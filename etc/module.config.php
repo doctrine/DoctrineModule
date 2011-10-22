@@ -1,68 +1,81 @@
 <?php
 
 $production = array(
-    'doctrine' => array(
-        'doctrine_path' => __DIR__ . '/../lib/',
-        'register_default_annotations' => true,
-    ),
     'di' => array(
         'definition' => array(
-            'class' => array(
-                'Doctrine\ORM\EntityManager' => array(
-                    'instantiator' => array('Doctrine\ORM\EntityManager', 'create'),
-                    'methods' => array(
-                        'create' => array(
-                            'conn'   => array(
-                                'type' => null, 
-                                'required' => true
-                            ),
-                            'config' => array(
-                                'type' => 'Doctrine\ORM\Configuration', 
-                                'required' => true
-                            ),
-                            'evm' => array(
-                                'type' => 'Doctrine\Common\EventManager', 
-                                'required' => false
-                            )
-                        ),
+            'SpiffyDoctrine\Container' => array(
+                'methods' => array(
+                    '__construct' => array(
+                        'type' => 'array',
+                        'required' => true
                     )
                 )
             )
         ),
         'instance' => array(
             'alias' => array(
-                'doctrine-config' => 'Doctrine\ORM\Configuration',
-                'doctrine-em'     => 'Doctrine\ORM\EntityManager',
-                'doctrine-evm'    => 'Doctrine\Common\EventManager'
+                'doctrine' => 'SpiffyDoctrine\Container',
             ),
-            'doctrin-evm' => array(
-                'parameters' => array()
-            ),
-            'doctrine-config' => array(
+            'doctrine' => array(
                 'parameters' => array(
-                    'ns'         => 'Doctrine\Proxy',
-                    'dir'        => realpath(__DIR__ . '/../src/Doctrine/Proxy'),
-                    'bool'       => false,
-                    'cacheImpl'  => 'Doctrine\Common\Cache\ArrayCache',
-                    'driverImpl' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver'
-                )
-            ),
-            'doctrine-em' => array(
-                'parameters' => array(
-                    'conn' => array(
-                        'driver'   => 'pdo_mysql',
-                        'host'     => 'localhost',
-                        'user'     => 'doctrine',
-                        'password' => 'doctrine'
-                    ),
-                    'config' => 'doctrine-config',
-                    'evm'    => 'doctrine-evm'
-                )
-            ),
-            'Doctrine\ORM\Mapping\Driver\AnnotationDriver' => array(
-                'parameters' => array(
-                    'reader' => 'Doctrine\Common\Annotations\AnnotationReader',
-                    'paths'  => array()
+                    'config' => array(
+                        'cache' => array(
+                            'default' => array(
+                                'class' => 'Doctrine\Common\Cache\ArrayCache'
+                            )
+                        ),
+                        'evm' => array(
+                            'default' => array(
+                                'class' => 'Doctrine\Common\EventManager',
+                                'subscribers' => array()
+                            )
+                        ),
+                        'dbal' => array(
+                            'connection' => array(
+                                'default' => array(
+                                    'evm' => 'default',
+                                    'dbname' => 'blitzaroo',
+                                    'user' => 'root',
+                                    'password' => '',
+                                    'host' => 'localhost',
+                                    'driver' => 'pdo_mysql'
+                                )
+                            )
+                        ),
+                        'orm' => array(
+                            'em' => array(
+                                'default' => array(
+                                    'connection' => 'default',
+                                    'proxy' => array(
+                                        'generate' => false,
+                                        'dir' => __DIR__ . '/../src/Proxy',
+                                        'namespace' => 'SpiffyDoctrine\Proxy'
+                                    ),
+                                    'cache' => array(
+                                        'metadata' => 'default',
+                                        'query' => 'default',
+                                        'result' => 'default'
+                                    ),
+                                    'metadata' => array(
+                                        'registry' => array(
+                                            'files' => array(
+                                                __DIR__ . '/../lib/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+                                            ),
+                                            'namespaces' => array()
+                                        ),
+                                        'driver' => array(
+                                            'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                                            'paths' => array(),
+                                            'reader' => array(
+                                                'class' => 'Doctrine\Common\Annotations\AnnotationReader',
+                                                'aliases' => array()
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
                 )
             )
         )
@@ -73,8 +86,8 @@ $staging = $production;
 $testing = $production;
 $development = $production;
 
-$testing['di']['instance']['Doctrine\ORM\Configuration']['parameters']['bool'] = true;
-$development['di']['instance']['Doctrine\ORM\Configuration']['parameters']['bool'] = true;
+$testing['spiffy_doctrine']['orm']['em']['default']['proxy']['generate'] = true;
+$development['spiffy_doctrine']['orm']['em']['default']['proxy']['generate'] = true;
 
 $config = compact('production', 'staging', 'testing', 'development');
 return $config;

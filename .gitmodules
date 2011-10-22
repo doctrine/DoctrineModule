@@ -1,0 +1,9 @@
+[submodule "lib/doctrine-orm"]
+	path = lib/doctrine-orm
+	url = https://github.com/doctrine/doctrine2.git
+[submodule "lib/doctrine-dbal"]
+	path = lib/doctrine-dbal
+	url = https://github.com/doctrine/dbal.git
+[submodule "lib/doctrine-common"]
+	path = lib/doctrine-common
+	url = https://github.com/doctrine/common.git
