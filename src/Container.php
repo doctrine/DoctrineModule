@@ -40,19 +40,43 @@ class Container
     protected $_entityManagers = array();
     
     /**
-     * Configuration.
+     * Cache configuration.
      * @var array
      */
-    protected $_config = array();
+    protected $_cache = array();
+    
+    /**
+     * EventManager configuration.
+     * @var array
+     */
+    protected $_evm = array();
+    
+    /**
+     * DBAL configuration.
+     * @var array
+     */
+    protected $_connection = array();
+    
+    /**
+     * EntityManager configuration.
+     * @var array
+     */
+    protected $_em = array();
     
     /**
      * Constructor.
      * 
-     * @param array $config
+     * @param array $evm
+     * @param array $connection
+     * @param array $em
+     * @param array $cache
      */
-    public function __construct(array $config = array())
+    public function __construct(array $evm, array $connection, array $em, array $cache)
     {
-        $this->_config = $config;
+        $this->_evm = $evm;
+        $this->_connection = $connection;
+        $this->_em = $em;
+        $this->_cache = $cache;
     }
 
     /**
@@ -127,12 +151,13 @@ class Container
      */
     protected function _prepareCache($name)
     {
-        if (!isset($this->_config['cache'][$name])) {
-            throw new InvalidArgumentException(
-                "Cache with index '{$name}' could not be located.");
+        if (!isset($this->_cache[$name])) {
+            throw new \InvalidArgumentException(
+                "Cache with index '{$name}' could not be located."
+            );
         }
 
-        $cacheOptions = $this->_config['cache'][$name];
+        $cacheOptions = $this->_cache[$name];
         $cache = new $cacheOptions['class'];
 
         // put memcache options here
@@ -147,18 +172,17 @@ class Container
      */
     protected function _prepareConnection($name)
     {
-        if (!isset($this->_config['dbal']['connection'][$name])) {
-            throw new InvalidArgumentException(
-                "Connection with index '{$name}' could not be located.");
+        if (!isset($this->_connection[$name])) {
+            throw new \InvalidArgumentException(
+                "Connection with index '{$name}' could not be located."
+            );
         }
 
-        $conOptions = $this->_config['dbal']['connection'][$name];
+        $conOptions = $this->_connection[$name];
         $this->_connections[$name] = DriverManager::getConnection(
             $conOptions,
             null,
-            $this->getEventManager(
-                $this->_config['dbal']['connection'][$name]['evm']
-            )
+            $this->getEventManager($this->_connection[$name]['evm'])
         );
     }
     
@@ -169,12 +193,13 @@ class Container
      */
     protected function _prepareEventManager($name)
     {
-        if (!isset($this->_config['evm'][$name])) {
-            throw new InvalidArgumentException(
-                "EventManager with index '{$name}' could not be located.");
+        if (!isset($this->_evm[$name])) {
+            throw new \InvalidArgumentException(
+                "EventManager with index '{$name}' could not be located."
+            );
         }
         
-        $evmOptions = $this->_config['evm'][$name];
+        $evmOptions = $this->_evm[$name];
         
         $evm = new EventManager();
         if (isset($evmOptions['subscribers']) && is_array($evmOptions['subscribers'])) {
@@ -194,12 +219,13 @@ class Container
      */
     protected function _prepareEntityManager($name)
     {
-        if (!isset($this->_config['orm']['em'][$name])) {
+        if (!isset($this->_em[$name])) {
             throw new \InvalidArgumentException(
-                "EntityManager with name '{$name}' could not be located.");
+                "EntityManager with name '{$name}' could not be located."
+            );
         }
 
-        $emOptions = $this->_config['orm']['em'][$name];
+        $emOptions = $this->_em[$name];
         $connection = isset($emOptions['connection']) ? $emOptions['connection'] : self::DEFAULT_KEY;
 
         $driverOptions = $emOptions['metadata']['driver'];
@@ -246,7 +272,7 @@ class Container
                     AnnotationRegistry::registerFile($file);
                 }
             }
-
+            
             // namespaces
             if (isset($regOptions['namespaces'])) {
                 if (!is_array($regOptions['namespaces'])) {
@@ -277,10 +303,10 @@ class Container
 
         $em = EntityManager::create($this->getConnection($connection), $config);
         
-        if (isset($emOptions['logger']['class'])) {
+        if (isset($emOptions['logger'])) {
             $dbalConfig = $em->getConnection()->getConfiguration();
             
-            $logger = new $emOptions['logger']['class']();
+            $logger = new $emOptions['logger']();
             $dbalConfig->setSqlLogger($logger);
         }
 
