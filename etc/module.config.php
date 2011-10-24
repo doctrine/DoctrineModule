@@ -1,22 +1,37 @@
 <?php
 
-$production = array(
+return array(
     'di' => array(
         'definition' => array(
-            'SpiffyDoctrine\Container' => array(
+            'SpiffyDoctrine\EntityManagerFactory' => array(
+                'instantiator' => array('SpiffyDoctrine\EntityManagerFactory', 'getInstance'),
                 'methods' => array(
-                    '__construct' => array(
-                        'type' => 'array',
-                        'required' => true
+                    'getInstance' => array(
+                        'name' => array(
+                            'type' => 'array',
+                            'required' => true
+                        )
+                    ),
+                    'setContainer' => array(
+                        'container' => array(
+                            'type' => 'Container',
+                            'required' => true
+                        )
                     )
                 )
-            )
+            ),
         ),
         'instance' => array(
             'alias' => array(
-                'doctrine' => 'SpiffyDoctrine\Container',
+                'doctrine-container' => 'SpiffyDoctrine\Container',
+                'em-default' => 'SpiffyDoctrine\EntityManagerFactory'
             ),
-            'doctrine' => array(
+            'em-default' => array(
+                'parameters' => array(
+                    'name' => 'default'
+                )
+            ),
+            'doctrine-container' => array(
                 'parameters' => array(
                     'connection' => array(
                         'default' => array(
@@ -49,7 +64,7 @@ $production = array(
                             'connection' => 'default',
                             'logger' => null,
                             'proxy' => array(
-                                'generate' => false,
+                                'generate' => true,
                                 'dir' => __DIR__ . '/../src/Proxy',
                                 'namespace' => 'SpiffyDoctrine\Proxy'
                             ),
@@ -76,13 +91,3 @@ $production = array(
         )
     )
 );
-
-$staging = $production;
-$testing = $production;
-$development = $production;
-
-$testing['di']['instance']['doctrine']['parameters']['em']['default']['proxy']['generate'] = true;
-$development['di']['instance']['doctrine']['parameters']['em']['default']['proxy']['generate'] = true;
-
-$config = compact('production', 'staging', 'testing', 'development');
-return $config;

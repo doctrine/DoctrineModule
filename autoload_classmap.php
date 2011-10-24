@@ -6,6 +6,7 @@ return array (
   'SpiffyDoctrine\\Container' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Container.php',
   'SpiffyDoctrine\\Annotation\\Validator\\Zend' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Annotation' . DIRECTORY_SEPARATOR . 'Validator' . DIRECTORY_SEPARATOR . 'Zend.php',
   'SpiffyDoctrine\\Annotation\\Filter\\Zend' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Annotation' . DIRECTORY_SEPARATOR . 'Filter' . DIRECTORY_SEPARATOR . 'Zend.php',
+  'SpiffyDoctrine\\EntityManagerFactory' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'EntityManagerFactory.php',
   'NativePhpunitTask' => __DIR__ . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'doctrine-orm' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'NativePhpunitTask.php',
   'Doctrine\\Tests\\Common\\DateTime\\DateTimeTest' => __DIR__ . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'doctrine-common' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Doctrine' . DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR . 'Common' . DIRECTORY_SEPARATOR . 'DateTime' . DIRECTORY_SEPARATOR . 'DateTimeTest.php',
   'Doctrine\\Tests\\Common\\DateTime\\DateTimeFactoryTest' => __DIR__ . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'doctrine-common' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Doctrine' . DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR . 'Common' . DIRECTORY_SEPARATOR . 'DateTime' . DIRECTORY_SEPARATOR . 'DateTimeFactoryTest.php',

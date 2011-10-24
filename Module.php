@@ -17,21 +17,9 @@ class Module
         require __DIR__ . '/autoload_register.php';
     }
 
-    public function getConfig($env = null)
+    public function getConfig()
     {
-        $config = new Config(include __DIR__ . '/etc/module.config.php');
-        if (null === $env) {
-            return $config;
-        }
-        if (!isset($config->{$env})) {
-            throw new InvalidArgumentException(sprintf(
-                'Unrecognized environment "%s" provided to "%s"',
-                $env,
-                __METHOD__
-            ));
-        }
-		
-        return $config->{$env};
+        return new Config(include __DIR__ . '/etc/module.config.php');
     }
 
     public function getClassmap()
