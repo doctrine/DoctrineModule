@@ -71,12 +71,12 @@ class Container
      * @param array $em
      * @param array $cache
      */
-    public function __construct(array $evm, array $connection, array $em, array $cache)
+    public function __construct(array $evms, array $connections, array $ems, array $caches)
     {
-        $this->_evm = $evm;
-        $this->_connection = $connection;
-        $this->_em = $em;
-        $this->_cache = $cache;
+        $this->_evm = $evms;
+        $this->_connection = $connections;
+        $this->_em = $ems;
+        $this->_cache = $caches;
     }
 
     /**

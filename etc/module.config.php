@@ -3,20 +3,20 @@
 return array(
     'di' => array(
         'definition' => array(
-            'SpiffyDoctrine\EntityManagerFactory' => array(
-                'instantiator' => array('SpiffyDoctrine\EntityManagerFactory', 'getInstance'),
-                'methods' => array(
-                    'getInstance' => array(
-                        'name' => array(
-                            'type' => 'array',
-                            'required' => true
-                        )
-                    ),
-                    'setContainer' => array(
-                        'container' => array(
-                            'type' => 'Container',
-                            'required' => true
-                        )
+            'class' => array(
+                'SpiffyDoctrine\EntityManagerFactory' => array(
+                    'instantiator' => array('SpiffyDoctrine\EntityManagerFactory', 'create'),
+                    'methods' => array(
+                        'create' => array(
+                            'name' => array(
+                                'type' => 'array',
+                                'required' => true
+                            ),
+                            'container' => array(
+                                'type' => 'SpiffyDoctrine\Container',
+                                'required' => true
+                            )
+                        ),
                     )
                 )
             ),
@@ -28,12 +28,13 @@ return array(
             ),
             'em-default' => array(
                 'parameters' => array(
-                    'name' => 'default'
+                    'name' => 'default',
+                    'container' => 'doctrine-container'
                 )
             ),
             'doctrine-container' => array(
                 'parameters' => array(
-                    'connection' => array(
+                    'connections' => array(
                         'default' => array(
                             'evm' => 'default',
                             'dbname' => 'blitzaroo',
@@ -43,18 +44,18 @@ return array(
                             'driver' => 'pdo_mysql'
                         )
                     ),
-                    'cache' => array(
+                    'caches' => array(
                         'default' => array(
                             'class' => 'Doctrine\Common\Cache\ArrayCache'
                         )
                     ),
-                    'evm' => array(
+                    'evms' => array(
                         'default' => array(
                             'class' => 'Doctrine\Common\EventManager',
                             'subscribers' => array()
                         )
                     ),
-                    'em' => array(
+                    'ems' => array(
                         'default' => array(
                             'cache' => array(
                                 'metadata' => 'default',
