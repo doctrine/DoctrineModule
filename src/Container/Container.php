@@ -1,8 +1,7 @@
 <?php
 namespace SpiffyDoctrine\Container;
 
-use Closure,
-    Doctrine\Common\Annotations\AnnotationRegistry,
+use Doctrine\Common\Annotations\AnnotationRegistry,
     Doctrine\Common\EventManager,
     Doctrine\DBAL\DriverManager,
     Doctrine\ORM\Mapping\Driver\AnnotationDriver,
