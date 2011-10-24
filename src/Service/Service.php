@@ -1,5 +1,5 @@
 <?php
-namespace SpiffyDoctrine;
+namespace SpiffyDoctrine\Service;
 use Doctrine\ORM\EntityManager;
 
 class Service 

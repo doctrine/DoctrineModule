@@ -1,11 +1,10 @@
 <?php
-
 return array(
     'di' => array(
         'definition' => array(
             'class' => array(
-                'SpiffyDoctrine\EntityManagerFactory' => array(
-                    'instantiator' => array('SpiffyDoctrine\EntityManagerFactory', 'create'),
+                'SpiffyDoctrine\Factory\EntityManager' => array(
+                    'instantiator' => array('SpiffyDoctrine\Factory\EntityManager', 'create'),
                     'methods' => array(
                         'create' => array(
                             'name' => array(
@@ -13,7 +12,7 @@ return array(
                                 'required' => true
                             ),
                             'container' => array(
-                                'type' => 'SpiffyDoctrine\Container',
+                                'type' => 'SpiffyDoctrine\Container\Container',
                                 'required' => true
                             )
                         ),
@@ -23,8 +22,8 @@ return array(
         ),
         'instance' => array(
             'alias' => array(
-                'doctrine-container' => 'SpiffyDoctrine\Container',
-                'em-default' => 'SpiffyDoctrine\EntityManagerFactory'
+                'doctrine-container' => 'SpiffyDoctrine\Container\Container',
+                'em-default' => 'SpiffyDoctrine\Factory\EntityManager'
             ),
             'em-default' => array(
                 'parameters' => array(
@@ -69,20 +68,18 @@ return array(
                                 'dir' => __DIR__ . '/../src/Proxy',
                                 'namespace' => 'SpiffyDoctrine\Proxy'
                             ),
-                            'metadata' => array(
-                                'registry' => array(
-                                    'files' => array(
-                                        __DIR__ . '/../lib/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
-                                    ),
-                                    'namespaces' => array()
+                            'registry' => array(
+                                'files' => array(
+                                    __DIR__ . '/../lib/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
                                 ),
-                                'driver' => array(
-                                    'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                                    'paths' => array(),
-                                    'reader' => array(
-                                        'class' => 'Doctrine\Common\Annotations\AnnotationReader',
-                                        'aliases' => array()
-                                    )
+                                'namespaces' => array()
+                            ),
+                            'driver' => array(
+                                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                                'paths' => array(),
+                                'reader' => array(
+                                    'class' => 'Doctrine\Common\Annotations\AnnotationReader',
+                                    'aliases' => array()
                                 )
                             )
                         )

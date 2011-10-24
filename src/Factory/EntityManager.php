@@ -1,7 +1,8 @@
 <?php
-namespace SpiffyDoctrine;
+namespace SpiffyDoctrine\Factory;
+use SpiffyDoctrine\Container\Container;
 
-class EntityManagerFactory
+class EntityManager
 {
     public static function create($name, Container $container)
     {

@@ -1,5 +1,5 @@
 <?php
-namespace SpiffyDoctrine;
+namespace SpiffyDoctrine\Container;
 
 use Closure,
     Doctrine\Common\Annotations\AnnotationRegistry,
@@ -12,6 +12,7 @@ use Closure,
 
 class Container
 {
+    const ANNOTATION_DRIVER = 'Doctrine\ORM\Mapping\Driver\AnnotationDriver';
     const DEFAULT_KEY = 'default';
 
     /**
@@ -143,9 +144,7 @@ class Container
     protected function _prepareCache($name)
     {
         if (!isset($this->_cache[$name])) {
-            throw new \InvalidArgumentException(
-                "Cache with name '{$name}' could not be located in configuration."
-            );
+            throw new Exception\CacheNotFound($name);
         }
 
         $cache = new $this->_cache[$name]['class'];
@@ -163,9 +162,7 @@ class Container
     protected function _prepareConnection($name)
     {
         if (!isset($this->_connection[$name])) {
-            throw new \InvalidArgumentException(
-                "Connection with name '{$name}' could not be located in configuration."
-            );
+            throw new Exception\ConnectionNotFound($name);
         }
 
         $this->_connections[$name] = DriverManager::getConnection(
@@ -178,17 +175,20 @@ class Container
     /**
      * Prepares an eveent manager instance.
      * 
+     * @todo: Add event listeners?
      * @param string $name
      */
     protected function _prepareEventManager($name)
     {
         if (!isset($this->_evm[$name])) {
-            throw new \InvalidArgumentException(
-                "EventManager with name '{$name}' could not be located in configuration."
-            );
+            throw new Exception\EventManagerNotFound($name);
         }
         
         $evm = new EventManager();
+        
+        // todo: put listeners here?
+        
+        // subscribers
         if (isset($this->_evm[$name]['subscribers']) && is_array($this->_evm[$name]['subscribers'])) {
             foreach($this->_evm[$name]['subscribers'] as $subscriber) {
                 $instance = new $subscriber();
@@ -207,96 +207,92 @@ class Container
     protected function _prepareEntityManager($name)
     {
         if (!isset($this->_em[$name])) {
-            throw new \InvalidArgumentException(
-                "EntityManager with name '{$name}' could not be located in configuration."
-            );
+            throw new Exception\EntityManagerNotFound($name);
         }
 
-        $emOptions = $this->_em[$name];
-        $connection = isset($emOptions['connection']) ? $emOptions['connection'] : self::DEFAULT_KEY;
+        $opts = $this->_em[$name];
+        $connection = isset($opts['connection']) ? $opts['connection'] : self::DEFAULT_KEY;
 
-        $driverOptions = $emOptions['metadata']['driver'];
-        $driverClass = $driverOptions['class'];
-        $driver = null;
+        $driver = $this->_createDriver($opts['driver']);
+        $this->_registerAnnotations($opts['registry']);
 
-        $reflClass = new ReflectionClass($driverClass);
+        $config = new Configuration();
+        $config->setProxyDir($opts['proxy']['dir']);
+        $config->setProxyNamespace($opts['proxy']['namespace']);
+        $config->setAutoGenerateProxyClasses($opts['proxy']['generate']);
+        $config->setMetadataDriverImpl($driver);
+        
+        $config->setMetadataCacheImpl($this->getCache($opts['cache']['metadata']));
+        $config->setQueryCacheImpl($this->getCache($opts['cache']['query']));
+        $config->setResultCacheImpl($this->getCache($opts['cache']['result']));
+
+        $em = EntityManager::create($this->getConnection($connection), $config);
+        
+        if (isset($opts['logger'])) {
+            $dbalConfig = $em->getConnection()->getConfiguration();
+            
+            $logger = new $opts['logger']();
+            $dbalConfig->setSqlLogger($logger);
+        }
+
+        $this->_entityManagers[$name] = $em;
+    }
+
+    /**
+     * Creates the metadata driver.
+     * 
+     * @param array $opts
+     * 
+     * @return mixed
+     */
+    protected function _createDriver(array $opts)
+    {
+        $driverClass = $opts['class'];
+
+        $refl = new ReflectionClass($driverClass);
 
         // annotation driver has extra initialization options
-        if ($reflClass->getName() == 'Doctrine\ORM\Mapping\Driver\AnnotationDriver'
-            || $reflClass->isSubclassOf('Doctrine\ORM\Mapping\Driver\AnnotationDriver')) {
-            if (!isset($driverOptions['reader']['class'])) {
-                throw new \InvalidArgumentException(
-                    'AnnotationDriver was specified but no reader options exist');
+        if ($refl->getName() == self::ANNOTATION_DRIVER || $refl->isSubclassOf(self::ANNOTATION_DRIVER)) {
+            if (!isset($opts['reader']['class'])) {
+                throw new Exception\InvalidAnnotationReaderClass;
             }
 
-            $readerClass = $driverOptions['reader']['class'];
+            $readerClass = $opts['reader']['class'];
             $reader = new $readerClass();
 
-            $driver = new $driverClass($reader, $driverOptions['paths']);
-        } else {
-            $driver = new $driverClass($driverOptions['paths']);
+            return new $driverClass($reader, $opts['paths']);
         }
-
-        // register annotations
-        if (isset($emOptions['metadata']['registry'])) {
-            $regOptions = $emOptions['metadata']['registry'];
-
+        
+        return new $driverClass($opts['paths']);
+    }
+    
+    /**
+     * Registers annotations using both namespace and file formats.
+     * 
+     * @param array $opts
+     */
+    protected function _registerAnnotations(array $opts)
+    {
+        if (isset($opts)) {
             // files
-            if (isset($regOptions['files'])) {
-                if (!is_array($regOptions['files'])) {
-                    $regOptions['files'] = array(
-                        $regOptions['files']
-                    );
+            if (isset($opts['files'])) {
+                if (!is_array($opts['files'])) {
+                    $opts['files'] = array($opts['files']);
                 }
 
-                // sanity check
-                if (!is_array($regOptions['files'])) {
-                    throw new \InvalidArgumentException(
-                        'Registry files must be an array of files');
-                }
-
-                foreach ($regOptions['files'] as $file) {
+                foreach ($opts['files'] as $file) {
                     AnnotationRegistry::registerFile($file);
                 }
             }
             
             // namespaces
-            if (isset($regOptions['namespaces'])) {
-                if (!is_array($regOptions['namespaces'])) {
-                    $regOptions['namespaces'] = array(
-                        $regOptions['namespaces']
-                    );
+            if (isset($opts['namespaces'])) {
+                if (!is_array($opts['namespaces'])) {
+                    $opts['namespaces'] = array($opts['namespaces']);
                 }
 
-                if (!is_array($regOptions['namespaces'])) {
-                    throw new \InvalidArgumentException(
-                        'Registry namespaces must be an array of key => value pairs'
-                    );
-                }
-
-                AnnotationRegistry::registerAutoloadNamespaces($regOptions['namespaces']);
+                AnnotationRegistry::registerAutoloadNamespaces($opts['namespaces']);
             }
         }
-
-        $config = new Configuration();
-        $config->setProxyDir($emOptions['proxy']['dir']);
-        $config->setProxyNamespace($emOptions['proxy']['namespace']);
-        $config->setAutoGenerateProxyClasses($emOptions['proxy']['generate']);
-        $config->setMetadataDriverImpl($driver);
-        
-        $config->setMetadataCacheImpl($this->getCache($emOptions['cache']['metadata']));
-        $config->setQueryCacheImpl($this->getCache($emOptions['cache']['query']));
-        $config->setResultCacheImpl($this->getCache($emOptions['cache']['result']));
-
-        $em = EntityManager::create($this->getConnection($connection), $config);
-        
-        if (isset($emOptions['logger'])) {
-            $dbalConfig = $em->getConnection()->getConfiguration();
-            
-            $logger = new $emOptions['logger']();
-            $dbalConfig->setSqlLogger($logger);
-        }
-
-        $this->_entityManagers[$name] = $em;
     }
 }
