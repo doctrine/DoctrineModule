@@ -2,7 +2,6 @@
 namespace SpiffyDoctrine;
 
 use Closure,
-    Doctrine\Common\Annotations\AnnotationReader,
     Doctrine\Common\Annotations\AnnotationRegistry,
     Doctrine\Common\EventManager,
     Doctrine\DBAL\DriverManager,
