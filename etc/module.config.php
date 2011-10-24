@@ -34,7 +34,7 @@ return array(
             ),
             'doctrine-container' => array(
                 'parameters' => array(
-                    'connections' => array(
+                    'connection' => array(
                         'default' => array(
                             'evm' => 'default',
                             'dbname' => 'blitzaroo',
@@ -44,18 +44,18 @@ return array(
                             'driver' => 'pdo_mysql'
                         )
                     ),
-                    'caches' => array(
+                    'cache' => array(
                         'default' => array(
                             'class' => 'Doctrine\Common\Cache\ArrayCache'
                         )
                     ),
-                    'evms' => array(
+                    'evm' => array(
                         'default' => array(
                             'class' => 'Doctrine\Common\EventManager',
                             'subscribers' => array()
                         )
                     ),
-                    'ems' => array(
+                    'em' => array(
                         'default' => array(
                             'cache' => array(
                                 'metadata' => 'default',
