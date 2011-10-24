@@ -85,10 +85,8 @@ class Container
      * @param string $name
      * @return Doctrine\Common\Cache\AbstractCache
      */
-    public function getCache($name = null)
+    public function getCache($name = self::DEFAULT_KEY)
     {
-        $name = $name ? $name : self::DEFAULT_KEY;
-
         if (!isset($this->_caches[$name])) {
             $this->_prepareCache($name);
         }
@@ -101,10 +99,8 @@ class Container
      * @param string $name
      * @return Doctrine\DBAL\Connection
      */
-    public function getConnection($name = null)
+    public function getConnection($name = self::DEFAULT_KEY)
     {
-        $name = $name ? $name : self::DEFAULT_KEY;
-
         if (!isset($this->_connections[$name])) {
             $this->_prepareConnection($name);
         }
@@ -117,10 +113,8 @@ class Container
     * @param string $name
     * @return Doctrine\Common\EventManager
     */
-    public function getEventManager($name = null)
+    public function getEventManager($name = self::DEFAULT_KEY)
     {
-        $name = $name ? $name : self::DEFAULT_KEY;
-    
         if (!isset($this->_eventManagers[$name])) {
             $this->_prepareEventManager($name);
         }
@@ -133,10 +127,8 @@ class Container
      * @param string $name
      * @return Doctrine\ORM\EntityManager
      */
-    public function getEntityManager($name = null)
+    public function getEntityManager($name = self::DEFAULT_KEY)
     {
-        $name = $name ? $name : self::DEFAULT_KEY;
-
         if (!isset($this->_entityManagers[$name])) {
             $this->_prepareEntityManager($name);
         }
@@ -153,12 +145,11 @@ class Container
     {
         if (!isset($this->_cache[$name])) {
             throw new \InvalidArgumentException(
-                "Cache with index '{$name}' could not be located."
+                "Cache with name '{$name}' could not be located in configuration."
             );
         }
 
-        $cacheOptions = $this->_cache[$name];
-        $cache = new $cacheOptions['class'];
+        $cache = new $this->_cache[$name]['class'];
 
         // put memcache options here
 
@@ -174,13 +165,12 @@ class Container
     {
         if (!isset($this->_connection[$name])) {
             throw new \InvalidArgumentException(
-                "Connection with index '{$name}' could not be located."
+                "Connection with name '{$name}' could not be located in configuration."
             );
         }
 
-        $conOptions = $this->_connection[$name];
         $this->_connections[$name] = DriverManager::getConnection(
-            $conOptions,
+            $this->_connection[$name],
             null,
             $this->getEventManager($this->_connection[$name]['evm'])
         );
@@ -195,15 +185,13 @@ class Container
     {
         if (!isset($this->_evm[$name])) {
             throw new \InvalidArgumentException(
-                "EventManager with index '{$name}' could not be located."
+                "EventManager with name '{$name}' could not be located in configuration."
             );
         }
         
-        $evmOptions = $this->_evm[$name];
-        
         $evm = new EventManager();
-        if (isset($evmOptions['subscribers']) && is_array($evmOptions['subscribers'])) {
-            foreach($evmOptions['subscribers'] as $subscriber) {
+        if (isset($this->_evm[$name]['subscribers']) && is_array($this->_evm[$name]['subscribers'])) {
+            foreach($this->_evm[$name]['subscribers'] as $subscriber) {
                 $instance = new $subscriber();
                 $evm->addEventSubscriber($instance);
             }
@@ -221,7 +209,7 @@ class Container
     {
         if (!isset($this->_em[$name])) {
             throw new \InvalidArgumentException(
-                "EntityManager with name '{$name}' could not be located."
+                "EntityManager with name '{$name}' could not be located in configuration."
             );
         }
 
