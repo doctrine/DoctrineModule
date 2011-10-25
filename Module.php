@@ -19,7 +19,7 @@ class Module
 
     public function getConfig()
     {
-        return new Config(include __DIR__ . '/etc/module.config.php');
+        return new Config(include __DIR__ . '/configs/module.config.php');
     }
 
     public function getClassmap()

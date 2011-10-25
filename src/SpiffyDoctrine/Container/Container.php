@@ -148,7 +148,7 @@ class Container
 
         $cache = new $this->_cache[$name]['class'];
 
-        // put memcache options here
+        // todo: put memcache options here
 
         $this->_caches[$name] = $cache;
     }

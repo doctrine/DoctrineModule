@@ -70,7 +70,7 @@ return array(
                             ),
                             'registry' => array(
                                 'files' => array(
-                                    __DIR__ . '/../lib/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+                                    __DIR__ . '/../library/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
                                 ),
                                 'namespaces' => array()
                             ),
