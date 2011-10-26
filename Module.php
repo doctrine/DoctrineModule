@@ -2,7 +2,6 @@
 namespace SpiffyDoctrine;
 
 use Doctrine\Common\Annotations\AnnotationRegistry,
-    InvalidArgumentException,
     Zend\Config\Config;
 
 class Module

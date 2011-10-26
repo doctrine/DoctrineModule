@@ -1,5 +1,0 @@
-1. Follow the setup in module.config.php and copy relative portions to application.config.php to overwrite.
-2. You can setup multiple entity manager alises by following the 'em-default' alias.
-
-In Controller:
-$entityManager = $this->getLocator()->get('em-default');

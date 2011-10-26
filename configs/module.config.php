@@ -8,7 +8,7 @@ return array(
                     'methods' => array(
                         'create' => array(
                             'name' => array(
-                                'type' => 'array',
+                                'type' => false,
                                 'required' => true
                             ),
                             'container' => array(
@@ -17,12 +17,13 @@ return array(
                             )
                         ),
                     )
-                )
+                ),
             ),
         ),
         'instance' => array(
             'alias' => array(
                 'doctrine-container' => 'SpiffyDoctrine\Container\Container',
+                'doctrine-service' => 'SpiffyDoctrine\Service\Service',
                 'em-default' => 'SpiffyDoctrine\Factory\EntityManager'
             ),
             'em-default' => array(
@@ -31,12 +32,17 @@ return array(
                     'container' => 'doctrine-container'
                 )
             ),
+            'doctrine-service' => array(
+                'parameters' => array(
+                    'container' => 'doctrine-container'
+                )
+            ),
             'doctrine-container' => array(
                 'parameters' => array(
                     'connection' => array(
                         'default' => array(
                             'evm' => 'default',
-                            'dbname' => 'blitzaroo',
+                            'dbname' => 'mydb',
                             'user' => 'root',
                             'password' => '',
                             'host' => 'localhost',
