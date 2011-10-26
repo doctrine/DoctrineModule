@@ -1,12 +1,3 @@
 [submodule "lib/doctrine-orm"]
 	path = library/doctrine-orm
 	url = https://github.com/doctrine/doctrine2.git
-[submodule "lib/doctrine-dbal"]
-	path = library/doctrine-dbal
-	url = https://github.com/doctrine/dbal.git
-[submodule "lib/doctrine-common"]
-	path = library/doctrine-common
-	url = https://github.com/doctrine/common.git
-[submodule "lib/Symfony/Component/Console"]
-	path = library/Symfony/Component/Console
-	url = git://github.com/symfony/Console.git
