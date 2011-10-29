@@ -2,6 +2,9 @@
 return array (
   'SpiffyDoctrineEntity\\Entity\\Factory' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Deprecated' . DIRECTORY_SEPARATOR . 'Factory.php',
   'SpiffyDoctrineEntity\\Entity\\Entity' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Deprecated' . DIRECTORY_SEPARATOR . 'Entity.php',
+  'SpiffyDoctrine\\Validator\\NoEntityExists' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Validator' . DIRECTORY_SEPARATOR . 'NoEntityExists.php',
+  'SpiffyDoctrine\\Validator\\AbstractEntity' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Validator' . DIRECTORY_SEPARATOR . 'AbstractEntity.php',
+  'SpiffyDoctrine\\Validator\\EntityExists' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Validator' . DIRECTORY_SEPARATOR . 'EntityExists.php',
   'SpiffyDoctrine\\Container\\Container' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Container' . DIRECTORY_SEPARATOR . 'Container.php',
   'SpiffyDoctrine\\Container\\Exception\\EventManagerNotFound' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Container' . DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'EventManagerNotFound.php',
   'SpiffyDoctrine\\Container\\Exception\\ConnectionNotFound' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Container' . DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'ConnectionNotFound.php',
@@ -9,8 +12,6 @@ return array (
   'SpiffyDoctrine\\Container\\Exception\\EntityManagerNotFound' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Container' . DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'EntityManagerNotFound.php',
   'SpiffyDoctrine\\Container\\Exception\\InvalidAnnotationReaderClass' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Container' . DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'InvalidAnnotationReaderClass.php',
   'SpiffyDoctrine\\Service\\Service' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Service' . DIRECTORY_SEPARATOR . 'Service.php',
-  'SpiffyDoctrine\\Annotation\\Validator\\Zend' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Annotation' . DIRECTORY_SEPARATOR . 'Validator' . DIRECTORY_SEPARATOR . 'Zend.php',
-  'SpiffyDoctrine\\Annotation\\Filter\\Zend' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Annotation' . DIRECTORY_SEPARATOR . 'Filter' . DIRECTORY_SEPARATOR . 'Zend.php',
   'SpiffyDoctrine\\Factory\\EntityManager' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'SpiffyDoctrine' . DIRECTORY_SEPARATOR . 'Factory' . DIRECTORY_SEPARATOR . 'EntityManager.php',
   'SpiffyDoctrine\\Module' => __DIR__ . DIRECTORY_SEPARATOR . 'Module.php',
   'NativePhpunitTask' => __DIR__ . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'doctrine-orm' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'doctrine-common' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'NativePhpunitTask.php',

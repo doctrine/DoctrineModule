@@ -9,6 +9,16 @@ class Module
     public function init()
     {
         $this->initAutoloader();
+        
+        $libfile = __DIR__ . '/library/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php';
+        if (file_exists($libfile)) {
+            AnnotationRegistry::registerFile($libfile);
+        } else {
+            @include 'Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php';
+            if (!class_exists('Doctrine\ORM\Mapping\Entity')) {
+                throw new \Exception('Failed to register annotations. Ensure Doctrine is on your include path.');
+            }
+        }
     }
     
     public function initAutoloader()

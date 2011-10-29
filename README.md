@@ -7,6 +7,7 @@ The following features are intended to work out of the box:
   - Specifying separate cache instances for metadata, query, and result caches.
   - Using a SQL Logger.
   - Configuration of annotations via registry files and/or namespaces (such as Gedmo DoctrineExtensions).
+  - Validators for EntityExists and NoEntityExists.
 
 ## Installation
 
@@ -68,3 +69,19 @@ you can get them from the SpiffyDoctrine\Container\Container.
 ## Doctrine CLI
 The Doctrine CLI has been pre-configured and is available in SpiffyDoctrine\bin. It should work as
 is without any special configuration required.
+
+## EntityExists and NoEntityExists Validators
+The EntityExists and NoEntityExists are validators similar to Zend\Validator\Db validators. You can 
+pass a variety of options to determine validity. The most basic use case requires an entity manager (em),
+an entity, and a field. You also have the option of specifying a query_builder Closure to use if you
+want to find tune the results. 
+
+    $validator = new \SpiffyDoctrine\Validator\NoEntityExists(array(
+       'em' => $this->getLocator()->get('em-default'),
+       'entity' => 'SpiffyUser\Entity\User',
+       'field' => 'username',
+       'query_builder' => function($er) {
+           return $er->createQueryBuilder('q');
+       }
+    ));
+    var_dump($validator->isValid('test'));
