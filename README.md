@@ -74,7 +74,7 @@ is without any special configuration required.
 The EntityExists and NoEntityExists are validators similar to Zend\Validator\Db validators. You can 
 pass a variety of options to determine validity. The most basic use case requires an entity manager (em),
 an entity, and a field. You also have the option of specifying a query_builder Closure to use if you
-want to find tune the results. 
+want to fine tune the results. 
 
     $validator = new \SpiffyDoctrine\Validator\NoEntityExists(array(
        'em' => $this->getLocator()->get('em-default'),
