@@ -27,6 +27,15 @@ $moduleManager = new Zend\Module\Manager(
     new Zend\Module\ManagerOptions($appConfig['module_manager_options'])
 );
 
+$bootstrap      = new Zend\Mvc\Bootstrap($moduleManager);
+$application    = new Zend\Mvc\Application;
+$bootstrap->bootstrap($application);
+$locator = $application->getLocator();
+
 \Doctrine\ORM\Tools\Console\ConsoleRunner::run(
-    new \Symfony\Component\Console\Helper\HelperSet()
+    new \Symfony\Component\Console\Helper\HelperSet(
+        array(
+            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($locator->get('em-default'))
+        )
+    )
 );
