@@ -16,7 +16,7 @@ SpiffyDoctrine key to your modules array.
   1. cd my/project/folder
   2. git clone https://SpiffyJr@github.com/SpiffyJr/SpiffyDoctrine.git modules/SpiffyDoctrine --recursive
   3. open my/project/folder/configs/application.config.php and add 'SpiffyDoctrine' to your 'modules' parameter.
-  4. Alter the configuration (most likely your connection) by adding the required changes to 
+  4. Alter the configuration (most likely your connection and entities path(s)) by adding the required changes to 
      my/project/folder/modules/Application/module.config.php.
 
 ## Example standard configuration
@@ -34,6 +34,15 @@ SpiffyDoctrine key to your modules array.
                             'password' => '',
                             'host' => 'localhost',
                             'driver' => 'pdo_mysql'
+                        )
+                    ),
+                    'em' => array(
+                        'default' => array(
+                            'driver' => array(
+                                'paths' => array(
+                                    '/path/to/your/entities',
+                                ),
+                            )
                         )
                     )
                 )
