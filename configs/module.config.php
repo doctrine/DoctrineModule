@@ -87,6 +87,20 @@ return array(
                                     'class' => 'Doctrine\Common\Annotations\AnnotationReader',
                                     'aliases' => array()
                                 )
+                            ),
+                            'functions' => array(
+                                'datetime' => array(
+                                    // 'name' => 'class-name'
+                                ),
+                                'numeric' => array(
+                                    // 'name' => 'class-name'
+                                ),
+                                'string' => array(
+                                    // 'name' => 'class-name'
+                                )
+                            ),
+                            'hydrators' => array(
+                                // 'mode' => 'class-name'
                             )
                         )
                     )

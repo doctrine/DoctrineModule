@@ -6,8 +6,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry,
     Doctrine\DBAL\DriverManager,
     Doctrine\ORM\Mapping\Driver\AnnotationDriver,
     Doctrine\ORM\Configuration,
-    Doctrine\ORM\EntityManager,
-    ReflectionClass;
+    Doctrine\ORM\EntityManager;
 
 class Container
 {
@@ -212,18 +211,8 @@ class Container
         $opts = $this->_em[$name];
         $connection = isset($opts['connection']) ? $opts['connection'] : self::DEFAULT_KEY;
 
-        $driver = $this->_createDriver($opts['driver']);
         $this->_registerAnnotations($opts['registry']);
-
-        $config = new Configuration();
-        $config->setProxyDir($opts['proxy']['dir']);
-        $config->setProxyNamespace($opts['proxy']['namespace']);
-        $config->setAutoGenerateProxyClasses($opts['proxy']['generate']);
-        $config->setMetadataDriverImpl($driver);
-        
-        $config->setMetadataCacheImpl($this->getCache($opts['cache']['metadata']));
-        $config->setQueryCacheImpl($this->getCache($opts['cache']['query']));
-        $config->setResultCacheImpl($this->getCache($opts['cache']['result']));
+        $config = $this->_createConfiguration($opts);
 
         $em = EntityManager::create($this->getConnection($connection), $config);
         
@@ -235,6 +224,74 @@ class Container
         }
 
         $this->_entityManagers[$name] = $em;
+    }
+    
+    /**
+     * Creates a Doctrine\ORM\Configuration.
+     * 
+     * @param array $opts
+     * 
+     * @return Configuration
+     */
+    protected function _createConfiguration(array $opts)
+    {
+        $config = new Configuration();
+        $config->setProxyDir($opts['proxy']['dir']);
+        $config->setProxyNamespace($opts['proxy']['namespace']);
+        $config->setAutoGenerateProxyClasses($opts['proxy']['generate']);
+        $config->setMetadataDriverImpl($this->_createDriver($opts['driver']));
+        
+        $config->setMetadataCacheImpl($this->getCache($opts['cache']['metadata']));
+        $config->setQueryCacheImpl($this->getCache($opts['cache']['query']));
+        $config->setResultCacheImpl($this->getCache($opts['cache']['result']));
+        
+        // custom hydrators (Ocramius)
+        if(isset($opts['hydrators'])) {
+            if(!is_array($opts['hydrators'])) {
+                throw new \InvalidArgumentException(
+                    "hydrators must be an array with format 'mode' => 'class-name'"
+                );
+            }
+            foreach($opts['hydrators'] as $modeName => $className) {
+                $config->addCustomHydrationMode($modeName, $className);
+            }
+        }
+        
+        // custom functions (Ocramius)
+        if(isset($opts['functions']['datetime'])) {
+            if(!is_array($opts['functions']['datetime'])) {
+                throw new \InvalidArgumentException(
+                    "datetime functions must be an array with format 'function' => 'class-name'"
+                );
+            }
+            foreach($opts['functions']['datetime'] as $function => $className) {
+                $config->addCustomDatetimeFunction($function, $className);
+            }
+        }
+
+        if(isset($opts['functions']['numeric'])) {
+            if(!is_array($opts['functions']['numeric'])) {
+                throw new \InvalidArgumentException(
+                    "numeric functions must be an array with format 'function' => 'class-name'"
+                );
+            }
+            foreach($opts['functions']['numeric'] as $function => $className) {
+                $config->addCustomNumericFunction($function, $className);
+            }
+        }  
+        
+        if(isset($opts['functions']['string'])) {
+            if(!is_array($opts['functions']['string'])) {
+                throw new \InvalidArgumentException(
+                    "string functions must be an array with format 'function' => 'class-name'"
+                );
+            }
+            foreach($opts['functions']['string'] as $function => $className) {
+                $config->addCustomStringFunction($function, $className);
+            }
+        }  
+        
+        return $config;
     }
 
     /**
@@ -248,7 +305,7 @@ class Container
     {
         $driverClass = $opts['class'];
 
-        $refl = new ReflectionClass($driverClass);
+        $refl = new \ReflectionClass($driverClass);
 
         // annotation driver has extra initialization options
         if ($refl->getName() == self::ANNOTATION_DRIVER || $refl->isSubclassOf(self::ANNOTATION_DRIVER)) {
