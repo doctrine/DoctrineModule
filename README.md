@@ -1,5 +1,4 @@
 # SpiffyDoctrine Module for Zend Framework 2
-
 The SpiffyDoctrine module intends to integrate Doctrine 2 with the Zend Framework quickly and easily. 
 The following features are intended to work out of the box: 
 
@@ -8,9 +7,11 @@ The following features are intended to work out of the box:
   - Using a SQL Logger.
   - Configuration of annotations via registry files and/or namespaces (such as Gedmo DoctrineExtensions).
   - Validators for EntityExists and NoEntityExists.
+  
+## Requirements
+  - Zend Framework 2
 
 ## Installation
-
 The simplest way to install is to clone the repository into your /modules directory add the 
 SpiffyDoctrine key to your modules array.
 
@@ -21,7 +22,6 @@ SpiffyDoctrine key to your modules array.
      my/project/folder/modules/Application/module.config.php.
 
 ## Example standard configuration
-
     // modules/Application/module.config.php
     'di' => array(
         'instance' => array(
