@@ -7,6 +7,7 @@ The following features are intended to work out of the box:
   - Using a SQL Logger.
   - Configuration of annotations via registry files and/or namespaces (such as Gedmo DoctrineExtensions).
   - Validators for EntityExists and NoEntityExists.
+  - Authentication adapater for Zend\Authentication.
   
 ## Requirements
   - Zend Framework 2
@@ -85,3 +86,16 @@ want to fine tune the results.
        }
     ));
     var_dump($validator->isValid('test'));
+    
+## Authentication adapter for Zend\Authentication
+    $adapter = new \SpiffyDoctrine\Authentication\Adapter\DoctrineEntity(
+        $this->getLocator()->get('em-default'), // entity manager
+        'Application\Test\Entity',
+        'username', // optional, default shown
+        'password'  // optional, default shown
+    );
+    $adapter->setIdentity('username');
+    $adapter->setCredential('password');
+    $result = $adapter->authenticate();
+    
+    var_dump($result);
