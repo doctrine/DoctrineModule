@@ -1,11 +1,20 @@
 # SpiffyDoctrine Module for Zend Framework 2
+<<<<<<< HEAD
 The SpiffyDoctrine module intends to integrate Doctrine 2 with the Zend Framework quickly and easily. 
-The following features are intended to work out of the box: 
+=======
 
-  - Configuration and creation of multiple entity managers, cache instance, connections, and event managers.
-  - Specifying separate cache instances for metadata, query, and result caches.
-  - Using a SQL Logger.
-  - Configuration of annotations via registry files and/or namespaces (such as Gedmo DoctrineExtensions).
+The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framework 2 quickly and easily. 
+>>>>>>> 392d9d08c77f82d44095c8b61ec94e16d8872fc1
+The following features are intended to work out of the box: 
+  
+  - Multiple ORM entity managers
+  - Multiple DBAL connections
+  - Caches for metadata, queries and resultsets
+  - Using a SQL logger
+  - Custom dql functions, additional hydration modes
+  - Named DQL and native queries
+  - Multiple metadata drivers
+  - Annotations registries initialization (such as Gedmo DoctrineExtensions).
   - Validators for EntityExists and NoEntityExists.
   
 ## Requirements
@@ -13,7 +22,7 @@ The following features are intended to work out of the box:
 
 ## Installation
 The simplest way to install is to clone the repository into your /modules directory add the 
-SpiffyDoctrine key to your modules array.
+SpiffyDoctrine key to your modules array before your Application module key.
 
   1. cd my/project/folder
   2. git clone https://SpiffyJr@github.com/SpiffyJr/SpiffyDoctrine.git modules/SpiffyDoctrine --recursive
@@ -25,46 +34,61 @@ SpiffyDoctrine key to your modules array.
     // modules/Application/module.config.php
     'di' => array(
         'instance' => array(
-            'doctrine-container' => array(
+            'spiffy-connection' => array(
                 'parameters' => array(
-                    'connection' => array(
-                        'default' => array(
-                            'evm' => 'default',
-                            'dbname' => 'mydb',
-                            'user' => 'root',
-                            'password' => '',
-                            'host' => 'localhost',
-                            'driver' => 'pdo_mysql'
-                        )
+                    'params' => array(
+                        'driver'   => 'pdo_mysql',
+                        'host'     => 'localhost',
+                        'port'     => '3306', 
+                        'user'     => 'YOUR_USER',
+                        'password' => 'YOUR_PASSWORD',
+                        'dbname'   => 'YOUR_DB_NAME',
                     ),
-                    'em' => array(
-                        'default' => array(
-                            'driver' => array(
-                                'paths' => array(
-                                    '/path/to/your/entities',
-                                ),
-                            )
-                        )
-                    )
-                )
-            )
-        )
-    )
+                ),
+            ),
+            'spiffy-configuration' => array(
+                'parameters' => array(
+                    'dir' => '/path/where/to/generate/proxies',
+                ),
+            ),
+            'spiffy-annotationdriver' => array(
+                'parameters' => array(
+                    'paths' => array(
+                        '/path/to/Entities',
+                        '/path/to/other/Entities',
+                    ),
+                ),
+            ),
+        ),
+    );
 
 
 ## Usage
 
 ### Accessing the default, pre-configured, entity-manager instance
-A default EntityManager instance has been configured for you and is called em-default. You can access
+A default EntityManager instance has been configured for you and is called "spiffy-entitymanager". You can access
 it from an ActionController using the locator as follows:
 
-    $em = $this->getLocator()->get('em-default');
+    $em = $this->getLocator()->get('spiffy-entitymanager');
     
-If for some reason you want access to additional objects such as the EVM, Cache, or Connection instances
-you can get them from the SpiffyDoctrine\Container\Container.
+If for some reason you want access to additional objects such as the EventManager, Cache, or Connection instances
+you can get them from the locator the same way.
 
-    $container = $this->getLocator()->get('doctrine-container');
+## Available locator items
+Following locator items are preconfigured with this module:
 
+  - 'spiffy-connection', a Doctrine\DBAL\Connection instance
+  - 'spiffy-configuration, a SpiffyDoctrine\ORM\Configuration instance
+  - 'spiffy-metadatacache, a Doctrine\Common\Cache\ArrayCache instance
+  - 'spiffy-querycache, a Doctrine\Common\Cache\ArrayCache instance
+  - 'spiffy-resultcache, a Doctrine\Common\Cache\ArrayCache instance
+  - 'spiffy-eventmanager, a Doctrine\Common\EventManager instance
+  - 'spiffy-metadatadriver, a SpiffyDoctrine\ORM\Mapping\Driver\DriverChain instance
+  - 'spiffy-annotationdriver, a Doctrine\ORM\Mapping\Driver\AnnotationDriver instance
+  - 'spiffy-cachedreader, a Doctrine\Common\Annotations\CachedReader instance
+  - 'spiffy-annotationcache, a Doctrine\Common\Cache\ArrayCache instance
+  - 'spiffy-indexedreader, a Doctrine\Common\Annotations\IndexedReader instance
+  - 'spiffy-annotationreader, a Doctrine\Common\Annotations\AnnotationReader instance
 
 ## Doctrine CLI
 The Doctrine CLI has been pre-configured and is available in SpiffyDoctrine\bin. It should work as
@@ -77,7 +101,7 @@ an entity, and a field. You also have the option of specifying a query_builder C
 want to fine tune the results. 
 
     $validator = new \SpiffyDoctrine\Validator\NoEntityExists(array(
-       'em' => $this->getLocator()->get('em-default'),
+       'em' => $this->getLocator()->get('spiffy-entitymanager'),
        'entity' => 'SpiffyUser\Entity\User',
        'field' => 'username',
        'query_builder' => function($er) {
@@ -85,3 +109,23 @@ want to fine tune the results.
        }
     ));
     var_dump($validator->isValid('test'));
+
+## Tuning for production
+Tuning the system for production should be as simple as setting the following in your
+configuration (example presumes you have APC installed).
+
+    'di' => array(
+        'instance' => array(
+            'alias' => array(
+                'spiffy-metadatacache'      => 'Doctrine\Common\Cache\ApcCache',
+                'spiffy-querycache'         => 'Doctrine\Common\Cache\ApcCache',
+                'spiffy-resultcache'        => 'Doctrine\Common\Cache\ApcCache',
+                'spiffy-annotationcache'    => 'Doctrine\Common\Cache\ApcCache',
+            ),
+            'spiffy-configuration' => array(
+                'parameters' => array(
+                    'autoGenerateProxies' => false,
+                ),
+            ),
+        ),
+    );

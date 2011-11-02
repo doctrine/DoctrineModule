@@ -1,4 +1,14 @@
 <?php
+use Zend\Loader\AutoloaderFactory,
+    Zend\Config\Config,
+    Zend\Loader\ModuleAutoloader,
+    Zend\Module\Manager as ModuleManager,
+    Zend\Module\ManagerOptions,
+    Zend\Mvc\Bootstrap,
+    Zend\Mvc\Application,
+    Doctrine\ORM\Tools\Console\ConsoleRunner,
+    Symfony\Component\Console\Helper\HelperSet,
+    Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 
 ini_set('display_errors', true);
 error_reporting(-1);
@@ -15,27 +25,23 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 require_once 'Zend/Loader/AutoloaderFactory.php';
-Zend\Loader\AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
+AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
 
-$appConfig = new Zend\Config\Config(include __DIR__ . '/../../../configs/application.config.php');
+$appConfig = new Config(include __DIR__ . '/../../../configs/application.config.php');
 
-$moduleLoader = new Zend\Loader\ModuleAutoloader($appConfig['module_paths']);
+$moduleLoader = new ModuleAutoloader($appConfig['module_paths']);
 $moduleLoader->register();
 
-$moduleManager = new Zend\Module\Manager(
-    array('SpiffyDoctrine', 'Application'),
-    new Zend\Module\ManagerOptions($appConfig['module_manager_options'])
+$moduleManager = new ModuleManager(
+    $appConfig['modules'],
+    new ManagerOptions($appConfig['module_manager_options'])
 );
 
-$bootstrap      = new Zend\Mvc\Bootstrap($moduleManager);
-$application    = new Zend\Mvc\Application;
+$bootstrap      = new Bootstrap($moduleManager);
+$application    = new Application();
 $bootstrap->bootstrap($application);
 $locator = $application->getLocator();
 
-\Doctrine\ORM\Tools\Console\ConsoleRunner::run(
-    new \Symfony\Component\Console\Helper\HelperSet(
-        array(
-            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($locator->get('em-default'))
-        )
-    )
-);
+ConsoleRunner::run(new HelperSet(array(
+    'em' => new EntityManagerHelper($locator->get('spiffy-em'))
+)));
