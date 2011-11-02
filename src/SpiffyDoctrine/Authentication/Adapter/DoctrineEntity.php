@@ -10,12 +10,53 @@ use Doctrine\ORM\EntityManager,
 
 class DoctrineEntity implements AuthenticationAdapter
 {
+    /**
+     * Doctrine EntityManager instance
+     * 
+     * @var Doctrine\ORM\EntityManager
+     */
     protected $_em;
+    
+    /**
+     * Entity class to use.
+     * 
+     * @var string
+     */
     protected $_entity;
+    
+    /**
+     * Identity column to check credential against.
+     * 
+     * @var string
+     */
     protected $_identityColumn;
+    
+    /**
+     * Credential column to check credential against.
+     * 
+     * @var string
+     */
     protected $_credentialColumn;
+    
+    /**
+     * Use supplied identity.
+     * 
+     * @var string
+     */
     protected $_identity;
+    
+    /**
+     * User supplied credential.
+     * 
+     * @var string
+     */
     protected $_credential;
+    
+    /**
+     * Contains the authentication results.
+     * 
+     * @var array
+     */
     protected $_authenticationResultInfo = null;
     
     /**
@@ -37,7 +78,7 @@ class DoctrineEntity implements AuthenticationAdapter
     }
     
     /**
-     * authenticate() - defined by Zend_Auth_Adapter_Interface.  This method is called to
+     * Defined by Zend_Auth_Adapter_Interface.  This method is called to
      * attempt an authentication.  Previous to this call, this adapter would have already
      * been configured with all necessary information to successfully connect to a database
      * table and attempt to find a record matching the provided identity.
@@ -58,6 +99,12 @@ class DoctrineEntity implements AuthenticationAdapter
         return $authResult;
     }
     
+    /**
+     * Prepares the query by building it from QueryBuilder based on the 
+     * entity, credentialColumn and identityColumn.
+     * 
+     * @return Doctrine\ORM\Query
+     */
     protected function _authenticateCreateQuery()
     {
         $mdata = $this->_em->getClassMetadata($this->_entity);
@@ -115,6 +162,12 @@ class DoctrineEntity implements AuthenticationAdapter
         return $this->_authenticateCreateAuthResult();
     }
     
+    /**
+     * Validates the query. Catches exceptions from Doctrine and populates authenticate results
+     * appropriately.
+     * 
+     * @return false|object
+     */
     protected function _authenticateValidateQuery(Query $query)
     {
         try {
