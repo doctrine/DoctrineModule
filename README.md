@@ -1,11 +1,5 @@
 # SpiffyDoctrine Module for Zend Framework 2
-<<<<<<< HEAD
-The SpiffyDoctrine module intends to integrate Doctrine 2 with the Zend Framework quickly and easily. 
-=======
-
-The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framework 2 quickly and easily. 
->>>>>>> 392d9d08c77f82d44095c8b61ec94e16d8872fc1
-The following features are intended to work out of the box: 
+The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framework 2 quickly and easily. The following features are intended to work out of the box: 
   
   - Multiple ORM entity managers
   - Multiple DBAL connections
