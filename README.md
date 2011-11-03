@@ -32,33 +32,37 @@ SpiffyDoctrine key to your modules array before your Application module key.
     // modules/Application/module.config.php
     'di' => array(
         'instance' => array(
+            'doctrine-annotationdriver' => array(
+                'parameters' => array(
+                    'reader' => 'doctrine-cachedreader',
+                    'paths' => array(
+                        __DIR__ . '/../src/MyEntityNamespace'
+                    ),
+                ),
+            ),
+            'doctrine-driverchain' => array(
+                'injections' => array(
+                    'addDriver' => array(
+                        array('nestedDriver' => 'doctrine-annotationdriver', 'namespace' => 'MyEntityNamespace'),
+                    )
+                ),
+            ),
             'doctrine-connection' => array(
                 'parameters' => array(
                     'params' => array(
                         'driver'   => 'pdo_mysql',
                         'host'     => 'localhost',
                         'port'     => '3306', 
-                        'user'     => 'YOUR_USER',
-                        'password' => 'YOUR_PASSWORD',
-                        'dbname'   => 'YOUR_DB_NAME',
+                        'user'     => 'USERNAME',
+                        'password' => 'PASSWORD',
+                        'dbname'   => 'DBNAME',
                     ),
+                    'config' => 'doctrine-configuration',
+                    'eventManager' => 'doctrine-eventmanager'
                 ),
             ),
-            'doctrine-configuration' => array(
-                'parameters' => array(
-                    'dir' => '/path/where/to/generate/proxies',
-                ),
-            ),
-            'doctrine-annotationdriver' => array(
-                'parameters' => array(
-                    'paths' => array(
-                        '/path/to/Entities',
-                        '/path/to/other/Entities',
-                    ),
-                ),
-            ),
-        ),
-    );
+        )
+    )
 
 
 ## Usage
