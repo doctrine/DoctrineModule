@@ -122,4 +122,15 @@ configuration (example presumes you have APC installed).
                 ),
             ),
         ),
+## Authentication adapter for Zend\Authentication
+    $adapter = new \SpiffyDoctrine\Authentication\Adapter\DoctrineEntity(
+        $this->getLocator()->get('em-default'), // entity manager
+        'Application\Test\Entity',
+        'username', // optional, default shown
+        'password'  // optional, default shown
     );
+    $adapter->setIdentity('username');
+    $adapter->setCredential('password');
+    $result = $adapter->authenticate();
+    
+    var_dump($result);
