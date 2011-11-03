@@ -34,7 +34,6 @@ SpiffyDoctrine key to your modules array before your Application module key.
         'instance' => array(
             'doctrine-annotationdriver' => array(
                 'parameters' => array(
-                    'reader' => 'doctrine-cachedreader',
                     'paths' => array(
                         __DIR__ . '/../src/MyEntityNamespace'
                     ),
@@ -57,8 +56,6 @@ SpiffyDoctrine key to your modules array before your Application module key.
                         'password' => 'PASSWORD',
                         'dbname'   => 'DBNAME',
                     ),
-                    'config' => 'doctrine-configuration',
-                    'eventManager' => 'doctrine-eventmanager'
                 ),
             ),
         )
