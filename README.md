@@ -1,4 +1,6 @@
 # SpiffyDoctrine Module for Zend Framework 2
+* THIS BRANCH REQUIRES RALPH SCHINDLER'S HOTFIX FOR ZF2/DI, https://github.com/ralphschindler/zf2.git (a8de0890e216e9826be3414a818c333e2f307028) *
+
 The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framework 2 quickly and easily. The following features are intended to work out of the box: 
   
   - Multiple ORM entity managers
@@ -10,6 +12,7 @@ The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framewor
   - Multiple metadata drivers
   - Annotations registries initialization (such as Gedmo DoctrineExtensions).
   - Validators for EntityExists and NoEntityExists.
+  - Authentication adapter for Zend\Authenticator.
   
 ## Requirements
   - Zend Framework 2
@@ -77,8 +80,12 @@ Following locator items are preconfigured with this module:
   - doctrine-querycache, a Doctrine\Common\Cache\ArrayCache instance
   - doctrine-resultcache, a Doctrine\Common\Cache\ArrayCache instance
   - doctrine-eventmanager, a Doctrine\Common\EventManager instance
-  - doctrine-metadatadriver, a SpiffyDoctrine\ORM\Mapping\Driver\DriverChain instance
+  - doctrine-driverchain, a Doctrine\ORM\Mapping\Driver\DriverChain instance
   - doctrine-annotationdriver, a Doctrine\ORM\Mapping\Driver\AnnotationDriver instance
+  - doctrine-phpdriver, a Doctrine\ORM\Mapping\Driver\PHPDriver instance
+  - doctrine-staticphpdriver, a Doctrine\ORM\Mapping\Driver\StaticPHPDriver instance 
+  - doctrine-xmldriver, a Doctrine\ORM\Mapping\Driver\XmlDriver instance
+  - doctrine-yamldriver, a Doctrine\ORM\Mapping\Driver\YamlDriver instance
   - doctrine-cachedreader, a Doctrine\Common\Annotations\CachedReader instance
   - doctrine-annotationcache, a Doctrine\Common\Cache\ArrayCache instance
   - doctrine-indexedreader, a Doctrine\Common\Annotations\IndexedReader instance

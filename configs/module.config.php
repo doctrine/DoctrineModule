@@ -126,45 +126,55 @@ return array(
                         )
                     ),
                 ),
-                'SpiffyDoctrine\ORM\Mapping\Driver\DriverChain' => array(
+                'Doctrine\ORM\Mapping\Driver\DriverChain' => array(
                     'methods' => array(
                         'addDriver' => array(
                             'nestedDriver' => array(
                                 'type' => 'Doctrine\ORM\Mapping\Driver\Driver',
                                 'required' => true,
+                            ),
+                            'namespace' => array(
+                                'type' => false,
+                                'required' => true
                             )
-                        )
-                    ),
+                        ),
+                    )
                 ),
             ),
         ),
         'instance' => array(
             'alias' => array(
-                //entity manager
+                // entity manager
                 'doctrine-em'                 => 'Doctrine\ORM\EntityManager',
                 
-                //connection
+                // connection
                 'doctrine-connection'         => 'Doctrine\DBAL\Connection',
                 
-                //config
+                // config
                 'doctrine-configuration'      => 'Doctrine\ORM\Configuration',
                 'doctrine-metadatacache'      => 'Doctrine\Common\Cache\ArrayCache',
                 'doctrine-querycache'         => 'Doctrine\Common\Cache\ArrayCache',
                 'doctrine-resultcache'        => 'Doctrine\Common\Cache\ArrayCache',
                 
-                //event manager
+                // event manager
                 'doctrine-eventmanager'       => 'Doctrine\Common\EventManager',
                 
-                //metadata
-                'doctrine-metadatadriver'     => 'SpiffyDoctrine\ORM\Mapping\Driver\DriverChain',
+                // drivers
+                'doctrine-driverchain'        => 'Doctrine\ORM\Mapping\Driver\DriverChain',
+                
                 'doctrine-annotationdriver'   => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'doctrine-phpdriver'          => 'Doctrine\ORM\Mapping\Driver\PHPDriver',
+                'doctrine-staticphpdriver'    => 'Doctrine\ORM\Mapping\Driver\StaticPHPDriver',
+                'doctrine-xmldriver'          => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+                'doctrine-yamldriver'         => 'Doctrine\ORM\Mapping\Driver\YamlDriver',
+                
+                // readers
                 'doctrine-cachedreader'       => 'Doctrine\Common\Annotations\CachedReader',
                 'doctrine-annotationcache'    => 'Doctrine\Common\Cache\ArrayCache',
                 'doctrine-indexedreader'      => 'Doctrine\Common\Annotations\IndexedReader',
                 'doctrine-annotationreader'   => 'Doctrine\Common\Annotations\AnnotationReader',
             ),
             
-            //entitymanager
             'doctrine-em' => array(
                 'parameters' => array(
                     'conn' => 'doctrine-connection',
@@ -173,7 +183,6 @@ return array(
                 ),
             ),
             
-            //connection
             'doctrine-connection' => array(
                 'parameters' => array(
                     'params' => array(
@@ -189,12 +198,11 @@ return array(
                 ),
             ),
             
-            // orm configuration
             'doctrine-configuration' => array(
                 'parameters' => array(
                     'dir'                      => __DIR__ . '/../src/Proxy',
                     'ns'                       => 'SpiffyDoctrine\Proxy',
-                    'driverImpl'               => 'doctrine-metadatadriver',
+                    'driverImpl'               => 'doctrine-driverchain',
                     //'logger'                   => 'sqllogger', //if needed
                     'metadataCacheImpl'        => 'doctrine-metadatacache',
                     'queryCacheImpl'           => 'doctrine-querycache',
@@ -223,24 +231,24 @@ return array(
                     'namespace' => 'spiffy_resultcache'
                 ),
             ),
-            
             'doctrine-eventmanager' => array(
                 'injections' => array(
                     //just an example of how multiple events can be attached in DIC
                     //'Gedmo/Sluggable/SluggableListener
                 ),
             ),
-            
-            'doctrine-metadatadriver' => array(
+            'doctrine-driverchain' => array(
                 'injections' => array(
-                    'doctrine-annotationdriver',
+                    'addDriver' => array(
+                        //array('nestedDriver' => 'doctrine-annotationdriver', 'namespace' => 'My\Annotation\Namespace'),
+                        //array('nestedDriver' => 'doctrine-yamldriver', 'namespace' => 'My\Yaml\Namespace')
+                    )
                 ),
             ),
             'doctrine-annotationdriver' => array(
                 'parameters' => array(
                     'reader' => 'doctrine-cachedreader',
                     'paths' => array(
-                        
                     ),
                 ),
             ),
