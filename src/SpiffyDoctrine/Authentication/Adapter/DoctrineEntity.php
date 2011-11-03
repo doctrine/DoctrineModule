@@ -99,6 +99,79 @@ class DoctrineEntity implements AuthenticationAdapter
         return $authResult;
     }
     
+   
+    /**
+     * Sets the entity manager to use.
+     * 
+     * @param Doctrine\ORM\EntityManager $em
+     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     */
+    public function setEntityManager(EntityManager $em)
+    {
+        $this->_em = $em;
+        return $this;
+    }
+    
+    /**
+     * Sets the entity to use for authentication.
+     * 
+     * @param string $entity
+     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     */
+    public function setEntity($entity)
+    {
+        $this->_entity = $entity;
+        return $this;
+    }
+    
+    /**
+     * Set the value to be used as the identity
+     *
+     * @param  string $value
+     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     */
+    public function setIdentity($value)
+    {
+        $this->_identity = $value;
+        return $this;
+    }
+
+    /**
+     * Set the credential value to be used.
+     *
+     * @param  string $credential
+     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     */
+    public function setCredential($credential)
+    {
+        $this->_credential = $credential;
+        return $this;
+    }
+    
+    /**
+     * Set the column name to be used as the identity column
+     *
+     * @param  string $identityColumn
+     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     */
+    public function setIdentityColumn($identityColumn)
+    {
+        $this->_identityColumn = $identityColumn;
+        return $this;
+    }
+
+    /**
+     * Set the column name to be used as the credential column
+     *
+     * @param  string $credentialColumn
+     * @return Zend\Authentication\Adapter\DbTable Provides a fluent interface
+     */
+    public function setCredentialColumn($credentialColumn)
+    {
+        $this->_credentialColumn = $credentialColumn;
+        return $this;
+    }
+    
     /**
      * Prepares the query by building it from QueryBuilder based on the 
      * entity, credentialColumn and identityColumn.
@@ -233,77 +306,5 @@ class DoctrineEntity implements AuthenticationAdapter
             $this->_authenticateResultInfo['identity'],
             $this->_authenticateResultInfo['messages']
         );
-    }
-    
-    /**
-     * Sets the entity manager to use.
-     * 
-     * @param Doctrine\ORM\EntityManager $em
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
-     */
-    public function setEntityManager(EntityManager $em)
-    {
-        $this->_em = $em;
-        return $this;
-    }
-    
-    /**
-     * Sets the entity to use for authentication.
-     * 
-     * @param string $entity
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
-     */
-    public function setEntity($entity)
-    {
-        $this->_entity = $entity;
-        return $this;
-    }
-    
-    /**
-     * Set the value to be used as the identity
-     *
-     * @param  string $value
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
-     */
-    public function setIdentity($value)
-    {
-        $this->_identity = $value;
-        return $this;
-    }
-
-    /**
-     * Set the credential value to be used.
-     *
-     * @param  string $credential
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
-     */
-    public function setCredential($credential)
-    {
-        $this->_credential = $credential;
-        return $this;
-    }
-    
-    /**
-     * Set the column name to be used as the identity column
-     *
-     * @param  string $identityColumn
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
-     */
-    public function setIdentityColumn($identityColumn)
-    {
-        $this->_identityColumn = $identityColumn;
-        return $this;
-    }
-
-    /**
-     * Set the column name to be used as the credential column
-     *
-     * @param  string $credentialColumn
-     * @return Zend\Authentication\Adapter\DbTable Provides a fluent interface
-     */
-    public function setCredentialColumn($credentialColumn)
-    {
-        $this->_credentialColumn = $credentialColumn;
-        return $this;
     }
 }
