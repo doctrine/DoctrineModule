@@ -28,7 +28,7 @@ SpiffyDoctrine key to your modules array before your Application module key.
     // modules/Application/module.config.php
     'di' => array(
         'instance' => array(
-            'spiffy-connection' => array(
+            'doctrine-connection' => array(
                 'parameters' => array(
                     'params' => array(
                         'driver'   => 'pdo_mysql',
@@ -40,12 +40,12 @@ SpiffyDoctrine key to your modules array before your Application module key.
                     ),
                 ),
             ),
-            'spiffy-configuration' => array(
+            'doctrine-configuration' => array(
                 'parameters' => array(
                     'dir' => '/path/where/to/generate/proxies',
                 ),
             ),
-            'spiffy-annotationdriver' => array(
+            'doctrine-annotationdriver' => array(
                 'parameters' => array(
                     'paths' => array(
                         '/path/to/Entities',
@@ -60,10 +60,10 @@ SpiffyDoctrine key to your modules array before your Application module key.
 ## Usage
 
 ### Accessing the default, pre-configured, entity-manager instance
-A default EntityManager instance has been configured for you and is called "spiffy-entitymanager". You can access
+A default EntityManager instance has been configured for you and is called "doctrine-em". You can access
 it from an ActionController using the locator as follows:
 
-    $em = $this->getLocator()->get('spiffy-entitymanager');
+    $em = $this->getLocator()->get('doctrine-em');
     
 If for some reason you want access to additional objects such as the EventManager, Cache, or Connection instances
 you can get them from the locator the same way.
@@ -71,18 +71,18 @@ you can get them from the locator the same way.
 ## Available locator items
 Following locator items are preconfigured with this module:
 
-  - 'spiffy-connection', a Doctrine\DBAL\Connection instance
-  - 'spiffy-configuration, a SpiffyDoctrine\ORM\Configuration instance
-  - 'spiffy-metadatacache, a Doctrine\Common\Cache\ArrayCache instance
-  - 'spiffy-querycache, a Doctrine\Common\Cache\ArrayCache instance
-  - 'spiffy-resultcache, a Doctrine\Common\Cache\ArrayCache instance
-  - 'spiffy-eventmanager, a Doctrine\Common\EventManager instance
-  - 'spiffy-metadatadriver, a SpiffyDoctrine\ORM\Mapping\Driver\DriverChain instance
-  - 'spiffy-annotationdriver, a Doctrine\ORM\Mapping\Driver\AnnotationDriver instance
-  - 'spiffy-cachedreader, a Doctrine\Common\Annotations\CachedReader instance
-  - 'spiffy-annotationcache, a Doctrine\Common\Cache\ArrayCache instance
-  - 'spiffy-indexedreader, a Doctrine\Common\Annotations\IndexedReader instance
-  - 'spiffy-annotationreader, a Doctrine\Common\Annotations\AnnotationReader instance
+  - doctrine-connection', a Doctrine\DBAL\Connection instance
+  - doctrine-configuration, a SpiffyDoctrine\ORM\Configuration instance
+  - doctrine-metadatacache, a Doctrine\Common\Cache\ArrayCache instance
+  - doctrine-querycache, a Doctrine\Common\Cache\ArrayCache instance
+  - doctrine-resultcache, a Doctrine\Common\Cache\ArrayCache instance
+  - doctrine-eventmanager, a Doctrine\Common\EventManager instance
+  - doctrine-metadatadriver, a SpiffyDoctrine\ORM\Mapping\Driver\DriverChain instance
+  - doctrine-annotationdriver, a Doctrine\ORM\Mapping\Driver\AnnotationDriver instance
+  - doctrine-cachedreader, a Doctrine\Common\Annotations\CachedReader instance
+  - doctrine-annotationcache, a Doctrine\Common\Cache\ArrayCache instance
+  - doctrine-indexedreader, a Doctrine\Common\Annotations\IndexedReader instance
+  - doctrine-annotationreader, a Doctrine\Common\Annotations\AnnotationReader instance
 
 ## Doctrine CLI
 The Doctrine CLI has been pre-configured and is available in SpiffyDoctrine\bin. It should work as
@@ -95,7 +95,7 @@ an entity, and a field. You also have the option of specifying a query_builder C
 want to fine tune the results. 
 
     $validator = new \SpiffyDoctrine\Validator\NoEntityExists(array(
-       'em' => $this->getLocator()->get('spiffy-entitymanager'),
+       'em' => $this->getLocator()->get('doctrine-em'),
        'entity' => 'SpiffyUser\Entity\User',
        'field' => 'username',
        'query_builder' => function($er) {
@@ -111,12 +111,12 @@ configuration (example presumes you have APC installed).
     'di' => array(
         'instance' => array(
             'alias' => array(
-                'spiffy-metadatacache'      => 'Doctrine\Common\Cache\ApcCache',
-                'spiffy-querycache'         => 'Doctrine\Common\Cache\ApcCache',
-                'spiffy-resultcache'        => 'Doctrine\Common\Cache\ApcCache',
-                'spiffy-annotationcache'    => 'Doctrine\Common\Cache\ApcCache',
+                'doctrine-metadatacache'      => 'Doctrine\Common\Cache\ApcCache',
+                'doctrine-querycache'         => 'Doctrine\Common\Cache\ApcCache',
+                'doctrine-resultcache'        => 'Doctrine\Common\Cache\ApcCache',
+                'doctrine-annotationcache'    => 'Doctrine\Common\Cache\ApcCache',
             ),
-            'spiffy-configuration' => array(
+            'doctrine-configuration' => array(
                 'parameters' => array(
                     'autoGenerateProxies' => false,
                 ),

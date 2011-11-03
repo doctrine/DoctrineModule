@@ -67,8 +67,7 @@ return array(
                         'getConnection',
                     ),
                 ),
-                // temporary - should be removable once Ralph fixes a DI issue
-                'SpiffyDoctrine\ORM\Configuration' => array(
+                'Doctrine\ORM\Configuration' => array(
                     'methods' => array(
                         'setMetadataCacheImpl' => array(
                             'metadataCacheImpl' => array(
@@ -94,41 +93,30 @@ return array(
                                 'required' => true,
                             ),
                         ),
-                        'addNumericFunction' => array(
-                            'numericFunction' => array(
-                                'type' => 'SpiffyDoctrine\ORM\Configuration\CustomNumericFunction',
-                                'required' => true,
-                            ),
+                        'addCustomDatetimeFunction' => array(
+                            'name' => array('type' => false, 'required' => true),
+                            'className' => array('type' => false, 'required' => true)
                         ),
-                        'addStringFunction' => array(
-                            'stringFunction' => array(
-                                'type' => 'SpiffyDoctrine\ORM\Configuration\CustomStringFunction',
-                                'required' => true,
-                            ),
+                        'addCustomNumericFunction' => array(
+                            'name' => array('type' => false, 'required' => true),
+                            'className' => array('type' => false, 'required' => true)
                         ),
-                        'addDatetimeFunction' => array(
-                            'datetimeFunction' => array(
-                                'type' => 'SpiffyDoctrine\ORM\Configuration\CustomDatetimeFunction',
-                                'required' => true,
-                            ),
+                        'addCustomStringFunction' => array(
+                            'name' => array('type' => false, 'required' => true),
+                            'className' => array('type' => false, 'required' => true)
                         ),
-                        'addHydrationMode' => array(
-                            'hydrationMode' => array(
-                                'type' => 'SpiffyDoctrine\ORM\Configuration\CustomHydrationMode',
-                                'required' => true,
-                            ),
+                        'addCustomHydrationMode' => array(
+                            'modeName' => array('type' => false, 'required' => true),
+                            'hydrator' => array('type' => false, 'required' => true)
                         ),
-                        'addQuery' => array(
-                            'namedQuery' => array(
-                                'type' => 'SpiffyDoctrine\ORM\Configuration\NamedQuery',
-                                'required' => true,
-                            ),
+                        'addNamedQuery' => array(
+                            'name' => array('type' => false, 'required' => true),
+                            'dql' => array('type' => false, 'required' => true)
                         ),
-                        'addNativeQuery' => array(
-                            'namedNativeQuery' => array(
-                                'type' => 'SpiffyDoctrine\ORM\Configuration\NamedNativeQuery',
-                                'required' => true,
-                            ),
+                        'addNamedNativeQuery' => array(
+                            'name' => array('type' => false, 'required' => true),
+                            'sql' => array('type' => false, 'required' => true),
+                            'rsm' => array('type' => 'Doctrine\ORM\Query\ResultSetMapping', 'required' => true)
                         ),
                         'setAutoGenerateProxyClasses' => array(
                             'autoGenerateProxyClasses' => array(
@@ -153,40 +141,40 @@ return array(
         'instance' => array(
             'alias' => array(
                 //entity manager
-                'spiffy-em'                 => 'Doctrine\ORM\EntityManager',
+                'doctrine-em'                 => 'Doctrine\ORM\EntityManager',
                 
                 //connection
-                'spiffy-connection'         => 'Doctrine\DBAL\Connection',
+                'doctrine-connection'         => 'Doctrine\DBAL\Connection',
                 
                 //config
-                'spiffy-configuration'      => 'SpiffyDoctrine\ORM\Configuration',
-                'spiffy-metadatacache'      => 'Doctrine\Common\Cache\ArrayCache',
-                'spiffy-querycache'         => 'Doctrine\Common\Cache\ArrayCache',
-                'spiffy-resultcache'        => 'Doctrine\Common\Cache\ArrayCache',
+                'doctrine-configuration'      => 'Doctrine\ORM\Configuration',
+                'doctrine-metadatacache'      => 'Doctrine\Common\Cache\ArrayCache',
+                'doctrine-querycache'         => 'Doctrine\Common\Cache\ArrayCache',
+                'doctrine-resultcache'        => 'Doctrine\Common\Cache\ArrayCache',
                 
                 //event manager
-                'spiffy-eventmanager'       => 'Doctrine\Common\EventManager',
+                'doctrine-eventmanager'       => 'Doctrine\Common\EventManager',
                 
                 //metadata
-                'spiffy-metadatadriver'     => 'SpiffyDoctrine\ORM\Mapping\Driver\DriverChain',
-                'spiffy-annotationdriver'   => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'spiffy-cachedreader'       => 'Doctrine\Common\Annotations\CachedReader',
-                'spiffy-annotationcache'    => 'Doctrine\Common\Cache\ArrayCache',
-                'spiffy-indexedreader'      => 'Doctrine\Common\Annotations\IndexedReader',
-                'spiffy-annotationreader'   => 'Doctrine\Common\Annotations\AnnotationReader',
+                'doctrine-metadatadriver'     => 'SpiffyDoctrine\ORM\Mapping\Driver\DriverChain',
+                'doctrine-annotationdriver'   => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'doctrine-cachedreader'       => 'Doctrine\Common\Annotations\CachedReader',
+                'doctrine-annotationcache'    => 'Doctrine\Common\Cache\ArrayCache',
+                'doctrine-indexedreader'      => 'Doctrine\Common\Annotations\IndexedReader',
+                'doctrine-annotationreader'   => 'Doctrine\Common\Annotations\AnnotationReader',
             ),
             
             //entitymanager
-            'spiffy-em' => array(
+            'doctrine-em' => array(
                 'parameters' => array(
-                    'conn' => 'spiffy-connection',
-                    'config' => 'spiffy-configuration',
-                    'eventManager' => 'spiffy-eventmanager',
+                    'conn' => 'doctrine-connection',
+                    'config' => 'doctrine-configuration',
+                    'eventManager' => 'doctrine-eventmanager',
                 ),
             ),
             
             //connection
-            'spiffy-connection' => array(
+            'doctrine-connection' => array(
                 'parameters' => array(
                     'params' => array(
                         //'driver'   => 'pdo_mysql',
@@ -196,77 +184,80 @@ return array(
                         //'password' => 'testpassword',
                         //'dbname'   => 'testdbname',
                     ),
-                    'config' => 'spiffy-configuration',
-                    'eventManager' => 'spiffy-eventmanager'
+                    'config' => 'doctrine-configuration',
+                    'eventManager' => 'doctrine-eventmanager'
                 ),
             ),
             
             // orm configuration
-            'spiffy-configuration' => array(
+            'doctrine-configuration' => array(
                 'parameters' => array(
                     'dir'                      => __DIR__ . '/../src/Proxy',
                     'ns'                       => 'SpiffyDoctrine\Proxy',
-                    'driverImpl'               => 'spiffy-metadatadriver',
+                    'driverImpl'               => 'doctrine-metadatadriver',
                     //'logger'                   => 'sqllogger', //if needed
-                    'metadataCacheImpl'        => 'spiffy-metadatacache',
-                    'queryCacheImpl'           => 'spiffy-querycache',
-                    'resultCacheImpl'          => 'spiffy-resultcache',
+                    'metadataCacheImpl'        => 'doctrine-metadatacache',
+                    'queryCacheImpl'           => 'doctrine-querycache',
+                    'resultCacheImpl'          => 'doctrine-resultcache',
                     'autoGenerateProxyClasses' => true,
                 ),
+                // shows an example of how to add custom functions/queries/hydrators
+                //'injections' => array(
+                //    'addCustomDatetimeFunction' => array(
+                //        array('name' => 'MyFunction', 'className' => 'My\Class\Name')
+                //    )
+                //)
             ),
-            'spiffy-metadatacache' => array(
+            'doctrine-metadatacache' => array(
                 'parameters' => array(
                     'namespace' => 'spiffy_metadatacache'
                 ),
             ),
-            'spiffy-querycache' => array(
+            'doctrine-querycache' => array(
                 'parameters' => array(
                     'namespace' => 'spiffy_querycache'
                 ),
             ),
-            'spiffy-resultcache' => array(
+            'doctrine-resultcache' => array(
                 'parameters' => array(
                     'namespace' => 'spiffy_resultcache'
                 ),
             ),
             
-            //eventmanager
-            'spiffy-eventmanager' => array(
+            'doctrine-eventmanager' => array(
                 'injections' => array(
                     //just an example of how multiple events can be attached in DIC
                     //'Gedmo/Sluggable/SluggableListener
-                    //'Doctrine\ORM\Event\EntityEventDelegator',
                 ),
             ),
             
-            //metadata
-            'spiffy-metadatadriver' => array(
+            'doctrine-metadatadriver' => array(
                 'injections' => array(
-                    'spiffy-annotationdriver',
+                    'doctrine-annotationdriver',
                 ),
             ),
-            'spiffy-annotationdriver' => array(
+            'doctrine-annotationdriver' => array(
                 'parameters' => array(
-                    'reader' => 'spiffy-cachedreader',
+                    'reader' => 'doctrine-cachedreader',
                     'paths' => array(
                         
                     ),
                 ),
             ),
-            'spiffy-cachedreader' => array(
+            'doctrine-cachedreader' => array(
                 'parameters' => array(
-                    'reader' => 'spiffy-indexedreader',
-                    'cache' => 'spiffy-annotationcache'
+                    'reader' => 'doctrine-indexedreader',
+                    'cache' => 'doctrine-annotationcache'
                 ),
             ),
-            'spiffy-annotationcache' => array(
+            'doctrine-annotationcache' => array(
                 'parameters' => array(
                     'namespace' => 'spiffy_annotation'
                 ),
             ),
-            'spiffy-indexedreader' => array(
+            'doctrine-indexedreader' => array(
                 'parameters' => array(
-                    'reader' => 'spiffy-annotationreader'
+                    'reader' => 'doctrine-annotationreader'
                 ),
             ),
             
