@@ -84,10 +84,6 @@ abstract class AbstractEntity extends AbstractValidator
             }
             $this->_queryBuilder = $options['query_builder'];
         } 
-        
-        if (!$this->_query && !array_key_exists('field', $options)) {
-            throw new Exception\InvalidArgumentException('You must specify a field if not using query.');
-        }
         $this->_field = $options['field'];
     }
 
