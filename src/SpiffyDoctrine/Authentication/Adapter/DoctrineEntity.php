@@ -158,6 +158,7 @@ class DoctrineEntity implements AuthenticationAdapter
         }
 
         $this->_authenticateResultInfo['code'] = AuthenticationResult::SUCCESS;
+        $this->_authenticateResultInfo['identity'] = $identity;
         $this->_authenticateResultInfo['messages'][] = 'Authentication successful.';
         return $this->_authenticateCreateAuthResult();
     }
@@ -212,7 +213,7 @@ class DoctrineEntity implements AuthenticationAdapter
 
         $this->_authenticateResultInfo = array(
             'code'     => AuthenticationResult::FAILURE,
-            'identity' => null,
+            'identity' => $this->_identity,
             'messages' => array()
             );
 
