@@ -13,6 +13,28 @@ return array(
     'di' => array(
         'definition' => array(
             'class' => array(
+                'SpiffyDoctrine\DBAL\DriverManager' => array(
+                    'methods' => array(
+                        'getConnection' => array(
+                            'params' => array(
+                                'type' => false,
+                                'required' => false,
+                            ),
+                            'config' => array(
+                                'type' => 'Doctrine\DBAL\Configuration',
+                                'required' => false,
+                            ),
+                            'eventManager' => array(
+                                'type' => 'Doctrine\Common\EventManager',
+                                'required' => false,
+                            ),
+                            'pdo' => array(
+                                'type' => 'PDO',
+                                'required' => false,
+                            )
+                        ),
+                    ),
+                ),
                 'Doctrine\Common\EventManager' => array(
                     'addEventSubscriber' => array(
                         'subscriber' => array(
@@ -22,10 +44,7 @@ return array(
                     )
                 ),
                 'Doctrine\ORM\EntityManager' => array(
-                    'instantiator' => array(
-                        'Doctrine\ORM\EntityManager',
-                        'create'
-                    ),
+                    'instantiator' => array('Doctrine\ORM\EntityManager', 'create'),
                     'methods' => array(
                         'create' => array(
                             'conn' => array(
@@ -43,29 +62,8 @@ return array(
                         ),
                     )
                 ),
-                'Doctrine\DBAL\DriverManager' => array(
-                    'methods' => array(
-                        'getConnection' => array(
-                            'params' => array(
-                                'type' => false,
-                                'required' => true,
-                            ),
-                            'config' => array(
-                                'type' => 'Doctrine\DBAL\Configuration',
-                                'required' => false,
-                            ),
-                            'eventManager' => array(
-                                'type' => 'Doctrine\Common\EventManager',
-                                'required' => false,
-                            ),
-                        ),
-                    ),
-                ),
                 'Doctrine\DBAL\Connection' => array(
-                    'instantiator' => array(
-                        'Doctrine\DBAL\DriverManager',
-                        'getConnection',
-                    ),
+                    'instantiator' => array('SpiffyDoctrine\DBAL\DriverManager', 'getConnection',),
                 ),
                 'Doctrine\ORM\Configuration' => array(
                     'methods' => array(
@@ -149,6 +147,7 @@ return array(
                 
                 // connection
                 'doctrine-connection'         => 'Doctrine\DBAL\Connection',
+                'doctrine-pdo'                => 'PDO',
                 
                 // config
                 'doctrine-configuration'      => 'Doctrine\ORM\Configuration',
@@ -174,7 +173,6 @@ return array(
                 'doctrine-indexedreader'      => 'Doctrine\Common\Annotations\IndexedReader',
                 'doctrine-annotationreader'   => 'Doctrine\Common\Annotations\AnnotationReader',
             ),
-            
             'doctrine-em' => array(
                 'parameters' => array(
                     'conn' => 'doctrine-connection',
@@ -182,7 +180,6 @@ return array(
                     'eventManager' => 'doctrine-eventmanager',
                 ),
             ),
-            
             'doctrine-connection' => array(
                 'parameters' => array(
                     'params' => array(
@@ -194,10 +191,20 @@ return array(
                         //'dbname'   => 'testdbname',
                     ),
                     'config' => 'doctrine-configuration',
-                    'eventManager' => 'doctrine-eventmanager'
+                    'eventManager' => 'doctrine-eventmanager',
+                    'pdo' => null, // optionally pass doctrine-pdo to use a PDO instance
                 ),
             ),
-            
+            'doctrine-pdo' => array(
+                'parameters' => array(
+                    'dsn' => 'mysql:dbname=SOME_DB;host=SOME_HOST',
+                    'username' => 'SOME_USER',
+                    'passwd' => 'SOME_PASSWORD',
+                    'driver_options' => array(
+                        \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+                    ),
+                )
+            ),
             'doctrine-configuration' => array(
                 'parameters' => array(
                     'dir'                      => __DIR__ . '/../src/Proxy',

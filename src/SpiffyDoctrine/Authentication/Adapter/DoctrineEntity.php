@@ -183,12 +183,7 @@ class DoctrineEntity implements AuthenticationAdapter
         $mdata = $this->_em->getClassMetadata($this->_entity);
         $qb = $this->_em->createQueryBuilder();
         
-        $select = sprintf('partial q.{%s, %s, %s}',
-                    $this->_credentialColumn,
-                    $this->_identityColumn,
-                    implode(',', $mdata->identifier));
-        
-        $qb->select($select)
+        $qb->select('q')
            ->from($this->_entity, 'q')
            ->where($qb->expr()->eq(
                 'q.' . $this->_identityColumn,

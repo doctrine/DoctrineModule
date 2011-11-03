@@ -13,6 +13,7 @@ The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framewor
   - Annotations registries initialization (such as Gedmo DoctrineExtensions).
   - Validators for EntityExists and NoEntityExists.
   - Authentication adapter for Zend\Authenticator.
+  - Support for using existing PDO connections.
   
 ## Requirements
   - Zend Framework 2
@@ -95,22 +96,6 @@ Following locator items are preconfigured with this module:
 The Doctrine CLI has been pre-configured and is available in SpiffyDoctrine\bin. It should work as
 is without any special configuration required.
 
-## EntityExists and NoEntityExists Validators
-The EntityExists and NoEntityExists are validators similar to Zend\Validator\Db validators. You can 
-pass a variety of options to determine validity. The most basic use case requires an entity manager (em),
-an entity, and a field. You also have the option of specifying a query_builder Closure to use if you
-want to fine tune the results. 
-
-    $validator = new \SpiffyDoctrine\Validator\NoEntityExists(array(
-       'em' => $this->getLocator()->get('doctrine-em'),
-       'entity' => 'SpiffyUser\Entity\User',
-       'field' => 'username',
-       'query_builder' => function($er) {
-           return $er->createQueryBuilder('q');
-       }
-    ));
-    var_dump($validator->isValid('test'));
-
 ## Tuning for production
 Tuning the system for production should be as simple as setting the following in your
 configuration (example presumes you have APC installed).
@@ -129,7 +114,57 @@ configuration (example presumes you have APC installed).
                 ),
             ),
         ),
-## Authentication adapter for Zend\Authentication
+
+## Extra goodies
+The items listed below are entirely optional and are intended to enhance ZF2/D2 integration.
+
+### Using a PDO connection
+Using a PDO connection requires some modifications to your module configuration. In your
+application module config add the following.
+
+    'di' => array( 
+        'instance' => array(
+            'doctrine-connection' => array(
+                'parameters' => array(
+                    'config' => 'doctrine-configuration',
+                    'eventManager' => 'doctrine-eventmanager',
+                    'pdo' => 'doctrine-pdo'
+                ),
+            ),
+            'doctrine-pdo' => array(
+                'parameters' => array(
+                    'dsn' => 'mysql:dbname=SOME_DB;host=SOME_HOST',
+                    'username' => 'SOME_USER',
+                    'passwd' => 'SOME_PASSWORD',
+                    'driver_options' => array(
+                        \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+                    ),
+                )
+            ),
+        )
+    )
+
+### EntityExists and NoEntityExists Validators
+The EntityExists and NoEntityExists are validators similar to Zend\Validator\Db validators. You can 
+pass a variety of options to determine validity. The most basic use case requires an entity manager (em),
+an entity, and a field. You also have the option of specifying a query_builder Closure to use if you
+want to fine tune the results. 
+
+    $validator = new \SpiffyDoctrine\Validator\NoEntityExists(array(
+       'em' => $this->getLocator()->get('doctrine-em'),
+       'entity' => 'SpiffyUser\Entity\User',
+       'field' => 'username',
+       'query_builder' => function($er) {
+           return $er->createQueryBuilder('q');
+       }
+    ));
+    var_dump($validator->isValid('test'));        
+        
+### Authentication adapter for Zend\Authentication
+The authentication adapter is intended to provide an adapter for Zend\Authenticator. It works much
+like the DbTable adapter in the core framework. You must provide the entity manager instance,
+entity name, identity field, and credential field.
+
     $adapter = new \SpiffyDoctrine\Authentication\Adapter\DoctrineEntity(
         $this->getLocator()->get('em-default'), // entity manager
         'Application\Test\Entity',
