@@ -1,10 +1,11 @@
 <?php
 return array(
+    'SpiffyDoctrine\Test\Authentication\Adapter\DoctrineEntityTest'              => __DIR__ . '/tests/SpiffyDoctrine/Test/Authentication/Adapter/DoctrineEntityTest.php',
     'SpiffyDoctrine\Validator\NoEntityExists'                                    => __DIR__ . '/src/SpiffyDoctrine/Validator/NoEntityExists.php',
     'SpiffyDoctrine\Validator\AbstractEntity'                                    => __DIR__ . '/src/SpiffyDoctrine/Validator/AbstractEntity.php',
     'SpiffyDoctrine\Validator\EntityExists'                                      => __DIR__ . '/src/SpiffyDoctrine/Validator/EntityExists.php',
     'SpiffyDoctrine\DBAL\DriverManager'                                          => __DIR__ . '/src/SpiffyDoctrine/DBAL/DriverManager.php',
-    'SpiffyDoctrine\ORM\Mapping\Driver\DriverChain'                              => __DIR__ . '/src/SpiffyDoctrine/ORM/Mapping/Driver/DriverChain.php',
+    'SpiffyDoctrine\Service\Doctrine'                                            => __DIR__ . '/src/SpiffyDoctrine/Service/Doctrine.php',
     'SpiffyDoctrine\Authentication\Adapter\DoctrineEntity'                       => __DIR__ . '/src/SpiffyDoctrine/Authentication/Adapter/DoctrineEntity.php',
     'SpiffyDoctrine\Module'                                                      => __DIR__ . '/Module.php',
     'NativePhpunitTask'                                                          => __DIR__ . '/library/doctrine-orm/lib/vendor/doctrine-common/tests/NativePhpunitTask.php',

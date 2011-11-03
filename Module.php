@@ -13,8 +13,6 @@ class Module
     {
         $this->initAutoloader();
         $this->initDoctrineAnnotations();
-        
-        $moduleManager->events()->attach('init.post', array($this, 'initAdditionalAnnotations'), 1000);
     }
     
     /**
@@ -33,40 +31,16 @@ class Module
         }
     }
     
-    /**
-     * Initialize additional annotations from registry files or namespaces. This has to be done
-     * as an init.post callback in order to gather the "complete" merged configuration from
-     * all modules.
-     */
-    public function initAdditionalAnnotations(Event $e)
-    {
-        $moduleManager = $e->getTarget();
-        
-        $config = $moduleManager->getMergedConfig()->get('spiffy-doctrine');
-        if ($sa = $config->get('annotations')) {
-            if (is_object($sa->get('namespaces'))) {
-                AnnotationRegistry::registerAutoloadNamespaces($sa->get('namespaces')->toArray());
-            }
-        }
-    }
-    
     public function initAutoloader()
     {
         require __DIR__ . '/autoload_register.php';
     }
     
-    /**
-     * @return Config
-     */
     public function getConfig()
     {
-        return new Config(include __DIR__ . '/configs/module.config.php');
+        return include __DIR__ . '/configs/module.config.php';
     }
     
-    /**
-     *
-     * @return array
-     */
     public function getClassmap()
     {
         return include __DIR__ . '/classmap.php';
