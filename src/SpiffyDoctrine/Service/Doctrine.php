@@ -103,8 +103,7 @@ class Doctrine
      */
     protected $_annotationDriverDefinition = array(
         'required' => array(
-            'cache-class' => 'string',
-            'cache-namespace' => 'string',
+            'cache-class' => 'string'
         )
     );
     
@@ -322,7 +321,7 @@ class Doctrine
     /**
      * Creates a driver chain based on passed parameters. Drivers should, at minimum, 
      * specify the class, namespace, and paths. AnnotationDrivers have two additional
-     * options 'cache-class' and 'cache-namespace' that are required.
+     * options 'cache-class' that are required.
      * 
      * @todo allow setting own driver chain extended from ORM\Mapping\Driver\DriverChain
      * @param array $drivers

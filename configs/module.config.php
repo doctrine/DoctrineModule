@@ -34,13 +34,12 @@ return array(
                         'proxy-dir'                 => __DIR__ . '/src/SpiffyDoctrine/Proxy',
                         'proxy-namespace'           => 'SpiffyDoctrine\Proxy',
                         'metadata-driver-impl'      => array(
-                            'doctrine-annotationdriver' => array(
-                                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                                'namespace' => 'SpiffyDoctrine',
-                                'paths' => array(),
-                                'cache-class' => 'Doctrine\Common\Cache\ArrayCache',
-                                'cache-namespace' => 'doctrine_annotation',
-                            )
+                            // 'application-annotation-driver' => array(
+                            //     'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                            //     'namespace' => 'My\Entity\Namespace',
+                            //     'paths' => array('/path/to/entities'),
+                            //     'cache-class' => 'Doctrine\Common\Cache\ArrayCache',
+                            // )
                         ),
                         'metadata-cache-impl'       => 'Doctrine\Common\Cache\ArrayCache',
                         'query-cache-impl'          => 'Doctrine\Common\Cache\ArrayCache',

@@ -25,9 +25,13 @@ SpiffyDoctrine key to your modules array before your Application module key.
                     ),
                     'config' => array(
                         'metadata-driver-impl' => array(
-                            'doctrine-annotationdriver' => array(
+                            // to add multiple drivers just follow the format below and give them a different keyed name
+                            // cache-class is only required for annotation drivers
+                            'application-annotation-driver' => array(
+                                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                                 'namespace' => 'My\Entity\Namespace',
-                                'paths'     => array('path/to/your/entities')
+                                'paths' => array('/some/path/to/entities'),
+                                'cache-class' => 'Doctrine\Common\Cache\ArrayCache',
                             )
                         )
                     )
