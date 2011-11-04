@@ -19,7 +19,7 @@ The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framewor
 ## Available locator items
 Following locator items are preconfigured with this module:
 
-  - doctrine, a SpiffyDoctrine\Servier\Doctrine instance
+  - doctrine, a SpiffyDoctrine\Service\Doctrine instance
 
 ## Doctrine CLI
 The Doctrine CLI has been pre-configured and is available in SpiffyDoctrine\bin. It should work as
