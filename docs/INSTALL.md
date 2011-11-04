@@ -50,7 +50,7 @@ configuration (example presumes you have APC installed).
             'doctrine' => array(
                 'parameters' => array(
                     'config' => array(
-                        'auto-generate-proxies' => true,
+                        'auto-generate-proxies' => false,
                         'metadata-driver-impl' => array(
                             'doctrine-annotationdriver' => array(
                                 'cache-class' => 'Doctrine\Common\Cache\ApcCache'
