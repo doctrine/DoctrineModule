@@ -1,0 +1,97 @@
+# Installing the SpiffyDoctrine module for Zend Framework 2 
+The simplest way to install is to clone the repository into your /modules directory add the 
+SpiffyDoctrine key to your modules array before your Application module key.
+
+  1. cd my/project/folder
+  2. git clone https://SpiffyJr@github.com/SpiffyJr/SpiffyDoctrine.git modules/SpiffyDoctrine --recursive
+  3. open my/project/folder/configs/application.config.php and add 'SpiffyDoctrine' to your 'modules' parameter.
+  4. Alter the configuration (most likely your connection and entities path(s)) by adding the required changes to 
+     my/project/folder/modules/Application/module.config.php.
+     
+
+## Example standard configuration
+    // modules/Application/module.config.php
+    'di' => array(
+        'instance' => array(
+            'doctrine' => array(
+                'parameters' => array(
+                    'conn' => array(
+                        'driver'   => 'pdo_mysql',
+                        'host'     => 'localhost',
+                        'port'     => '3306', 
+                        'user'     => 'USERNAME',
+                        'password' => 'PASSWORD',
+                        'dbname'   => 'DBNAME',
+                    ),
+                    'config' => array(
+                        'metadata-driver-impl' => array(
+                            'doctrine-annotationdriver' => array(
+                                'namespace' => 'My\Entity\Namespace',
+                                'paths'     => array('path/to/your/entities')
+                            )
+                        )
+                    )
+                ),
+            ),
+        )
+    )
+    
+## Usage
+Access the entity manager using the following locator: 
+
+    $em = $this->getLocator()->get('doctrine')->getEntityManager();
+    
+## Tuning for production
+Tuning the system for production should be as simple as setting the following in your
+configuration (example presumes you have APC installed).
+
+    'di' => array(
+        'instance' => array(
+            'doctrine' => array(
+                'parameters' => array(
+                    'config' => array(
+                        'auto-generate-proxies' => true,
+                        'metadata-driver-impl' => array(
+                            'doctrine-annotationdriver' => array(
+                                'cache-class' => 'Doctrine\Common\Cache\ApcCache'
+                            )
+                        ),
+                        'metadata-cache-impl' => 'Doctrine\Common\Cache\ApcCache',
+                        'query-cache-impl'    => 'Doctrine\Common\Cache\ApcCache',
+                        'result-cache-impl'   => 'Doctrine\Common\Cache\ApcCache'
+                    ),
+                ),
+            ),
+        ),
+        
+## Using a Zend\Di configured PDO instance or pre-existing PDO instance
+Using a PDO connection requires a minor modification to your configuration. Simply add the 'pdo' 
+instance and remove the 'conn' option. If you are not using Zend\Di you can also pass the 'pdo'
+key to the 'conn' array.
+
+    'di' => array( 
+        'instance' => array(
+            'doctrine' => array(
+                'parameters' => array(
+                     'conn' => array(
+                    //     'driver'   => 'pdo_mysql',
+                    //     'host'     => 'localhost',
+                    //     'port'     => '3306', 
+                    //     'user'     => 'USERNAME',
+                    //     'password' => 'PASSWORD',
+                    //     'dbname'   => 'DBNAME',
+                        'pdo' => 'my-pdo-object' // only available if not using Zend\Di
+                    ),
+                    'config' => array(
+                        'metadata-driver-impl' => array(
+                            'doctrine-annotationdriver' => array(
+                                'namespace' => 'My\Entity\Namespace',
+                                'paths'     => array('path/to/your/entities')
+                            )
+                        )
+                    ),
+                    'pdo' => 'my-pdo-alias'
+                ),
+            ),
+        )
+    )
