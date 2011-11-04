@@ -21,17 +21,29 @@ return array(
             'doctrine' => array(
                 'parameters' => array(
                     'conn' => array(
+                        'driver'   => 'pdo_mysql',
+                        'host'     => 'localhost',
+                        'port'     => '3306', 
+                        'user'     => 'testuser',
+                        'password' => 'testpassword',
+                        'dbname'   => 'testdbname',
                     ),
                     'config' => array(
                         'auto-generate-proxies'     => true,
                         // @todo: figure out how to de-couple the Proxy dir
-                        'proxy-dir'                 => true,
+                        'proxy-dir'                 => __DIR__ . '/src/SpiffyDoctrine/Proxy',
                         'proxy-namespace'           => 'SpiffyDoctrine\Proxy',
                         'metadata-driver-impl'      => array(
-                            // array('className', 'namespace')
+                            'doctrine-annotationdriver' => array(
+                                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                                'namespace' => 'SpiffyDoctrine',
+                                'paths' => array(),
+                                'cache-class' => 'Doctrine\Common\Cache\ArrayCache',
+                                'cache-namespace' => 'doctrine_annotation',
+                            )
                         ),
                         'metadata-cache-impl'       => 'Doctrine\Common\Cache\ArrayCache',
-                        'query-cach-impl'           => 'Doctrine\Common\Cache\ArrayCache',
+                        'query-cache-impl'          => 'Doctrine\Common\Cache\ArrayCache',
                         'result-cache-impl'         => 'Doctrine\Common\Cache\ArrayCache',
                         'custom-datetime-functions' => array(
                             // array('name', 'className')
@@ -52,6 +64,9 @@ return array(
                         'sql-logger'                => null,
                     ),
                     'evm' => array(
+                        'subscribers' => array(
+                            // 'Gedmo\Sluggable\SluggableListener'
+                        )
                     )  
                 )
             )

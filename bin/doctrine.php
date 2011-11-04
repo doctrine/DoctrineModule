@@ -43,5 +43,5 @@ $bootstrap->bootstrap($application);
 $locator = $application->getLocator();
 
 ConsoleRunner::run(new HelperSet(array(
-    'em' => new EntityManagerHelper($locator->get('doctrine-em'))
+    'em' => new EntityManagerHelper($locator->get('doctrine')->getEntityManager())
 )));
