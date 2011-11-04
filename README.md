@@ -77,7 +77,7 @@ you can get them from the locator the same way.
 Following locator items are preconfigured with this module:
 
   - doctrine-connection', a Doctrine\DBAL\Connection instance
-  - doctrine-configuration, a SpiffyDoctrine\ORM\Configuration instance
+  - doctrine-configuration, a Doctrine\ORM\Configuration instance
   - doctrine-metadatacache, a Doctrine\Common\Cache\ArrayCache instance
   - doctrine-querycache, a Doctrine\Common\Cache\ArrayCache instance
   - doctrine-resultcache, a Doctrine\Common\Cache\ArrayCache instance
