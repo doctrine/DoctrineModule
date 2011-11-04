@@ -33,6 +33,55 @@ class Doctrine
     );
     
     /**
+     * Definition for custom functions.
+     * 
+     * @var array
+     */
+    protected $_customFunctionDefinition = array(
+        'required' => array(
+            'name'      => 'string',
+            'className' => 'string'
+        )
+    );
+    
+    /**
+     * Definition for custom hydrators.
+     * 
+     * @var array
+     */
+    protected $_customHydratorDefinition = array(
+        'required' => array(
+            'modeName' => 'string',
+            'hydrator' => 'string'
+        )
+    );
+    
+    /**
+     * Definition for named DQL queries.
+     * 
+     * @var array
+     */
+    protected $_namedQueryDefinition = array(
+        'required' => array(
+            'name' => 'string',
+            'dql'  => 'string'
+        )
+    );
+    
+    /**
+     * Definition for named native queries.
+     * 
+     * @var array
+     */
+    protected $_namedNativeQueryDefinition = array(
+        'required' => array(
+            'name' => 'string',
+            'sql'  => 'string',
+            'rsm'  => 'string'
+        )
+    );
+    
+    /**
      * Definition for driver chain options.
      * 
      * @var array
@@ -116,13 +165,53 @@ class Doctrine
     }
     
     /**
-     * Getter for Doctrine\ORM\EntityManager.
+     * Get entity manager.
      * 
      * @return Doctrine\ORM\EntityManager
      */
     public function getEntityManager()
     {
         return $this->_em;
+    }
+    
+    /**
+     * Get event manager.
+     * 
+     * @return Doctrine\Common\EventManager
+     */
+    public function getEventManager()
+    {
+        return $this->_evm;
+    }
+    
+    /**
+     * Get connection.
+     * 
+     * @return Doctrine\DBAL\Connection
+     */
+    public function getConnection()
+    {
+        return $this->_conn;
+    }
+    
+    /**
+     * Get configuration.
+     * 
+     * @return Doctrine\ORM\Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->_config;
+    }
+    
+    /**
+     * Get driver chain.
+     * 
+     * @return Doctrine\ORM\Mapping\Driver\DriverChain
+     */
+    public function getDriverChain()
+    {
+        return $this->_driverChain;
     }
     
     /**
@@ -167,6 +256,37 @@ class Doctrine
         $config->setAutoGenerateProxyClasses($opts['auto-generate-proxies']);
         $config->setProxyDir($opts['proxy-dir']);
         $config->setProxyNamespace($opts['proxy-namespace']);
+        
+        // add custom functions
+        foreach($opts['custom-datetime-functions'] as $function) {
+            $this->_validateOptions($function, $this->_customFunctionDefinition);
+            $config->addCustomDatetimeFunction($function['name'], $function['className']);
+        }
+        
+        foreach($opts['custom-string-functions'] as $function) {
+            $this->_validateOptions($function, $this->_customFunctionDefinition);
+            $config->addCustomStringFunction($function['name'], $function['className']);
+        }
+        
+        foreach($opts['custom-numeric-functions'] as $function) {
+            $this->_validateOptions($function, $this->_customFunctionDefinition);
+            $config->customNumericFunctions($function['name'], $function['className']);
+        }
+        
+        foreach($opts['named-queries'] as $query) {
+            $this->_validateOptions($query, $this->_namedQueryDefinition);
+            $config->customNumericFunctions($query['name'], $query['dql']);
+        }
+        
+        foreach($opts['named-native-queries'] as $query) {
+            $this->_validateOptions($query, $this->_namedNativeQueryDefinition);
+            $config->customNumericFunctions($query['name'], $query['sql'], new $query['rsm']);
+        }
+
+        // logger
+        if ($opts['sql-logger']) {
+            $config->setSQLLogger(new $opts['sql-logger']);
+        }
         
         // create metadata driver chain
         $this->_createDriverChain($opts['metadata-driver-impl']);

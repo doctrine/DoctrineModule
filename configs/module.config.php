@@ -46,7 +46,7 @@ return array(
                         'query-cache-impl'          => 'Doctrine\Common\Cache\ArrayCache',
                         'result-cache-impl'         => 'Doctrine\Common\Cache\ArrayCache',
                         'custom-datetime-functions' => array(
-                            // array('name', 'className')
+                            //array('name' => 'name', 'className' => 'className')
                         ),
                         'custom-numeric-functions'  => array(
                         ),
