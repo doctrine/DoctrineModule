@@ -4,7 +4,6 @@ return array(
     'SpiffyDoctrine\Validator\NoEntityExists'                                    => __DIR__ . '/src/SpiffyDoctrine/Validator/NoEntityExists.php',
     'SpiffyDoctrine\Validator\AbstractEntity'                                    => __DIR__ . '/src/SpiffyDoctrine/Validator/AbstractEntity.php',
     'SpiffyDoctrine\Validator\EntityExists'                                      => __DIR__ . '/src/SpiffyDoctrine/Validator/EntityExists.php',
-    'SpiffyDoctrine\DBAL\DriverManager'                                          => __DIR__ . '/src/SpiffyDoctrine/DBAL/DriverManager.php',
     'SpiffyDoctrine\Service\Doctrine'                                            => __DIR__ . '/src/SpiffyDoctrine/Service/Doctrine.php',
     'SpiffyDoctrine\Authentication\Adapter\DoctrineEntity'                       => __DIR__ . '/src/SpiffyDoctrine/Authentication/Adapter/DoctrineEntity.php',
     'SpiffyDoctrine\Module'                                                      => __DIR__ . '/Module.php',
