@@ -26,6 +26,12 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 require_once 'Zend/Loader/AutoloaderFactory.php';
 \Zend\Loader\AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
 
+$moduleLoader = new \Zend\Loader\ModuleAutoloader(array(
+    __DIR__ . '/../modules',
+    __DIR__ . '/../modules/vendor'
+));
+$moduleLoader->register();
+
 $moduleManager = new \Zend\Module\Manager(array(MODULE_NAME));
 $moduleManager->loadModule(MODULE_NAME);
 
