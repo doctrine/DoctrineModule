@@ -17,7 +17,7 @@ class Module
     
     public function initDoctrineAnnotations()
     {
-        $libfile = __DIR__ . '/library/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php';
+        $libfile = __DIR__ . '/vendor/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php';
         if (file_exists($libfile)) {
             AnnotationRegistry::registerFile($libfile);
         } else {
