@@ -1,7 +1,2 @@
 <?php
-$root  = realpath(dirname(__DIR__));
-$tests = "$root/tests";
-
-define('MODULE_NAME', 'SpiffyDoctrine');
-define('TESTS_PATH', $tests);
-define('ZEND_FRAMEWORK_PATH', realpath(__DIR__ . '/../../../library/ZendFramework/library'));
+define('ZEND_FRAMEWORK_PATH', realpath(__DIR__ . '/../../../../library/ZendFramework/library'));

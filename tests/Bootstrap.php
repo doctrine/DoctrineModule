@@ -4,20 +4,14 @@ require_once __DIR__ . '/../autoload_register.php';
 $rootPath  = realpath(dirname(__DIR__));
 $testsPath = "$rootPath/tests";
 
-/*
- * Load the default configuration and overwrite with user configuration if
- * it exists.
- */
-require_once $testsPath . '/TestConfiguration.php.dist';
 if (is_readable($testsPath . '/TestConfiguration.php')) {
     require_once $testsPath . '/TestConfiguration.php';
+} else {
+    require_once $testsPath . '/TestConfiguration.php.dist';
 }
 
-/**
- * Register include path with tests and Zend Framework.
- */
 $path = array(
-    TESTS_PATH,
+    $testsPath,
     ZEND_FRAMEWORK_PATH,
     get_include_path(),
 );
@@ -27,15 +21,14 @@ require_once 'Zend/Loader/AutoloaderFactory.php';
 \Zend\Loader\AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
 
 $moduleLoader = new \Zend\Loader\ModuleAutoloader(array(
-    __DIR__ . '/../modules',
-    __DIR__ . '/../modules/vendor'
+    realpath(__DIR__ . '/../..'),
+    realpath(__DIR__ . '/../../..')
 ));
 $moduleLoader->register();
 
-$moduleManager = new \Zend\Module\Manager(array(MODULE_NAME));
-$moduleManager->loadModule(MODULE_NAME);
+$moduleManager = new \Zend\Module\Manager(array('SpiffyDoctrine'));
+$moduleManager->loadModule('SpiffyDoctrine');
 
-// * SPIFFYDOCTRINE SPECIFIC
 $config = $moduleManager->getMergedConfig()->toArray();
 $config = $config['di']['instance']['doctrine']['parameters'];
 $config['conn'] = array(
@@ -48,7 +41,7 @@ $config['config']['metadata-driver-impl'] = array(
         'namespace' => 'SpiffyDoctrineTest\Assets\Entity',
         'paths' => array(__DIR__ . '/SpiffyDoctrineTest/Assets/Entity'),
         'cache-class' => 'Doctrine\Common\Cache\ArrayCache'
-    )
+    ),
 );
 
 \SpiffyDoctrineTest\Framework\TestCase::$config = $config;
