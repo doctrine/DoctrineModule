@@ -15,9 +15,6 @@ class Module
         $this->initDoctrineAnnotations();
     }
     
-    /**
-     * Initialize the Doctrine default annotation mapping.
-     */
     public function initDoctrineAnnotations()
     {
         $libfile = __DIR__ . '/library/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php';
