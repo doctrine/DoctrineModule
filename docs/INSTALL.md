@@ -24,14 +24,14 @@ SpiffyDoctrine key to your modules array before your Application module key.
                         'dbname'   => 'DBNAME',
                     ),
                     'config' => array(
-                        'metadata-driver-impl' => array(
+                        'metadata_driver_impl' => array(
                             // to add multiple drivers just follow the format below and give them a different keyed name
-                            // cache-class is only required for annotation drivers
-                            'application-annotation-driver' => array(
+                            // cache_class is only required for annotation drivers
+                            'application_annotation_driver' => array(
                                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                                 'namespace' => 'My\Entity\Namespace',
                                 'paths' => array('/some/path/to/entities'),
-                                'cache-class' => 'Doctrine\Common\Cache\ArrayCache',
+                                'cache_class' => 'Doctrine\Common\Cache\ArrayCache',
                             )
                         )
                     )
@@ -54,15 +54,15 @@ configuration (example presumes you have APC installed).
             'doctrine' => array(
                 'parameters' => array(
                     'config' => array(
-                        'auto-generate-proxies' => false,
-                        'metadata-driver-impl' => array(
-                            'doctrine-annotationdriver' => array(
-                                'cache-class' => 'Doctrine\Common\Cache\ApcCache'
+                        'auto_generate_proxies' => false,
+                        'metadata_driver_impl' => array(
+                            'doctrine_annotationdriver' => array(
+                                'cache_class' => 'Doctrine\Common\Cache\ApcCache'
                             )
                         ),
-                        'metadata-cache-impl' => 'Doctrine\Common\Cache\ApcCache',
-                        'query-cache-impl'    => 'Doctrine\Common\Cache\ApcCache',
-                        'result-cache-impl'   => 'Doctrine\Common\Cache\ApcCache'
+                        'metadata_cache_impl' => 'Doctrine\Common\Cache\ApcCache',
+                        'query_cache_impl'    => 'Doctrine\Common\Cache\ApcCache',
+                        'result_cache_impl'   => 'Doctrine\Common\Cache\ApcCache'
                     ),
                 ),
             ),
@@ -84,17 +84,17 @@ key to the 'conn' array.
                     //     'user'     => 'USERNAME',
                     //     'password' => 'PASSWORD',
                     //     'dbname'   => 'DBNAME',
-                        'pdo' => 'my-pdo-object' // only available if not using Zend\Di
+                        'pdo' => 'my_pdo_object' // only available if not using Zend\Di
                     ),
                     'config' => array(
-                        'metadata-driver-impl' => array(
-                            'doctrine-annotationdriver' => array(
+                        'metadata_driver_impl' => array(
+                            'doctrine_annotationdriver' => array(
                                 'namespace' => 'My\Entity\Namespace',
                                 'paths'     => array('path/to/your/entities')
                             )
                         )
                     ),
-                    'pdo' => 'my-pdo-alias'
+                    'pdo' => 'my_pdo_alias'
                 ),
             ),
         )

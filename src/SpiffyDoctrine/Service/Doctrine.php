@@ -13,22 +13,22 @@ class Doctrine
      */
     protected $_configurationDefinition = array(
         'required' => array(
-            'auto-generate-proxies' => 'boolean',
-            'proxy-dir'             => 'string',
-            'proxy-namespace'       => 'string',
-            'metadata-driver-impl'  => 'array',
-            'metadata-cache-impl'   => 'string',
-            'query-cache-impl'      => 'string',
+            'auto_generate_proxies' => 'boolean',
+            'proxy_dir'             => 'string',
+            'proxy_namespace'       => 'string',
+            'metadata_driver_impl'  => 'array',
+            'metadata_cache_impl'   => 'string',
+            'query_cache_impl'      => 'string',
         ),
         'optional' => array(
-            'result-cache-impl'         => 'null',
-            'custom-datetime-functions' => 'array',
-            'custom-numeric-functions'  => 'array',
-            'custom-string-functions'   => 'array',
-            'custom-hydration-modes'    => 'array',
-            'named-queries'             => 'array',
-            'named-native-queries'      => 'array',
-            'sql-logger'                => 'array'
+            'result_cache_impl'         => 'null',
+            'custom_datetime_functions' => 'array',
+            'custom_numeric_functions'  => 'array',
+            'custom_string_functions'   => 'array',
+            'custom_hydration_modes'    => 'array',
+            'named_queries'             => 'array',
+            'named_native_queries'      => 'array',
+            'sql_logger'                => 'array'
         )
     );
     
@@ -103,7 +103,7 @@ class Doctrine
      */
     protected $_annotationDriverDefinition = array(
         'required' => array(
-            'cache-class' => 'string'
+            'cache_class' => 'string'
         )
     );
     
@@ -252,43 +252,43 @@ class Doctrine
         $this->_validateOptions($opts, $this->_configurationDefinition);
         
         $config = new ORM\Configuration;
-        $config->setAutoGenerateProxyClasses($opts['auto-generate-proxies']);
-        $config->setProxyDir($opts['proxy-dir']);
-        $config->setProxyNamespace($opts['proxy-namespace']);
+        $config->setAutoGenerateProxyClasses($opts['auto_generate_proxies']);
+        $config->setProxyDir($opts['proxy_dir']);
+        $config->setProxyNamespace($opts['proxy_namespace']);
         
         // add custom functions
-        foreach($opts['custom-datetime-functions'] as $function) {
+        foreach($opts['custom_datetime_functions'] as $function) {
             $this->_validateOptions($function, $this->_customFunctionDefinition);
             $config->addCustomDatetimeFunction($function['name'], $function['className']);
         }
         
-        foreach($opts['custom-string-functions'] as $function) {
+        foreach($opts['custom_string_functions'] as $function) {
             $this->_validateOptions($function, $this->_customFunctionDefinition);
             $config->addCustomStringFunction($function['name'], $function['className']);
         }
         
-        foreach($opts['custom-numeric-functions'] as $function) {
+        foreach($opts['custom_numeric_functions'] as $function) {
             $this->_validateOptions($function, $this->_customFunctionDefinition);
             $config->customNumericFunctions($function['name'], $function['className']);
         }
         
-        foreach($opts['named-queries'] as $query) {
+        foreach($opts['named_queries'] as $query) {
             $this->_validateOptions($query, $this->_namedQueryDefinition);
             $config->customNumericFunctions($query['name'], $query['dql']);
         }
         
-        foreach($opts['named-native-queries'] as $query) {
+        foreach($opts['named_native_queries'] as $query) {
             $this->_validateOptions($query, $this->_namedNativeQueryDefinition);
             $config->customNumericFunctions($query['name'], $query['sql'], new $query['rsm']);
         }
 
         // logger
-        if ($opts['sql-logger']) {
-            $config->setSQLLogger(new $opts['sql-logger']);
+        if ($opts['sql_logger']) {
+            $config->setSQLLogger(new $opts['sql_logger']);
         }
         
         // create metadata driver chain
-        $this->_createDriverChain($opts['metadata-driver-impl']);
+        $this->_createDriverChain($opts['metadata_driver_impl']);
         $config->setMetadataDriverImpl($this->_driverChain);
         
         $this->_config = $config;
@@ -306,13 +306,17 @@ class Doctrine
         
         $evm = new Common\EventManager;
         foreach($opts['subscribers'] as $subscriber) {
-            if (!class_exists($subscriber)) {
-                throw new \InvalidArgumentException(sprintf(
-                   'failed to register subscriber "%s" because the class does not exist.',
-                   $subscriber 
-                ));
+            if (is_string($subscriber)) {
+                if (!class_exists($subscriber)) {
+                    throw new \InvalidArgumentException(sprintf(
+                       'failed to register subscriber "%s" because the class does not exist.',
+                       $subscriber 
+                    ));
+                }
+                $subscriber = new $subscriber;
             }
-            $evm->addEventSubscriber(new $subscriber);
+            
+            $evm->addEventSubscriber($subscriber);
         }
         
         $this->_evm = $evm;
@@ -321,7 +325,7 @@ class Doctrine
     /**
      * Creates a driver chain based on passed parameters. Drivers should, at minimum, 
      * specify the class, namespace, and paths. AnnotationDrivers have two additional
-     * options 'cache-class' that are required.
+     * options 'cache_class' that are required.
      * 
      * @todo allow setting own driver chain extended from ORM\Mapping\Driver\DriverChain
      * @param array $drivers
@@ -346,7 +350,7 @@ class Doctrine
             if ($isAnnotation) {       
                 $this->_validateOptions($opts, $this->_annotationDriverDefinition);
                 
-                $cache = new $opts['cache-class'];
+                $cache = new $opts['cache_class'];
                 $annotationReader = new Common\Annotations\AnnotationReader;
                 $indexedReader = new Common\Annotations\IndexedReader($annotationReader);
                 $cachedReader = new Common\Annotations\CachedReader($indexedReader, $cache);
