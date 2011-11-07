@@ -37,10 +37,4 @@ class Module
     {
         return include __DIR__ . '/configs/module.config.php';
     }
-    
-    public function getClassmap()
-    {
-        return include __DIR__ . '/classmap.php';
-    }
-    
 }
