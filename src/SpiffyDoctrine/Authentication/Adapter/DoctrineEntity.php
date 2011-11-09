@@ -53,6 +53,13 @@ class DoctrineEntity implements AuthenticationAdapter
     protected $_credential;
     
     /**
+     * User supplied credential.
+     * 
+     * @var mixed
+     */
+    protected $_credentialCallable;
+    
+    /**
      * Contains the authentication results.
      * 
      * @var array
@@ -66,15 +73,17 @@ class DoctrineEntity implements AuthenticationAdapter
      * @param  string                     $tableName
      * @param  string                     $identityColumn
      * @param  string                     $credentialColumn
+     * @param  null|array|Closure		  $credentialCallable
      * @return void
      */
     public function __construct(EntityManager $em, $entity, $identityColumn = 'username',
-                                $credentialColumn = 'password')
+                                $credentialColumn = 'password', $credentialCallable = null)
     {
         $this->setEntityManager($em);
         $this->setEntity($entity);
         $this->setIdentityColumn($identityColumn);
         $this->setCredentialColumn($credentialColumn);
+        $this->setCredentialCallable($credentialCallable);
     }
     
     /**
@@ -149,6 +158,19 @@ class DoctrineEntity implements AuthenticationAdapter
     }
     
     /**
+     * Set the credential callable to be used to transform the password
+     * before checking.
+     *
+     * @param  string $callable
+     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     */
+    public function setCredentialCallable($callable)
+    {
+        $this->_credentialCallable = $callable;
+        return $this;
+    }
+    
+    /**
      * Set the column name to be used as the identity column
      *
      * @param  string $identityColumn
@@ -219,7 +241,20 @@ class DoctrineEntity implements AuthenticationAdapter
             ));
         }
         
-        if ($credential != $this->_credential) {
+        $credential = $this->_credential;
+        $callable   = $this->_credentialCallable;
+        if ($callable) {
+        	if (!is_callable($callable)) {
+	    		throw new RuntimeException(sprintf(
+	    			'failed to call algorithm function %s::%s(), does it exist?',
+	    			$algorithm[0],
+	    			$algorithm[1]
+	    		));
+        	}
+        	$credential = call_user_func($callable, $identity, $credential);
+        }
+        
+        if ($credential != $credential) {
             $this->_authenticateResultInfo['code'] = AuthenticationResult::FAILURE_CREDENTIAL_INVALID;
             $this->_authenticateResultInfo['messages'][] = 'Supplied credential is invalid.';
             return $this->_authenticateCreateAuthResult();

@@ -3,6 +3,14 @@ return array(
     'di' => array(
         'definition' => array(
             'class' => array(
+            	'SpiffyDoctrine\Factory\EntityManager' => array(
+            		'instantiator' => array('SpiffyDoctrine\Factory\EntityManager', 'get'),
+            		'methods' => array(
+            			'get' => array(
+            				'doctrineService' => array('type' => 'SpiffyDoctrine\Service\Doctrine', 'required' => true)
+            			)
+            		)
+            	),
                 'SpiffyDoctrine\Service\Doctrine' => array(
                     'methods' => array(
                         '__construct' => array(
@@ -16,7 +24,8 @@ return array(
         ),
         'instance' => array(
             'alias' => array(
-                'doctrine' => 'SpiffyDoctrine\Service\Doctrine',
+                'doctrine'    => 'SpiffyDoctrine\Service\Doctrine',
+                'doctrine-em' => 'SpiffyDoctrine\Factory\EntityManager', 
             ),
             'doctrine' => array(
                 'parameters' => array(
@@ -68,7 +77,12 @@ return array(
                         )
                     )  
                 )
-            )
+            ),
+            'doctrine-em' => array(
+            	'parameteres' => array(
+            		'doctrineService' => 'doctrine'
+            	)
+            ),
         )
     )
 );

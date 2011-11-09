@@ -252,6 +252,8 @@ class Doctrine
         $this->_validateOptions($opts, $this->_configurationDefinition);
         
         $config = new ORM\Configuration;
+        
+        // proxies
         $config->setAutoGenerateProxyClasses($opts['auto_generate_proxies']);
         $config->setProxyDir($opts['proxy_dir']);
         $config->setProxyNamespace($opts['proxy_namespace']);
@@ -281,6 +283,14 @@ class Doctrine
             $this->_validateOptions($query, $this->_namedNativeQueryDefinition);
             $config->customNumericFunctions($query['name'], $query['sql'], new $query['rsm']);
         }
+        
+        // caching
+        $config->setQueryCacheImpl(new $opts['query_cache_impl']);
+		$config->setMetadataCacheImpl(new $opts['metadata_cache_impl']);
+		
+		if ($opts['result_cache_impl']) {
+			$config->setResultCacheImpl(new $opts['result_cache_impl']);
+		}
 
         // logger
         if ($opts['sql_logger']) {

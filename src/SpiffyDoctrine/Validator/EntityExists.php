@@ -13,6 +13,7 @@ class EntityExists extends AbstractEntity
         try {
             $result = $query->getSingleResult(Query::HYDRATE_ARRAY);
         } catch (NoResultException $e) {
+        	$this->error(self::ERROR_NO_RECORD_FOUND, $value);
             return false;
         } catch (NonUniqueResultException $e) {
             return true;

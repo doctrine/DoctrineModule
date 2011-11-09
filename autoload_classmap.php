@@ -9,6 +9,7 @@ return array(
     'SpiffyDoctrine\Validator\AbstractEntity'                                    => __DIR__ . '/src/SpiffyDoctrine/Validator/AbstractEntity.php',
     'SpiffyDoctrine\Validator\EntityExists'                                      => __DIR__ . '/src/SpiffyDoctrine/Validator/EntityExists.php',
     'SpiffyDoctrine\Service\Doctrine'                                            => __DIR__ . '/src/SpiffyDoctrine/Service/Doctrine.php',
+    'SpiffyDoctrine\Factory\EntityManager'                                       => __DIR__ . '/src/SpiffyDoctrine/Factory/EntityManager.php',
     'SpiffyDoctrine\Authentication\Adapter\DoctrineEntity'                       => __DIR__ . '/src/SpiffyDoctrine/Authentication/Adapter/DoctrineEntity.php',
     'NativePhpunitTask'                                                          => __DIR__ . '/vendor/doctrine-orm/lib/vendor/doctrine-common/tests/NativePhpunitTask.php',
     'Doctrine\Tests\DbalFunctionalTestCase'                                      => __DIR__ . '/vendor/doctrine-orm/lib/vendor/doctrine-dbal/tests/Doctrine/Tests/DbalFunctionalTestCase.php',

@@ -15,9 +15,11 @@ class NoEntityExists extends AbstractEntity
         } catch (NoResultException $e) {
             return true;
         } catch (NonUniqueResultException $e) {
+        	$this->error(self::ERROR_RECORD_FOUND, $value);
             return false;
         }
         
+        $this->error(self::ERROR_RECORD_FOUND, $value);
         return false;
     }
 }

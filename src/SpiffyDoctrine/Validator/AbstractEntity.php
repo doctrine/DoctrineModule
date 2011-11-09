@@ -85,6 +85,8 @@ abstract class AbstractEntity extends AbstractValidator
             $this->_queryBuilder = $options['query_builder'];
         } 
         $this->_field = $options['field'];
+        
+        parent::__construct($options);
     }
 
     /**
