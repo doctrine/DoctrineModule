@@ -8,19 +8,18 @@ The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framewor
   - Custom dql functions, additional hydration modes
   - Named DQL and native queries
   - Multiple metadata drivers
-  - Annotations registries initialization (such as Gedmo DoctrineExtensions).
-  - Validators for EntityExists and NoEntityExists.
-  - Authentication adapter for Zend\Authenticator.
-  - Support for using existing PDO connections.
+  - Annotations registries initialization (such as Gedmo DoctrineExtensions)
+  - Validators for EntityExists and NoEntityExists
+  - Authentication adapter for Zend\Authenticator
+  - Support for using existing PDO connections
   
 ## Requirements
-  - Zend Framework 2
-
-## Available locator items
-Following locator items are preconfigured with this module:
-
-  - doctrine, a SpiffyDoctrine\Service\Doctrine instance
+  - [Zend Framework 2](http://www.github.com/zendframework/zf2)
 
 ## Doctrine CLI
 The Doctrine CLI has been pre-configured and is available in SpiffyDoctrine\bin. It should work as
 is without any special configuration required.
+
+## TODO
+ - Implement migration/fixture support from doctrin-fixtures.
+ - Write MORE unit tests.

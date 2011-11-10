@@ -30,18 +30,24 @@ $moduleManager = new \Zend\Module\Manager(array('SpiffyDoctrine'));
 $moduleManager->loadModule('SpiffyDoctrine');
 
 $config = $moduleManager->getMergedConfig()->toArray();
-$config = $config['di']['instance']['doctrine']['parameters'];
-$config['conn'] = array(
-    'driver' => 'pdo_sqlite',
-    'memory' => true
-);
-$config['config']['metadata-driver-impl'] = array(
-    'test-annotation-driver' => array(
-        'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-        'namespace' => 'SpiffyDoctrineTest\Assets\Entity',
-        'paths' => array(__DIR__ . '/SpiffyDoctrineTest/Assets/Entity'),
-        'cache-class' => 'Doctrine\Common\Cache\ArrayCache'
-    ),
+
+// setup sqlite
+$config['di']['instance']['doctrine_connection']['parameters']['params'] = array(
+	'driver' => 'pdo_sqlite',
+	'memory' => true
 );
 
-\SpiffyDoctrineTest\Framework\TestCase::$config = $config;
+// setup the driver
+$config['di']['instance']['doctrine_driver_chain']['parameters']['drivers']['doctrine_test_driver'] = array(
+	'class' 	=> 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+	'namespace' => 'SpiffyDoctrineTest\Assets\Entity',
+	'paths'     => array( __DIR__ . '/SpiffyDoctrineTests/src/SpiffyDoctrineTests/Assets/Entity')
+);
+
+$di = new \Zend\Di\Di;
+$di->instanceManager()->addTypePreference('Zend\Di\Locator', $di);
+
+$config = new \Zend\Di\Configuration($config['di']);
+$config->configure($di);
+
+\SpiffyDoctrineTest\Framework\TestCase::$locator = $di;

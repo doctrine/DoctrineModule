@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="test")
+ * @ORM\Table(name="spiffy_doctrine_test")
  */
 class Test
 {

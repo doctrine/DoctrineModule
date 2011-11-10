@@ -13,29 +13,28 @@ SpiffyDoctrine key to your modules array before your Application module key.
     // modules/Application/module.config.php
     'di' => array(
         'instance' => array(
-            'doctrine' => array(
+            'doctrine_connection' => array(
                 'parameters' => array(
-                    'conn' => array(
+                    'params' => array(
                         'driver'   => 'pdo_mysql',
-                        'host'     => 'localhost',
                         'port'     => '3306', 
-                        'user'     => 'USERNAME',
-                        'password' => 'PASSWORD',
-                        'dbname'   => 'DBNAME',
+                        'host'     => 'DB_HOST',
+                        'user'     => 'DB_USERNAME',
+                        'password' => 'DB_PASSWORD',
+                        'dbname'   => 'DB_NAME',
                     ),
-                    'config' => array(
-                        'metadata_driver_impl' => array(
-                            // to add multiple drivers just follow the format below and give them a different keyed name
-                            // cache_class is only required for annotation drivers
-                            'application_annotation_driver' => array(
-                                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                                'namespace' => 'My\Entity\Namespace',
-                                'paths' => array('/some/path/to/entities'),
-                                'cache_class' => 'Doctrine\Common\Cache\ArrayCache',
-                            )
-                        )
+                )
+            ),
+            'doctrine_driver_chain' => array(
+                'parameters' => array(
+                    'drivers' => array(
+                        'application_annotation_driver' => array(
+                            'class'           => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                            'namespace'       => 'My\Entity\Namespace',
+                            'paths'           => array(__DIR__ . '/../src/Application/My/Entity/Folder'),
+                        ),
                     )
-                ),
+                )
             ),
         )
     )
@@ -43,7 +42,7 @@ SpiffyDoctrine key to your modules array before your Application module key.
 ## Usage
 Access the entity manager using the following locator: 
 
-    $em = $this->getLocator()->get('doctrine')->getEntityManager();
+    $em = $this->getLocator()->get('doctrine_em');
     
 ## Tuning for production
 Tuning the system for production should be as simple as setting the following in your
@@ -75,27 +74,20 @@ key to the 'conn' array.
 
     'di' => array( 
         'instance' => array(
-            'doctrine' => array(
+            'doctrine_config' => array(
                 'parameters' => array(
-                     'conn' => array(
-                    //     'driver'   => 'pdo_mysql',
-                    //     'host'     => 'localhost',
-                    //     'port'     => '3306', 
-                    //     'user'     => 'USERNAME',
-                    //     'password' => 'PASSWORD',
-                    //     'dbname'   => 'DBNAME',
-                        'pdo' => 'my_pdo_object' // only available if not using Zend\Di
+                    'opts' => array(
+                        'auto_generate_proxies' => true
                     ),
-                    'config' => array(
-                        'metadata_driver_impl' => array(
-                            'doctrine_annotationdriver' => array(
-                                'namespace' => 'My\Entity\Namespace',
-                                'paths'     => array('path/to/your/entities')
-                            )
-                        )
-                    ),
-                    'pdo' => 'my_pdo_alias'
-                ),
+                    'metadataCache' => 'doctrine_cache_apc',
+                    'queryCache'    => 'doctrine_cache_apc',
+                    'resultCache'   => 'doctrine_cache_apc', // optional
+                )
             ),
+            'doctrine_driver_chain' => array(
+                'parameters' => array(
+                    'cache' => 'doctrine_cache_apc'
+                )
+            )
         )
     )

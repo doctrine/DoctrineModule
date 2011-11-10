@@ -1,11 +1,16 @@
 <?php
 namespace SpiffyDoctrine\Factory;
-use SpiffyDoctrine\Service\Doctrine;
+use Doctrine\ORM\EntityManager as DoctrineEntityManager,
+	SpiffyDoctrine\Instance\Connection;
 
 class EntityManager
 {
-	public static function get(Doctrine $doctrineService)
+	public static function get(Connection $conn)
 	{
-		return $doctrine->getEntityManager();
+		return DoctrineEntityManager::create(
+			$conn->getInstance(),
+			$conn->getInstance()->getConfiguration(),
+			$conn->getInstance()->getEventManager()
+		);
 	}
 }

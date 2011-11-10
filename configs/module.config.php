@@ -3,33 +3,54 @@ return array(
     'di' => array(
         'definition' => array(
             'class' => array(
-            	'SpiffyDoctrine\Factory\EntityManager' => array(
-            		'instantiator' => array('SpiffyDoctrine\Factory\EntityManager', 'get'),
-            		'methods' => array(
-            			'get' => array(
-            				'doctrineService' => array('type' => 'SpiffyDoctrine\Service\Doctrine', 'required' => true)
-            			)
-            		)
-            	),
-                'SpiffyDoctrine\Service\Doctrine' => array(
+                'SpiffyDoctrine\Factory\EntityManager' => array(
+                    'instantiator' => array('SpiffyDoctrine\Factory\EntityManager', 'get'),
                     'methods' => array(
-                        '__construct' => array(
-                            'conn'   => array('type' => false, 'required' => true),
-                            'config' => array('type' => false, 'required' => true),
-                            'evm'    => array('type' => false, 'required' => false) 
+                        'get' => array(
+                            'conn' => array('type' => 'SpiffyDoctrine\Instance\Connection', 'required' => true)
                         )
                     )
-                )
+                ),
             ),
         ),
         'instance' => array(
             'alias' => array(
-                'doctrine'    => 'SpiffyDoctrine\Service\Doctrine',
-                'doctrine-em' => 'SpiffyDoctrine\Factory\EntityManager', 
+                'doctrine_em'           => 'SpiffyDoctrine\Factory\EntityManager',
+                'doctrine_config'       => 'SpiffyDoctrine\Instance\Configuration',
+                'doctrine_connection'   => 'SpiffyDoctrine\Instance\Connection',
+                'doctrine_evm'          => 'SpiffyDoctrine\Instance\EventManager',
+                'doctrine_driver_chain' => 'SpiffyDoctrine\Instance\DriverChain',
+                'doctrine_cache_apc'    => 'Doctrine\Common\Cache\ApcCache',
+                'doctrine_cache_array'  => 'Doctrine\Common\Cache\ArrayCache',
             ),
-            'doctrine' => array(
+            'doctrine_em' => array(
                 'parameters' => array(
-                    'conn' => array(
+                    'conn'   => 'doctrine_connection',
+                )
+            ),
+            'doctrine_config' => array(
+                'parameters' => array(
+                    'opts' => array(
+                        'auto_generate_proxies'     => true,
+                        'proxy_dir'                 => __DIR__ . '/src/SpiffyDoctrine/Proxy',
+                        'proxy_namespace'           => 'SpiffyDoctrine\Proxy',
+                        'custom_datetime_functions' => array(),
+                        'custom_numeric_functions'  => array(),
+                        'custom_string_functions'   => array(),
+                        'custom_hydration_modes'    => array(),
+                        'named_queries'             => array(),
+                        'named_native_queries'      => array(),
+                    ),
+                    'metadataDriver' => 'doctrine_driver_chain',
+                    'metadataCache'  => 'doctrine_cache_array',
+                    'queryCache'     => 'doctrine_cache_array',
+                    'resultCache'    => null,
+                    'sqlLogger'      => null,
+                )
+            ),
+            'doctrine_connection' => array(
+                'parameters' => array(
+                    'params' => array(
                         'driver'   => 'pdo_mysql',
                         'host'     => 'localhost',
                         'port'     => '3306', 
@@ -37,52 +58,23 @@ return array(
                         'password' => 'testpassword',
                         'dbname'   => 'testdbname',
                     ),
-                    'config' => array(
-                        'auto_generate_proxies'     => true,
-                        // @todo: figure out how to de_couple the Proxy dir
-                        'proxy_dir'                 => __DIR__ . '/src/SpiffyDoctrine/Proxy',
-                        'proxy_namespace'           => 'SpiffyDoctrine\Proxy',
-                        'metadata_driver_impl'      => array(
-                            // 'application_annotation_driver' => array(
-                            //     'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                            //     'namespace' => 'My\Entity\Namespace',
-                            //     'paths' => array('/path/to/entities'),
-                            //     'cache_class' => 'Doctrine\Common\Cache\ArrayCache',
-                            // )
-                        ),
-                        'metadata_cache_impl'       => 'Doctrine\Common\Cache\ArrayCache',
-                        'query_cache_impl'          => 'Doctrine\Common\Cache\ArrayCache',
-                        'result_cache_impl'         => 'Doctrine\Common\Cache\ArrayCache',
-                        'custom_datetime_functions' => array(
-                            //array('name' => 'name', 'className' => 'className')
-                        ),
-                        'custom_numeric_functions'  => array(
-                        ),
-                        'custom_string_functions'   => array(
-                        ),
-                        'custom_hydration_modes'    => array(
-                            // array('modeName', 'hydrator')
-                        ),
-                        'named_queries'             => array(
-                            // array('name', 'dql')
-                        ),
-                        'named_native_queries'      => array(
-                            // array('name', 'sql', 'rsm')
-                        ),
-                        'sql_logger'                => null,
-                    ),
-                    'evm' => array(
-                        'subscribers' => array(
-                            // 'Gedmo\Sluggable\SluggableListener'
-                        )
-                    )  
+                    'config' => 'doctrine_config',
+                    'evm'    => 'doctrine_evm'
                 )
             ),
-            'doctrine-em' => array(
-            	'parameteres' => array(
-            		'doctrineService' => 'doctrine'
-            	)
+            'doctrine_driver_chain' => array(
+                'parameters' => array(
+                    'drivers' => array(),
+                    'cache' => 'doctrine_cache_array'
+                )
             ),
+            'doctrine_evm' => array(
+                'parameters' => array(
+                    'opts' => array(
+                        'subscribers' => array()
+                    )
+                )
+            )
         )
     )
 );

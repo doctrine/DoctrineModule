@@ -5,12 +5,12 @@ use PHPUnit_Framework_TestCase,
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
-    public static $config;
+    public static $locator;
     
     /**
      * @var boolean
      */
-    protected $_hasDb = false;
+    protected static $hasDb = false;
     
     /**
      * @var SpiffyDoctrine\Service\Doctrine
@@ -22,16 +22,20 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     public function createDb()
     {
-        if ($this->_hasDb) {
+        if (self::$hasDb) {
             return;
         }
         
         $em = $this->getEntityManager();
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
-        $classes = array(
-            $em->getClassMetadata('SpiffyDoctrineTest\Assets\Entity\Test'),
-        );
+        $classes = array($em->getClassMetadata('SpiffyDoctrineTest\Assets\Entity\Test'));
         $tool->createSchema($classes);
+        self::$hasDb = true;
+    }
+    
+    public function getLocator()
+    {
+    	return self::$locator;
     }
     
     /**
@@ -41,24 +45,6 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     public function getEntityManager()
     {
-        return $this->getService()->getEntityManager();
-    }
-    
-    /**
-     * Get Doctrine service.
-     * 
-     * @return SpiffyDoctrine\Service\Doctrine
-     */
-    public function getService()
-    {
-        if (null === $this->_service) {
-            $config = self::$config;
-            $this->_service = new Doctrine(
-                $config['conn'],
-                $config['config'],
-                $config['evm']
-            );
-        }
-        return $this->_service;
+        return $this->getLocator()->get('doctrine_em');
     }
 }

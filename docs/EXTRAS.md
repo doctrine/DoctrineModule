@@ -20,13 +20,21 @@ want to fine tune the results.
 ## Authentication adapter for Zend\Authentication
 The authentication adapter is intended to provide an adapter for Zend\Authenticator. It works much
 like the DbTable adapter in the core framework. You must provide the entity manager instance,
-entity name, identity field, and credential field.
+entity name, identity field, and credential field. You can optionally provide a callable method
+to perform hashing on the password prior to checking for validation.
 
     $adapter = new \SpiffyDoctrine\Authentication\Adapter\DoctrineEntity(
         $this->getLocator()->get('doctrine')->getEntityManager(), // entity manager
         'Application\Test\Entity',
         'username', // optional, default shown
-        'password'  // optional, default shown
+        'password'  // optional, default shown,
+        function($identity, $credential) { // optional callable 
+             return \SpiffyUser\Service\User::hashCredential(
+                    $credential,
+                    $identity->getSalt(),
+                    $identity->getAlgorithm()
+                );
+        }
     );
     $adapter->setIdentity('username');
     $adapter->setCredential('password');
