@@ -2,7 +2,6 @@
 return array(
     'SpiffyDoctrineTest\Framework\TestCase'                                      => __DIR__ . '/tests/SpiffyDoctrineTest/Framework/TestCase.php',
     'SpiffyDoctrineTest\Assets\Entity\Test'                                      => __DIR__ . '/tests/SpiffyDoctrineTest/Assets/Entity/Test.php',
-    'SpiffyDoctrineTest\Authentication\Adapter\DoctrineTest'                     => __DIR__ . '/tests/SpiffyDoctrineTest/Service/DoctrineTest.php',
     'SpiffyDoctrineTest\Doctrine\CliTest'                                        => __DIR__ . '/tests/SpiffyDoctrineTest/Doctrine/CliTest.php',
     'SpiffyDoctrineTest\Authentication\Adapter\DoctrineEntityTest'               => __DIR__ . '/tests/SpiffyDoctrineTest/Authentication/Adapter/DoctrineEntityTest.php',
     'SpiffyDoctrine\Validator\NoEntityExists'                                    => __DIR__ . '/src/SpiffyDoctrine/Validator/NoEntityExists.php',

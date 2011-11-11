@@ -32,7 +32,7 @@ return array(
                 'parameters' => array(
                     'opts' => array(
                         'auto_generate_proxies'     => true,
-                        'proxy_dir'                 => __DIR__ . '/src/SpiffyDoctrine/Proxy',
+                        'proxy_dir'                 => __DIR__ . '/../../../data/SpiffyDoctrine/Proxy',
                         'proxy_namespace'           => 'SpiffyDoctrine\Proxy',
                         'custom_datetime_functions' => array(),
                         'custom_numeric_functions'  => array(),
