@@ -2,17 +2,15 @@
 namespace SpiffyDoctrine;
 
 use Doctrine\Common\Annotations\AnnotationRegistry,
-    Zend\Config\Config,
     Zend\EventManager\Event,
-    Zend\Loader\AutoloaderFactory,
+    Zend\Module\Consumer\AutoloaderProvider,
     Zend\Module\Manager;
 
-class Module
+class Module implements AutoloaderProvider
 {
     
     public function init(Manager $moduleManager)
     {
-        $this->initAutoloader();
         $this->initDoctrineAnnotations();
     }
     
@@ -29,18 +27,13 @@ class Module
         }
     }
     
-    protected function initAutoloader($env = null)
+    public function getAutoloaderConfig()
     {
-        AutoloaderFactory::factory(array(
+        return array(
             'Zend\Loader\ClassMapAutoloader' => array(
                 __DIR__ . '/autoload_classmap.php',
             ),
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        ));
+        );
     }
     
     public function getConfig()
