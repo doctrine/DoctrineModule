@@ -1,9 +1,7 @@
 <?php
 use Zend\Loader\AutoloaderFactory,
-    Zend\Config\Config,
     Zend\Loader\ModuleAutoloader,
     Zend\Module\Manager as ModuleManager,
-    Zend\Module\ManagerOptions,
     Zend\Mvc\Bootstrap,
     Zend\Mvc\Application,
     Doctrine\ORM\Tools\Console\ConsoleRunner,
@@ -27,17 +25,15 @@ set_include_path(implode(PATH_SEPARATOR, array(
 require_once 'Zend/Loader/AutoloaderFactory.php';
 AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
 
-$appConfig = new Config(include __DIR__ . '/../../../configs/application.config.php');
+$appConfig = include __DIR__ . '/../../../configs/application.config.php';
 
 $moduleLoader = new ModuleAutoloader($appConfig['module_paths']);
 $moduleLoader->register();
 
-$moduleManager = new ModuleManager(
-    $appConfig['modules'],
-    new ManagerOptions($appConfig['module_manager_options'])
-);
+$moduleManager = new ModuleManager($appConfig['modules']);
+$moduleManager->loadModules();
 
-$bootstrap      = new Bootstrap($moduleManager);
+$bootstrap      = new Bootstrap($moduleManager->getMergedConfig());
 $application    = new Application();
 $bootstrap->bootstrap($application);
 $locator = $application->getLocator();
