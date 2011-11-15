@@ -25,7 +25,7 @@ return array(
             ),
             'doctrine_em' => array(
                 'parameters' => array(
-                    'conn'   => 'doctrine_connection',
+                    'conn' => 'doctrine_connection',
                 )
             ),
             'doctrine_config' => array(

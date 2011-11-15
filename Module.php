@@ -4,6 +4,7 @@ namespace SpiffyDoctrine;
 use Doctrine\Common\Annotations\AnnotationRegistry,
     Zend\Config\Config,
     Zend\EventManager\Event,
+    Zend\Loader\AutoloaderFactory,
     Zend\Module\Manager;
 
 class Module
@@ -28,9 +29,18 @@ class Module
         }
     }
     
-    public function initAutoloader()
+    protected function initAutoloader($env = null)
     {
-        require __DIR__ . '/autoload_register.php';
+        AutoloaderFactory::factory(array(
+            'Zend\Loader\ClassMapAutoloader' => array(
+                __DIR__ . '/autoload_classmap.php',
+            ),
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        ));
     }
     
     public function getConfig()
