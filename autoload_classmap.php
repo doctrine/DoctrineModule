@@ -13,7 +13,6 @@ return array(
     'SpiffyDoctrine\Instance\DriverChain'                                        => __DIR__ . '/src/SpiffyDoctrine/Instance/DriverChain.php',
     'SpiffyDoctrine\Instance\Cache'                                              => __DIR__ . '/src/SpiffyDoctrine/Instance/Cache.php',
     'SpiffyDoctrine\Instance\Instance'                                           => __DIR__ . '/src/SpiffyDoctrine/Instance/Instance.php',
-    'SpiffyDoctrine\Service\Doctrine'                                            => __DIR__ . '/src/SpiffyDoctrine/Service/Doctrine.php',
     'SpiffyDoctrine\Factory\EntityManager'                                       => __DIR__ . '/src/SpiffyDoctrine/Factory/EntityManager.php',
     'SpiffyDoctrine\Authentication\Adapter\DoctrineEntity'                       => __DIR__ . '/src/SpiffyDoctrine/Authentication/Adapter/DoctrineEntity.php',
     'NativePhpunitTask'                                                          => __DIR__ . '/vendor/doctrine-orm/lib/vendor/doctrine-common/tests/NativePhpunitTask.php',

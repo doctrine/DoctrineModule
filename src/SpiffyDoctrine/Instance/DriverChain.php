@@ -88,14 +88,16 @@ class DriverChain extends Instance
     /**
      * Get the cached reader instance for annotation readers.
      * 
+     * @todo investigate use cases for indexed reader
      * @return Doctrine\Common\Annotations\CachedReader
      */
     protected function getCachedReader()
     {
     	if (null === self::$cachedReader) {
 	    	$annotationReader   = new AnnotationReader;
-			$indexedReader 	    = new IndexedReader($annotationReader);
-			self::$cachedReader = new CachedReader($indexedReader, $this->cache);
+			//$indexedReader 	    = new IndexedReader($annotationReader);
+			//self::$cachedReader = new CachedReader($indexedReader, $this->cache);
+			self::$cachedReader = new CachedReader($annotationReader, $this->cache);
     	}
     	return self::$cachedReader;
     }
