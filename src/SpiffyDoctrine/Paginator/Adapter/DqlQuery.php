@@ -72,7 +72,7 @@
                 $this->query = $options['query'];
             }
             elseif ($options['query'] instanceof QueryBuilder) {
-                $this->query = $options['query']->getDQL();
+                $this->query = $options['query']->getQuery();
             }
             else {
                 throw new Exception\InvalidArgumentException('Query must either be a DQL string, a Query object or a QueryBuilder object.');
@@ -92,7 +92,7 @@
          */
         public function getItems($offset, $itemCountPerPage)
         {
-            $this->query->setFirstResult(($offset - 1) * $itemCountPerPage)
+            $this->query->setFirstResult($offset)
                         ->setMaxResults($itemCountPerPage);
 
             return $this->query->getResult();
