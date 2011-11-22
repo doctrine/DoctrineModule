@@ -17,15 +17,15 @@ defined('APPLICATION_ENV')
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(__DIR__ . '/../../../library'), // just for git submodule
-    realpath(__DIR__ . '/../../../library/ZendFramework/library'), // just for git submodule
+    realpath(__DIR__ . '/../../../../library'), // just for git submodule
+    realpath(__DIR__ . '/../../../../library/ZendFramework/library'), // just for git submodule
     get_include_path(),
 )));
 
 require_once 'Zend/Loader/AutoloaderFactory.php';
 AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
 
-$appConfig = include __DIR__ . '/../../../configs/application.config.php';
+$appConfig = include __DIR__ . '/../../../../configs/application.config.php';
 
 $moduleLoader = new ModuleAutoloader($appConfig['module_paths']);
 $moduleLoader->register();
