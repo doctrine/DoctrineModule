@@ -45,7 +45,7 @@ return array(
                     'metadataCache'  => 'doctrine_cache_array',
                     'queryCache'     => 'doctrine_cache_array',
                     'resultCache'    => null,
-                    'sqlLogger'      => null,
+                    'logger'         => null,
                 )
             ),
             'doctrine_connection' => array(

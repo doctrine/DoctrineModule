@@ -1,40 +1,28 @@
 <?php
-use Zend\Loader\AutoloaderFactory,
-    Zend\Loader\ModuleAutoloader,
-    Zend\Module\Manager as ModuleManager,
-    Zend\Mvc\Bootstrap,
-    Zend\Mvc\Application,
-    Doctrine\ORM\Tools\Console\ConsoleRunner,
+use Doctrine\ORM\Tools\Console\ConsoleRunner,
     Symfony\Component\Console\Helper\HelperSet,
     Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 
 ini_set('display_errors', true);
 error_reporting(-1);
 
-// Define application environment
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+require_once dirname(__DIR__) . '/../../vendor/ZendFramework/library/Zend/Loader/AutoloaderFactory.php';
+Zend\Loader\AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
 
-// Ensure library/ is on include_path
-set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(__DIR__ . '/../../../../library'), // just for git submodule
-    realpath(__DIR__ . '/../../../../library/ZendFramework/library'), // just for git submodule
-    get_include_path(),
-)));
+$appConfig = include dirname(__DIR__) . '/../../config/application.config.php';
 
-require_once 'Zend/Loader/AutoloaderFactory.php';
-AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
-
-$appConfig = include __DIR__ . '/../../../../configs/application.config.php';
-
-$moduleLoader = new ModuleAutoloader($appConfig['module_paths']);
+$moduleLoader = new Zend\Loader\ModuleAutoloader($appConfig['module_paths']);
 $moduleLoader->register();
 
-$moduleManager = new ModuleManager($appConfig['modules']);
+$moduleManager = new Zend\Module\Manager($appConfig['modules']);
+$listenerOptions = new Zend\Module\Listener\ListenerOptions($appConfig['module_listener_options']);
+$moduleManager->setDefaultListenerOptions($listenerOptions);
+$moduleManager->getConfigListener()->addConfigGlobPath(dirname(__DIR__) . '/config/autoload/*.config.php');
 $moduleManager->loadModules();
 
-$bootstrap      = new Bootstrap($moduleManager->getMergedConfig());
-$application    = new Application();
+// Create application, bootstrap, and run
+$bootstrap   = new Zend\Mvc\Bootstrap($moduleManager->getMergedConfig());
+$application = new Zend\Mvc\Application;
 $bootstrap->bootstrap($application);
 $locator = $application->getLocator();
 
