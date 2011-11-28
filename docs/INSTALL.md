@@ -1,5 +1,5 @@
 # Installing the SpiffyDoctrine module for Zend Framework 2 
-The simplest way to install is to clone the repository into your /modules/vendor directory add the 
+The simplest way to install is to clone the repository into your /vendor directory add the 
 SpiffyDoctrine key to your modules array before your Application module key.
 
   1. cd my/project/folder
