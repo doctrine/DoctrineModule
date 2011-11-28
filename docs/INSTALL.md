@@ -3,14 +3,14 @@ The simplest way to install is to clone the repository into your /modules/vendor
 SpiffyDoctrine key to your modules array before your Application module key.
 
   1. cd my/project/folder
-  2. git clone git://github.com/SpiffyJr/SpiffyDoctrine.git modules/vendor/SpiffyDoctrine --recursive
+  2. git clone git://github.com/SpiffyJr/SpiffyDoctrine.git vendor/SpiffyDoctrine --recursive
   3. open my/project/folder/configs/application.config.php and add 'SpiffyDoctrine' to your 'modules' parameter.
   4. Alter the configuration (most likely your connection and entities path(s)) by adding the required changes to 
-     my/project/folder/modules/Application/module.config.php.
+     my/project/folder/module/Application/module.config.php.
      
 
 ## Example standard configuration
-    // modules/Application/module.config.php
+    // module/Application/module.config.php
     'di' => array(
         'instance' => array(
             'doctrine_connection' => array(
