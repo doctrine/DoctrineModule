@@ -7,13 +7,6 @@ return array(
                     'addServer' => array(
                         'host'             => array('type' => false, 'required' => true),
                         'port'             => array('type' => false, 'required' => true),
-                        'persistent'       => array('type' => false, 'required' => false),
-                        'weight'           => array('type' => false, 'required' => false),
-                        'timeout'          => array('type' => false, 'required' => false),
-                        'retry_interval'   => array('type' => false, 'required' => false),
-                        'status'           => array('type' => false, 'required' => false),
-                        'failure_callback' => array('type' => false, 'required' => false),
-                        'timeoutms'        => array('type' => false, 'required' => false),
                     )
                 ),
                 'SpiffyDoctrine\Factory\EntityManager' => array(
