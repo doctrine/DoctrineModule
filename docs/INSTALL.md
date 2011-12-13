@@ -54,18 +54,14 @@ configuration (example presumes you have APC installed).
                 'parameters' => array(
                     'opts' => array(
                         'auto_generate_proxies' => false,
-                        'metadata_driver_impl' => array(
-                            'doctrine_annotationdriver' => array(
-                                'cache_class' => 'Doctrine\Common\Cache\ApcCache'
-                            )
-                        ),
-                        'metadata_cache_impl' => 'Doctrine\Common\Cache\ApcCache',
-                        'query_cache_impl'    => 'Doctrine\Common\Cache\ApcCache',
-                        'result_cache_impl'   => 'Doctrine\Common\Cache\ApcCache'
                     ),
+                    'metadataCache'  => 'doctrine_cache_apc',
+                    'queryCache'     => 'doctrine_cache_apc',
+                    'resultCache'    => 'doctrine_cache_apc',
                 ),
             ),
         ),
+    ),
         
 ## Using a Zend\Di configured PDO instance or pre-existing PDO instance
 Using a PDO connection requires a minor modification to your configuration. Simply add the 'pdo' 
