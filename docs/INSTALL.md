@@ -50,7 +50,7 @@ configuration (example presumes you have APC installed).
 
     'di' => array(
         'instance' => array(
-            'doctrine' => array(
+            'doctrine_config' => array(
                 'parameters' => array(
                     'config' => array(
                         'auto_generate_proxies' => false,
