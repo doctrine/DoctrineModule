@@ -52,7 +52,7 @@ configuration (example presumes you have APC installed).
         'instance' => array(
             'doctrine_config' => array(
                 'parameters' => array(
-                    'config' => array(
+                    'opts' => array(
                         'auto_generate_proxies' => false,
                         'metadata_driver_impl' => array(
                             'doctrine_annotationdriver' => array(
