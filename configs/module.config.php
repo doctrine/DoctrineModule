@@ -3,6 +3,19 @@ return array(
     'di' => array(
         'definition' => array(
             'class' => array(
+                'Memcache' => array(
+                    'addServer' => array(
+                        'host'             => array('type' => false, 'required' => true),
+                        'port'             => array('type' => false, 'required' => true),
+                        'persistent'       => array('type' => false, 'required' => false),
+                        'weight'           => array('type' => false, 'required' => false),
+                        'timeout'          => array('type' => false, 'required' => false),
+                        'retry_interval'   => array('type' => false, 'required' => false),
+                        'status'           => array('type' => false, 'required' => false),
+                        'failure_callback' => array('type' => false, 'required' => false),
+                        'timeoutms'        => array('type' => false, 'required' => false),
+                    )
+                ),
                 'SpiffyDoctrine\Factory\EntityManager' => array(
                     'instantiator' => array('SpiffyDoctrine\Factory\EntityManager', 'get'),
                     'methods' => array(
@@ -15,17 +28,31 @@ return array(
         ),
         'instance' => array(
             'alias' => array(
-                'doctrine_em'           => 'SpiffyDoctrine\Factory\EntityManager',
-                'doctrine_config'       => 'SpiffyDoctrine\Instance\Configuration',
-                'doctrine_connection'   => 'SpiffyDoctrine\Instance\Connection',
-                'doctrine_evm'          => 'SpiffyDoctrine\Instance\EventManager',
-                'doctrine_driver_chain' => 'SpiffyDoctrine\Instance\DriverChain',
-                'doctrine_cache_apc'    => 'Doctrine\Common\Cache\ApcCache',
-                'doctrine_cache_array'  => 'Doctrine\Common\Cache\ArrayCache',
+                'doctrine_memcache'       => 'Memcache',
+                
+                'doctrine_em'             => 'SpiffyDoctrine\Factory\EntityManager',
+                'doctrine_config'         => 'SpiffyDoctrine\Instance\Configuration',
+                'doctrine_connection'     => 'SpiffyDoctrine\Instance\Connection',
+                'doctrine_evm'            => 'SpiffyDoctrine\Instance\EventManager',
+                'doctrine_driver_chain'   => 'SpiffyDoctrine\Instance\DriverChain',
+                'doctrine_cache_apc'      => 'Doctrine\Common\Cache\ApcCache',
+                'doctrine_cache_array'    => 'Doctrine\Common\Cache\ArrayCache',
+                'doctrine_cache_memcache' => 'Doctrine\Common\Cache\MemcacheCache', 
+            ),
+            'doctrine_memcache' => array(
+                'parameters' => array(
+                    'host' => '127.0.0.1',
+                    'port' => '11211'
+                )
             ),
             'doctrine_em' => array(
                 'parameters' => array(
                     'conn' => 'doctrine_connection',
+                )
+            ),
+            'doctrine_cache_memcache' => array(
+                'parameters' => array(
+                    'memcache' => 'doctrine_memcache' 
                 )
             ),
             'doctrine_config' => array(

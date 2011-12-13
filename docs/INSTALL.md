@@ -62,6 +62,11 @@ configuration (example presumes you have APC installed).
             ),
         ),
     ),
+    
+## Using Memcache
+Di has been pre-configured for the usage of memcache. Simply specify doctrine_cache_memcache instead
+of doctrine_cache_* to begin using it. The default host is 127.0.0.1 with port 11211. If you want
+to use something different you'll have to modify the "doctrine_em" alias and set the values accordingly.
         
 ## Using a Zend\Di configured PDO instance or pre-existing PDO instance
 Using a PDO connection requires a minor modification to your configuration. Simply add the 'pdo' 
