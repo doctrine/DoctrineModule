@@ -1,22 +1,33 @@
 <?php
-use Doctrine\ORM\Tools\Console\ConsoleRunner,
-    Symfony\Component\Console\Helper\HelperSet,
-    Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
+// todo: fix this hacky pos
+$mongofile = 'vendor/SpiffyDoctrine/vendor/doctrine-odm/lib/Doctrine';
+$ormfile   = 'vendor/SpiffyDoctrine/vendor/doctrine-orm/lib/Doctrine';
 
 ini_set('display_errors', true);
-error_reporting(-1);
 
-chdir(dirname(__DIR__));
-require_once dirname(__DIR__) . '/../../vendor/ZendFramework/library/Zend/Loader/AutoloaderFactory.php';
-Zend\Loader\AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
+chdir(dirname(__DIR__ . '/../../../...'));
+require_once 'vendor/ZendFramework/library/Zend/Loader/AutoloaderFactory.php';
 
-$appConfig = include '../../config/application.config.php';
+$namespaces = array();
+if (file_exists($ormfile)) {
+    $namespaces['Symfony'] = __DIR__ . '/../vendor/doctrine-orm/lib/vendor/Symfony';
+} else if (file_exists($mongofile)) {
+    $namespaces['Symfony'] = __DIR__ . '/../vendor/doctrine-odm/lib/vendor/Symfony';
+}
+
+Zend\Loader\AutoloaderFactory::factory(array(
+    'Zend\Loader\StandardAutoloader' => array(
+        'namespaces' => $namespaces
+    ),
+));
+
+$appConfig = include 'config/application.config.php';
 
 $moduleManager    = new Zend\Module\Manager($appConfig['modules']);
 $listenerOptions  = new Zend\Module\Listener\ListenerOptions($appConfig['module_listener_options']);
 $defaultListeners = new Zend\Module\Listener\DefaultListenerAggregate($listenerOptions);
 
-$defaultListeners->getConfigListener()->addConfigGlobPath('../../config/autoload/*.{global,local}.config.php');
+$defaultListeners->getConfigListener()->addConfigGlobPath('config/autoload/*.config.php');
 $moduleManager->events()->attachAggregate($defaultListeners);
 $moduleManager->loadModules();
 
@@ -26,6 +37,56 @@ $application = new Zend\Mvc\Application;
 $bootstrap->bootstrap($application);
 $locator = $application->getLocator();
 
-ConsoleRunner::run(new HelperSet(array(
-    'em' => new EntityManagerHelper($locator->get('doctrine_em'))
-)));
+$cli = new \Symfony\Component\Console\Application(
+    'SpiffyDoctrine Command Line Interface',
+    \SpiffyDoctrine\Version::VERSION
+);
+$cli->setCatchExceptions(true);
+
+$helpers = array();
+if (file_exists($mongofile)) {
+    $helpers['dm'] = new \Doctrine\ODM\MongoDB\Tools\Console\Helper\DocumentManagerHelper($locator->get('doctrine_mongo'));
+    $cli->addCommands(array(
+        new \Doctrine\ODM\MongoDB\Tools\Console\Command\QueryCommand(),
+        new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateDocumentsCommand(),
+        new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateRepositoriesCommand(),
+        new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateProxiesCommand(),
+        new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateHydratorsCommand(),
+        new \Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\CreateCommand(),
+        new \Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\DropCommand(),
+    ));
+}
+
+if (file_exists($ormfile)) {
+    $helpers['em'] = new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($locator->get('doctrine_em'));
+    $cli->addCommands(array(
+        // DBAL Commands
+        new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand(),
+        new \Doctrine\DBAL\Tools\Console\Command\ImportCommand(),
+    
+        // ORM Commands
+        new \Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\RunDqlCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand(),
+        new \Doctrine\ORM\Tools\Console\Command\InfoCommand()
+    ));
+}
+
+$helperSet = isset($helperSet) ? $helperSet : new \Symfony\Component\Console\Helper\HelperSet();
+foreach ($helpers as $name => $helper) {
+    $helperSet->set($helper, $name);
+}
+$cli->setHelperSet($helperSet);
+
+$cli->run();

@@ -1,6 +1,7 @@
 <?php
-namespace SpiffyDoctrine\Instance;
-use Doctrine\Common\EventManager as DoctrineEventManager;
+namespace SpiffyDoctrine\Doctrine\Common;
+use Doctrine\Common\EventManager as DoctrineEventManager,
+    SpiffyDoctrine\Doctrine\Instance;
 
 class EventManager extends Instance
 {

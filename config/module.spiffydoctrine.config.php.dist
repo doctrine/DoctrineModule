@@ -1,0 +1,108 @@
+ <?php
+ /**
+ * SpiffyDoctrine Configuration
+ *
+ * If you have a ./configs/autoload/ directory set up for your project, you can 
+ * drop this config file in it and change the values as you wish.
+ */
+$settings = array(
+    /** Common settings */
+   'production' => false,
+   'cache'      => 'memcache', // can be array, memcache, or apc
+   
+    // only used if cache is set to memcache
+    'memcache' => array( 
+        'host' => '127.0.0.1',
+        'port' => '11211'
+    ),
+   
+    /** ORM only */
+    'orm_connection' => array(
+        'driver'   => 'pdo_mysql',
+        'host'     => 'localhost',
+        'port'     => '3306', 
+        'user'     => 'username',
+        'password' => 'password',
+        'dbname'   => 'dbname',
+    ),
+    'orm_driver' => array(
+        'class'     => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+        'namespace' => 'Application\Entity',
+        'paths'     => array('module/Application/src/Application/Entity') 
+    ),
+    
+    /** MongoDB only */
+    'mongo_connection' => array(
+        'server' => null
+    ), 
+    'mongo_driver' => array(
+        'class'     => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
+        'namespace' => 'Application\Document',
+        'paths'     => array('module/Application/src/Application/Document'),
+    ),
+    
+);
+
+/**
+ * YOU DO NOT NEED TO EDIT BELOW THIS LINE.
+ */
+$cache = array('array', 'memcache', 'apc');
+if (!in_array($settings['cache'], $cache)) {
+    throw new InvalidArgumentException(sprintf(
+        'cache must be one of: %s',
+        implode(', ', $cache)
+    ));
+}
+$settings['cache'] = 'doctrine_cache_' . $settings['cache'];
+
+return array(
+    'di' => array(
+        'instance' => array(
+            'doctrine_memcache' => array(
+                'parameters' => $settings['memcache']
+            ),
+            'orm_config' => array(
+                'parameters' => array(
+                    'opts' => array(
+                        'auto_generate_proxies' => !$settings['production']
+                    ),
+                    'metadataCache' => $settings['cache'],
+                    'queryCache'    => $settings['cache'],
+                    'resultCache'   => $settings['cache'],
+                )
+            ),
+            'orm_connection' => array(
+                'parameters' => array(
+                    'params' => $settings['orm_connection']
+                ),
+            ),
+            'orm_driver_chain' => array(
+                'parameters' => array(
+                    'drivers' => array(
+                        'application_annotation_driver' => $settings['orm_driver']
+                    ),
+                    'cache' => $settings['cache']
+                )
+            ),
+            'mongo_config' => array(
+                'parameters' => array(
+                    'opts' => array(
+                        'auto_generate_proxies'   => !$settings['production'],
+                        'auto_generate_hydrators' => !$settings['production'],
+                    ),
+                    'metadataCache'  => $settings['cache'],
+                )
+            ),
+            'mongo_connection' => array(
+                'parameters' => $settings['mongo_connection']
+            ),
+            'mongo_driver_chain' => array(
+                'parameters' => array(
+                    'drivers' => array(
+                        'application_annotation_driver' => $settings['mongo_driver']
+                    )
+                )
+            ),
+        ),
+    ),
+);

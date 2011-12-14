@@ -1,11 +1,12 @@
 <?php
-namespace SpiffyDoctrine\Instance;
-use Doctrine\Common\Cache\Cache,
+namespace SpiffyDoctrine\Doctrine\ORM;
+use ReflectionClass,
+    Doctrine\Common\Cache\Cache,
 	Doctrine\Common\Annotations\AnnotationReader,
 	Doctrine\Common\Annotations\CachedReader,
 	Doctrine\Common\Annotations\IndexedReader,
 	Doctrine\ORM\Mapping\Driver\DriverChain as DoctrineDriverChain,
-	ReflectionClass;
+    SpiffyDoctrine\Doctrine\Instance;
 
 class DriverChain extends Instance
 {

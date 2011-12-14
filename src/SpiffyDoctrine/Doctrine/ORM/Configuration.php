@@ -1,8 +1,9 @@
 <?php
-namespace SpiffyDoctrine\Instance;
+namespace SpiffyDoctrine\Doctrine\ORM;
 use Doctrine\Common\Cache\Cache,
     Doctrine\DBAL\Logging\SQLLogger,
-    Doctrine\ORM\Configuration as DoctrineConfiguration;
+    Doctrine\ORM\Configuration as DoctrineConfiguration,
+    SpiffyDoctrine\Doctrine\Instance;
 
 class Configuration extends Instance
 {

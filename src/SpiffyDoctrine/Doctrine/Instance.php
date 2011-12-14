@@ -1,5 +1,5 @@
 <?php
-namespace SpiffyDoctrine\Instance;
+namespace SpiffyDoctrine\Doctrine;
 use InvalidArgumentException;
 
 abstract class Instance

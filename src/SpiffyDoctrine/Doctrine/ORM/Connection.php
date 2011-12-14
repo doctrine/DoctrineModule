@@ -1,7 +1,9 @@
 <?php
-namespace SpiffyDoctrine\Instance;
-use Doctrine\DBAL\DriverManager,
-	PDO;
+namespace SpiffyDoctrine\Doctrine\ORM;
+use PDO,
+    Doctrine\DBAL\DriverManager,
+    SpiffyDoctrine\Doctrine\Common\EventManager,
+    SpiffyDoctrine\Doctrine\Instance;
 
 class Connection extends Instance
 {
