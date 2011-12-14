@@ -1,20 +1,24 @@
 # SpiffyDoctrine Module for Zend Framework 2
-The SpiffyDoctrine module intends to integrate Doctrine 2 ORM with Zend Framework 2 quickly and easily. The following features are intended to work out of the box: 
+The SpiffyDoctrine module intends to integrate Doctrine 2 with Zend Framework 2 quickly and easily. 
+The following features are intended to work out of the box: 
   
-  - ORM and MongoDB support
-  - Multiple ORM/ODM managers
-  - Multiple connections
-  - Validators for EntityExists and NoEntityExists (ORM)
-  - Authentication adapter for Zend\Authenticator (ORM)
-  - Support for using existing PDO connections (ORM)
+  - CLI support for ORM and MongoDB-ODM.
+  - Validators for EntityExists and NoEntityExists
+  - Authentication adapter for Zend\Authenticator
+  - Support for using existing PDO connections
   
 ## Requirements
   - [Zend Framework 2](http://www.github.com/zendframework/zf2)
 
 ## Doctrine CLI
 The Doctrine CLI has been pre-configured and is available in SpiffyDoctrine\bin. It should work as
-is without any special configuration required.
+is without any special configuration required for MongoODM and ORM.
+
+## Installation
+See the [INSTALL.md](http://www.github.com/spiffyjr/spiffydoctrine/tree/master/docs/INSTALL.md) file.
+
+## Upgrading
+See the [UPGRADE.md](http://www.github.com/spiffyjr/spiffydoctrine/tree/master/docs/UPGRADE.md) file.
 
 ## TODO
- - Implement migration/fixture support from doctrin-fixtures.
- - Write MORE unit tests.
+See the [TODO.md](http://www.github.com/spiffyjr/spiffydoctrine/tree/master/docs/TODO.md) file.

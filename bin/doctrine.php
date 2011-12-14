@@ -1,25 +1,9 @@
 <?php
-// todo: fix this hacky pos
-$mongofile = 'vendor/SpiffyDoctrine/vendor/doctrine-odm/lib/Doctrine';
-$ormfile   = 'vendor/SpiffyDoctrine/vendor/doctrine-orm/lib/Doctrine';
-
 ini_set('display_errors', true);
 
 chdir(dirname(__DIR__ . '/../../../...'));
 require_once 'vendor/ZendFramework/library/Zend/Loader/AutoloaderFactory.php';
-
-$namespaces = array();
-if (file_exists($ormfile)) {
-    $namespaces['Symfony'] = __DIR__ . '/../vendor/doctrine-orm/lib/vendor/Symfony';
-} else if (file_exists($mongofile)) {
-    $namespaces['Symfony'] = __DIR__ . '/../vendor/doctrine-odm/lib/vendor/Symfony';
-}
-
-Zend\Loader\AutoloaderFactory::factory(array(
-    'Zend\Loader\StandardAutoloader' => array(
-        'namespaces' => $namespaces
-    ),
-));
+Zend\Loader\AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
 
 $appConfig = include 'config/application.config.php';
 
@@ -44,7 +28,7 @@ $cli = new \Symfony\Component\Console\Application(
 $cli->setCatchExceptions(true);
 
 $helpers = array();
-if (file_exists($mongofile)) {
+if (class_exists('Doctrine\ODM\MongoDB\Version')) {
     $helpers['dm'] = new \Doctrine\ODM\MongoDB\Tools\Console\Helper\DocumentManagerHelper($locator->get('doctrine_mongo'));
     $cli->addCommands(array(
         new \Doctrine\ODM\MongoDB\Tools\Console\Command\QueryCommand(),
@@ -57,7 +41,7 @@ if (file_exists($mongofile)) {
     ));
 }
 
-if (file_exists($ormfile)) {
+if (class_exists('Doctrine\ORM\Version')) {
     $helpers['em'] = new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($locator->get('doctrine_em'));
     $cli->addCommands(array(
         // DBAL Commands
