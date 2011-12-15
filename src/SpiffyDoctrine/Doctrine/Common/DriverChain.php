@@ -22,9 +22,6 @@ abstract class DriverChain extends Instance
             'namespace' => 'string',
             'paths' 	=> 'array',
         ),
-        'optional' => array(
-            'defaultNamespace' => 'string'
-        )
     );
 	
 	/**
@@ -78,7 +75,7 @@ abstract class DriverChain extends Instance
             if (($driverOpts['class'] == $this->annotationDriverClass) ||
             	(is_subclass_of($driverOpts['class'], $this->annotationDriverClass))
 			) {
-                $cachedReader = $this->getCachedReader($driverOpts['defaultNamespace']);
+                $cachedReader = $this->getCachedReader();
                 $driver = new $driverOpts['class']($cachedReader, $driverOpts['paths']);
             } else {
                 $driver = new $driverOpts['class']($driverOpts['paths']);
@@ -93,15 +90,12 @@ abstract class DriverChain extends Instance
      * Get the cached reader instance for annotation readers.
      * 
      * @todo investigate use cases for indexed reader
-     * @param  null|string $defaultNamespace
      * @return Doctrine\Common\Annotations\CachedReader
      */
-    protected function getCachedReader($defaultNamespace)
+    protected function getCachedReader()
     {
     	if (null === self::$cachedReader) {
 	    	$reader = new AnnotationReader;
-            $reader->setDefaultAnnotationNamespace($defaultNamespace);
-            
 			//$indexedReader 	    = new IndexedReader($reader);
 			//self::$cachedReader = new CachedReader($indexedReader, $this->cache);
 			self::$cachedReader = new CachedReader($reader, $this->cache);
