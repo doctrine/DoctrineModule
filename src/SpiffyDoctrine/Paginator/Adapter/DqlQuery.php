@@ -113,6 +113,8 @@ class DqlQuery implements Adapter
     {
         if ($this->countQuery === null) {
             $this->countQuery = clone ($this->query);
+            $this->countQuery->setParameters($this->query->getParameters(),
+            	$this->query->getParameterTypes());
             $this->countQuery->setHint(
                 Query::HINT_CUSTOM_TREE_WALKERS, 
                 array('SpiffyDoctrine\Paginator\TreeWalker\CountSqlWalker')

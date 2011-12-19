@@ -35,5 +35,7 @@ class CountSqlWalker extends TreeWalkerAdapter
         $AST->selectClause->selectExpressions = array(
             new SelectExpression(new AggregateExpression('count', $pathExpression, true), null)
         );
+        
+        $AST->orderByClause = null;
     }
 }
