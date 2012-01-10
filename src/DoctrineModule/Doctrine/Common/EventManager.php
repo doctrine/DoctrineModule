@@ -17,15 +17,14 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Doctrine\Common;
 
-use Zend\EventManager\Event,
-    Zend\Module\Consumer\AutoloaderProvider,
-    Zend\Module\Manager;
+use Doctrine\Common\EventManager as DoctrineEventManager,
+    DoctrineModule\Doctrine\Instance;
 
 /**
- * Base module for Doctrine that provides common functionality between providers and includes adapters,
- * paginators, and other classes for ZF2 + Doctrine.
+ * Wrapper for Doctrine EventManager that helps setup configuration without relying
+ * entirely on Di.
  *
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
@@ -33,19 +32,36 @@ use Zend\EventManager\Event,
  * @version $Revision$
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class Module implements AutoloaderProvider
+class EventManager extends Instance
 {
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
-        );
-    }
-    
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
-    }
+	/**
+	 * @var array
+	 */
+	protected $definition = array(
+        'optional' => array(
+            'subscribers' => 'array'
+        )
+    );
+	
+	protected function loadInstance()
+	{
+		$opts = $this->getOptions();
+		$evm = new DoctrineEventManager;
+        
+        foreach($opts['subscribers'] as $subscriber) {
+            if (is_string($subscriber)) {
+                if (!class_exists($subscriber)) {
+                    throw new \InvalidArgumentException(sprintf(
+                       'failed to register subscriber "%s" because the class does not exist.',
+                       $subscriber 
+                    ));
+                }
+                $subscriber = new $subscriber;
+            }
+            
+            $evm->addEventSubscriber($subscriber);
+        }
+        
+        $this->instance = $evm;
+	}
 }

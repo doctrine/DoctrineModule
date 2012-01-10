@@ -1,5 +1,5 @@
 <?php
-namespace SpiffyDoctrineTest\Assets\Entity;
+namespace DoctrineModuleTest\Assets\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

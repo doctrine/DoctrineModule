@@ -26,8 +26,8 @@ $moduleLoader = new \Zend\Loader\ModuleAutoloader(array(
 ));
 $moduleLoader->register();
 
-$moduleManager = new \Zend\Module\Manager(array('SpiffyDoctrine'));
-$moduleManager->loadModule('SpiffyDoctrine');
+$moduleManager = new \Zend\Module\Manager(array('DoctrineModule'));
+$moduleManager->loadModule('DoctrineModule');
 
 $config = $moduleManager->getMergedConfig()->toArray();
 
@@ -40,8 +40,8 @@ $config['di']['instance']['doctrine_connection']['parameters']['params'] = array
 // setup the driver
 $config['di']['instance']['doctrine_driver_chain']['parameters']['drivers']['doctrine_test_driver'] = array(
 	'class' 	=> 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-	'namespace' => 'SpiffyDoctrineTest\Assets\Entity',
-	'paths'     => array( __DIR__ . '/SpiffyDoctrineTests/src/SpiffyDoctrineTests/Assets/Entity')
+	'namespace' => 'DoctrineModuleTest\Assets\Entity',
+	'paths'     => array( __DIR__ . '/DoctrineModuleTests/src/DoctrineModuleTests/Assets/Entity')
 );
 
 $di = new \Zend\Di\Di;
@@ -50,4 +50,4 @@ $di->instanceManager()->addTypePreference('Zend\Di\Locator', $di);
 $config = new \Zend\Di\Configuration($config['di']);
 $config->configure($di);
 
-\SpiffyDoctrineTest\Framework\TestCase::$locator = $di;
+\DoctrineModuleTest\Framework\TestCase::$locator = $di;

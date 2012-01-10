@@ -17,15 +17,14 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Validator;
 
-use Zend\EventManager\Event,
-    Zend\Module\Consumer\AutoloaderProvider,
-    Zend\Module\Manager;
+use Doctrine\ORM\Query,
+    Doctrine\ORM\NoResultException,
+    Doctrine\ORM\NonUniqueResultException;
 
 /**
- * Base module for Doctrine that provides common functionality between providers and includes adapters,
- * paginators, and other classes for ZF2 + Doctrine.
+ * Validator for verifying an entity exists.
  *
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
@@ -33,19 +32,21 @@ use Zend\EventManager\Event,
  * @version $Revision$
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class Module implements AutoloaderProvider
+class EntityExists extends AbstractEntity
 {
-    public function getAutoloaderConfig()
+    public function isValid($value)
     {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
-        );
-    }
-    
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
+        $query = $this->_getQuery($value);
+        
+        try {
+            $result = $query->getSingleResult(Query::HYDRATE_ARRAY);
+        } catch (NoResultException $e) {
+        	$this->error(self::ERROR_NO_RECORD_FOUND, $value);
+            return false;
+        } catch (NonUniqueResultException $e) {
+            return true;
+        }
+        
+        return true;
     }
 }

@@ -17,15 +17,10 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
-
-use Zend\EventManager\Event,
-    Zend\Module\Consumer\AutoloaderProvider,
-    Zend\Module\Manager;
+namespace DoctrineModule\Service;
 
 /**
- * Base module for Doctrine that provides common functionality between providers and includes adapters,
- * paginators, and other classes for ZF2 + Doctrine.
+ * Service class with helpful entity related methods.
  *
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
@@ -33,19 +28,8 @@ use Zend\EventManager\Event,
  * @version $Revision$
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class Module implements AutoloaderProvider
+class Service
 {
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
-        );
-    }
-    
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
-    }
+    public function fromArray($object, array $data)
+    {}
 }

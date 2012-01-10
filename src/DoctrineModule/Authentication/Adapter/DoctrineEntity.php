@@ -1,5 +1,24 @@
 <?php
-namespace SpiffyDoctrine\Authentication\Adapter;
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the LGPL. For more information, see
+ * <http://www.doctrine-project.org>.
+ */
+
+namespace DoctrineModule\Authentication\Adapter;
+
 use Doctrine\ORM\EntityManager,
     Doctrine\ORM\NoResultException,
     Doctrine\ORM\NonUniqueResultException,
@@ -8,6 +27,15 @@ use Doctrine\ORM\EntityManager,
     Zend\Authentication\Adapter\Exception,
     Zend\Authentication\Result as AuthenticationResult;
 
+/**
+ * Authentication adapter that uses a Doctrine Entity for verification.
+ *
+ * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * @link    www.doctrine-project.org
+ * @since   1.0
+ * @version $Revision$
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class DoctrineEntity implements AuthenticationAdapter
 {
     /**
@@ -113,7 +141,7 @@ class DoctrineEntity implements AuthenticationAdapter
      * Sets the entity manager to use.
      * 
      * @param Doctrine\ORM\EntityManager $em
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setEntityManager(EntityManager $em)
     {
@@ -125,7 +153,7 @@ class DoctrineEntity implements AuthenticationAdapter
      * Sets the entity to use for authentication.
      * 
      * @param string $entity
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setEntity($entity)
     {
@@ -137,7 +165,7 @@ class DoctrineEntity implements AuthenticationAdapter
      * Set the value to be used as the identity
      *
      * @param  string $value
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setIdentity($value)
     {
@@ -149,7 +177,7 @@ class DoctrineEntity implements AuthenticationAdapter
      * Set the credential value to be used.
      *
      * @param  string $credential
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setCredential($credential)
     {
@@ -162,7 +190,7 @@ class DoctrineEntity implements AuthenticationAdapter
      * before checking.
      *
      * @param  string $callable
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setCredentialCallable($callable)
     {
@@ -174,7 +202,7 @@ class DoctrineEntity implements AuthenticationAdapter
      * Set the column name to be used as the identity column
      *
      * @param  string $identityColumn
-     * @return SpiffyDoctrine\Authentication\Adapater\DoctrineEntity
+     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setIdentityColumn($identityColumn)
     {

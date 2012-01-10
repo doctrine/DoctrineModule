@@ -1,7 +1,7 @@
 <?php
-namespace SpiffyDoctrineTest\Framework;
+namespace DoctrineModuleTest\Framework;
 use PHPUnit_Framework_TestCase,
-    SpiffyDoctrine\Service\Doctrine;
+    DoctrineModule\Service\Doctrine;
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class TestCase extends PHPUnit_Framework_TestCase
     protected static $hasDb = false;
     
     /**
-     * @var SpiffyDoctrine\Service\Doctrine
+     * @var DoctrineModule\Service\Doctrine
      */
     protected $_service;
     
@@ -28,7 +28,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         
         $em = $this->getEntityManager();
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
-        $classes = array($em->getClassMetadata('SpiffyDoctrineTest\Assets\Entity\Test'));
+        $classes = array($em->getClassMetadata('DoctrineModuleTest\Assets\Entity\Test'));
         $tool->createSchema($classes);
         self::$hasDb = true;
     }

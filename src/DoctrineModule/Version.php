@@ -19,13 +19,8 @@
 
 namespace DoctrineModule;
 
-use Zend\EventManager\Event,
-    Zend\Module\Consumer\AutoloaderProvider,
-    Zend\Module\Manager;
-
 /**
- * Base module for Doctrine that provides common functionality between providers and includes adapters,
- * paginators, and other classes for ZF2 + Doctrine.
+ * Version.
  *
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
@@ -33,19 +28,7 @@ use Zend\EventManager\Event,
  * @version $Revision$
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class Module implements AutoloaderProvider
+class Version
 {
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
-        );
-    }
-    
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
-    }
+    const VERSION = '1.0.0b';
 }

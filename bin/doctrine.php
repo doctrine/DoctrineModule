@@ -22,8 +22,8 @@ $bootstrap->bootstrap($application);
 $locator = $application->getLocator();
 
 $cli = new \Symfony\Component\Console\Application(
-    'SpiffyDoctrine Command Line Interface',
-    \SpiffyDoctrine\Version::VERSION
+    'DoctrineModule Command Line Interface',
+    \DoctrineModule\Version::VERSION
 );
 $cli->setCatchExceptions(true);
 

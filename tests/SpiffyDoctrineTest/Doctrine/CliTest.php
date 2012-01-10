@@ -1,5 +1,5 @@
 <?php
-namespace SpiffyDoctrineTest\Doctrine;
+namespace DoctrineModuleTest\Doctrine;
 
 class CliTest
 {

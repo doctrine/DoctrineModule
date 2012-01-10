@@ -13,6 +13,9 @@ return array(
         ),
         'instance' => array(
             'alias' => array(
+                // services
+                'doctrine_service' => 'DoctrineModule\Service\Service',
+                
                 // caching
                 'doctrine_memcache'       => 'Memcache',
                 'doctrine_cache_apc'      => 'Doctrine\Common\Cache\ApcCache',

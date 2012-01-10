@@ -1,6 +1,6 @@
 <?php
-namespace SpiffyDoctrineTest\Authentication\Adapter;
-use SpiffyDoctrineTest\Framework\TestCase;
+namespace DoctrineModuleTest\Authentication\Adapter;
+use DoctrineModuleTest\Framework\TestCase;
 
 class DoctrineEntityTest extends TestCase 
 {
@@ -13,9 +13,9 @@ class DoctrineEntityTest extends TestCase
     {
         $em = $this->getEntityManager();
         
-        $adapter = new \SpiffyDoctrine\Authentication\Adapter\DoctrineEntity(
+        $adapter = new \DoctrineModule\Authentication\Adapter\DoctrineEntity(
             $em,
-            'SpiffyDoctrineTest\Assets\Entity\Test'
+            'DoctrineModuleTest\Assets\Entity\Test'
         );
         $adapter->setIdentity('username');
         $adapter->setCredential('password');
@@ -29,15 +29,15 @@ class DoctrineEntityTest extends TestCase
     {
         $em = $this->getEntityManager();
         
-        $entity = new \SpiffyDoctrineTest\Assets\Entity\Test;
+        $entity = new \DoctrineModuleTest\Assets\Entity\Test;
         $entity->username = 'username';
         $entity->password = 'password';
         $em->persist($entity);
         $em->flush();
         
-        $adapter = new \SpiffyDoctrine\Authentication\Adapter\DoctrineEntity(
+        $adapter = new \DoctrineModule\Authentication\Adapter\DoctrineEntity(
             $em,
-            'SpiffyDoctrineTest\Assets\Entity\Test'
+            'DoctrineModuleTest\Assets\Entity\Test'
         );
         $adapter->setIdentity('username');
         $adapter->setCredential('password');
