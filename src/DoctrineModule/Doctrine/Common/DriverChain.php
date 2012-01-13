@@ -51,6 +51,9 @@ abstract class DriverChain extends Instance
             'namespace' => 'string',
             'paths' 	=> 'array',
         ),
+        'optional' => array(
+            'file_extension' => 'string'
+        )
     );
 	
 	/**
@@ -105,6 +108,11 @@ abstract class DriverChain extends Instance
             } else {
                 $driver = new $driverOpts['class']($driverOpts['paths']);
             }
+
+            if ($driverOpts['file_extension'] && method_exists($driver, 'setFileExtension')) {
+                $driver->setFileExtension($driverOpts['file_extension']);
+            }
+
             $chain->addDriver($driver, $driverOpts['namespace']);
         }
 
