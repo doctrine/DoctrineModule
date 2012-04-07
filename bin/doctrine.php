@@ -1,9 +1,23 @@
 <?php
 ini_set('display_errors', true);
+chdir(__DIR__);
 
-chdir(dirname(__DIR__ . '/../../../...'));
-require_once 'vendor/ZendFramework/library/Zend/Loader/AutoloaderFactory.php';
-Zend\Loader\AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array()));
+$previousDir = '.';
+while (!file_exists('config/application.config.php')) {
+    $dir = dirname(getcwd());
+    if($previousDir === $dir) {
+        throw new RuntimeException(
+            'Unable to locate "config/application.config.php":'
+                . ' is DoctrineModule in a subdir of your application skeleton?'
+        );
+    }
+    $previousDir = $dir;
+    chdir($dir);
+}
+file_exists('vendor/.composer/autoload.php') && require_once 'vendor/.composer/autoload.php';
+
+require_once (getenv('ZF2_PATH') ?: 'vendor/ZendFramework/library') . '/Zend/Loader/AutoloaderFactory.php';
+Zend\Loader\AutoloaderFactory::factory();
 
 $appConfig = include 'config/application.config.php';
 
@@ -47,7 +61,7 @@ if (class_exists('Doctrine\ORM\Version')) {
         // DBAL Commands
         new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand(),
         new \Doctrine\DBAL\Tools\Console\Command\ImportCommand(),
-    
+
         // ORM Commands
         new \Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand(),
         new \Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand(),
