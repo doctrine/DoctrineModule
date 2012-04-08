@@ -1,2 +1,0 @@
-<?php
-define('ZEND_FRAMEWORK_PATH', realpath(__DIR__ . '/../../../library/ZendFramework/library'));
