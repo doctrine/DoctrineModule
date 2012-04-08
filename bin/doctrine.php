@@ -14,7 +14,6 @@ while (!file_exists('config/application.config.php')) {
     $previousDir = $dir;
     chdir($dir);
 }
-file_exists('vendor/.composer/autoload.php') && require_once 'vendor/.composer/autoload.php';
 
 require_once (getenv('ZF2_PATH') ?: 'vendor/ZendFramework/library') . '/Zend/Loader/AutoloaderFactory.php';
 Zend\Loader\AutoloaderFactory::factory();
