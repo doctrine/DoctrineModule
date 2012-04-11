@@ -19,13 +19,14 @@
 
 namespace DoctrineModule\Doctrine\Common;
 
-use InvalidArgumentException,
-    ReflectionClass,
-    Doctrine\Common\Cache\Cache,
-	Doctrine\Common\Annotations\AnnotationReader,
-	Doctrine\Common\Annotations\CachedReader,
-	Doctrine\Common\Annotations\IndexedReader,
-    DoctrineModule\Doctrine\Instance;
+use InvalidArgumentException;
+use ReflectionClass;
+use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\Common\Annotations\IndexedReader;
+use DoctrineModule\Doctrine\Instance;
 
 /**
  * Wrapper for Doctrine DriverChain that helps setup configuration without relying
@@ -37,11 +38,11 @@ use InvalidArgumentException,
  * @version $Revision$
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-abstract class DriverChain extends Instance
+class DriverChain extends Instance
 {
     protected $annotationDriverClass = 'Doctrine\ORM\Mapping\Driver\AnnotationDriver';
     protected $driverChainClass      = 'Doctrine\ORM\Mapping\Driver\DriverChain';
-    
+
 	/**
 	 * @var array
 	 */
@@ -55,33 +56,33 @@ abstract class DriverChain extends Instance
             'file_extension' => 'string'
         )
     );
-	
+
 	/**
 	 * @var Doctrine\Common\Annotations\CachedReader
 	 */
 	protected static $cachedReader;
-	
+
 	/**
 	 * @var Doctrine\Common\Cache\Cache
 	 */
 	protected $cache;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param array $drivers
 	 * @param Cache $cache
 	 */
-	public function __construct(array $drivers = array(), Cache $cache)
+	public function __construct(array $drivers = array(), Cache $cache = null)
 	{
-		$this->cache = $cache;
+		$this->cache = $cache ? $cache : new ArrayCache();
 		parent::__construct($drivers);
 	}
-    
+
 	protected function loadInstance()
 	{
 		$drivers = $this->getOptions();
-		
+
         $wrapperClass = $this->driverChainClass;
         if (isset($opts['wrapperClass'])) {
             if (is_subclass_of($opts['wrapperClass'], $wrapperClass)) {
@@ -94,12 +95,12 @@ abstract class DriverChain extends Instance
                 ));
             }
         }
-		
+
         $chain = new $wrapperClass;
-        
+
         foreach($drivers as $driverOpts) {
             $this->validateOptions($driverOpts, $this->driverChainDefinition);
-            
+
             if (($driverOpts['class'] == $this->annotationDriverClass) ||
             	(is_subclass_of($driverOpts['class'], $this->annotationDriverClass))
 			) {
@@ -116,12 +117,12 @@ abstract class DriverChain extends Instance
             $chain->addDriver($driver, $driverOpts['namespace']);
         }
 
-        $this->instance = $chain; 
+        $this->instance = $chain;
     }
-    
+
     /**
      * Get the cached reader instance for annotation readers.
-     * 
+     *
      * @todo investigate use cases for indexed reader
      * @return Doctrine\Common\Annotations\CachedReader
      */
