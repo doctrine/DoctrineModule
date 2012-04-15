@@ -59,6 +59,14 @@ if (class_exists('Doctrine\ORM\Version')) {
     $helpers['em'] = new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em);
     $helpers['db'] = new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection());
     $cli->addCommands(array(
+        // Migrations Commands
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
+
         // DBAL Commands
         new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand(),
         new \Doctrine\DBAL\Tools\Console\Command\ImportCommand(),
