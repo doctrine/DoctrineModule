@@ -31,7 +31,10 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "ocramius/OcraComposer": "dev-master"
+        "ocramius/OcraComposer": "dev-master",
+        "doctrine/common": "2.*",
+        "symfony/yaml": "2.0.*",
+        "symfony/console": "2.0.*"
     },
 
     "autoload": {
