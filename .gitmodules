@@ -7,3 +7,6 @@
 [submodule "vendor/symfony-yaml"]
 	path = vendor/symfony-yaml
 	url = git://github.com/symfony/Yaml
+[submodule "vendor/doctrine-data-fixtures"]
+	path = vendor/doctrine-data-fixtures
+	url = git://github.com/doctrine/data-fixtures.git
