@@ -23,7 +23,7 @@ use Doctrine\ORM\EntityManager,
     Doctrine\ORM\NoResultException,
     Doctrine\ORM\NonUniqueResultException,
     Doctrine\ORM\Query,
-    Zend\Authentication\Adapter as AuthenticationAdapter,
+    Zend\Authentication\Adapter\AdapaterInterface,
     Zend\Authentication\Adapter\Exception,
     Zend\Authentication\Result as AuthenticationResult;
 
@@ -36,7 +36,7 @@ use Doctrine\ORM\EntityManager,
  * @version $Revision$
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class DoctrineEntity implements AuthenticationAdapter
+class DoctrineEntity implements AdapterInterface
 {
     /**
      * Doctrine EntityManager instance
