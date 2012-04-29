@@ -1,0 +1,12 @@
+[submodule "vendor/doctrine-common"]
+	path = vendor/doctrine-common
+	url = git://github.com/doctrine/common.git
+[submodule "vendor/symfony-console"]
+	path = vendor/symfony-console
+	url = git://github.com/symfony/Console
+[submodule "vendor/symfony-yaml"]
+	path = vendor/symfony-yaml
+	url = git://github.com/symfony/Yaml
+[submodule "vendor/doctrine-data-fixtures"]
+	path = vendor/doctrine-data-fixtures
+	url = git://github.com/doctrine/data-fixtures.git
