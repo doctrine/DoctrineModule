@@ -38,7 +38,7 @@ $cli = $application->getLocator()->get('doctrine_cli');
 
 if (class_exists('Doctrine\ODM\MongoDB\Version')) {
     $cli->getHelperSet()->set(
-        new \Doctrine\ODM\MongoDB\Tools\Console\Helper\DocumentManagerHelper($locator->get('doctrine_mongo')),
+        new \Doctrine\ODM\MongoDB\Tools\Console\Helper\DocumentManagerHelper($application->getLocator()->get('mongo_dm')),
         'dm'
     );
     $cli->addCommands(array(
