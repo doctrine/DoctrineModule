@@ -23,7 +23,7 @@ use Doctrine\ORM\EntityManager,
     Doctrine\ORM\NoResultException,
     Doctrine\ORM\NonUniqueResultException,
     Doctrine\ORM\Query,
-    Zend\Authentication\Adapter\AdapaterInterface,
+    Zend\Authentication\Adapter\AdapterInterface,
     Zend\Authentication\Adapter\Exception,
     Zend\Authentication\Result as AuthenticationResult;
 
@@ -40,64 +40,64 @@ class DoctrineEntity implements AdapterInterface
 {
     /**
      * Doctrine EntityManager instance
-     * 
-     * @var Doctrine\ORM\EntityManager
+     *
+     * @var \Doctrine\ORM\EntityManager
      */
     protected $em;
-    
+
     /**
      * Entity class to use.
-     * 
+     *
      * @var string
      */
     protected $entity;
-    
+
     /**
      * Identity column to check credential against.
-     * 
+     *
      * @var string
      */
     protected $identityColumn;
-    
+
     /**
      * Credential column to check credential against.
-     * 
+     *
      * @var string
      */
     protected $credentialColumn;
-    
+
     /**
      * Use supplied identity.
-     * 
+     *
      * @var string
      */
     protected $identity;
-    
+
     /**
      * User supplied credential.
-     * 
+     *
      * @var string
      */
     protected $credential;
-    
+
     /**
      * User supplied credential.
-     * 
+     *
      * @var mixed
      */
     protected $credentialCallable;
-    
+
     /**
      * Contains the authentication results.
-     * 
+     *
      * @var array
      */
-    protected $authenticationResultInfo = null;
-    
+    protected $authenticateResultInfo = array();
+
     /**
      * __construct() - Sets configuration options
      *
-     * @param  Doctrine\ORM\EntityManager $em
+     * @param  \Doctrine\ORM\EntityManager $em
      * @param  string                     $tableName
      * @param  string                     $identityColumn
      * @param  string                     $credentialColumn
@@ -113,59 +113,59 @@ class DoctrineEntity implements AdapterInterface
         $this->setCredentialColumn($credentialColumn);
         $this->setCredentialCallable($credentialCallable);
     }
-    
+
     /**
      * Defined by Zend_Auth_Adapter_Interface.  This method is called to
      * attempt an authentication.  Previous to this call, this adapter would have already
      * been configured with all necessary information to successfully connect to a database
      * table and attempt to find a record matching the provided identity.
      *
-     * @throws Zend\Authentication\Adapter\Exception if answering the authentication query is impossible
-     * @return Zend\Authentication\Result
+     * @throws \Zend\Authentication\Adapter\Exception if answering the authentication query is impossible
+     * @return \Zend\Authentication\Result
      */
     public function authenticate()
     {
         $this->authenticateSetup();
         $query = $this->authenticateCreateQuery();
-        
+
         if (!($identity = $this->authenticateValidateQuery($query))) {
             return $this->authenticateCreateAuthResult();
         }
-        
+
         $authResult = $this->authenticateValidateIdentity($identity);
         return $authResult;
     }
-    
-   
+
+
     /**
      * Sets the entity manager to use.
-     * 
-     * @param Doctrine\ORM\EntityManager $em
-     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
+     *
+     * @param \Doctrine\ORM\EntityManager $em
+     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setEntityManager(EntityManager $em)
     {
         $this->em = $em;
         return $this;
     }
-    
+
     /**
      * Sets the entity to use for authentication.
-     * 
+     *
      * @param string $entity
-     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setEntity($entity)
     {
         $this->entity = $entity;
         return $this;
     }
-    
+
     /**
      * Set the value to be used as the identity
      *
      * @param  string $value
-     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setIdentity($value)
     {
@@ -177,32 +177,32 @@ class DoctrineEntity implements AdapterInterface
      * Set the credential value to be used.
      *
      * @param  string $credential
-     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setCredential($credential)
     {
         $this->credential = $credential;
         return $this;
     }
-    
+
     /**
      * Set the credential callable to be used to transform the password
      * before checking.
      *
      * @param  string $callable
-     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setCredentialCallable($callable)
     {
         $this->credentialCallable = $callable;
         return $this;
     }
-    
+
     /**
      * Set the column name to be used as the identity column
      *
      * @param  string $identityColumn
-     * @return DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
      */
     public function setIdentityColumn($identityColumn)
     {
@@ -214,48 +214,48 @@ class DoctrineEntity implements AdapterInterface
      * Set the column name to be used as the credential column
      *
      * @param  string $credentialColumn
-     * @return Zend\Authentication\Adapter\DbTable Provides a fluent interface
+     * @return \Zend\Authentication\Adapter\DbTable Provides a fluent interface
      */
     public function setCredentialColumn($credentialColumn)
     {
         $this->credentialColumn = $credentialColumn;
         return $this;
     }
-    
+
     /**
-     * Prepares the query by building it from QueryBuilder based on the 
+     * Prepares the query by building it from QueryBuilder based on the
      * entity, credentialColumn and identityColumn.
-     * 
-     * @return Doctrine\ORM\Query
+     *
+     * @return \Doctrine\ORM\Query
      */
     protected function authenticateCreateQuery()
     {
         $mdata = $this->em->getClassMetadata($this->entity);
         $qb = $this->em->createQueryBuilder();
-        
+
         $qb->select('q')
            ->from($this->entity, 'q')
            ->where($qb->expr()->eq(
                 'q.' . $this->identityColumn,
                 $qb->expr()->literal($this->identity)
             ));
-           
+
         return $qb->getQuery();
     }
-    
+
     /**
-     * This method attempts to validate that the record in the resultset is indeed a 
+     * This method attempts to validate that the record in the resultset is indeed a
      * record that matched the identity provided to this adapter.
      *
      * @param  object $identity
-     * @return Zend\Authentication\Result
+     * @return \Zend\Authentication\Result
      */
     protected function authenticateValidateIdentity($identity)
     {
         $getter           = 'get' . ucfirst($this->credentialColumn);
         $vars             = get_object_vars($identity);
         $entityCredential = null;
-        
+
         if (method_exists($identity, $getter)) {
             $entityCredential = $identity->$getter();
         } else if (isset($identity->{$this->credentialColumn}) || isset($vars[$this->credentialColumn])) {
@@ -269,7 +269,7 @@ class DoctrineEntity implements AdapterInterface
                 $getter
             ));
         }
-        
+
         $credential = $this->credential;
         $callable   = $this->credentialCallable;
         if ($callable) {
@@ -282,7 +282,7 @@ class DoctrineEntity implements AdapterInterface
         	}
         	$credential = call_user_func($callable, $identity, $credential);
         }
-        
+
         if ($credential != $entityCredential) {
             $this->authenticateResultInfo['code'] = AuthenticationResult::FAILURE_CREDENTIAL_INVALID;
             $this->authenticateResultInfo['messages'][] = 'Supplied credential is invalid.';
@@ -294,12 +294,12 @@ class DoctrineEntity implements AdapterInterface
         $this->authenticateResultInfo['messages'][] = 'Authentication successful.';
         return $this->authenticateCreateAuthResult();
     }
-    
+
     /**
      * Validates the query. Catches exceptions from Doctrine and populates authenticate results
      * appropriately.
-     * 
-     * @return false|object
+     *
+     * @return bool|object
      */
     protected function authenticateValidateQuery(Query $query)
     {
@@ -315,13 +315,13 @@ class DoctrineEntity implements AdapterInterface
 
         return false;
     }
-    
+
     /**
-     * This method abstracts the steps involved with making sure that this adapter was 
+     * This method abstracts the steps involved with making sure that this adapter was
      * indeed setup properly with all required pieces of information.
      *
-     * @throws Zend\Authentication\Adapter\Exception - in the event that setup was not done properly
-     * @return true
+     * @throws \Zend\Authentication\Adapter\Exception - in the event that setup was not done properly
+     * @return bool
      */
     protected function authenticateSetup()
     {
@@ -353,7 +353,7 @@ class DoctrineEntity implements AdapterInterface
     }
 
     /**
-     * Creates a Zend_Auth_Result object from the information that has been collected 
+     * Creates a Zend_Auth_Result object from the information that has been collected
      * during the authenticate() attempt.
      *
      * @return \Zend\Authentication\Result
