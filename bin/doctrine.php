@@ -33,23 +33,7 @@ $bootstrap = new Zend\Mvc\Bootstrap($defaultListeners->getConfigListener()->getM
 $application = new Zend\Mvc\Application();
 $bootstrap->bootstrap($application);
 
-/* @var $cli \Symfony\Component\Console\Application */
-$cli = $application->getLocator()->get('doctrine_cli');
-
-if (class_exists('Doctrine\ODM\MongoDB\Version')) {
-    $cli->getHelperSet()->set(
-        new \Doctrine\ODM\MongoDB\Tools\Console\Helper\DocumentManagerHelper($application->getLocator()->get('mongo_dm')),
-        'dm'
-    );
-    $cli->addCommands(array(
-        new \Doctrine\ODM\MongoDB\Tools\Console\Command\QueryCommand(),
-        new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateDocumentsCommand(),
-        new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateRepositoriesCommand(),
-        new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateProxiesCommand(),
-        new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateHydratorsCommand(),
-        new \Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\CreateCommand(),
-        new \Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\DropCommand(),
-    ));
-}
-
-$cli->run();
+$application
+    ->getLocator()
+    ->get('doctrine_cli')
+    ->run();
