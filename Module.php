@@ -37,11 +37,15 @@ class Module implements AutoloaderProvider
 {
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
-        );
+        if (realpath(__DIR__ . '/vendor/doctrine-common/lib')) {
+            return array(
+                'Zend\Loader\ClassMapAutoloader' => array(
+                    __DIR__ . '/autoload_classmap.php',
+                ),
+            );
+        }
+
+        return array();
     }
 
     public function getConfig()
