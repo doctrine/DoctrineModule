@@ -1,0 +1,5 @@
+{
+    "require": {
+        "doctrine/DoctrineModule": "dev-master"
+    }
+}
