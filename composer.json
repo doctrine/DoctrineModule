@@ -31,11 +31,11 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "ocramius/OcraComposer": "dev-master",
-        "doctrine/common": "2.*",
+        "ocramius/OcraComposer": "0.1.0",
+        "doctrine/common": "2.2.2",
         "doctrine/data-fixtures": "dev-master",
-        "symfony/yaml": "2.0.*",
-        "symfony/console": "2.0.*"
+        "symfony/yaml": "v2.0.13",
+        "symfony/console": "v2.0.13"
     },
 
     "autoload": {
