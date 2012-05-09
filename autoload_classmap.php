@@ -7,8 +7,7 @@ return array(
     'DoctrineModule\Doctrine\Common\DriverChain'                                                                                                         => __DIR__ . '/src/DoctrineModule/Doctrine/Common/DriverChain.php',
     'DoctrineModule\Doctrine\Common\EventManager'                                                                                                        => __DIR__ . '/src/DoctrineModule/Doctrine/Common/EventManager.php',
     'DoctrineModule\Doctrine\Instance'                                                                                                                   => __DIR__ . '/src/DoctrineModule/Doctrine/Instance.php',
-    'DoctrineModule\Paginator\Adapter\DqlQuery'                                                                                                          => __DIR__ . '/src/DoctrineModule/Paginator/Adapter/DqlQuery.php',
-    'DoctrineModule\Paginator\TreeWalker\CountSqlWalker'                                                                                                 => __DIR__ . '/src/DoctrineModule/Paginator/TreeWalker/CountSqlWalker.php',
+    'DoctrineModule\Factory\DoctrineObject'                                                                                                              => __DIR__ . '/src/DoctrineModule/Factory/DoctrineObject.php',
     'DoctrineModule\Service\Service'                                                                                                                     => __DIR__ . '/src/DoctrineModule/Service/Service.php',
     'DoctrineModule\Validator\AbstractEntity'                                                                                                            => __DIR__ . '/src/DoctrineModule/Validator/AbstractEntity.php',
     'DoctrineModule\Validator\EntityExists'                                                                                                              => __DIR__ . '/src/DoctrineModule/Validator/EntityExists.php',
@@ -229,21 +228,6 @@ return array(
     'Symfony\Component\Console\Output\StreamOutput'                                                                                                      => __DIR__ . '/vendor/symfony-console/Output/StreamOutput.php',
     'Symfony\Component\Console\Shell'                                                                                                                    => __DIR__ . '/vendor/symfony-console/Shell.php',
     'Symfony\Component\Console\Tester\ApplicationTester'                                                                                                 => __DIR__ . '/vendor/symfony-console/Tester/ApplicationTester.php',
-<<<<<<< HEAD
-    'Symfony\Component\Console\Command\ListCommand'                                                                                                      => __DIR__ . '/vendor/symfony-console/Command/ListCommand.php',
-    'Symfony\Component\Console\Command\Command'                                                                                                          => __DIR__ . '/vendor/symfony-console/Command/Command.php',
-    'Symfony\Component\Console\Command\HelpCommand'                                                                                                      => __DIR__ . '/vendor/symfony-console/Command/HelpCommand.php',
-    'DoctrineModule\Service\Service'                                                                                                                     => __DIR__ . '/src/DoctrineModule/Service/Service.php',
-    'DoctrineModule\Authentication\Adapter\DoctrineEntity'                                                                                               => __DIR__ . '/src/DoctrineModule/Authentication/Adapter/DoctrineEntity.php',
-    'DoctrineModule\Version'                                                                                                                             => __DIR__ . '/src/DoctrineModule/Version.php',
-    'DoctrineModule\Validator\EntityExists'                                                                                                              => __DIR__ . '/src/DoctrineModule/Validator/EntityExists.php',
-    'DoctrineModule\Validator\NoEntityExists'                                                                                                            => __DIR__ . '/src/DoctrineModule/Validator/NoEntityExists.php',
-    'DoctrineModule\Validator\AbstractEntity'                                                                                                            => __DIR__ . '/src/DoctrineModule/Validator/AbstractEntity.php',
-    'DoctrineModule\Doctrine\Common\EventManager'                                                                                                        => __DIR__ . '/src/DoctrineModule/Doctrine/Common/EventManager.php',
-    'DoctrineModule\Doctrine\Common\DriverChain'                                                                                                         => __DIR__ . '/src/DoctrineModule/Doctrine/Common/DriverChain.php',
-    'DoctrineModule\Doctrine\Instance'                                                                                                                   => __DIR__ . '/src/DoctrineModule/Doctrine/Instance.php',
-    'DoctrineModule\Module'                                                                                                                              => __DIR__ . '/Module.php',
-=======
     'Symfony\Component\Console\Tester\CommandTester'                                                                                                     => __DIR__ . '/vendor/symfony-console/Tester/CommandTester.php',
     'Symfony\Component\Yaml\Dumper'                                                                                                                      => __DIR__ . '/vendor/symfony-yaml/Dumper.php',
     'Symfony\Component\Yaml\Escaper'                                                                                                                     => __DIR__ . '/vendor/symfony-yaml/Escaper.php',
@@ -254,5 +238,4 @@ return array(
     'Symfony\Component\Yaml\Parser'                                                                                                                      => __DIR__ . '/vendor/symfony-yaml/Parser.php',
     'Symfony\Component\Yaml\Unescaper'                                                                                                                   => __DIR__ . '/vendor/symfony-yaml/Unescaper.php',
     'Symfony\Component\Yaml\Yaml'                                                                                                                        => __DIR__ . '/vendor/symfony-yaml/Yaml.php',
->>>>>>> Updated config files
 );
