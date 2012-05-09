@@ -29,7 +29,8 @@ use Doctrine\ORM\EntityManager,
 
 /**
  * Authentication adapter that uses a Doctrine Entity for verification.
- *
+ * 
+ * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
  * @since   1.0

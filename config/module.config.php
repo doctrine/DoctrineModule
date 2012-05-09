@@ -88,6 +88,21 @@ return array(
                         ),
                     ),
                 ),
+                
+                'DoctrineModule\Authentication\Adapter\DoctrineObject' => array(
+                    'methods' => array(
+                        '__construct' => array(
+                            'objectManager' => array('type' => 'Doctrine\Common\Persistence\ObjectManager', 'required' => true),
+                            'identityClassName' => array('type' => false, 'required' => true),
+                            'identityProperty' => array('type' => false, 'required' => true),
+                            'credentialProperty' => array('type' => false, 'required' => true),
+                            'credentialCallable' => array('type' => false, 'required' => false)
+                        ),                         
+                        'setIdentityClassName' => array(
+                            'identityClassName' => array('type' => false, 'required' => false)
+                        )
+                    )
+                )                                              
             ),
         ),
     ),
