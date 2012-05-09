@@ -24,8 +24,7 @@ use Zend\EventManager\Event,
     Zend\Module\Manager;
 
 /**
- * Base module for Doctrine that provides common functionality between providers and includes adapters,
- * paginators, and other classes for ZF2 + Doctrine.
+ * Base module for integration of Doctrine projects with ZF2 applications
  *
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org

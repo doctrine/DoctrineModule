@@ -229,8 +229,6 @@ return array(
     'DoctrineModule\Service\Service'                                                                                                                     => __DIR__ . '/src/DoctrineModule/Service/Service.php',
     'DoctrineModule\Authentication\Adapter\DoctrineEntity'                                                                                               => __DIR__ . '/src/DoctrineModule/Authentication/Adapter/DoctrineEntity.php',
     'DoctrineModule\Version'                                                                                                                             => __DIR__ . '/src/DoctrineModule/Version.php',
-    'DoctrineModule\Paginator\TreeWalker\CountSqlWalker'                                                                                                 => __DIR__ . '/src/DoctrineModule/Paginator/TreeWalker/CountSqlWalker.php',
-    'DoctrineModule\Paginator\Adapter\DqlQuery'                                                                                                          => __DIR__ . '/src/DoctrineModule/Paginator/Adapter/DqlQuery.php',
     'DoctrineModule\Validator\EntityExists'                                                                                                              => __DIR__ . '/src/DoctrineModule/Validator/EntityExists.php',
     'DoctrineModule\Validator\NoEntityExists'                                                                                                            => __DIR__ . '/src/DoctrineModule/Validator/NoEntityExists.php',
     'DoctrineModule\Validator\AbstractEntity'                                                                                                            => __DIR__ . '/src/DoctrineModule/Validator/AbstractEntity.php',

@@ -41,22 +41,3 @@ to perform hashing on the password prior to checking for validation.
     $result = $adapter->authenticate();
 
     var_dump($result);
-
-## Pagination adapter for Zend\Paginator\Paginator
-The paginator adapter is intended to provide an adapter for Zend\Adapter. You must provide the 
-entity manager (em) and a valid query (currently accepted are pure DQL string, Query object or
-QueryBuilder object). You can optionally provide a hydration_mode which defines how data is 
-fetched (array, object...). Please refer to the Doctrine manual for more information about 
-Doctrine's hydration modes.
-
-IMPORTANT: currently, the paginator adapter only work with single identifier (composite primary keys 
-or identity through multiple foreign keys are not supported, because of the CountWalker class).
-
-    $paginatorAdapter = new \DoctrineModule\Paginator\Adapter\DqlQuery(array(
-        'em'    => $this->getLocator()->get('doctrine_em'),
-        'query' => "SELECT u FROM User u WHERE u.city = 'Paris'"
-    ));
-
-    $paginator = new \Zend\Paginator\Paginator($paginatorAdapter);
-    $paginator->setCurrentPageNumber(1)
-              ->setItemCountPerPage(10);
