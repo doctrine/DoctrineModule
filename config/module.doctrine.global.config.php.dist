@@ -1,0 +1,22 @@
+ <?php
+ /**
+  * Doctrine Configuration
+  *
+  * If you have a ./configs/autoload/ directory set up for your project, you can
+  * drop this config file in it and change the values as you wish.
+  */
+
+return array(
+    'di' => array(
+        'instance' => array(
+            'DoctrineModule\Authentication\Adapter\DoctrineObject' => array(
+                'parameters' => array(
+                    'identityClassName' =>  'Application\Model\User',
+                    'identityProperty' =>   'username',
+                    'credentialProperty' => 'password',
+                    'credentialCallable' => 'Application\Model\User::hashPassword'
+                )
+            ),               
+        ),
+    ),
+);
