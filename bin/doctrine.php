@@ -35,5 +35,5 @@ $bootstrap->bootstrap($application);
 
 $application
     ->getLocator()
-    ->get('doctrine_cli')
+    ->get('Symfony\Component\Console\Application')
     ->run();

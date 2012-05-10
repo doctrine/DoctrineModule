@@ -11,23 +11,17 @@ return array(
                 'doctrine_cache_apc'      => 'Doctrine\Common\Cache\ApcCache',
                 'doctrine_cache_array'    => 'Doctrine\Common\Cache\ArrayCache',
                 'doctrine_cache_memcache' => 'Doctrine\Common\Cache\MemcacheCache',
-
-                // CLI tools
-                'doctrine_cli' => 'Symfony\Component\Console\Application',
-                'doctrine_cli_helperset' => 'Symfony\Component\Console\Helper\HelperSet',
             ),
 
             // Defaults for CLI
-            'doctrine_cli' => array(
+            'Symfony\Component\Console\Application' => array(              
                 'parameters' => array(
-                    'name' => 'DoctrineModule Command Line Interface',
+                    //'name' => 'DoctrineModule Command Line Interface',
                     'version' => 'dev-master',
-                ),
-                'injections' => array(
-                    'doctrine_cli_helperset',
+                    'helperSet' => 'Symfony\Component\Console\Helper\HelperSet',
                 ),
             ),
-            'doctrine_cli_helperset' => array(
+            'Symfony\Component\Console\Helper\HelperSet' => array(               
                 'parameters' => array(
                     'helpers' => array(),
                 ),
@@ -67,16 +61,15 @@ return array(
 
                 // CLI Application setup
                 'Symfony\Component\Console\Application' => array(
-                    'methods' => array(
-                        'add' => array(
-                            'command' => array(
-                                'type' => 'Symfony\Component\Console\Command\Command',
-                                'required' => true,
-                            ),
+                    'add' => array(
+                        'command' => array(
+                            'type' => 'Symfony\Component\Console\Command\Command',
+                            'required' => true,
                         ),
                     ),
                 ),
-                'Symfony\Component\Console\Helper\HelperSet' => array(
+                                
+                'Symfony\Component\Console\Helper\HelperSet' => array(                   
                     'set' => array(
                         'helper' => array(
                             'type' => 'Symfony\Component\Console\Helper\HelperInterface',
@@ -102,7 +95,58 @@ return array(
                             'identityClassName' => array('type' => false, 'required' => false)
                         )
                     )
-                )                                              
+                ),
+                
+                'DoctrineModule\Factory\Find' => array(
+                    'instantiator' => array(
+                        'DoctrineModule\Factory\Find', 'get',                      
+                    ),
+                    'methods' => array(
+                        'get' => array(
+                            'objectManager' => array('type' => 'Doctrine\Common\Persistence\ObjectManager', 'required' => true),
+                            'objectClassName' => array('type' => false, 'required' => true),
+                            'id' => array('type' => false, 'required' => true),                            
+                        ),                                             
+                    ),
+                ),  
+                'DoctrineModule\Factory\FindAll' => array(
+                    'instantiator' => array(
+                        'DoctrineModule\Factory\FindAll', 'get'                        
+                    ),
+                    'methods' => array(
+                        'get' => array(
+                            'objectManager' => array('type' => 'Doctrine\Common\Persistence\ObjectManager', 'required' => true),
+                            'objectClassName' => array('type' => false, 'required' => true),                         
+                        ),                                                
+                    ),
+                ),                 
+                'DoctrineModule\Factory\FindBy' => array(
+                    'instantiator' => array(
+                        'DoctrineModule\Factory\FindBy', 'get'                        
+                    ),
+                    'methods' => array(
+                        'get' => array(
+                            'objectManager' => array('type' => 'Doctrine\Common\Persistence\ObjectManager', 'required' => true),
+                            'objectClassName' => array('type' => false, 'required' => true),
+                            'criteria' => array('type' => false, 'required' => false),  
+                            'orderBy' => array('type' => false, 'required' => false),    
+                            'limit' => array('type' => false, 'required' => false),
+                            'offset' => array('type' => false, 'required' => false),                                                   
+                        ),                                                
+                    ),
+                ), 
+                'DoctrineModule\Factory\FindOneBy' => array(
+                    'instantiator' => array(
+                        'DoctrineModule\Factory\FindOneBy', 'get'                        
+                    ),
+                    'methods' => array(
+                        'get' => array(
+                            'objectManager' => array('type' => 'Doctrine\Common\Persistence\ObjectManager', 'required' => true),
+                            'objectClassName' => array('type' => false, 'required' => true),
+                            'criteria' => array('type' => false, 'required' => false),                                                 
+                        ),                                                
+                    ),
+                ),                
             ),
         ),
     ),
