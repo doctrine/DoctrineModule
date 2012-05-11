@@ -4,17 +4,23 @@ This module is a provides common Doctrine and ZF integration. To get the most be
 provider module such as [DoctrineORMModule](http://www.github.com/doctrine/DoctrineORMModule). The
 following features are intended to work out of the box:
 
-  - CLI support for ORM and MongoDB-ODM.
+  - CLI support for Doctrine 2 ORM and Doctrine MongoDB ODM.
   - Validators for EntityExists and NoEntityExists
   - Authentication adapter for Zend\Authenticator
   - Support for using existing PDO connections
 
 ## Requirements
-  - [Zend Framework 2](http://www.github.com/zendframework/zf2)
+[Zend Framework 2](http://www.github.com/zendframework/zf2)
 
 ## Doctrine CLI
-The Doctrine CLI has been pre-configured and is available in DoctrineModule\bin. It should work as
-is without any special configuration required for MongoODM and ORM.
+The Doctrine CLI has been pre-configured for you and works as is without any special configuration required for
+MongoODM and ORM. It will just use your configuration for those modules.
+
+Access the Doctrine command line through
+
+```sh
+./vendor/doctrine/DoctrineModule/bin/doctrine
+```
 
 ## Installation
 
@@ -52,11 +58,6 @@ your application with composer. This may change in future.
      ```
 
 ## Usage
-Access the command line through
-
-```sh
-./vendor/doctrine/DoctrineModule/bin/doctrine
-```
 
 ## Upgrading
 See the [UPGRADE.md](http://www.github.com/doctrine/DoctrineModule/tree/master/docs/UPGRADE.md) file.
