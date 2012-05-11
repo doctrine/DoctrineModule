@@ -19,9 +19,10 @@
 
 namespace DoctrineModule;
 
-use Zend\EventManager\Event,
-    Zend\Module\Consumer\AutoloaderProvider,
-    Zend\Module\Manager;
+use Zend\EventManager\Event;
+use Zend\Module\Consumer\AutoloaderProvider;
+use Zend\Module\Manager;
+use Zend\Loader\StandardAutoloader;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
@@ -31,15 +32,27 @@ use Zend\EventManager\Event,
  * @since   1.0
  * @version $Revision$
  * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class Module implements AutoloaderProvider
 {
+    /**
+     * Retrieves configuration that can be consumed by Zend\Loader\AutoloaderFactory
+     *
+     * @return array
+     */
     public function getAutoloaderConfig()
     {
         if (realpath(__DIR__ . '/vendor/doctrine-common/lib')) {
             return array(
-                'Zend\Loader\ClassMapAutoloader' => array(
-                    __DIR__ . '/autoload_classmap.php',
+                'Zend\Loader\StandardAutoloader' => array(
+                    Zend\Loader\StandardAutoloader::LOAD_NS => array(
+                        __NAMESPACE__                   => __DIR__ . '/src/' . __NAMESPACE__,
+                        'Doctrine\Common\DataFixtures'  => __DIR__ . '/vendor/doctrine-data-fixtures/lib/Doctrine/Common/DataFixtures',
+                        'Doctrine\Common'               => __DIR__ . '/vendor/doctrine-common/lib/Doctrine/Common',
+                        'Symfony\Component\Yaml'        => __DIR__ . '/vendor/symfony-yaml',
+                        'Symfony\Component\Console'     => __DIR__ . '/vendor/symfony-console',
+                    ),
                 ),
             );
         }
@@ -47,6 +60,9 @@ class Module implements AutoloaderProvider
         return array();
     }
 
+    /**
+     * @return array
+     */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
