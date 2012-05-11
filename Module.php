@@ -46,7 +46,7 @@ class Module implements AutoloaderProvider
         if (realpath(__DIR__ . '/vendor/doctrine-common/lib')) {
             return array(
                 'Zend\Loader\StandardAutoloader' => array(
-                    Zend\Loader\StandardAutoloader::LOAD_NS => array(
+                    StandardAutoloader::LOAD_NS => array(
                         __NAMESPACE__                   => __DIR__ . '/src/' . __NAMESPACE__,
                         'Doctrine\Common\DataFixtures'  => __DIR__ . '/vendor/doctrine-data-fixtures/lib/Doctrine/Common/DataFixtures',
                         'Doctrine\Common'               => __DIR__ . '/vendor/doctrine-common/lib/Doctrine/Common',
