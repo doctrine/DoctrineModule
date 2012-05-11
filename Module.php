@@ -43,21 +43,13 @@ class Module implements AutoloaderProvider
      */
     public function getAutoloaderConfig()
     {
-        if (realpath(__DIR__ . '/vendor/doctrine-common/lib')) {
-            return array(
-                'Zend\Loader\StandardAutoloader' => array(
-                    StandardAutoloader::LOAD_NS => array(
-                        __NAMESPACE__                   => __DIR__ . '/src/' . __NAMESPACE__,
-                        'Doctrine\Common\DataFixtures'  => __DIR__ . '/vendor/doctrine-data-fixtures/lib/Doctrine/Common/DataFixtures',
-                        'Doctrine\Common'               => __DIR__ . '/vendor/doctrine-common/lib/Doctrine/Common',
-                        'Symfony\Component\Yaml'        => __DIR__ . '/vendor/symfony-yaml',
-                        'Symfony\Component\Console'     => __DIR__ . '/vendor/symfony-console',
-                    ),
+        return array(
+            'Zend\Loader\StandardAutoloader' => array(
+                StandardAutoloader::LOAD_NS => array(
+                    __NAMESPACE__                   => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
-            );
-        }
-
-        return array();
+            ),
+        );
     }
 
     /**
