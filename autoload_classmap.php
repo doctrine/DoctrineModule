@@ -7,7 +7,6 @@ return array(
     'DoctrineModule\Doctrine\Common\DriverChain'                                                                                                         => __DIR__ . '/src/DoctrineModule/Doctrine/Common/DriverChain.php',
     'DoctrineModule\Doctrine\Common\EventManager'                                                                                                        => __DIR__ . '/src/DoctrineModule/Doctrine/Common/EventManager.php',
     'DoctrineModule\Doctrine\Instance'                                                                                                                   => __DIR__ . '/src/DoctrineModule/Doctrine/Instance.php',
-    'DoctrineModule\Factory\DoctrineObject'                                                                                                              => __DIR__ . '/src/DoctrineModule/Factory/DoctrineObject.php',
     'DoctrineModule\Service\Service'                                                                                                                     => __DIR__ . '/src/DoctrineModule/Service/Service.php',
     'DoctrineModule\Validator\AbstractEntity'                                                                                                            => __DIR__ . '/src/DoctrineModule/Validator/AbstractEntity.php',
     'DoctrineModule\Validator\EntityExists'                                                                                                              => __DIR__ . '/src/DoctrineModule/Validator/EntityExists.php',

@@ -13,21 +13,22 @@ return array(
                 'doctrine_cache_memcache' => 'Doctrine\Common\Cache\MemcacheCache',
 
                 // CLI tools
-                'doctrine_cli' => 'Symfony\Component\Console\Application',
-                'doctrine_cli_helperset' => 'Symfony\Component\Console\Helper\HelperSet',
+                //'doctrine_cli' => 'Symfony\Component\Console\Application',
+                //'doctrine_cli_helperset' => 'Symfony\Component\Console\Helper\HelperSet',
             ),
 
             // Defaults for CLI
-            'doctrine_cli' => array(
+            //'doctrine_cli' => array(
+            'Symfony\Component\Console\Application' => array(                              
                 'parameters' => array(
-                    'name' => 'DoctrineModule Command Line Interface',
+                    //'name' => 'DoctrineModule Command Line Interface',
                     'version' => 'dev-master',
-                ),
-                'injections' => array(
-                    'doctrine_cli_helperset',
+                    //'helperSet' => 'doctrine_cli_helperset',
+                    'helperSet' => 'Symfony\Component\Console\Helper\HelperSet'                        
                 ),
             ),
-            'doctrine_cli_helperset' => array(
+            //'doctrine_cli_helperset' => array(
+            'Symfony\Component\Console\Helper\HelperSet' => array(                  
                 'parameters' => array(
                     'helpers' => array(),
                 ),
@@ -77,14 +78,16 @@ return array(
                     ),
                 ),
                 'Symfony\Component\Console\Helper\HelperSet' => array(
-                    'set' => array(
-                        'helper' => array(
-                            'type' => 'Symfony\Component\Console\Helper\HelperInterface',
-                            'required' => true,
-                        ),
-                        'alias' => array(
-                            'type' => false,
-                            'required' => false,
+                    'methods' => array(                    
+                        'set' => array(
+                            'helper' => array(
+                                'type' => 'Symfony\Component\Console\Helper\HelperInterface',
+                                'required' => true,
+                            ),
+                            'alias' => array(
+                                'type' => false,
+                                'required' => false,
+                            ),
                         ),
                     ),
                 ),
