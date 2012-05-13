@@ -43,7 +43,7 @@
             "./"
         ]
     },
-    "config": {
-        "bin-dir": "bin"
-    }
+    "bin": [
+        "bin/doctrine-module"
+    ]
 }
