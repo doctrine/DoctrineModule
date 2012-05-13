@@ -25,8 +25,8 @@ Access the Doctrine command line through
 ## Installation
 
 Installation of DoctrineModule uses composer. For composer documentation, please refer to
-[getcomposer.org](http://getcomposer.org/). To achieve the task, it currently uses `ocramius/OcraComposer` to integrate
-your application with composer. This may change in future.
+[getcomposer.org](http://getcomposer.org/). To achieve the task, it currently uses the `OcraComposer` module to
+integrate your application with composer. This may change in future.
 
 #### Installation steps
 
@@ -49,15 +49,6 @@ your application with composer. This may change in future.
      'OcraComposer',
      'DoctrineModule',
      ```
-
-     also add following `module_paths`:
-
-     ```php
-     'vendor/ocramius',
-     'vendor/doctrine',
-     ```
-
-## Usage
 
 ## Upgrading
 See the [UPGRADE.md](http://www.github.com/doctrine/DoctrineModule/tree/master/docs/UPGRADE.md) file.
