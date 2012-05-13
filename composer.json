@@ -39,9 +39,9 @@
     },
 
     "autoload": {
-        "psr-0": {
-            "DoctrineModule": "src/"
-        }
+        "classmap": [
+            "./"
+        ]
     },
     "config": {
         "bin-dir": "bin"
