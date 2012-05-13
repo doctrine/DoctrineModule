@@ -16,5 +16,5 @@ before_script:
   - rm config/application.config.php && cp ../DoctrineModule/.travis/application.config.php config/
 
 script:
-  - ./vendor/doctrine/DoctrineModule/bin/doctrine help
-  - ./vendor/doctrine/DoctrineModule/bin/doctrine list
+  - ./vendor/bin/doctrine-module help
+  - ./vendor/bin/doctrine-module list

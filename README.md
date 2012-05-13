@@ -19,7 +19,7 @@ MongoODM and ORM. It will just use your configuration for those modules.
 Access the Doctrine command line through
 
 ```sh
-./vendor/doctrine/DoctrineModule/bin/doctrine
+./vendor/bin/doctrine-module
 ```
 
 ## Installation
