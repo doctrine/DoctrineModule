@@ -6,4 +6,4 @@ GOTO RUN
 :USE_PEAR_PATH
 set PHPBIN=%PHP_PEAR_PHP_BIN%
 :RUN
-"%PHPBIN%" "@bin_dir@\doctrine" %*
+"%PHPBIN%" "@bin_dir@\doctrine-module.php" %*
