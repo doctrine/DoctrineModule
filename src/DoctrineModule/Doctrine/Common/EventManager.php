@@ -52,7 +52,7 @@ class EventManager
 	 * Add an event listener.
 	 * @var Doctrine\Common\EventSubscriber subscriber
 	 */     
-    public function addSubscriber(EventSubscriber $subscriber){
+    public function setSubscriber(EventSubscriber $subscriber){
         $this->subscribers[] = $subscriber;
     }
     

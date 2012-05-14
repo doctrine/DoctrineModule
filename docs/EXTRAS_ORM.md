@@ -53,7 +53,7 @@ To add your own listeners to doctrine events, just add the following to your mod
 
     'DoctrineModule\Doctrine\Common\EventManager' => array(
         'injections' => array(
-            'addSubscriber' => array(
+            'setSubscriber' => array(
                 array('subscriber' => 'My\Listener')
             ),
         ),
