@@ -22,9 +22,7 @@ return array(
                 'parameters' => array(
                     'name' => 'DoctrineModule Command Line Interface',
                     'version' => 'dev-master',
-                ),
-                'injections' => array(
-                    'doctrine_cli_helperset',
+                    'helperSet' => 'doctrine_cli_helperset',
                 ),
             ),
             'doctrine_cli_helperset' => array(

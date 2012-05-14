@@ -48,3 +48,13 @@ $result = $adapter->authenticate();
 
 echo $result->isValid() ? 'Authenticated!' : 'Could not authenticate';
 ```
+## Injected Event Listeners
+To add your own listeners to doctrine events, just add the following to your module config:
+
+    'DoctrineModule\Doctrine\Common\EventManager' => array(
+        'injections' => array(
+            'setSubscriber' => array(
+                array('subscriber' => 'My\Listener')
+            ),
+        ),
+    ),
