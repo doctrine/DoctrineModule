@@ -20,7 +20,7 @@
 namespace DoctrineModule\Doctrine\Common;
 
 use Doctrine\Common\EventManager as DoctrineEventManager,
-    DoctrineModule\Doctrine\Instance;
+    Doctrine\Common\EventSubscriber;
 
 /**
  * Wrapper for Doctrine EventManager that helps setup configuration without relying
@@ -31,34 +31,53 @@ use Doctrine\Common\EventManager as DoctrineEventManager,
  * @since   1.0
  * @version $Revision$
  * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class EventManager extends Instance
+class EventManager
 {
+
 	/**
-	 * @var array
+	 * The configured instance.
+	 * @var mixed
 	 */
-	protected $definition = array(
-        'optional' => array(
-            'subscribers' => 'array'
-        )
-    );
-	
+	protected $instance;
+    
+	/**
+	 * An array of event listeners.
+	 * @var array
+	 */    
+	protected $subscribers = array();
+    
+	/**
+	 * Add an event listener.
+	 * @var Doctrine\Common\EventSubscriber subscriber
+	 */     
+    public function addSubscriber(EventSubscriber $subscriber){
+        $this->subscribers[] = $subscriber;
+    }
+    
+	/**
+	 * Get the configured instance.
+	 * 
+	 * @return mixed
+	 */
+	public function getInstance()
+	{
+		if (null === $this->instance) {
+			$this->loadInstance();
+		}
+		return $this->instance;
+	}
+    
+	/**
+	 * Instanate the event manager, and attatch event listeners
+	 */      
 	protected function loadInstance()
 	{
-		$opts = $this->getOptions();
+		$subscribers = $this->subscribers;
 		$evm = new DoctrineEventManager;
         
-        foreach($opts['subscribers'] as $subscriber) {
-            if (is_string($subscriber)) {
-                if (!class_exists($subscriber)) {
-                    throw new \InvalidArgumentException(sprintf(
-                       'failed to register subscriber "%s" because the class does not exist.',
-                       $subscriber 
-                    ));
-                }
-                $subscriber = new $subscriber;
-            }
-            
+        foreach($subscribers as $subscriber) {
             $evm->addEventSubscriber($subscriber);
         }
         
