@@ -50,17 +50,18 @@ return array(
         // Definitions (enforcing DIC behavior)
         'definition' => array(
             'class' => array(
-
                 // Enforcing Memcache to behave correctly (methods are not always discovered correctly by DIC)
                 'Memcache' => array(
-                    'addServer' => array(
-                        'host' => array(
-                            'type' => false,
-                            'required' => true,
-                        ),
-                        'port' => array(
-                            'type' => false,
-                            'required' => true,
+                    'methods' => array(
+                        'addServer' => array(
+                            'host' => array(
+                                'type' => false,
+                                'required' => true,
+                            ),
+                            'port' => array(
+                                'type' => false,
+                                'required' => true,
+                            ),
                         ),
                     ),
                 ),
@@ -77,32 +78,53 @@ return array(
                     ),
                 ),
                 'Symfony\Component\Console\Helper\HelperSet' => array(
-                    'set' => array(
-                        'helper' => array(
-                            'type' => 'Symfony\Component\Console\Helper\HelperInterface',
-                            'required' => true,
-                        ),
-                        'alias' => array(
-                            'type' => false,
-                            'required' => false,
+                    'methods' => array(
+                        'set' => array(
+                            'helper' => array(
+                                'type' => 'Symfony\Component\Console\Helper\HelperInterface',
+                                'required' => true,
+                            ),
+                            'alias' => array(
+                                'type' => false,
+                                'required' => false,
+                            ),
                         ),
                     ),
                 ),
-                
+
+                // Enforcing hints for the DoctrineObject auth adapter
                 'DoctrineModule\Authentication\Adapter\DoctrineObject' => array(
                     'methods' => array(
                         '__construct' => array(
-                            'objectManager' => array('type' => 'Doctrine\Common\Persistence\ObjectManager', 'required' => true),
-                            'identityClassName' => array('type' => false, 'required' => true),
-                            'identityProperty' => array('type' => false, 'required' => true),
-                            'credentialProperty' => array('type' => false, 'required' => true),
-                            'credentialCallable' => array('type' => false, 'required' => false)
-                        ),                         
+                            'objectManager' => array(
+                                'type' => 'Doctrine\Common\Persistence\ObjectManager',
+                                'required' => true
+                            ),
+                            'identityClassName' => array(
+                                'type' => false,
+                                'required' => true
+                            ),
+                            'identityProperty' => array(
+                                'type' => false,
+                                'required' => true
+                            ),
+                            'credentialProperty' => array(
+                                'type' => false,
+                                'required' => true
+                            ),
+                            'credentialCallable' => array(
+                                'type' => false,
+                                'required' => false
+                            ),
+                        ),
                         'setIdentityClassName' => array(
-                            'identityClassName' => array('type' => false, 'required' => false)
+                            'identityClassName' => array(
+                                'type' => false,
+                                'required' => false
+                            ),
                         )
                     )
-                )                                              
+                )
             ),
         ),
     ),
