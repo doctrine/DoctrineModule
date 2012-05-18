@@ -20,8 +20,7 @@
 namespace DoctrineModule;
 
 use Zend\EventManager\Event;
-use Zend\Module\Consumer\AutoloaderProvider;
-use Zend\Module\Manager;
+use Zend\ModuleManager\ModuleManager;
 use Zend\Loader\StandardAutoloader;
 
 /**
@@ -34,7 +33,7 @@ use Zend\Loader\StandardAutoloader;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Module implements AutoloaderProvider
+class Module
 {
     /**
      * Retrieves configuration that can be consumed by Zend\Loader\AutoloaderFactory
