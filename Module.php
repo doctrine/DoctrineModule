@@ -19,8 +19,7 @@
 
 namespace DoctrineModule;
 
-use Zend\EventManager\Event;
-use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Loader\StandardAutoloader;
 
 /**
@@ -32,7 +31,7 @@ use Zend\Loader\StandardAutoloader;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Module
+class Module implements AutoloaderProviderInterface
 {
     /**
      * Retrieves configuration that can be consumed by Zend\Loader\AutoloaderFactory
