@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -49,31 +49,31 @@ abstract class AbstractEntity extends AbstractValidator
         self::ERROR_NO_RECORD_FOUND => "No record matching '%value%' was found",
         self::ERROR_RECORD_FOUND    => "A record matching '%value%' was found",
     );
- 
+
     /**
      * Doctrine EntityManager
-     * 
+     *
      * @var EntityManager
      */
     protected $_em;
-    
+
     /**
      * Name of the entity to use for validation.
-     * 
+     *
      * @var string
      */
     protected $_entity;
-    
+
     /**
      * Name of the field to use for validation.
-     * 
+     *
      * @var string
      */
     protected $_field;
 
     /**
      * QueryBuilder closure.
-     * 
+     *
      * @var Closure
      */
     protected $_queryBuilder;
@@ -83,36 +83,36 @@ abstract class AbstractEntity extends AbstractValidator
      *  - em        EntityManager instance to use.
      *  - entity    Entity to use for validation.
      *  - field     Field to check.
-     * 
+     *
      * Optional options are:
      *  - query_builder     Custom query_builder Closure to use for the select. A single
      *                      EntityRepository argument is passed at call time. Example:
-     *                      'query_builder' => function($er) { return $er->createQueryBuilder('q'); } 
+     *                      'query_builder' => function($er) { return $er->createQueryBuilder('q'); }
      */
     public function __construct(array $options)
     {
         if (!array_key_exists('em', $options)) {
             throw new Exception\InvalidArgumentException('No EntityManager was specified.');
         }
-        
+
         if (!$options['em'] instanceof EntityManager) {
             throw new Exception\InvalidArgumentException('Invalid EntityManager specified.');
         }
         $this->_em = $options['em'];
-        
+
         if (!array_key_exists('entity', $options)) {
             throw new Exception\InvalidArgumentException('No entity class was specified.');
         }
         $this->_entity = $options['entity'];
-        
+
         if (array_key_exists('query_builder', $options)) {
             if (!$options['query_builder'] instanceof Closure) {
                 throw new Exception\InvalidArgumentException('query_builder must be a Closure');
             }
             $this->_queryBuilder = $options['query_builder'];
-        } 
+        }
         $this->_field = $options['field'];
-        
+
         parent::__construct($options);
     }
 
@@ -120,16 +120,16 @@ abstract class AbstractEntity extends AbstractValidator
      * Generates a query based on the constructor options. Attempts to enforce
      * a minimum select for the query by checking the DQL parts for an alias
      * and then using the entity metadata to select only the identifiers.
-     * 
+     *
      * @param mixed $value  Contains the value to check.
-     * @return Doctrine\ORM\Query 
+     * @return Doctrine\ORM\Query
      */
     protected function _getQuery($value)
     {
         $em = $this->_em;
         $qb = $this->_queryBuilder;
         $field = $this->_field;
-        
+
         // set default query builder closure if one wasn't specified
         if (!$qb) {
             $qb = function(EntityRepository $er) use ($field) {
@@ -139,17 +139,17 @@ abstract class AbstractEntity extends AbstractValidator
 
         $er = $em->getRepository($this->_entity);
         $qb = call_user_func($qb, $er);
-        
+
         // reduce query to minimal return (selecting identifiers)
         $mdata = $em->getClassMetadata($this->_entity);
         $alias = current($qb->getDqlPart('from'))->getAlias();
-        
+
         $qb->select("partial {$alias}.{" . implode(',', $mdata->identifier) . '}');
-        
+
         // add field to query
         $qb->andWhere($qb->expr()->eq('q.' . $field, $qb->expr()->literal($value)))
            ->setMaxResults(1);
-           
+
         return $qb->getQuery();
     }
 }

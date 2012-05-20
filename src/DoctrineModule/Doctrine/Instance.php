@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -33,36 +33,36 @@ use InvalidArgumentException;
 abstract class Instance
 {
 	/**
-	 * All instances have a required opts array. 
+	 * All instances have a required opts array.
 	 * @var array
 	 */
 	protected $opts;
-	
+
 	/**
 	 * Provides a definition of expected option parameters.
 	 * @var array
 	 */
 	protected $definition = array();
-	
+
 	/**
 	 * The configured instance.
 	 * @var mixed
 	 */
 	protected $instance;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param array $opts
 	 */
 	public function __construct(array $opts)
 	{
 		$this->setOptions($opts);
 	}
-	
+
 	/**
 	 * Set options and validate minimum requirements.
-	 * 
+	 *
 	 * @param array $opts
 	 */
 	public function setOptions(array $opts)
@@ -70,20 +70,20 @@ abstract class Instance
 		$this->validateOptions($opts);
         $this->opts = $opts;
 	}
-	
+
 	/**
 	 * Get options.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getOptions()
 	{
 		return $this->opts;
 	}
-	
+
 	/**
 	 * Get the configured instance.
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function getInstance()
@@ -93,13 +93,13 @@ abstract class Instance
 		}
 		return $this->instance;
 	}
-	
+
 	abstract protected function loadInstance();
-	
+
     /**
      * Validates that required options are present and of the correct type and generates
      * optional options of the correct type if missing.
-     * 
+     *
      * @param array 		$opts Options to check.
      * @param null|array    $defs Definitions to use - defaults to the class.
      * @throws InvalidArgumentException on missing required arguments.
@@ -118,7 +118,7 @@ abstract class Instance
                         $var
                     ));
                 }
-                
+
                 // if class_exists of $type then instantiate new object
                 if (null !== $type) {
                     $got = gettype($opts[$var]);

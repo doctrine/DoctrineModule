@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -42,26 +42,26 @@ class EventManager extends Instance
             'subscribers' => 'array'
         )
     );
-	
+
 	protected function loadInstance()
 	{
 		$opts = $this->getOptions();
 		$evm = new DoctrineEventManager;
-        
+
         foreach($opts['subscribers'] as $subscriber) {
             if (is_string($subscriber)) {
                 if (!class_exists($subscriber)) {
                     throw new \InvalidArgumentException(sprintf(
                        'failed to register subscriber "%s" because the class does not exist.',
-                       $subscriber 
+                       $subscriber
                     ));
                 }
                 $subscriber = new $subscriber;
             }
-            
+
             $evm->addEventSubscriber($subscriber);
         }
-        
+
         $this->instance = $evm;
 	}
 }
