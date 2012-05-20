@@ -54,5 +54,6 @@ $serviceManager->setService('ApplicationConfiguration', $configuration);
 $serviceManager->get('ModuleManager')->loadModules();
 
 $serviceManager
+    ->get('Di')
     ->get('doctrine_cli')
     ->run();
