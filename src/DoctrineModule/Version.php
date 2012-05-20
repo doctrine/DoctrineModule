@@ -20,12 +20,11 @@
 namespace DoctrineModule;
 
 /**
- * Version.
+ * Version
  *
- * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @link    www.doctrine-project.org
- * @since   1.0
- * @version $Revision$
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @since   0.1.0
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 class Version

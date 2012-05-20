@@ -31,11 +31,10 @@ use Doctrine\ORM\EntityManager,
  * Authentication adapter that uses a Doctrine Entity for verification.
  *
  * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
- * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @link    www.doctrine-project.org
- * @since   0.1.0
- * @version $Revision$
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @license    MIT
+ * @link       http://www.doctrine-project.org/
+ * @since      0.1.0
+ * @author     Kyle Spraggs <theman@spiffyjr.me>
  */
 class DoctrineEntity extends DoctrineObject
 {

@@ -27,10 +27,10 @@ Zend\Authentication\Result as AuthenticationResult;
 /**
  * Abstract authentication adapter that uses a Doctrine object for verification.
  *
- * @license  http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @link     www.doctrine-project.org
- * @since    0.2.0
- * @author   Tim Roediger <superdweebie@gmail.com>
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @since   0.2.0
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
 class DoctrineObject implements AdapterInterface
 {
