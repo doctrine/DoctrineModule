@@ -2,7 +2,13 @@
 
 namespace DoctrineORMModule\Form\Element;
 
-use Closure, InvalidArgumentException, RuntimeException, Doctrine\ORM\EntityManager, Doctrine\ORM\EntityRepository, Doctrine\ORM\Query, Zend\Form\Element\Multi;
+use Closure;
+use InvalidArgumentException;
+use RuntimeException;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
+use Zend\Form\Element\Multi;
 
 class Entity extends Multi
 {

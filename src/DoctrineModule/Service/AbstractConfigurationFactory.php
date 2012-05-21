@@ -3,9 +3,9 @@
 namespace DoctrineModule\Service;
 
 use Doctrine\ORM\Mapping\Driver\DriverChain;
-use Zend\EventManager\EventManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
 
 abstract class AbstractConfigurationFactory implements FactoryInterface
 {
@@ -19,17 +19,11 @@ abstract class AbstractConfigurationFactory implements FactoryInterface
      */
     protected $chain;
 
-    public function events($sl)
+    public function events(ServiceManager $sm)
     {
         if (null === $this->events) {
-            exit;
-            $events = new EventManager;
-            $events->setIdentifiers(array(
-                __CLASS__,
-                'Doctrine\ORM\Configuration',
-                'doctrine_orm_configuration',
-                'DoctrineORMModule'
-            ));
+            $events = $sm->get('EventManager');
+            $events->addIdentifiers(array(__CLASS__));
 
             $this->events = $events;
         }
@@ -41,9 +35,6 @@ abstract class AbstractConfigurationFactory implements FactoryInterface
         if (null === $this->chain) {
             $events = $this->events($sl);
             $chain  = new DriverChain;
-
-            // TODO: Temporary workaround for EventManagerFactory. Remove when file is patched.
-            $events->setSharedManager($sl->get('ModuleManager')->events()->getSharedManager());
 
             $collection = $events->trigger('loadDrivers', $sl, array('config' => $config));
             foreach($collection as $response) {
