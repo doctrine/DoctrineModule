@@ -40,8 +40,12 @@
 
     "autoload": {
         "psr-0": {
-            "DoctrineModule": "src"
-        }
+            "DoctrineModule": "src/",
+            "DoctrineModuleTest": "tests/"
+        },
+        "classmap": [
+            "./"
+        ]
     },
     "bin": [
         "bin/doctrine-module"

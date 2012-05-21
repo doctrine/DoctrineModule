@@ -17,6 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
+use Zend\Loader\AutoloaderFactory;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfiguration;
 
@@ -30,8 +31,8 @@ while (!file_exists('config/application.config.php')) {
 
     if ($previousDir === $dir) {
         throw new RuntimeException(
-            'Unable to locate "config/application.config.php":'
-                . ' is DoctrineModule in a subdir of your application skeleton?'
+            'Unable to locate "config/application.config.php": ' .
+            'is DoctrineModule in a subdir of your application skeleton?'
         );
     }
 
@@ -39,9 +40,12 @@ while (!file_exists('config/application.config.php')) {
     chdir($dir);
 }
 
-if (!include('vendor/autoload.php')) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Did you run php composer.phar install?');
+if (!file_exists('vendor/autoload.php')) {
+    throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
+    exit;
 }
+
+require_once('vendor/autoload.php');
 
 // get application stack configuration
 $configuration = include 'config/application.config.php';
@@ -51,7 +55,5 @@ $serviceManager = new ServiceManager(new ServiceManagerConfiguration($configurat
 $serviceManager->setService('ApplicationConfiguration', $configuration);
 $serviceManager->get('ModuleManager')->loadModules();
 
-// currently bug caused by lazy initialization of Di factory
-$serviceManager->get('Di');
-
-$serviceManager->get('doctrine_cli')->run();
+$serviceManager->get('Application')->bootstrap();
+$serviceManager->get('doctrine.cli')->run();
