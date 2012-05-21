@@ -19,8 +19,8 @@
 
 namespace DoctrineModule;
 
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\Loader\StandardAutoloader;
+use Doctrine\Common\Cache\ArrayCache;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
@@ -31,29 +31,31 @@ use Zend\Loader\StandardAutoloader;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Module implements AutoloaderProviderInterface
+class Module implements ServiceProviderInterface
 {
-    /**
-     * Retrieves configuration that can be consumed by Zend\Loader\AutoloaderFactory
-     *
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                StandardAutoloader::LOAD_NS => array(
-                    __NAMESPACE__                   => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
-    }
-
     /**
      * @return array
      */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+
+    /**
+     * Expected to return \Zend\ServiceManager\Configuration object or array to
+     * seed such an object.
+     *
+     * @return array|\Zend\ServiceManager\Configuration
+     */
+    public function getServiceConfiguration()
+    {
+        return array(
+            'aliases' => array(
+            ),
+            'factories' => array(
+                'doctrine_cli'                     => 'DoctrineModule\Service\CliFactory',
+                'Doctrine\Common\Cache\ArrayCache' => function() { return new ArrayCache; },
+            )
+        );
     }
 }

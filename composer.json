@@ -39,6 +39,11 @@
     },
 
     "autoload": {
+        "autoload": {
+            "psr-0": {
+                "DoctrineModule": "DoctrineModule/src"
+            }
+        },
         "classmap": [
             "./"
         ]
