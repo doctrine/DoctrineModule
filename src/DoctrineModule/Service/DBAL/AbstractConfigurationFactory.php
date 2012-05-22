@@ -1,6 +1,6 @@
 <?php
 
-namespace DoctrineModule\Service;
+namespace DoctrineModule\Service\DBAL;
 
 use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Zend\ServiceManager\FactoryInterface;
@@ -23,12 +23,14 @@ abstract class AbstractConfigurationFactory implements FactoryInterface
     {
         if (null === $this->events) {
             $events = $sm->get('EventManager');
-            $events->addIdentifiers(array(__CLASS__));
+            $events->addIdentifiers(array($this->getIdentifier()));
 
             $this->events = $events;
         }
         return $this->events;
     }
+
+    abstract protected function getIdentifier();
 
     protected function getDriverChain(ServiceLocatorInterface $sl, $config)
     {
