@@ -54,7 +54,8 @@ class Module implements ServiceProviderInterface
             ),
             'factories' => array(
                 'doctrine_cli'                     => 'DoctrineModule\Service\CliFactory',
-                'Doctrine\Common\Cache\ArrayCache' => function() { return new ArrayCache; },
+                'doctrine_common_cache_arraycache' => function() { return new ArrayCache; },
+                'doctrine_common_eventmanager'     => function() { return new \Doctrine\Common\EventManager; },
             )
         );
     }
