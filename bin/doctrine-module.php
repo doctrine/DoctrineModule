@@ -40,7 +40,7 @@ while (!file_exists('config/application.config.php')) {
     chdir($dir);
 }
 
-require_once (getenv('ZF2_PATH') ?: 'vendor/ZendFramework/library') . '/Zend/Loader/AutoloaderFactory.php';
+require_once (getenv('ZF2_PATH') ?: 'vendor/zendframework/zendframework/library') . '/Zend/Loader/AutoloaderFactory.php';
 
 // setup autoloader
 AutoloaderFactory::factory();
