@@ -17,7 +17,6 @@
  * <http://www.doctrine-project.org>.
  */
 
-use Zend\Loader\AutoloaderFactory;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfiguration;
 
