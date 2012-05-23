@@ -40,10 +40,9 @@ while (!file_exists('config/application.config.php')) {
     chdir($dir);
 }
 
-require_once (getenv('ZF2_PATH') ?: 'vendor/ZendFramework/library') . '/Zend/Loader/AutoloaderFactory.php';
-
-// setup autoloader
-AutoloaderFactory::factory();
+if (!include('vendor/autoload.php')) {
+    throw new RuntimeException('vendor/autoload.php could not be found. Did you run php composer.phar install?');
+}
 
 // get application stack configuration
 $configuration = include 'config/application.config.php';
@@ -53,7 +52,7 @@ $serviceManager = new ServiceManager(new ServiceManagerConfiguration($configurat
 $serviceManager->setService('ApplicationConfiguration', $configuration);
 $serviceManager->get('ModuleManager')->loadModules();
 
-$serviceManager
-    ->get('Di')
-    ->get('doctrine_cli')
-    ->run();
+// currently bug caused by lazy initialization of Di factory
+$serviceManager->get('Di');
+
+$serviceManager->get('doctrine_cli')->run();
