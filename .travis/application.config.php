@@ -2,7 +2,6 @@
 return array(
     'modules' => array(
         'Application',
-        'OcraComposer',
         'DoctrineModule',
     ),
     'module_listener_options' => array(
