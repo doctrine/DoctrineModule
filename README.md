@@ -25,8 +25,7 @@ Access the Doctrine command line through
 ## Installation
 
 Installation of DoctrineModule uses composer. For composer documentation, please refer to
-[getcomposer.org](http://getcomposer.org/). To achieve the task, it currently uses the `OcraComposer` module to
-integrate your application with composer. This may change in future.
+[getcomposer.org](http://getcomposer.org/).
 
 #### Installation steps
 
@@ -43,10 +42,9 @@ integrate your application with composer. This may change in future.
   3. install composer via `curl -s http://getcomposer.org/installer | php` (on windows, download
      http://getcomposer.org/installer and execute it with PHP)
   4. run `php composer.phar install`
-  5. open `my/project/directory/configs/application.config.php` and add following keys to your `modules` (in this order)
+  5. open `my/project/directory/configs/application.config.php` and add the following key to your `modules`: 
 
      ```php
-     'OcraComposer',
      'DoctrineModule',
      ```
 
