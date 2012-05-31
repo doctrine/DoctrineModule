@@ -20,12 +20,10 @@
 namespace DoctrineModule\Doctrine\Common;
 
 use InvalidArgumentException;
-use ReflectionClass;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Annotations\IndexedReader;
 use DoctrineModule\Doctrine\Instance;
 
 /**
@@ -127,12 +125,11 @@ class DriverChain extends Instance
      */
     protected function getCachedReader()
     {
-    	if (null === self::$cachedReader) {
-	    	$reader = new AnnotationReader;
-			//$indexedReader 	    = new IndexedReader($reader);
-			//self::$cachedReader = new CachedReader($indexedReader, $this->cache);
-			self::$cachedReader = new CachedReader($reader, $this->cache);
-    	}
+        if (null === self::$cachedReader) {
+            $reader = new SimpleAnnotationReader;
+            $reader->addNamespace('Doctrine\ORM\Mapping');
+            self::$cachedReader = new CachedReader($reader, $this->cache);
+        }
     	return self::$cachedReader;
     }
 }
