@@ -32,18 +32,20 @@ abstract class AbstractConfigurationFactory implements FactoryInterface
 
     abstract protected function getIdentifier();
 
-    protected function getDriverChain(ServiceLocatorInterface $sl, $config)
+    protected function getDriverChain(ServiceManager $sm, $config)
     {
         if (null === $this->chain) {
-            $events = $this->events($sl);
+            $events = $this->events($sm);
             $chain  = new DriverChain;
 
-            $collection = $events->trigger('loadDrivers', $sl, array('config' => $config));
-            foreach($collection as $response) {
-                foreach($response as $namespace => $driver) {
-                    $chain->addDriver($driver, $namespace);
-                }
-            }
+            $events->trigger(
+                'loadDrivers',
+                $chain,
+                array(
+                    'config'          => $config,
+                    'service_manager' => $sm
+                )
+            );
 
             $this->chain = $chain;
         }

@@ -40,9 +40,10 @@ class ConnectionFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $name = $this->name;
-        $conn = $serviceLocator->get('Configuration')->doctrine->connections;
+        $cfg  = $serviceLocator->get('Configuration');
+        $conn = isset($cfg['doctrine']['connections'][$name]) ? $cfg['doctrine']['connections'][$name] : null;
 
-        if (null === ($conn = $conn->$name)) {
+        if (null === $conn) {
             throw new RuntimeException(sprintf(
                 'Connection with name "%s" could not be found in doctrine => connections configuration.',
                 $name
@@ -52,6 +53,6 @@ class ConnectionFactory implements FactoryInterface
         $config       = $serviceLocator->get($this->config);
         $eventManager = $serviceLocator->get($this->eventManager ?: new EventManager);
 
-        return DriverManager::getConnection($conn->toArray(), $config, $eventManager);
+        return DriverManager::getConnection($conn, $config, $eventManager);
     }
 }
