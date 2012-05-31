@@ -1,4 +1,7 @@
 # Doctrine Module for Zend Framework 2
+
+Master: [![Build Status](https://secure.travis-ci.org/doctrine/DoctrineModule.png?branch=master)](http://travis-ci.org/doctrine/DoctrineModule)
+
 The Doctrine module intends to integrate Doctrine 2 with Zend Framework 2 quickly and easily.
 This module is a provides common Doctrine and ZF integration. To get the most benefit you must use a
 provider module such as [DoctrineORMModule](http://www.github.com/doctrine/DoctrineORMModule). The
