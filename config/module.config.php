@@ -49,6 +49,14 @@ return array(
                 'parameters' => array(
                     'helpers' => array(),
                 ),
+                'injections' => array(
+                    'set' => array(
+                        array(
+                            'helper' => 'Symfony\Component\Console\Helper\DialogHelper',
+                            'alias' => 'dialog',
+                        ),
+                    ),
+                ),
             ),
 
             // Defaults for memcache
