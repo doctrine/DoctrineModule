@@ -20,6 +20,7 @@
 namespace DoctrineModule;
 
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\EventManager;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 /**
@@ -35,11 +36,6 @@ class Module
 {
     /**
      * @return array
-=======
-class Module implements ServiceProviderInterface
-{
-    /**
-     * @return array
      */
     public function getConfig()
     {
@@ -47,20 +43,18 @@ class Module implements ServiceProviderInterface
     }
 
     /**
-     * Expected to return \Zend\ServiceManager\Configuration object or array to
-     * seed such an object.
-     *
-     * @return array|\Zend\ServiceManager\Configuration
+     * {@inheritDoc}
      */
     public function getServiceConfiguration()
     {
+        new \DoctrineModule\Service\CliFactory;
         return array(
             'aliases' => array(
             ),
             'factories' => array(
                 'doctrine_cli'                     => 'DoctrineModule\Service\CliFactory',
-                'doctrine_common_cache_arraycache' => function() { return new ArrayCache; },
-                'doctrine_common_eventmanager'     => function() { return new \Doctrine\Common\EventManager; },
+                'doctrine_common_cache_arraycache' => function() { return new ArrayCache(); },
+                'doctrine_common_eventmanager'     => function() { return new EventManager(); },
             )
         );
     }
