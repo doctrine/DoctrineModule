@@ -19,7 +19,9 @@
 
 namespace DoctrineModule;
 
-use Zend\Loader\StandardAutoloader;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\EventManager;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
@@ -38,5 +40,22 @@ class Module
     public function getConfig()
     {
         return include __DIR__ . '/../../config/module.config.php';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getServiceConfiguration()
+    {
+        new \DoctrineModule\Service\CliFactory;
+        return array(
+            'aliases' => array(
+            ),
+            'factories' => array(
+                'doctrine_cli'                     => 'DoctrineModule\Service\CliFactory',
+                'doctrine_common_cache_arraycache' => function() { return new ArrayCache(); },
+                'doctrine_common_eventmanager'     => function() { return new EventManager(); },
+            )
+        );
     }
 }
