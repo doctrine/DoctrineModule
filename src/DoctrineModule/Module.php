@@ -19,7 +19,6 @@
 
 namespace DoctrineModule;
 
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Loader\StandardAutoloader;
 
 /**
@@ -31,24 +30,8 @@ use Zend\Loader\StandardAutoloader;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Module implements AutoloaderProviderInterface
+class Module
 {
-    /**
-     * Retrieves configuration that can be consumed by Zend\Loader\AutoloaderFactory
-     *
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                StandardAutoloader::LOAD_NS => array(
-                    __NAMESPACE__                   => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
-    }
-
     /**
      * @return array
      */
