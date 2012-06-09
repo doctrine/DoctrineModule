@@ -19,6 +19,6 @@
 
 return array(
     'doctrine' => array(
-        'connections' => array()
+        'connection' => array()
     )
 );

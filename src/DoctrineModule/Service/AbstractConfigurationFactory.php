@@ -1,6 +1,6 @@
 <?php
 
-namespace DoctrineModule\Service\DBAL;
+namespace DoctrineModule\Service;
 
 use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Zend\ServiceManager\FactoryInterface;
@@ -31,6 +31,8 @@ abstract class AbstractConfigurationFactory implements FactoryInterface
     }
 
     abstract protected function getIdentifier();
+
+    abstract protected function getName();
 
     protected function getDriverChain(ServiceManager $sm, $config)
     {
