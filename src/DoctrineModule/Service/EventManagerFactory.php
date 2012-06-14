@@ -4,38 +4,28 @@ namespace DoctrineModule\Service;
 
 use RuntimeException;
 use Doctrine\Common\EventManager;
-use Zend\ServiceManager\FactoryInterface;
+use DoctrineModule\Service\AbstractFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class EventManagerFactory implements FactoryInterface
+class EventManagerFactory extends AbstractFactory
 {
-    /**
-     * @var string
-     */
-    protected $name;
-
-    public function __construct($name)
+    public function createService(ServiceLocatorInterface $sl)
     {
-        $this->name = $name;
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $doctrine = $serviceLocator->get('Configuration');
-        $doctrine = $doctrine['doctrine'];
-        $config   = isset($doctrine['eventmanager'][$this->name]) ? $doctrine['eventmanager'][$this->name] : null;
-
-        if (null === $config) {
-            throw new RuntimeException(sprintf(
-                'EventManager with name "%s" could not be found in "doctrine.eventmanager".',
-                $this->name
-            ));
-        }
-
-        $evm = new EventManager;
+        $options = $this->getOptions($sl, 'eventmanager');
+        $evm     = new EventManager;
 
         // todo: implement event manager configuration
 
         return $evm;
+    }
+
+    /**
+     * Get the class name of the options associated with this factory.
+     *
+     * @return string
+     */
+    public function getOptionsClass()
+    {
+        return 'DoctrineModule\Options\EventManager';
     }
 }

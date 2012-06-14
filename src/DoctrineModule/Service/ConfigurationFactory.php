@@ -7,7 +7,7 @@ use Doctrine\DBAL\Configuration;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-abstract class AbstractConfigurationFactory implements FactoryInterface
+class ConfigurationFactory implements FactoryInterface
 {
     /**
      * @var string
@@ -17,6 +17,16 @@ abstract class AbstractConfigurationFactory implements FactoryInterface
     public function __construct($name)
     {
         $this->name = $name;
+    }
+
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $options = $this->getOptions($serviceLocator);
+        $config  = new \Doctrine\DBAL\Configuration;
+
+        $this->setupDBALConfiguration($serviceLocator, $config);
+
+        return $config;
     }
 
     public function setupDBALConfiguration(ServiceLocatorInterface $serviceLocator, Configuration $config)
@@ -44,5 +54,8 @@ abstract class AbstractConfigurationFactory implements FactoryInterface
         return new $optionsClass($options);
     }
 
-    abstract protected function getOptionsClass();
+    protected function getOptionsClass()
+    {
+        return 'DoctrineModule\Options\Configuration';
+    }
 }

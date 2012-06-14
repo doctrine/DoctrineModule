@@ -3,39 +3,42 @@
 namespace DoctrineModule\Service;
 
 use RuntimeException;
-use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
-use Zend\ServiceManager\FactoryInterface;
+use DoctrineModule\Service\AbstractFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class ConnectionFactory implements FactoryInterface
+class ConnectionFactory extends AbstractFactory
 {
-    /**
-     * @var string
-     */
-    protected $name;
-
-    public function __construct($name)
+    public function createService(ServiceLocatorInterface $sl)
     {
-        $this->name = $name;
-    }
+        /** @var $options \DoctrineModule\Options\Connection */
+        $options = $this->getOptions($sl, 'connection');
+        $pdo     = $options->getPdo();
 
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $doctrine = $serviceLocator->get('Configuration');
-        $doctrine = $doctrine['doctrine'];
-        $config   = isset($doctrine['connection'][$this->name]) ? $doctrine['connection'][$this->name] : null;
-
-        if (null === $config) {
-            throw new RuntimeException(sprintf(
-                'Connection with name "%s" could not be found in "doctrine.connection".',
-                $this->name
-            ));
+        if (is_string($pdo)) {
+            $pdo = $sl->get($pdo);
         }
 
-        $configuration = $serviceLocator->get("doctrine.configuration.{$config['configuration']}");
-        $eventManager  = $serviceLocator->get("doctrine.eventmanager.{$config['eventmanager']}");
+        $params = array(
+            'driverClass'  => $options->getDriverClass(),
+            'wrapperClass' => $options->getWrapperClass(),
+            'pdo'          => $pdo,
+        );
+        $params = array_merge($params, $options->getParams());
 
-        return DriverManager::getConnection($config, $configuration, $eventManager);
+        $configuration = $sl->get($options->getConfiguration());
+        $eventManager  = $sl->get($options->getEventManager());
+
+        return DriverManager::getConnection($params, $configuration, $eventManager);
+    }
+
+    /**
+     * Get the class name of the options associated with this factory.
+     *
+     * @return string
+     */
+    public function getOptionsClass()
+    {
+        return 'DoctrineModule\Options\Connection';
     }
 }

@@ -3,42 +3,17 @@
 namespace DoctrineModule\Service;
 
 use RuntimeException;
-use Zend\ServiceManager\FactoryInterface;
+use Doctrine\Common\Cache;
+use DoctrineModule\Service\AbstractFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class CacheFactory implements FactoryInterface
+class CacheFactory extends AbstractFactory
 {
-    /**
-     * @var string
-     */
-    protected $name;
-
-    public function __construct($name)
+    public function createService(ServiceLocatorInterface $sl)
     {
-        $this->name = $name;
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $doctrine = $serviceLocator->get('Configuration');
-        $doctrine = $doctrine['doctrine'];
-        $config   = isset($doctrine['cache'][$this->name]) ? $doctrine['cache'][$this->name] : null;
-
-        if (null === $config) {
-            throw new RuntimeException(sprintf(
-                'Cache with name "%s" could not be found in "doctrine.cache".',
-                $this->name
-            ));
-        }
-
-        $class = null;
-        if (is_string($config)) {
-            $class  = $config;
-            $config = array();
-        } else if (is_array($config) && isset($config['class'])) {
-            $class = $config['class'];
-            unset($config['class']);
-        }
+        /** @var $options \DoctrineModule\Options\Cache */
+        $options = $this->getOptions($sl, 'cache');
+        $class   = $options->getClass();
 
         if (!$class) {
             throw new RuntimeException('Cache must have a class name to instantiate');
@@ -46,14 +21,24 @@ class CacheFactory implements FactoryInterface
 
         $cache = new $class;
 
-        foreach($config as $key => $alias) {
-            $mutator = 'set' . ucfirst($key);
-
-            if (method_exists($class, $mutator)) {
-                $class->$mutator($serviceLocator->get($alias));
-            }
+        if ($cache instanceof Cache\MemcacheCache) {
+            $cache->setMemcache($options->getInstance());
+        } else if ($cache instanceof Cache\MemcachedCache) {
+            $cache->setMemcached($options->getInstance());
+        } else if ($cache instanceof Cache\RedisCache) {
+            $cache->setRedis($options->getInstance());
         }
 
         return $cache;
+    }
+
+    /**
+     * Get the class name of the options associated with this factory.
+     *
+     * @return string
+     */
+    public function getOptionsClass()
+    {
+        return 'DoctrineModule\Options\Cache';
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace DoctrineModule\Service;
+namespace DoctrineModule\Options;
 
 use Zend\Stdlib\Options;
 
-class AbstractConfigurationOptions extends Options
+class Configuration extends Options
 {
     /**
      * Set the cache key for the result cache. Cache key

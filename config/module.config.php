@@ -21,23 +21,33 @@ return array(
     'doctrine' => array(
         'connection' => array(),
         'cache' => array(
-            'apc'      => 'Doctrine\Common\Cache\ApcCache',
-            'array'    => 'Doctrine\Common\Cache\ArrayCache',
+            'apc' => array(
+                'class' => 'Doctrine\Common\Cache\ApcCache',
+            ),
+            'array' => array(
+                'class' => 'Doctrine\Common\Cache\ArrayCache',
+            ),
             'memcache' => array(
                 'class'    => 'Doctrine\Common\Cache\Memcache',
-                'memcache' => 'my_memcache_alias',
+                'instance' => 'my_memcache_alias',
             ),
             'memcached' => array(
-                'class'     => 'Doctrine\Common\Cache\Memcached',
-                'memcached' => 'my_memcached_alias',
+                'class'    => 'Doctrine\Common\Cache\Memcached',
+                'instance' => 'my_memcached_alias',
             ),
             'redis' => array(
-                'class' => 'Doctrine\Common\Cache\RedisCache',
-                'redis' => 'my_redis_alias',
+                'class'    => 'Doctrine\Common\Cache\RedisCache',
+                'instance' => 'my_redis_alias',
             ),
-            'wincache' => 'Doctrine\Common\Cache\Wincache',
-            'xcache'   => 'Doctrine\Common\Cache\XcacheCache',
-            'zenddata' => 'Doctrine\Common\Cache\ZendDataCache',
+            'wincache' => array(
+                'class' => 'Doctrine\Common\Cache\Wincache',
+            ),
+            'xcache' => array(
+                'class' => 'Doctrine\Common\Cache\XcacheCache',
+            ),
+            'zenddata' => array(
+                'class' => 'Doctrine\Common\Cache\ZendDataCache',
+            )
         ),
     )
 );
