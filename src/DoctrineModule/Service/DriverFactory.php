@@ -47,14 +47,9 @@ class DriverFactory implements FactoryInterface
                 $serviceLocator->get("doctrine.cache.{$cache}")
             );
 
-            $driver = new $config['type']($reader);
+            $driver = new $config['type']($reader, $paths);
         } else {
-            $driver = new $config['type'];
-        }
-
-        // The majority of drivers allow adding paths, but not all.
-        if (method_exists($driver, 'addPaths')) {
-            $driver->addPaths($paths);
+            $driver = new $config['type']($paths);
         }
 
         // File-drivers allow extensions.
