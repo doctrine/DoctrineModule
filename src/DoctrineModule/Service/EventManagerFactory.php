@@ -11,10 +11,17 @@ class EventManagerFactory extends AbstractFactory
 {
     public function createService(ServiceLocatorInterface $sl)
     {
+        /** @var $options \DoctrineModule\Options\EventManager */
         $options = $this->getOptions($sl, 'eventmanager');
         $evm     = new EventManager;
 
-        // todo: implement event manager configuration
+        foreach($options->getSubscribers() as $subscriber) {
+            if (is_subclass_of($subscriber, 'Doctrine\Common\EventSubscriber')) {
+                $evm->addEventSubscriber(new $subscriber);
+            } else {
+                $evm->addEventSubscriber($sl->get($subscriber));
+            }
+        }
 
         return $evm;
     }

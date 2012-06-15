@@ -11,14 +11,14 @@ class Cache extends Options
      *
      * @var string
      */
-    protected $class;
+    protected $class = 'Doctrine\Common\Cache\ArrayCache';
 
     /**
      * Namespace to prefix all cache ids with.
      *
      * @var string
      */
-    protected $namespace;
+    protected $namespace = '';
 
     /**
      * Key to use for fetching the memcache, memcached, or redis instance from
@@ -26,7 +26,7 @@ class Cache extends Options
      *
      * @var string
      */
-    protected $instance;
+    protected $instance = null;
 
     /**
      * @param string $class
@@ -34,6 +34,7 @@ class Cache extends Options
     public function setClass($class)
     {
         $this->class = $class;
+        return $this;
     }
 
     /**
@@ -50,6 +51,7 @@ class Cache extends Options
     public function setInstance($instance)
     {
         $this->instance = $instance;
+        return $this;
     }
 
     /**
@@ -66,6 +68,7 @@ class Cache extends Options
     public function setNamespace($namespace)
     {
         $this->namespace = $namespace;
+        return $this;
     }
 
     /**
