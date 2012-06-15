@@ -84,6 +84,13 @@ class DoctrineObject implements AdapterInterface
     protected $credentialCallable;
 
     /**
+     * User supplied identity
+     *
+     * @var mixed
+     */
+    protected $identityCallable;
+
+    /**
      * Contains the authentication results.
      *
      * @var array
@@ -98,6 +105,7 @@ class DoctrineObject implements AdapterInterface
      * @param  string                       $identityProperty
      * @param  string                       $credentialProperty
      * @param  null|array|Closure            $credentialCallable
+     * @param  null|array|Closure            $identityCallable
      * @return void
      */
     public function __construct(
@@ -105,7 +113,8 @@ class DoctrineObject implements AdapterInterface
         $identityClassName,
         $identityProperty = 'username',
         $credentialProperty = 'password',
-        $credentialCallable = null
+        $credentialCallable = null,
+        $identityCallable = null
     ) {
         $this->setObjectManager($objectManager);
         $this->setIdentityClassName($identityClassName);
@@ -114,6 +123,10 @@ class DoctrineObject implements AdapterInterface
 
         if (null !== $credentialCallable) {
             $this->setCredentialCallable($credentialCallable);
+        }
+
+        if (null !== $identityCallable) {
+            $this->setIdentityCallable($identityCallable);
         }
     }
 
@@ -208,6 +221,27 @@ class DoctrineObject implements AdapterInterface
     }
 
     /**
+     * Set the identity callable to be used when saving the identity property to the
+     * authentication result info.
+     *
+     * @param  string $callable
+     * @throws \InvalidArgumentException if argument is not a callable function
+     * @return self
+     */
+    public function setIdentityCallable($callable)
+    {
+        if (!is_callable($callable)) {
+            throw new \InvalidArgumentException(sprintf(
+                '"%s" is not a callable fuction',
+                is_string($callable) ? $callable : gettype($callable)
+            ));
+        }
+
+        $this->identityCallable = $callable;
+        return $this;
+    }
+
+    /**
      * Set the property name to be used as the identity property
      *
      * @param  string $identityProperty
@@ -275,10 +309,15 @@ class DoctrineObject implements AdapterInterface
             $credentialValue = call_user_func($callable, $identity, $credentialValue);
         }
 
-        if ($credentialValue != $documentCredential) {
+        if ($credentialValue === false || $credentialValue != $documentCredential) {
             $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_CREDENTIAL_INVALID;
             $this->authenticationResultInfo['messages'][] = 'Supplied credential is invalid.';
             return $this->authenticateCreateAuthResult();
+        }
+
+        $identityCallable = $this->identityCallable;
+        if ($identityCallable) {
+            $identity = call_user_func($identityCallable, $identity);
         }
 
         $this->authenticationResultInfo['code'] = AuthenticationResult::SUCCESS;
