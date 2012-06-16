@@ -18,140 +18,36 @@
  */
 
 return array(
-    'di' => array(
-        'instance' => array(
-            'alias' => array(
-                // Services
-                'doctrine_service' => 'DoctrineModule\Service\Service',
-
-                // Caching
-                'doctrine_memcache'       => 'Memcache',
-                'doctrine_cache_apc'      => 'Doctrine\Common\Cache\ApcCache',
-                'doctrine_cache_array'    => 'Doctrine\Common\Cache\ArrayCache',
-                'doctrine_cache_memcache' => 'Doctrine\Common\Cache\MemcacheCache',
-
-                // CLI tools
-                'doctrine_cli' => 'Symfony\Component\Console\Application',
-                'doctrine_cli_helperset' => 'Symfony\Component\Console\Helper\HelperSet',
+    'doctrine' => array(
+        'connection' => array(),
+        'cache' => array(
+            'apc' => array(
+                'class' => 'Doctrine\Common\Cache\ApcCache',
             ),
-
-            // Defaults for CLI
-            'doctrine_cli' => array(
-                'parameters' => array(
-                    'name' => 'DoctrineModule Command Line Interface',
-                    'version' => 'dev-master',
-                ),
-                'injections' => array(
-                    'doctrine_cli_helperset',
-                ),
+            'array' => array(
+                'class' => 'Doctrine\Common\Cache\ArrayCache',
             ),
-            'doctrine_cli_helperset' => array(
-                'parameters' => array(
-                    'helpers' => array(),
-                ),
-                'injections' => array(
-                    'set' => array(
-                        array(
-                            'helper' => 'Symfony\Component\Console\Helper\DialogHelper',
-                            'alias' => 'dialog',
-                        ),
-                    ),
-                ),
+            'memcache' => array(
+                'class'    => 'Doctrine\Common\Cache\Memcache',
+                'instance' => 'my_memcache_alias',
             ),
-
-            // Defaults for memcache
-            'doctrine_memcache' => array(
-                'parameters' => array(
-                    'host' => '127.0.0.1',
-                    'port' => '11211',
-                ),
+            'memcached' => array(
+                'class'    => 'Doctrine\Common\Cache\Memcached',
+                'instance' => 'my_memcached_alias',
             ),
-            'doctrine_cache_memcache' => array(
-                'parameters' => array(
-                    'memcache' => 'doctrine_memcache',
-                ),
+            'redis' => array(
+                'class'    => 'Doctrine\Common\Cache\RedisCache',
+                'instance' => 'my_redis_alias',
             ),
+            'wincache' => array(
+                'class' => 'Doctrine\Common\Cache\Wincache',
+            ),
+            'xcache' => array(
+                'class' => 'Doctrine\Common\Cache\XcacheCache',
+            ),
+            'zenddata' => array(
+                'class' => 'Doctrine\Common\Cache\ZendDataCache',
+            )
         ),
-
-        // Definitions (enforcing DIC behavior)
-        'definition' => array(
-            'class' => array(
-                // Enforcing Memcache to behave correctly (methods are not always discovered correctly by DIC)
-                'Memcache' => array(
-                    'methods' => array(
-                        'addServer' => array(
-                            'host' => array(
-                                'type' => false,
-                                'required' => true,
-                            ),
-                            'port' => array(
-                                'type' => false,
-                                'required' => true,
-                            ),
-                        ),
-                    ),
-                ),
-
-                // CLI Application setup
-                'Symfony\Component\Console\Application' => array(
-                    'methods' => array(
-                        'add' => array(
-                            'command' => array(
-                                'type' => 'Symfony\Component\Console\Command\Command',
-                                'required' => true,
-                            ),
-                        ),
-                    ),
-                ),
-                'Symfony\Component\Console\Helper\HelperSet' => array(
-                    'methods' => array(
-                        'set' => array(
-                            'helper' => array(
-                                'type' => 'Symfony\Component\Console\Helper\HelperInterface',
-                                'required' => true,
-                            ),
-                            'alias' => array(
-                                'type' => false,
-                                'required' => false,
-                            ),
-                        ),
-                    ),
-                ),
-
-                // Enforcing hints for the DoctrineObject auth adapter
-                'DoctrineModule\Authentication\Adapter\DoctrineObject' => array(
-                    'methods' => array(
-                        '__construct' => array(
-                            'objectManager' => array(
-                                'type' => 'Doctrine\Common\Persistence\ObjectManager',
-                                'required' => true
-                            ),
-                            'identityClassName' => array(
-                                'type' => false,
-                                'required' => true
-                            ),
-                            'identityProperty' => array(
-                                'type' => false,
-                                'required' => true
-                            ),
-                            'credentialProperty' => array(
-                                'type' => false,
-                                'required' => true
-                            ),
-                            'credentialCallable' => array(
-                                'type' => false,
-                                'required' => false
-                            ),
-                        ),
-                        'setIdentityClassName' => array(
-                            'identityClassName' => array(
-                                'type' => false,
-                                'required' => false
-                            ),
-                        )
-                    )
-                )
-            ),
-        ),
-    ),
+    )
 );

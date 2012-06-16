@@ -19,7 +19,8 @@
 
 namespace DoctrineModule;
 
-use Zend\Loader\StandardAutoloader;
+use DoctrineModule\Service\CacheFactory;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
@@ -30,13 +31,38 @@ use Zend\Loader\StandardAutoloader;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Module
+class Module implements ServiceProviderInterface
 {
     /**
+     * Retrieves configuration that can be consumed by Zend\Loader\AutoloaderFactory
+     *
      * @return array
      */
     public function getConfig()
     {
         return include __DIR__ . '/../../config/module.config.php';
+    }
+
+    /**
+     * Expected to return \Zend\ServiceManager\Configuration object or array to
+     * seed such an object.
+     *
+     * @return array|\Zend\ServiceManager\Configuration
+     */
+    public function getServiceConfiguration()
+    {
+        return array(
+            'factories' => array(
+                'doctrine.cli'             => 'DoctrineModule\Service\CliFactory',
+                'doctrine.cache.apc'       => new CacheFactory('apc'),
+                'doctrine.cache.array'     => new CacheFactory('array'),
+                'doctrine.cache.memcache'  => new CacheFactory('memcache'),
+                'doctrine.cache.memcached' => new CacheFactory('memcached'),
+                'doctrine.cache.redis'     => new CacheFactory('redis'),
+                'doctrine.cache.wincache'  => new CacheFactory('wincache'),
+                'doctrine.cache.xcache'    => new CacheFactory('xcache'),
+                'doctrine.cache.zenddata'  => new CacheFactory('zenddata'),
+            )
+        );
     }
 }

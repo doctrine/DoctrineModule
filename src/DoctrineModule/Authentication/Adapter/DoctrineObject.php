@@ -19,10 +19,10 @@
 
 namespace DoctrineModule\Authentication\Adapter;
 
-use Doctrine\Common\Persistence\ObjectManager,
-Zend\Authentication\Adapter\AdapterInterface,
-Zend\Authentication\Adapter\Exception,
-Zend\Authentication\Result as AuthenticationResult;
+use Doctrine\Common\Persistence\ObjectManager;
+use Zend\Authentication\Adapter\AdapterInterface;
+use Zend\Authentication\Adapter\Exception;
+use Zend\Authentication\Result as AuthenticationResult;
 
 /**
  * Abstract authentication adapter that uses a Doctrine object for verification.
