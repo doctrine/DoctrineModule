@@ -38,7 +38,7 @@ Installation of DoctrineModule uses composer. For composer documentation, please
      ```json
      {
          "require": {
-             "doctrine/DoctrineModule": "dev-master"
+             "doctrine/doctrine-module": "dev-master"
          }
      }
      ```
