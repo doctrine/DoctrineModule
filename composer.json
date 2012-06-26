@@ -1,5 +1,5 @@
 {
-    "name": "doctrine/DoctrineModule",
+    "name": "doctrine/doctrine-module",
     "description": "Zend Framework 2 Module that provides Doctrine basic functionality required for ORM and ODM modules",
     "type": "library",
     "license": "MIT",
