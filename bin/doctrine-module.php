@@ -42,7 +42,6 @@ while (!file_exists('config/application.config.php')) {
 
 if  (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
     throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
-    exit;
 }
 
 // get application stack configuration
