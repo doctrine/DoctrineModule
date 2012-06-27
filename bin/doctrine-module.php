@@ -40,12 +40,9 @@ while (!file_exists('config/application.config.php')) {
     chdir($dir);
 }
 
-if (!file_exists('vendor/autoload.php')) {
+if  (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
     throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
-    exit;
 }
-
-require_once('vendor/autoload.php');
 
 // get application stack configuration
 $configuration = include 'config/application.config.php';
