@@ -2,9 +2,9 @@
 
 namespace DoctrineModule\Options;
 
-use Zend\Stdlib\Options;
+use Zend\Stdlib\AbstractOptions;
 
-class Configuration extends Options
+class Configuration extends AbstractOptions
 {
     /**
      * Set the cache key for the result cache. Cache key

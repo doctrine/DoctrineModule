@@ -2,9 +2,9 @@
 
 namespace DoctrineModule\Options;
 
-use Zend\Stdlib\Options;
+use Zend\Stdlib\AbstractOptions;
 
-class Driver extends Options
+class Driver extends AbstractOptions
 {
     /**
      * The class name of the Driver.
