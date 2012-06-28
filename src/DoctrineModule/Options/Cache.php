@@ -2,9 +2,9 @@
 
 namespace DoctrineModule\Options;
 
-use Zend\Stdlib\Options;
+use Zend\Stdlib\AbstractOptions;
 
-class Cache extends Options
+class Cache extends AbstractOptions
 {
     /**
      * Class used to instantiate the cache.
