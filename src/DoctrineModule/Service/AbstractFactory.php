@@ -14,7 +14,7 @@ abstract class AbstractFactory implements FactoryInterface
     protected $name;
 
     /**
-     * @var \Zend\Stdlib\Options
+     * @var \Zend\Stdlib\AbstractOptions
      */
     protected $options;
 
@@ -40,7 +40,7 @@ abstract class AbstractFactory implements FactoryInterface
      * @param ServiceLocatorInterface $sl
      * @param string $key
      * @param null|string $name
-     * @return \Zend\Stdlib\Options
+     * @return \Zend\Stdlib\AbstractOptions
      * @throws \RuntimeException
      */
     public function getOptions(ServiceLocatorInterface $sl, $key, $name = null)

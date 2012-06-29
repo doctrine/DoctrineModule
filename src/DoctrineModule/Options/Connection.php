@@ -2,9 +2,9 @@
 
 namespace DoctrineModule\Options;
 
-use Zend\Stdlib\Options;
+use Zend\Stdlib\AbstractOptions;
 
-class Connection extends Options
+class Connection extends AbstractOptions
 {
     /**
      * Set the configuration key for the Configuration. Configuration key

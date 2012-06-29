@@ -2,9 +2,9 @@
 
 namespace DoctrineModule\Options;
 
-use Zend\Stdlib\Options;
+use Zend\Stdlib\AbstractOptions;
 
-class EventManager extends Options
+class EventManager extends AbstractOptions
 {
     /**
      * An array of subscribers. The array can contain the FQN of the
