@@ -35,7 +35,8 @@
         "doctrine/common": "2.*",
         "doctrine/data-fixtures": "dev-master",
         "symfony/yaml": "2.0.*",
-        "symfony/console": "2.0.*"
+        "symfony/console": "2.0.*",
+        "zendframework/zendframework": "dev-master"
     },
 
     "autoload": {

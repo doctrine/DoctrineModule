@@ -1,6 +1,6 @@
 {
     "require": {
-        "doctrine/DoctrineModule": "dev-master",
+        "doctrine/doctrine-module": "dev-master",
         "zendframework/zendframework": "dev-master"
     }
 }
