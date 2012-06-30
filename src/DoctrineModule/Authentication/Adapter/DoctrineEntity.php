@@ -30,7 +30,7 @@ use Doctrine\ORM\EntityManager,
 /**
  * Authentication adapter that uses a Doctrine Entity for verification.
  *
- * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
+ * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObjectRepository
  * @license    MIT
  * @link       http://www.doctrine-project.org/
  * @since      0.1.0

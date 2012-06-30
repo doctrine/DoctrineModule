@@ -11,10 +11,12 @@ before_script:
   - cp ../DoctrineModule/.travis/composer.json ./
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
-  - rm -rf vendor/doctrine/DoctrineModule
-  - cp -r ../DoctrineModule vendor/doctrine/
+  - rm -rf vendor/doctrine/doctrine-module
+  - cp -r ../DoctrineModule vendor/doctrine/doctrine-module
   - rm config/application.config.php && cp ../DoctrineModule/.travis/application.config.php config/
 
 script:
   - ./vendor/bin/doctrine-module help
   - ./vendor/bin/doctrine-module list
+  - cd vendor/doctrine/doctrine-module/tests
+  - phpunit

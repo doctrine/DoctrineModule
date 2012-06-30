@@ -19,7 +19,7 @@
 
 namespace DoctrineModule\Authentication\Adapter;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Adapter\Exception;
 use Zend\Authentication\Result as AuthenticationResult;
@@ -27,20 +27,19 @@ use Zend\Authentication\Result as AuthenticationResult;
 /**
  * Abstract authentication adapter that uses a Doctrine object for verification.
  *
- * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObjectRepository
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @since   0.2.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class DoctrineObject implements AdapterInterface
+class DoctrineObjectRepository implements AdapterInterface
 {
     /**
-     * Doctrine ObjectManager instance
+     * Doctrine ObjectRepository instance
      *
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var ObjectRepository
      */
-    protected $om;
+    protected $objectRepository;
 
     /**
      * Doctrine object class that holds the identity.
@@ -101,34 +100,22 @@ class DoctrineObject implements AdapterInterface
     /**
      * __construct() - Sets configuration options
      *
-     * @param  \Doctrine\Common\Persistence\ObjectManager $om
+     * @param  ObjectRepository $objectRepository
      * @param  string                       $identityClassName
      * @param  string                       $identityProperty
      * @param  string                       $credentialProperty
-     * @param  null|array|Closure            $credentialCallable
-     * @param  null|array|Closure            $identityCallable
      * @return void
      */
     public function __construct(
-        ObjectManager $objectManager,
+        ObjectRepository $objectRepository,
         $identityClassName,
         $identityProperty = 'username',
-        $credentialProperty = 'password',
-        $credentialCallable = null,
-        $identityCallable = null
+        $credentialProperty = 'password'
     ) {
-        $this->setObjectManager($objectManager);
+        $this->setObjectRepository($objectRepository);
         $this->setIdentityClassName($identityClassName);
         $this->setIdentityProperty($identityProperty);
         $this->setCredentialProperty($credentialProperty);
-
-        if (null !== $credentialCallable) {
-            $this->setCredentialCallable($credentialCallable);
-        }
-
-        if (null !== $identityCallable) {
-            $this->setIdentityCallable($identityCallable);
-        }
     }
 
     /**
@@ -139,8 +126,7 @@ class DoctrineObject implements AdapterInterface
     public function authenticate()
     {
         $this->authenticateSetup();
-        $repository = $this->om->getRepository($this->identityClassName);
-        $identity = $repository->findOneBy(array($this->identityProperty => $this->identityValue));
+        $identity = $this->objectRepository->findOneBy(array($this->identityProperty => $this->identityValue));
 
         if (!$identity) {
             $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
@@ -153,14 +139,14 @@ class DoctrineObject implements AdapterInterface
     }
 
     /**
-     * Sets the object manager to use.
+     * Sets the object repository where to look for identities
      *
-     * @param  \Doctrine\Common\Persistence\ObjectManager $om
+     * @param  ObjectRepository $objectRepository
      * @return self
      */
-    public function setObjectManager(ObjectManager $om)
+    public function setObjectRepository(ObjectRepository $objectRepository)
     {
-        $this->om = $om;
+        $this->objectRepository = $objectRepository;
         return $this;
     }
 
@@ -172,7 +158,14 @@ class DoctrineObject implements AdapterInterface
      */
     public function setIdentityClassName($identityClassName)
     {
-        $this->identityClassName = (string) $identityClassName;
+        if (!class_exists($identityClassName)) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Provided $identityClassName "%s" does not exist or could not be loaded',
+                $identityClassName
+            ));
+        }
+
+        $this->identityClassName = $identityClassName;
         return $this;
     }
 
@@ -211,8 +204,8 @@ class DoctrineObject implements AdapterInterface
     public function setCredentialCallable($callable)
     {
         if (!is_callable($callable)) {
-            throw new \InvalidArgumentException(sprintf(
-                '"%s" is not a callable fuction',
+            throw new Exception\InvalidArgumentException(sprintf(
+                '"%s" is not a callable',
                 is_string($callable) ? $callable : gettype($callable)
             ));
         }
@@ -232,8 +225,8 @@ class DoctrineObject implements AdapterInterface
     public function setIdentityCallable($callable)
     {
         if (!is_callable($callable)) {
-            throw new \InvalidArgumentException(sprintf(
-                '"%s" is not a callable fuction',
+            throw new Exception\InvalidArgumentException(sprintf(
+                '"%s" is not a callable',
                 is_string($callable) ? $callable : gettype($callable)
             ));
         }
@@ -250,6 +243,13 @@ class DoctrineObject implements AdapterInterface
      */
     public function setIdentityProperty($identityProperty)
     {
+        if (!$identityProperty) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Provided $identityProperty is invalid, %s given',
+                gettype($identityProperty)
+            ));
+        }
+
         $this->identityProperty = (string) $identityProperty;
         return $this;
     }
@@ -262,6 +262,13 @@ class DoctrineObject implements AdapterInterface
      */
     public function setCredentialProperty($credentialProperty)
     {
+        if (!$credentialProperty) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Provided $credentialProperty is invalid, %s given',
+                gettype($credentialProperty)
+            ));
+        }
+
         $this->credentialProperty = (string) $credentialProperty;
         return $this;
     }
@@ -278,7 +285,7 @@ class DoctrineObject implements AdapterInterface
     protected function authenticateValidateIdentity($identity)
     {
         if (!$identity instanceof $this->identityClassName) {
-            throw new \UnexpectedValueException(sprintf(
+            throw new Exception\UnexpectedValueException(sprintf(
                 'Identity class type expected was %s, but got %s',
                 $this->identityClassName,
                 get_class($identity)
@@ -294,7 +301,7 @@ class DoctrineObject implements AdapterInterface
         } else if (isset($identity->{$this->credentialProperty}) || isset($vars[$this->credentialProperty])) {
             $documentCredential = $identity->{$this->credentialProperty};
         } else {
-            throw new \BadMethodCallException(sprintf(
+            throw new Exception\UnexpectedValueException(sprintf(
                 'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
                 $this->credentialProperty,
                 get_class($identity),
@@ -336,24 +343,6 @@ class DoctrineObject implements AdapterInterface
      */
     protected function authenticateSetup()
     {
-        if (!$this->identityClassName) {
-            throw new Exception\RuntimeException(
-                'An identityClassName  must be supplied for the DoctrineObject authentication adapter'
-            );
-        }
-
-        if (!$this->identityProperty) {
-            throw new Exception\RuntimeException(
-                'An identity property must be supplied for the DoctrineObject authentication adapter'
-            );
-        }
-
-        if (!$this->credentialProperty) {
-            throw new Exception\RuntimeException(
-                'A credential property must be supplied for the DoctrineObject authentication adapter'
-            );
-        }
-
         if (null === $this->identityValue) {
             throw new Exception\RuntimeException(
                 'A value for the identity was not provided prior to authentication with DoctrineObject authentication '
