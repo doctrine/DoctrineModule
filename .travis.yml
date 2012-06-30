@@ -6,7 +6,7 @@ php:
 
 before_script:
   - cd ..
-  - git clone git://github.com/zendframework/ZendSkeletonApplication.git --recursive
+  - git clone git://github.com/zendframework/ZendSkeletonApplication.git
   - cd ZendSkeletonApplication
   - cp ../DoctrineModule/.travis/composer.json ./
   - curl -s http://getcomposer.org/installer | php
