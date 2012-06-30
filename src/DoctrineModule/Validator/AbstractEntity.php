@@ -121,7 +121,7 @@ abstract class AbstractEntity extends AbstractValidator
      * and then using the entity metadata to select only the identifiers.
      *
      * @param mixed $value  Contains the value to check.
-     * @return Doctrine\ORM\Query
+     * @return \Doctrine\ORM\Query
      */
     protected function _getQuery($value)
     {
@@ -137,11 +137,14 @@ abstract class AbstractEntity extends AbstractValidator
         }
 
         $er = $em->getRepository($this->_entity);
+        /* @var $qb \Doctrine\ORM\QueryBuilder */
         $qb = call_user_func($qb, $er);
 
         // reduce query to minimal return (selecting identifiers)
         $mdata = $em->getClassMetadata($this->_entity);
-        $alias = current($qb->getDqlPart('from'))->getAlias();
+        /* @var $from \Doctrine\ORM\Query\Expr\From */
+        $from = current($qb->getDqlPart('from'));
+        $alias = $from->getAlias();
 
         $qb->select("partial {$alias}.{" . implode(',', $mdata->identifier) . '}');
 

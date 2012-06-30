@@ -98,13 +98,12 @@ class DoctrineObjectRepository implements AdapterInterface
     protected $authenticationResultInfo = null;
 
     /**
-     * __construct() - Sets configuration options
+     * Constructor
      *
-     * @param  ObjectRepository $objectRepository
-     * @param  string                       $identityClassName
-     * @param  string                       $identityProperty
-     * @param  string                       $credentialProperty
-     * @return void
+     * @param  ObjectRepository $objectRepository   Object repository where to look for identities
+     * @param  string           $identityClassName  Class that the retrieved identities must be instances of
+     * @param  string           $identityProperty   Property field used to search the repository with the given identity value
+     * @param  string           $credentialProperty Credential to check if the retrieved identity is valid
      */
     public function __construct(
         ObjectRepository $objectRepository,
@@ -120,8 +119,6 @@ class DoctrineObjectRepository implements AdapterInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @return  \Zend\Authentication\Result
      */
     public function authenticate()
     {
@@ -154,6 +151,7 @@ class DoctrineObjectRepository implements AdapterInterface
      * Sets the identity class to use for authentication.
      *
      * @param  string $identityClassName
+     * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
     public function setIdentityClassName($identityClassName)
@@ -172,7 +170,7 @@ class DoctrineObjectRepository implements AdapterInterface
     /**
      * Set the value to be used as the identity
      *
-     * @param  mixed $value
+     * @param mixed $identityValue
      * @return self
      */
     public function setIdentityValue($identityValue)
@@ -198,7 +196,7 @@ class DoctrineObjectRepository implements AdapterInterface
      * before checking.
      *
      * @param  string $callable
-     * @throws \InvalidArgumentException if argument is not a callable function
+     * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
     public function setCredentialCallable($callable)
@@ -219,7 +217,7 @@ class DoctrineObjectRepository implements AdapterInterface
      * authentication result info.
      *
      * @param  string $callable
-     * @throws \InvalidArgumentException if argument is not a callable function
+     * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
     public function setIdentityCallable($callable)
@@ -239,6 +237,7 @@ class DoctrineObjectRepository implements AdapterInterface
      * Set the property name to be used as the identity property
      *
      * @param  string $identityProperty
+     * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
     public function setIdentityProperty($identityProperty)
@@ -257,7 +256,8 @@ class DoctrineObjectRepository implements AdapterInterface
     /**
      * Set the property name to be used as the credential property
      *
-     * @param  string $credentialField
+     * @param string $credentialProperty
+     * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
     public function setCredentialProperty($credentialProperty)
@@ -278,9 +278,8 @@ class DoctrineObjectRepository implements AdapterInterface
      * record that matched the identity provided to this adapter.
      *
      * @param  object $identity
-     * @throws \UnexpectedValueException - if the identity is not the class expected
-     * @throws \BadMethodCallException - if the credentialProperty cannot be accessed on identity
-     * @return \Zend\Authentication\Result
+     * @throws \Zend\Authentication\Adapter\Exception\UnexpectedValueException
+     * @return AuthenticationResult
      */
     protected function authenticateValidateIdentity($identity)
     {

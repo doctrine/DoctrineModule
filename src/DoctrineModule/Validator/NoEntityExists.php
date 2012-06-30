@@ -38,7 +38,7 @@ class NoEntityExists extends AbstractEntity
         $query = $this->_getQuery($value);
 
         try {
-            $result = $query->getSingleResult(Query::HYDRATE_ARRAY);
+            $query->getSingleResult(Query::HYDRATE_ARRAY);
         } catch (NoResultException $e) {
             return true;
         } catch (NonUniqueResultException $e) {

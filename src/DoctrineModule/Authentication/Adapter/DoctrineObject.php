@@ -101,13 +101,12 @@ class DoctrineObject implements AdapterInterface
     /**
      * __construct() - Sets configuration options
      *
-     * @param  \Doctrine\Common\Persistence\ObjectManager $om
-     * @param  string                       $identityClassName
-     * @param  string                       $identityProperty
-     * @param  string                       $credentialProperty
-     * @param  null|array|Closure            $credentialCallable
-     * @param  null|array|Closure            $identityCallable
-     * @return void
+     * @param  ObjectManager      $objectManager
+     * @param  string             $identityClassName
+     * @param  string             $identityProperty
+     * @param  string             $credentialProperty
+     * @param  null|array|Closure $credentialCallable
+     * @param  null|array|Closure $identityCallable
      */
     public function __construct(
         ObjectManager $objectManager,
@@ -179,7 +178,7 @@ class DoctrineObject implements AdapterInterface
     /**
      * Set the value to be used as the identity
      *
-     * @param  mixed $value
+     * @param mixed $identityValue
      * @return self
      */
     public function setIdentityValue($identityValue)
@@ -257,7 +256,7 @@ class DoctrineObject implements AdapterInterface
     /**
      * Set the property name to be used as the credential property
      *
-     * @param  string $credentialField
+     * @param mixed $credentialProperty
      * @return self
      */
     public function setCredentialProperty($credentialProperty)

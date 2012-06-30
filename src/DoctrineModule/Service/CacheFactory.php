@@ -22,10 +22,13 @@ class CacheFactory extends AbstractFactory
         $cache = new $class;
 
         if ($cache instanceof Cache\MemcacheCache) {
+            /* @var $cache \Doctrine\Common\Cache\MemcacheCache */
             $cache->setMemcache($options->getInstance());
         } else if ($cache instanceof Cache\MemcachedCache) {
+            /* @var $cache \Doctrine\Common\Cache\MemcachedCache */
             $cache->setMemcached($options->getInstance());
         } else if ($cache instanceof Cache\RedisCache) {
+            /* @var $cache \Doctrine\Common\Cache\RedisCache */
             $cache->setRedis($options->getInstance());
         }
 

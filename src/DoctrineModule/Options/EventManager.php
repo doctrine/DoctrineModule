@@ -17,6 +17,7 @@ class EventManager extends AbstractOptions
 
     /**
      * @param array $subscribers
+     * @return self
      */
     public function setSubscribers($subscribers)
     {

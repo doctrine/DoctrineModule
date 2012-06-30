@@ -30,6 +30,7 @@ class Cache extends AbstractOptions
 
     /**
      * @param string $class
+     * @return self
      */
     public function setClass($class)
     {
@@ -47,6 +48,7 @@ class Cache extends AbstractOptions
 
     /**
      * @param string $instance
+     * @return self
      */
     public function setInstance($instance)
     {
@@ -64,6 +66,7 @@ class Cache extends AbstractOptions
 
     /**
      * @param string $namespace
+     * @return self
      */
     public function setNamespace($namespace)
     {

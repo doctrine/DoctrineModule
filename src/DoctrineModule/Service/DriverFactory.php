@@ -27,9 +27,9 @@ class DriverFactory extends AbstractFactory
 
     /**
      * @param ServiceLocatorInterface $sl
-     * @param Driver $options
+     * @param DriverOptions $options
+     * @throws InvalidArgumentException
      * @return mixed
-     * @throws \InvalidArgumentException
      */
     protected function createDriver(ServiceLocatorInterface $sl, DriverOptions $options)
     {
@@ -58,8 +58,10 @@ class DriverFactory extends AbstractFactory
                 new Annotations\IndexedReader($reader),
                 $sl->get($options->getCache())
             );
+            /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver */
             $driver = new $class($reader, $paths);
         } else {
+            /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver */
             $driver = new $class($paths);
         }
 
@@ -70,6 +72,7 @@ class DriverFactory extends AbstractFactory
 
         // Extra post-create options for DriverChain.
         if ($driver instanceof \Doctrine\ORM\Mapping\Driver\DriverChain && $options->getDrivers()) {
+            /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain */
             $drivers = $options->getDrivers();
 
             if (!is_array($drivers)) {

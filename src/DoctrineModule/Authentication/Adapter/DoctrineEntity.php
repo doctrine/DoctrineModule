@@ -55,9 +55,9 @@ class DoctrineEntity extends DoctrineObject
     /**
      * Sets the entity manager to use.
      *
-     * @param \Doctrine\ORM\EntityManager $em
-     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
      * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
+     *
+     * @param EntityManager $em
      */
     public function setEntityManager(EntityManager $em)
     {
@@ -68,7 +68,7 @@ class DoctrineEntity extends DoctrineObject
      * Sets the entity to use for authentication.
      *
      * @param string $entity
-     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return self
      * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
      */
     public function setEntity($entity)
@@ -81,7 +81,7 @@ class DoctrineEntity extends DoctrineObject
      * Set the value to be used as the identity
      *
      * @param  string $value
-     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return self
      * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
      */
     public function setIdentity($value)
@@ -94,7 +94,7 @@ class DoctrineEntity extends DoctrineObject
      * Set the credential value to be used.
      *
      * @param  string $credential
-     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return self
      * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
      */
     public function setCredential($credential)
@@ -107,7 +107,7 @@ class DoctrineEntity extends DoctrineObject
      * Set the column name to be used as the identity column
      *
      * @param  string $identityColumn
-     * @return \DoctrineModule\Authentication\Adapater\DoctrineEntity
+     * @return self
      * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
      */
     public function setIdentityColumn($identityColumn)
@@ -120,7 +120,7 @@ class DoctrineEntity extends DoctrineObject
      * Set the column name to be used as the credential column
      *
      * @param  string $credentialColumn
-     * @return \Zend\Authentication\Adapter\DbTable Provides a fluent interface
+     * @return self
      * @deprecated please use DoctrineModule\Authentication\Adapter\DoctrineObject
      */
     public function setCredentialColumn($credentialColumn)

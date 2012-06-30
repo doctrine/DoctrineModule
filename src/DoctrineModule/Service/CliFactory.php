@@ -12,7 +12,7 @@ use Zend\ServiceManager\ServiceManager;
 class CliFactory implements FactoryInterface
 {
     /**
-     * @var \Zend\EventManager\EventManager
+     * @var \Zend\EventManager\EventManagerInterface
      */
     protected $events;
 
@@ -29,6 +29,7 @@ class CliFactory implements FactoryInterface
     public function events(ServiceManager $sm)
     {
         if (null === $this->events) {
+            /* @var $events \Zend\EventManager\EventManagerInterface */
             $events = $sm->get('EventManager');
             $events->addIdentifiers(array(
                 __CLASS__,
