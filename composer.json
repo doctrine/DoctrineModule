@@ -32,21 +32,18 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "doctrine/common": "2.*",
+        "doctrine/common": "dev-master",
         "doctrine/data-fixtures": "dev-master",
-        "symfony/yaml": "2.0.*",
-        "symfony/console": "2.0.*",
+        "symfony/yaml": ">=2.0.13",
+        "symfony/console": ">=2.0.13",
         "zendframework/zendframework": "dev-master"
     },
-
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
             "DoctrineModule": "src/",
             "DoctrineModuleTest": "tests/"
-        },
-        "classmap": [
-            "./"
-        ]
+        }
     },
     "bin": [
         "bin/doctrine-module"
