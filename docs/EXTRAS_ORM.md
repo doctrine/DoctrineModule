@@ -48,3 +48,44 @@ $result = $adapter->authenticate();
 
 echo $result->isValid() ? 'Authenticated!' : 'Could not authenticate';
 ```
+
+## Custom DBAL Types
+To register custom Doctrine DBAL types, simply add them to the `doctrine.configuration.my_dbal_default.types`
+key in you configuration file:
+
+```php
+<?php
+return array(
+    'doctrine' => array(
+        'configuration' => array(
+            'my_dbal_default' => array(
+                'types' => array(
+                    // You can override a default type
+                    'date' => 'My\DBAL\Types\DateType',
+                    // And set new ones
+                    'tinyint' => 'My\DBAL\Types\TinyIntType',
+                ),
+            ),
+        ),
+    ),
+);
+```
+
+You are now able to use them, for example, in your ORM entities:
+
+```php
+<?php
+
+class User
+{
+    /**
+     * @ORM\Column(type="date")
+     */
+    protected $birthdate;
+
+    /**
+     * @ORM\Column(type="tinyint")
+     */
+    protected $houses;
+}
+```
