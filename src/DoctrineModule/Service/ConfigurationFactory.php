@@ -4,6 +4,7 @@ namespace DoctrineModule\Service;
 
 use RuntimeException;
 use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Types\Type;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -35,6 +36,14 @@ class ConfigurationFactory implements FactoryInterface
 
         $config->setResultCacheImpl($serviceLocator->get($options->resultCache));
         $config->setSQLLogger($options->sqlLogger);
+
+        foreach ($options->types as $name => $class) {
+            if (Type::hasType($name)) {
+                Type::overrideType($name, $class);
+            } else {
+                Type::addType($name, $class);
+            }
+        }
     }
 
     public function getOptions(ServiceLocatorInterface $serviceLocator)

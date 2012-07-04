@@ -23,6 +23,14 @@ class Configuration extends AbstractOptions
     protected $sqlLogger = null;
 
     /**
+     * Keys must be the name of the type identifier and value is
+     * the class name of the Type
+     *
+     * @var array
+     */
+    protected $types = array();
+
+    /**
      * @param string $resultCache
      */
     public function setResultCache($resultCache)
@@ -52,5 +60,21 @@ class Configuration extends AbstractOptions
     public function getSqlLogger()
     {
         return $this->sqlLogger;
+    }
+
+    /**
+     * @param string $types
+     */
+    public function setTypes(array $types)
+    {
+        $this->types = $types;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 }
