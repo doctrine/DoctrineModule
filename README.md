@@ -33,10 +33,12 @@ Installation of DoctrineModule uses composer. For composer documentation, please
 #### Installation steps
 
   1. `cd my/project/directory`
-  2. create a `composer.json` file with following contents:
+  2. create a `composer.json` file with following contents (minimum stability is required since the module still has
+     frequent updates):
 
      ```json
      {
+         "minimum-stability": "dev",
          "require": {
              "doctrine/doctrine-module": "dev-master"
          }
@@ -45,7 +47,7 @@ Installation of DoctrineModule uses composer. For composer documentation, please
   3. install composer via `curl -s http://getcomposer.org/installer | php` (on windows, download
      http://getcomposer.org/installer and execute it with PHP)
   4. run `php composer.phar install`
-  5. open `my/project/directory/configs/application.config.php` and add the following key to your `modules`: 
+  5. open `my/project/directory/configs/application.config.php` and add the following key to your `modules`:
 
      ```php
      'DoctrineModule',
