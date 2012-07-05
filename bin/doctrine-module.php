@@ -48,7 +48,9 @@ if  (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __D
 $configuration = include 'config/application.config.php';
 
 // setup service manager
-$serviceManager = new ServiceManager(new ServiceManagerConfiguration($configuration['service_manager']));
+$serviceManager = new ServiceManager(new ServiceManagerConfiguration(
+    isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
+));
 $serviceManager->setService('ApplicationConfiguration', $configuration);
 $serviceManager->get('ModuleManager')->loadModules();
 

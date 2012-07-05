@@ -45,4 +45,6 @@ if (!$config = @include __DIR__ . '/TestConfiguration.php') {
     $config = require __DIR__ . '/TestConfiguration.php.dist';
 }
 
-ServiceManagerTestCase::setServiceManagerConfiguration($config);
+ServiceManagerTestCase::setServiceManagerConfiguration(
+    isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
+);
