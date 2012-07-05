@@ -47,6 +47,15 @@ class ConfigurationFactory implements FactoryInterface
         return $config;
     }
 
+    public function setupPlatformConfigarion($serviceLocator)
+    {
+        $options = $this->getOptions($serviceLocator);
+        foreach ((array)$options['registerTypes'] as $dbType => $doctrineType) {
+            
+        }
+        
+    }
+
     public function setupDBALConfiguration(ServiceLocatorInterface $serviceLocator, Configuration $config)
     {
         $options = $this->getOptions($serviceLocator);

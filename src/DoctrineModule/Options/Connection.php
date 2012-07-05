@@ -73,6 +73,11 @@ class Connection extends AbstractOptions
     protected $params = array();
 
     /**
+     * @var array
+     */
+    protected $doctrineTypeMappings = array();
+
+    /**
      * @param string $configuration
      */
     public function setConfiguration($configuration)
@@ -118,6 +123,25 @@ class Connection extends AbstractOptions
     public function getParams()
     {
         return $this->params;
+    }
+
+    /**
+     * @param array $doctrineTypeMappings
+     * @return \DoctrineModule\Options\Connection
+     */
+    public function setDoctrineTypeMappings($doctrineTypeMappings)
+    {
+        $this->doctrineTypeMappings = (array)$doctrineTypeMappings;
+        return $this;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getDoctrineTypeMappings()
+    {
+        return $this->doctrineTypeMappings;
     }
 
     /**
