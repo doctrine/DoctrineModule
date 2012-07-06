@@ -21,6 +21,7 @@ namespace DoctrineModule\Service;
 
 use InvalidArgumentException;
 use Doctrine\Common\Annotations;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use DoctrineModule\Options\Driver as DriverOptions;
 use DoctrineModule\Service\AbstractFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -67,8 +68,8 @@ class DriverFactory extends AbstractFactory
         $paths = $options->getPaths();
 
         // Special options for AnnotationDrivers.
-        if (($class == 'Doctrine\ORM\Mapping\Driver\AnnotationDriver') ||
-            (is_subclass_of($class, 'Doctrine\ORM\Mapping\Driver\AnnotationDriver')))
+        if (($class == 'Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver') ||
+            (is_subclass_of($class, 'Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver')))
         {
             $reader = new Annotations\AnnotationReader;
             $reader = new Annotations\CachedReader(
@@ -88,7 +89,7 @@ class DriverFactory extends AbstractFactory
         }
 
         // Extra post-create options for DriverChain.
-        if ($driver instanceof \Doctrine\ORM\Mapping\Driver\DriverChain && $options->getDrivers()) {
+        if ($driver instanceof MappingDriver && $options->getDrivers()) {
             /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain */
             $drivers = $options->getDrivers();
 
