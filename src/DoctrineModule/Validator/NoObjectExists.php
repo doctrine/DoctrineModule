@@ -19,36 +19,41 @@
 
 namespace DoctrineModule\Validator;
 
-use Doctrine\ORM\Query,
-    Doctrine\ORM\NoResultException,
-    Doctrine\ORM\NonUniqueResultException;
-
 /**
- * Validator for verifying that no entity exists.
+ * Class that validates if objects does not exist in a given repository with a given list of matched fields
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
- *
- * @deprecated use NoObjectExists instead
+ * @since   0.4.0
+ * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class NoEntityExists extends AbstractEntity
+class NoObjectExists extends ObjectExists
 {
+    /**
+     * Error constants
+     */
+    const ERROR_OBJECT_FOUND    = 'objectFound';
+
+    /**
+     * @var array Message templates
+     */
+    protected $messageTemplates = array(
+        self::ERROR_OBJECT_FOUND    => "An object matching '%value%' was found",
+    );
+
+    /**
+     * {@inheritDoc}
+     */
     public function isValid($value)
     {
-        $query = $this->_getQuery($value);
+        $value = $this->cleanSearchValue($value);
+        $match = $this->objectRepository->findOneBy($value);
 
-        try {
-            $query->getSingleResult(Query::HYDRATE_ARRAY);
-        } catch (NoResultException $e) {
-            return true;
-        } catch (NonUniqueResultException $e) {
-        	$this->error(self::ERROR_RECORD_FOUND, $value);
+        if (is_object($match)) {
+            $this->error(self::ERROR_OBJECT_FOUND, $value);
             return false;
         }
 
-        $this->error(self::ERROR_RECORD_FOUND, $value);
-        return false;
+        return true;
     }
 }
