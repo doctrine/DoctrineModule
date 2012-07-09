@@ -32,11 +32,11 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "doctrine/common": "dev-master",
-        "doctrine/data-fixtures": "dev-master",
+        "doctrine/common": ">=2.0",
+        "doctrine/data-fixtures": ">=v1.0.0-ALPHA2",
         "symfony/yaml": ">=2.0.13",
         "symfony/console": ">=2.0.13",
-        "zendframework/zendframework": "dev-master"
+        "zendframework/zendframework": ">=2.0.0beta5"
     },
     "minimum-stability": "dev",
     "autoload": {
