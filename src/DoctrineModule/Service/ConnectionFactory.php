@@ -46,7 +46,12 @@ class ConnectionFactory extends AbstractFactory
         $configuration = $sl->get($options->getConfiguration());
         $eventManager  = $sl->get($options->getEventManager());
 
-        return DriverManager::getConnection($params, $configuration, $eventManager);
+        $connection = DriverManager::getConnection($params, $configuration, $eventManager);
+        $platform = $connection->getDatabasePlatform();
+        foreach ($options->getDoctrineTypeMappings() as $dbType => $doctrineType) {
+            $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
+        }
+        return $connection;
     }
 
     /**
