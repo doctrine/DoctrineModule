@@ -23,8 +23,6 @@ use DoctrineModule\Cache\DoctrineCacheStorage;
 use Doctrine\Common\Cache\ArrayCache;
 
 use Zend\Cache\Storage\Adapter\AdapterOptions;
-use Zend\Cache\Exception\RuntimeException;
-use Zend\EventManager\EventInterface;
 
 use PHPUnit_Framework_TestCase;
 use Zend\Stdlib\ErrorHandler;
