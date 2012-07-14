@@ -17,34 +17,47 @@
  * <http://www.doctrine-project.org>.
  */
 
-use DoctrineModuleTest\ServiceManagerTestCase;
+namespace DoctrineModule\Paginator;
 
-chdir(__DIR__);
+use Doctrine\Common\Collections\Collection;
+use Zend\Paginator\Adapter\AdapterInterface;
 
-$previousDir = '.';
+/**
+ * Base module for Doctrine ORM.
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Michaël Gallego
+ * @author  Marco Pivetta <ocramius@gmail.com>
+ */
+class CollectionAdapter implements AdapterInterface
+{
+    /**
+     * @var Collection
+     */
+    protected $collection;
 
-while (!file_exists('config/application.config.php')) {
-    $dir = dirname(getcwd());
-
-    if ($previousDir === $dir) {
-        throw new RuntimeException(
-            'Unable to locate "config/application.config.php":'
-            . ' is DoctrineModule in a sub-directory of your application skeleton?'
-        );
+    /**
+     * @param Collection $collection
+     */
+    public function __construct(Collection $collection)
+    {
+        $this->collection = $collection;
     }
 
-    $previousDir = $dir;
-    chdir($dir);
-}
+    /**
+     * {@inheritDoc}
+     */
+    public function getItems($offset, $itemCountPerPage)
+    {
+        return array_values($this->collection->slice($offset, $itemCountPerPage));
+    }
 
-if  (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
+    /**
+     * {@inheritDoc}
+     */
+    public function count()
+    {
+        return count($this->collection);
+    }
 }
-
-if (!$config = @include __DIR__ . '/TestConfiguration.php') {
-    $config = require __DIR__ . '/TestConfiguration.php.dist';
-}
-
-ServiceManagerTestCase::setServiceManagerConfiguration(
-    isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
-);
