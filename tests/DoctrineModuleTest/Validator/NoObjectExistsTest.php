@@ -23,6 +23,13 @@ use stdClass;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use DoctrineModule\Validator\NoObjectExists;
 
+/**
+ * Tests for the NoObjectExists tests
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Marco Pivetta <ocramius@gmail.com>
+ */
 class NoObjectExistsTest extends BaseTestCase
 {
     public function testCanValidateWithNoAvailableObjectInRepository()

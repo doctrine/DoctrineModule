@@ -22,21 +22,32 @@ namespace DoctrineModule\Service;
 use InvalidArgumentException;
 use Doctrine\Common\Annotations;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
 use DoctrineModule\Options\Driver as DriverOptions;
 use DoctrineModule\Service\AbstractFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * MappingDriver ServiceManager factory
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class DriverFactory extends AbstractFactory
 {
+    /**
+     * {@inheritDoc}
+     * @return MappingDriver
+     */
     public function createService(ServiceLocatorInterface $sl)
     {
         return $this->createDriver($sl, $this->getOptions($sl, 'driver'));
     }
 
     /**
-     * Get the class name of the options associated with this factory.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getOptionsClass()
     {
@@ -44,10 +55,10 @@ class DriverFactory extends AbstractFactory
     }
 
     /**
-     * @param ServiceLocatorInterface $sl
-     * @param DriverOptions $options
+     * @param  ServiceLocatorInterface  $sl
+     * @param  DriverOptions            $options
      * @throws InvalidArgumentException
-     * @return mixed
+     * @return MappingDriver
      */
     protected function createDriver(ServiceLocatorInterface $sl, DriverOptions $options)
     {
@@ -76,16 +87,28 @@ class DriverFactory extends AbstractFactory
                 new Annotations\IndexedReader($reader),
                 $sl->get($options->getCache())
             );
-            /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver */
+            /* @var $driver MappingDriver */
             $driver = new $class($reader, $paths);
         } else {
-            /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver */
+            /* @var $driver MappingDriver */
             $driver = new $class($paths);
         }
 
-        // File-drivers allow extensions.
-        if ($options->getExtension() && method_exists($driver, 'setFileExtension')) {
-            $driver->setFileExtension($options->getExtension());
+        if ($driver instanceof FileDriver) {
+            /* @var $driver FileDriver */
+            /* @var $locator \Doctrine\Common\Persistence\Mapping\Driver\FileLocator */
+            $locator = $driver->getLocator();
+
+            if (get_class($locator) === 'Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator') {
+                $driver->setLocator(new DefaultFileLocator($locator->getPaths(), $options->getExtension()));
+            } else {
+                throw new InvalidArgumentException(sprintf(
+                    'Discovered file locator for driver of type "%s" is an instance of "%s". This factory '
+                        . 'supports only the DefaultFileLocator when an extension is set for the file locator',
+                    get_class($driver),
+                    get_class($locator)
+                ));
+            }
         }
 
         // Extra post-create options for DriverChain.
@@ -97,9 +120,8 @@ class DriverFactory extends AbstractFactory
                 $drivers = array($drivers);
             }
 
-            foreach($drivers as $namespace => $driverName) {
+            foreach ($drivers as $namespace => $driverName) {
                 $options = $this->getOptions($sl, 'driver', $driverName);
-
                 $driver->addDriver($this->createDriver($sl, $options), $namespace);
             }
         }

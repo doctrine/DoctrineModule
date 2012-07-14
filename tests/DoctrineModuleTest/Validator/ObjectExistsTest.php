@@ -23,6 +23,13 @@ use stdClass;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use DoctrineModule\Validator\ObjectExists;
 
+/**
+ * Tests for the ObjectExists validator
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Marco Pivetta <ocramius@gmail.com>
+ */
 class ObjectExistsTest extends BaseTestCase
 {
     public function testCanValidateWithSingleField()

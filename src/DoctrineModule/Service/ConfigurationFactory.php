@@ -25,6 +25,13 @@ use Doctrine\DBAL\Types\Type;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * DBAL Configuration ServiceManager factory
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class ConfigurationFactory implements FactoryInterface
 {
     /**
@@ -32,25 +39,33 @@ class ConfigurationFactory implements FactoryInterface
      */
     protected $name;
 
+    /**
+     * @param $name
+     */
     public function __construct($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return \Doctrine\DBAL\Configuration
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $options = $this->getOptions($serviceLocator);
-        $config  = new \Doctrine\DBAL\Configuration;
-
+        $config  = new Configuration();
         $this->setupDBALConfiguration($serviceLocator, $config);
 
         return $config;
     }
 
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param Configuration           $config
+     */
     public function setupDBALConfiguration(ServiceLocatorInterface $serviceLocator, Configuration $config)
     {
         $options = $this->getOptions($serviceLocator);
-
         $config->setResultCacheImpl($serviceLocator->get($options->resultCache));
         $config->setSQLLogger($options->sqlLogger);
 
@@ -63,6 +78,11 @@ class ConfigurationFactory implements FactoryInterface
         }
     }
 
+    /**
+     * @param  ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     * @throws RuntimeException
+     */
     public function getOptions(ServiceLocatorInterface $serviceLocator)
     {
         $options = $serviceLocator->get('Configuration');
@@ -77,9 +97,13 @@ class ConfigurationFactory implements FactoryInterface
         }
 
         $optionsClass = $this->getOptionsClass();
+
         return new $optionsClass($options);
     }
 
+    /**
+     * @return string
+     */
     protected function getOptionsClass()
     {
         return 'DoctrineModule\Options\Configuration';

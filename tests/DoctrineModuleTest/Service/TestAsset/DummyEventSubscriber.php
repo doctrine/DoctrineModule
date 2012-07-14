@@ -36,7 +36,7 @@ class DummyEventSubscriber implements EventSubscriber
     /**
      * {@inheritDoc}
      */
-    function getSubscribedEvents()
+    public function getSubscribedEvents()
     {
         return array(
             'dummy'

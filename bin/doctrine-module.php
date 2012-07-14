@@ -17,7 +17,6 @@
  * <http://www.doctrine-project.org>.
  */
 
-use Zend\Loader\AutoloaderFactory;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfiguration;
 
@@ -40,7 +39,7 @@ while (!file_exists('config/application.config.php')) {
     chdir($dir);
 }
 
-if  (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
+if (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
     throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
 }
 
@@ -52,7 +51,15 @@ $serviceManager = new ServiceManager(new ServiceManagerConfiguration(
     isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
 ));
 $serviceManager->setService('ApplicationConfiguration', $configuration);
-$serviceManager->get('ModuleManager')->loadModules();
 
-$serviceManager->get('Application')->bootstrap();
-$serviceManager->get('doctrine.cli')->run();
+/* @var $moduleManager \Zend\ModuleManager\ModuleManagerInterface */
+$moduleManager = $serviceManager->get('ModuleManager');
+$moduleManager->loadModules();
+
+/* @var $application \Zend\Mvc\Application */
+$application = $serviceManager->get('Application');
+$application->bootstrap();
+
+/* @var $cli \Symfony\Component\Console\Application */
+$cli = $serviceManager->get('doctrine.cli');
+$cli->run();

@@ -21,6 +21,13 @@ namespace DoctrineModule\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
+/**
+ * Cache options
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class Cache extends AbstractOptions
 {
     /**
@@ -46,12 +53,13 @@ class Cache extends AbstractOptions
     protected $instance = null;
 
     /**
-     * @param string $class
+     * @param  string $class
      * @return self
      */
     public function setClass($class)
     {
         $this->class = $class;
+
         return $this;
     }
 
@@ -64,12 +72,13 @@ class Cache extends AbstractOptions
     }
 
     /**
-     * @param string $instance
+     * @param  string $instance
      * @return self
      */
     public function setInstance($instance)
     {
         $this->instance = $instance;
+
         return $this;
     }
 
@@ -82,12 +91,13 @@ class Cache extends AbstractOptions
     }
 
     /**
-     * @param string $namespace
+     * @param  string $namespace
      * @return self
      */
     public function setNamespace($namespace)
     {
         $this->namespace = $namespace;
+
         return $this;
     }
 

@@ -51,6 +51,7 @@ class NoObjectExists extends ObjectExists
 
         if (is_object($match)) {
             $this->error(self::ERROR_OBJECT_FOUND, $value);
+
             return false;
         }
 

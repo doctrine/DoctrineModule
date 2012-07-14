@@ -21,6 +21,13 @@ namespace DoctrineModule\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
+/**
+ * DBAL Connection options
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class Connection extends AbstractOptions
 {
     /**
@@ -126,12 +133,13 @@ class Connection extends AbstractOptions
     }
 
     /**
-     * @param array $doctrineTypeMappings
+     * @param  array                              $doctrineTypeMappings
      * @return \DoctrineModule\Options\Connection
      */
     public function setDoctrineTypeMappings($doctrineTypeMappings)
     {
-        $this->doctrineTypeMappings = (array)$doctrineTypeMappings;
+        $this->doctrineTypeMappings = (array) $doctrineTypeMappings;
+
         return $this;
     }
 

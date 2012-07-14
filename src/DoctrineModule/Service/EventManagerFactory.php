@@ -39,13 +39,13 @@ class EventManagerFactory extends AbstractFactory
         $options      = $this->getOptions($sl, 'eventmanager');
         $eventManager = new EventManager();
 
-        foreach($options->getSubscribers() as $subscriberName) {
+        foreach ($options->getSubscribers() as $subscriberName) {
             $subscriber = $subscriberName;
 
             if (is_string($subscriber)) {
                 if ($sl->has($subscriber)) {
                     $subscriber = $sl->get($subscriber);
-                } else if (class_exists($subscriber)) {
+                } elseif (class_exists($subscriber)) {
                     $subscriber = new $subscriber();
                 }
             }

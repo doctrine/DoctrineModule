@@ -19,13 +19,23 @@
 
 namespace DoctrineModule\Service;
 
-use RuntimeException;
 use Doctrine\DBAL\DriverManager;
 use DoctrineModule\Service\AbstractFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * DBAL Connection ServiceManager factory
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class ConnectionFactory extends AbstractFactory
 {
+    /**
+     * {@inheritDoc}
+     * @return \Doctrine\DBAL\Connection
+     */
     public function createService(ServiceLocatorInterface $sl)
     {
         /** @var $options \DoctrineModule\Options\Connection */
@@ -51,6 +61,7 @@ class ConnectionFactory extends AbstractFactory
         foreach ($options->getDoctrineTypeMappings() as $dbType => $doctrineType) {
             $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
         }
+
         return $connection;
     }
 

@@ -21,6 +21,13 @@ namespace DoctrineModule\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
+/**
+ * Connection options
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class Configuration extends AbstractOptions
 {
     /**
@@ -80,7 +87,7 @@ class Configuration extends AbstractOptions
     }
 
     /**
-     * @param string $types
+     * @param array $types
      */
     public function setTypes(array $types)
     {

@@ -24,6 +24,13 @@ use DoctrineModule\Authentication\Adapter\DoctrineObjectRepository as ObjectRepo
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject;
 
+/**
+ * Tests for the ObjectRepository based authentication adapter
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Marco Pivetta <ocramius@gmail.com>
+ */
 class DoctrineObjectRepositoryTest extends BaseTestCase
 {
     public function testWillRejectInvalidIdentityClassName()

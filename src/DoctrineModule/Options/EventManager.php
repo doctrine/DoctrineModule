@@ -21,6 +21,13 @@ namespace DoctrineModule\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
+/**
+ * EventManager options
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class EventManager extends AbstractOptions
 {
     /**
@@ -33,12 +40,13 @@ class EventManager extends AbstractOptions
     protected $subscribers = array();
 
     /**
-     * @param array $subscribers
+     * @param  array $subscribers
      * @return self
      */
     public function setSubscribers($subscribers)
     {
         $this->subscribers = $subscribers;
+
         return $this;
     }
 

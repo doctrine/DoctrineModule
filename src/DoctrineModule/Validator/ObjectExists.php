@@ -131,7 +131,7 @@ class ObjectExists extends AbstractValidator
     }
 
     /**
-     * @param  string|array $value a field value or an array of field values if more fields have been configured to be
+     * @param string|array $value a field value or an array of field values if more fields have been configured to be
      *                      matched
      * @return array
      * @throws \Zend\Validator\Exception\RuntimeException
@@ -182,6 +182,7 @@ class ObjectExists extends AbstractValidator
         }
 
         $this->error(self::ERROR_NO_OBJECT_FOUND, $value);
+
         return false;
     }
 }

@@ -26,6 +26,13 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 
+/**
+ * CLI Application ServiceManager factory responsible for instantiating a Symfony CLI application
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class CliFactory implements FactoryInterface
 {
     /**
@@ -43,7 +50,11 @@ class CliFactory implements FactoryInterface
      */
     protected $commands = array();
 
-    public function events(ServiceManager $sm)
+    /**
+     * @param  ServiceManager                           $sm
+     * @return \Zend\EventManager\EventManagerInterface
+     */
+    public function getEventManager(ServiceManager $sm)
     {
         if (null === $this->events) {
             /* @var $events \Zend\EventManager\EventManagerInterface */
@@ -55,9 +66,14 @@ class CliFactory implements FactoryInterface
 
             $this->events = $events;
         }
+
         return $this->events;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Application
+     */
     public function createService(ServiceLocatorInterface $sl)
     {
         $cli = new Application;
@@ -66,7 +82,7 @@ class CliFactory implements FactoryInterface
         $cli->setHelperSet(new HelperSet);
 
         // Load commands using event
-        $this->events($sl)->trigger('loadCli.post', $cli, array('ServiceManager' => $sl));
+        $this->getEventManager($sl)->trigger('loadCli.post', $cli, array('ServiceManager' => $sl));
 
         return $cli;
     }

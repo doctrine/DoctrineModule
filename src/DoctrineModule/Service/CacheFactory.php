@@ -20,12 +20,26 @@
 namespace DoctrineModule\Service;
 
 use RuntimeException;
-use Doctrine\Common\Cache;
+use Doctrine\Common\Cache\MemcacheCache;
+use Doctrine\Common\Cache\MemcachedCache;
+use Doctrine\Common\Cache\RedisCache;
 use DoctrineModule\Service\AbstractFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Cache ServiceManager factory
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 class CacheFactory extends AbstractFactory
 {
+    /**
+     * {@inheritDoc}
+     * @return \Doctrine\Common\Cache\Cache
+     * @throws RuntimeException
+     */
     public function createService(ServiceLocatorInterface $sl)
     {
         /** @var $options \DoctrineModule\Options\Cache */
@@ -38,14 +52,14 @@ class CacheFactory extends AbstractFactory
 
         $cache = new $class;
 
-        if ($cache instanceof Cache\MemcacheCache) {
-            /* @var $cache \Doctrine\Common\Cache\MemcacheCache */
+        if ($cache instanceof MemcacheCache) {
+            /* @var $cache MemcacheCache */
             $cache->setMemcache($options->getInstance());
-        } else if ($cache instanceof Cache\MemcachedCache) {
-            /* @var $cache \Doctrine\Common\Cache\MemcachedCache */
+        } elseif ($cache instanceof MemcachedCache) {
+            /* @var $cache MemcachedCache */
             $cache->setMemcached($options->getInstance());
-        } else if ($cache instanceof Cache\RedisCache) {
-            /* @var $cache \Doctrine\Common\Cache\RedisCache */
+        } elseif ($cache instanceof RedisCache) {
+            /* @var $cache RedisCache */
             $cache->setRedis($options->getInstance());
         }
 
@@ -53,9 +67,7 @@ class CacheFactory extends AbstractFactory
     }
 
     /**
-     * Get the class name of the options associated with this factory.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getOptionsClass()
     {

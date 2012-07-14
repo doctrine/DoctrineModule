@@ -23,6 +23,13 @@ use RuntimeException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Base ServiceManager factory to be extended
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
+ */
 abstract class AbstractFactory implements FactoryInterface
 {
     /**
@@ -54,9 +61,9 @@ abstract class AbstractFactory implements FactoryInterface
     /**
      * Gets options from configuration based on name.
      *
-     * @param ServiceLocatorInterface $sl
-     * @param string $key
-     * @param null|string $name
+     * @param  ServiceLocatorInterface      $sl
+     * @param  string                       $key
+     * @param  null|string                  $name
      * @return \Zend\Stdlib\AbstractOptions
      * @throws \RuntimeException
      */
@@ -79,6 +86,7 @@ abstract class AbstractFactory implements FactoryInterface
         }
 
         $optionsClass = $this->getOptionsClass();
+
         return new $optionsClass($options);
     }
 

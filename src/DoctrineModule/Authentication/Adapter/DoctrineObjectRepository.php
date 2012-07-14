@@ -100,10 +100,10 @@ class DoctrineObjectRepository implements AdapterInterface
     /**
      * Constructor
      *
-     * @param  ObjectRepository $objectRepository   Object repository where to look for identities
-     * @param  string           $identityClassName  Class that the retrieved identities must be instances of
-     * @param  string           $identityProperty   Property field used to search the repository with the given identity value
-     * @param  string           $credentialProperty Credential to check if the retrieved identity is valid
+     * @param ObjectRepository $objectRepository   Object repository where to look for identities
+     * @param string           $identityClassName  Class that the retrieved identities must be instances of
+     * @param string           $identityProperty   Property field used to search the repository with the given identity value
+     * @param string           $credentialProperty Credential to check if the retrieved identity is valid
      */
     public function __construct(
         ObjectRepository $objectRepository,
@@ -128,10 +128,12 @@ class DoctrineObjectRepository implements AdapterInterface
         if (!$identity) {
             $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
             $this->authenticationResultInfo['messages'][] = 'A record with the supplied identity could not be found.';
+
             return $this->authenticateCreateAuthResult();
         }
 
         $authResult = $this->authenticateValidateIdentity($identity);
+
         return $authResult;
     }
 
@@ -144,13 +146,14 @@ class DoctrineObjectRepository implements AdapterInterface
     public function setObjectRepository(ObjectRepository $objectRepository)
     {
         $this->objectRepository = $objectRepository;
+
         return $this;
     }
 
     /**
      * Sets the identity class to use for authentication.
      *
-     * @param  string $identityClassName
+     * @param  string                                                          $identityClassName
      * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
@@ -164,18 +167,20 @@ class DoctrineObjectRepository implements AdapterInterface
         }
 
         $this->identityClassName = $identityClassName;
+
         return $this;
     }
 
     /**
      * Set the value to be used as the identity
      *
-     * @param mixed $identityValue
+     * @param  mixed $identityValue
      * @return self
      */
     public function setIdentityValue($identityValue)
     {
         $this->identityValue = $identityValue;
+
         return $this;
     }
 
@@ -188,6 +193,7 @@ class DoctrineObjectRepository implements AdapterInterface
     public function setCredentialValue($credentialValue)
     {
         $this->credentialValue = $credentialValue;
+
         return $this;
     }
 
@@ -195,7 +201,7 @@ class DoctrineObjectRepository implements AdapterInterface
      * Set the credential callable to be used to transform the password
      * before checking.
      *
-     * @param  string $callable
+     * @param  string                                                          $callable
      * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
@@ -209,6 +215,7 @@ class DoctrineObjectRepository implements AdapterInterface
         }
 
         $this->credentialCallable = $callable;
+
         return $this;
     }
 
@@ -216,7 +223,7 @@ class DoctrineObjectRepository implements AdapterInterface
      * Set the identity callable to be used when saving the identity property to the
      * authentication result info.
      *
-     * @param  string $callable
+     * @param  string                                                          $callable
      * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
@@ -230,13 +237,14 @@ class DoctrineObjectRepository implements AdapterInterface
         }
 
         $this->identityCallable = $callable;
+
         return $this;
     }
 
     /**
      * Set the property name to be used as the identity property
      *
-     * @param  string $identityProperty
+     * @param  string                                                          $identityProperty
      * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
@@ -250,13 +258,14 @@ class DoctrineObjectRepository implements AdapterInterface
         }
 
         $this->identityProperty = (string) $identityProperty;
+
         return $this;
     }
 
     /**
      * Set the property name to be used as the credential property
      *
-     * @param string $credentialProperty
+     * @param  string                                                          $credentialProperty
      * @throws \Zend\Authentication\Adapter\Exception\InvalidArgumentException
      * @return self
      */
@@ -270,6 +279,7 @@ class DoctrineObjectRepository implements AdapterInterface
         }
 
         $this->credentialProperty = (string) $credentialProperty;
+
         return $this;
     }
 
@@ -277,7 +287,7 @@ class DoctrineObjectRepository implements AdapterInterface
      * This method attempts to validate that the record in the resultset is indeed a
      * record that matched the identity provided to this adapter.
      *
-     * @param  object $identity
+     * @param  object                                                          $identity
      * @throws \Zend\Authentication\Adapter\Exception\UnexpectedValueException
      * @return AuthenticationResult
      */
@@ -297,7 +307,7 @@ class DoctrineObjectRepository implements AdapterInterface
 
         if (method_exists($identity, $getter)) {
             $documentCredential = $identity->$getter();
-        } else if (isset($identity->{$this->credentialProperty}) || isset($vars[$this->credentialProperty])) {
+        } elseif (isset($identity->{$this->credentialProperty}) || isset($vars[$this->credentialProperty])) {
             $documentCredential = $identity->{$this->credentialProperty};
         } else {
             throw new Exception\UnexpectedValueException(sprintf(
@@ -319,6 +329,7 @@ class DoctrineObjectRepository implements AdapterInterface
         if ($credentialValue !== true && $credentialValue != $documentCredential) {
             $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_CREDENTIAL_INVALID;
             $this->authenticationResultInfo['messages'][] = 'Supplied credential is invalid.';
+
             return $this->authenticateCreateAuthResult();
         }
 
@@ -330,6 +341,7 @@ class DoctrineObjectRepository implements AdapterInterface
         $this->authenticationResultInfo['code'] = AuthenticationResult::SUCCESS;
         $this->authenticationResultInfo['identity'] = $identity;
         $this->authenticationResultInfo['messages'][] = 'Authentication successful.';
+
         return $this->authenticateCreateAuthResult();
     }
 

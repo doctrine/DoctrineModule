@@ -54,7 +54,7 @@ class ServiceManagerTestCase extends BaseTestCase
     /**
      * Retrieves a new ServiceManager instance
      *
-     * @param array|null $configuration
+     * @param  array|null     $configuration
      * @return ServiceManager
      */
     public function getServiceManager(array $configuration = null)
@@ -65,6 +65,7 @@ class ServiceManagerTestCase extends BaseTestCase
         /* @var $moduleManager \Zend\ModuleManager\ModuleManagerInterface */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
+
         return $serviceManager;
     }
 }
