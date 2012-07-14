@@ -22,10 +22,10 @@ namespace DoctrineModule\Service;
 use RuntimeException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Cache\Storage\StorageInterface;
-use DoctrineModule\Cache\ZendCacheStorage;
+use DoctrineModule\Cache\ZendStorageCache;
 
 /**
- * ZendCacheStorage ServiceManager factory
+ * ZendStorageCache ServiceManager factory
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
@@ -35,7 +35,7 @@ class ZendCacheStorageFactory extends CacheFactory
 {
     /**
      * {@inheritDoc}
-     * @return ZendCacheStorage
+     * @return ZendStorageCache
      * @throws RuntimeException
      */
     public function createService(ServiceLocatorInterface $sl)
@@ -46,7 +46,7 @@ class ZendCacheStorageFactory extends CacheFactory
 
         if (!$instance) {
             // @todo move this validation to the options class
-            throw new RuntimeException('ZendCacheStorage must have a referenced cache instance');
+            throw new RuntimeException('ZendStorageCache must have a referenced cache instance');
         }
 
         $cache = $sl->get($instance);
@@ -59,6 +59,6 @@ class ZendCacheStorageFactory extends CacheFactory
             ));
         }
 
-        return new ZendCacheStorage($cache);
+        return new ZendStorageCache($cache);
     }
 }

@@ -20,7 +20,7 @@
 namespace DoctrineModule;
 
 use DoctrineModule\Service\CacheFactory;
-use DoctrineModule\Service\ZendCacheStorageFactory;
+use DoctrineModule\Service\ZendStorageCacheFactory;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 /**
@@ -63,7 +63,7 @@ class Module implements ServiceProviderInterface
                 'doctrine.cache.wincache'         => new CacheFactory('wincache'),
                 'doctrine.cache.xcache'           => new CacheFactory('xcache'),
                 'doctrine.cache.zenddata'         => new CacheFactory('zenddata'),
-                'doctrine.cache.zendcachestorage' => new ZendCacheStorageFactory('zendcachestorage'),
+                'doctrine.cache.zendcachestorage' => new ZendStorageCacheFactory('zendcachestorage'),
             )
         );
     }

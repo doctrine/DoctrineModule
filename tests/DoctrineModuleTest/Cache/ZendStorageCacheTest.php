@@ -19,7 +19,7 @@
 
 namespace DoctrineModuleTest\Cache;
 
-use DoctrineModule\Cache\ZendCacheStorage;
+use DoctrineModule\Cache\ZendStorageCache;
 use Doctrine\Common\Cache\Cache;
 use Zend\Cache\Storage\Adapter\Memory;
 use PHPUnit_Framework_TestCase;
@@ -31,14 +31,14 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ZendCacheStorageTest extends PHPUnit_Framework_TestCase
+class ZendStorageCacheTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @return ZendCacheStorage
+     * @return ZendStorageCache
      */
     protected function getCacheDriver()
     {
-        return new ZendCacheStorage(new Memory());
+        return new ZendStorageCache(new Memory());
     }
 
     public function testBasics()

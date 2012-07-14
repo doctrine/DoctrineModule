@@ -33,7 +33,7 @@ use Zend\Cache\Storage\AvailableSpaceCapableInterface;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ZendCacheStorage extends CacheProvider
+class ZendStorageCache extends CacheProvider
 {
 
     /**
