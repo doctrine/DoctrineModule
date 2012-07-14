@@ -31,7 +31,6 @@ use Zend\Cache\Storage\Adapter\AbstractAdapter;
  */
 class DoctrineCacheStorage extends AbstractAdapter
 {
-
     /**
      * @var Cache
      */
@@ -53,10 +52,16 @@ class DoctrineCacheStorage extends AbstractAdapter
      */
     protected function internalGetItem(& $normalizedKey, & $success = null, & $casToken = null)
     {
-        $fetched = $this->cache->fetch($normalizedKey);
-        $success = $fetched === false ? false : true;
+        $key = $this->getOptions()->getNamespace() . $normalizedKey;
+        $fetched = $this->cache->fetch($key);
+        $success = ($fetched === false ? false : true);
 
-        return $fetched;
+        if ($success) {
+            $casToken = $fetched;
+            return $fetched;
+        }
+
+        return null;
     }
 
     /**
@@ -64,7 +69,8 @@ class DoctrineCacheStorage extends AbstractAdapter
      */
     protected function internalSetItem(& $normalizedKey, & $value)
     {
-        return $this->cache->save($normalizedKey, $value);
+        $key = $this->getOptions()->getNamespace() . $normalizedKey;
+        return $this->cache->save($key, $value);
     }
 
     /**
@@ -72,6 +78,11 @@ class DoctrineCacheStorage extends AbstractAdapter
      */
     protected function internalRemoveItem(& $normalizedKey)
     {
-        return $this->cache->delete($normalizedKey);
+        $key = $this->getOptions()->getNamespace() . $normalizedKey;
+        if (!$this->cache->contains($key)) {
+            return false;
+        }
+
+        return $this->cache->delete($key);
     }
 }
