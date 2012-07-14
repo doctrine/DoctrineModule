@@ -51,10 +51,10 @@ class CliFactory implements FactoryInterface
     protected $commands = array();
 
     /**
-     * @param  ServiceManager                           $sm
+     * @param  ServiceLocatorInterface                  $sm
      * @return \Zend\EventManager\EventManagerInterface
      */
-    public function getEventManager(ServiceManager $sm)
+    public function getEventManager(ServiceLocatorInterface $sm)
     {
         if (null === $this->events) {
             /* @var $events \Zend\EventManager\EventManagerInterface */

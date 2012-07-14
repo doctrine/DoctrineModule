@@ -33,6 +33,9 @@ use PHPUnit_Framework_TestCase;
  */
 class ZendCacheStorageTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @return ZendCacheStorage
+     */
     protected function getCacheDriver()
     {
         return new ZendCacheStorage(new Memory());

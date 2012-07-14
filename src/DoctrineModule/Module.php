@@ -20,6 +20,7 @@
 namespace DoctrineModule;
 
 use DoctrineModule\Service\CacheFactory;
+use DoctrineModule\Service\ZendCacheStorageFactory;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 /**
@@ -53,15 +54,16 @@ class Module implements ServiceProviderInterface
     {
         return array(
             'factories' => array(
-                'doctrine.cli'             => 'DoctrineModule\Service\CliFactory',
-                'doctrine.cache.apc'       => new CacheFactory('apc'),
-                'doctrine.cache.array'     => new CacheFactory('array'),
-                'doctrine.cache.memcache'  => new CacheFactory('memcache'),
-                'doctrine.cache.memcached' => new CacheFactory('memcached'),
-                'doctrine.cache.redis'     => new CacheFactory('redis'),
-                'doctrine.cache.wincache'  => new CacheFactory('wincache'),
-                'doctrine.cache.xcache'    => new CacheFactory('xcache'),
-                'doctrine.cache.zenddata'  => new CacheFactory('zenddata'),
+                'doctrine.cli'                    => 'DoctrineModule\Service\CliFactory',
+                'doctrine.cache.apc'              => new CacheFactory('apc'),
+                'doctrine.cache.array'            => new CacheFactory('array'),
+                'doctrine.cache.memcache'         => new CacheFactory('memcache'),
+                'doctrine.cache.memcached'        => new CacheFactory('memcached'),
+                'doctrine.cache.redis'            => new CacheFactory('redis'),
+                'doctrine.cache.wincache'         => new CacheFactory('wincache'),
+                'doctrine.cache.xcache'           => new CacheFactory('xcache'),
+                'doctrine.cache.zenddata'         => new CacheFactory('zenddata'),
+                'doctrine.cache.zendcachestorage' => new ZendCacheStorageFactory('zendcachestorage'),
             )
         );
     }

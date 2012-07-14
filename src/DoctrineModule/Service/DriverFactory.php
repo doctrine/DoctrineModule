@@ -43,7 +43,10 @@ class DriverFactory extends AbstractFactory
      */
     public function createService(ServiceLocatorInterface $sl)
     {
-        return $this->createDriver($sl, $this->getOptions($sl, 'driver'));
+        /* @var $options DriverOptions */
+        $options = $this->getOptions($sl, 'driver');
+
+        return $this->createDriver($sl, $options);
     }
 
     /**

@@ -47,7 +47,7 @@ return array(
             ),
             'zenddata' => array(
                 'class' => 'Doctrine\Common\Cache\ZendDataCache',
-            )
+            ),
         ),
-    )
+    ),
 );
