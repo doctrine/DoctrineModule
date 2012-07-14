@@ -230,26 +230,6 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_storage->hasItem('key'));
     }
 
-    public function testHasItemReturnsFalseOnExpiredItem()
-    {
-        $capabilities = $this->_storage->getCapabilities();
-
-        if ($capabilities->getMinTtl() === 0) {
-            $this->markTestSkipped("Adapter doesn't support item expiration");
-        }
-
-        $ttl = $capabilities->getTtlPrecision();
-        $this->_options->setTtl($ttl);
-
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-
-        // wait until the item expired
-        $wait = $ttl + $capabilities->getTtlPrecision();
-        usleep($wait * 2000000);
-
-        $this->assertFalse($this->_storage->hasItem('key'));
-    }
-
     public function testHasItemNonReadable()
     {
         $this->assertTrue($this->_storage->setItem('key', 'value'));
@@ -295,30 +275,6 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         $this->_storage->setItem('test', 'test');
         $this->_storage->getItem('test', $success);
         $this->assertTrue($success);
-    }
-
-    public function testGetItemReturnsNullOnExpiredItem()
-    {
-        $capabilities = $this->_storage->getCapabilities();
-
-        if ($capabilities->getMinTtl() === 0) {
-            $this->markTestSkipped("Adapter doesn't support item expiration");
-        }
-
-        if ($capabilities->getUseRequestTime()) {
-            $this->markTestSkipped("Can't test get expired item if request time will be used");
-        }
-
-        $ttl = $capabilities->getTtlPrecision();
-        $this->_options->setTtl($ttl);
-
-        $this->_storage->setItem('key', 'value');
-
-        // wait until expired
-        $wait = $ttl + $capabilities->getTtlPrecision();
-        usleep($wait * 2000000);
-
-        $this->assertNull($this->_storage->getItem('key'));
     }
 
     public function testGetItemReturnsNullIfNonReadable()
@@ -540,75 +496,6 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSetAndGetExpiredItem()
-    {
-        $capabilities = $this->_storage->getCapabilities();
-
-        if ($capabilities->getMinTtl() === 0) {
-            $this->markTestSkipped("Adapter doesn't support item expiration");
-        }
-
-        $ttl = $capabilities->getTtlPrecision();
-        $this->_options->setTtl($ttl);
-
-        $this->_storage->setItem('key', 'value');
-
-        // wait until expired
-        $wait = $ttl + $capabilities->getTtlPrecision();
-        usleep($wait * 2000000);
-
-        if (!$capabilities->getUseRequestTime()) {
-            $this->assertNull($this->_storage->getItem('key'));
-        } else {
-            $this->assertEquals('value', $this->_storage->getItem('key'));
-        }
-
-        $this->_options->setTtl(0);
-        if ($capabilities->getExpiredRead()) {
-            $this->assertEquals('value', $this->_storage->getItem('key'));
-        } else {
-            $this->assertNull($this->_storage->getItem('key'));
-        }
-    }
-
-    public function testSetAndGetExpiredItems()
-    {
-        $capabilities = $this->_storage->getCapabilities();
-
-        if ($capabilities->getMinTtl() === 0) {
-            $this->markTestSkipped("Adapter doesn't support item expiration");
-        }
-
-        $ttl = $capabilities->getTtlPrecision();
-        $this->_options->setTtl($ttl);
-
-        $items = array(
-            'key1' => 'value1',
-            'key2' => 'value2',
-            'key3' => 'value3'
-        );
-        $this->assertSame(array(), $this->_storage->setItems($items));
-
-        // wait until expired
-        $wait = $ttl + $capabilities->getTtlPrecision();
-        usleep($wait * 2000000);
-
-        $rs = $this->_storage->getItems(array_keys($items));
-        if (!$capabilities->getUseRequestTime()) {
-            $this->assertEquals(array(), $rs);
-        } else {
-            ksort($rs);
-            $this->assertEquals($items, $rs);
-        }
-
-        $this->_options->setTtl(0);
-        if ($capabilities->getExpiredRead()) {
-            $rs = $this->_storage->getItems(array_keys($items));
-            ksort($rs);
-            $this->assertEquals($items, $rs);
-        }
-    }
-
     public function testSetAndGetItemOfDifferentTypes()
     {
         $capabilities = $this->_storage->getCapabilities();
@@ -822,31 +709,6 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(array(), $this->_storage->decrementItems(array('key' => 5)));
         $this->assertEquals(10, $this->_storage->getItem('key'));
-    }
-
-    public function testTouchItem()
-    {
-        $capabilities = $this->_storage->getCapabilities();
-
-        if ($capabilities->getMinTtl() === 0) {
-            $this->markTestSkipped("Adapter doesn't support item expiration");
-        }
-
-        $this->_options->setTtl(2 * $capabilities->getTtlPrecision());
-
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-
-        // sleep 1 times before expire to touch the item
-        usleep($capabilities->getTtlPrecision() * 1000000);
-        $this->assertTrue($this->_storage->touchItem('key'));
-
-        usleep($capabilities->getTtlPrecision() * 1000000);
-        $this->assertTrue($this->_storage->hasItem('key'));
-
-        if (!$capabilities->getUseRequestTime()) {
-            usleep($capabilities->getTtlPrecision() * 2000000);
-            $this->assertFalse($this->_storage->hasItem('key'));
-        }
     }
 
     public function testTouchItemReturnsFalseOnMissingItem()
