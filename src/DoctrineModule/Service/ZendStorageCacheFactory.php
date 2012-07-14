@@ -31,7 +31,7 @@ use DoctrineModule\Cache\ZendStorageCache;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ZendCacheStorageFactory extends CacheFactory
+class ZendStorageCacheFactory extends CacheFactory
 {
     /**
      * {@inheritDoc}
