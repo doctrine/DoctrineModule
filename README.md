@@ -8,7 +8,7 @@ provider module such as [DoctrineORMModule](http://www.github.com/doctrine/Doctr
 following features are intended to work out of the box:
 
   - CLI support for Doctrine 2 ORM and Doctrine MongoDB ODM.
-  - Validators for EntityExists and NoEntityExists
+  - Validators for ObjectExists and NoObjectExists
   - Authentication adapter for Zend\Authenticator
   - Support for using existing PDO connections
 

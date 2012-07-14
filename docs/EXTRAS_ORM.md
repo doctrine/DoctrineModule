@@ -2,23 +2,24 @@
 The items listed below are entirely optional and are intended to enhance integration between Zend Framework 2 and
 Doctrine 2 .
 
-## EntityExists and NoEntityExists Validators
-The EntityExists and NoEntityExists are validators similar to Zend\Validator\Db validators. You can
+## ObjectExists and NoObjectExists Validators
+The ObjectExists and NoObjectExists are validators similar to Zend\Validator\Db validators. You can
 pass a variety of options to determine validity. The most basic use case requires an entity manager (em),
 an entity, and a field. You also have the option of specifying a query_builder Closure to use if you
 want to fine tune the results.
 
 ```php
 <?php
-$validator = new DoctrineModule\Validator\NoEntityExists(array(
-   'em' => $this->getLocator()->get('Doctrine\ORM\EntityManager'),
-   'entity' => 'My\Entity\User',
-   'field' => 'username',
-   'query_builder' => function($er) {
-       return $er->createQueryBuilder('q');
-   }
+$validator = new \DoctrineModule\Validator\NoObjectExists(array(
+    // object repository to lookup
+    'object_repository' => $serviceLocator->get('Doctrine\ORM\EntityManager')->getRepository('My\Entity\User'),
+
+    // fields to match
+    'fields' => array('username'),
 ));
-echo $validator->isValid('test') ? 'Valid' : 'Invalid! Duplicate found!';
+
+// following works also with simple values if the number of fields to be matched is 1
+echo $validator->isValid(array('username' => 'test')) ? 'Valid' : 'Invalid! Duplicate found!';
 ```
 
 ## Authentication adapter for Zend\Authentication
@@ -33,17 +34,18 @@ $adapter = new \DoctrineModule\Authentication\Adapter\DoctrineObject(
     $this->getLocator()->get('Doctrine\ORM\EntityManager'),
     'Application\Test\Entity',
     'username', // optional, default shown
-    'password'  // optional, default shown,
+    'password',  // optional, default shown,
     function($identity, $credential) { // optional callable
-         return \My\Service\User::hashCredential(
-                $credential,
-                $identity->getSalt(),
-                $identity->getAlgorithm()
-            );
+        return \My\Service\User::hashCredential(
+            $credential,
+            $identity->getSalt(),
+            $identity->getAlgorithm()
+        );
     }
 );
-$adapter->setIdentityValue('username');
-$adapter->setCredentialValue('password');
+
+$adapter->setIdentityValue('admin');
+$adapter->setCredentialValue('pa55w0rd');
 $result = $adapter->authenticate();
 
 echo $result->isValid() ? 'Authenticated!' : 'Could not authenticate';
@@ -62,6 +64,7 @@ return array(
                 'types' => array(
                     // You can override a default type
                     'date' => 'My\DBAL\Types\DateType',
+
                     // And set new ones
                     'tinyint' => 'My\DBAL\Types\TinyIntType',
                 ),
