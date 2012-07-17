@@ -60,7 +60,7 @@ class Driver extends AbstractOptions
      * Set the file extension to use. This option is only
      * valid for FileDrivers (XmlDriver, YamlDriver, PHPDriver, etc).
      *
-     * @var null
+     * @var string|null
      */
     protected $extension = null;
 
@@ -130,7 +130,7 @@ class Driver extends AbstractOptions
     }
 
     /**
-     * @return null
+     * @return string|null
      */
     public function getExtension()
     {

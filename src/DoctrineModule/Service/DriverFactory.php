@@ -97,7 +97,7 @@ class DriverFactory extends AbstractFactory
             $driver = new $class($paths);
         }
 
-        if ($driver instanceof FileDriver) {
+        if ($options->getExtension() && $driver instanceof FileDriver) {
             /* @var $driver FileDriver */
             /* @var $locator \Doctrine\Common\Persistence\Mapping\Driver\FileLocator */
             $locator = $driver->getLocator();
