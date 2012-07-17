@@ -32,7 +32,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "doctrine/common": ">=2.2,<2.4-dev",
+        "doctrine/common": ">2.2,<2.4-dev",
         "doctrine/data-fixtures": "dev-master",
         "symfony/yaml": ">=2.0.13",
         "symfony/console": ">=2.0.13",
