@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Service;
 
-use DoctrineModule\Authentication\Storage\Db as DbStorage;
+use DoctrineModule\Authentication\Storage\Db as ObjectManagerStorage;
 use DoctrineModule\Authentication\Adapter\ObjectRepository as DoctrineAdapter;
 use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use DoctrineModule\Service\AbstractFactory;
@@ -26,7 +26,7 @@ class AuthenticationFactory extends AbstractFactory
         $objectRepository = $om->getRepository($options->getIdentityClass());
         $metadataFactory  = $om->getMetadataFactory();
 
-        $storage = new DbStorage($objectRepository, new SessionStorage());
+        $storage = new ObjectManagerStorage($objectRepository, new SessionStorage());
 
         $adapter = new DoctrineAdapter($objectRepository, $metadataFactory);
         $adapter->setIdentityProperty($options->getIdentityProperty());

@@ -50,14 +50,14 @@ class Authentication extends AbstractOptions
      *
      * @var string
      */
-    protected $identityProperty = 'username';
+    protected $identityProperty;
 
     /**
      * Property to use for the credential
      *
      * @var string
      */
-    protected $credentialProperty = 'password';
+    protected $credentialProperty;
 
     /**
      * Callable function to check if a credential is valid
