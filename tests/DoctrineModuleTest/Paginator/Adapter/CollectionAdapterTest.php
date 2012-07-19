@@ -17,9 +17,9 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Paginator;
+namespace DoctrineModuleTest\Paginator\Adapter;
 
-use DoctrineModule\Paginator\CollectionAdapter;
+use DoctrineModule\Paginator\Adapter\Collection as CollectionAdapter;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit_Framework_TestCase;
 

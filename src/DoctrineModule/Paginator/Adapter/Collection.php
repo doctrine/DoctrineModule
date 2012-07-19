@@ -17,9 +17,9 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Paginator;
+namespace DoctrineModule\Paginator\Adapter;
 
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Zend\Paginator\Adapter\AdapterInterface;
 
 /**
@@ -27,20 +27,20 @@ use Zend\Paginator\Adapter\AdapterInterface;
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Michaël Gallego
+ * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class CollectionAdapter implements AdapterInterface
+class Collection implements AdapterInterface
 {
     /**
-     * @var Collection
+     * @var DoctrineCollection
      */
     protected $collection;
 
     /**
-     * @param Collection $collection
+     * @param DoctrineCollection $collection
      */
-    public function __construct(Collection $collection)
+    public function __construct(DoctrineCollection $collection)
     {
         $this->collection = $collection;
     }
