@@ -19,7 +19,7 @@
 
 namespace DoctrineModule\Authentication\Adapter;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Adapter\Exception;
 use Zend\Authentication\Result as AuthenticationResult;
@@ -33,6 +33,6 @@ use Zend\Authentication\Result as AuthenticationResult;
  * @author  Tim Roediger <superdweebie@gmail.com>
  * @deprecated File deprecated in 0.5.0, please use ObjectRepository
  */
-abstract class DoctrineObjectRepository implements AdapterInterface
+class DoctrineObjectRepository extends ObjectRepository
 {
 }
