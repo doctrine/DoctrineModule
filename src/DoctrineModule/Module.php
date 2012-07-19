@@ -54,6 +54,7 @@ class Module implements ServiceProviderInterface
     {
         return array(
             'factories' => array(
+                'doctrine.authentication_service' => 'DoctrineModule\Service\AuthenticationFactory',
                 'doctrine.cli'                    => 'DoctrineModule\Service\CliFactory',
                 'doctrine.cache.apc'              => new CacheFactory('apc'),
                 'doctrine.cache.array'            => new CacheFactory('array'),
