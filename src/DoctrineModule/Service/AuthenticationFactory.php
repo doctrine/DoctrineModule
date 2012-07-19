@@ -22,8 +22,9 @@ class AuthenticationFactory extends AbstractFactory
         /** @var $options AuthenticationOptions */
         $options = $this->getOptions($sl, 'authentication');
 
-        $em = $sl->get('doctrine.entitymanager.orm_default');
-        $objectRepository = $em->getRepository($options->getIdentityClass());
+        $om = $options->getObjectManager();
+        $objectRepository = $om->getRepository($options->getIdentityClass());
+        $metadataFactory  = $om->getMetadataFactory();
 
         $storage = new DbStorage($objectRepository, new SessionStorage());
 

@@ -19,6 +19,7 @@
 
 namespace DoctrineModule\Options;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Zend\Authentication\Adapter\Exception;
 use Zend\Stdlib\AbstractOptions;
 
@@ -30,6 +31,13 @@ use Zend\Stdlib\AbstractOptions;
  */
 class Authentication extends AbstractOptions
 {
+    /**
+     * A valid object implementing ObjectManager interface
+     *
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     /**
      * Entity's class name
      *
@@ -58,6 +66,24 @@ class Authentication extends AbstractOptions
      */
     protected $credentialCallable;
 
+
+    /**
+     * @param  ObjectManager $objectManager
+     * @return Authentication
+     */
+    public function setObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
+        return $this;
+    }
+
+    /**
+     * @return ObjectManager
+     */
+    public function getObjectManager()
+    {
+        return $this->objectManager;
+    }
 
     /**
      * @param string $identityClass
