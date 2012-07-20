@@ -19,7 +19,6 @@
 
 namespace DoctrineModule\Authentication\Adapter;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\ObjectRepository as DoctrineRepository;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Adapter\Exception;
@@ -42,13 +41,6 @@ class ObjectRepository implements AdapterInterface
      * @var DoctrineRepository
      */
     protected $objectRepository;
-
-    /**
-     * Metadata factory
-     *
-     * @var ClassMetadataFactory
-     */
-    protected $metadataFactory;
 
     /**
      * Identity property to check credential against.
@@ -96,12 +88,10 @@ class ObjectRepository implements AdapterInterface
      * Constructor
      *
      * @param DoctrineRepository   $objectRepository   Object repository where to look for identities
-     * @param ClassMetadataFactory $metadataFactory    Metadata factory used to get identifier values
      */
-    public function __construct(DoctrineRepository $objectRepository, ClassMetadataFactory $metadataFactory)
+    public function __construct(DoctrineRepository $objectRepository)
     {
         $this->setObjectRepository($objectRepository);
-        $this->setMetadataFactory($metadataFactory);
     }
 
     /**
@@ -126,24 +116,6 @@ class ObjectRepository implements AdapterInterface
     {
         $this->identityValue = $identityValue;
         return $this;
-    }
-
-    /**
-     * @param ClassMetadataFactory $metadataFactory
-     * @return ObjectRepository
-     */
-    public function setMetadataFactory(ClassMetadataFactory $metadataFactory)
-    {
-        $this->metadataFactory = $metadataFactory;
-        return $this;
-    }
-
-    /**
-     * @return ClassMetadataFactory
-     */
-    public function getMetadataFactory()
-    {
-        return $this->metadataFactory;
     }
 
     /**
@@ -255,10 +227,8 @@ class ObjectRepository implements AdapterInterface
             return $this->createAuthenticationResult();
         }
 
-        $metadataInfo = $this->metadataFactory->getMetadataFor(get_class($identity));
-
-        $this->authenticationResultInfo['code'] = AuthenticationResult::SUCCESS;
-        $this->authenticationResultInfo['identity'] = $metadataInfo->getIdentifierValues($identity);
+        $this->authenticationResultInfo['code']       = AuthenticationResult::SUCCESS;
+        $this->authenticationResultInfo['identity']   = $identity;
         $this->authenticationResultInfo['messages'][] = 'Authentication successful.';
 
         return $this->createAuthenticationResult();

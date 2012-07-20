@@ -19,23 +19,31 @@
 
 namespace DoctrineModule\Authentication\Storage;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
+use Doctrine\Common\Persistence\ObjectRepository as DoctrineRepository;
 use Zend\Authentication\Storage\StorageInterface;
 
 /**
- * This class implements StorageInterface and allow to save the result of an authentication against a database
+ * This class implements StorageInterface and allow to save the result of an authentication against an object repository
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @since   0.5.0
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
-class Db implements StorageInterface
+class ObjectRepository implements StorageInterface
 {
     /**
-     * @var ObjectRepository
+     * @var DoctrineRepository
      */
     protected $objectRepository;
+
+    /**
+     * Metadata factory
+     *
+     * @var ClassMetadataFactory
+     */
+    protected $metadataFactory;
 
     /**
      * @var StorageInterface
@@ -44,13 +52,15 @@ class Db implements StorageInterface
 
 
     /**
-     * @param ObjectRepository $objectRepository
-     * @param StorageInterface $storage
+     * @param DoctrineRepository     $objectRepository
+     * @param ClassMetadataFactory   $metadataFactory
+     * @param StorageInterface       $storage
      */
-    public function __construct(ObjectRepository $objectRepository, StorageInterface $storage)
+    public function __construct(DoctrineRepository $objectRepository, ClassMetadataFactory $metadataFactory, StorageInterface $storage)
     {
         $this->objectRepository = $objectRepository;
-        $this->storage = $storage;
+        $this->storage          = $storage;
+        $this->metadataFactory  = $metadataFactory;
     }
 
     /**
@@ -77,12 +87,15 @@ class Db implements StorageInterface
     }
 
     /**
-     * @param  array|int $contents Identifier value(s) of the entity
+     * @param  object $identity
      * @return void
      */
-    public function write($contents)
+    public function write($identity)
     {
-        $this->storage->write($contents);
+        $metadataInfo     = $this->metadataFactory->getMetadataFor(get_class($identity));
+        $identifierValues = $metadataInfo->getIdentifierValues($identity);
+
+        $this->storage->write($identifierValues);
     }
 
     /**
