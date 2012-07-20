@@ -87,7 +87,7 @@ class ObjectRepository implements AdapterInterface
     /**
      * Constructor
      *
-     * @param DoctrineRepository   $objectRepository   Object repository where to look for identities
+     * @param DoctrineRepository $objectRepository Object repository where to look for identities
      */
     public function __construct(DoctrineRepository $objectRepository)
     {

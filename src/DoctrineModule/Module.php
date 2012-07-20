@@ -54,7 +54,6 @@ class Module implements ServiceProviderInterface
     {
         return array(
             'factories' => array(
-                'doctrine.authentication_service' => 'DoctrineModule\Service\AuthenticationFactory',
                 'doctrine.cli'                    => 'DoctrineModule\Service\CliFactory',
                 'doctrine.cache.apc'              => new CacheFactory('apc'),
                 'doctrine.cache.array'            => new CacheFactory('array'),
@@ -65,6 +64,7 @@ class Module implements ServiceProviderInterface
                 'doctrine.cache.xcache'           => new CacheFactory('xcache'),
                 'doctrine.cache.zenddata'         => new CacheFactory('zenddata'),
                 'doctrine.cache.zendcachestorage' => new ZendStorageCacheFactory('zendcachestorage'),
+                'doctrine.service.authentication' => 'DoctrineModule\Service\AuthenticationFactory',
             )
         );
     }
