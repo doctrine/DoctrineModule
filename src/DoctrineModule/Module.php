@@ -50,7 +50,7 @@ class Module implements ServiceProviderInterface
      *
      * @return array|\Zend\ServiceManager\Configuration
      */
-    public function getServiceConfiguration()
+    public function getServiceConfig()
     {
         return array(
             'factories' => array(
