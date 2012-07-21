@@ -18,7 +18,7 @@
  */
 
 use Zend\ServiceManager\ServiceManager;
-use Zend\Mvc\Service\ServiceManagerConfiguration;
+use Zend\Mvc\Service\ServiceManagerConfig;
 
 ini_set('display_errors', true);
 chdir(__DIR__);
@@ -47,10 +47,10 @@ if (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DI
 $configuration = include 'config/application.config.php';
 
 // setup service manager
-$serviceManager = new ServiceManager(new ServiceManagerConfiguration(
+$serviceManager = new ServiceManager(new ServiceManagerConfig(
     isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
 ));
-$serviceManager->setService('ApplicationConfiguration', $configuration);
+$serviceManager->setService('ApplicationConfig', $configuration);
 
 /* @var $moduleManager \Zend\ModuleManager\ModuleManagerInterface */
 $moduleManager = $serviceManager->get('ModuleManager');
