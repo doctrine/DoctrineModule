@@ -87,7 +87,7 @@ class Authentication extends AbstractOptions
 
     /**
      * @param string $identityClass
-     * @return Config
+     * @return Authentication
      */
     public function setIdentityClass($identityClass)
     {
@@ -106,7 +106,7 @@ class Authentication extends AbstractOptions
     /**
      * @param  string $identityProperty
      * @throws Exception\InvalidArgumentException
-     * @return Config
+     * @return Authentication
      */
     public function setIdentityProperty($identityProperty)
     {
@@ -133,7 +133,7 @@ class Authentication extends AbstractOptions
     /**
      * @param  string $credentialProperty
      * @throws Exception\InvalidArgumentException
-     * @return Config
+     * @return Authentication
      */
     public function setCredentialProperty($credentialProperty)
     {
@@ -160,7 +160,7 @@ class Authentication extends AbstractOptions
     /**
      * @param  mixed $credentialCallable
      * @throws Exception\InvalidArgumentException
-     * @return Config
+     * @return Authentication
      */
     public function setCredentialCallable($credentialCallable)
     {
