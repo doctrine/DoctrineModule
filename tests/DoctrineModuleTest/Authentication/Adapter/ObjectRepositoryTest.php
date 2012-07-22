@@ -20,7 +20,8 @@
 namespace DoctrineModuleTest\Authentication\Adapter;
 
 use PHPUnit_Framework_TestCase as BaseTestCase;
-use DoctrineModule\Authentication\Adapter\DoctrineObjectRepository as ObjectRepositoryAdapter;
+use DoctrineModule\Authentication\Adapter\ObjectRepository as ObjectRepositoryAdapter;
+use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject;
 
@@ -31,31 +32,17 @@ use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentity
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class DoctrineObjectRepositoryTest extends BaseTestCase
+class ObjectRepositoryTest extends BaseTestCase
 {
-    public function testWillRejectInvalidIdentityClassName()
-    {
-        $this->setExpectedException(
-            'Zend\Authentication\Adapter\Exception\InvalidArgumentException',
-            'Provided $identityClassName "' . __NAMESPACE__ . '\TestAsset\SomeNonExistingClassName'
-                . '" does not exist or could not be loaded'
-        );
-        new ObjectRepositoryAdapter(
-            $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-            __NAMESPACE__ . '\TestAsset\SomeNonExistingClassName'
-        );
-    }
-
     public function testWillRejectInvalidIdentityProperty()
     {
         $this->setExpectedException(
             'Zend\Authentication\Adapter\Exception\InvalidArgumentException',
             'Provided $identityProperty is invalid, boolean given'
         );
-        new ObjectRepositoryAdapter(
-            $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-            __NAMESPACE__ . '\TestAsset\IdentityObject',
-            false
+        new ObjectRepositoryAdapter(array(
+                'identity_property' => false
+            )
         );
     }
 
@@ -65,11 +52,9 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
             'Zend\Authentication\Adapter\Exception\InvalidArgumentException',
             'Provided $credentialProperty is invalid, boolean given'
         );
-        new ObjectRepositoryAdapter(
-            $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-            __NAMESPACE__ . '\TestAsset\IdentityObject',
-            'username',
-            false
+        new ObjectRepositoryAdapter(array(
+                'credential_property' => false
+            )
         );
     }
 
@@ -77,14 +62,15 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
     {
         $this->setExpectedException(
             'Zend\Authentication\Adapter\Exception\RuntimeException',
-            'A value for the identity was not provided prior to authentication with DoctrineObject authentication '
+            'A value for the identity was not provided prior to authentication with ObjectRepository authentication '
                 . 'adapter'
         );
-        $adapter = new ObjectRepositoryAdapter(
-            $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-            __NAMESPACE__ . '\TestAsset\IdentityObject'
-        );
-        $adapter->setCredentialValue('a credential');
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+        ));
+        $adapter->setCredentialValue('a credetential');
         $adapter->authenticate();
     }
 
@@ -92,12 +78,14 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
     {
         $this->setExpectedException(
             'Zend\Authentication\Adapter\Exception\RuntimeException',
-            'A credential value was not provided prior to authentication with DoctrineObject authentication adapter'
+            'A credential value was not provided prior to authentication with ObjectRepository authentication adapter'
         );
-        $adapter = new ObjectRepositoryAdapter(
-            $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-            __NAMESPACE__ . '\TestAsset\IdentityObject'
-        );
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+        ));
+
         $adapter->setIdentityValue('an identity');
         $adapter->authenticate();
     }
@@ -108,25 +96,13 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
             'Zend\Authentication\Adapter\Exception\InvalidArgumentException',
             '"array" is not a callable'
         );
-        $adapter = new ObjectRepositoryAdapter(
-            $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-            __NAMESPACE__ . '\TestAsset\IdentityObject'
-        );
-        $adapter->setCredentialCallable(array());
-        $adapter->authenticate();
-    }
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+            'credential_callable' => array()
+        ));
 
-    public function testWillRejectInvalidIdentityCallable()
-    {
-        $this->setExpectedException(
-            'Zend\Authentication\Adapter\Exception\InvalidArgumentException',
-            '"array" is not a callable'
-        );
-        $adapter = new ObjectRepositoryAdapter(
-            $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-            __NAMESPACE__ . '\TestAsset\IdentityObject'
-        );
-        $adapter->setIdentityCallable(array());
         $adapter->authenticate();
     }
 
@@ -143,13 +119,27 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
             ->with($this->equalTo(array('username' => 'a username')))
             ->will($this->returnValue($entity));
 
-        $adapter = new ObjectRepositoryAdapter($objectRepository, __NAMESPACE__ . '\TestAsset\IdentityObject');
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->exactly(2))
+                      ->method('getRepository')
+                      ->with($this->equalTo('DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject'))
+                      ->will($this->returnValue($objectRepository));
+
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_manager' => $objectManager,
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+            'credential_property' => 'password',
+            'identity_property' => 'username'
+        ));
+
         $adapter->setIdentityValue('a username');
         $adapter->setCredentialValue('a password');
 
         $result = $adapter->authenticate();
 
         $this->assertTrue($result->isValid());
+        $this->assertInstanceOf('DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject', $result->getIdentity());
 
         $method->will($this->returnValue(null));
 
@@ -171,10 +161,13 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
             ->with($this->equalTo(array('username' => 'a username')))
             ->will($this->returnValue($entity));
 
-        $adapter = new ObjectRepositoryAdapter(
-            $objectRepository,
-            __NAMESPACE__ . '\TestAsset\PublicPropertiesIdentityObject'
-        );
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_repository' => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property' => 'username'
+        ));
+
         $adapter->setIdentityValue('a username');
         $adapter->setCredentialValue('a password');
 
@@ -200,41 +193,21 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
             ->with($this->equalTo(array('username' => 'a username')))
             ->will($this->returnValue(new \stdClass()));
 
-        $adapter = new ObjectRepositoryAdapter($objectRepository, 'stdClass');
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_repository' => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property' => 'username'
+        ));
+
         $adapter->setIdentityValue('a username');
         $adapter->setCredentialValue('a password');
         $adapter->authenticate();
     }
 
-    public function testCanGetSpecificValueFromEntityThroughIdentityCallable()
-    {
-        $entity = new IdentityObject();
-        $entity->setUsername('username');
-        $entity->setPassword('password');
-
-        $objectRepository =  $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $objectRepository
-            ->expects($this->once())
-            ->method('findOneBy')
-            ->with($this->equalTo(array('username' => 'username')))
-            ->will($this->returnValue($entity));
-
-        $adapter = new ObjectRepositoryAdapter($objectRepository, __NAMESPACE__ . '\TestAsset\IdentityObject');
-        $adapter->setIdentityValue('username');
-        $adapter->setCredentialValue('password');
-        // enforced type hinting to verify that closure is invoked correctly
-        $adapter->setIdentityCallable(function(IdentityObject $identity) {
-            return 'callable enforced value';
-        });
-
-        $result = $adapter->authenticate();
-
-        $this->assertEquals('callable enforced value', $result->getIdentity());
-    }
-
     public function testCanValidateWithSpecialCrypt()
     {
-        $hash = '$2a$07$usesomesillystringforsalt$';
+        $hash = '$2y$07$usesomesillystringforsalt$';
         $entity = new IdentityObject();
         $entity->setUsername('username');
         // Crypt password using Blowfish
@@ -247,13 +220,19 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
             ->with($this->equalTo(array('username' => 'username')))
             ->will($this->returnValue($entity));
 
-        $adapter = new ObjectRepositoryAdapter($objectRepository, __NAMESPACE__ . '\TestAsset\IdentityObject');
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_repository' => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property' => 'username',
+            // enforced type hinting to verify that closure is invoked correctly
+            'credential_callable' => function(IdentityObject $identity, $credentialValue) use ($hash) {
+                return $identity->getPassword() === crypt($credentialValue, $hash);
+            }
+        ));
+
         $adapter->setIdentityValue('username');
         $adapter->setCredentialValue('password');
-        // enforced type hinting to verify that closure is invoked correctly
-        $adapter->setCredentialCallable(function(IdentityObject $identity, $credentialValue) use ($hash) {
-            return $identity->getPassword() === crypt($credentialValue, $hash);
-        });
 
         $result = $adapter->authenticate();
 
@@ -276,7 +255,13 @@ class DoctrineObjectRepositoryTest extends BaseTestCase
             ->with($this->equalTo(array('username' => 'a username')))
             ->will($this->returnValue(new \stdClass()));
 
-        $adapter = new ObjectRepositoryAdapter($objectRepository, __NAMESPACE__ . '\TestAsset\IdentityObject');
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_repository' => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property' => 'username'
+        ));
+
         $adapter->setIdentityValue('a username');
         $adapter->setCredentialValue('a password');
 
