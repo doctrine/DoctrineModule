@@ -19,7 +19,6 @@
 
 return array(
     'doctrine' => array(
-        'connection' => array(),
         'cache' => array(
             'apc' => array(
                 'class' => 'Doctrine\Common\Cache\ApcCache',

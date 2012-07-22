@@ -48,7 +48,7 @@ class Module implements ServiceProviderInterface
      * Expected to return \Zend\ServiceManager\Configuration object or array to
      * seed such an object.
      *
-     * @return array|\Zend\ServiceManager\Configuration
+     * @return array|\Zend\ServiceManager\Config
      */
     public function getServiceConfig()
     {
