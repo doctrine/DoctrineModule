@@ -89,7 +89,7 @@ class ObjectRepository implements AdapterInterface
             $options = new AuthenticationOptions($options);
         }
 
-        if ($options->getObjectManager()) {
+        if (!$this->objectRepository && $options->getObjectManager()) {
             $objectRepository = $options->getObjectManager()->getRepository($options->getIdentityClass());
             $this->objectRepository = $objectRepository;
         }
