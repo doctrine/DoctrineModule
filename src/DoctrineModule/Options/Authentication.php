@@ -139,7 +139,7 @@ class Authentication extends AbstractOptions
     {
         if (!is_string($credentialProperty) || $credentialProperty === '') {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Provided $identityProperty is invalid, %s given',
+                'Provided $credentialProperty is invalid, %s given',
                 gettype($credentialProperty)
             ));
         }

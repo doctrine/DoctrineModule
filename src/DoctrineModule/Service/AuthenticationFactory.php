@@ -28,13 +28,7 @@ class AuthenticationFactory extends AbstractFactory
 
         $storage = new ObjectRepositoryStorage($objectRepository, $metadataFactory, new SessionStorage());
 
-        $adapter = new ObjectRepositoryAdapter($objectRepository);
-        $adapter->setIdentityProperty($options->getIdentityProperty());
-        $adapter->setCredentialProperty($options->getCredentialProperty());
-
-        if ($options->getCredentialCallable()) {
-            $adapter->setCredentialCallable($options->getCredentialCallable());
-        }
+        $adapter = new ObjectRepositoryAdapter($options);
 
         $authenticationService = new AuthenticationService($storage, $adapter);
 
