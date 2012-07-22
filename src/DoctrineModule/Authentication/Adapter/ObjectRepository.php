@@ -19,7 +19,6 @@
 
 namespace DoctrineModule\Authentication\Adapter;
 
-use Doctrine\Common\Persistence\ObjectRepository as DoctrineRepository;
 use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Adapter\Exception;
@@ -36,13 +35,6 @@ use Zend\Authentication\Result as AuthenticationResult;
  */
 class ObjectRepository implements AdapterInterface
 {
-    /**
-     * Doctrine ObjectRepository instance
-     *
-     * @var DoctrineRepository
-     */
-    protected $objectRepository;
-
     /**
      * User supplied identity.
      *
