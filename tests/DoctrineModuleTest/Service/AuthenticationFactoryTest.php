@@ -35,7 +35,7 @@ class AuthenticationFactoryTest extends BaseTestCase
         $factory = new AuthenticationFactory($name);
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectManager->expects($this->exactly(2))
+        $objectManager->expects($this->exactly(1))
                       ->method('getRepository')
                       ->will($this->returnValue($this->getMock('Doctrine\Common\Persistence\ObjectRepository')));
 

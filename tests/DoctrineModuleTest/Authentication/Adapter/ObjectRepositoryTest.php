@@ -119,10 +119,20 @@ class ObjectRepositoryTest extends BaseTestCase
             ->with($this->equalTo(array('username' => 'a username')))
             ->will($this->returnValue($entity));
 
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->exactly(2))
+                      ->method('getRepository')
+                      ->with($this->equalTo('DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject'))
+                      ->will($this->returnValue($objectRepository));
+
         $adapter = new ObjectRepositoryAdapter();
-        $adapter->setObjectRepository($objectRepository);
-        $adapter->setIdentityProperty('username');
-        $adapter->setCredentialProperty('password');
+        $adapter->setOptions(array(
+            'object_manager' => $objectManager,
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+            'credential_property' => 'password',
+            'identity_property' => 'username'
+        ));
+
         $adapter->setIdentityValue('a username');
         $adapter->setCredentialValue('a password');
 
@@ -152,9 +162,12 @@ class ObjectRepositoryTest extends BaseTestCase
             ->will($this->returnValue($entity));
 
         $adapter = new ObjectRepositoryAdapter();
-        $adapter->setObjectRepository($objectRepository);
-        $adapter->setIdentityProperty('username');
-        $adapter->setCredentialProperty('password');
+        $adapter->setOptions(array(
+            'object_repository' => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property' => 'username'
+        ));
+
         $adapter->setIdentityValue('a username');
         $adapter->setCredentialValue('a password');
 
@@ -181,9 +194,12 @@ class ObjectRepositoryTest extends BaseTestCase
             ->will($this->returnValue(new \stdClass()));
 
         $adapter = new ObjectRepositoryAdapter();
-        $adapter->setObjectRepository($objectRepository);
-        $adapter->setIdentityProperty('username');
-        $adapter->setCredentialProperty('password');
+        $adapter->setOptions(array(
+            'object_repository' => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property' => 'username'
+        ));
+
         $adapter->setIdentityValue('a username');
         $adapter->setCredentialValue('a password');
         $adapter->authenticate();
@@ -205,15 +221,18 @@ class ObjectRepositoryTest extends BaseTestCase
             ->will($this->returnValue($entity));
 
         $adapter = new ObjectRepositoryAdapter();
-        $adapter->setObjectRepository($objectRepository);
-        $adapter->setIdentityProperty('username');
-        $adapter->setCredentialProperty('password');
+        $adapter->setOptions(array(
+            'object_repository' => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property' => 'username',
+            // enforced type hinting to verify that closure is invoked correctly
+            'credential_callable' => function(IdentityObject $identity, $credentialValue) use ($hash) {
+                return $identity->getPassword() === crypt($credentialValue, $hash);
+            }
+        ));
+
         $adapter->setIdentityValue('username');
         $adapter->setCredentialValue('password');
-        // enforced type hinting to verify that closure is invoked correctly
-        $adapter->setCredentialCallable(function(IdentityObject $identity, $credentialValue) use ($hash) {
-            return $identity->getPassword() === crypt($credentialValue, $hash);
-        });
 
         $result = $adapter->authenticate();
 
@@ -237,9 +256,12 @@ class ObjectRepositoryTest extends BaseTestCase
             ->will($this->returnValue(new \stdClass()));
 
         $adapter = new ObjectRepositoryAdapter();
-        $adapter->setObjectRepository($objectRepository);
-        $adapter->setIdentityProperty('username');
-        $adapter->setCredentialProperty('password');
+        $adapter->setOptions(array(
+            'object_repository' => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property' => 'username'
+        ));
+
         $adapter->setIdentityValue('a username');
         $adapter->setCredentialValue('a password');
 

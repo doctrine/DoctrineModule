@@ -20,6 +20,7 @@
 namespace DoctrineModule\Options;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\Authentication\Adapter\Exception;
 use Zend\Stdlib\AbstractOptions;
 
@@ -37,6 +38,13 @@ class Authentication extends AbstractOptions
      * @var ObjectManager
      */
     protected $objectManager;
+
+    /**
+     * A valid object implementing ObjectRepository interface (or ObjectManager/identityClass)
+     *
+     * @var ObjectRepository
+     */
+    protected $objectRepository;
 
     /**
      * Entity's class name
@@ -86,10 +94,24 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectRepository
+     * @param  ObjectRepository $objectRepository
+     * @return Authentication
+     */
+    public function setObjectRepository(ObjectRepository $objectRepository)
+    {
+        $this->objectRepository = $objectRepository;
+        return $this;
+    }
+
+    /**
+     * @return ObjectRepository
      */
     public function getObjectRepository()
     {
+        if ($this->objectRepository) {
+            return $this->objectRepository;
+        }
+
         return $this->objectManager->getRepository($this->identityClass);
     }
 
