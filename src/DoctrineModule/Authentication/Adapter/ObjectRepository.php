@@ -89,33 +89,8 @@ class ObjectRepository implements AdapterInterface
             $options = new AuthenticationOptions($options);
         }
 
-        if (!$this->objectRepository && $options->getObjectManager()) {
-            $objectRepository = $options->getObjectManager()->getRepository($options->getIdentityClass());
-            $this->objectRepository = $objectRepository;
-        }
-
         $this->options = $options;
         return $this;
-    }
-
-    /**
-     * Sets the object repository where to look for identities
-     *
-     * @param  DoctrineRepository $objectRepository
-     * @return ObjectRepository
-     */
-    public function setObjectRepository(DoctrineRepository $objectRepository)
-    {
-        $this->objectRepository = $objectRepository;
-        return $this;
-    }
-
-    /**
-     * @return \Doctrine\Common\Persistence\ObjectRepository
-     */
-    public function getObjectRepository()
-    {
-        return $this->objectRepository;
     }
 
     /**
@@ -159,72 +134,13 @@ class ObjectRepository implements AdapterInterface
     }
 
     /**
-     * Set the credential callable to be used to transform the password before checking.
-     *
-     * @param  $credentialCallable
-     * @return ObjectRepository
-     */
-    public function setCredentialCallable($credentialCallable)
-    {
-        $this->options->setCredentialCallable($credentialCallable);
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCredentialCallable()
-    {
-        return $this->options->getCredentialCallable();
-    }
-
-    /**
-     * Set the property name to be used as the identity property
-     *
-     * @param  string $identityProperty
-     * @return ObjectRepository
-     */
-    public function setIdentityProperty($identityProperty)
-    {
-        $this->options->setIdentityProperty($identityProperty);
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentityProperty()
-    {
-        return $this->options->getIdentityProperty();
-    }
-
-    /**
-     * Set the property name to be used as the credential property
-     *
-     * @param  string           $credentialProperty
-     * @return ObjectRepository
-     */
-    public function setCredentialProperty($credentialProperty)
-    {
-        $this->options->setCredentialProperty($credentialProperty);
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCredentialProperty()
-    {
-        return $this->options->getCredentialProperty();
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function authenticate()
     {
         $this->setup();
-        $identity = $this->getObjectRepository()->findOneBy(array($this->getIdentityProperty() => $this->identityValue));
+        $options  = $this->options;
+        $identity = $options->getObjectRepository()->findOneBy(array($options->getIdentityProperty() => $this->identityValue));
 
         if (!$identity) {
             $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
@@ -248,7 +164,7 @@ class ObjectRepository implements AdapterInterface
      */
     protected function validateIdentity($identity)
     {
-        $credentialProperty = $this->getCredentialProperty();
+        $credentialProperty = $this->options->getCredentialProperty();
         $getter = 'get' . ucfirst($credentialProperty);
         $documentCredential = null;
 
@@ -267,7 +183,7 @@ class ObjectRepository implements AdapterInterface
         }
 
         $credentialValue = $this->credentialValue;
-        $callable = $this->getCredentialCallable();
+        $callable = $this->options->getCredentialCallable();
 
         if ($callable) {
             $credentialValue = call_user_func($callable, $identity, $credentialValue);

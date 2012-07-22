@@ -86,6 +86,14 @@ class Authentication extends AbstractOptions
     }
 
     /**
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+    public function getObjectRepository()
+    {
+        return $this->objectManager->getRepository($this->identityClass);
+    }
+
+    /**
      * @param string $identityClass
      * @return Authentication
      */

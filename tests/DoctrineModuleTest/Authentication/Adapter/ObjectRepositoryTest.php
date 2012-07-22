@@ -66,9 +66,11 @@ class ObjectRepositoryTest extends BaseTestCase
                 . 'adapter'
         );
         $adapter = new ObjectRepositoryAdapter();
-        $adapter->setObjectRepository($this->getMock('Doctrine\Common\Persistence\ObjectRepository'));
-
-        $adapter->setCredentialValue('a credential');
+        $adapter->setOptions(array(
+            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+        ));
+        $adapter->setCredentialValue('a credetential');
         $adapter->authenticate();
     }
 
@@ -79,7 +81,10 @@ class ObjectRepositoryTest extends BaseTestCase
             'A credential value was not provided prior to authentication with ObjectRepository authentication adapter'
         );
         $adapter = new ObjectRepositoryAdapter();
-        $adapter->setObjectRepository($this->getMock('Doctrine\Common\Persistence\ObjectRepository'));
+        $adapter->setOptions(array(
+            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+        ));
 
         $adapter->setIdentityValue('an identity');
         $adapter->authenticate();
@@ -92,9 +97,12 @@ class ObjectRepositoryTest extends BaseTestCase
             '"array" is not a callable'
         );
         $adapter = new ObjectRepositoryAdapter();
-        $adapter->setObjectRepository($this->getMock('Doctrine\Common\Persistence\ObjectRepository'));
+        $adapter->setOptions(array(
+            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+            'credential_callable' => array()
+        ));
 
-        $adapter->setCredentialCallable(array());
         $adapter->authenticate();
     }
 
