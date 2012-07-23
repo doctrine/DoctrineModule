@@ -19,6 +19,7 @@
 
 namespace DoctrineModule;
 
+use DoctrineModule\Service\AuthenticationFactory;
 use DoctrineModule\Service\CacheFactory;
 use DoctrineModule\Service\ZendStorageCacheFactory;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
@@ -64,7 +65,7 @@ class Module implements ServiceProviderInterface
                 'doctrine.cache.xcache'           => new CacheFactory('xcache'),
                 'doctrine.cache.zenddata'         => new CacheFactory('zenddata'),
                 'doctrine.cache.zendcachestorage' => new ZendStorageCacheFactory('zendcachestorage'),
-                'doctrine.service.authentication' => 'DoctrineModule\Service\AuthenticationFactory',
+                'doctrine.service.authentication' => new AuthenticationFactory('default')
             )
         );
     }

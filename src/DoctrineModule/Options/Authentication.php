@@ -35,7 +35,7 @@ class Authentication extends AbstractOptions
     /**
      * A valid object implementing ObjectManager interface
      *
-     * @var ObjectManager
+     * @var ObjectManager|string
      */
     protected $objectManager;
 
@@ -76,17 +76,17 @@ class Authentication extends AbstractOptions
 
 
     /**
-     * @param  ObjectManager $objectManager
+     * @param  ObjectManager|string $objectManager
      * @return Authentication
      */
-    public function setObjectManager(ObjectManager $objectManager)
+    public function setObjectManager($objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;
     }
 
     /**
-     * @return ObjectManager
+     * @return ObjectManager|string
      */
     public function getObjectManager()
     {

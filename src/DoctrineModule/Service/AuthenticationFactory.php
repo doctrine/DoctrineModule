@@ -23,6 +23,11 @@ class AuthenticationFactory extends AbstractFactory
         $options = $this->getOptions($sl, 'authentication');
 
         $om = $options->getObjectManager();
+
+        if (is_string($om)) {
+            $om = $sl->get($om);
+        }
+
         $objectRepository = $om->getRepository($options->getIdentityClass());
         $metadataFactory  = $om->getMetadataFactory();
 
