@@ -18,7 +18,7 @@
  */
 
 use Zend\ServiceManager\ServiceManager;
-use Zend\Mvc\Service\ServiceManagerConfig;
+use Zend\Mvc\Application;
 
 ini_set('display_errors', true);
 chdir(__DIR__);
@@ -43,23 +43,8 @@ if (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DI
     throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
 }
 
-// get application stack configuration
-$configuration = include 'config/application.config.php';
-
-// setup service manager
-$serviceManager = new ServiceManager(new ServiceManagerConfig(
-    isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
-));
-$serviceManager->setService('ApplicationConfig', $configuration);
-
-/* @var $moduleManager \Zend\ModuleManager\ModuleManagerInterface */
-$moduleManager = $serviceManager->get('ModuleManager');
-$moduleManager->loadModules();
-
-/* @var $application \Zend\Mvc\Application */
-$application = $serviceManager->get('Application');
-$application->bootstrap();
+$application = Application::init(include 'config/application.config.php');
 
 /* @var $cli \Symfony\Component\Console\Application */
-$cli = $serviceManager->get('doctrine.cli');
+$cli = $application->getServiceManager()->get('doctrine.cli');
 $cli->run();

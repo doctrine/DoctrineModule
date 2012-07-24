@@ -62,6 +62,7 @@ class ServiceManagerTestCase extends BaseTestCase
         $configuration = $configuration ?: static::getServiceManagerConfiguration();
         $serviceManager = new ServiceManager(new ServiceManagerConfig($configuration));
         $serviceManager->setService('ApplicationConfiguration', $configuration);
+        $serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
         /* @var $moduleManager \Zend\ModuleManager\ModuleManagerInterface */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
