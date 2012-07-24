@@ -10,17 +10,17 @@ use Zend\Stdlib\Hydrator\ObjectProperty as ObjectPropertyHydrator;
 class DoctrineObjectTest extends BaseTestCase
 {
     /**
-     * @var \Zend\Stdlib\Hydrator\HydratorInterface
+     * @var DoctrineObjectHydrator
      */
     protected $hydrator;
 
     /**
-     * @var \Doctrine\Common\Persistence\Mapping\ClassMetadata
+     * @var \Doctrine\Common\Persistence\Mapping\ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadata;
 
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var \Doctrine\Common\Persistence\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
 
@@ -164,5 +164,108 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertInstanceOf('DateTime', $object->date);
         $this->assertEquals($object->date->getTimestamp(), $now);
+    }
+
+    /**
+     * Tricky case: assuming the related `Review` entity has an identifier which is a `ReviewReference` object.
+     */
+    public function testHydrateCanFindSingleRelatedObjectByNonScalarIdentifier()
+    {
+        $reviewReference = new stdClass();
+        $reviewReference->uuid = '1234';
+
+        $review = new stdClass();
+        $review->reviewer = 'Marco Pivetta';
+        $review->description = 'Adding support for non-scalar references/identifiers';
+
+        $data = array(
+            'review' => $reviewReference,
+        );
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getTypeOfField')
+            ->with($this->equalTo('review'))
+            ->will($this->returnValue('Review'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('review'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('review'))
+            ->will($this->returnValue('Review'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('review'))
+            ->will($this->returnValue(true));
+
+
+        $this->objectManager->expects($this->exactly(1))
+            ->method('find')
+            ->with('Review', $reviewReference)
+            ->will($this->returnValue($review));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertSame($review, $object->review);
+    }
+
+    /**
+     * Same as testHydrateCanFindSingleRelatedObjectByNonScalarIdentifier, but with collection valued associations
+     */
+    public function testHydrateCanFindMultipleRelatedObjectByNonScalarIdentifier()
+    {
+        $reviewReference = new stdClass();
+        $reviewReference->uuid = '5678';
+
+        $review = new stdClass();
+        $review->reviewer = 'Marco Pivetta';
+        $review->description = 'Adding support for non-scalar references/identifiers';
+
+        $data = array(
+            'reviews' => array(
+                $reviewReference,
+                $reviewReference,
+                $reviewReference,
+            ),
+        );
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getTypeOfField')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue('Review'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue('Review'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(false));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isCollectionValuedAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(true));
+
+        $this->objectManager->expects($this->exactly(3))
+            ->method('find')
+            ->with('Review', $reviewReference)
+            ->will($this->returnValue($review));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertCount(3, $object->reviews);
+        $this->assertSame($review, $object->reviews[0]);
+        $this->assertSame($review, $object->reviews[1]);
+        $this->assertSame($review, $object->reviews[2]);
     }
 }
