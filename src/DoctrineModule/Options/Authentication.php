@@ -32,12 +32,6 @@ use Zend\Stdlib\AbstractOptions;
  */
 class Authentication extends AbstractOptions
 {
-    /**
-     * A valid object implementing ObjectManager interface
-     *
-     * @var ObjectManager
-     */
-    protected $objectManager;
 
     /**
      * A valid object implementing ObjectRepository interface (or ObjectManager/identityClass)
@@ -45,13 +39,6 @@ class Authentication extends AbstractOptions
      * @var ObjectRepository
      */
     protected $objectRepository;
-
-    /**
-     * Entity's class name
-     *
-     * @var string
-     */
-    protected $identityClass;
 
     /**
      * Property to use for the identity
@@ -74,25 +61,6 @@ class Authentication extends AbstractOptions
      */
     protected $credentialCallable;
 
-
-    /**
-     * @param  ObjectManager $objectManager
-     * @return Authentication
-     */
-    public function setObjectManager(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-        return $this;
-    }
-
-    /**
-     * @return ObjectManager
-     */
-    public function getObjectManager()
-    {
-        return $this->objectManager;
-    }
-
     /**
      * @param  ObjectRepository $objectRepository
      * @return Authentication
@@ -113,24 +81,6 @@ class Authentication extends AbstractOptions
         }
 
         return $this->objectManager->getRepository($this->identityClass);
-    }
-
-    /**
-     * @param string $identityClass
-     * @return Authentication
-     */
-    public function setIdentityClass($identityClass)
-    {
-        $this->identityClass = $identityClass;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentityClass()
-    {
-        return $this->identityClass;
     }
 
     /**
