@@ -25,17 +25,34 @@ use Zend\Authentication\Adapter\Exception;
 use Zend\Stdlib\AbstractOptions;
 
 /**
+ * This options class is used by both DoctrineModule\Authentication\Adapter\ObjectRepository
+ * and DoctrineModule\Service\AuthenticationAdapterFactory.
+ *
+ * When using with DoctrineModule\Authentication\Adapter\ObjectRepository the following
+ * options are required:
+ *
+ * $identityProperty
+ * $credentialProperty
+ *
+ * In addition either $objectRepository or $objectManager and $identityClass must be set.
+ * If $objectRepository is set, it takes precedence over $objectManager and $identityClass.
+ * If $objectManager is used, it must be an instance of ObjectManager.
+ *
+ * When all remains the same using with DoctrineModule\Service\AuthenticationAdapterFactory,
+ * however, a string may be passed to $objectManager. This string must be a valid key to
+ * retrieve an ObjectManager instance from the ServiceManager.
+ *
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @since   0.5.0
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
-class Authentication extends AbstractOptions
+class AuthenticationAdapter extends AbstractOptions
 {
     /**
      * A valid object implementing ObjectManager interface
      *
-     * @var ObjectManager
+     * @var string | ObjectManager
      */
     protected $objectManager;
 
@@ -76,10 +93,10 @@ class Authentication extends AbstractOptions
 
 
     /**
-     * @param  ObjectManager $objectManager
+     * @param  string | ObjectManager $objectManager
      * @return Authentication
      */
-    public function setObjectManager(ObjectManager $objectManager)
+    public function setObjectManager($objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;
