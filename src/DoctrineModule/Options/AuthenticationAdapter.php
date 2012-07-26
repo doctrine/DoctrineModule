@@ -38,7 +38,7 @@ use Zend\Stdlib\AbstractOptions;
  * If $objectRepository is set, it takes precedence over $objectManager and $identityClass.
  * If $objectManager is used, it must be an instance of ObjectManager.
  *
- * When all remains the same using with DoctrineModule\Service\AuthenticationAdapterFactory,
+ * All remains the same using with DoctrineModule\Service\AuthenticationAdapterFactory,
  * however, a string may be passed to $objectManager. This string must be a valid key to
  * retrieve an ObjectManager instance from the ServiceManager.
  *
