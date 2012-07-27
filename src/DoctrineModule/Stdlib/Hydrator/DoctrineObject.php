@@ -111,6 +111,10 @@ class DoctrineObject implements HydratorInterface
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
 
         foreach($data as $field => &$value) {
+            if ($value === null) {
+                continue;
+            }
+
             // @todo DateTime (and other types) conversion should be handled by doctrine itself in future
             if (in_array($this->metadata->getTypeOfField($field), array('datetime', 'time', 'date'))) {
                 if (is_int($value)) {
