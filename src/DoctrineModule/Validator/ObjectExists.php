@@ -59,6 +59,13 @@ class ObjectExists extends AbstractValidator
      * @var array
      */
     protected $fields;
+    
+    /**
+     * Indicates whether or not multiple entities should be validated.
+     * 
+     * @var bool
+     */
+    protected $multipleEntities;
 
     /**
      * Constructor
@@ -99,6 +106,8 @@ class ObjectExists extends AbstractValidator
 
         $this->fields = $options['fields'];
         $this->validateFields();
+        
+        $this->multipleEntities = isset($options['multiple_entities']) && (bool)$options['multiple_entities'] == true;
 
         parent::__construct($options);
     }
@@ -174,15 +183,28 @@ class ObjectExists extends AbstractValidator
      */
     public function isValid($value)
     {
-        $value = $this->cleanSearchValue($value);
-        $match = $this->objectRepository->findOneBy($value);
+        $values = array();
+        if ($this->multipleEntities) {
+            foreach ($value as $v) {
+                $values[] = array($v);
+            }
+        } else {
+            $values = array($value);
+        }
+        
+        $isValid = true;
+        
+        foreach ($values as $value) {
+            $value = $this->cleanSearchValue($value);
+            $match = $this->objectRepository->findOneBy($value);
 
-        if (is_object($match)) {
-            return true;
+            if (!is_object($match)) {
+                $this->error(self::ERROR_NO_OBJECT_FOUND, $value);
+                $isValid = false;
+                break;
+            }
         }
 
-        $this->error(self::ERROR_NO_OBJECT_FOUND, $value);
-
-        return false;
+        return $isValid;
     }
 }
