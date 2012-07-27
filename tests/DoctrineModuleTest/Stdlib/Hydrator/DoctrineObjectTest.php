@@ -143,6 +143,19 @@ class DoctrineObjectTest extends BaseTestCase
         }
     }
 
+    public function testCanHydrateEntityWithNullableAssociation()
+    {
+        $data = array(
+            'country' => null
+        );
+
+        $this->metadata->expects($this->never())
+                ->method('hasAssociation');
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertNull($object->country);
+    }
+
     public function testHydrateHandlesDateTimeFieldsCorrectly()
     {
         $this->metadata->expects($this->exactly(2))
