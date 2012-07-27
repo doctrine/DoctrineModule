@@ -268,4 +268,84 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($review, $object->reviews[1]);
         $this->assertSame($review, $object->reviews[2]);
     }
+    
+    public function testHydrateCanHandleSingleRelatedObject()
+    {
+        $review = new stdClass();
+        $review->reviewer = 'David Windell';
+        $review->description = 'Testing hydration of related objects instead of identifiers';
+
+        $data = array(
+            'review' => $review,
+        );
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getTypeOfField')
+            ->with($this->equalTo('review'))
+            ->will($this->returnValue('stdClass'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('review'))
+            ->will($this->returnValue('stdClass'));
+        
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('review'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('review'))
+            ->will($this->returnValue(true));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertSame($review, $object->review);
+    }
+    
+    public function testHydrateCanHandleMultipleRelatedObjects()
+    {
+        $review = new stdClass();
+        $review->reviewer = 'David Windell';
+        $review->description = 'Testing hydration of related objects instead of identifiers';
+
+        $data = array(
+            'reviews' => array(
+                $review,
+                $review,
+                $review,
+            ),
+        );
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getTypeOfField')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue('stdClass'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue('stdClass'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(false));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isCollectionValuedAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(true));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertCount(3, $object->reviews);
+        $this->assertSame($review, $object->reviews[0]);
+        $this->assertSame($review, $object->reviews[1]);
+        $this->assertSame($review, $object->reviews[2]);
+    }
 }
