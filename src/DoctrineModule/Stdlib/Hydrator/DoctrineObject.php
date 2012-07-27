@@ -54,12 +54,20 @@ class DoctrineObject implements HydratorInterface
     protected $hydrator;
 
     /**
+     * Indicates whether or not multiple entities should be hydrated.
+     * 
+     * @var bool
+     */
+    protected $multipleEntities;
+
+    /**
      * @param ObjectManager     $objectManager
      * @param HydratorInterface $hydrator
      */
     public function __construct(ObjectManager $objectManager, HydratorInterface $hydrator = null)
     {
         $this->objectManager = $objectManager;
+        $this->multipleEntities = false;
 
         if (null === $hydrator) {
             $hydrator = new ClassMethodsHydrator(false);
@@ -85,6 +93,28 @@ class DoctrineObject implements HydratorInterface
     public function getHydrator()
     {
         return $this->hydrator;
+    }
+
+    /**
+     * Sets whether or not multiple entities are hydrated.
+     * 
+     * @param bool $multipleEntities The flag to set.
+     * @return DoctrineObject 
+     */
+    public function setMultipleEntities($multipleEntities)
+    {
+        $this->multipleEntities = (bool)$multipleEntities;
+        return $this;
+    }
+
+    /**
+     * Gets the flag that indicates whether or not multiple entities should be hydrated.
+     * 
+     * @return bool
+     */
+    public function getMultipleEntities()
+    {
+        return $this->multipleEntities;
     }
 
     /**
@@ -155,6 +185,10 @@ class DoctrineObject implements HydratorInterface
     {
         if (!is_array($valueOrObject) && !$valueOrObject instanceof Traversable) {
             $valueOrObject = (array) $valueOrObject;
+        }
+
+        if ($this->multipleEntities) {
+            $valueOrObject = $valueOrObject[0];
         }
 
         $values = array();
