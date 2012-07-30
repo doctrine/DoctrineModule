@@ -143,6 +143,10 @@ class DoctrineObject implements HydratorInterface
      */
     protected function toOne($valueOrObject, $target)
     {
+        if ($valueOrObject instanceof $target) {
+            return $valueOrObject;
+        }
+        
         return $this->find($target, $valueOrObject);
     }
 
@@ -160,7 +164,11 @@ class DoctrineObject implements HydratorInterface
         $values = array();
 
         foreach($valueOrObject as $value) {
-            $values[] = $this->find($target, $value);
+            if ($value instanceof $target) {
+                $values[] = $value;
+            } else {
+                $values[] = $this->find($target, $value);
+            }
         }
 
         return $values;
