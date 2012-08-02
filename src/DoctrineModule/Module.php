@@ -40,22 +40,20 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 {
     /**
      * {@inheritDoc}
-     *
-     * @return array
      */
     public function getAutoloaderConfig()
     {
         return array(
             AutoloaderFactory::STANDARD_AUTOLOADER => array(
-                StandardAutoloader::LOAD_NS => array(__NAMESPACE__ => __DIR__)
-            )
+                StandardAutoloader::LOAD_NS => array(
+                    __NAMESPACE__ => __DIR__,
+                ),
+            ),
         );
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @return array|\Traversable
      */
     public function getConfig()
     {
@@ -64,8 +62,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 
     /**
      * {@inheritDoc}
-     *
-     * @return array|\Zend\ServiceManager\Config
      */
     public function getServiceConfig()
     {
@@ -80,8 +76,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
                 'doctrine.cache.wincache'         => new CacheFactory('wincache'),
                 'doctrine.cache.xcache'           => new CacheFactory('xcache'),
                 'doctrine.cache.zenddata'         => new CacheFactory('zenddata'),
-                'doctrine.cache.zendcachestorage' => new ZendStorageCacheFactory('zendcachestorage')
-            )
+                'doctrine.cache.zendcachestorage' => new ZendStorageCacheFactory('zendcachestorage'),
+            ),
         );
     }
 }
