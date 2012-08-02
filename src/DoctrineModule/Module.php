@@ -23,6 +23,8 @@ use DoctrineModule\Service\AuthenticationFactory;
 use DoctrineModule\Service\CacheFactory;
 use DoctrineModule\Service\ZendStorageCacheFactory;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Loader\AutoloaderFactory;
+use Zend\Loader\StandardAutoloader;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
@@ -35,6 +37,20 @@ use Zend\ModuleManager\Feature\ServiceProviderInterface;
  */
 class Module implements ServiceProviderInterface
 {
+	/**
+	 * Return an array for passing to Zend\Loader\AutoloaderFactory.
+	 *
+	 * @return array
+	 */
+	public function getAutoloaderConfig()
+	{
+		return array(
+			AutoloaderFactory::STANDARD_AUTOLOADER => array(
+				StandardAutoloader::LOAD_NS => array(__NAMESPACE__ => __DIR__)
+			)
+		);
+	}
+
     /**
      * Retrieves configuration that can be consumed by Zend\Loader\AutoloaderFactory
      *
