@@ -56,15 +56,13 @@ Installation of DoctrineModule uses composer. For composer documentation, please
 #### Installation steps (without composer)
 
   1. clone this module to `vendor/DoctrineModule`
-  2. setup PSR-0 autoloading for namespace `DoctrineModule` (the directory where the classes in this namespace live 
-     is `vendor/DoctrineModule/src/DoctrineModule`.
-  3. The module depends on [Doctrine Common 2.3.*](https://github.com/doctrine/common), 
+  2. The module depends on [Doctrine Common 2.3.*](https://github.com/doctrine/common), 
      [Doctrine Data-Fixtures](https://github.com/doctrine/data-fixtures), 
      [Symfony Console >= 2.0.13](https://github.com/symfony/console), 
      [Symfony Yaml >= 2.0.13 ](https://github.com/symfony/yaml),
      [Zend Framework > 2.0.0-beta5 ](https://github.com/zendframework/zf2). You have to download/install those
      packages and have them autoloaded.
-  4. open `my/project/directory/configs/application.config.php` and add the following key to your `modules`:
+  3. open `my/project/directory/configs/application.config.php` and add the following key to your `modules`:
 
      ```php
      'DoctrineModule',
