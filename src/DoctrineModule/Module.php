@@ -19,11 +19,13 @@
 
 namespace DoctrineModule;
 
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use DoctrineModule\Service\CacheFactory;
 use DoctrineModule\Service\ZendStorageCacheFactory;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\ModuleManager\ModuleManagerInterface;
 use Zend\Loader\AutoloaderFactory;
 use Zend\Loader\StandardAutoloader;
 
@@ -38,6 +40,17 @@ use Zend\Loader\StandardAutoloader;
  */
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
+
+    /**
+     * @param ModuleManagerInterface $moduleManager
+     */
+    public function init(ModuleManagerInterface $moduleManager)
+    {
+        AnnotationRegistry::registerLoader(function($className) {
+            return class_exists($className);
+        });
+    }
+
     /**
      * {@inheritDoc}
      */
