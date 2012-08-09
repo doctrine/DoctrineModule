@@ -23,6 +23,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use DoctrineModule\Service\CacheFactory;
 use DoctrineModule\Service\ZendStorageCacheFactory;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
@@ -38,11 +39,15 @@ use Zend\Loader\StandardAutoloader;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
+class Module implements
+    AutoloaderProviderInterface,
+    ConfigProviderInterface,
+    ServiceProviderInterface,
+    InitProviderInterface
 {
 
     /**
-     * @param ModuleManagerInterface $moduleManager
+     * {@inheritDoc}
      */
     public function init(ModuleManagerInterface $moduleManager)
     {
