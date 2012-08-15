@@ -115,7 +115,7 @@ class DriverFactory extends AbstractFactory
         }
 
         // Extra post-create options for DriverChain.
-        if ($driver instanceof MappingDriver && $options->getDrivers()) {
+        if ($driver instanceof MappingDriverChain && $options->getDrivers()) {
             /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain */
             $drivers = $options->getDrivers();
 
