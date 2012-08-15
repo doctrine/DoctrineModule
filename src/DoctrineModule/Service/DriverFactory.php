@@ -22,6 +22,7 @@ namespace DoctrineModule\Service;
 use InvalidArgumentException;
 use Doctrine\Common\Annotations;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
 use DoctrineModule\Options\Driver as DriverOptions;
@@ -115,7 +116,7 @@ class DriverFactory extends AbstractFactory
         }
 
         // Extra post-create options for DriverChain.
-        if ($driver instanceof MappingDriver && $options->getDrivers()) {
+        if ($driver instanceof MappingDriverChain && $options->getDrivers()) {
             /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain */
             $drivers = $options->getDrivers();
 
