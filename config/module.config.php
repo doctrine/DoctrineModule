@@ -27,11 +27,11 @@ return array(
                 'class' => 'Doctrine\Common\Cache\ArrayCache',
             ),
             'memcache' => array(
-                'class'    => 'Doctrine\Common\Cache\Memcache',
+                'class'    => 'Doctrine\Common\Cache\MemcacheCache',
                 'instance' => 'my_memcache_alias',
             ),
             'memcached' => array(
-                'class'    => 'Doctrine\Common\Cache\Memcached',
+                'class'    => 'Doctrine\Common\Cache\MemcachedCache',
                 'instance' => 'my_memcached_alias',
             ),
             'redis' => array(
@@ -39,7 +39,7 @@ return array(
                 'instance' => 'my_redis_alias',
             ),
             'wincache' => array(
-                'class' => 'Doctrine\Common\Cache\Wincache',
+                'class' => 'Doctrine\Common\Cache\WinCacheCache',
             ),
             'xcache' => array(
                 'class' => 'Doctrine\Common\Cache\XcacheCache',
