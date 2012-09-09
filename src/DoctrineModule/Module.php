@@ -88,6 +88,7 @@ class Module implements
                 'doctrine.cli'                    => 'DoctrineModule\Service\CliFactory',
                 'doctrine.cache.apc'              => new CacheFactory('apc'),
                 'doctrine.cache.array'            => new CacheFactory('array'),
+                'doctrine.cache.filesystem'       => new CacheFactory('filesystem'),
                 'doctrine.cache.memcache'         => new CacheFactory('memcache'),
                 'doctrine.cache.memcached'        => new CacheFactory('memcached'),
                 'doctrine.cache.redis'            => new CacheFactory('redis'),
