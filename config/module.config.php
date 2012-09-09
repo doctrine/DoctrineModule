@@ -26,6 +26,10 @@ return array(
             'array' => array(
                 'class' => 'Doctrine\Common\Cache\ArrayCache',
             ),
+            'filesystem' => array(
+                'class' => 'Doctrine\Common\Cache\FilesystemCache',
+                'directory' => 'data/DoctrineModule/cache',
+            ),
             'memcache' => array(
                 'class'    => 'Doctrine\Common\Cache\MemcacheCache',
                 'instance' => 'my_memcache_alias',

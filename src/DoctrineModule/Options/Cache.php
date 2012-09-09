@@ -43,6 +43,13 @@ class Cache extends AbstractOptions
      * @var string
      */
     protected $namespace = '';
+    
+    /**
+     * Directory for file-based caching
+     *
+     * @var string
+     */
+    protected $directory;
 
     /**
      * Key to use for fetching the memcache, memcached, or redis instance from
@@ -107,5 +114,25 @@ class Cache extends AbstractOptions
     public function getNamespace()
     {
         return $this->namespace;
+    }
+
+
+    /**
+     * @param  string $directory
+     * @return self
+     */
+    public function setDirectory($directory)
+    {
+        $this->directory = $directory;
+
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getDirectory()
+    {
+        return $this->directory;
     }
 }
