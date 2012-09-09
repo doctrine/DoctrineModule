@@ -116,7 +116,6 @@ class Cache extends AbstractOptions
         return $this->namespace;
     }
 
-
     /**
      * @param  string $directory
      * @return self
