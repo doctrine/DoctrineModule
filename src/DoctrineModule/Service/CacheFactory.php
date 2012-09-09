@@ -50,7 +50,11 @@ class CacheFactory extends AbstractFactory
             throw new RuntimeException('Cache must have a class name to instantiate');
         }
 
-        $cache = new $class;
+        if ($class === 'Doctrine\Common\Cache\FilesystemCache') {
+            $cache = new $class($options->getDirectory());
+        } else {
+            $cache = new $class;
+        }
 
         if ($cache instanceof MemcacheCache) {
             /* @var $cache MemcacheCache */
