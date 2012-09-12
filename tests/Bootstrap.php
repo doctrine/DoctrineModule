@@ -37,9 +37,18 @@ while (!file_exists('config/application.config.php')) {
     chdir($dir);
 }
 
-if (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
+switch (true){
+    case file_exists(__DIR__ . '/../vendor/autoload.php'):
+        $loader = include_once __DIR__ . '/../vendor/autoload.php';
+        break;
+    case file_exists(__DIR__ . '/../../../autoload.php'):
+        $loader = include_once __DIR__ . '/../../../autoload.php';
+        break;
+    default:
+        throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
 }
+
+$loader->add('DoctrineModuleTest', __DIR__);
 
 if (!$config = @include __DIR__ . '/TestConfiguration.php') {
     $config = require __DIR__ . '/TestConfiguration.php.dist';
