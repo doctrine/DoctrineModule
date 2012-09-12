@@ -120,7 +120,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->will($this->returnValue($entity));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectManager->expects($this->exactly(2))
+        $objectManager->expects($this->exactly(1))
                       ->method('getRepository')
                       ->with($this->equalTo('DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject'))
                       ->will($this->returnValue($objectRepository));
