@@ -108,11 +108,11 @@ class Authentication extends AbstractOptions
      */
     public function getObjectRepository()
     {
-        if ($this->objectRepository) {
-            return $this->objectRepository;
+        if ( ! $this->objectRepository) {
+            $this->objectRepository = $this->objectManager->getRepository($this->identityClass);
         }
 
-        return $this->objectManager->getRepository($this->identityClass);
+        return $this->objectRepository;
     }
 
     /**
