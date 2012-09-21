@@ -56,15 +56,20 @@ class CacheFactory extends AbstractFactory
             $cache = new $class;
         }
 
+        $instance = $options->getInstance();
+        if (is_string($instance) && $sl->has($instance)) {
+            $instance = $sl->get($instance);
+        }
+
         if ($cache instanceof MemcacheCache) {
             /* @var $cache MemcacheCache */
-            $cache->setMemcache($options->getInstance());
+            $cache->setMemcache($instance);
         } elseif ($cache instanceof MemcachedCache) {
             /* @var $cache MemcachedCache */
-            $cache->setMemcached($options->getInstance());
+            $cache->setMemcached($instance);
         } elseif ($cache instanceof RedisCache) {
             /* @var $cache RedisCache */
-            $cache->setRedis($options->getInstance());
+            $cache->setRedis($instance);
         }
 
         return $cache;
