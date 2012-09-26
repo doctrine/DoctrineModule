@@ -46,25 +46,34 @@ class CollectionUtils
     {
         $toRemove = array();
 
-        foreach ($collection1 as $key => $value1) {
+        foreach ($collection1 as $key1 => $value1) {
             $elementFound = false;
 
-            foreach ($collection2 as $value2) {
+            foreach ($collection2 as $key2 => $value2) {
                 if ($value1 === $value2) {
                     $elementFound = true;
+                    unset ($collection2[$key2]);
+
                     break;
                 }
             }
 
             if (!$elementFound) {
-                $toRemove[] = $key;
+                $toRemove[] = $key1;
             }
         }
 
+        // Remove elements that are in $collection1 but not in $collection2
         foreach ($toRemove as $key) {
             $collection1->remove($key);
+        }
+
+        // Add elements that are in $collection2 but not in $collection1
+        foreach ($collection2 as $value) {
+            $collection1->add($value);
         }
 
         return $collection1;
     }
 }
+
