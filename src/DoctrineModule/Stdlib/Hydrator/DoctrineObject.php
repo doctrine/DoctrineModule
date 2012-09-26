@@ -111,6 +111,8 @@ class DoctrineObject implements HydratorInterface
     {
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
 
+        $object = $this->tryConvertArrayToObject($data, $object);
+
         foreach($data as $field => &$value) {
             if ($value === null) {
                 continue;
@@ -166,17 +168,10 @@ class DoctrineObject implements HydratorInterface
             $valueOrObject = (array) $valueOrObject;
         }
 
-        $values         = new ArrayCollection();
-        $targetMetadata = $this->objectManager->getClassMetadata($target);
+        $values = new ArrayCollection();
 
         foreach($valueOrObject as $value) {
             if ($value instanceof $target) {
-                $identifier = $targetMetadata->getIdentifierValues($value);
-
-                if (!empty($identifier)) {
-                    $value = $this->objectManager->merge($value);
-                }
-                
                 $values[] = $value;
             } else {
                 $values[] = $this->find($target, $value);
@@ -184,6 +179,31 @@ class DoctrineObject implements HydratorInterface
         }
 
         return $values;
+    }
+
+    /**
+     * This function tries, given an array of data, to convert it to an object if the given array contains
+     * an identifier for the object. This is useful in a context of updating existing entities, without ugly
+     * tricks like setting manually the existing id directly into the entity
+     *
+     * @param  array  $data
+     * @param  object $object
+     * @return object
+     */
+    protected function tryConvertArrayToObject($data, $object)
+    {
+        $identifierNames  = $this->metadata->getIdentifierFieldNames($object);
+        $identifierValues = array();
+
+        foreach ($identifierNames as $identifierName) {
+            if (!isset($data[$identifierName]) || empty($data[$identifierName])) {
+                return $object;
+            }
+
+            $identifierValues[$identifierName] = $data[$identifierName];
+        }
+
+        return $this->find(get_class($object), $identifierValues);
     }
 
     /**
