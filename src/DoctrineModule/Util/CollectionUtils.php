@@ -32,8 +32,39 @@ use Doctrine\Common\Collections\Collection;
  */
 class CollectionUtils
 {
-    public function intersectUnion(Collection $collection1, Collection $collection2)
+    /**
+     * This function performs a kind of "intersection union" operation, and is useful especially when dealing
+     * with dynamic forms. For instance, if a collection contains existing elements and a form remove one of those
+     * elements, this function will return a Collection that contains all the elements from $collection1, minus ones
+     * that are not present in $collection2
+     *
+     * @param  Collection                             $collection1
+     * @param  Collection                             $collection2
+     * @return Collection
+     */
+    public static function intersectUnion(Collection $collection1, Collection $collection2)
     {
-        
+        $toRemove = array();
+
+        foreach ($collection1 as $key => $value1) {
+            $elementFound = false;
+
+            foreach ($collection2 as $value2) {
+                if ($value1 === $value2) {
+                    $elementFound = true;
+                    break;
+                }
+            }
+
+            if (!$elementFound) {
+                $toRemove[] = $key;
+            }
+        }
+
+        foreach ($toRemove as $key) {
+            $collection1->remove($key);
+        }
+
+        return $collection1;
     }
 }
