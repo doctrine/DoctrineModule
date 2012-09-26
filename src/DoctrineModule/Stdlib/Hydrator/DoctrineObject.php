@@ -166,11 +166,12 @@ class DoctrineObject implements HydratorInterface
             $valueOrObject = (array) $valueOrObject;
         }
 
-        $values = new ArrayCollection();
+        $values         = new ArrayCollection();
+        $targetMetadata = $this->objectManager->getClassMetadata($target);
 
         foreach($valueOrObject as $value) {
             if ($value instanceof $target) {
-                $identifier = $this->metadata->getIdentifierValues($value);
+                $identifier = $targetMetadata->getIdentifierValues($value);
 
                 if (!empty($identifier)) {
                     $value = $this->objectManager->merge($value);
