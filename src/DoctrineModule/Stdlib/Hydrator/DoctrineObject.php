@@ -21,6 +21,7 @@ namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
 use Traversable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -165,7 +166,7 @@ class DoctrineObject implements HydratorInterface
             $valueOrObject = (array) $valueOrObject;
         }
 
-        $values = array();
+        $values = new ArrayCollection();
 
         foreach($valueOrObject as $value) {
             if ($value instanceof $target) {
