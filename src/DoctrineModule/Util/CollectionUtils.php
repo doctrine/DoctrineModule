@@ -21,8 +21,9 @@ namespace DoctrineModule\Util;
 
 use Doctrine\Common\Collections\Collection;
 
+
 /**
- * This class provides some util functions that help dealing with Collections
+ * This class provides some useful util functions when dealing with Doctrine Collections.
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
@@ -31,12 +32,8 @@ use Doctrine\Common\Collections\Collection;
  */
 class CollectionUtils
 {
-    public static function intersectUnion(Collection $collection1, Collection $collection2)
+    public function intersectUnion(Collection $collection1, Collection $collection2)
     {
-        // Get the elements that are not in $collection2 but still are in $collection1
-        $elementsCollection1 = $collection1->toArray();
-        $elementsCollection2 = $collection2->toArray();
-
-        $toRemove = array_diff(array_intersect($elementsCollection1, $elementsCollection2) + $elementsCollection2, $elementsCollection2);
+        
     }
 }
