@@ -19,42 +19,45 @@ In order to authenticate a user (or anything else) against Doctrine, the followi
 
 Here is a simple code that follow those three steps (we assume here that the entity we want to authentication is simply called `Application\Entity\User`). For simplicity, I have written this code in the Module.php class.
 
-	namespace Application;
-	
-	use DoctrineModule\Options\AuthenticationAdapter as AuthenticationAdapterOptions;
-	use DoctrineModule\Authentication\Adapter\ObjectRepository as AuthenticationAdapter;
-	use DoctrineModule\Authentication\Storage\ObjectRepository as AuthenticationStorage;
-	use Zend\Authentication\AuthenticationService;
-	use Zend\Authentication\Storage\Session as SessionStorage;
-	
-	class Module
+```php
+namespace Application;
+
+use DoctrineModule\Options\AuthenticationAdapter as AuthenticationAdapterOptions;
+use DoctrineModule\Authentication\Adapter\ObjectRepository as AuthenticationAdapter;
+use DoctrineModule\Authentication\Storage\ObjectRepository as AuthenticationStorage;
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Storage\Session as SessionStorage;
+
+class Module
+{
+	public function getServiceConfig()
 	{
-		public function getServiceConfig()
-		{
-			return array(
-				'factories' => array(
-					'Zend\Authentication\AuthenticationService' => function($serviceManager) {
-						// Create the Auth adapter
-						$authOptions = new AuthenticationAdapterOptions(array(
-					   		'object_manager' => 'Doctrine\ORM\EntityManager',
-							'identity_class' => 'Application\Entity\User',
-							'identity_property' => 'email'
-							'credential_property' => 'password'
-						));
-	
-						$authAdapter = new AuthenticationAdapter($authOptions);
-						
-						// Create the storage adapter
-						$metadata = $options->getObjectManager()->getMetadataFactory();
-						$sessionStorage = new SessionStorage();
-        				$storage = new AuthenticationStorage($authOptions->getObjectRepository(), $metadata, $sessionStorage);
-        				
-        				// Return the fully constructed AuthenticationService
-        				return new AuthenticationService($storage, $authAdapter);
-					}
-				)
-			);
-		}
+		return array(
+			'factories' => array(
+				'Zend\Authentication\AuthenticationService' => function($serviceManager) {
+					// Create the Auth adapter
+					$authOptions = new AuthenticationAdapterOptions(array(
+				   		'object_manager' => 'Doctrine\ORM\EntityManager',
+						'identity_class' => 'Application\Entity\User',
+						'identity_property' => 'email'
+						'credential_property' => 'password'
+					));
+
+					$authAdapter = new AuthenticationAdapter($authOptions);
+					
+					// Create the storage adapter
+					$metadata = $options->getObjectManager()->getMetadataFactory();
+					$sessionStorage = new SessionStorage();
+       				$storage = new AuthenticationStorage($authOptions->getObjectRepository(), $metadata, $sessionStorage);
+       				
+       				// Return the fully constructed AuthenticationService
+       				return new AuthenticationService($storage, $authAdapter);
+				}
+			)
+		);
+	}
+}
+```
 		
 Some explanations about this code : we first create the AuthenticationAdapter through an AuthenticationAdapterOptions instance. This option object needs some options : 
 
@@ -71,75 +74,85 @@ The AuthenticationAdapterOptions accept some more options that can be used :
 
 Here is an example code that adds the `credential_callable` function to our previous example :
 
-	$authOptions = new AuthenticationAdapterOptions(array(
-		'object_manager' => 'Doctrine\ORM\EntityManager',
-		'identity_class' => 'Application\Entity\User',
-		'identity_property' => 'email'
-		'credential_property' => 'password',
-		'credential_callable' => function(User $user, $passwordGiven) {
-			return ($user->getPassword() === crypt($passwordGiven, $user->getPassword()));
-		}
-	));
+```php
+$authOptions = new AuthenticationAdapterOptions(array(
+	'object_manager' => 'Doctrine\ORM\EntityManager',
+	'identity_class' => 'Application\Entity\User',
+	'identity_property' => 'email'
+	'credential_property' => 'password',
+	'credential_callable' => function(User $user, $passwordGiven) {
+		return ($user->getPassword() === crypt($passwordGiven, $user->getPassword()));
+	}
+));
+```
 
 
 #### Using the AuthenticationService
 
 Now that we have defined how to create a `Zend\Authentication\AuthenticationService` object, we can use it in our code. Here is an example of you we could use it from a controller action :
 
-	public function loginAction()
-	{
-		// Create the form and checks if the values are valid
-		$form = new LoginForm();
+```php
+public function loginAction()
+{
+	// Create the form and checks if the values are valid
+	$form = new LoginForm();
+	
+	if ($this->request->isPost()) {
+		$form->setData($this->request->getPost());
 		
-		if ($this->request->isPost()) {
-			$form->setData($this->request->getPost());
+		if ($form->isValid()) {
+			// Fetch the authentication service from the Service Manager
+			$authService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
 			
-			if ($form->isValid()) {
-				// Fetch the authentication service from the Service Manager
-				$authService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
-				
-				// Set the credential and identity value from the form using the AuthAdapter
-				$data = $form->getData();
-				$authAdapter = $authService->getAdapter();
-				$authAdapter->setIdentityValue($data['login'])
-							->setCredentialValue($data['password']);
-							
-				// Check if this is correct
-				$authenticationResult = $adapter->authenticate();
+			// Set the credential and identity value from the form using the AuthAdapter
+			$data = $form->getData();
+			$authAdapter = $authService->getAdapter();
+			$authAdapter->setIdentityValue($data['login'])
+						->setCredentialValue($data['password']);
+						
+			// Check if this is correct
+			$authenticationResult = $adapter->authenticate();
 
-        		if ($authenticationResult->isValid()) {
-            		$identity = $authenticationResult->getIdentity();
-            		$authService->getStorage()->write($identity);
-            		
-            		// Perform some redirection …
-            		return $this->redirect()->toRoute('home');
-        		}
-        		
-        		// If not correct, send an error message to the view
-        		$errorMessage = 'The authentication failed';
-			}
+       		if ($authenticationResult->isValid()) {
+           		$identity = $authenticationResult->getIdentity();
+           		$authService->getStorage()->write($identity);
+           		
+           		// Perform some redirection …
+           		return $this->redirect()->toRoute('home');
+       		}
+       		
+       		// If not correct, send an error message to the view
+       		$errorMessage = 'The authentication failed';
 		}
-		
-		return array(
-			'form' => $form,
-			'message' => $errorMessage
-		);
 	}
+	
+	return array(
+		'form' => $form,
+		'message' => $errorMessage
+	);
+}
+```
 	
 Of course, doing this in the controller is not the best practice, and you'd better move that kind of logic to a service layer. But this is how it works.
 
 Note that when the authentication is valid, we first get the identity :
 
-	$identity = $authenticationResult->getIdentity();
+```php
+$identity = $authenticationResult->getIdentity();
+```
 	
 This will return the full entity (in our case, an `Application\Entity\User` instance). However, storing a full entity in session is not a recommended practice. That's why, when writing the identity :
 
-	$authService->getStorage()->write($identity);
+```php
+$authService->getStorage()->write($identity);
+```
 	
 The storage automatically extracts ONLY the identifier values and only store this in session. Later, when you want to retrieve the logged user :
 
-	$authenticationService = $this->serviceLocator()->get('Zend\Authentication\AuthenticationService');
-	$loggedUser = $authenticationService->getIdentity();
+```php
+$authenticationService = $this->serviceLocator()->get('Zend\Authentication\AuthenticationService');
+$loggedUser = $authenticationService->getIdentity();
+```
 	
 The storage will automatically make the database call with the entity identifiers, and effectively return you a fully loaded entity.
 
@@ -149,142 +162,152 @@ Knowing if a user is logged and get the logged user is a very common practice th
 
 Here is a sample code that shows you the Controller Plugin :
 
-	<?php
+```php
+<?php
 
-	namespace Application\Controller\Plugin;
+namespace Application\Controller\Plugin;
 
-	use Zend\Authentication\AuthenticationService;
-	use Zend\Mvc\Controller\Plugin\AbstractPlugin;
-	
-	class UserIdentity extends AbstractPlugin
-	{
-	    /**
-	     * @var AuthenticationService
-	     */
-	    protected $authenticationService;
-	
-	    /**
-	     * Constructor
-	     *
-	     * @param AuthenticationService $authenticationService
-	     */
-	    public function __construct(AuthenticationService $authenticationService)
-	    {
-	        $this->authenticationService = $authenticationService;
-	    }
-	
-	    /**
-	     * @return \Application\Entity\User
-	     */
-	    public function __invoke()
-	    {
-	        if ($this->authenticationService->hasIdentity()) {
-	            return $this->authenticationService->getIdentity();
-	        }
-	
-	        return null;
-	    }
-	}
-	
-The View Helper is very similar :
+use Zend\Authentication\AuthenticationService;
+use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
-	<?php
-	
-	namespace Application\View\Helper;
-	
-	use Zend\Authentication\AuthenticationService;
-	use Zend\View\Helper\AbstractHelper;
-	
-	class UserIdentity extends AbstractHelper
-	{
-	    /**
-	     * @var AuthenticationService
-	     */
-	    protected $authenticationService;
-	
-	    /**
-	     * Constructor
-	     *
-	     * @param AuthenticationService $authenticationService
-	     */
-	    public function __construct(AuthenticationService $authenticationService)
-	    {
-	        $this->authenticationService = $authenticationService;
-	    }
-	
-	    /**
-	     * @return \Application\Entity\User
-	     */
-	    public function __invoke()
-	    {
-	        if ($this->authenticationService->hasIdentity()) {
-	            return $this->authenticationService->getIdentity();
-	        }
-	
-	        return null;
-	    }
-	}
-
-You now need to tell the ServiceManager how to find the Controller Plugin and the View Helper. Add the following code in your Module.php class :
-
-	/**
-     * @return array
+class UserIdentity extends AbstractPlugin
+{
+    /**
+     * @var AuthenticationService
      */
-    public function getViewHelperConfig()
-    {
-        return array(
-            'aliases' => array(
-                'userIdentity' => 'User\View\Helper\UserIdentity'
-            ),
-            'factories' => array(
-                'Application\View\Helper\UserIdentity' => function ($serviceManager) {
-                    $authenticationService = $serviceManager->getServiceLocator()
-                                                            ->get('Zend\Authentication\AuthenticationService');
+    protected $authenticationService;
 
-                    return new \Application\View\Helper\UserIdentity($authenticationService);
-                }
-            )
-        );
+    /**
+     * Constructor
+     *
+     * @param AuthenticationService $authenticationService
+     */
+    public function __construct(AuthenticationService $authenticationService)
+    {
+        $this->authenticationService = $authenticationService;
     }
 
     /**
-     * @return array
+     * @return \Application\Entity\User
      */
-    public function getControllerPluginConfig()
+    public function __invoke()
     {
-        return array(
-            'aliases' => array(
-                'userIdentity' => 'User\Controller\Plugin\UserIdentity'
-            ),
-            'factories' => array(
-                'Application\Controller\Plugin\UserIdentity' => function ($serviceManager) {
-                    $authenticationService = $serviceManager->getServiceLocator()
-                                                            ->get('Zend\Authentication\AuthenticationService');
+        if ($this->authenticationService->hasIdentity()) {
+            return $this->authenticationService->getIdentity();
+        }
 
-                    return new \Application\Controller\Plugin\UserIdentity($authenticationService);
-                }
-            )
-        );
+        return null;
     }
+}
+```
+	
+The View Helper is very similar :
+
+```php
+<?php
+
+namespace Application\View\Helper;
+
+use Zend\Authentication\AuthenticationService;
+use Zend\View\Helper\AbstractHelper;
+
+class UserIdentity extends AbstractHelper
+{
+    /**
+     * @var AuthenticationService
+     */
+    protected $authenticationService;
+
+    /**
+     * Constructor
+     *
+     * @param AuthenticationService $authenticationService
+     */
+    public function __construct(AuthenticationService $authenticationService)
+    {
+        $this->authenticationService = $authenticationService;
+    }
+
+    /**
+     * @return \Application\Entity\User
+     */
+    public function __invoke()
+    {
+        if ($this->authenticationService->hasIdentity()) {
+            return $this->authenticationService->getIdentity();
+        }
+
+        return null;
+    }
+}
+```
+
+You now need to tell the ServiceManager how to find the Controller Plugin and the View Helper. Add the following code in your Module.php class :
+
+```php
+/**
+ * @return array
+ */
+public function getViewHelperConfig()
+{
+    return array(
+        'aliases' => array(
+            'userIdentity' => 'User\View\Helper\UserIdentity'
+        ),
+        'factories' => array(
+            'Application\View\Helper\UserIdentity' => function ($serviceManager) {
+                $authenticationService = $serviceManager->getServiceLocator()
+                                                        ->get('Zend\Authentication\AuthenticationService');
+
+                return new \Application\View\Helper\UserIdentity($authenticationService);
+            }
+        )
+    );
+}
+
+/**
+ * @return array
+ */
+public function getControllerPluginConfig()
+{
+    return array(
+        'aliases' => array(
+            'userIdentity' => 'User\Controller\Plugin\UserIdentity'
+        ),
+        'factories' => array(
+            'Application\Controller\Plugin\UserIdentity' => function ($serviceManager) {
+                $authenticationService = $serviceManager->getServiceLocator()
+                                                        ->get('Zend\Authentication\AuthenticationService');
+
+                return new \Application\Controller\Plugin\UserIdentity($authenticationService);
+            }
+        )
+    );
+}
+```
     
 This is very simple code. This code automatically handles the dependencies with the AuthenticationService.
 
 Here is how you use it in your controller :
 
-	public function testAction()
-	{
-		$loggedUser = $this->userIdentity();
-		
-		if ($loggedUser === null) {
-			// Nobody is logged
-		} else {
-			// Do whatever you want with the logged user
-		}
+```php
+public function testAction()
+{
+	$loggedUser = $this->userIdentity();
+	
+	if ($loggedUser === null) {
+		// Nobody is logged
+	} else {
+		// Do whatever you want with the logged user
 	}
+}
+```
 	
 And in your view :
 
-	<?php $user = $this->userIdentity(); ?>
+```php
+<?php $user = $this->userIdentity(); ?>
+```
 	
 
 ### Advanced usage
