@@ -302,6 +302,7 @@ DoctrineModule provides a simple Paginator adapter that can be used with Doctrin
 
 Here is how you can use the DoctrineModule paginator adapter :
 
+	```php
 	use Doctrine\Common\Collections\ArrayCollection;
 	use DoctrineModule\Paginator\Adapter\Collection as CollectionAdapter;
 	use Zend\Paginator\Paginator;
@@ -318,6 +319,7 @@ Here is how you can use the DoctrineModule paginator adapter :
 			  ->setItemCountPerPage(5);
 			  
 	// Pass it to the view, and use it like a "standard" Zend paginator
+	```
 	
 For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html);
 
