@@ -344,7 +344,7 @@ $paginator->setCurrentPageNumber(1)
 // Pass it to the view, and use it like a "standard" Zend paginator
 ```
 	
-For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html);
+For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html).
 
 	
 ## Validator
@@ -444,13 +444,15 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 	
 	public function getInputFilterSpecification()
 	{
+		$entityManager = $this->serviceManager->get('Doctrine\ORM\EntityManager');
+		
 		return array(
 			'email' => array(
 				'validators' => array(
 					array(
 						'name' => 'DoctrineModule\Validator\NoObjectExists',
 						'options' => array(
-							'object_manager' => $this->getEntityManager()->getRepository('Application\Entity\User'),
+							'object_manager' => $entityManager->getRepository('Application\Entity\User'),
 							'fields' => 'email'
 						)
 					)
@@ -486,6 +488,7 @@ $objectExistsValidator = new \DoctrineModule\Validator\ObjectExists(array(
 ));
 
 $objectExistsValidator->setMessage('noObjectFound', 'Sorry, we expect that this email exists !');
+```
 
 > Note : as you can see, in order to create a validator in your form objects, you need an object repository, and hence you need to have access to the service manager in order to fetch it (this is also the case for other features from DoctrineModule like custom Form elements). However, when dealing with complex forms, you can have a very deep hierarchy of fieldsets, and "transferring" the service manager from one fieldset to another can be a tedious task, and bring useless complexity to your code, especially if only the deepest fieldset effectively needs the service manager. When dealing with such cases, I have found that the simplest case is to use a Registry. I perfectly know that registry was removed from Zend Framework 2, and it is considered bad practice as it makes testing harder. However, for this very specific use case, I found that this is a nice way to solve the problem. But remember, don't tend to take the easy way out, and don't use this Registry trick every where in your program.
 
