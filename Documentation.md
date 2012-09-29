@@ -592,7 +592,7 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
        	));
        	
        	$cityFieldset = new CityFieldset($serviceManager);
-       	$cityFieldset->setLabel(Your city');
+       	$cityFieldset->setLabel('Your city');
        	$cityFieldset->setName('city');
        	$this->add($cityFieldset);
 	}
