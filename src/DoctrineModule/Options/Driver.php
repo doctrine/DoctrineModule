@@ -35,7 +35,7 @@ class Driver extends AbstractOptions
      *
      * @var string
      */
-    protected $class = 'Doctrine\ORM\Mapping\Driver\AnnotationDriver';
+    protected $class;
 
     /**
      * All drivers (except DriverChain) require paths to work on. You
