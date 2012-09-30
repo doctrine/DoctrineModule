@@ -19,8 +19,7 @@
 
 namespace DoctrineModule\Authentication\Storage;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
-use Doctrine\Common\Persistence\ObjectRepository as DoctrineRepository;
+use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Zend\Authentication\Storage\StorageInterface;
 
 /**
@@ -33,34 +32,35 @@ use Zend\Authentication\Storage\StorageInterface;
  */
 class ObjectRepository implements StorageInterface
 {
-    /**
-     * @var DoctrineRepository
-     */
-    protected $objectRepository;
 
     /**
-     * Metadata factory
      *
-     * @var ClassMetadataFactory
+     * @var \DoctrineModule\Options\Authentication
      */
-    protected $metadataFactory;
+    protected $options;
 
     /**
-     * @var StorageInterface
+     * @param  array | \DoctrineModule\Options\Authentication $options
+     * @return ObjectRepository
      */
-    protected $storage;
-
-
-    /**
-     * @param DoctrineRepository     $objectRepository
-     * @param ClassMetadataFactory   $metadataFactory
-     * @param StorageInterface       $storage
-     */
-    public function __construct(DoctrineRepository $objectRepository, ClassMetadataFactory $metadataFactory, StorageInterface $storage)
+    public function setOptions($options)
     {
-        $this->objectRepository = $objectRepository;
-        $this->storage          = $storage;
-        $this->metadataFactory  = $metadataFactory;
+        if (!$options instanceof AuthenticationOptions) {
+            $options = new AuthenticationOptions($options);
+        }
+
+        $this->options = $options;
+        return $this;
+    }
+    
+    /**
+     * Constructor
+     *
+     * @param array | \DoctrineModule\Options\Authentication $options
+     */
+    public function __construct($options = array())
+    {
+        $this->setOptions($options);
     }
 
     /**
@@ -68,7 +68,7 @@ class ObjectRepository implements StorageInterface
      */
     public function isEmpty()
     {
-        return $this->storage->isEmpty();
+        return $this->options->getStorage()->isEmpty();
     }
 
     /**
@@ -79,23 +79,33 @@ class ObjectRepository implements StorageInterface
      */
     public function read()
     {
-        if (($identity = $this->storage->read())) {
-            return $this->objectRepository->find($identity);
+        if (($identity = $this->options->getStorage()->read())) {
+            return $this->options->getObjectRepository()->find($identity);
         }
 
         return null;
     }
 
     /**
+     * Will return the key of the identity. If only the key is needed, this avoids an
+     * unnessisary db call
+     * 
+     * @return mixed
+     */
+    public function readKeyOnly(){
+        return $identity = $this->options->getStorage()->read();
+    }
+    
+    /**
      * @param  object $identity
      * @return void
      */
     public function write($identity)
     {
-        $metadataInfo     = $this->metadataFactory->getMetadataFor(get_class($identity));
+        $metadataInfo     = $this->options->getClassMetadata();
         $identifierValues = $metadataInfo->getIdentifierValues($identity);
 
-        $this->storage->write($identifierValues);
+        $this->options->getStorage()->write($identifierValues);
     }
 
     /**
@@ -103,6 +113,6 @@ class ObjectRepository implements StorageInterface
      */
     public function clear()
     {
-        $this->storage->clear();
+        $this->options->getStorage()->clear();
     }
 }

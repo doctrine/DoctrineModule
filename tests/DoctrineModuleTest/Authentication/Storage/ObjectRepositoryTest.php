@@ -21,10 +21,8 @@ namespace DoctrineModuleTest\Authentication\Storage;
 
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use DoctrineModule\Authentication\Storage\ObjectRepository as ObjectRepositoryStorage;
-use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
-use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject;
-use Zend\Authentication\Storage\Session as SessionStorage;
+use Zend\Authentication\Storage\NonPersistent as NonPersistentStorage;
 
 /**
  * Tests for the ObjectRepository based authentication adapter
@@ -53,19 +51,20 @@ class ObjectRepositoryTest extends BaseTestCase
                  ->method('getIdentifierValues')
                  ->with($this->equalTo($entity))
                  ->will($this->returnValue($entity->getUsername()));
-
-        $metadataFactory =  $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
-        $metadataFactory->expects($this->exactly(1))
-                        ->method('getMetadataFor')
-                        ->with($this->equalTo('DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject'))
-                        ->will($this->returnValue($metadata));
-
-        $storage = new ObjectRepositoryStorage($objectRepository, $metadataFactory, new SessionStorage());
+        
+        $storage = new ObjectRepositoryStorage(array(
+            'objectRepository' => $objectRepository, 
+            'classMetadata' => $metadata, 
+            'storage' => new NonPersistentStorage()
+        ));
 
         $storage->write($entity);
         $this->assertFalse($storage->isEmpty());
 
         $result = $storage->read();
         $this->assertEquals($entity, $result);
+        
+        $key = $storage->readKeyOnly();
+        $this->assertEquals('a username', $key);
     }
 }

@@ -19,7 +19,7 @@
 
 namespace DoctrineModule\Authentication\Adapter;
 
-use DoctrineModule\Options\AuthenticationAdapter as AuthenticationOptions;
+use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Adapter\Exception;
 use Zend\Authentication\Result as AuthenticationResult;

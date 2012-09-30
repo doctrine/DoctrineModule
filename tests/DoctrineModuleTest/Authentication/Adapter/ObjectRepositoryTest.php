@@ -21,7 +21,6 @@ namespace DoctrineModuleTest\Authentication\Adapter;
 
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use DoctrineModule\Authentication\Adapter\ObjectRepository as ObjectRepositoryAdapter;
-use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject;
 
