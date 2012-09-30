@@ -5,9 +5,249 @@ Hydrators are simple objects that allow to convert an array of data to an object
 
 ### Basic usage
 
-DoctrineModule ships with a very powerful hydrator that allow almost any use-case. Before digging into this component, you have to understand why you would need such a hydrator.
+DoctrineModule ships with a very powerful hydrator that allow almost any use-case.
+
+#### Example 1 : simple example
+
+Let's begin by a simple example:
+
+```php
+
+namespace Application\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class City
+{
+	/**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+    
+    /**
+     * @ORM\Column(type="string", length=48)
+     */
+	protected $name;
+	
+    /**
+     * @ORM\Column(type="string", length=8)
+     */
+    protected $postCode;
+    
+    public function getId()
+    {
+   		return $this->id;
+    }
+    
+    public function setName($name)
+    {
+    	$this->name = $name;
+    }
+    
+    public function getName()
+    {
+    	return $this->name;
+    }
+    
+    public function setPostCode($postCode)
+    {
+    	$this->postCode = $postCode;
+    }
+    
+    public function getPostCode()
+    {
+    	return $this->postCode;
+    }
+}
+```
+
+Now, let's use the Doctrine hydrator :
+
+```php
+$hydrator = new \DoctrineModule\Stdlib\Hydrator\DoctrineObject($entityManager);
+$city = new City();
+$data = array(
+	'name' => 'Paris',
+	'postCode' => '75016'
+);
+
+$city = $hydrator->hydrate($data, $city);
+
+echo $city->getName(); // prints "Paris"
+echo $city->getPostCode(); // prints "75016"
+
+$dataArray = $hydrator->extract($city);
+echo $dataArray['city']; // prints "Paris"
+echo $dataArray['postCode']; // prints "75016"
+```
+
+Internally, DoctrineModule's hydrator uses by default a `Zend\Stdlib\Hydrator\ClassMethods` hydrator, meaning that the
+hydrator call getter and setters for extracting and hydrating, respectively. This is why the keys of the data, and the
+property names have to match.
+
+You can change the default hydrator used internally by calling the `setHydrator()`, or directly during construction:
+
+```php
+$objectPropertyHydrator = new \Zend\Stdlib\Hydrator\ObjectProperty();
+
+// Using constructor:
+$doctrineHydrator = new \DoctrineModule\Stdlib\Hydrator\DoctrineObject($entityManager, $objectPropertyHydrator);
+
+// Using function
+$doctrineHydrator->setHydrator($objectPropertyHydrator);
+```
+
+As you can see from this example, in such simple cases, DoctrineModule hydrator brings nearly no advantages over a "simpler"
+ClassMethods Zend hydrator. However, even in those cases, I recommend you to use the DoctrineModule hydrator, as if a field is
+of type datetime/time/date, the hydrator can automatically converts a timestamp to a DateTime object.
+
+#### Example 2 : OneToOne relationship
+
+DoctrineModule hydrator is especially useful when dealing with relations (OneToOne, OneToMany, ManyToOne). For instance, let's
+add an Address entity that composes the City entity described earlier.
+
+```php
+
+namespace Application\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class Address
+{
+	/**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+    
+    /**
+     * @ORM\Column(type="string", length=48)
+     */
+	protected $street;
+	
+	/**
+     * @ORM\OneToOne(targetEntity="City")
+     */
+	protected $city;
+    
+    public function getId()
+    {
+   		return $this->id;
+    }
+    
+    public function setStreet($street)
+    {
+    	$this->street = $street;
+    }
+    
+    public function getStreet()
+    {
+    	return $this->street;
+    }
+    
+    public function setCity(City $city)
+    {
+    	$this->city = $city;
+    }
+    
+    public function getCity()
+    {
+    	return $this->city;
+    }
+}
+```
+
+Once again, let's use the Doctrine hydrator:
+
+```php
+$hydrator = new \DoctrineModule\Stdlib\Hydrator\DoctrineObject($entityManager);
+$address = new Address();
+$city = new City();
+$city->setName('Paris')
+	 ->setPostCode('75016');
+	 
+$data = array(
+	'street' => '1 avenue des Champs Elysees',
+	'city' => $city
+);
+
+$address = $hydrator->hydrate($data, $address);
+
+echo $address->getStreet(); // prints "1 avenue des Champs Elysees"
+echo $address->getCity()->getPostCode(); // prints "75016"
+```
+
+This can perfectly be achieved with using the standard ClassMethods hydrator. But let's not say that the cities are already
+saved in databases, and that we want to be able to set the city of the address only using the city's identifier (this is a
+common pattern in Forms, where we use hidden inputs to store an identifier). This can be achieved easily with Doctrine
+hydrator:
+
+```php
+$hydrator = new \DoctrineModule\Stdlib\Hydrator\DoctrineObject($entityManager);
+$address = new Address();
+	 
+$data = array(
+	'street' => '1 avenue des Champs Elysees',
+	'city' => '2' // we assume '2' is the Id of Paris
+);
+
+$address = $hydrator->hydrate($data, $address);
+
+echo $address->getStreet(); // prints "1 avenue des Champs Elysees"
+$address->getCity()->getName(); // prints "Paris"
+$address->getCity()->getPostCode(); // prints "75016"
+```
+
+#### Example 3 : OneToMany relationship
+
+DoctrineModule hydrator also handles OneToMany relationships (when use `Zend\Form\Element\Collection` element). Please refer
+to the official [Zend Framework 2 documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html) to
+learn more about Collection.
+
+Please refer to the Cookbook in this page to have a fully example of such relationships.
+
 
 ### Advanced use
+
+When dealing with Forms, the following use-case often appears:
+
+1. Collection elements are created and persisted to the database (for instance, a list of tags for an article).
+2. An edit form allow to delete existing elements in the collection, or add new elements (or even modify existing ones).
+
+This use case can quickly become leads to a lot of boilerplate code. Hopefully, DoctrineModule hydrator make it so easy you
+will find this black magic !
+
+To make this happen, you need to slightly modify both your entity code and your forms. First, about the entity. Let's take again
+the simple Article / Tags example. The Article therefore has a OneToMany or ManyToMany relationships, and must likely have such
+a setter:
+
+```php
+public function setTags(ArrayCollection $tags)
+{
+	$this->tags = $tags;
+}
+```
+
+This has to be changed to:
+
+```php
+use DoctrineModule\Util\CollectionUtils;
+
+public function setTags(ArrayCollection $tags)
+{
+	$this->tags = CollectionUtils::intersectionUnion($this->tags, $tags);
+}
+```
+
 
 
 ### Performance considerations
