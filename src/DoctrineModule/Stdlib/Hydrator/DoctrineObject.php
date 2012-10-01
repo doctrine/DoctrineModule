@@ -195,6 +195,10 @@ class DoctrineObject implements HydratorInterface
         $identifierNames  = $this->metadata->getIdentifierFieldNames($object);
         $identifierValues = array();
 
+        if (empty($identifierNames)) {
+            return $object;
+        }
+
         foreach ($identifierNames as $identifierName) {
             if (!isset($data[$identifierName]) || empty($data[$identifierName])) {
                 return $object;
