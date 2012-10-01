@@ -1,4 +1,4 @@
-## Authentication
+# Authentication
 
 Authentication through Doctrine is fully supported by DoctrineModule through an authentication adapter, and a specific storage implementation that relies on the database. Most of the time, those classes will be used in conjunction with `Zend\Authentication\AuthenticationService` class.
 

@@ -1,3 +1,0 @@
-# DoctrineModule Documentation
-
-DoctrineModule provides a bridge between Zend Framework 2 and Doctrine 2. It gives you access to features that can be used accross Doctrine 2 ORM as well as Doctrine 2 ODM. We also provide bridge for ORM and ODM through [DoctrineORMModule](https://github.com/doctrine/DoctrineORMModule) and [DoctrineMongoODMModule](https://github.com/doctrine/DoctrineMongoODMModule), respectively.
