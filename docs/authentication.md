@@ -61,7 +61,7 @@ return array(
 		)
 	)
 );
-
+```
 
 #### Creating the AuthenticationService
 
