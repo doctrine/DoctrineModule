@@ -361,4 +361,96 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($review, $object->reviews[1]);
         $this->assertSame($review, $object->reviews[2]);
     }
+
+    public function testAlwaysRetrieveArrayCollectionForToManyRelationships()
+    {
+        $reviewReference = new stdClass();
+        $reviewReference->uuid = '5678';
+
+        $review = new stdClass();
+        $review->reviewer = 'Michaël Gallego';
+        $review->description = 'Testing Array Collection';
+
+        $data = array(
+            'reviews' => array(
+                $reviewReference,
+                $reviewReference,
+                $reviewReference,
+            ),
+        );
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getTypeOfField')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue('Review'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue('Review'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(false));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isCollectionValuedAssociation')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue(true));
+
+        $this->objectManager->expects($this->exactly(3))
+            ->method('find')
+            ->with('Review', $reviewReference)
+            ->will($this->returnValue($review));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertCount(3, $object->reviews);
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $object->reviews);
+    }
+
+    public function testReturnObjectIfArrayContainIdentifierValues()
+    {
+        $reviewReference = new stdClass();
+        $reviewReference->uuid = '5678';
+
+        $review = new stdClass();
+
+        $reviewWithId = new stdClass();
+        $reviewWithId->id = 5;
+
+        $data = array(
+            'id' => '5',
+            'reviewer' => 'Michaël Gallego'
+        );
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('getTypeOfField')
+            ->withAnyParameters()
+            ->will($this->returnValue('string'));
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasAssociation')
+            ->withAnyParameters()
+            ->will($this->returnValue(false));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getIdentifierFieldNames')
+            ->with($this->equalTo(new stdClass()))
+            ->will($this->returnValue(array('id')));
+
+        $this->objectManager->expects($this->exactly(1))
+            ->method('find')
+            ->with('stdClass', array('id' => '5'))
+            ->will($this->returnValue($reviewWithId));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertEquals('5', $object->id);
+        $this->assertEquals('Michaël Gallego', $object->reviewer);
+    }
 }
