@@ -16,7 +16,7 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Service;
+namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use DoctrineModule\Service\AbstractFactory;
@@ -30,7 +30,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @since   0.1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class AuthenticationAdapterFactory extends AbstractFactory
+class AdapterFactory extends AbstractFactory
 {
     /**
      *
@@ -39,7 +39,7 @@ class AuthenticationAdapterFactory extends AbstractFactory
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $options = $this->getOptions($serviceLocator, 'authenticationadapter');
+        $options = $this->getOptions($serviceLocator, 'authentication');
         if (is_string($options->getObjectManager())) {
             $options->setObjectManager($serviceLocator->get($options->getObjectManager()));
         }
@@ -48,6 +48,6 @@ class AuthenticationAdapterFactory extends AbstractFactory
 
     public function getOptionsClass()
     {
-        return 'DoctrineModule\Options\AuthenticationAdapter';
+        return 'DoctrineModule\Options\Authentication';
     }
 }
