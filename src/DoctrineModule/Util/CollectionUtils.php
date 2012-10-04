@@ -36,10 +36,11 @@ class CollectionUtils
      * This function performs a kind of "intersection union" operation, and is useful especially when dealing
      * with dynamic forms. For instance, if a collection contains existing elements and a form remove one of those
      * elements, this function will return a Collection that contains all the elements from $collection1, minus ones
-     * that are not present in $collection2
+     * that are not present in $collection2. This is used internally in the DoctrineModule hydrator, so that the
+     * work is done for you automatically
      *
-     * @param  Collection                             $collection1
-     * @param  Collection                             $collection2
+     * @param  Collection $collection1
+     * @param  Collection $collection2
      * @return Collection
      */
     public static function intersectUnion(Collection $collection1, Collection $collection2)
