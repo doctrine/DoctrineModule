@@ -24,6 +24,7 @@ use Traversable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use DoctrineModule\Util\CollectionUtils;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 
@@ -138,7 +139,11 @@ class DoctrineObject implements HydratorInterface
                     $value = $this->toMany($value, $target);
 
                     // Automatically merge collections using helper utility
-                    $this->metadata->getReflectionClass();
+                    $propertyRefl = $this->metadata->getReflectionClass()->getProperty($field);
+                    $propertyRefl->setAccessible(true);
+
+                    $previousValue = $propertyRefl->getValue($object);
+                    $value = CollectionUtils::intersectUnion($previousValue, $value);
                 }
             }
         }
@@ -147,8 +152,8 @@ class DoctrineObject implements HydratorInterface
     }
 
     /**
-     * @param mixed  $valueOrObject
-     * @param string $target
+     * @param  mixed  $valueOrObject
+     * @param  string $target
      * @return object
      */
     protected function toOne($valueOrObject, $target)
@@ -161,9 +166,9 @@ class DoctrineObject implements HydratorInterface
     }
 
     /**
-     * @param mixed $valueOrObject
-     * @param string $target
-     * @return array
+     * @param  mixed $valueOrObject
+     * @param  string $target
+     * @return ArrayCollection
      */
     protected function toMany($valueOrObject, $target)
     {
