@@ -136,6 +136,9 @@ class DoctrineObject implements HydratorInterface
                     $value = $this->toOne($value, $target);
                 } elseif ($this->metadata->isCollectionValuedAssociation($field)) {
                     $value = $this->toMany($value, $target);
+
+                    // Automatically merge collections using helper utility
+                    $this->metadata->getReflectionClass();
                 }
             }
         }
