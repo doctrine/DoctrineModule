@@ -102,7 +102,7 @@ class DoctrineObjectTest extends BaseTestCase
         );
 
         $reflClass = $this->getMock('\ReflectionClass',
-            array('setAccessible', 'getProperty'),
+            array(),
             array('Doctrine\Common\Collections\ArrayCollection'));
 
         $reflProperty = $this->getMock('\ReflProperty',
