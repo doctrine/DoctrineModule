@@ -4,6 +4,7 @@ namespace DoctrineModuleTest\Stdlib\Hydrator;
 
 use stdClass;
 use PHPUnit_Framework_TestCase as BaseTestCase;
+use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use Zend\Stdlib\Hydrator\ObjectProperty as ObjectPropertyHydrator;
 
@@ -106,7 +107,7 @@ class DoctrineObjectTest extends BaseTestCase
             array('Doctrine\Common\Collections\ArrayCollection'));
 
         $reflProperty = $this->getMock('\ReflProperty',
-            array('getValue')
+            array('setAccessible', 'getValue')
         );
 
         $this->metadata->expects($this->exactly(1))
@@ -141,13 +142,12 @@ class DoctrineObjectTest extends BaseTestCase
         $reflClass->expects($this->exactly(1))
             ->method('getProperty')
             ->with($this->equalTo('categories'))
-            ->will($this->returnValue(new $reflProperty));
+            ->will($this->returnValue($reflProperty));
 
-
-        $categories = array();
-        $categories[] = new stdClass();
-        $categories[] = new stdClass();
-        $categories[] = new stdClass();
+        $reflProperty->expects($this->exactly(1))
+            ->method('getValue')
+            ->withAnyParameters()
+            ->will($this->returnValue(new ArrayCollection($data['categories'])));
 
         $this->objectManager->expects($this->exactly(3))
             ->method('find')
@@ -262,7 +262,13 @@ class DoctrineObjectTest extends BaseTestCase
             ),
         );
 
-        $reflClass = new \ReflectionClass('Doctrine\Common\Collections\ArrayCollection');
+        $reflClass = $this->getMock('\ReflectionClass',
+            array(),
+            array('Doctrine\Common\Collections\ArrayCollection'));
+
+        $reflProperty = $this->getMock('\ReflProperty',
+            array('setAccessible', 'getValue')
+        );
 
         $this->metadata->expects($this->exactly(1))
             ->method('getTypeOfField')
@@ -298,11 +304,22 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($reflClass));
 
+        $reflClass->expects($this->exactly(1))
+            ->method('getProperty')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue($reflProperty));
+
+        $reflProperty->expects($this->exactly(1))
+            ->method('getValue')
+            ->withAnyParameters()
+            ->will($this->returnValue(new ArrayCollection($data['reviews'])));
+
         $object = $this->hydrator->hydrate($data, new stdClass());
         $this->assertCount(3, $object->reviews);
-        $this->assertSame($review, $object->reviews[0]);
-        $this->assertSame($review, $object->reviews[1]);
-        $this->assertSame($review, $object->reviews[2]);
+
+        foreach ($object->reviews as $review) {
+            $this->assertSame($review, $review);
+        }
     }
     
     public function testHydrateCanHandleSingleRelatedObject()
@@ -353,7 +370,13 @@ class DoctrineObjectTest extends BaseTestCase
             ),
         );
 
-        $reflClass = new \ReflectionClass('Doctrine\Common\Collections\ArrayCollection');
+        $reflClass = $this->getMock('\ReflectionClass',
+            array(),
+            array('Doctrine\Common\Collections\ArrayCollection'));
+
+        $reflProperty = $this->getMock('\ReflProperty',
+            array('setAccessible', 'getValue')
+        );
 
         $this->metadata->expects($this->exactly(1))
             ->method('getTypeOfField')
@@ -383,6 +406,16 @@ class DoctrineObjectTest extends BaseTestCase
         $this->metadata->expects($this->exactly(1))
             ->method('getReflectionClass')
             ->will($this->returnValue($reflClass));
+
+        $reflClass->expects($this->exactly(1))
+            ->method('getProperty')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue($reflProperty));
+
+        $reflProperty->expects($this->exactly(1))
+            ->method('getValue')
+            ->withAnyParameters()
+            ->will($this->returnValue(new ArrayCollection($data['reviews'])));
 
         $object = $this->hydrator->hydrate($data, new stdClass());
         $this->assertCount(3, $object->reviews);
@@ -408,7 +441,13 @@ class DoctrineObjectTest extends BaseTestCase
             ),
         );
 
-        $reflClass = new \ReflectionClass('Doctrine\Common\Collections\ArrayCollection');
+        $reflClass = $this->getMock('\ReflectionClass',
+            array(),
+            array('Doctrine\Common\Collections\ArrayCollection'));
+
+        $reflProperty = $this->getMock('\ReflProperty',
+            array('setAccessible', 'getValue')
+        );
 
         $this->metadata->expects($this->exactly(1))
             ->method('getTypeOfField')
@@ -439,6 +478,16 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($reflClass));
 
+        $reflClass->expects($this->exactly(1))
+            ->method('getProperty')
+            ->with($this->equalTo('reviews'))
+            ->will($this->returnValue($reflProperty));
+
+        $reflProperty->expects($this->exactly(1))
+            ->method('getValue')
+            ->withAnyParameters()
+            ->will($this->returnValue(new ArrayCollection($data['reviews'])));
+
         $this->objectManager->expects($this->exactly(3))
             ->method('find')
             ->with('Review', $reviewReference)
@@ -453,8 +502,6 @@ class DoctrineObjectTest extends BaseTestCase
     {
         $reviewReference = new stdClass();
         $reviewReference->uuid = '5678';
-
-        $review = new stdClass();
 
         $reviewWithId = new stdClass();
         $reviewWithId->id = 5;
@@ -487,5 +534,148 @@ class DoctrineObjectTest extends BaseTestCase
         $object = $this->hydrator->hydrate($data, new stdClass());
         $this->assertEquals('5', $object->id);
         $this->assertEquals('Michaël Gallego', $object->reviewer);
+    }
+
+    /**
+     * This data set contains the data that is added to an existing collection. The original collection is always
+     * the same, that is to say :
+     *  'categories' => [0 => 'foo', 1 => 'bar', 2 => 'french']
+     *
+     * @return array
+     */
+    public function intersectionUnionProvider()
+    {
+        $first = new stdClass();
+        $first->value = 'foo';
+        $second = new stdClass();
+        $second->value = 'bar';
+        $third = new stdClass();
+        $third->value = 'italian';
+        $fourth = new stdClass();
+        $fourth->value = 'umbrella';
+
+        return array(
+            // Same count, but different values
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second, $third
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second, $third
+                    )
+                )
+            ),
+
+            // Fewer count
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second
+                    )
+                )
+            ),
+
+            // More count (new elements)
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second, $third, $fourth
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second, $third, $fourth
+                    )
+                )
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider intersectionUnionProvider
+     */
+    public function testAutomaticallyIntersectUnionCollections(array $data, array $expected)
+    {
+        $reflClass = $this->getMock('\ReflectionClass',
+            array(),
+            array('Doctrine\Common\Collections\ArrayCollection'));
+
+        $reflProperty = $this->getMock('\ReflProperty',
+            array('setAccessible', 'getValue')
+        );
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getTypeOfField')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue('array'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue('stdClass'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(false));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isCollectionValuedAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getReflectionClass')
+            ->will($this->returnValue($reflClass));
+
+        $reflClass->expects($this->exactly(1))
+            ->method('getProperty')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue($reflProperty));
+
+        $reflProperty->expects($this->exactly(1))
+            ->method('getValue')
+            ->withAnyParameters()
+            ->will($this->returnValue(new ArrayCollection($data)));
+
+        // Set an object with pre-defined values (we have to create stdClass as element so that elements are passed
+        // by reference and not as value, so that we can emulate normal behaviour)
+        $first = new stdClass();
+        $first->value = 'foo';
+        $second = new stdClass();
+        $second->value = 'bar';
+        $third = new stdClass();
+        $third->value = 'french';
+
+        $existingObject = new stdClass();
+        $existingObject->categories = array(
+            $first, $second, $first
+        );
+
+        $object = $this->hydrator->hydrate($data, $existingObject);
+        $this->assertEquals(count($expected['categories']), count($object->categories));
+        $this->assertEquals($expected['categories'], $object->categories->toArray());
     }
 }
