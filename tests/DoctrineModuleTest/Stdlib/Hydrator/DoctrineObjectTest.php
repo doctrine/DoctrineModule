@@ -101,6 +101,14 @@ class DoctrineObjectTest extends BaseTestCase
             )
         );
 
+        $reflClass = $this->getMock('\ReflectionClass',
+            array('setAccessible', 'getProperty'),
+            array('Doctrine\Common\Collections\ArrayCollection'));
+
+        $reflProperty = $this->getMock('\ReflProperty',
+            array('getValue')
+        );
+
         $this->metadata->expects($this->exactly(1))
             ->method('getTypeOfField')
             ->with($this->equalTo('categories'))
@@ -125,6 +133,16 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('isCollectionValuedAssociation')
             ->with($this->equalTo('categories'))
             ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getReflectionClass')
+            ->will($this->returnValue($reflClass));
+
+        $reflClass->expects($this->exactly(1))
+            ->method('getProperty')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(new $reflProperty));
+
 
         $categories = array();
         $categories[] = new stdClass();
@@ -215,7 +233,6 @@ class DoctrineObjectTest extends BaseTestCase
             ->with($this->equalTo('review'))
             ->will($this->returnValue(true));
 
-
         $this->objectManager->expects($this->exactly(1))
             ->method('find')
             ->with('Review', $reviewReference)
@@ -244,6 +261,8 @@ class DoctrineObjectTest extends BaseTestCase
                 $reviewReference,
             ),
         );
+
+        $reflClass = new \ReflectionClass('Doctrine\Common\Collections\ArrayCollection');
 
         $this->metadata->expects($this->exactly(1))
             ->method('getTypeOfField')
@@ -274,6 +293,10 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('find')
             ->with('Review', $reviewReference)
             ->will($this->returnValue($review));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getReflectionClass')
+            ->will($this->returnValue($reflClass));
 
         $object = $this->hydrator->hydrate($data, new stdClass());
         $this->assertCount(3, $object->reviews);
@@ -330,6 +353,8 @@ class DoctrineObjectTest extends BaseTestCase
             ),
         );
 
+        $reflClass = new \ReflectionClass('Doctrine\Common\Collections\ArrayCollection');
+
         $this->metadata->expects($this->exactly(1))
             ->method('getTypeOfField')
             ->with($this->equalTo('reviews'))
@@ -354,6 +379,10 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('isCollectionValuedAssociation')
             ->with($this->equalTo('reviews'))
             ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getReflectionClass')
+            ->will($this->returnValue($reflClass));
 
         $object = $this->hydrator->hydrate($data, new stdClass());
         $this->assertCount(3, $object->reviews);
@@ -379,6 +408,8 @@ class DoctrineObjectTest extends BaseTestCase
             ),
         );
 
+        $reflClass = new \ReflectionClass('Doctrine\Common\Collections\ArrayCollection');
+
         $this->metadata->expects($this->exactly(1))
             ->method('getTypeOfField')
             ->with($this->equalTo('reviews'))
@@ -403,6 +434,10 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('isCollectionValuedAssociation')
             ->with($this->equalTo('reviews'))
             ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getReflectionClass')
+            ->will($this->returnValue($reflClass));
 
         $this->objectManager->expects($this->exactly(3))
             ->method('find')
