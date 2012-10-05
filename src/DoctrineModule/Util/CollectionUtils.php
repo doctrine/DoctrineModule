@@ -45,6 +45,11 @@ class CollectionUtils
      */
     public static function intersectUnion(Collection $collection1, Collection $collection2)
     {
+        // Don't make the work both
+        if ($collection1 === $collection2) {
+            return $collection1;
+        }
+
         $toRemove = array();
 
         foreach ($collection1 as $key1 => $value1) {
