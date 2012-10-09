@@ -215,6 +215,8 @@ learn more about Collection.
 
 Please refer to the Cookbook in this page to have a fully example of such relationships.
 
+> Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetch the objects throuhg the Doctrine `find` function. However, this may cause problems if one of the value of the collection is the empty string '' (as the ``find`` will most likely fail). In order to solve this problem, empty string identifiers are simply ignored during the hydration phase. Therefore, if your database contains an empty string value as primary key, the hydrator could not work correctly (the simplest way to avoid that is simply to not have an empty string primary key, which should not happen if you use auto-increment primary keys, anyway).
+
 
 ### Advanced use
 

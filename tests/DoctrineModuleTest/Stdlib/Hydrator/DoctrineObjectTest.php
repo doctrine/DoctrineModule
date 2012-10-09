@@ -678,4 +678,67 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals(count($expected['categories']), count($object->categories));
         $this->assertEquals($expected['categories'], $object->categories->toArray());
     }
+
+    public function testAvoidFailingLookupsForEmptyArrayValues()
+    {
+        $data = array(
+            'categories' => array(
+                1, 2, ''
+            )
+        );
+
+        $reflClass = $this->getMock('\ReflectionClass',
+            array(),
+            array('Doctrine\Common\Collections\ArrayCollection'));
+
+        $reflProperty = $this->getMock('\ReflProperty',
+            array('setAccessible', 'getValue')
+        );
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getTypeOfField')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue('array'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue('stdClass'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(false));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isCollectionValuedAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(true));
+
+        $this->objectManager->expects($this->exactly(2))
+            ->method('find')
+            ->will($this->returnValue(new stdClass()));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getReflectionClass')
+            ->will($this->returnValue($reflClass));
+
+        $reflClass->expects($this->exactly(1))
+            ->method('getProperty')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue($reflProperty));
+
+        $reflProperty->expects($this->exactly(1))
+            ->method('getValue')
+            ->withAnyParameters()
+            ->will($this->returnValue(new ArrayCollection($data)));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertEquals(2, count($object->categories));
+    }
 }
