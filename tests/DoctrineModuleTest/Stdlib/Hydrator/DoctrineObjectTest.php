@@ -321,7 +321,7 @@ class DoctrineObjectTest extends BaseTestCase
             $this->assertSame($review, $review);
         }
     }
-    
+
     public function testHydrateCanHandleSingleRelatedObject()
     {
         $review = new stdClass();
@@ -341,7 +341,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getAssociationTargetClass')
             ->with($this->equalTo('review'))
             ->will($this->returnValue('stdClass'));
-        
+
         $this->metadata->expects($this->exactly(1))
             ->method('hasAssociation')
             ->with($this->equalTo('review'))
@@ -355,7 +355,7 @@ class DoctrineObjectTest extends BaseTestCase
         $object = $this->hydrator->hydrate($data, new stdClass());
         $this->assertSame($review, $object->review);
     }
-    
+
     public function testHydrateCanHandleMultipleRelatedObjects()
     {
         $review = new stdClass();
@@ -740,5 +740,25 @@ class DoctrineObjectTest extends BaseTestCase
 
         $object = $this->hydrator->hydrate($data, new stdClass());
         $this->assertEquals(2, count($object->categories));
+    }
+
+    public function testHydratingObjectsWithStrategy()
+    {
+        $data = array(
+            'username' => 'foo',
+            'password' => 'bar'
+        );
+
+        $modifiedData = array(
+            'username' => 'MODIFIED',
+            'password' => 'bar'
+        );
+
+        $this->hydrator->addStrategy('username', new TestAsset\HydratorStrategy());
+
+        $object  = $this->hydrator->hydrate($data, new stdClass());
+        $extract = $this->hydrator->extract($object);
+
+        $this->assertEquals($modifiedData, $extract);
     }
 }
