@@ -178,6 +178,9 @@ class DoctrineObject implements HydratorInterface
 
         $values = new ArrayCollection();
 
+        // In order to avoid to make a "find" against an empty value (for instance when a collection contains
+        // an empty value. However, please note that as a side-effect, the empty string '' cannot be used as
+        // an identifier
         foreach($valueOrObject as $value) {
             if ($value instanceof $target) {
                 $values[] = $value;
