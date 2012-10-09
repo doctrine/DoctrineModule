@@ -173,7 +173,7 @@ class DoctrineObject implements HydratorInterface
         foreach($valueOrObject as $value) {
             if ($value instanceof $target) {
                 $values[] = $value;
-            } else {
+            } elseif($value) {
                 $values[] = $this->find($target, $value);
             }
         }
