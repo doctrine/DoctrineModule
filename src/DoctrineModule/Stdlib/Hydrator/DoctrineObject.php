@@ -25,6 +25,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use DoctrineModule\Util\CollectionUtils;
+use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 
@@ -38,7 +39,7 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
  * @since   0.5.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
  */
-class DoctrineObject implements HydratorInterface
+class DoctrineObject extends AbstractHydrator
 {
     /**
      * @var ObjectManager
@@ -115,6 +116,9 @@ class DoctrineObject implements HydratorInterface
         $object = $this->tryConvertArrayToObject($data, $object);
 
         foreach($data as $field => &$value) {
+
+            $value = $this->hydrateValue($field, $value);
+
             if ($value === null) {
                 continue;
             }
@@ -161,7 +165,7 @@ class DoctrineObject implements HydratorInterface
         if ($valueOrObject instanceof $target) {
             return $valueOrObject;
         }
-        
+
         return $this->find($target, $valueOrObject);
     }
 
