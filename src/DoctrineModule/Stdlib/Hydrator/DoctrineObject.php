@@ -69,6 +69,8 @@ class DoctrineObject extends AbstractHydrator
         }
 
         $this->setHydrator($hydrator);
+
+        parent::__construct();
     }
 
     /**
