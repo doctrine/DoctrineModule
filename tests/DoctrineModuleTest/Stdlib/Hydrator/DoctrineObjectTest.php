@@ -453,4 +453,45 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals('5', $object->id);
         $this->assertEquals('Michaël Gallego', $object->reviewer);
     }
+
+    public function testAvoidFailingLookupsForEmptyArrayValues()
+    {
+        $data = array(
+            'categories' => array(
+                1, 2, ''
+            )
+        );
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getTypeOfField')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue('array'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue('stdClass'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(false));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isCollectionValuedAssociation')
+            ->with($this->equalTo('categories'))
+            ->will($this->returnValue(true));
+
+        $this->objectManager->expects($this->exactly(2))
+            ->method('find')
+            ->will($this->returnValue(new stdClass()));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+        $this->assertEquals(2, count($object->categories));
+    }
 }
