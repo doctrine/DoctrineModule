@@ -1,6 +1,6 @@
 ## Hydrator
 
-Hydrators are simple objects that allow to convert an array of data to an object (this is called "hydrating") and to convert back an object to an array (this is called "extracting"). Hydrators are mainly used in the context of Forms, with our new binding functionnality. If you are not really comfortable with hydrators, please first read [Zend Framework hydrator's documentation](http://framework.zend.com/manual/2.0/en/modules/zend.stdlib.hydrator.html)
+Hydrators are simple objects that allow to convert an array of data to an object (this is called "hydrating") and to convert back an object to an array (this is called "extracting"). Hydrators are mainly used in the context of Forms, with our new binding functionality. If you are not really comfortable with hydrators, please first read [Zend Framework hydrator's documentation](http://framework.zend.com/manual/2.0/en/modules/zend.stdlib.hydrator.html)
 
 
 ### Basic usage
@@ -28,37 +28,37 @@ class City
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string", length=48)
      */
 	protected $name;
-	
+
     /**
      * @ORM\Column(type="string", length=8)
      */
     protected $postCode;
-    
+
     public function getId()
     {
    		return $this->id;
     }
-    
+
     public function setName($name)
     {
     	$this->name = $name;
     }
-    
+
     public function getName()
     {
     	return $this->name;
     }
-    
+
     public function setPostCode($postCode)
     {
     	$this->postCode = $postCode;
     }
-    
+
     public function getPostCode()
     {
     	return $this->postCode;
@@ -128,37 +128,37 @@ class Address
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string", length=48)
      */
 	protected $street;
-	
+
 	/**
      * @ORM\OneToOne(targetEntity="City")
      */
 	protected $city;
-    
+
     public function getId()
     {
    		return $this->id;
     }
-    
+
     public function setStreet($street)
     {
     	$this->street = $street;
     }
-    
+
     public function getStreet()
     {
     	return $this->street;
     }
-    
+
     public function setCity(City $city)
     {
     	$this->city = $city;
     }
-    
+
     public function getCity()
     {
     	return $this->city;
@@ -174,7 +174,7 @@ $address = new Address();
 $city = new City();
 $city->setName('Paris')
 	 ->setPostCode('75016');
-	 
+
 $data = array(
 	'street' => '1 avenue des Champs Elysees',
 	'city' => $city
@@ -194,7 +194,7 @@ hydrator:
 ```php
 $hydrator = new \DoctrineModule\Stdlib\Hydrator\DoctrineObject($entityManager);
 $address = new Address();
-	 
+
 $data = array(
 	'street' => '1 avenue des Champs Elysees',
 	'city' => '2' // we assume '2' is the Id of Paris
@@ -262,6 +262,14 @@ By default, the DoctrineModule hydrator performs a "find" operation for every re
 
 If you are using Doctrine 2 ORM, you have to use the hydrator from DoctrineORMModule (instead of the one from DoctrineModule). The usage is exactly the same, except that instead of a `find` call, it makes a `getReference` call. This is up to you to choose the right hydrator for your specific need.
 
+#### Hydration Strategies
+
+The hydrator implements Zend Framework 2's StrategyEnabledInterface which allows you to inspect and modify data before it is processed by the Hydrator. Please note that hydration strategies will only be applied to the hydrate() function and not extract() as this is proxied directly to the default Hydrator, in which case you should do the following:
+
+```php
+$doctrineHydrator->getHydrator()->addStrategy(new MyHydrationStrategy());
+```
+
 #### Unwanting side-effect
 
 You have to be very careful when you are using DoctrineModule hydrator with complex entities that contain a lot of relationships, as a lot of unnecessary calls to database can be made if you are not perfectly aware of what happen under the hood. To explain this problem, let's have an example.
@@ -287,17 +295,17 @@ class User
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string", length=48)
      */
 	protected $name;
-	
+
     /**
      * @ORM\OneToOne(targetEntity="City")
      */
     protected $city;
-    
+
     // … getter and setters are defined …
 }
 ```
@@ -323,10 +331,10 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 	{
 		parent::__construct('user');
 		$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
-		
+
 		$this->setHydrator(new DoctrineHydrator($entityManager))
 			 ->setObject(new User());
-		
+
 		$this->add(array(
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'name',
@@ -337,13 +345,13 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
                 'required'  => 'required'
             )
        	));
-       	
+
        	$cityFieldset = new CityFieldset($serviceManager);
        	$cityFieldset->setLabel('Your city');
        	$cityFieldset->setName('city');
        	$this->add($cityFieldset);
 	}
-	
+
 	public function getInputFilterSpecification()
 	{
 		return array(
@@ -373,10 +381,10 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
 	{
 		parent::__construct('city');
 		$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
-		
+
 		$this->setHydrator(new DoctrineHydrator($entityManager))
 			 ->setObject(new City());
-		
+
 		$this->add(array(
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'name',
@@ -387,7 +395,7 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
                 'required'  => 'required'
             )
        	));
-       	
+
        	$this->add(array(
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'postCode',
@@ -399,14 +407,14 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
             )
        	));
 	}
-	
+
 	public function getInputFilterSpecification()
 	{
 		return array(
 			'name' => array(
 				'required' => true
 			),
-			
+
 			'postCode' => array(
 				'required' => true
 			)
@@ -431,23 +439,23 @@ class EditNameForm extends Form
 	{
 		parent::__construct('edit-name-form');
 		$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
-		
+
 		$this->setHydrator(new DoctrineHydrator($entityManager));
-		
+
 		// Add the user fieldset, and set it as the base fieldset
 		$userFieldset = new UserFieldset($serviceManager);
 		$userFieldset->setName('user');
 		$userFieldset->setUseAsBaseFieldset(true);
 		$this->add($userFieldset);
-		
+
 		// … add CSRF and submit elements …
-		
+
 		// Set the validation group so that we don't care about city
 		$this->setValidationGroup(array(
 			'csrf', // assume we added a CSRF element
 			'user' => array(
 				'name'
-			)		
+			)
 		));
 	}
 }
@@ -462,18 +470,18 @@ public function editNameAction()
 {
 	// Create the form
 	$form = new EditNameForm();
-	
+
 	// Get the logged user (for more informations about userIdentity(), please read the Authentication doc)
 	$loggedUser = $this->userIdentity();
-	
+
 	// We bind the logged user to the form, so that the name is pre-filled with previous data
 	$form->bind($loggedUser);
-	
+
 	$request = $this->request;
 	if ($request->isPost()) {
 		// Set data from post
 		$form->setData($request->getPost());
-		
+
 		if ($form->isValid()) {
 			// You can now safely save $loggedUser
 		}
@@ -505,21 +513,21 @@ class EditNameForm extends Form
 	{
 		parent::__construct('edit-name-form');
 		$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
-		
+
 		$this->setHydrator(new DoctrineHydrator($entityManager));
-		
+
 		// Add the user fieldset, and set it as the base fieldset
 		$userFieldset = new UserFieldset($serviceManager);
 		$userFieldset->setName('user');
 		$userFieldset->setUseAsBaseFieldset(true);
-		
+
 		// We don't want City relationship, so remove it !!
 		$userFieldset->remove('city');
-		
+
 		$this->add($userFieldset);
-		
+
 		// … add CSRF and submit elements …
-		
+
 		// We don't even need the validation group as the City fieldset does not
 		// exist anymore
 	}
