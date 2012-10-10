@@ -73,6 +73,15 @@ class DoctrineObject extends AbstractHydrator
     );
 
     /**
+     * @var array
+     */
+    protected $strategiesCallable = array(
+        self::COLLECTION_MERGING_INTERSECTION_UNION => array('DoctrineModule\Util\CollectionUtils', 'intersectionUnion'),
+        self::COLLECTION_MERGING_INTERSECTION => array('DoctrineModule\Util\CollectionUtils', 'intersection'),
+        self::COLLECTION_MERGING_UNION => array('DoctrineModule\Util\CollectionUtils', 'union')
+    );
+
+    /**
      * @param ObjectManager     $objectManager
      * @param HydratorInterface $hydrator
      */
@@ -276,15 +285,7 @@ class DoctrineObject extends AbstractHydrator
             $mergingStrategy = $this->getCollectionMergingStrategy('*');
         }
 
-        if ($mergingStrategy === self::COLLECTION_MERGING_INTERSECTION) {
-            return CollectionUtils::intersection($previousCollection, $collection);
-        }
-
-        if ($mergingStrategy === self::COLLECTION_MERGING_UNION) {
-            return CollectionUtils::union($previousCollection, $collection);
-        }
-
-        return CollectionUtils::intersectUnion($previousCollection, $collection);
+        return call_user_func($this->strategiesCallable[$mergingStrategy], $previousCollection, $collection);
     }
 
     /**
