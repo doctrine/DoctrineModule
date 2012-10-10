@@ -21,7 +21,6 @@ namespace DoctrineModule\Util;
 
 use Doctrine\Common\Collections\Collection;
 
-
 /**
  * This class provides some useful util functions when dealing with Doctrine Collections.
  *
@@ -115,14 +114,14 @@ class CollectionUtils
     }
 
     /**
-     * This function performs an "intersection" operation on collections. This function returns $collection1, by
+     * This function performs an "intersect" operation on collections. This function returns $collection1, by
      * removing all the elements that are not both in $collection1 and $collection2
      *
      * @param  Collection $collection1
      * @param  Collection $collection2
      * @return Collection
      */
-    public static function intersection(Collection $collection1, Collection $collection2)
+    public static function intersect(Collection $collection1, Collection $collection2)
     {
         // Don't make the work twice
         if ($collection1 === $collection2) {

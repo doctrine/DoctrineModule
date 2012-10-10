@@ -45,8 +45,8 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Merging strategies constants
      */
-    const COLLECTION_MERGING_INTERSECTION_UNION = 0x01;
-    const COLLECTION_MERGING_INTERSECTION = 0x03;
+    const COLLECTION_MERGING_INTERSECT_UNION = 0x01;
+    const COLLECTION_MERGING_INTERSECT = 0x03;
     const COLLECTION_MERGING_UNION = 0x02;
 
     /**
@@ -68,15 +68,15 @@ class DoctrineObject extends AbstractHydrator
      * @var array
      */
     protected $collectionMergingStrategies = array(
-        '*' => self::COLLECTION_MERGING_INTERSECTION_UNION
+        '*' => self::COLLECTION_MERGING_INTERSECT_UNION
     );
 
     /**
      * @var array
      */
     protected $strategiesCallable = array(
-        self::COLLECTION_MERGING_INTERSECTION_UNION => array('DoctrineModule\Util\CollectionUtils', 'intersectionUnion'),
-        self::COLLECTION_MERGING_INTERSECTION => array('DoctrineModule\Util\CollectionUtils', 'intersection'),
+        self::COLLECTION_MERGING_INTERSECT_UNION => array('DoctrineModule\Util\CollectionUtils', 'intersectUnion'),
+        self::COLLECTION_MERGING_INTERSECT => array('DoctrineModule\Util\CollectionUtils', 'intersect'),
         self::COLLECTION_MERGING_UNION => array('DoctrineModule\Util\CollectionUtils', 'union')
     );
 
@@ -117,9 +117,9 @@ class DoctrineObject extends AbstractHydrator
 
     /**
      * If set to:
-     * - "INTERSECTION_UNION": the collection will contain all the elements that already exist, minus
+     * - "INTERSECT_UNION": the collection will contain all the elements that already exist, minus
      *   the ones that does not exist in the data from the submitted collection.
-     * - "INTERSECTION": the collection will contain all the elements that already exists and that are also
+     * - "INTERSECT": the collection will contain all the elements that already exists and that are also
      *   in the data from the submitted collection.
      * - "UNION": the collection will contain all the elements that already exists and the ones that are new
      *   from the submitted collection.
@@ -134,8 +134,8 @@ class DoctrineObject extends AbstractHydrator
     public function setCollectionMergingStrategy($mergingStrategy, $collectionName = '*')
     {
         $validStrategies = array(
-            self::COLLECTION_MERGING_INTERSECTION_UNION,
-            self::COLLECTION_MERGING_INTERSECTION,
+            self::COLLECTION_MERGING_INTERSECT_UNION,
+            self::COLLECTION_MERGING_INTERSECT,
             self::COLLECTION_MERGING_UNION
         );
 
@@ -284,7 +284,7 @@ class DoctrineObject extends AbstractHydrator
             $mergingStrategy = $this->getCollectionMergingStrategy('*');
         }
 
-        return call_user_func($this->strategiesCallable[$mergingStrategy], $previousCollection, $collection);
+        return forward_static_call($this->strategiesCallable[$mergingStrategy], $previousCollection, $collection);
     }
 
     /**
