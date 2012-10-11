@@ -20,14 +20,16 @@ The first task is to configure the Authentication by adding the ``authentication
 // in your module.config.php:
 
 return array(
-	'doctrine' => array(
-		'authentication' => array(
-			'object_manager' => 'Doctrine\ORM\Entity\Manager',
-			'identity_class' => 'Application\Entity\User',
-			'identity_property' => 'email',
-			'credential_property' => 'password',
-		)
-	)
+    'doctrine' => array(
+        'authentication' => array(
+            'orm_default' => array(
+                'object_manager' => 'Doctrine\ORM\Entity\Manager',
+                'identity_class' => 'Application\Entity\User',
+                'identity_property' => 'email',
+                'credential_property' => 'password',
+            ),
+        ),
+    ),
 );
 ```
 
@@ -49,17 +51,19 @@ Here is an example code that adds the `credential_callable` function to our prev
 // in your module.config.php:
 
 return array(
-	'doctrine' => array(
-		'authentication' => array(
-			'object_manager' => 'Doctrine\ORM\Entity\Manager',
-			'identity_class' => 'Application\Entity\User',
-			'identity_property' => 'email',
-			'credential_property' => 'password',
-			'credential_callable' => function(User $user, $passwordGiven) {
-				return my_awesome_check_test($user->getPassword(), $passwordGiven);
-			}
-		)
-	)
+    'doctrine' => array(
+        'authentication' => array(
+            'orm_default => array(
+                'object_manager' => 'Doctrine\ORM\Entity\Manager',
+                'identity_class' => 'Application\Entity\User',
+                'identity_property' => 'email',
+                'credential_property' => 'password',
+                'credential_callable' => function(User $user, $passwordGiven) {
+                    return my_awesome_check_test($user->getPassword(), $passwordGiven);
+                },
+            ),
+        ),
+    ),
 );
 ```
 
@@ -74,20 +78,20 @@ use Zend\Authentication\AuthenticationService;
 
 class Module
 {
-	public function getServiceConfig()
-	{
-		return array(
-			'factories' => array(
-				'Zend\Authentication\AuthenticationService' => function($serviceManager) {
-					// If you are using DoctrineORMModule:
-					return $serviceManager->get('doctrine.authenticationservice.orm_default');
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'Zend\Authentication\AuthenticationService' => function($serviceManager) {
+                    // If you are using DoctrineORMModule:
+                    return $serviceManager->get('doctrine.authenticationservice.orm_default');
 
-					// If you are using DoctrineODMModule:
-					return $serviceManager->get('doctrine.authenticationservice.odm_default');
-				}
-			)
-		);
-	}
+                    // If you are using DoctrineODMModule:
+                    return $serviceManager->get('doctrine.authenticationservice.odm_default');
+                }
+            )
+        );
+    }
 }
 ```
 
@@ -102,9 +106,9 @@ Here is an example of you we could use it from a controller action (we stripped 
 ```php
 public function loginAction()
 {
-	$data = $this->getRequest()->getPost();
+    $data = $this->getRequest()->getPost();
 
-	// If you used another name for the authentication service, change it here
+    // If you used another name for the authentication service, change it here
     $authService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
 
     $adapter = $authService->getAdapter();
@@ -154,11 +158,11 @@ Here is how you use it in your controller :
 ```php
 public function testAction()
 {
-	if ($user = $this->identity()) {
-    	// someone is logged !
-	} else {
-    	// not logged in
-	}
+    if ($user = $this->identity()) {
+        // someone is logged !
+    } else {
+        // not logged in
+    }
 }
 ```
 
@@ -166,10 +170,10 @@ And in your view :
 
 ```php
 <?php
-	if ($user = $this->identity()) {
-	    echo 'Logged in as ' . $this->escapeHtml($user->getUsername());
-	} else {
-	    echo 'Not logged in';
-	}
+    if ($user = $this->identity()) {
+        echo 'Logged in as ' . $this->escapeHtml($user->getUsername());
+    } else {
+        echo 'Not logged in';
+    }
 ?>
 ```
