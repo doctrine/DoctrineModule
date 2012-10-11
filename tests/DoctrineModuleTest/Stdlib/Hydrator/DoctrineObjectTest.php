@@ -543,33 +543,38 @@ class DoctrineObjectTest extends BaseTestCase
      *
      * @return array
      */
-    public function intersectionUnionProvider()
+    public function collectionMergingProvider()
     {
         $first = new stdClass();
         $first->value = 'foo';
         $second = new stdClass();
         $second->value = 'bar';
         $third = new stdClass();
-        $third->value = 'italian';
+        $third->value = 'french';
         $fourth = new stdClass();
-        $fourth->value = 'umbrella';
+        $fourth->value = 'italian';
+        $fifth = new stdClass();
+        $fifth->value = 'umbrella';
 
         return array(
+            // ------------- INTERSECTION UNION STRATEGY -------------
             // Same count, but different values
             array(
                 // new collection
                 array(
                     'categories' => array(
-                        $first, $second, $third
+                        $first, $second, $fourth
                     ),
                 ),
 
                 // expected merge
                 array(
                     'categories' => array(
-                        $first, $second, $third
+                        $first, $second, $fourth
                     )
-                )
+                ),
+
+                'strategy' => 'intersectUnion'
             ),
 
             // Fewer count
@@ -586,7 +591,9 @@ class DoctrineObjectTest extends BaseTestCase
                     'categories' => array(
                         $first, $second
                     )
-                )
+                ),
+
+                'strategy' => 'intersectUnion'
             ),
 
             // More count (new elements)
@@ -603,15 +610,135 @@ class DoctrineObjectTest extends BaseTestCase
                     'categories' => array(
                         $first, $second, $third, $fourth
                     )
-                )
+                ),
+
+                'strategy' => 'intersectUnion'
+            ),
+
+
+            // ------------- INTERSECTION STRATEGY -------------
+            // Same count, but different values
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second, $fourth
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second
+                    )
+                ),
+
+                'strategy' => 'intersect'
+            ),
+
+            // Fewer count
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second
+                    )
+                ),
+
+                'strategy' => 'intersect'
+            ),
+
+            // More count (new elements)
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second, $third, $fourth
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second, $third
+                    )
+                ),
+
+                'strategy' => 'intersect'
+            ),
+
+
+            // ------------- UNION STRATEGY -------------
+            // Same count, but different values
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second, $fourth
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second, $third, $fourth
+                    )
+                ),
+
+                'strategy' => 'union'
+            ),
+
+            // Fewer count
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second, $third
+                    )
+                ),
+
+                'strategy' => 'union'
+            ),
+
+            // More count (new elements)
+            array(
+                // new collection
+                array(
+                    'categories' => array(
+                        $first, $second, $third, $fourth
+                    ),
+                ),
+
+                // expected merge
+                array(
+                    'categories' => array(
+                        $first, $second, $third, $fourth
+                    )
+                ),
+
+                'strategy' => 'union'
             ),
         );
     }
 
     /**
-     * @dataProvider intersectionUnionProvider
+     * @dataProvider collectionMergingProvider
      */
-    public function testAutomaticallyIntersectUnionCollections(array $data, array $expected)
+    public function testAutomaticallyMergeCollections(array $data, array $expected, $strategy)
     {
         $reflClass = $this->getMock('\ReflectionClass',
             array(),
@@ -619,6 +746,35 @@ class DoctrineObjectTest extends BaseTestCase
 
         $reflProperty = $this->getMock('\ReflProperty',
             array('setAccessible', 'getValue')
+        );
+
+        // Set an object with pre-defined values (we have to create stdClass as element so that elements are passed
+        // by reference and not as value, so that we can emulate normal behaviour)
+        $categories = $data['categories'];
+        if (isset($categories[0]) && $categories[0]->value === 'foo') {
+            $first = $categories[0];
+        } else {
+            $first = new stdClass();
+            $first->value = 'foo';
+        }
+
+        if (isset($categories[1]) && $categories[1]->value === 'bar') {
+            $second = $categories[1];
+        } else {
+            $second = new stdClass();
+            $second->value = 'bar';
+        }
+
+        if (isset($categories[2]) && $categories[2]->value === 'french') {
+            $third = $categories[2];
+        } else {
+            $third = new stdClass();
+            $third->value = 'french';
+        }
+
+        $existingObject = new stdClass();
+        $existingObject->categories = array(
+            $first, $second, $third
         );
 
         $this->metadata->expects($this->exactly(1))
@@ -658,25 +814,20 @@ class DoctrineObjectTest extends BaseTestCase
         $reflProperty->expects($this->exactly(1))
             ->method('getValue')
             ->withAnyParameters()
-            ->will($this->returnValue(new ArrayCollection($data)));
+            ->will($this->returnValue(new ArrayCollection($existingObject->categories)));
 
-        // Set an object with pre-defined values (we have to create stdClass as element so that elements are passed
-        // by reference and not as value, so that we can emulate normal behaviour)
-        $first = new stdClass();
-        $first->value = 'foo';
-        $second = new stdClass();
-        $second->value = 'bar';
-        $third = new stdClass();
-        $third->value = 'french';
-
-        $existingObject = new stdClass();
-        $existingObject->categories = array(
-            $first, $second, $first
-        );
+        if ($strategy === 'intersectUnion') {
+            $this->hydrator->setCollectionMergingStrategy(DoctrineObjectHydrator::COLLECTION_MERGING_INTERSECT_UNION, '*');
+        } elseif ($strategy === 'intersect') {
+            $this->hydrator->setCollectionMergingStrategy(DoctrineObjectHydrator::COLLECTION_MERGING_INTERSECT, '*');
+        } elseif ($strategy === 'union') {
+            $this->hydrator->setCollectionMergingStrategy(DoctrineObjectHydrator::COLLECTION_MERGING_UNION, '*');
+        }
 
         $object = $this->hydrator->hydrate($data, $existingObject);
+        $this->assertSame($object->categories, $existingObject->categories);
         $this->assertEquals(count($expected['categories']), count($object->categories));
-        $this->assertEquals($expected['categories'], $object->categories->toArray());
+        $this->assertEquals(array_values($expected['categories']), array_values($object->categories->toArray()));
     }
 
     public function testAvoidFailingLookupsForEmptyArrayValues()

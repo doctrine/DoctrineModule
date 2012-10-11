@@ -191,7 +191,6 @@ class DoctrineObject extends AbstractHydrator
         $object = $this->tryConvertArrayToObject($data, $object);
 
         foreach($data as $field => &$value) {
-
             $value = $this->hydrateValue($field, $value);
 
             if ($value === null) {
@@ -279,7 +278,7 @@ class DoctrineObject extends AbstractHydrator
         $propertyRefl->setAccessible(true);
 
         $previousCollection = $propertyRefl->getValue($object);
-
+//var_dump($previousCollection);
         if (($mergingStrategy = $this->getCollectionMergingStrategy($field)) === null) {
             $mergingStrategy = $this->getCollectionMergingStrategy('*');
         }
