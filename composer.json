@@ -37,7 +37,7 @@
         "symfony/console": ">=2.0.13",
         "zendframework/zendframework": "2.*"
     },
-    "minimum-stability": "ALPHA",
+    "minimum-stability": "alpha",
     "autoload": {
         "psr-0": {
             "DoctrineModule\\": "src/"
