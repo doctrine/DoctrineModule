@@ -33,11 +33,11 @@
     "require": {
         "php": ">=5.3.3",
         "doctrine/common": ">=2.3-dev,<2.5-dev",
-        "doctrine/data-fixtures": "dev-master",
+        "doctrine/data-fixtures": "1.*",
         "symfony/console": ">=2.0.13",
         "zendframework/zendframework": "2.*"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "ALPHA",
     "autoload": {
         "psr-0": {
             "DoctrineModule\\": "src/"
