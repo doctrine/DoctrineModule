@@ -143,7 +143,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                  ->method('getIdentifierValues')
                  ->will($this->returnCallback(
                      function() use ($objectOne, $objectTwo) {
-                         $input = array_shift(func_get_args());
+                         $input = func_get_args();
+                         $input = array_shift($input);
                          if ($input == $objectOne) {
                              return array('id' => 1);
                          } else if ($input == $objectTwo) {
