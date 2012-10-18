@@ -21,7 +21,7 @@ class ObjectRadio extends RadioElement
     public function getProxy()
     {
         if (null === $this->proxy) {
-            $this->proxy = new Proxy($this);
+            $this->proxy = new Proxy();
         }
         return $this->proxy;
     }
