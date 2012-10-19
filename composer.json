@@ -28,6 +28,11 @@
         {
             "name": "Guilherme Blanco",
             "email": "guilhermeblanco@hotmail.com"
+        },
+        {
+            "name": "Michaël Gallego",
+            "email": "mic.gallego@gmail.com",
+            "homepage": "http://www.michaelgallego.fr"
         }
     ],
     "require": {
