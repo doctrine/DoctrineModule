@@ -188,44 +188,48 @@ class Proxy
         $objects    = $this->getObjects();
         $options    = array();
 
-        foreach ($objects as $key => $object) {
-            if (($property = $this->property)) {
-                if (!$metadata->hasField($property)) {
-                    throw new RuntimeException(sprintf(
-                        'Property "%s" could not be found in object "%s"',
-                        $property,
-                        $targetClass
-                    ));
+        if (empty($objects)) {
+            $options[''] = '';
+        } else {
+            foreach ($objects as $key => $object) {
+                if (($property = $this->property)) {
+                    if (!$metadata->hasField($property)) {
+                        throw new RuntimeException(sprintf(
+                            'Property "%s" could not be found in object "%s"',
+                            $property,
+                            $targetClass
+                        ));
+                    }
+
+                    $getter = 'get' . ucfirst($property);
+                    if (!is_callable(array($object, $getter))) {
+                        throw new RuntimeException(sprintf(
+                            'Method "%s::%s" is not callable',
+                            $this->targetClass,
+                            $getter
+                        ));
+                    }
+
+                    $label = $object->{$getter}();
+                } else {
+                    if (!is_callable(array($object, '__toString'))) {
+                        throw new RuntimeException(sprintf(
+                            '%s must have a "__toString()" method defined if you have not set a property or method to use.',
+                            $targetClass
+                        ));
+                    }
+
+                    $label = (string) $object;
                 }
 
-                $getter = 'get' . ucfirst($property);
-                if (!is_callable(array($object, $getter))) {
-                    throw new RuntimeException(sprintf(
-                        'Method "%s::%s" is not callable',
-                        $this->targetClass,
-                        $getter
-                    ));
+                if (count($identifier) > 1) {
+                    $value = $key;
+                } else {
+                    $value = current($metadata->getIdentifierValues($object));
                 }
 
-                $label = $object->{$getter}();
-            } else {
-                if (!is_callable(array($object, '__toString'))) {
-                    throw new RuntimeException(sprintf(
-                        '%s must have a "__toString()" method defined if you have not set a property or method to use.',
-                        $targetClass
-                    ));
-                }
-
-                $label = (string) $object;
+                $options[] = array('label' => $label, 'value' => $value);
             }
-
-            if (count($identifier) > 1) {
-                $value = $key;
-            } else {
-                $value = current($metadata->getIdentifierValues($object));
-            }
-
-            $options[] = array('label' => $label, 'value' => $value);
         }
 
         $this->valueOptions = $options;
