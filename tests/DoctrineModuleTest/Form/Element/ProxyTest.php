@@ -117,6 +117,14 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    public function testCanWorkWithEmptyTables()
+    {
+        $this->prepareEmptyProxy();
+
+        $result = $this->proxy->getValueOptions();
+        $this->assertEquals(array(), $result);
+    }
+
     protected function prepareProxy()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
@@ -170,6 +178,38 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                       ->method('getRepository')
                       ->with($this->equalTo($objectClass))
                       ->will($this->returnValue($objectRepository));
+
+        $this->proxy->setOptions(array(
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass
+        ));
+
+        $this->metadata = $metadata;
+    }
+
+    public function prepareEmptyProxy()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+
+        $result = new ArrayCollection();
+
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue($result));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($metadata));
+
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($objectRepository));
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
