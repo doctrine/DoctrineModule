@@ -20,7 +20,7 @@ You can directly instantiate a validator the following way:
 ```php
 $validator = new \DoctrineModule\Validator\ObjectExists(array(
     'object_repository' => $objectManager->getRepository('Application\Entity\User'),
-    'fields => array('email')
+    'fields' => array('email')
 ));
 
 var_dump($validator->isValid('test@example.com')); // dumps 'true' if an entity matches
