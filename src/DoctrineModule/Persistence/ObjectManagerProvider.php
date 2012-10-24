@@ -17,23 +17,37 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Form;
+namespace DoctrineModule\Persistence;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 
-interface ObjectRepositoryProviderInterface
+/**
+ * Trait to provide object manager to a form (only works from PHP 5.4)
+ */
+trait ProvidesObjectManager
 {
     /**
-     * Set the object repository
-     *
-     * @param ObjectRepository $objectRepository
+     * @var ObjectManager
      */
-    public function setObjectRepository(ObjectRepository $objectRepository);
+    protected $objectManager;
 
     /**
-     * Get the object repository
+     * Set the object manager
      *
-     * @return ObjectRepository
+     * @param ObjectManager $objectManager
      */
-    public function getObjectRepository();
+    public function setObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
+     * Get the object manager
+     *
+     * @return ObjectManager
+     */
+    public function getObjectManager()
+    {
+        return $this->objectManager;
+    }
 }
