@@ -22,9 +22,9 @@ namespace DoctrineModule\Form\Element;
 use RuntimeException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
-use DoctrineModule\Persistence\ObjectManagerProviderInterface;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
-class Proxy implements ObjectManagerProviderInterface
+class Proxy implements ObjectManagerAwareInterface
 {
     /**
      * @var array

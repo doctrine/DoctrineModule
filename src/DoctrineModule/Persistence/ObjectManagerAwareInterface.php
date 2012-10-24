@@ -21,7 +21,7 @@ namespace DoctrineModule\Persistence;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-interface ObjectManagerProviderInterface
+interface ObjectManagerAwareInterface
 {
     /**
      * Set the object manager
