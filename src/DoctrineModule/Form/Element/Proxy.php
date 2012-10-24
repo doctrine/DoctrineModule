@@ -22,8 +22,9 @@ namespace DoctrineModule\Form\Element;
 use RuntimeException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Persistence\ObjectManagerProviderInterface;
 
-class Proxy
+class Proxy implements ObjectManagerProviderInterface
 {
     /**
      * @var array
@@ -146,6 +147,11 @@ class Proxy
         return $this->property;
     }
 
+    /**
+     * @param  $value
+     * @return array|mixed|object
+     * @throws \RuntimeException
+     */
     public function getValue($value)
     {
         if (!($om = $this->getObjectManager())) {
@@ -182,6 +188,11 @@ class Proxy
         return $value;
     }
 
+    /**
+     * Load objects
+     *
+     * @return void
+     */
     protected function loadObjects()
     {
         if (!empty($this->objects)) {
@@ -190,6 +201,12 @@ class Proxy
         $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
     }
 
+    /**
+     * Load value options
+     *
+     * @throws \RuntimeException
+     * @return void
+     */
     protected function loadValueOptions()
     {
         if (!($om = $this->objectManager)) {
