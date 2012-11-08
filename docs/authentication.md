@@ -23,7 +23,7 @@ return array(
     'doctrine' => array(
         'authentication' => array(
             'orm_default' => array(
-                'object_manager' => 'Doctrine\ORM\Entity\Manager',
+                'object_manager' => 'Doctrine\ORM\EntityManager',
                 'identity_class' => 'Application\Entity\User',
                 'identity_property' => 'email',
                 'credential_property' => 'password',
@@ -54,7 +54,7 @@ return array(
     'doctrine' => array(
         'authentication' => array(
             'orm_default => array(
-                'object_manager' => 'Doctrine\ORM\Entity\Manager',
+                'object_manager' => 'Doctrine\ORM\EntityManager',
                 'identity_class' => 'Application\Entity\User',
                 'identity_property' => 'email',
                 'credential_property' => 'password',
