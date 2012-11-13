@@ -51,7 +51,7 @@ class FormObject
     /**
      * @var string|null
      */
-    protected $lastname;
+    protected $surname;
 
     /**
      * @var string|null
