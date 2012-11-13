@@ -123,8 +123,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->proxy->setOptions(array('property' => 'name', 'is_method' => true));
 
-        $this->metadata->expects($this->exactly(2))
-                       ->method('hasMethod')
+        $this->metadata->expects($this->exactly(0))
+                       ->method('hasField')
                        ->with($this->equalTo('name'))
                        ->will($this->returnValue(true));
 
