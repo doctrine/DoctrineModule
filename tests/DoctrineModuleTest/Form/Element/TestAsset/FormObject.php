@@ -46,6 +46,16 @@ class FormObject
     /**
      * @var string|null
      */
+    protected $firstname;
+
+    /**
+     * @var string|null
+     */
+    protected $lastname;
+
+    /**
+     * @var string|null
+     */
     protected $password;
 
     public function __toString()
@@ -111,5 +121,47 @@ class FormObject
     public function getUsername()
     {
         return $this->username;
+    }
+
+    /**
+     * @param string $firstname
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = (string) $firstname;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string $surname
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = (string) $surname;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName()
+    {
+        return isset($this->firstname) && isset($this->surname)? $this->firstname . " " . $this->surname : null;
     }
 }
