@@ -27,6 +27,11 @@ class Proxy
      * @var
      */
     protected $property;
+    
+    /**
+     * @var
+     */
+    protected $isMethod;
 
     /**
      * @var ObjectManager
@@ -45,6 +50,10 @@ class Proxy
 
         if (isset($options['property'])) {
             $this->setProperty($options['property']);
+        }
+        
+        if (isset($options['is_method'])) {
+            $this->setIsMethod($options['is_method']);
         }
     }
 
@@ -128,6 +137,26 @@ class Proxy
     {
         return $this->property;
     }
+    
+    /**
+     * Set if the property is a method to use as the label in the options
+     *
+     * @param  boolean         $method
+     * @return Proxy
+     */
+    public function setIsMethod($method)
+    {
+    	$this->isMethod = $method;
+    	return $this;
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function getIsMethod()
+    {
+    	return $this->isMethod;
+    }
 
     public function getValue($value)
     {
@@ -193,7 +222,7 @@ class Proxy
         } else {
             foreach ($objects as $key => $object) {
                 if (($property = $this->property)) {
-                    if (!$metadata->hasField($property)) {
+                    if ($this->isMethod == false && !$metadata->hasField($property)) {
                         throw new RuntimeException(sprintf(
                             'Property "%s" could not be found in object "%s"',
                             $property,
