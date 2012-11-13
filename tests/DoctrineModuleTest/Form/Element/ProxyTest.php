@@ -117,6 +117,24 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    public function testIsMethodOptionUsedForGetValueOptions()
+    {
+        $this->prepareProxy();
+
+        $this->proxy->setOptions(array('property' => 'name', 'is_method' => true));
+
+        $this->metadata->expects($this->exactly(2))
+                       ->method('hasMethod')
+                       ->with($this->equalTo('name'))
+                       ->will($this->returnValue(true));
+
+        $result = $this->proxy->getValueOptions();
+        $this->assertEquals($result[0]['label'], 'object one firstname object one surname');
+        $this->assertEquals($result[1]['label'], 'object two firstname object two surname');
+        $this->assertEquals($result[0]['value'], 1);
+        $this->assertEquals($result[1]['value'], 2);
+    }
+
     public function testCanWorkWithEmptyTables()
     {
         $this->prepareEmptyProxy();
@@ -134,12 +152,16 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $objectOne->setId(1)
                   ->setUsername('object one username')
                   ->setPassword('object one password')
-                  ->setEmail('object one email');
+                  ->setEmail('object one email')
+                  ->setFirstname('object one firstname')
+                  ->setSurname('object one surname');
 
         $objectTwo->setId(2)
                   ->setUsername('object two username')
                   ->setPassword('object two password')
-                  ->setEmail('object two email');
+                  ->setEmail('object two email')
+                  ->setFirstname('object two firstname')
+                  ->setSurname('object two surname');
 
         $result = new ArrayCollection(array(
             $objectOne,
