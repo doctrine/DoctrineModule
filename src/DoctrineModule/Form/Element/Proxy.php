@@ -146,7 +146,7 @@ class Proxy
      */
     public function setIsMethod($method)
     {
-    	$this->isMethod = $method;
+    	$this->isMethod = (bool) $method;
     	return $this;
     }
     
