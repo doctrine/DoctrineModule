@@ -24,6 +24,11 @@ class Proxy
     protected $valueOptions = array();
 
     /**
+     * @var array
+     */
+    protected $filter_by = null;
+
+    /**
      * @var
      */
     protected $property;
@@ -129,6 +134,25 @@ class Proxy
         return $this->property;
     }
 
+    /**
+     * Set the filter property to filter resulting objects
+     * @param array $filter_by
+     * @return Proxy
+    public function setFilterBy($filter_by)
+    {
+        $this->filter_by = $filter_by;
+        return $this;
+    }
+
+    /**
+     * Get Filter definition
+     * @return array|null
+     */
+    public function getFilterBy()
+    {
+        return $this->filter_by;
+    }
+
     public function getValue($value)
     {
         if (!($om = $this->getObjectManager())) {
@@ -170,7 +194,12 @@ class Proxy
         if (!empty($this->objects)) {
             return;
         }
-        $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
+
+        if($this->getFilterBy() == null) {
+            $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
+        }else{
+            $this->objects = $this->objectManager->getRepository($this->targetClass)->findby($this->getFilterBy());
+        }
     }
 
     protected function loadValueOptions()
