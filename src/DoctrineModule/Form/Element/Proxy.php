@@ -169,7 +169,8 @@ class Proxy
 
     /**
      * Set the filter property to filter resulting objects
-     * @param array $filter_by
+     *
+     * @param array $filterBy
      * @return Proxy
      */
     public function setFilterBy($filterBy)
@@ -180,6 +181,7 @@ class Proxy
 
     /**
      * Get Filter definition
+     *
      * @return array|null
      */
     public function getFilterBy()
