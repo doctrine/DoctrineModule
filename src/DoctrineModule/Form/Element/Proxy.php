@@ -26,7 +26,7 @@ class Proxy
     /**
      * @var array
      */
-    protected $filter_by = null;
+    protected $filterBy = null;
 
     /**
      * @var
@@ -50,6 +50,10 @@ class Proxy
 
         if (isset($options['property'])) {
             $this->setProperty($options['property']);
+        }
+        
+        if (isset($options['filter_by')) {
+            $this->setFilterBy($options['filter_by');
         }
     }
 
@@ -138,9 +142,10 @@ class Proxy
      * Set the filter property to filter resulting objects
      * @param array $filter_by
      * @return Proxy
-    public function setFilterBy($filter_by)
+     */
+    public function setFilterBy($filterBy)
     {
-        $this->filter_by = $filter_by;
+        $this->filterBy = $filterBy;
         return $this;
     }
 
@@ -150,7 +155,7 @@ class Proxy
      */
     public function getFilterBy()
     {
-        return $this->filter_by;
+        return $this->filterBy;
     }
 
     public function getValue($value)
@@ -195,10 +200,10 @@ class Proxy
             return;
         }
 
-        if($this->getFilterBy() == null) {
+        if ($this->getFilterBy() == null) {
             $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
-        }else{
-            $this->objects = $this->objectManager->getRepository($this->targetClass)->findby($this->getFilterBy());
+        } else {
+            $this->objects = $this->objectManager->getRepository($this->targetClass)->findBy($this->getFilterBy());
         }
     }
 
