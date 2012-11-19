@@ -52,7 +52,7 @@ class Proxy
             $this->setProperty($options['property']);
         }
         
-        if (isset($options['filter_by')) {
+        if (isset($options['filter_by'])) {
             $this->setFilterBy($options['filter_by');
         }
     }
