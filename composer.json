@@ -48,6 +48,11 @@
             "DoctrineModule\\": "src/"
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.6.x-dev"
+        }
+    },
     "bin": [
         "bin/doctrine-module"
     ]
