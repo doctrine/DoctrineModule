@@ -244,8 +244,8 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         $result = $this->_storage->hasItems(array('missing', 'key1', 'key2'));
         sort($result);
 
-        $exprectedResult = array('key1', 'key2');
-        $this->assertEquals($exprectedResult, $result);
+        $expectedResult = array('key1', 'key2');
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function testHasItemsReturnsEmptyArrayIfNonReadable()
@@ -291,11 +291,11 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         $result = $this->_storage->getItems(array('missing', 'key1', 'key2'));
         ksort($result);
 
-        $exprectedResult = array(
+        $expectedResult = array(
             'key1' => 'value1',
             'key2' => 'value2',
         );
-        $this->assertEquals($exprectedResult, $result);
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function testGetItemsReturnsEmptyArrayIfNonReadable()
