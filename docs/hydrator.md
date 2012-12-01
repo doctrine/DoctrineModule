@@ -215,7 +215,7 @@ learn more about Collection.
 
 Please refer to the Cookbook in this page to have a fully example of such relationships.
 
-> Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetch the objects throuhg the Doctrine `find` function. However, this may cause problems if one of the value of the collection is the empty string '' (as the ``find`` will most likely fail). In order to solve this problem, empty string identifiers are simply ignored during the hydration phase. Therefore, if your database contains an empty string value as primary key, the hydrator could not work correctly (the simplest way to avoid that is simply to not have an empty string primary key, which should not happen if you use auto-increment primary keys, anyway).
+> Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetch the objects through the Doctrine `find` function. However, this may cause problems if one of the value of the collection is the empty string '' (as the ``find`` will most likely fail). In order to solve this problem, empty string identifiers are simply ignored during the hydration phase. Therefore, if your database contains an empty string value as primary key, the hydrator could not work correctly (the simplest way to avoid that is simply to not have an empty string primary key, which should not happen if you use auto-increment primary keys, anyway).
 
 
 ### Advanced use
@@ -424,7 +424,7 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
 
 ```
 
-Now, let's say that we have one form where a logged user can only change his name. This specific form does not allow the user to change this city, and the fields of the city are not even rendered in the form. Naïvely, this form would be like this :
+Now, let's say that we have one form where a logged user can only change his name. This specific form does not allow the user to change this city, and the fields of the city are not even rendered in the form. Naively, this form would be like this :
 
 ```php
 namespace Application\Form;
@@ -496,7 +496,7 @@ You could ask, why ? Yes, we set the validation group, BUT the problem happens d
 1. It first arrives to the UserFieldset. The input are "name" (which is string field), and a "city" which is another fieldset (in our User entity, this is a OneToOne relationship to another entity). The hydrator will extract both the name and the city (which will be a Doctrine 2 Proxy object).
 2. Because the UserFieldset contains a reference to another Fieldset (in our case, a CityFieldset), it will, in turn, tries to extract the values of the City to populate the values of the CityFieldset. And here is the problem : City is a Proxy, and hence because the hydrator tries to extract its values (the name and postcode field), Doctrine will automatically fetch the object from the database in order to please the hydrator.
 
-This is absolutely normal, this is how ZF 2 forms work and what make them nearly magic, but in this specific case, it can leads to desastrous consequences. When you have very complex entities with a lot of OneToMany collections, imagine how many unnecessary calls can be made (actually, after discovering this problem, I've realized that my applications was doing 10 unnecessary database calls).
+This is absolutely normal, this is how ZF 2 forms work and what make them nearly magic, but in this specific case, it can leads to disastrous consequences. When you have very complex entities with a lot of OneToMany collections, imagine how many unnecessary calls can be made (actually, after discovering this problem, I've realized that my applications was doing 10 unnecessary database calls).
 
 In fact, the fix is ultra simple : if you don't need specific fieldsets in a form, remove them. Here is the fix EditUserForm :
 
