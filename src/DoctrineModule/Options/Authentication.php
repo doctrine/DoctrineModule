@@ -121,7 +121,7 @@ class Authentication extends AbstractOptions
      * When using this options class to create a DoctrineModule/Authentication/Storage/ObjectRepository
      * this is the storage instance that the object key will be stored in.
      *
-     * When useing this options class to create an AuthenticationService with and
+     * When using this options class to create an AuthenticationService with and
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
