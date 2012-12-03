@@ -141,6 +141,18 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $result);
     }
 
+    public function testFilterBy()
+    {
+        $this->prepareFilteredProxy();
+
+        $filter = $this->proxy->getFilterBy();
+        $result = $this->proxy->getValueOptions();
+
+        $this->assertArrayHasKey('email', $filter);
+        $this->assertEquals($filter['email'], 'object one email');
+        $this->assertEquals(1, count($result));
+    }
+
     protected function prepareProxy()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
@@ -202,6 +214,63 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
             'target_class'   => $objectClass
+        ));
+
+        $this->metadata = $metadata;
+    }
+
+    protected function prepareFilteredProxy()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $objectOne   = new FormObject;
+        $objectTwo   = new FormObject;
+
+        $objectOne->setId(1)
+                  ->setUsername('object one username')
+                  ->setPassword('object one password')
+                  ->setEmail('object one email');
+
+        $result = new ArrayCollection(array(
+                $objectOne
+        ));
+
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata->expects($this->exactly(1))
+                 ->method('getIdentifierValues')
+                 ->will($this->returnCallback(
+                    function() use ($objectOne, $objectTwo) {
+                        $input = func_get_args();
+                        $input = array_shift($input);
+                        if ($input == $objectOne) {
+                            return array('id' => 1);
+                        } else if ($input == $objectTwo) {
+                            return array('id' => 2);
+                        } else {
+                            return array();
+                        }
+                    }
+        ));
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository->expects($this->once())
+                         ->method('findBy')
+                         ->will($this->returnValue($result));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+                      ->method('getClassMetadata')
+                      ->with($this->equalTo($objectClass))
+                      ->will($this->returnValue($metadata));
+
+        $objectManager->expects($this->once())
+                      ->method('getRepository')
+                      ->with($this->equalTo($objectClass))
+                      ->will($this->returnValue($objectRepository));
+
+        $this->proxy->setOptions(array(
+                'object_manager' => $objectManager,
+                'target_class'   => $objectClass,
+                'filter_by'      => array('email' => 'object one email')
         ));
 
         $this->metadata = $metadata;
