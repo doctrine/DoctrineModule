@@ -3,6 +3,7 @@
 namespace DoctrineModule\Form\Element;
 
 use RuntimeException;
+use ReflectionMethod;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -26,7 +27,7 @@ class Proxy
     /**
      * @var array
      */
-    protected $filterBy = null;
+    protected $findMethod = array();
 
     /**
      * @var
@@ -57,8 +58,8 @@ class Proxy
             $this->setProperty($options['property']);
         }
         
-        if (isset($options['filter_by'])) {
-            $this->setFilterBy($options['filter_by']);
+        if (isset($options['find_method'])) {
+            $this->setFindMethod($options['find_method']);
         }
         
         if (isset($options['is_method'])) {
@@ -167,26 +168,25 @@ class Proxy
     	return $this->isMethod;
     }
 
-    /**
-     * Set the filter property to filter resulting objects
+    /** Set the findMethod property to specify the method to use on repository
      *
-     * @param array $filterBy
+     * @param array $findMethod
      * @return Proxy
      */
-    public function setFilterBy($filterBy)
+    public function setFindMethod($findMethod)
     {
-        $this->filterBy = $filterBy;
+        $this->findMethod = $findMethod;
         return $this;
     }
 
     /**
-     * Get Filter definition
+     * Get findMethod definition
      *
-     * @return array|null
+     * @return array
      */
-    public function getFilterBy()
+    public function getFindMethod()
     {
-        return $this->filterBy;
+        return $this->findMethod;
     }
 
     public function getValue($value)
@@ -230,11 +230,36 @@ class Proxy
         if (!empty($this->objects)) {
             return;
         }
-
-        if ($this->getFilterBy() == null) {
+        
+        $findMethod = (array) $this->getFindMethod();
+        if (!$findMethod) {
             $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
         } else {
-            $this->objects = $this->objectManager->getRepository($this->targetClass)->findBy($this->getFilterBy());
+            if (!isset($this->findMethod['name'])) {
+                throw new RuntimeException('No method name was set');
+            }
+            $findMethodName = $findMethod['name'];
+            $findMethodParams = isset($findMethod['params']) ? $findMethod['params'] : null;
+
+            $repository = $this->objectManager->getRepository($this->targetClass);
+            if (!method_exists($repository, $findMethodName)) {
+                throw new RuntimeException(sprintf(
+                    'Method "%s" could not be found in respository "%s"',
+                    $findMethodName,
+                    get_class($repository)
+                ));
+            }
+
+            $r = new ReflectionMethod($repository, $findMethodName);
+            $args = array();
+            foreach ($r->getParameters() as $param) {
+                if (array_key_exists($param->getName(), $findMethodParams)) {
+                    $args[] = $findMethodParams[$param->getName()];
+                } else {
+                    $args[] = $param->getDefaultValue();
+                }
+            }
+            $this->objects = $r->invokeArgs($repository, $args);
         }
     }
 
