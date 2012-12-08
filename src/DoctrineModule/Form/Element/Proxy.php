@@ -199,25 +199,24 @@ class Proxy
             throw new RuntimeException('No target class was set');
         }
 
-        $metadata = $om->getClassMetadata($targetClass);
         if (is_object($value)) {
+            $uow = $om->getUnitOfWork();
             if ($value instanceof Collection) {
                 $data = array();
                 foreach($value as $object) {
-                    $values = $metadata->getIdentifierValues($object);
+                    $values = $uow->getEntityIdentifier($object);
                     $data[] = array_shift($values);
                 }
 
                 $value = $data;
-            } else {
-                $metadata   = $om->getClassMetadata(get_class($value));
-                $identifier = $metadata->getIdentifierFieldNames();
+            } elseif (is_a($value, $targetClass)) {
+                $identifier = $uow->getEntityIdentifier($value);
 
                 // TODO: handle composite (multiple) identifiers
                 if (count($identifier) > 1) {
-                    //$value = $key;
+                    //$value = $identifier;
                 } else {
-                    $value = current($metadata->getIdentifierValues($value));
+                    $value = current($identifier);
                 }
             }
         }
