@@ -217,7 +217,7 @@ class Proxy
                 if (count($identifier) > 1) {
                     //$value = $key;
                 } else {
-                    $value = current($metadata->getIdentifierValues($value));
+                    $value = $om->getUnitOfWork()->getEntityIdentifier($value);
                 }
             }
         }
