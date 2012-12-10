@@ -239,7 +239,7 @@ class Proxy
                 throw new RuntimeException('No method name was set');
             }
             $findMethodName = $findMethod['name'];
-            $findMethodParams = isset($findMethod['params']) ? $findMethod['params'] : null;
+            $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : null;
 
             $repository = $this->objectManager->getRepository($this->targetClass);
             if (!method_exists($repository, $findMethodName)) {
@@ -253,8 +253,8 @@ class Proxy
             $r = new ReflectionMethod($repository, $findMethodName);
             $args = array();
             foreach ($r->getParameters() as $param) {
-                if (array_key_exists($param->getName(), $findMethodParams)) {
-                    $args[] = $findMethodParams[$param->getName()];
+                if (array_key_exists(strtolower($param->getName()), $findMethodParams)) {
+                    $args[] = $findMethodParams[strtolower($param->getName())];
                 } else {
                     $args[] = $param->getDefaultValue();
                 }
