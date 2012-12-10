@@ -70,6 +70,59 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->getValueOptions();
     }
 
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage No method name was set
+     */
+    public function testExceptionThrownForMissingFindMethodName()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+ 
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+                      ->method('getClassMetadata')
+                      ->with($this->equalTo($objectClass))
+                      ->will($this->returnValue($metadata));
+
+        $this->proxy->setOptions(array(
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+            'find_method' => array('no_name')
+        ));
+
+        $this->proxy->getValueOptions();
+    }
+
+    public function testExceptionFindMethodNameNotExistentInRepository()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+                      ->method('getClassMetadata')
+                      ->with($this->equalTo($objectClass))
+                      ->will($this->returnValue($metadata));
+
+        $objectManager->expects($this->once())
+                      ->method('getRepository')
+                      ->with($this->equalTo($objectClass))
+                      ->will($this->returnValue($objectRepository));
+
+        $this->proxy->setOptions(array(
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+            'find_method' => array('name' => 'NotExistent'),
+        ));
+
+        $this->setExpectedException('RuntimeException', 'Method "NotExistent" could not be found in respository "' . get_class($objectRepository).'"');
+
+        $this->proxy->getValueOptions();
+    }
+
     public function testToStringIsUsedForGetValueOptions()
     {
         $this->prepareProxy();
@@ -140,17 +193,12 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $result = $this->proxy->getValueOptions();
         $this->assertEquals(array(), $result);
     }
-
-    public function testFilterBy()
+    
+    public function testUsingFindMethod()
     {
         $this->prepareFilteredProxy();
-
-        $filter = $this->proxy->getFilterBy();
-        $result = $this->proxy->getValueOptions();
-
-        $this->assertArrayHasKey('email', $filter);
-        $this->assertEquals($filter['email'], 'object one email');
-        $this->assertEquals(1, count($result));
+        
+        $this->proxy->getValueOptions();
     }
 
     protected function prepareProxy()
@@ -228,28 +276,38 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $objectOne->setId(1)
                   ->setUsername('object one username')
                   ->setPassword('object one password')
-                  ->setEmail('object one email');
+                  ->setEmail('object one email')
+                  ->setFirstname('object one firstname')
+                  ->setSurname('object one surname');
+
+        $objectTwo->setId(2)
+                  ->setUsername('object two username')
+                  ->setPassword('object two password')
+                  ->setEmail('object two email')
+                  ->setFirstname('object two firstname')
+                  ->setSurname('object two surname');
 
         $result = new ArrayCollection(array(
-                $objectOne
+            $objectOne,
+            $objectTwo
         ));
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $metadata->expects($this->exactly(1))
+        $metadata->expects($this->exactly(2))
                  ->method('getIdentifierValues')
                  ->will($this->returnCallback(
-                    function() use ($objectOne, $objectTwo) {
-                        $input = func_get_args();
-                        $input = array_shift($input);
-                        if ($input == $objectOne) {
-                            return array('id' => 1);
-                        } else if ($input == $objectTwo) {
-                            return array('id' => 2);
-                        } else {
-                            return array();
-                        }
-                    }
-        ));
+                     function() use ($objectOne, $objectTwo) {
+                         $input = func_get_args();
+                         $input = array_shift($input);
+                         if ($input == $objectOne) {
+                             return array('id' => 1);
+                         } else if ($input == $objectTwo) {
+                             return array('id' => 2);
+                         } else {
+                             return array();
+                         }
+                     }
+                  ));
 
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository->expects($this->once())
@@ -268,9 +326,13 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                       ->will($this->returnValue($objectRepository));
 
         $this->proxy->setOptions(array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-                'filter_by'      => array('email' => 'object one email')
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+            'find_method' => array('name' => 'findBy',
+                                   'params' => array(
+                                       'criteria' => array('email' => 'object one email'),
+                                   ),
+                             ),
         ));
 
         $this->metadata = $metadata;
