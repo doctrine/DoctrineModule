@@ -17,56 +17,37 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Form\Element;
+namespace DoctrineModule\Persistence;
 
-use DoctrineModule\Form\Element\Proxy;
-use Zend\Form\Element\MultiCheckbox;
-use Zend\Form\Form;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class ObjectMultiCheckbox extends MultiCheckbox
+/**
+ * Trait to provide object manager to a form (only works from PHP 5.4)
+ */
+trait ProvidesObjectManager
 {
     /**
-     * @var Proxy
+     * @var ObjectManager
      */
-    protected $proxy;
+    protected $objectManager;
 
     /**
-     * @return Proxy
+     * Set the object manager
+     *
+     * @param ObjectManager $objectManager
      */
-    public function getProxy()
+    public function setObjectManager(ObjectManager $objectManager)
     {
-        if (null === $this->proxy) {
-            $this->proxy = new Proxy();
-        }
-        return $this->proxy;
+        $this->objectManager = $objectManager;
     }
 
     /**
-     * @param  array|\Traversable $options
-     * @return ObjectSelect
+     * Get the object manager
+     *
+     * @return ObjectManager
      */
-    public function setOptions($options)
+    public function getObjectManager()
     {
-        $this->getProxy()->setOptions($options);
-        return parent::setOptions($options);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setValue($value)
-    {
-        return parent::setValue($this->getProxy()->getValue($value));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getValueOptions()
-    {
-        if (empty($this->valueOptions)) {
-            $this->setValueOptions($this->getProxy()->getValueOptions());
-        }
-        return $this->valueOptions;
+        return $this->objectManager;
     }
 }
