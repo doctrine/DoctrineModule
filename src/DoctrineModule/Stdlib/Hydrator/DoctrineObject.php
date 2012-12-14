@@ -20,11 +20,12 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
+use InvalidArgumentException;
 use Traversable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use DoctrineModule\Util\CollectionUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
@@ -42,6 +43,13 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 class DoctrineObject extends AbstractHydrator
 {
     /**
+     * Merging strategies constants
+     */
+    const COLLECTION_MERGING_INTERSECT_UNION = 0x01;
+    const COLLECTION_MERGING_INTERSECT = 0x03;
+    const COLLECTION_MERGING_UNION = 0x02;
+
+    /**
      * @var ObjectManager
      */
     protected $objectManager;
@@ -55,6 +63,22 @@ class DoctrineObject extends AbstractHydrator
      * @var HydratorInterface
      */
     protected $hydrator;
+
+    /**
+     * @var array
+     */
+    protected $collectionMergingStrategies = array(
+        '*' => self::COLLECTION_MERGING_INTERSECT_UNION
+    );
+
+    /**
+     * @var array
+     */
+    protected $strategiesCallable = array(
+        self::COLLECTION_MERGING_INTERSECT_UNION => array('DoctrineModule\Util\CollectionUtils', 'intersectUnion'),
+        self::COLLECTION_MERGING_INTERSECT => array('DoctrineModule\Util\CollectionUtils', 'intersect'),
+        self::COLLECTION_MERGING_UNION => array('DoctrineModule\Util\CollectionUtils', 'union')
+    );
 
     /**
      * @param ObjectManager     $objectManager
@@ -74,13 +98,12 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * @param HydratorInterface $hydrator
+     * @param  HydratorInterface $hydrator
      * @return DoctrineObject
      */
     public function setHydrator(HydratorInterface $hydrator)
     {
         $this->hydrator = $hydrator;
-
         return $this;
     }
 
@@ -90,6 +113,56 @@ class DoctrineObject extends AbstractHydrator
     public function getHydrator()
     {
         return $this->hydrator;
+    }
+
+    /**
+     * If set to:
+     * - "INTERSECT_UNION": the collection will contain all the elements that already exist, minus
+     *   the ones that does not exist in the data from the submitted collection.
+     * - "INTERSECT": the collection will contain all the elements that already exists and that are also
+     *   in the data from the submitted collection.
+     * - "UNION": the collection will contain all the elements that already exists and the ones that are new
+     *   from the submitted collection.
+     *
+     * The strategy can be set for a specific collection name or to every collection by using the wildcard
+     *
+     * @param  int    $mergingStrategy
+     * @param  string $collectionName
+     * @throws InvalidArgumentException
+     * @return DoctrineObject
+     */
+    public function setCollectionMergingStrategy($mergingStrategy, $collectionName = '*')
+    {
+        $validStrategies = array(
+            self::COLLECTION_MERGING_INTERSECT_UNION,
+            self::COLLECTION_MERGING_INTERSECT,
+            self::COLLECTION_MERGING_UNION
+        );
+
+        if (!in_array($mergingStrategy, $validStrategies)) {
+            throw new InvalidArgumentException(
+                'The merging strategy given does not exist'
+            );
+        }
+
+        $this->collectionMergingStrategies[$collectionName] = $mergingStrategy;
+
+        return $this;
+    }
+
+    /**
+     * Get the merging strategy for the collection (or the generic one using wildcard)
+     *
+     * @param  string $collectionName
+     * @return null|int
+     */
+    public function getCollectionMergingStrategy($collectionName = '*')
+    {
+        if (isset($this->collectionMergingStrategies[$collectionName])) {
+            return $this->collectionMergingStrategies[$collectionName];
+        }
+
+        return null;
     }
 
     /**
@@ -118,7 +191,6 @@ class DoctrineObject extends AbstractHydrator
         $object = $this->tryConvertArrayToObject($data, $object);
 
         foreach($data as $field => &$value) {
-
             $value = $this->hydrateValue($field, $value);
 
             if ($value === null) {
@@ -142,14 +214,8 @@ class DoctrineObject extends AbstractHydrator
                 if ($this->metadata->isSingleValuedAssociation($field)) {
                     $value = $this->toOne($value, $target);
                 } elseif ($this->metadata->isCollectionValuedAssociation($field)) {
-                    $value = $this->toMany($value, $target);
-
-                    // Automatically merge collections using helper utility
-                    $propertyRefl = $this->metadata->getReflectionClass()->getProperty($field);
-                    $propertyRefl->setAccessible(true);
-
-                    $previousValue = $propertyRefl->getValue($object);
-                    $value = CollectionUtils::intersectUnion($previousValue, $value);
+                    $collection = $this->toMany($value, $target);
+                    $value      = $this->mergeCollection($collection, $field, $object);
                 }
             }
         }
@@ -196,6 +262,28 @@ class DoctrineObject extends AbstractHydrator
         }
 
         return $values;
+    }
+
+    /**
+     * Performs a merge of the collection
+     *
+     * @param Collection $collection
+     * @param string     $field
+     * @param object     $object
+     * @return Collection
+     */
+    protected function mergeCollection(Collection $collection, $field, $object)
+    {
+        $propertyRefl = $this->metadata->getReflectionClass()->getProperty($field);
+        $propertyRefl->setAccessible(true);
+
+        $previousCollection = $propertyRefl->getValue($object);
+//var_dump($previousCollection);
+        if (($mergingStrategy = $this->getCollectionMergingStrategy($field)) === null) {
+            $mergingStrategy = $this->getCollectionMergingStrategy('*');
+        }
+
+        return forward_static_call($this->strategiesCallable[$mergingStrategy], $previousCollection, $collection);
     }
 
     /**

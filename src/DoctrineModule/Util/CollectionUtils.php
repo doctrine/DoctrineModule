@@ -21,7 +21,6 @@ namespace DoctrineModule\Util;
 
 use Doctrine\Common\Collections\Collection;
 
-
 /**
  * This class provides some useful util functions when dealing with Doctrine Collections.
  *
@@ -34,10 +33,9 @@ class CollectionUtils
 {
     /**
      * This function performs a kind of "intersection union" operation, and is useful especially when dealing
-     * with dynamic forms. For instance, if a collection contains existing elements and a form remove one of those
-     * elements, this function will return a Collection that contains all the elements from $collection1, minus ones
-     * that are not present in $collection2. This is used internally in the DoctrineModule hydrator, so that the
-     * work is done for you automatically
+     * with dynamic forms. It returns $collection1, but remove all the elements from $collection1 that does not
+     * exist in $collection2. This is the default behavior used by DoctrineModule hydrator when dealing with
+     * collection
      *
      * @param  Collection $collection1
      * @param  Collection $collection2
@@ -45,7 +43,7 @@ class CollectionUtils
      */
     public static function intersectUnion(Collection $collection1, Collection $collection2)
     {
-        // Don't make the work both
+        // Don't make the work twice
         if ($collection1 === $collection2) {
             return $collection1;
         }
@@ -77,6 +75,79 @@ class CollectionUtils
         // Add elements that are in $collection2 but not in $collection1
         foreach ($collection2 as $value) {
             $collection1->add($value);
+        }
+
+        return $collection1;
+    }
+
+    /**
+     * This function performs an "union" operation on collections. This function returns $collection1, by adding
+     * all the elements that are also in $collection2. This can be used in the DoctrineModule hydrator or in your
+     * own entity code
+     *
+     * @param  Collection $collection1
+     * @param  Collection $collection2
+     * @return Collection
+     */
+    public static function union(Collection $collection1, Collection $collection2)
+    {
+        // Don't make the work twice
+        if ($collection1 === $collection2) {
+            return $collection1;
+        }
+
+        foreach ($collection1 as $key1 => $value1) {
+            foreach ($collection2 as $key2 => $value2) {
+                if ($value1 === $value2) {
+                    unset ($collection2[$key2]);
+                    break;
+                }
+            }
+        }
+
+        // Add elements that are in $collection2 but not in $collection1
+        foreach ($collection2 as $value) {
+            $collection1->add($value);
+        }
+
+        return $collection1;
+    }
+
+    /**
+     * This function performs an "intersect" operation on collections. This function returns $collection1, by
+     * removing all the elements that are not both in $collection1 and $collection2
+     *
+     * @param  Collection $collection1
+     * @param  Collection $collection2
+     * @return Collection
+     */
+    public static function intersect(Collection $collection1, Collection $collection2)
+    {
+        // Don't make the work twice
+        if ($collection1 === $collection2) {
+            return $collection1;
+        }
+
+        $toRemove = array();
+
+        foreach ($collection1 as $key1 => $value1) {
+            $elementFound = false;
+
+            foreach ($collection2 as $key2 => $value2) {
+                if ($value1 === $value2) {
+                    $elementFound = true;
+                    break;
+                }
+            }
+
+            if (!$elementFound) {
+                $toRemove[] = $key1;
+            }
+        }
+
+        // Remove elements that are not both in $collection1 and $collection2
+        foreach ($toRemove as $key) {
+            $collection1->remove($key);
         }
 
         return $collection1;

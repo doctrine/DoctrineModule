@@ -29,4 +29,48 @@ class CollectionUtilsTest extends BaseTestCase
             'foo', 'baz'
         ), $resultArray);
     }
+
+    public function testCanIntersectTwoArrays()
+    {
+        $masterCollection = new ArrayCollection(array(
+            'foo',
+            'bar'
+        ));
+
+        $collection2 = new ArrayCollection(array(
+            'foo',
+            'baz'
+        ));
+
+        $result = CollectionUtils::intersect($masterCollection, $collection2);
+
+        $this->assertSame($result, $masterCollection);
+
+        $resultArray = array_values($result->toArray());
+        $this->assertEquals(array(
+            'foo'
+        ), $resultArray);
+    }
+
+    public function testCanUnionTwoArrays()
+    {
+        $masterCollection = new ArrayCollection(array(
+            'foo',
+            'bar'
+        ));
+
+        $collection2 = new ArrayCollection(array(
+            'foo',
+            'baz'
+        ));
+
+        $result = CollectionUtils::union($masterCollection, $collection2);
+
+        $this->assertSame($result, $masterCollection);
+
+        $resultArray = array_values($result->toArray());
+        $this->assertEquals(array(
+            'foo', 'bar', 'baz'
+        ), $resultArray);
+    }
 }
