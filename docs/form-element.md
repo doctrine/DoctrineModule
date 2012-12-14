@@ -28,13 +28,15 @@ class MyForm extends Form implements ObjectManagerAwareInterface
     public function init()
     {
         $this->add(
-            'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-            'name' => 'name',
-            'options' => array(
-                'object_manager' => $this->getObjectManager(),
-                'target_class'   => 'Module\Entity\SomeEntity',
-                'property'       => 'property',
-            ),
+            array(
+                'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+                'name' => 'name',
+                'options' => array(
+                    'object_manager' => $this->getObjectManager(),
+                    'target_class'   => 'Module\Entity\SomeEntity',
+                    'property'       => 'property',
+                ),
+            )
         );
     }
     
@@ -63,20 +65,22 @@ Also you can specify a method as a property by setting `is_method` to true.
 
 ```php
 $this->add(
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-    'name' => 'name',
-    'options' => array(
-        'object_manager' => $this->getObjectManager(),
-        'target_class'   => 'Module\Entity\User',
-        'property'       => 'ComposedOfSeveralProperties',
-        'is_method'      => true,
-        'find_method'    => array(
-            'name'   => 'findBy',
-            'params' => array(
-                'criteria' => array('active' => 1),
-                'orderBy'  => array('lastname' => 'ASC'),
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager' => $this->getObjectManager(),
+            'target_class'   => 'Module\Entity\User',
+            'property'       => 'ComposedOfSeveralProperties',
+            'is_method'      => true,
+            'find_method'    => array(
+                'name'   => 'findBy',
+                'params' => array(
+                    'criteria' => array('active' => 1),
+                    'orderBy'  => array('lastname' => 'ASC'),
+                ),
             ),
         ),
-    ),
+    )
 );
 ```
