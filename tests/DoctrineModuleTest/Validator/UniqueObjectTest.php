@@ -53,9 +53,29 @@ class UniqueObjectTest extends BaseTestCase
     public function testCanValidateIfThereIsTheSameObjectInTheRepository()
     {
         $match = new stdClass();
-        $match->id = 'identifier';
+
+        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $classMetadata
+            ->expects($this->once())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+        $classMetadata
+            ->expects($this->once())
+            ->method('getIdentifierValues')
+            ->with($match)
+            ->will($this->returnValue(array('id' => 'identifier')));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->any())
+                      ->method('getClassMetadata')
+                      ->with('stdClass')
+                      ->will($this->returnValue($classMetadata));
 
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository
+            ->expects($this->any())
+            ->method('getClassName')
+            ->will($this->returnValue('stdClass'));
         $repository
             ->expects($this->once())
             ->method('findOneBy')
@@ -68,15 +88,36 @@ class UniqueObjectTest extends BaseTestCase
                 'fields'            => 'matchKey',
             )
         );
+        $validator->setObjectManager($objectManager);
         $this->assertTrue($validator->isValid('matchValue', array('id' => 'identifier')));
     }
 
     public function testCannotValidateIfThereIsAnotherObjectWithTheSameValueInTheRepository()
     {
         $match = new stdClass();
-        $match->id = 'identifier';
+
+        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $classMetadata
+            ->expects($this->once())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+        $classMetadata
+            ->expects($this->once())
+            ->method('getIdentifierValues')
+            ->with($match)
+            ->will($this->returnValue(array('id' => 'identifier')));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->any())
+                      ->method('getClassMetadata')
+                      ->with('stdClass')
+                      ->will($this->returnValue($classMetadata));
 
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository
+            ->expects($this->any())
+            ->method('getClassName')
+            ->will($this->returnValue('stdClass'));
         $repository
             ->expects($this->once())
             ->method('findOneBy')
@@ -89,54 +130,8 @@ class UniqueObjectTest extends BaseTestCase
                 'fields'            => 'matchKey',
             )
         );
+        $validator->setObjectManager($objectManager);
         $this->assertFalse($validator->isValid('matchValue', array('id' => 'another identifier')));
-    }
-
-    public function testCanAccessThePropertiesByGetter()
-    {
-        $match = $this->getMock('stdClass', array('getId'));
-        $match->expects($this->once())
-              ->method('getId')
-              ->will($this->returnValue('identifier'));
-
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $repository
-            ->expects($this->once())
-            ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
-            ->will($this->returnValue($match));
-
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'fields'            => 'matchKey',
-            )
-        );
-        $this->assertFalse($validator->isValid('matchValue', array('id' => 'another identifier')));
-    }
-
-    /**
-     * @expectedException Zend\Validator\Exception\RuntimeException
-     * @expectedExceptionMessage Property (id) in (stdClass) is not accessible. You should implement stdClass::getId()
-     */
-    public function testThrowsAnExceptionWhenAnIdentifierPropertyDoesNotExistInTheMatchedObject()
-    {
-        $match = new stdClass();
-
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $repository
-            ->expects($this->once())
-            ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
-            ->will($this->returnValue($match));
-
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'fields'            => 'matchKey',
-            )
-        );
-        $validator->isValid('matchValue', array('id' => 'identifier'));
     }
 
     /**
@@ -146,7 +141,6 @@ class UniqueObjectTest extends BaseTestCase
     public function testThrowsAnExceptionOnMissingContext()
     {
         $match = new stdClass();
-        $match->id = 'identifier';
 
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
@@ -171,9 +165,24 @@ class UniqueObjectTest extends BaseTestCase
     public function testThrowsAnExceptionOnMissingIdentifierInContext()
     {
         $match = new stdClass();
-        $match->id = 'identifier';
+
+        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $classMetadata
+            ->expects($this->once())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->any())
+                      ->method('getClassMetadata')
+                      ->with('stdClass')
+                      ->will($this->returnValue($classMetadata));
 
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository
+            ->expects($this->any())
+            ->method('getClassName')
+            ->will($this->returnValue('stdClass'));
         $repository
             ->expects($this->once())
             ->method('findOneBy')
@@ -186,47 +195,7 @@ class UniqueObjectTest extends BaseTestCase
                 'fields'            => 'matchKey',
             )
         );
+        $validator->setObjectManager($objectManager);
         $validator->isValid('matchValue', array());
-    }
-
-    /**
-     * @expectedException Zend\Validator\Exception\InvalidArgumentException
-     * @expectedExceptionMessage There must be at least one identifier
-     */
-    public function testThrowsAnExceptionOnMissingIdentifierFields()
-    {
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'fields'            => 'matchKey',
-                'id_fields'         => array()
-            )
-        );
-        $validator->isValid('matchValue', array());
-    }
-
-    public function testCanHandleMultipleIdentifiers()
-    {
-        $match = new stdClass();
-        $match->id  = 'identifier';
-        $match->id2 = 'identifier2';
-
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $repository
-            ->expects($this->once())
-            ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
-            ->will($this->returnValue($match));
-
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'fields'            => 'matchKey',
-                'id_fields'         => array('id', 'id2')
-            )
-        );
-        $this->assertFalse($validator->isValid('matchValue', array('id' => 'identifier', 'id2' => 'notIdentifier2')));
     }
 }

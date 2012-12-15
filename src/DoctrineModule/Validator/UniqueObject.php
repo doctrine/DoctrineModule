@@ -19,6 +19,8 @@
 
 namespace DoctrineModule\Validator;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Zend\Validator\Exception;
 
 /**
@@ -28,7 +30,7 @@ use Zend\Validator\Exception;
  * @link    http://www.doctrine-project.org/
  * @author  Oskar Bley <oskar@programming-php.net>
  */
-class UniqueObject extends ObjectExists
+class UniqueObject extends ObjectExists implements ObjectManagerAwareInterface
 {
     /**
      * Error constants
@@ -43,31 +45,24 @@ class UniqueObject extends ObjectExists
     );
 
     /**
-     * @var array Identifier fields
+     * @var ObjectManager
      */
-    protected $identifierFields;
+    protected $objectManager;
 
     /**
-     * Constructor
-     *
-     * @param array $options required keys are `object_repository`, which must be an instance of
-     *                       Doctrine\Common\Persistence\ObjectRepository, and `fields`, with either
-     *                       a string or an array of strings representing the fields to be matched by the validator.
-     *                       There might be also an key `id_fields`, that must be an string or an array of strings
-     *                       containing the identifiers of the entity.
-     * @throws \Zend\Validator\Exception\InvalidArgumentException
+     * @return ObjectManager
      */
-    public function __construct(array $options)
+    public function getObjectManager()
     {
-        $this->identifierFields = isset($options['id_fields'])
-                                ? (array) $options['id_fields']
-                                : array('id');
+        return $this->objectManager;
+    }
 
-        if (count($this->identifierFields) == 0) {
-            throw new Exception\InvalidArgumentException('There must be at least one identifier');
-        }
-
-        parent::__construct($options);
+    /**
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     */
+    public function setObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -99,35 +94,16 @@ class UniqueObject extends ObjectExists
 
     /**
      * Gets the identifiers from the matched object.
-     * 
+     *
      * @param object $match
      * @return array
      * @throws Exception\RuntimeException
      */
     protected function getFoundIdentifiers($match)
     {
-        $result = array();
-
-        foreach ($this->identifierFields as $identifierField) {
-            $getter = 'get' . ucfirst($identifierField);
-
-            if (\method_exists($match, $getter)) {
-                $result[$identifierField] = $match->$getter();
-            } elseif (\property_exists($match, $identifierField)) {
-                $result[$identifierField] = $match->{$identifierField};
-            } else {
-                throw new Exception\RuntimeException(
-                    \sprintf(
-                        'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
-                        $identifierField,
-                        \get_class($match),
-                        \get_class($match),
-                        $getter
-                    )
-                );
-            }
-        }
-        return $result;
+        return $this->objectManager
+                    ->getClassMetadata($this->objectRepository->getClassName())
+                    ->getIdentifierValues($match);
     }
 
     /**
@@ -146,7 +122,7 @@ class UniqueObject extends ObjectExists
         }
 
         $result = array();
-        foreach ($this->identifierFields as $identifierField) {
+        foreach ($this->getIdentifiers() as $identifierField) {
 
             if (!isset($context[$identifierField])) {
                 throw new Exception\RuntimeException(\sprintf('Expected context to contain %s', $identifierField));
@@ -155,5 +131,16 @@ class UniqueObject extends ObjectExists
             $result[$identifierField] = $context[$identifierField];
         }
         return $result;
+    }
+
+
+    /**
+     * @return array the names of the identifiers
+     */
+    protected function getIdentifiers()
+    {
+        return $this->objectManager
+                    ->getClassMetadata($this->objectRepository->getClassName())
+                    ->getIdentifierFieldNames();
     }
 }
