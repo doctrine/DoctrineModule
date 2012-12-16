@@ -1,11 +1,15 @@
 ## Validator
 
-DoctrineModule provides two validators that work out the box : `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` that allow to check if an entity or does not exists in database, respectively. They work like any other standard Zend validators.
+DoctrineModule provides three validators that work out the box : `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` that allow to check if an entity or does not exists in database, respectively; `DoctrineModule\Validator\UniqueObject` that allows to check if a value is only used in one object. They work like any other standard Zend validators.
 
-Both validators accept the following options :
+All three validators accept the following options :
 
 * `object_repository` : an instance of an object repository.
 * `fields` : an array that contains all the fields that are used to check if the entity exists (or does not).
+
+The `DoctrineModule\Validator\UniqueObject` also needs the following option:
+
+* `object_manager` : an instance of an object manager.
 
 > Tip : to get an object repository (in Doctrine ORM this is called an entity repository) from an object manager (in Doctrine ORM this is called an entity manager), you need to call the `getRepository` function of any valid object manager instance, passing it the FQCN of the class. For instance, in the context of Doctrine 2 ORM, here is how you get the `object_repository` of the 'Application\Entity\User' entity :
 
@@ -25,7 +29,7 @@ $validator = new \DoctrineModule\Validator\ObjectExists(array(
 
 var_dump($validator->isValid('test@example.com')); // dumps 'true' if an entity matches
 var_dump($validator->isValid(array('email' => 'test@example.com'))); // dumps 'true' if an entity matches
-```php
+```
 
 ### Use together with Zend Framework 2 forms
 
@@ -39,11 +43,11 @@ use Zend\Form\Form;
 use Zend\ServiceManager\ServiceManager;
 
 class User extends Form
-{		
+{
 	public function __construct(ServiceManager $serviceManager)
-	{			
+	{
 		parent::__construct('my-form');
-		
+
 		// Add an element
 		$this->add(array(
             'type'    => 'Zend\Form\Element\Email',
@@ -55,15 +59,15 @@ class User extends Form
                 'required'  => 'required'
             )
        	));
-       	
+
        	// add other elements (submit, CSRF…)
-       	
+
        	// Fetch any valid object manager from the Service manager (here, an entity manager)
        	$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
-       	
+
        	// Now get the input filter of the form, and add the validator to the email input
        	$emailInput = $this->getInputFilter()->get('email');
-       	
+
        	$noObjectExistsValidator = new NoObjectExistsValidator(array(
             'object_repository' => $entityManager->getRepository('Application\Entity\User'),
             'fields'            => 'email'
@@ -87,13 +91,13 @@ use Zend\ServiceManager\ServiceManager;
 class UserFieldset extends Fieldset implements InputFilterProviderInterface
 {
 	protected $serviceManager;
-	
+
 	public function __construct(ServiceManager $serviceManager)
 	{
 		$this->serviceManager = $serviceManager;
-		
+
 		parent::__construct('my-fieldset');
-		
+
 		// Add an element
 		$this->add(array(
             'type'    => 'Zend\Form\Element\Email',
@@ -106,11 +110,11 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
             )
        	));
 	}
-	
+
 	public function getInputFilterSpecification()
 	{
 		$entityManager = $this->serviceManager->get('Doctrine\ORM\EntityManager');
-		
+
 		return array(
 			'email' => array(
 				'validators' => array(
