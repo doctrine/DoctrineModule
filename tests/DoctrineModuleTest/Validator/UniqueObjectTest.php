@@ -41,9 +41,12 @@ class UniqueObjectTest extends BaseTestCase
             ->with(array('matchKey' => 'matchValue'))
             ->will($this->returnValue(null));
 
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
         $validator = new UniqueObject(
             array(
                 'object_repository' => $repository,
+                'object_manager'    => $objectManager,
                 'fields'            => 'matchKey',
             )
         );
@@ -85,10 +88,10 @@ class UniqueObjectTest extends BaseTestCase
         $validator = new UniqueObject(
             array(
                 'object_repository' => $repository,
-                'fields'            => 'matchKey',
+                'object_manager'    => $objectManager,
+                'fields'            => 'matchKey'
             )
         );
-        $validator->setObjectManager($objectManager);
         $this->assertTrue($validator->isValid('matchValue', array('id' => 'identifier')));
     }
 
@@ -127,10 +130,10 @@ class UniqueObjectTest extends BaseTestCase
         $validator = new UniqueObject(
             array(
                 'object_repository' => $repository,
-                'fields'            => 'matchKey',
+                'object_manager'    => $objectManager,
+                'fields'            => 'matchKey'
             )
         );
-        $validator->setObjectManager($objectManager);
         $this->assertFalse($validator->isValid('matchValue', array('id' => 'another identifier')));
     }
 
@@ -149,9 +152,12 @@ class UniqueObjectTest extends BaseTestCase
             ->with(array('matchKey' => 'matchValue'))
             ->will($this->returnValue($match));
 
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
         $validator = new UniqueObject(
             array(
                 'object_repository' => $repository,
+                'object_manager'    => $objectManager,
                 'fields'            => 'matchKey',
             )
         );
@@ -192,10 +198,47 @@ class UniqueObjectTest extends BaseTestCase
         $validator = new UniqueObject(
             array(
                 'object_repository' => $repository,
-                'fields'            => 'matchKey',
+                'object_manager'    => $objectManager,
+                'fields'            => 'matchKey'
             )
         );
-        $validator->setObjectManager($objectManager);
         $validator->isValid('matchValue', array());
+    }
+
+    /**
+     * @expectedException Zend\Validator\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Option "object_manager" is required and must be
+     *                           an instance of Doctrine\Common\Persistence\ObjectManager, nothing given
+     */
+    public function testThrowsAnExceptionOnMissingObjectManager()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        new UniqueObject(
+            array(
+                'object_repository' => $repository,
+                'fields'            => 'matchKey'
+            )
+        );
+    }
+
+    /**
+     * @expectedException Zend\Validator\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Option "object_manager" is required and must be
+     *                           an instance of Doctrine\Common\Persistence\ObjectManager, nothing given
+     */
+    public function testThrowsAnExceptionOnWrongObjectManager()
+    {
+        $objectManager = new stdClass();
+
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        new UniqueObject(
+            array(
+                'object_repository' => $repository,
+                'object_manager'    => $objectManager,
+                'fields'            => 'matchKey'
+            )
+        );
     }
 }

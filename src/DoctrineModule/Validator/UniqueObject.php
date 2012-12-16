@@ -48,20 +48,41 @@ class UniqueObject extends ObjectExists
      */
     protected $objectManager;
 
-    /**
-     * @return ObjectManager
+    /***
+     * Constructor
+     *
+     * @param array $options required keys are `object_repository`, which must be an instance of
+     *                       Doctrine\Common\Persistence\ObjectRepository, `object_manager`, which
+     *                       must be an instance of Doctrine\Common\Persistence\ObjectManager,
+     *                       and `fields`, with either a string or an array of strings representing
+     *                       the fields to be matched by the validator.
+     * @throws Exception\InvalidArgumentException
      */
-    public function getObjectManager()
+    public function __construct(array $options)
     {
-        return $this->objectManager;
-    }
+        parent::__construct($options);
 
-    /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     */
-    public function setObjectManager(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
+        if (!isset($options['object_manager']) || !$options['object_manager'] instanceof ObjectManager) {
+            if (!array_key_exists('object_manager', $options)) {
+                $provided = 'nothing';
+            } else {
+                if (is_object($options['object_manager'])) {
+                    $provided = get_class($options['object_manager']);
+                } else {
+                    $provided = getType($options['object_manager']);
+                }
+            }
+
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    'Option "object_manager" is required and must be an instance of'
+                    . ' Doctrine\Common\Persistence\ObjectManager, %s given',
+                    $provided
+                )
+            );
+        }
+
+        $this->objectManager = $options['object_manager'];
     }
 
     /**
