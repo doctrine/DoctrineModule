@@ -20,7 +20,6 @@
 namespace DoctrineModule\Validator;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Zend\Validator\Exception;
 
 /**
@@ -30,7 +29,7 @@ use Zend\Validator\Exception;
  * @link    http://www.doctrine-project.org/
  * @author  Oskar Bley <oskar@programming-php.net>
  */
-class UniqueObject extends ObjectExists implements ObjectManagerAwareInterface
+class UniqueObject extends ObjectExists
 {
     /**
      * Error constants
