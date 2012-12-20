@@ -38,11 +38,13 @@
     "require": {
         "php": ">=5.3.3",
         "doctrine/common": ">=2.3-dev,<2.5-dev",
-        "doctrine/data-fixtures": "1.*",
         "symfony/console": ">=2.0.13",
         "zendframework/zendframework": "2.*"
     },
-    "minimum-stability": "alpha",
+    "suggest": {
+        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
+    },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
             "DoctrineModule\\": "src/"
@@ -50,7 +52,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.6.x-dev"
+            "dev-master": "0.7.x-dev"
         }
     },
     "bin": [
