@@ -53,7 +53,7 @@ class Proxy implements ObjectManagerAwareInterface
     protected $property;
 
     /**
-     * @var Closure
+     * @var \Closure
      */
     protected $labelGenerator;
 
