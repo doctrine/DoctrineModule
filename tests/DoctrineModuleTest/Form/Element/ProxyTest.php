@@ -186,6 +186,24 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    public function testLabelCreatorUsedForGetValueOptions()
+    {
+        $this->prepareProxy();
+
+        $this->proxy->setOptions(array('label_generator' => function($targetEntity) {
+            return $targetEntity->getEmail();
+        }));
+
+        $this->metadata->expects($this->never())
+                       ->method('hasField');
+
+        $result = $this->proxy->getvalueOptions();
+        $this->assertEquals($result[0]['label'], 'object one email');
+        $this->assertEquals($result[1]['label'], 'object two email');
+        $this->assertEquals($result[0]['value'], 1);
+        $this->assertEquals($result[1]['value'], 2);
+    }
+
     public function testCanWorkWithEmptyTables()
     {
         $this->prepareEmptyProxy();

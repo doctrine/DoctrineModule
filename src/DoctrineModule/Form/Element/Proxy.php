@@ -51,7 +51,12 @@ class Proxy implements ObjectManagerAwareInterface
      * @var
      */
     protected $property;
-    
+
+    /**
+     * @var Closure
+     */
+    protected $labelGenerator;
+
     /**
      * @var
      */
@@ -74,6 +79,10 @@ class Proxy implements ObjectManagerAwareInterface
 
         if (isset($options['property'])) {
             $this->setProperty($options['property']);
+        }
+
+        if (isset($options['label_generator'])) {
+            $this->setLabelGenerator($options['label_generator']);
         }
         
         if (isset($options['find_method'])) {
@@ -165,7 +174,29 @@ class Proxy implements ObjectManagerAwareInterface
     {
         return $this->property;
     }
-    
+
+    /**
+     * @param $closure \Closure Anonymous function to create a multi property Label
+     * @return Proxy
+     */
+    public function setLabelGenerator(\Closure $closure)
+    {
+        $this->labelGenerator = $closure;
+        return $this;
+    }
+
+    /**
+     * @param $targetEntity
+     * @return string|null
+     */
+    public function getLabelGenerator($targetEntity)
+    {
+        if (is_callable($this->labelGenerator)) {
+            return call_user_func($this->labelGenerator, $targetEntity);
+        }
+        return null;
+    }
+
     /**
      * Set if the property is a method to use as the label in the options
      *
@@ -316,7 +347,9 @@ class Proxy implements ObjectManagerAwareInterface
             $options[''] = '';
         } else {
             foreach ($objects as $key => $object) {
-                if (($property = $this->property)) {
+                if (!is_null(($createdLabel = $this->getLabelGenerator($object)))) {
+                    $label = $createdLabel;
+                }  elseif (($property = $this->property)) {
                     if ($this->isMethod == false && !$metadata->hasField($property)) {
                         throw new RuntimeException(sprintf(
                             'Property "%s" could not be found in object "%s"',
