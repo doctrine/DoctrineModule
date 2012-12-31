@@ -156,6 +156,9 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * Hydrate the object using a by-value logic (this means that it uses the entity API, in this
+     * case, setters)
+     *
      * @param  array  $data
      * @param  object $object
      * @throws RuntimeException
@@ -163,8 +166,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function hydrateByValue(array $data, $object)
     {
-        $object = $this->tryConvertArrayToObject($data, $object);
-
+        $object   = $this->tryConvertArrayToObject($data, $object);
         $metadata = $this->getMetadataFor(get_class($object));
 
         foreach ($data as $field => $value) {
@@ -172,24 +174,14 @@ class DoctrineObject extends AbstractHydrator
                 continue;
             }
 
-            // @TODO DateTime (and other types) conversion should be handled by doctrine itself in future
-            if (in_array($metadata->getTypeOfField($field), array('datetime', 'time', 'date'))) {
-                if (is_int($value)) {
-                    $dt = new DateTime();
-                    $dt->setTimestamp($value);
-                    $value = $dt;
-                } elseif (is_string($value)) {
-                    $value = new DateTime($value);
-                }
-            }
+            $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
+            $setter = 'set' . ucfirst($field);
 
             if ($metadata->hasAssociation($field)) {
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
-                    $setter = 'set' . ucfirst($field);
                     $value  = $this->toOne($this->hydrateValue($field, $value), $target);
-
                     $object->$setter(clone $value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
                     // Check for strategy (like if it has a AllowRemove, DisallowRemove...).
@@ -201,6 +193,8 @@ class DoctrineObject extends AbstractHydrator
                     // As collection are always handled "by reference", it will directly modify the collection
                     $this->hydrateValue($field, $value);
                 }
+            } else {
+                $object->$setter($value);
             }
         }
 
@@ -208,13 +202,52 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * Hydrate the object using a by-reference logic (this means that values are modified directly without
+     * using the public API, in this case setters, and hence override any logic that could be done in those
+     * setters)
+     *
      * @param  array  $data
      * @param  object $object
      * @return object
      */
     protected function hydrateByReference(array $data, $object)
     {
+        $object   = $this->tryConvertArrayToObject($data, $object);
+        $metadata = $this->getMetadataFor(get_class($object));
+        $refl     = $metadata->getReflectionClass();
 
+        foreach ($data as $field => $value) {
+            // Ignore unknown fields or null values
+            if ($value === null || !$refl->hasProperty($field)) {
+                continue;
+            }
+
+            $value        = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
+            $reflProperty = $refl->getProperty($field);
+            $reflProperty->setAccessible(true);
+
+            if ($metadata->hasAssociation($field)) {
+                $target = $metadata->getAssociationTargetClass($field);
+
+                if ($metadata->isSingleValuedAssociation($field)) {
+                    $value  = $this->toOne($this->hydrateValue($field, $value), $target);
+                    $reflProperty->setValue($object, $value);
+                } elseif ($metadata->isCollectionValuedAssociation($field)) {
+                    // Check for strategy (like if it has a AllowRemove, DisallowRemove...).
+                    if (!$this->hasStrategy($field)) {
+                        $defaultStrategy = new Strategy\AllowRemove($this->objectManager, $object, $field);
+                        $this->addStrategy($field, $defaultStrategy);
+                    }
+
+                    // As collection are always handled "by reference", it will directly modify the collection
+                    $this->hydrateValue($field, $value);
+                }
+            } else {
+                $reflProperty->setValue($object, $value);
+            }
+        }
+
+        return $object;
     }
 
     /**
@@ -267,6 +300,45 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * @param mixed  $valueOrObject
+     * @param string $target
+     */
+    protected function toMany($valueOrObject, $target)
+    {
+
+    }
+
+    /**
+     * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
+     *
+     * @param  mixed  $value
+     * @param  string $typeOfField
+     * @return DateTime
+     */
+    protected function handleTypeConversions($value, $typeOfField)
+    {
+        switch($typeOfField) {
+            case 'datetime':
+            case 'time':
+            case 'date':
+                if (is_int($value)) {
+                    $dateTime = new DateTime();
+                    $dateTime->setTimestamp($value);
+                    $value = $dateTime;
+                } elseif (is_string($value)) {
+                    $value = new DateTime($value);
+                }
+
+                break;
+            default:
+        }
+
+        return $value;
+    }
+
+    /**
+     * Find an object by its identifiers
+     *
      * @param  string  $target
      * @param  mixed   $identifiers
      * @return object
@@ -277,6 +349,8 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * Get the metadata for given class
+     *
      * @param  string $className
      * @return ClassMetadata
      */
