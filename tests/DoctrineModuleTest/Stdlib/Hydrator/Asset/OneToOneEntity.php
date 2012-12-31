@@ -26,13 +26,24 @@ class OneToOneEntity
         return $this->id;
     }
 
-    public function setToOne(SimpleEntity $entity)
+    public function setToOne(SimpleEntity $entity, $modifyValue = true)
     {
+        // Modify the value to illustrate the difference between by value and by reference
+        if ($modifyValue) {
+            $entity->setField('Modified from setToOne setter', false);
+        }
+
         $this->toOne = $entity;
     }
 
-    public function getToOne()
+    public function getToOne($modifyValue = true)
     {
+        // Make some modifications to the relationship so that we can demonstrate difference between
+        // by value and by reference
+        if ($modifyValue) {
+            $this->toOne->setField('Modified from getToOne getter', false);
+        }
+
         return $this->toOne;
     }
 }
