@@ -38,7 +38,7 @@ class OneToOneEntity
 
     public function getToOne($modifyValue = true)
     {
-        // Make some modifications to the relationship so that we can demonstrate difference between
+        // Make some modifications to the association so that we can demonstrate difference between
         // by value and by reference
         if ($modifyValue) {
             $this->toOne->setField('Modified from getToOne getter', false);

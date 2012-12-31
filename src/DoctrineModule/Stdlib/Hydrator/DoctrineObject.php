@@ -176,8 +176,8 @@ class DoctrineObject extends AbstractHydrator
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
-                    $value = $this->toOne($this->hydrateValue($field, $value), $target);
-                    $object->$setter(clone $value);
+                    $value = $this->toOne($target, $this->hydrateValue($field, $value));
+                    $object->$setter($value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
                     // Collections are always handled "by reference", it will directly modify the collection
                     $this->toMany($field, $value, $object);
@@ -219,7 +219,7 @@ class DoctrineObject extends AbstractHydrator
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
-                    $value = $this->toOne($this->hydrateValue($field, $value), $target);
+                    $value = $this->toOne($target, $this->hydrateValue($field, $value));
                     $reflProperty->setValue($object, $value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
                     // Collections are always handled "by reference", it will directly modify the collection
@@ -267,11 +267,11 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Handle ToOne relationships. This function converts identifiers to an instance of the relationship
      *
-     * @param  mixed  $valueOrObject
      * @param  string $target
+     * @param  mixed  $valueOrObject
      * @return object
      */
-    protected function toOne($valueOrObject, $target)
+    protected function toOne($target, $valueOrObject)
     {
         if ($valueOrObject instanceof $target) {
             return $valueOrObject;
