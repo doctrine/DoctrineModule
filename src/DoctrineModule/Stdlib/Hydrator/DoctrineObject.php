@@ -19,6 +19,7 @@
 
 namespace DoctrineModule\Stdlib\Hydrator;
 
+use ArrayObject;
 use DateTime;
 use RuntimeException;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -49,6 +50,11 @@ class DoctrineObject extends AbstractHydrator
     protected $loadedMetadata = array();
 
     /**
+     * @var array
+     */
+    protected $collectionsUsedInSelect = array();
+
+    /**
      * @var bool
      */
     protected $byValue = true;
@@ -67,6 +73,32 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * Set the collections in the associations that are used in the context of a select form element. This
+     * is needed only during the extracting phase. For instance, let's say you have an entity "User" with a
+     * relationship to an entity "City". However, when modifying the entity "User", what you may want is to show
+     * the City in a Select form element, and hence the hydrator must extract only the identifier of the city
+     * entity in order to set the correct element value
+     *
+     * @param  array $collectionsUsedInSelect
+     * @return DoctrineObject
+     */
+    public function setCollectionsUsedInSelect(array $collectionsUsedInSelect)
+    {
+        $this->collectionsUsedInSelect = $collectionsUsedInSelect;
+        return $this;
+    }
+
+    /**
+     * Get the collections in the associations that are used in the context of a select form element
+     *
+     * @return array
+     */
+    public function getCollectionsUsedInSelect()
+    {
+        return $this->collectionsUsedInSelect;
+    }
+
+    /**
      * Extract values from an object
      *
      * @param  object $object
@@ -74,6 +106,8 @@ class DoctrineObject extends AbstractHydrator
      */
     public function extract($object)
     {
+        $this->prepare($object);
+
         if ($this->byValue === true) {
             return $this->extractByValue($object);
         }
@@ -90,11 +124,46 @@ class DoctrineObject extends AbstractHydrator
      */
     public function hydrate(array $data, $object)
     {
+        $this->prepare($object);
+
         if ($this->byValue === true) {
             return $this->hydrateByValue($data, $object);
         }
 
         return $this->hydrateByReference($data, $object);
+    }
+
+    /**
+     * It prepares the hydrator to be used for this object by adding a default strategy to every
+     * associations that does not have one currently set
+     *
+     * @param  object $object
+     * @return DoctrineObject
+     */
+    protected function prepare($object)
+    {
+        $metadata     = $this->getMetadataFor(get_class($object));
+        $associations = $metadata->getAssociationNames();
+
+        foreach ($associations as $association) {
+            // Ignore single valued association as the only one of interest are Collections here
+            if ($metadata->isSingleValuedAssociation($association)) {
+                continue;
+            }
+
+            if (!$this->hasStrategy($association)) {
+                // Is the association used in the context of a Select form element ?
+                $useInSelect = false;
+                if (isset($this->collectionsUsedInSelect[$association])) {
+                    $useInSelect = true;
+                }
+
+                $strategy = new Strategy\AllowRemove($metadata, $object, $association, $useInSelect);
+                $this->addStrategy($association, $strategy);
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -296,20 +365,13 @@ class DoctrineObject extends AbstractHydrator
      *
      * For more information on how to use Collections properly, please check the documentation of DoctrineModule
      *
-     * @param  mixed  $field
+     * @param  mixed  $collectionName
      * @param  mixed  $value
-     * @param  object $object
      * @return void
      */
-    protected function toMany($field, $value, $object)
+    protected function toMany($collectionName, $value)
     {
-        // Check for strategy (like if it has a AllowRemove, DisallowRemove...).
-        if (!$this->hasStrategy($field)) {
-            $defaultStrategy = new Strategy\AllowRemove($this->objectManager, $object, $field);
-            $this->addStrategy($field, $defaultStrategy);
-        }
-
-        $this->hydrateValue($field, $value);
+        $this->hydrateValue($collectionName, $value);
     }
 
     /**

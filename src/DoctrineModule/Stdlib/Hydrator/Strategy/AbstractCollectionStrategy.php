@@ -19,8 +19,9 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
+use RuntimeException;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
@@ -32,9 +33,9 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 abstract class AbstractCollectionStrategy implements StrategyInterface
 {
     /**
-     * @var ObjectManager
+     * @var ClassMetadata
      */
-    protected $objectManager;
+    protected $metadata;
 
     /**
      * @var object
@@ -47,17 +48,47 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
     protected $collectionName;
 
     /**
+     * @var bool
+     */
+    protected $useInSelect;
+
+
+    /**
      * Constructor
      *
-     * @param ObjectManager $objectManager
+     * @param ClassMetadata $metadata
      * @param               $object
      * @param string        $collectionName
+     * @param bool          $useInSelect
      */
-    public function __construct(ObjectManager $objectManager, $object, $collectionName)
+    public function __construct(ClassMetadata $metadata, $object, $collectionName, $useInSelect = false)
     {
-        $this->objectManager  = $objectManager;
+        $this->metadata       = $metadata;
         $this->object         = $object;
         $this->collectionName = $collectionName;
+        $this->useInSelect    = (bool) $useInSelect;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function extract($value)
+    {
+        if (!$this->useInSelect || is_numeric($value) || $value === null) {
+            return $value;
+        }
+
+        $identifierValues = $this->metadata->getIdentifierValues($this->object);
+
+        if (count($identifierValues) > 1) {
+            throw new RuntimeException(
+                'Doctrine hydrator does not support composite identifiers when collections are used in
+                 select form elements (because a select value cannot contain more than one value)'
+            );
+        }
+
+        // Return the first value of the array
+        return reset($identifierValues);
     }
 
     /**
@@ -82,9 +113,7 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
         }
 
         // Reflection
-        $metadata = $this->objectManager->getClassMetadata(get_class($object));
-        $refl     = $metadata->getReflectionClass();
-
+        $refl         = $this->metadata->getReflectionClass();
         $reflProperty = $refl->getProperty($this->collectionName);
         $reflProperty->setAccessible(true);
 

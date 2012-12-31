@@ -59,6 +59,10 @@ class DoctrineObjectTest extends BaseTestCase
                        ->will($this->returnValue(array('id', 'field')));
 
         $this->metadata->expects($this->any())
+                       ->method('getAssociationNames')
+                       ->will($this->returnValue(array()));
+
+        $this->metadata->expects($this->any())
                        ->method('getTypeOfField')
                        ->with($this->logicalOr(
                             $this->equalTo('id'),
@@ -101,6 +105,10 @@ class DoctrineObjectTest extends BaseTestCase
         $this->metadata->expects($this->any())
                        ->method('getFieldNames')
                        ->will($this->returnValue(array('id', 'toOne')));
+
+        $this->metadata->expects($this->any())
+                       ->method('getAssociationNames')
+                       ->will($this->returnValue(array('toOne')));
 
         $this->metadata->expects($this->any())
                        ->method('getTypeOfField')
@@ -155,6 +163,10 @@ class DoctrineObjectTest extends BaseTestCase
         $this->metadata->expects($this->any())
                        ->method('getFieldNames')
                        ->will($this->returnValue(array('id', 'entities')));
+
+        $this->metadata->expects($this->any())
+                       ->method('getAssociationNames')
+                       ->will($this->returnValue(array('entities')));
 
         $this->metadata->expects($this->any())
                        ->method('getTypeOfField')
@@ -509,10 +521,15 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function testAssertCollectionsAreNotSwappedDuringHydration()
     {
-        
+
     }
 
     public function testHandleDateTimeConversion()
+    {
+
+    }
+
+    public function testCanReturnOnlyIndexOfAssocationWhenExtractingForUsingInSelect()
     {
 
     }

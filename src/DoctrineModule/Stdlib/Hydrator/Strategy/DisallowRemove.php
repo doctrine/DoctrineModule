@@ -35,14 +35,6 @@ class DisallowRemove extends AbstractCollectionStrategy
     /**
      * {@inheritDoc}
      */
-    public function extract($value)
-    {
-        return $value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function hydrate($value)
     {
         // AllowRemove strategy need "adder"
