@@ -181,17 +181,11 @@ class DoctrineObject extends AbstractHydrator
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
-                    $value  = $this->toOne($this->hydrateValue($field, $value), $target);
+                    $value = $this->toOne($this->hydrateValue($field, $value), $target);
                     $object->$setter(clone $value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    // Check for strategy (like if it has a AllowRemove, DisallowRemove...).
-                    if (!$this->hasStrategy($field)) {
-                        $defaultStrategy = new Strategy\AllowRemove($this->objectManager, $object, $field);
-                        $this->addStrategy($field, $defaultStrategy);
-                    }
-
-                    // As collection are always handled "by reference", it will directly modify the collection
-                    $this->hydrateValue($field, $value);
+                    // Collections are always handled "by reference", it will directly modify the collection
+                    $this->toMany($field, $value, $object);
                 }
             } else {
                 $object->$setter($value);
@@ -230,17 +224,11 @@ class DoctrineObject extends AbstractHydrator
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
-                    $value  = $this->toOne($this->hydrateValue($field, $value), $target);
+                    $value = $this->toOne($this->hydrateValue($field, $value), $target);
                     $reflProperty->setValue($object, $value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    // Check for strategy (like if it has a AllowRemove, DisallowRemove...).
-                    if (!$this->hasStrategy($field)) {
-                        $defaultStrategy = new Strategy\AllowRemove($this->objectManager, $object, $field);
-                        $this->addStrategy($field, $defaultStrategy);
-                    }
-
-                    // As collection are always handled "by reference", it will directly modify the collection
-                    $this->hydrateValue($field, $value);
+                    // Collections are always handled "by reference", it will directly modify the collection
+                    $this->toMany($field, $value, $object);
                 }
             } else {
                 $reflProperty->setValue($object, $value);
@@ -282,6 +270,8 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * Handle ToOne relationships. This function converts identifiers to an instance of the relationship
+     *
      * @param  mixed  $valueOrObject
      * @param  string $target
      * @return object
@@ -300,12 +290,31 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * @param mixed  $valueOrObject
-     * @param string $target
+     * Handle ToMany relationships. Collections are specials because they are always handled by reference. Many
+     * people use them badly, and this hydrator tries to force people to use them the right way, although it involves
+     * little more code to right on the entity side. Basically, it will use a strategy (by default, Doctrine Module
+     * ships with two strategies: AllowRemove and DisallowRemove) to modify the collection of the entity, without
+     * changing/swapping it (which is what many people do). Instead, for this to work, you'll need to define two
+     * functions in your entities. For instance, for the collection "people", you need to define addPeople and
+     * removePeople functions (which will give you the opportunity to define specific logic when it comes to inverse
+     * or owning side).
+     *
+     * For more information on how to use Collections properly, please check the documentation of DoctrineModule
+     *
+     * @param  mixed  $field
+     * @param  mixed  $value
+     * @param  object $object
+     * @return void
      */
-    protected function toMany($valueOrObject, $target)
+    protected function toMany($field, $value, $object)
     {
+        // Check for strategy (like if it has a AllowRemove, DisallowRemove...).
+        if (!$this->hasStrategy($field)) {
+            $defaultStrategy = new Strategy\AllowRemove($this->objectManager, $object, $field);
+            $this->addStrategy($field, $defaultStrategy);
+        }
 
+        $this->hydrateValue($field, $value);
     }
 
     /**

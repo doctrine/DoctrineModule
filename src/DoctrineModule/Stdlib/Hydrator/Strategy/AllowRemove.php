@@ -19,9 +19,13 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
+use LogicException;
+
 /**
- * When this strategy is used for Collections, if the new collection does not contain element that are present in
- * the original collection, then this strategy remove elements from the original collection
+ * When this strategy is used for Collections, if the new collection does not contain elements that are present in
+ * the original collection, then this strategy remove elements from the original collection. For instance, if the
+ * collection initially contains elements A and B, and that the new collection contains elements B and C, then the
+ * final collection will contain elements B and C (while element A will be asked to be removed).
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
@@ -43,21 +47,25 @@ class AllowRemove extends AbstractCollectionStrategy
      */
     public function hydrate($value)
     {
-        /**
-         * Algorithm:
-         *
-         *  adder = addSomethings;
-            remover = removeSomethings;
+        // AllowRemove strategy need "adder" and "remover"
+        $adder   = 'add' . ucfirst($this->collectionName);
+        $remover = 'remove' . ucfirst($this->collectionName);
 
-            $coll = create collection from posted data
-            $oldColl = get existing collection by ref
-            $addDiff = compute add diff
-            $removeDiff = compute remove diff
+        if (!method_exists($this->object, $adder) || !method_exists($this->object, $remover)) {
+            throw new LogicException(sprintf(
+                'AllowRemove strategy for DoctrineModule hydrator requires both %s and %s to be defined in %s
+                 entity domain code, but one or both seem to be missing',
+                $adder, $remover, get_class($this->object)
+            ));
+        }
 
-            if is_callable($adder)
-                object->adder($addDiff);
-            if is_callable($remover)
-                object->remover($addDiff)
-         */
+        $collection = $this->getCollectionFromObject()->toArray();
+        $toAdd      = array_udiff($value, $collection, array($this, 'compareObjects'));
+        $toRemove   = array_udiff($collection, $value, array($this, 'compareObjects'));
+
+        $this->object->$adder($toAdd);
+        $this->object->$remover($toRemove);
+
+        return $collection;
     }
 }

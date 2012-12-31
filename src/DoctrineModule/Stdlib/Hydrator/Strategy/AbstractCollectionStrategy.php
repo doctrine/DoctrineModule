@@ -19,6 +19,7 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
@@ -46,6 +47,8 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
     protected $collectionName;
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      * @param               $object
      * @param string        $collectionName
@@ -55,5 +58,48 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
         $this->objectManager  = $objectManager;
         $this->object         = $object;
         $this->collectionName = $collectionName;
+    }
+
+    /**
+     * Get the collection value from the object. It first tries to get it using the getter, then trying to get
+     * if using the public property (if it exists), and then finally using Reflection
+     *
+     * @return Collection
+     */
+    protected function getCollectionFromObject()
+    {
+        $object = $this->object;
+        $getter = 'get' . ucfirst($this->collectionName);
+
+        // Getter
+        if (method_exists($object, $getter)) {
+            return $object->$getter;
+        }
+
+        // Public property
+        if (isset($object->{$this->collectionName})) {
+            return $object->{$this->collectionName};
+        }
+
+        // Reflection
+        $metadata = $this->objectManager->getClassMetadata(get_class($object));
+        $refl     = $metadata->getReflectionClass();
+
+        $reflProperty = $refl->getProperty($this->collectionName);
+        $reflProperty->setAccessible(true);
+
+        return $reflProperty->getValue();
+    }
+
+    /**
+     * This method is used internally by array_udiff to check if two objects are equal, according to their
+     * SPL hash. This is needed because the native array_diff only compare strings
+     *
+     * @param object $a
+     * @param object $b
+     */
+    protected function compareObjects($a, $b)
+    {
+        return strcmp(spl_object_hash($a), spl_object_hash($b));
     }
 }
