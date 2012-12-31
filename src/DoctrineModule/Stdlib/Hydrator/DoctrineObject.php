@@ -120,12 +120,7 @@ class DoctrineObject extends AbstractHydrator
                 continue;
             }
 
-            if ($metadata->isSingleValuedAssociation($fieldName)) {
-                $data[$fieldName] = $this->extractValue($fieldName, clone $object->$getter());
-            } elseif ($metadata->isCollectionValuedAssociation($fieldName)) {
-                // We don't clone Collection is this is prohibited
-                $data[$fieldName] = $this->extractValue($fieldName, $object->$getter());
-            }
+            $data[$fieldName] = $this->extractValue($fieldName, $object->$getter());
         }
 
         return $data;

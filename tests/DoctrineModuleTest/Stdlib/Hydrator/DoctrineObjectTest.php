@@ -2,18 +2,21 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator;
 
-use stdClass;
 use PHPUnit_Framework_TestCase as BaseTestCase;
-use Doctrine\Common\Collections\ArrayCollection;
+use ReflectionClass;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
-use Zend\Stdlib\Hydrator\ObjectProperty as ObjectPropertyHydrator;
 
 class DoctrineObjectTest extends BaseTestCase
 {
     /**
      * @var DoctrineObjectHydrator
      */
-    protected $hydrator;
+    protected $hydratorByValue;
+
+    /**
+     * @var DoctrineObjectHydrator
+     */
+    protected $hydratorByReference;
 
     /**
      * @var \Doctrine\Common\Persistence\Mapping\ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
@@ -25,6 +28,10 @@ class DoctrineObjectTest extends BaseTestCase
      */
     protected $objectManager;
 
+
+    /**
+     * setUp
+     */
     public function setUp()
     {
         parent::setUp();
@@ -32,733 +39,191 @@ class DoctrineObjectTest extends BaseTestCase
         $this->metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
         $this->objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, true);
+        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, false);
+    }
+
+    public function configureObjectManagerForSimpleEntity()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
+
         $this->objectManager->expects($this->atLeastOnce())
-                      ->method('getClassMetadata')
-                      ->with($this->equalTo('stdClass'))
-                      ->will($this->returnValue($this->metadata));
+                            ->method('getClassMetadata')
+                            ->with($this->equalTo('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'))
+                            ->will($this->returnValue($this->metadata));
 
-        $this->hydrator = new DoctrineObjectHydrator($this->objectManager, new ObjectPropertyHydrator());
-    }
+        $this->metadata->expects($this->any())
+                       ->method('getFieldNames')
+                       ->will($this->returnValue(array('id', 'field')));
 
-    public function testCanHydrateSimpleObject()
-    {
-        $data = array(
-            'username' => 'foo',
-            'password' => 'bar'
-        );
-
-        $this->metadata->expects($this->exactly(2))
+        $this->metadata->expects($this->any())
                        ->method('getTypeOfField')
-                       ->withAnyParameters()
-                       ->will($this->returnValue('string'));
+                       ->with($this->logicalOr(
+                            $this->equalTo('id'),
+                            $this->equalTo('field')))
+                       ->will($this->returnCallback(function($arg) {
+                            if ($arg === 'id') {
+                                return 'integer';
+                            } elseif ($arg === 'field') {
+                                return 'string';
+                            }
+                       }));
 
-        $object  = $this->hydrator->hydrate($data, new stdClass());
-        $extract = $this->hydrator->extract($object);
+        $this->metadata->expects($this->any())
+                       ->method('hasAssociation')
+                       ->with($this->logicalOr(
+                            $this->equalTo('id'),
+                            $this->equalTo('field')))
+                       ->will($this->returnCallback(function($arg) {
+                            return false;
+        }));
 
-        $this->assertEquals($data, $extract);
+        $this->metadata->expects($this->any())
+                       ->method('getIdentifierFieldNames')
+                       ->will($this->returnValue(array('id')));
+
+        $this->metadata->expects($this->any())
+                       ->method('getReflectionClass')
+                       ->will($this->returnValue($refl));
     }
 
-    public function testCanHydrateOneToOneEntity()
+    public function configureObjectManagerForOneToOneEntity()
     {
-        $data = array(
-            'country' => 1
-        );
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity');
 
-        $this->metadata->expects($this->exactly(1))
-             ->method('getTypeOfField')
-             ->with($this->equalTo('country'))
-             ->will($this->returnValue('integer'));
+        $this->objectManager->expects($this->atLeastOnce())
+                            ->method('getClassMetadata')
+                            ->with($this->equalTo('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity'))
+                            ->will($this->returnValue($this->metadata));
 
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('country'))
-            ->will($this->returnValue(true));
+        $this->metadata->expects($this->any())
+                       ->method('getFieldNames')
+                       ->will($this->returnValue(array('id', 'toOne')));
 
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('country'))
-            ->will($this->returnValue('stdClass'));
+        $this->metadata->expects($this->any())
+                       ->method('getTypeOfField')
+                       ->with($this->logicalOr(
+                            $this->equalTo('id'),
+                            $this->equalTo('field')))
+                       ->will($this->returnCallback(function($arg) {
+                                if ($arg === 'id') {
+                                    return 'integer';
+                                } elseif ($arg === 'toOne') {
+                                    return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                                }
+                       }));
 
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('country'))
-            ->will($this->returnValue(true));
+        $this->metadata->expects($this->any())
+                       ->method('hasAssociation')
+                       ->with($this->logicalOr(
+                            $this->equalTo('id'),
+                            $this->equalTo('field')))
+                       ->will($this->returnCallback(function($arg) {
+                                if ($arg === 'id') {
+                                    return false;
+                                } elseif ($arg === 'toOne') {
+                                    return true;
+                                }
+                       }));
 
-        $country = new stdClass();
-        $country->name = 'France';
-        $this->objectManager->expects($this->exactly(1))
-             ->method('find')
-             ->will($this->returnValue($country));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertInstanceOf('stdClass', $object->country);
+        $this->metadata->expects($this->any())
+                       ->method('getReflectionClass')
+                       ->will($this->returnValue($refl));
     }
 
-    public function testCanHydrateOneToManyEntity()
+    public function testCanExtractSimpleEntityByValue()
     {
-        $data = array(
-            'categories' => array(
-                1, 2, 3
-            )
-        );
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $entity = new Asset\SimpleEntity();
+        $entity->setId(2);
+        $entity->setField('foo', false);
 
-        $reflClass = $this->getMock('\ReflectionClass',
-            array(),
-            array('Doctrine\Common\Collections\ArrayCollection'));
+        $this->configureObjectManagerForSimpleEntity();
 
-        $reflProperty = $this->getMock('\ReflProperty',
-            array('setAccessible', 'getValue')
-        );
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue('array'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue('stdClass'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(false));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isCollectionValuedAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getReflectionClass')
-            ->will($this->returnValue($reflClass));
-
-        $reflClass->expects($this->exactly(1))
-            ->method('getProperty')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue($reflProperty));
-
-        $reflProperty->expects($this->exactly(1))
-            ->method('getValue')
-            ->withAnyParameters()
-            ->will($this->returnValue(new ArrayCollection($data['categories'])));
-
-        $this->objectManager->expects($this->exactly(3))
-            ->method('find')
-            ->will($this->returnValue(new stdClass()));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertEquals(3, count($object->categories));
-
-        foreach ($object->categories as $category) {
-            $this->assertInstanceOf('stdClass', $category);
-        }
+        $data = $this->hydratorByValue->extract($entity);
+        $this->assertEquals(array('id' => 2, 'field' => 'From getter: foo'), $data);
     }
 
-    public function testCanHydrateEntityWithNullableAssociation()
+    public function testCanExtractSimpleEntityByReference()
     {
-        $data = array(
-            'country' => null
-        );
+        // When using extraction by reference, it won't use the public API of entity (getters won't be called)
+        $entity = new Asset\SimpleEntity();
+        $entity->setId(2);
+        $entity->setField('foo', false);
 
-        $this->metadata->expects($this->never())
-                ->method('hasAssociation');
+        $this->configureObjectManagerForSimpleEntity();
 
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertNull($object->country);
+        $data = $this->hydratorByReference->extract($entity);
+        $this->assertEquals(array('id' => 2, 'field' => 'foo'), $data);
     }
 
-    public function testHydrateHandlesDateTimeFieldsCorrectly()
+    public function testCanHydrateSimpleEntityByValue()
     {
-        $this->metadata->expects($this->exactly(2))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('date'))
-            ->will($this->returnValue('datetime'));
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntity();
+        $this->configureObjectManagerForSimpleEntity();
+        $data = array('field' => 'foo');
 
-        // Integers
-        $now    = time();
-        $data   = array('date' => $now);
-        $object = $this->hydrator->hydrate($data, new stdClass());
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DateTime', $object->date);
-        $this->assertEquals($object->date->getTimestamp(), $now);
-
-        // Strings
-        $data   = array('date' => date('Y-m-d H:i:s', $now));
-        $object = $this->hydrator->hydrate($data, new stdClass());
-
-        $this->assertInstanceOf('DateTime', $object->date);
-        $this->assertEquals($object->date->getTimestamp(), $now);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('From setter: foo', $entity->getField(false));
     }
 
-    /**
-     * Tricky case: assuming the related `Review` entity has an identifier which is a `ReviewReference` object.
-     */
-    public function testHydrateCanFindSingleRelatedObjectByNonScalarIdentifier()
+    public function testCanHydrateSimpleEntityByReference()
     {
-        $reviewReference = new stdClass();
-        $reviewReference->uuid = '1234';
+        // When using hydration by reference, it won't use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntity();
+        $this->configureObjectManagerForSimpleEntity();
+        $data = array('field' => 'foo');
 
-        $review = new stdClass();
-        $review->reviewer = 'Marco Pivetta';
-        $review->description = 'Adding support for non-scalar references/identifiers';
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $data = array(
-            'review' => $reviewReference,
-        );
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('review'))
-            ->will($this->returnValue('Review'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('review'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('review'))
-            ->will($this->returnValue('Review'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('review'))
-            ->will($this->returnValue(true));
-
-        $this->objectManager->expects($this->exactly(1))
-            ->method('find')
-            ->with('Review', $reviewReference)
-            ->will($this->returnValue($review));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertSame($review, $object->review);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('foo', $entity->getField(false));
     }
 
-    /**
-     * Same as testHydrateCanFindSingleRelatedObjectByNonScalarIdentifier, but with collection valued associations
-     */
-    public function testHydrateCanFindMultipleRelatedObjectByNonScalarIdentifier()
+    public function testReuseExistingEntityIfDataArrayContainsIdentifier()
     {
-        $reviewReference = new stdClass();
-        $reviewReference->uuid = '5678';
+        // When using hydration by reference, it won't use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntity();
 
-        $review = new stdClass();
-        $review->reviewer = 'Marco Pivetta';
-        $review->description = 'Adding support for non-scalar references/identifiers';
+        $this->configureObjectManagerForSimpleEntity();
+        $data = array('id' => 1);
 
-        $data = array(
-            'reviews' => array(
-                $reviewReference,
-                $reviewReference,
-                $reviewReference,
-            ),
-        );
+        $entityInDatabaseWithIdOfOne = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfOne->setId(1);
+        $entityInDatabaseWithIdOfOne->setField('bar', false);
 
-        $reflClass = $this->getMock('\ReflectionClass',
-            array(),
-            array('Doctrine\Common\Collections\ArrayCollection'));
+        $this->objectManager->expects($this->any())
+                            ->method('find')
+                            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 1))
+                            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
-        $reflProperty = $this->getMock('\ReflProperty',
-            array('setAccessible', 'getValue')
-        );
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->metadata->expects($this->exactly(1))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue('Review'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue('Review'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(false));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isCollectionValuedAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(true));
-
-        $this->objectManager->expects($this->exactly(3))
-            ->method('find')
-            ->with('Review', $reviewReference)
-            ->will($this->returnValue($review));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getReflectionClass')
-            ->will($this->returnValue($reflClass));
-
-        $reflClass->expects($this->exactly(1))
-            ->method('getProperty')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue($reflProperty));
-
-        $reflProperty->expects($this->exactly(1))
-            ->method('getValue')
-            ->withAnyParameters()
-            ->will($this->returnValue(new ArrayCollection($data['reviews'])));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertCount(3, $object->reviews);
-
-        foreach ($object->reviews as $review) {
-            $this->assertSame($review, $review);
-        }
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('bar', $entity->getField(false));
     }
 
-    public function testHydrateCanHandleSingleRelatedObject()
+    public function testExtractOneToOneRelationshipByValue()
     {
-        $review = new stdClass();
-        $review->reviewer = 'David Windell';
-        $review->description = 'Testing hydration of related objects instead of identifiers';
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toOne = new Asset\SimpleEntity();
+        $toOne->setId(2);
+        $toOne->setField('foo', false);
 
-        $data = array(
-            'review' => $review,
-        );
+        $entity = new Asset\OneToOneEntity();
+        $entity->setId(2);
+        $entity->setToOne($toOne);
 
-        $this->metadata->expects($this->exactly(1))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('review'))
-            ->will($this->returnValue('stdClass'));
+        $this->configureObjectManagerForOneToOneEntity();
 
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('review'))
-            ->will($this->returnValue('stdClass'));
+        $data = $this->hydratorByValue->extract($entity);
 
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('review'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('review'))
-            ->will($this->returnValue(true));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertSame($review, $object->review);
-    }
-
-    public function testHydrateCanHandleMultipleRelatedObjects()
-    {
-        $review = new stdClass();
-        $review->reviewer = 'David Windell';
-        $review->description = 'Testing hydration of related objects instead of identifiers';
-
-        $data = array(
-            'reviews' => array(
-                $review,
-                $review,
-                $review,
-            ),
-        );
-
-        $reflClass = $this->getMock('\ReflectionClass',
-            array(),
-            array('Doctrine\Common\Collections\ArrayCollection'));
-
-        $reflProperty = $this->getMock('\ReflProperty',
-            array('setAccessible', 'getValue')
-        );
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue('stdClass'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue('stdClass'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(false));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isCollectionValuedAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getReflectionClass')
-            ->will($this->returnValue($reflClass));
-
-        $reflClass->expects($this->exactly(1))
-            ->method('getProperty')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue($reflProperty));
-
-        $reflProperty->expects($this->exactly(1))
-            ->method('getValue')
-            ->withAnyParameters()
-            ->will($this->returnValue(new ArrayCollection($data['reviews'])));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertCount(3, $object->reviews);
-        $this->assertSame($review, $object->reviews[0]);
-        $this->assertSame($review, $object->reviews[1]);
-        $this->assertSame($review, $object->reviews[2]);
-    }
-
-    public function testAlwaysRetrieveArrayCollectionForToManyRelationships()
-    {
-        $reviewReference = new stdClass();
-        $reviewReference->uuid = '5678';
-
-        $review = new stdClass();
-        $review->reviewer = 'Michaël Gallego';
-        $review->description = 'Testing Array Collection';
-
-        $data = array(
-            'reviews' => array(
-                $reviewReference,
-                $reviewReference,
-                $reviewReference,
-            ),
-        );
-
-        $reflClass = $this->getMock('\ReflectionClass',
-            array(),
-            array('Doctrine\Common\Collections\ArrayCollection'));
-
-        $reflProperty = $this->getMock('\ReflProperty',
-            array('setAccessible', 'getValue')
-        );
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue('Review'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue('Review'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(false));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isCollectionValuedAssociation')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getReflectionClass')
-            ->will($this->returnValue($reflClass));
-
-        $reflClass->expects($this->exactly(1))
-            ->method('getProperty')
-            ->with($this->equalTo('reviews'))
-            ->will($this->returnValue($reflProperty));
-
-        $reflProperty->expects($this->exactly(1))
-            ->method('getValue')
-            ->withAnyParameters()
-            ->will($this->returnValue(new ArrayCollection($data['reviews'])));
-
-        $this->objectManager->expects($this->exactly(3))
-            ->method('find')
-            ->with('Review', $reviewReference)
-            ->will($this->returnValue($review));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertCount(3, $object->reviews);
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $object->reviews);
-    }
-
-    public function testReturnObjectIfArrayContainIdentifierValues()
-    {
-        $reviewReference = new stdClass();
-        $reviewReference->uuid = '5678';
-
-        $reviewWithId = new stdClass();
-        $reviewWithId->id = 5;
-
-        $data = array(
-            'id' => '5',
-            'reviewer' => 'Michaël Gallego'
-        );
-
-        $this->metadata->expects($this->exactly(2))
-            ->method('getTypeOfField')
-            ->withAnyParameters()
-            ->will($this->returnValue('string'));
-
-        $this->metadata->expects($this->exactly(2))
-            ->method('hasAssociation')
-            ->withAnyParameters()
-            ->will($this->returnValue(false));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getIdentifierFieldNames')
-            ->with($this->equalTo(new stdClass()))
-            ->will($this->returnValue(array('id')));
-
-        $this->objectManager->expects($this->exactly(1))
-            ->method('find')
-            ->with('stdClass', array('id' => '5'))
-            ->will($this->returnValue($reviewWithId));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertEquals('5', $object->id);
-        $this->assertEquals('Michaël Gallego', $object->reviewer);
-    }
-
-    /**
-     * This data set contains the data that is added to an existing collection. The original collection is always
-     * the same, that is to say :
-     *  'categories' => [0 => 'foo', 1 => 'bar', 2 => 'french']
-     *
-     * @return array
-     */
-    public function intersectionUnionProvider()
-    {
-        $first = new stdClass();
-        $first->value = 'foo';
-        $second = new stdClass();
-        $second->value = 'bar';
-        $third = new stdClass();
-        $third->value = 'italian';
-        $fourth = new stdClass();
-        $fourth->value = 'umbrella';
-
-        return array(
-            // Same count, but different values
-            array(
-                // new collection
-                array(
-                    'categories' => array(
-                        $first, $second, $third
-                    ),
-                ),
-
-                // expected merge
-                array(
-                    'categories' => array(
-                        $first, $second, $third
-                    )
-                )
-            ),
-
-            // Fewer count
-            array(
-                // new collection
-                array(
-                    'categories' => array(
-                        $first, $second
-                    ),
-                ),
-
-                // expected merge
-                array(
-                    'categories' => array(
-                        $first, $second
-                    )
-                )
-            ),
-
-            // More count (new elements)
-            array(
-                // new collection
-                array(
-                    'categories' => array(
-                        $first, $second, $third, $fourth
-                    ),
-                ),
-
-                // expected merge
-                array(
-                    'categories' => array(
-                        $first, $second, $third, $fourth
-                    )
-                )
-            ),
-        );
-    }
-
-    /**
-     * @dataProvider intersectionUnionProvider
-     */
-    public function testAutomaticallyIntersectUnionCollections(array $data, array $expected)
-    {
-        $reflClass = $this->getMock('\ReflectionClass',
-            array(),
-            array('Doctrine\Common\Collections\ArrayCollection'));
-
-        $reflProperty = $this->getMock('\ReflProperty',
-            array('setAccessible', 'getValue')
-        );
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue('array'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue('stdClass'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(false));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isCollectionValuedAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getReflectionClass')
-            ->will($this->returnValue($reflClass));
-
-        $reflClass->expects($this->exactly(1))
-            ->method('getProperty')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue($reflProperty));
-
-        $reflProperty->expects($this->exactly(1))
-            ->method('getValue')
-            ->withAnyParameters()
-            ->will($this->returnValue(new ArrayCollection($data)));
-
-        // Set an object with pre-defined values (we have to create stdClass as element so that elements are passed
-        // by reference and not as value, so that we can emulate normal behaviour)
-        $first = new stdClass();
-        $first->value = 'foo';
-        $second = new stdClass();
-        $second->value = 'bar';
-        $third = new stdClass();
-        $third->value = 'french';
-
-        $existingObject = new stdClass();
-        $existingObject->categories = array(
-            $first, $second, $first
-        );
-
-        $object = $this->hydrator->hydrate($data, $existingObject);
-        $this->assertEquals(count($expected['categories']), count($object->categories));
-        $this->assertEquals($expected['categories'], $object->categories->toArray());
-    }
-
-    public function testAvoidFailingLookupsForEmptyArrayValues()
-    {
-        $data = array(
-            'categories' => array(
-                1, 2, ''
-            )
-        );
-
-        $reflClass = $this->getMock('\ReflectionClass',
-            array(),
-            array('Doctrine\Common\Collections\ArrayCollection'));
-
-        $reflProperty = $this->getMock('\ReflProperty',
-            array('setAccessible', 'getValue')
-        );
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getTypeOfField')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue('array'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('hasAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(true));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getAssociationTargetClass')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue('stdClass'));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isSingleValuedAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(false));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('isCollectionValuedAssociation')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue(true));
-
-        $this->objectManager->expects($this->exactly(2))
-            ->method('find')
-            ->will($this->returnValue(new stdClass()));
-
-        $this->metadata->expects($this->exactly(1))
-            ->method('getReflectionClass')
-            ->will($this->returnValue($reflClass));
-
-        $reflClass->expects($this->exactly(1))
-            ->method('getProperty')
-            ->with($this->equalTo('categories'))
-            ->will($this->returnValue($reflProperty));
-
-        $reflProperty->expects($this->exactly(1))
-            ->method('getValue')
-            ->withAnyParameters()
-            ->will($this->returnValue(new ArrayCollection($data)));
-
-        $object = $this->hydrator->hydrate($data, new stdClass());
-        $this->assertEquals(2, count($object->categories));
-    }
-
-    public function testHydratingObjectsWithStrategy()
-    {
-        $data = array(
-            'username' => 'foo',
-            'password' => 'bar'
-        );
-
-        $modifiedData = array(
-            'username' => 'MODIFIED',
-            'password' => 'bar'
-        );
-
-        $this->hydrator->addStrategy('username', new TestAsset\HydratorStrategy());
-
-        $object  = $this->hydrator->hydrate($data, new stdClass());
-        $extract = $this->hydrator->extract($object);
-
-        $this->assertEquals($modifiedData, $extract);
+        $this->assertEquals(2, $data['id']);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $data['toOne']);
+        $this->assertSame($toOne, $data['toOne']);
     }
 }
