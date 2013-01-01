@@ -33,9 +33,14 @@ class OneToManyEntity
         return $this->id;
     }
 
-    public function addEntities(Collection $entities)
+    public function addEntities(Collection $entities, $modifyValue = true)
     {
         foreach ($entities as $entity) {
+            // Modify the value to illustrate the difference between by value and by reference
+            if ($modifyValue) {
+                $entity->setField('Modified from addEntities adder', false);
+            }
+
             $this->entities->add($entity);
         }
     }
@@ -47,8 +52,15 @@ class OneToManyEntity
         }
     }
 
-    public function getEntities()
+    public function getEntities($modifyValue = true)
     {
+        // Modify the value to illustrate the difference between by value and by reference
+        if ($modifyValue) {
+            foreach ($this->entities as $entity) {
+                $entity->setField('Modified from getEntities getter', false);
+            }
+        }
+
         return $this->entities;
     }
 }

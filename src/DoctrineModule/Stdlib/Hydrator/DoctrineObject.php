@@ -20,7 +20,9 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
+use InvalidArgumentException;
 use RuntimeException;
+use Traversable;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
@@ -219,7 +221,7 @@ class DoctrineObject extends AbstractHydrator
                     $object->$setter($value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
                     // Collections are always handled "by reference", it will directly modify the collection
-                    $this->toMany($field, $value, $object);
+                    $this->toMany($object, $field, $target, $value);
                 }
             } else {
                 $object->$setter($value);
@@ -262,7 +264,7 @@ class DoctrineObject extends AbstractHydrator
                     $reflProperty->setValue($object, $value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
                     // Collections are always handled "by reference", it will directly modify the collection
-                    $this->toMany($field, $value, $object);
+                    $this->toMany($object, $field, $target, $value);
                 }
             } else {
                 $reflProperty->setValue($object, $value);
@@ -283,7 +285,6 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function tryConvertArrayToObject($data, $object)
     {
-        $objectClassName  = get_class($object);
         $metadata         = $this->metadata;
         $identifierNames  = $metadata->getIdentifierFieldNames($object);
         $identifierValues = array();
@@ -307,20 +308,20 @@ class DoctrineObject extends AbstractHydrator
      * Handle ToOne associations
      *
      * @param  string $target
-     * @param  mixed  $valueOrObject
+     * @param  mixed  $value
      * @return object
      */
-    protected function toOne($target, $valueOrObject)
+    protected function toOne($target, $value)
     {
-        if ($valueOrObject instanceof $target) {
-            return $valueOrObject;
+        if ($value instanceof $target) {
+            return $value;
         }
 
-        if ($valueOrObject === '') {
+        if ($value === '') {
             return null;
         }
 
-        return $this->find($valueOrObject);
+        return $this->find($value);
     }
 
     /**
@@ -329,13 +330,43 @@ class DoctrineObject extends AbstractHydrator
      * strategies that inherit from AbstractCollectionStrategy class, and that add or remove elements but without
      * changing the collection of the object
      *
+     * @param  object $object
      * @param  mixed  $collectionName
-     * @param  mixed  $value
+     * @param  string $target
+     * @param  mixed  $values
      * @return void
      */
-    protected function toMany($collectionName, $value)
+    protected function toMany($object, $collectionName, $target, $values)
     {
-        $this->hydrateValue($collectionName, $value);
+        if (!is_array($values) && !$values instanceof Traversable) {
+            $values = (array) $values;
+        }
+
+        $collection = array();
+
+        // If the collection contains identifiers, fetch the objects from database. A small consequence from
+        // this logic : a primary key whose value is empty string ('') is not allowed
+        foreach($values as $value) {
+            if ($value instanceof $target) {
+                $collection[] = $value;
+            } elseif ($value !== null && $value !== '') {
+                $collection[] = $this->find($value);
+            }
+        }
+
+        // Set the object so that the strategy can extract the Collection from it
+        $collectionStrategy = $this->getStrategy($collectionName);
+
+        if (!$collectionStrategy instanceof Strategy\AbstractCollectionStrategy) {
+            throw new InvalidArgumentException(sprintf(
+                'Strategies used for collections valued associations must inherit from
+                 Strategy\AbstractCollectionStrategy, %s given',
+                get_class($collectionStrategy)
+            ));
+        }
+
+        $collectionStrategy->setObject($object)
+                           ->hydrate($collection);
     }
 
     /**

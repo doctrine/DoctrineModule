@@ -20,6 +20,7 @@
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
 use LogicException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in
@@ -52,8 +53,8 @@ class AllowRemove extends AbstractCollectionStrategy
         }
 
         $collection = $this->getCollectionFromObject()->toArray();
-        $toAdd      = array_udiff($value, $collection, array($this, 'compareObjects'));
-        $toRemove   = array_udiff($collection, $value, array($this, 'compareObjects'));
+        $toAdd      = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
+        $toRemove   = new ArrayCollection(array_udiff($collection, $value, array($this, 'compareObjects')));
 
         $this->object->$adder($toAdd);
         $this->object->$remover($toRemove);

@@ -114,7 +114,7 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
 
         // Getter
         if (method_exists($object, $getter)) {
-            return $object->$getter;
+            return $object->$getter();
         }
 
         // Public property
