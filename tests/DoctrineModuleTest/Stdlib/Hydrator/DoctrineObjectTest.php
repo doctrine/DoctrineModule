@@ -26,6 +26,11 @@ class DoctrineObjectTest extends BaseTestCase
     protected $metadata;
 
     /**
+     * @var \Doctrine\Common\Persistence\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManager;
+
+    /**
      * @var \Doctrine\Common\Persistence\ObjectRepository|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectRepository;
@@ -39,7 +44,16 @@ class DoctrineObjectTest extends BaseTestCase
         parent::setUp();
 
         $this->metadata         = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $this->objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $this->objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $this->objectManager->expects($this->any())
+                            ->method('getRepository')
+                            ->will($this->returnValue($this->objectRepository));
+
+        $this->objectManager->expects($this->any())
+                            ->method('getClassMetadata')
+                            ->will($this->returnValue($this->metadata));
     }
 
     public function configureObjectManagerForSimpleEntity()
@@ -79,8 +93,8 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('getReflectionClass')
                        ->will($this->returnValue($refl));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectRepository, $this->metadata, true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectRepository, $this->metadata, false);
+        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', true);
+        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', false);
     }
 
     public function configureObjectManagerForSimpleEntityWithDateTime()
@@ -120,8 +134,8 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('getReflectionClass')
                        ->will($this->returnValue($refl));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectRepository, $this->metadata, true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectRepository, $this->metadata, false);
+        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime', true);
+        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime', false);
     }
 
     public function configureObjectManagerForOneToOneEntity()
@@ -176,8 +190,8 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('getReflectionClass')
                        ->will($this->returnValue($refl));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectRepository, $this->metadata, true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectRepository, $this->metadata, false);
+        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', true);
+        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', false);
     }
 
     public function configureObjectManagerForOneToManyEntity()
@@ -237,8 +251,8 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('getReflectionClass')
                        ->will($this->returnValue($refl));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectRepository, $this->metadata, true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectRepository, $this->metadata, false);
+        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', true);
+        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', false);
     }
 
     public function testCanExtractSimpleEntityByValue()

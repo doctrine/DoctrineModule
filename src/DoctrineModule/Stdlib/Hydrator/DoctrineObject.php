@@ -23,6 +23,7 @@ use DateTime;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
@@ -44,6 +45,11 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 class DoctrineObject extends AbstractHydrator
 {
     /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
      * @var ObjectRepository
      */
     protected $objectRepository;
@@ -54,6 +60,11 @@ class DoctrineObject extends AbstractHydrator
     protected $metadata;
 
     /**
+     * @var string
+     */
+    protected $targetClass;
+
+    /**
      * @var bool
      */
     protected $byValue = true;
@@ -62,16 +73,18 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Constructor
      *
-     * @param ObjectRepository $objectRepository
-     * @param ClassMetadata    $metadata
-     * @param bool             $byValue
+     * @param ObjectManager $objectManager
+     * @param string        $targetClass
+     * @param bool          $byValue
      */
-    public function __construct(ObjectRepository $objectRepository, ClassMetadata $metadata, $byValue = true)
+    public function __construct(ObjectManager $objectManager, $targetClass, $byValue = true)
     {
         parent::__construct();
 
-        $this->objectRepository = $objectRepository;
-        $this->metadata         = $metadata;
+        $this->objectManager    = $objectManager;
+        $this->objectRepository = $objectManager->getRepository($targetClass);
+        $this->metadata         = $objectManager->getClassMetadata($targetClass);
+        $this->targetClass      = $targetClass;
         $this->byValue          = (bool) $byValue;
 
         $this->prepare();
