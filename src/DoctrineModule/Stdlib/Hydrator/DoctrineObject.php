@@ -19,18 +19,20 @@
 
 namespace DoctrineModule\Stdlib\Hydrator;
 
-use ArrayObject;
 use DateTime;
 use RuntimeException;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
+use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
- * Hydrator based on Doctrine ObjectManager. Hydrates an object using a wrapped hydrator and
- * by retrieving associations by the given identifiers.
+ * This hydrator has been completely refactored for DoctrineModule 0.6.0. It provides an easy and powerful way
+ * of extracting/hydrator objects in Doctrine, by handling most associations types.
  *
- * It was completely refactored given DoctrineModule 0.6.0
+ * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instanciated once
+ * and be used with objects of different types). Most of the time, this won't be a problem as in a form we only
+ * create one hydrator. This is by design, because this hydrator uses metadata extensively, so it's more efficient
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
@@ -40,19 +42,14 @@ use Zend\Stdlib\Hydrator\AbstractHydrator;
 class DoctrineObject extends AbstractHydrator
 {
     /**
-     * @var ObjectManager
+     * @var ObjectRepository
      */
-    protected $objectManager;
+    protected $objectRepository;
 
     /**
-     * @var array
+     * @var ClassMetadata
      */
-    protected $loadedMetadata = array();
-
-    /**
-     * @var array
-     */
-    protected $collectionsUsedInSelect = array();
+    protected $metadata;
 
     /**
      * @var bool
@@ -61,41 +58,21 @@ class DoctrineObject extends AbstractHydrator
 
 
     /**
-     * @param ObjectManager $objectManager
-     * @param bool          $byValue
+     * Constructor
+     *
+     * @param ObjectRepository $objectRepository
+     * @param ClassMetadata    $metadata
+     * @param bool             $byValue
      */
-    public function __construct(ObjectManager $objectManager, $byValue = true)
+    public function __construct(ObjectRepository $objectRepository, ClassMetadata $metadata, $byValue = true)
     {
         parent::__construct();
 
-        $this->objectManager = $objectManager;
-        $this->byValue       = (bool) $byValue;
-    }
+        $this->objectRepository = $objectRepository;
+        $this->metadata         = $metadata;
+        $this->byValue          = (bool) $byValue;
 
-    /**
-     * Set the collections in the associations that are used in the context of a select form element. This
-     * is needed only during the extracting phase. For instance, let's say you have an entity "User" with a
-     * relationship to an entity "City". However, when modifying the entity "User", what you may want is to show
-     * the City in a Select form element, and hence the hydrator must extract only the identifier of the city
-     * entity in order to set the correct element value
-     *
-     * @param  array $collectionsUsedInSelect
-     * @return DoctrineObject
-     */
-    public function setCollectionsUsedInSelect(array $collectionsUsedInSelect)
-    {
-        $this->collectionsUsedInSelect = $collectionsUsedInSelect;
-        return $this;
-    }
-
-    /**
-     * Get the collections in the associations that are used in the context of a select form element
-     *
-     * @return array
-     */
-    public function getCollectionsUsedInSelect()
-    {
-        return $this->collectionsUsedInSelect;
+        $this->prepare();
     }
 
     /**
@@ -106,8 +83,6 @@ class DoctrineObject extends AbstractHydrator
      */
     public function extract($object)
     {
-        $this->prepare($object);
-
         if ($this->byValue === true) {
             return $this->extractByValue($object);
         }
@@ -124,8 +99,6 @@ class DoctrineObject extends AbstractHydrator
      */
     public function hydrate(array $data, $object)
     {
-        $this->prepare($object);
-
         if ($this->byValue === true) {
             return $this->hydrateByValue($data, $object);
         }
@@ -134,36 +107,35 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * It prepares the hydrator to be used for this object by adding a default strategy to every
-     * associations that does not have one currently set
+     * {@inheritDoc}
+     */
+    public function addStrategy($name, StrategyInterface $strategy)
+    {
+        if ($strategy instanceof Strategy\AbstractCollectionStrategy) {
+            $strategy->setCollectionName($name);
+        }
+
+        return parent::addStrategy($name, $strategy);
+    }
+
+
+    /**
+     * Prepare the hydrator by adding strategies to every collection valued associations
      *
      * @param  object $object
      * @return DoctrineObject
      */
-    protected function prepare($object)
+    protected function prepare()
     {
-        $metadata     = $this->getMetadataFor(get_class($object));
+        $metadata     = $this->metadata;
         $associations = $metadata->getAssociationNames();
 
         foreach ($associations as $association) {
-            // Ignore single valued association as the only one of interest are Collections here
-            if ($metadata->isSingleValuedAssociation($association)) {
-                continue;
-            }
-
-            if (!$this->hasStrategy($association)) {
-                // Is the association used in the context of a Select form element ?
-                $useInSelect = false;
-                if (isset($this->collectionsUsedInSelect[$association])) {
-                    $useInSelect = true;
-                }
-
-                $strategy = new Strategy\AllowRemove($metadata, $object, $association, $useInSelect);
-                $this->addStrategy($association, $strategy);
+            // We only need to prepare collection valued associations
+            if ($metadata->isCollectionValuedAssociation($association)) {
+                $this->addStrategy($association, new Strategy\AllowRemove());
             }
         }
-
-        return $this;
     }
 
     /**
@@ -176,8 +148,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByValue($object)
     {
-        $metadata   = $this->getMetadataFor(get_class($object));
-        $fieldNames = $metadata->getFieldNames();
+        $fieldNames = $this->metadata->getFieldNames();
         $methods    = get_class_methods($object);
 
         $data = array();
@@ -204,9 +175,8 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByReference($object)
     {
-        $metadata   = $this->getMetadataFor(get_class($object));
-        $fieldNames = $metadata->getFieldNames();
-        $refl       = $metadata->getReflectionClass();
+        $fieldNames = $this->metadata->getFieldNames();
+        $refl       = $this->metadata->getReflectionClass();
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
@@ -231,7 +201,7 @@ class DoctrineObject extends AbstractHydrator
     protected function hydrateByValue(array $data, $object)
     {
         $object   = $this->tryConvertArrayToObject($data, $object);
-        $metadata = $this->getMetadataFor(get_class($object));
+        $metadata = $this->metadata;
 
         foreach ($data as $field => $value) {
             if ($value === null) {
@@ -271,7 +241,7 @@ class DoctrineObject extends AbstractHydrator
     protected function hydrateByReference(array $data, $object)
     {
         $object   = $this->tryConvertArrayToObject($data, $object);
-        $metadata = $this->getMetadataFor(get_class($object));
+        $metadata = $this->metadata;
         $refl     = $metadata->getReflectionClass();
 
         foreach ($data as $field => $value) {
@@ -314,7 +284,7 @@ class DoctrineObject extends AbstractHydrator
     protected function tryConvertArrayToObject($data, $object)
     {
         $objectClassName  = get_class($object);
-        $metadata         = $this->getMetadataFor($objectClassName);
+        $metadata         = $this->metadata;
         $identifierNames  = $metadata->getIdentifierFieldNames($object);
         $identifierValues = array();
 
@@ -330,11 +300,11 @@ class DoctrineObject extends AbstractHydrator
             $identifierValues[$identifierName] = $data[$identifierName];
         }
 
-        return $this->find($objectClassName, $identifierValues);
+        return $this->find($identifierValues);
     }
 
     /**
-     * Handle ToOne relationships. This function converts identifiers to an instance of the relationship
+     * Handle ToOne associations
      *
      * @param  string $target
      * @param  mixed  $valueOrObject
@@ -350,20 +320,14 @@ class DoctrineObject extends AbstractHydrator
             return null;
         }
 
-        return $this->find($target, $valueOrObject);
+        return $this->find($valueOrObject);
     }
 
     /**
-     * Handle ToMany relationships. Collections are specials because they are always handled by reference. Many
-     * people use them badly, and this hydrator tries to force people to use them the right way, although it involves
-     * little more code to right on the entity side. Basically, it will use a strategy (by default, Doctrine Module
-     * ships with two strategies: AllowRemove and DisallowRemove) to modify the collection of the entity, without
-     * changing/swapping it (which is what many people do). Instead, for this to work, you'll need to define two
-     * functions in your entities. For instance, for the collection "people", you need to define addPeople and
-     * removePeople functions (which will give you the opportunity to define specific logic when it comes to inverse
-     * or owning side).
-     *
-     * For more information on how to use Collections properly, please check the documentation of DoctrineModule
+     * Handle ToMany associations. In proper Doctrine design, Collections should not be swapped, so
+     * collections are always handled by reference. Internally, every collection is handled using specials
+     * strategies that inherit from AbstractCollectionStrategy class, and that add or remove elements but without
+     * changing the collection of the object
      *
      * @param  mixed  $collectionName
      * @param  mixed  $value
@@ -405,27 +369,11 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Find an object by its identifiers
      *
-     * @param  string  $target
      * @param  mixed   $identifiers
      * @return object
      */
-    protected function find($target, $identifiers)
+    protected function find($identifiers)
     {
-        return $this->objectManager->find($target, $identifiers);
-    }
-
-    /**
-     * Get the metadata for given class
-     *
-     * @param  string $className
-     * @return ClassMetadata
-     */
-    private function getMetadataFor($className)
-    {
-        if (!isset($this->loadedMetadata[$className])) {
-            $this->loadedMetadata[$className] = $this->objectManager->getClassMetadata($className);
-        }
-
-        return $this->loadedMetadata[$className];
+        return $this->objectRepository->find($identifiers);
     }
 }

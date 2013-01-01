@@ -19,9 +19,8 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
-use RuntimeException;
+use InvalidArgumentException;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
@@ -33,11 +32,6 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 abstract class AbstractCollectionStrategy implements StrategyInterface
 {
     /**
-     * @var ClassMetadata
-     */
-    protected $metadata;
-
-    /**
      * @var object
      */
     protected $object;
@@ -47,26 +41,56 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      */
     protected $collectionName;
 
-    /**
-     * @var bool
-     */
-    protected $useInSelect;
-
 
     /**
-     * Constructor
+     * Set the name of the collection
      *
-     * @param ClassMetadata $metadata
-     * @param               $object
-     * @param string        $collectionName
-     * @param bool          $useInSelect
+     * @param  string $collectionName
+     * @return AbstractCollectionStrategy
      */
-    public function __construct(ClassMetadata $metadata, $object, $collectionName, $useInSelect = false)
+    public function setCollectionName($collectionName)
     {
-        $this->metadata       = $metadata;
-        $this->object         = $object;
-        $this->collectionName = $collectionName;
-        $this->useInSelect    = (bool) $useInSelect;
+        $this->collectionName = (string) $collectionName;
+        return $this;
+    }
+
+    /**
+     * Get the name of the collection
+     *
+     * @return string
+     */
+    public function getCollectionName()
+    {
+        return $this->collectionName;
+    }
+
+    /**
+     * Set the object
+     *
+     * @param  object $object
+     * @return AbstractCollectionStrategy
+     */
+    public function setObject($object)
+    {
+        if (!is_object($object)) {
+            throw new InvalidArgumentException(sprintf(
+                'The parameter given to setObject method of %s class is not an object',
+                get_called_class()
+            ));
+        }
+
+        $this->object = $object;
+        return $this;
+    }
+
+    /**
+     * Get the object
+     *
+     * @return object
+     */
+    public function getObject()
+    {
+        return $this->object;
     }
 
     /**
@@ -74,32 +98,18 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      */
     public function extract($value)
     {
-        if (!$this->useInSelect || is_numeric($value) || $value === null) {
-            return $value;
-        }
-
-        $identifierValues = $this->metadata->getIdentifierValues($this->object);
-
-        if (count($identifierValues) > 1) {
-            throw new RuntimeException(
-                'Doctrine hydrator does not support composite identifiers when collections are used in
-                 select form elements (because a select value cannot contain more than one value)'
-            );
-        }
-
-        // Return the first value of the array
-        return reset($identifierValues);
+        return $value;
     }
 
     /**
-     * Get the collection value from the object. It first tries to get it using the getter, then trying to get
-     * if using the public property (if it exists), and then finally using Reflection
+     * Get the collection value from the object. It first tries to get it using the getter and then trying to get
+     * if using the public property (if it exists)
      *
      * @return Collection
      */
     protected function getCollectionFromObject()
     {
-        $object = $this->object;
+        $object = $this->getObject();
         $getter = 'get' . ucfirst($this->collectionName);
 
         // Getter
@@ -111,13 +121,6 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
         if (isset($object->{$this->collectionName})) {
             return $object->{$this->collectionName};
         }
-
-        // Reflection
-        $refl         = $this->metadata->getReflectionClass();
-        $reflProperty = $refl->getProperty($this->collectionName);
-        $reflProperty->setAccessible(true);
-
-        return $reflProperty->getValue();
     }
 
     /**
@@ -132,3 +135,4 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
         return strcmp(spl_object_hash($a), spl_object_hash($b));
     }
 }
+
