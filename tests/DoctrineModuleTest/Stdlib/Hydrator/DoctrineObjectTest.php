@@ -460,6 +460,56 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
     }
 
+    public function testHydrateOneToOneAssociationByValueUsingIdentifierArrayForRelation()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\OneToOneEntity();
+        $this->configureObjectManagerForOneToOneEntity();
+
+        // Use entity of id 1 as relation
+        $data = array('toOne' => array('id' => 1));
+
+        $entityInDatabaseWithIdOfOne = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfOne->setId(1);
+        $entityInDatabaseWithIdOfOne->setField('bar', false);
+
+        $this->objectRepository->expects($this->once())
+                               ->method('find')
+                               ->with(array('id' => 1))
+                               ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
+    }
+
+    public function testHydrateOneToOneAssociationByReferenceUsingIdentifierArrayForRelation()
+    {
+        // When using hydration by reference, it won't use the public API of the entity to set values (setters)
+        $entity = new Asset\OneToOneEntity();
+        $this->configureObjectManagerForOneToOneEntity();
+
+        // Use entity of id 1 as relation
+        $data = array('toOne' => array('id' => 1));
+
+        $entityInDatabaseWithIdOfOne = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfOne->setId(1);
+        $entityInDatabaseWithIdOfOne->setField('bar', false);
+
+        $this->objectRepository->expects($this->once())
+                               ->method('find')
+                               ->with(array('id' => 1))
+                               ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
+    }
+
     public function testCanHydrateOneToOneAssociationByValueWithNullableRelation()
     {
         // When using hydration by value, it will use the public API of the entity to retrieve values (setters)
@@ -668,6 +718,114 @@ class DoctrineObjectTest extends BaseTestCase
             }));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+
+        $entities = $entity->getEntities(false);
+
+        foreach ($entities as $en) {
+            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInternalType('integer', $en->getId());
+            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+        }
+
+        $this->assertEquals(2, $entities[0]->getId());
+        $this->assertSame($entityInDatabaseWithIdOfTwo, $entities[0]);
+
+        $this->assertEquals(3, $entities[1]->getId());
+        $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
+    }
+
+    public function testHydrateOneToManyAssociationByValueUsingIdentifiersArrayForRelations()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\OneToManyEntity();
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $data = array(
+            'entities' => array(
+                array('id' => 2),
+                array('id' => 3)
+            )
+        );
+
+        $entityInDatabaseWithIdOfTwo = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfTwo->setId(2);
+        $entityInDatabaseWithIdOfTwo->setField('foo', false);
+
+        $entityInDatabaseWithIdOfThree = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfThree->setId(3);
+        $entityInDatabaseWithIdOfThree->setField('bar', false);
+
+        $this->objectRepository->expects($this->any())
+                               ->method('find')
+                               ->with($this->logicalOr(
+                                    $this->equalTo(array('id' => 2)),
+                                    $this->equalTo(array('id' => 3))
+                               ))
+                               ->will($this->returnCallback(function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                                    if ($arg['id'] === 2) {
+                                        return $entityInDatabaseWithIdOfTwo;
+                                    } elseif ($arg['id'] === 3) {
+                                        return $entityInDatabaseWithIdOfThree;
+                                    }
+                               }));
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+
+        $entities = $entity->getEntities(false);
+
+        foreach ($entities as $en) {
+            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInternalType('integer', $en->getId());
+            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+        }
+
+        $this->assertEquals(2, $entities[0]->getId());
+        $this->assertSame($entityInDatabaseWithIdOfTwo, $entities[0]);
+
+        $this->assertEquals(3, $entities[1]->getId());
+        $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
+    }
+
+    public function testHydrateOneToManyAssociationByReferenceUsingIdentifiersArrayForRelations()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\OneToManyEntity();
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $data = array(
+            'entities' => array(
+                array('id' => 2),
+                array('id' => 3)
+            )
+        );
+
+        $entityInDatabaseWithIdOfTwo = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfTwo->setId(2);
+        $entityInDatabaseWithIdOfTwo->setField('foo', false);
+
+        $entityInDatabaseWithIdOfThree = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfThree->setId(3);
+        $entityInDatabaseWithIdOfThree->setField('bar', false);
+
+        $this->objectRepository->expects($this->any())
+                               ->method('find')
+                               ->with($this->logicalOr(
+                                    $this->equalTo(array('id' => 2)),
+                                    $this->equalTo(array('id' => 3))
+                               ))
+                               ->will($this->returnCallback(function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                                    if ($arg['id'] === 2) {
+                                        return $entityInDatabaseWithIdOfTwo;
+                                    } elseif ($arg['id'] === 3) {
+                                        return $entityInDatabaseWithIdOfThree;
+                                    }
+                               }));
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
 
