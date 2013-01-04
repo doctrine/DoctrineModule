@@ -144,7 +144,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->metadata->expects($this->any())
                        ->method('getFieldNames')
-                       ->will($this->returnValue(array('id', 'toOne')));
+                       ->will($this->returnValue(array('id')));
 
         $this->metadata->expects($this->any())
                        ->method('getAssociationNames')
@@ -200,7 +200,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->metadata->expects($this->any())
                        ->method('getFieldNames')
-                       ->will($this->returnValue(array('id', 'entities')));
+                       ->will($this->returnValue(array('id')));
 
         $this->metadata->expects($this->any())
                        ->method('getAssociationNames')
