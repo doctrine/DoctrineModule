@@ -163,7 +163,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByValue($object)
     {
-        $fieldNames = $this->metadata->getFieldNames();
+        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
         $methods    = get_class_methods($object);
 
         $data = array();
@@ -190,7 +190,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByReference($object)
     {
-        $fieldNames = $this->metadata->getFieldNames();
+        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
         $refl       = $this->metadata->getReflectionClass();
 
         $data = array();
@@ -379,7 +379,7 @@ class DoctrineObject extends AbstractHydrator
         }
 
         $collectionStrategy->setObject($object)
-                           ->hydrate($collection);
+            ->hydrate($collection);
     }
 
     /**
