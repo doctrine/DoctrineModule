@@ -568,7 +568,7 @@ $tags[] = $tag2;
 
 $data = array(
 	'title' => 'The best blog post in the world !',
-	'tags'  => $tags
+	'tags'  => $tags // Note that you can mix integers and entities without any problem
 );
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
