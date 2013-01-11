@@ -335,7 +335,7 @@ echo $blogPost->getTitle(); // prints "The best blog post in the world !"
 echo $blogPost->getUser()->getId(); // prints 2
 ```
 
-For this to work, you must also slightly change your mapping, so that Doctrine can persist new entities on associations:
+For this to work, you must also slightly change your mapping, so that Doctrine can persist new entities on associations (note the cascade options on the OneToMany association):
 
 ```php
 
@@ -499,7 +499,7 @@ public function setTags(Collection $tags)
 }
 ```
 
-But this is very bad, because Doctrine collections should not be swapped. It would work if $tags === $this->tags but this it's very easy to fail about this assumption. This is why we need you to define an "adder" and "remover" functions, so that you always work with the original collection.
+But this is very bad, because Doctrine collections should not be swapped, mostly because collections are managed by an ObjectManager, thus it must not be replaced by a new instance.
 
 Once again, two cases may arise: the tags already exist or they does not.
 
@@ -577,7 +577,7 @@ echo $blogPost->getTitle(); // prints "The best blog post in the world !"
 echo count($blogPost->getTags()); // prints 2
 ```
 
-For this to work, you must also slightly change your mapping, so that Doctrine can persist new entities on associations:
+For this to work, you must also slightly change your mapping, so that Doctrine can persist new entities on associations (note the cascade options on the OneToMany association):
 
 ```php
 
@@ -603,7 +603,7 @@ class BlogPost
 
 ### Collections strategy
 
-By default, every collections associations have a special strategy attached to them that is called during the hydrating and extracting phase. All those strategies extend from the class `DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy`.
+By default, every collections association has a special strategy attached to it that is called during the hydrating and extracting phase. All those strategies extend from the class `DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy`.
 
 DoctrineModule provides two strategies out of the box:
 
@@ -657,16 +657,13 @@ class SimpleEntity
      */
 	protected $foo;
 	
-	public function setFoo($foo)
-	{
-		$this->foo = $foo;
-	}
-	
 	public function getFoo()
 	{
 		// Modify the $foo variable when we retrieve it
 		return 'SUPER' . $this->foo;
 	}
+
+  	/** ... */
 }
 ```
 
@@ -707,7 +704,7 @@ It now only prints "bar", which shows clearly that the getter has not been calle
 
 ### The ultimate example !
 
-Okey, now that we understand how the hydrator works, let's see how it integrates into the Zend Framework 2's Form component. We are going to use a simple example with, once again, a BlogPost and a Tag entities. We will see how we can create the blog post, and being able to edit it.
+Now that we understand how the hydrator works, let's see how it integrates into the Zend Framework 2's Form component. We are going to use a simple example with, once again, a BlogPost and a Tag entities. We will see how we can create the blog post, and being able to edit it.
 
 #### The entities
 
