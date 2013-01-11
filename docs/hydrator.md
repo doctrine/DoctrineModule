@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class City
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -46,11 +46,11 @@ class City
     /**
      * @ORM\Column(type="string", length=48)
      */
-	protected $name;
+    protected $name;
 
     public function getId()
     {
-   		return $this->id;
+    	return $this->id;
     }
 
     public function setName($name)
@@ -98,7 +98,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Appointment
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -108,11 +108,11 @@ class Appointment
     /**
      * @ORM\Column(type="datetime")
      */
-	protected $time;
+    protected $time;
 
     public function getId()
     {
-   		return $this->id;
+	return $this->id;
     }
 
     public function setTime(DateTime $time)
@@ -148,7 +148,7 @@ As you can see, the hydrator automatically converted the timestamp to a DateTime
 
 
 
-#### Example 2 : OneToOne association
+#### Example 2 : OneToOne/ManyToOne associations
 
 DoctrineModule hydrator is especially useful when dealing with associations (OneToOne, OneToMany, ManyToOne) and integrates nicely with the Form/Fieldset logic ([learn more about this here](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html)).
 
@@ -165,7 +165,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -175,16 +175,16 @@ class User
     /**
      * @ORM\Column(type="string", length=48)
      */
-	protected $username;
+    protected $username;
 	
-	/**
+    /**
      * @ORM\Column(type="string")
      */
-	protected $password;
+    protected $password;
 
     public function getId()
     {
-   		return $this->id;
+	return $this->id;
     }
 
     public function setUsername($username)
@@ -209,7 +209,7 @@ class User
 }
 ```
 
-And the BlogPost entity, with a OneToOne association:
+And the BlogPost entity, with a ManyToOne association:
 
 ```php
 
@@ -222,7 +222,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BlogPost
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -230,18 +230,18 @@ class BlogPost
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Application\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\User")
      */
-	protected $user;
+    protected $user;
 	
-	/**
+    /**
      * @ORM\Column(type="string")
      */
-	protected $title;
+    protected $title;
 
     public function getId()
     {
-   		return $this->id;
+        return $this->id;
     }
 
     public function setUser(User $user)
@@ -322,7 +322,7 @@ $hydrator = new DoctrineHydrator($entityManager, 'Application\Entity\BlogPost');
 $blogPost = new BlogPost();
 $user = new User();
 $user->setUsername('bakura');
-$user->setPassword('azerty');
+$user->setPassword('p@$$w0rd');
 
 $data = array(
 	'title' => 'The best blog post in the world !',
@@ -348,14 +348,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BlogPost
 {
-	/** .. */
+    /** .. */
 
     /**
-     * @ORM\OneToOne(targetEntity="Application\Entity\User", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Application\Entity\User", cascade={"persist"})
      */
-	protected $user;
+    protected $user;
 	
-	/** … */
+    /** … */
 }
 ```
 
@@ -382,7 +382,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BlogPost
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -392,11 +392,11 @@ class BlogPost
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\Tag", mappedBy="blogPost")
      */
-	protected $tags;
+    protected $tags;
 	
-	/**
-	 * Never forget to initialize all your collections !
-	 */
+    /**
+     * Never forget to initialize all your collections !
+     */
 	public function __construct()
 	{
 		$this->tags = new ArrayCollection();
@@ -525,7 +525,7 @@ $blogPost = $hydrator->hydrate($data, $blogPost);
 echo $blogPost->getTitle(); // prints "The best blog post in the world !"
 echo count($blogPost->getTags()); // prints 2
 
-**NOTE** : when using association whose primary key is not compound, you can rewrite the following more succintely:
+**NOTE** : once again, this:
 
 ```php
 $data = array(
@@ -537,7 +537,7 @@ $data = array(
 );
 ```
 
-to:
+can be written:
 
 ```php
 $data = array(
