@@ -608,10 +608,17 @@ By default, every collections association has a special strategy attached to it 
 
 DoctrineModule provides two strategies out of the box:
 
-1. `DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemove`: this is the default strategy that is attached to every collections. To explain this strategy, let's say that an entity BlogPost contains a ManyToOne collections of Tag entities. If, initially, the BlogPost contains tags "A" and "B", and that we hydrate this existing BlogPost entity with a new ``tags`` array that contain tags "B" and "C", the tags collection of the BlogPost entity will then contain tags "B" and "C", while tag "A" will be asked to be removed by calling the remover in the BlogPost entity (in this case, "removeTags").
-2. `DoctrineModule\Stdlib\Hydrator\Strategy\DisallowRemove`: if we take the same example, the tags collection will contain tags "A", "B" and "C". Therefore, if a given element exists in the old collection but not on the new one, it will not be removed.
+1. `DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemove`: this is the default strategy, it removes old elements that are not in the new collection.
+2. `DoctrineModule\Stdlib\Hydrator\Strategy\DisallowRemove`: this strategy does not remove old elements even if they are not in the new collection.
 
-As a consequence, when using the `AllowRemove` strategy (which is the default), you must always define the adder (addTags for instance) AND the remover (removeTags for instance). On the other hand, when using the `DisallowRemove` strategy, you must always define at least the adder, but the remover is optional (because elements are never removed).
+As a consequence, when using `AllowRemove`, you need to define both adder (eg. addTags) and remover (eg. removeTags). On the other hand, when using the `DisallowRemove` strategy, you must always define at least the adder, but the remover is optional (because elements are never removed).
+
+The following table illustrate the difference between the two strategies
+
+| Strategy | Initial collection | Submitted collection | Result |
+| -------- | ------------------ | -------------------- | ------ |
+| AllowRemove | A, B  | B, C | B, C
+| DisallowRemove | A, B  | B, C | A, B, C
 
 #### Changing the strategy
 
@@ -660,8 +667,7 @@ class SimpleEntity
 	
 	public function getFoo()
 	{
-		// Modify the $foo variable when we retrieve it
-		return 'SUPER' . $this->foo;
+		die();
 	}
 
   	/** ... */
@@ -679,7 +685,7 @@ $object->setFoo('bar');
 
 $data = $hydrator->extract($object);
 
-echo $data['foo']; // prints 'SUPER bar'
+echo $data['foo']; // never executed, because the script was killed when getter was accessed
 ```
 
 As we can see here, the hydrator used the public API (here getFoo) to retrieve the value.
@@ -703,7 +709,7 @@ It now only prints "bar", which shows clearly that the getter has not been calle
 > Note: There is only one exception: collections. Collections strategies always call the adder/remover of the public API of your entity.
 
 
-### The ultimate example !
+### A complete example using Zend\Form
 
 Now that we understand how the hydrator works, let's see how it integrates into the Zend Framework 2's Form component. We are going to use a simple example with, once again, a BlogPost and a Tag entities. We will see how we can create the blog post, and being able to edit it.
 
