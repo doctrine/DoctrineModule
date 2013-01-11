@@ -524,6 +524,7 @@ $blogPost = $hydrator->hydrate($data, $blogPost);
 
 echo $blogPost->getTitle(); // prints "The best blog post in the world !"
 echo count($blogPost->getTags()); // prints 2
+```
 
 **NOTE** : once again, this:
 
