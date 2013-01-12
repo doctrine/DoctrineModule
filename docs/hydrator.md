@@ -1,6 +1,10 @@
 ## Hydrator
 
-Hydrators are simple objects that allow to convert an array of data to an object (this is called "hydrating") and to convert back an object to an array (this is called "extracting"). Hydrators are mainly used in the context of Forms, with the new binding functionality of Zend Framework 2, but can also be used for any hydrating/extracting context (for instance, it can be used in RESTful context). If you are not really comfortable with hydrators, please first read [Zend Framework hydrator's documentation](http://framework.zend.com/manual/2.0/en/modules/zend.stdlib.hydrator.html).
+Hydrators are simple objects that allow to convert an array of data to an object (this is called "hydrating") and to 
+convert back an object to an array (this is called "extracting"). Hydrators are mainly used in the context of Forms,
+with the new binding functionality of Zend Framework 2, but can also be used for any hydrating/extracting context (for 
+instance, it can be used in RESTful context). If you are not really comfortable with hydrators, please first 
+read [Zend Framework hydrator's documentation](http://framework.zend.com/manual/2.0/en/modules/zend.stdlib.hydrator.html).
 
 
 ### Basic usage
@@ -9,7 +13,8 @@ DoctrineModule ships with a very powerful hydrator that allow almost any use-cas
 
 #### Create a hydrator
 
-To create a Doctrine Hydrator, you just need two things: an object manager (also called Entity Manager in Doctrine ORM or Document Manager in Doctrine ODM) and the FQCN of the entity:
+To create a Doctrine Hydrator, you just need two things: an object manager (also called Entity Manager in Doctrine ORM 
+or Document Manager in Doctrine ODM) and the FQCN of the entity:
 
 ```php
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -17,9 +22,17 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($objectManager, 'Application\Entity\User');
 ```
 
-As you can see, contrary to other standard hydrators shipped in Zend Framework 2, the Doctrine Hydrator works with only one instance type once its created. This means that if you need to hydrate two entities (let's say `Application\Entity\BlogPost` and `Application\Entity\PostComment`), you will need to create two different hydrators. It was made like this by design, because the hydrator heavily rely on entities metadata, and it allows us to do some performance tweaks as well as to provide more consistency to the hydrator code. However, this should not be a problem as, most of the time, we only create a hydrator to hydrate/extract one type of entity.
+As you can see, contrary to other standard hydrators shipped in Zend Framework 2, the Doctrine Hydrator works with only 
+one instance type once its created. This means that if you need to hydrate two entities (let's say 
+`Application\Entity\BlogPost` and `Application\Entity\PostComment`), you will need to create two different hydrators. 
+It was made like this by design, because the hydrator heavily rely on entities metadata, and it allows us to do some 
+performance tweaks as well as to provide more consistency to the hydrator code. However, this should not be a problem 
+as, most of the time, we only create a hydrator to hydrate/extract one type of entity.
 
-The hydrator constructor also allows a third parameter, `byValue`, which is true by default. We will come back later about this distinction, but to be short, it allows the hydrator the change the way it gets/sets data by either accessing the public API of your entity (getters/setters) or directly get/set data through reflection, hence bypassing any of your custom logic.
+The hydrator constructor also allows a third parameter, `byValue`, which is true by default. We will come back later 
+about this distinction, but to be short, it allows the hydrator the change the way it gets/sets data by either 
+accessing the public API of your entity (getters/setters) or directly get/set data through reflection, hence bypassing 
+any of your custom logic.
 
 #### Example 1 : simple entity with no associations
 
@@ -84,7 +97,10 @@ $dataArray = $hydrator->extract($city);
 echo $dataArray['name']; // prints "Paris"
 ```
 
-As you can see from this example, in simple cases, the DoctrineModule hydrator provides nearly no benefits over a simpler hydrator like "ClassMethods". However, even in those cases, I suggest you to use it, as it performs automatically conversions between types. For instance, it can converts timestamp to DateTime (which is the type used by Doctrine to represent dates):
+As you can see from this example, in simple cases, the DoctrineModule hydrator provides nearly no benefits over a 
+simpler hydrator like "ClassMethods". However, even in those cases, I suggest you to use it, as it performs automatically
+conversions between types. For instance, it can converts timestamp to DateTime (which is the type used by Doctrine to 
+represent dates):
 
 ```php
 
@@ -143,14 +159,16 @@ $appointment = $hydrator->hydrate($data, $appointment);
 echo get_class($city->getTime()); // prints "DateTime"
 ```
 
-As you can see, the hydrator automatically converted the timestamp to a DateTime object during the hydration, hence allowing us to have a nice API in our entity with correct typehint.
+As you can see, the hydrator automatically converted the timestamp to a DateTime object during the hydration, hence 
+allowing us to have a nice API in our entity with correct typehint.
 
 
 
 
 #### Example 2 : OneToOne/ManyToOne associations
 
-DoctrineModule hydrator is especially useful when dealing with associations (OneToOne, OneToMany, ManyToOne) and integrates nicely with the Form/Fieldset logic ([learn more about this here](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html)).
+DoctrineModule hydrator is especially useful when dealing with associations (OneToOne, OneToMany, ManyToOne) and 
+integrates nicely with the Form/Fieldset logic ([learn more about this here](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html)).
 
 Let's take a simple example with a BlogPost and a User entity to illustrate OneToOne association:
 
@@ -266,7 +284,9 @@ class BlogPost
 }
 ```
 
-There are two use cases that can arise when using OneToOne association: the toOne entity (in the case, the user) may already exist (which will often be the case with a User and BlogPost example), or it can be created too. The DoctrineHydrator natively supports both cases.
+There are two use cases that can arise when using OneToOne association: the toOne entity (in the case, the user) may 
+already exist (which will often be the case with a User and BlogPost example), or it can be created too. The 
+DoctrineHydrator natively supports both cases.
 
 ##### Existing entity in the association
 
@@ -335,7 +355,8 @@ echo $blogPost->getTitle(); // prints "The best blog post in the world !"
 echo $blogPost->getUser()->getId(); // prints 2
 ```
 
-For this to work, you must also slightly change your mapping, so that Doctrine can persist new entities on associations (note the cascade options on the OneToMany association):
+For this to work, you must also slightly change your mapping, so that Doctrine can persist new entities on 
+associations (note the cascade options on the OneToMany association):
 
 ```php
 
@@ -362,10 +383,15 @@ class BlogPost
 
 #### Example 3 : OneToMany association
 
-DoctrineModule hydrator also handles OneToMany relationships (when use `Zend\Form\Element\Collection` element). Please refer
-to the official [Zend Framework 2 documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html) to learn more about Collection.
+DoctrineModule hydrator also handles OneToMany relationships (when use `Zend\Form\Element\Collection` element). Please 
+refer to the official [Zend Framework 2 documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html) to learn more about Collection.
 
-> Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetch the objects through the Doctrine `find` function. However, this may cause problems if one of the value of the collection is the empty string '' (as the ``find`` will most likely fail). In order to solve this problem, empty string identifiers are simply ignored during the hydration phase. Therefore, if your database contains an empty string value as primary key, the hydrator could not work correctly (the simplest way to avoid that is simply to not have an empty string primary key, which should not happen if you use auto-increment primary keys, anyway).
+> Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetch the 
+objects through the Doctrine `find` function. However, this may cause problems if one of the value of the collection 
+is the empty string '' (as the ``find`` will most likely fail). In order to solve this problem, empty string identifiers
+are simply ignored during the hydration phase. Therefore, if your database contains an empty string value as primary 
+key, the hydrator could not work correctly (the simplest way to avoid that is simply to not have an empty string primary
+key, which should not happen if you use auto-increment primary keys, anyway).
 
 Let's take again a simple example: a BlogPost and Tag entities.
 
@@ -490,7 +516,10 @@ class Tag
 }
 ```
 
-Please note interesting things in BlogPost entity. We have defined two functions: addTags and removeTags. Those functions must be always defined and are called automatically by Doctrine hydrator when dealing with collections. You may think this is overkill, and ask why you cannot just define a `setTags` function to replace the old collection by the new one:
+Please note interesting things in BlogPost entity. We have defined two functions: addTags and removeTags. Those 
+functions must be always defined and are called automatically by Doctrine hydrator when dealing with collections. 
+You may think this is overkill, and ask why you cannot just define a `setTags` function to replace the old collection 
+by the new one:
 
 ```php
 public function setTags(Collection $tags)
@@ -499,7 +528,8 @@ public function setTags(Collection $tags)
 }
 ```
 
-But this is very bad, because Doctrine collections should not be swapped, mostly because collections are managed by an ObjectManager, thus it must not be replaced by a new instance.
+But this is very bad, because Doctrine collections should not be swapped, mostly because collections are managed by 
+an ObjectManager, thus it must not be replaced by a new instance.
 
 Once again, two cases may arise: the tags already exist or they does not.
 
@@ -578,7 +608,8 @@ echo $blogPost->getTitle(); // prints "The best blog post in the world !"
 echo count($blogPost->getTags()); // prints 2
 ```
 
-For this to work, you must also slightly change your mapping, so that Doctrine can persist new entities on associations (note the cascade options on the OneToMany association):
+For this to work, you must also slightly change your mapping, so that Doctrine can persist new entities on 
+associations (note the cascade options on the OneToMany association):
 
 ```php
 
@@ -604,14 +635,18 @@ class BlogPost
 
 ### Collections strategy
 
-By default, every collections association has a special strategy attached to it that is called during the hydrating and extracting phase. All those strategies extend from the class `DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy`.
+By default, every collections association has a special strategy attached to it that is called during the hydrating 
+and extracting phase. All those strategies extend from the class 
+`DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy`.
 
 DoctrineModule provides two strategies out of the box:
 
 1. `DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemove`: this is the default strategy, it removes old elements that are not in the new collection.
 2. `DoctrineModule\Stdlib\Hydrator\Strategy\DisallowRemove`: this strategy does not remove old elements even if they are not in the new collection.
 
-As a consequence, when using `AllowRemove`, you need to define both adder (eg. addTags) and remover (eg. removeTags). On the other hand, when using the `DisallowRemove` strategy, you must always define at least the adder, but the remover is optional (because elements are never removed).
+As a consequence, when using `AllowRemove`, you need to define both adder (eg. addTags) and remover (eg. removeTags).
+On the other hand, when using the `DisallowRemove` strategy, you must always define at least the adder, but the remover
+is optional (because elements are never removed).
 
 The following table illustrate the difference between the two strategies
 
@@ -637,7 +672,10 @@ Note that you can also add strategies to simple fields.
 
 ### By value and by reference
 
-By default, Doctrine Hydrator works by value. This means that the hydrator will access and modify your properties through the public API of your entities (that is to say, with getters and setters). However, you can override this behaviour to work by reference (that is to say that the hydrator will access the properties through Reflection API, and hence bypass any logic you may include in your setters/getters).
+By default, Doctrine Hydrator works by value. This means that the hydrator will access and modify your properties 
+through the public API of your entities (that is to say, with getters and setters). However, you can override this 
+behaviour to work by reference (that is to say that the hydrator will access the properties through Reflection API, 
+and hence bypass any logic you may include in your setters/getters).
 
 To change the behaviour, just give the third parameter of the constructor to false:
 
@@ -706,12 +744,15 @@ echo $data['foo']; // prints 'bar'
 
 It now only prints "bar", which shows clearly that the getter has not been called.
 
-> Note: There is only one exception: collections. Collections strategies always call the adder/remover of the public API of your entity.
+> Note: There is only one exception: collections. Collections strategies always call the adder/remover of the public 
+API of your entity.
 
 
 ### A complete example using Zend\Form
 
-Now that we understand how the hydrator works, let's see how it integrates into the Zend Framework 2's Form component. We are going to use a simple example with, once again, a BlogPost and a Tag entities. We will see how we can create the blog post, and being able to edit it.
+Now that we understand how the hydrator works, let's see how it integrates into the Zend Framework 2's Form component. 
+We are going to use a simple example with, once again, a BlogPost and a Tag entities. We will see how we can create the 
+blog post, and being able to edit it.
 
 #### The entities
 
@@ -870,9 +911,14 @@ class Tag
 
 #### The fieldsets
 
-We now need to create two fieldsets that will map those entities. With Zend Framework 2, it's a good practice to create one fieldset per entity in order to reuse them accross many forms.
+We now need to create two fieldsets that will map those entities. With Zend Framework 2, it's a good practice to create
+one fieldset per entity in order to reuse them accross many forms.
 
-Here is the fieldset for the Tag. Notice that in this example, I added a hidden input whose name is "id". This is needed for editing. Most of the time, when you create the Blog Post for the first time, the tags does not exist. Therefore, the id will be empty. However, when you edit the blog post, all the tags already exists in database (they have been persisted and have an id), and hence the hidden "id" input will have a value. This allow you to modify a tag name by modifying an existing Tag entity without creating a new tag (and removing the old one).
+Here is the fieldset for the Tag. Notice that in this example, I added a hidden input whose name is "id". This is 
+needed for editing. Most of the time, when you create the Blog Post for the first time, the tags does not exist. 
+Therefore, the id will be empty. However, when you edit the blog post, all the tags already exists in database (they 
+have been persisted and have an id), and hence the hidden "id" input will have a value. This allow you to modify a tag 
+name by modifying an existing Tag entity without creating a new tag (and removing the old one).
 
 ```php
 
@@ -973,11 +1019,15 @@ class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
 }
 ```
 
-Plain and easy. The blog post is just a simple fieldset with an element type of type ``Zend\Form\Element\Collection`` that represents the ManyToOne association.
+Plain and easy. The blog post is just a simple fieldset with an element type of type ``Zend\Form\Element\Collection`` 
+that represents the ManyToOne association.
 
 #### The form
 
-Now that we have created our fieldset, we will create two forms: one form for creation and one form for updating. The form task is to make the glue between the fieldsets. In this simple example, both forms are exactly the same, but in a real application, you may want to change this behaviour by changing the validation group (for instance, you may want to disallow the user to modify the title of the blog post when updating).
+Now that we have created our fieldset, we will create two forms: one form for creation and one form for updating. 
+The form task is to make the glue between the fieldsets. In this simple example, both forms are exactly the same, 
+but in a real application, you may want to change this behaviour by changing the validation group (for instance, you
+may want to disallow the user to modify the title of the blog post when updating).
 
 Here is the create form:
 
@@ -1047,7 +1097,8 @@ We now have everything. Let's create the controllers.
 
 ##### Creation
 
-If the createAction, we will create a new BlogPost and all the associated tags. As a consequence, the hidden ids for the tags will by empty (because they have not been persisted yet).
+If the createAction, we will create a new BlogPost and all the associated tags. As a consequence, the hidden ids 
+for the tags will by empty (because they have not been persisted yet).
 
 Here is the action for create a new blog post:
 
@@ -1109,17 +1160,26 @@ public function editAction()
 
 ### Performance considerations
 
-Although using the hydrator is like magical as it abstracts most of the tedious task, you have to be aware that it can leads to performance issues in some situations. Please carefully read the following paragraphs in order to know how to solve (and avoid !) them.
+Although using the hydrator is like magical as it abstracts most of the tedious task, you have to be aware that it can 
+leads to performance issues in some situations. Please carefully read the following paragraphs in order to know how 
+to solve (and avoid !) them.
 
 #### Make hydrator get a reference instead of a database call
 
-By default, the DoctrineModule hydrator performs a "find" operation for every relationships, and hence retrieving the whole entity from database. This is not always the wanted behaviour (but it can be !), and it can leads to performance problems. Most of the time, what you want is just retrieving a reference to this object, instead of fetching it from database.
+By default, the DoctrineModule hydrator performs a "find" operation for every relationships, and hence retrieving the
+whole entity from database. This is not always the wanted behaviour (but it can be !), and it can leads to performance
+problems. Most of the time, what you want is just retrieving a reference to this object, instead of fetching it from 
+database.
 
-If you are using Doctrine 2 ORM, you have to use the hydrator from DoctrineORMModule (instead of the one from DoctrineModule). The usage is exactly the same, except that instead of a `find` call, it makes a `getReference` call. This is up to you to choose the right hydrator for your specific need.
+If you are using Doctrine 2 ORM, you have to use the hydrator from DoctrineORMModule (instead of the one from 
+DoctrineModule). The usage is exactly the same, except that instead of a `find` call, it makes a `getReference` 
+call. This is up to you to choose the right hydrator for your specific need.
 
 #### Unwanting side-effect
 
-You have to be very careful when you are using DoctrineModule hydrator with complex entities that contain a lot of associations, as a lot of unnecessary calls to database can be made if you are not perfectly aware of what happen under the hood. To explain this problem, let's have an example.
+You have to be very careful when you are using DoctrineModule hydrator with complex entities that contain a lot of 
+associations, as a lot of unnecessary calls to database can be made if you are not perfectly aware of what happen 
+under the hood. To explain this problem, let's have an example.
 
 Imagine the following entity :
 
@@ -1157,9 +1217,12 @@ class User
 }
 ```
 
-This simple entity contains an id, a string property, and a OneToOne relationship. If you are using Zend Framework 2 forms the correct way, you will likely have a fieldset for every entity, so that you have a perfect mapping between entities and fieldsets. Here are fieldsets for User and and City entities.
+This simple entity contains an id, a string property, and a OneToOne relationship. If you are using Zend Framework 2 
+forms the correct way, you will likely have a fieldset for every entity, so that you have a perfect mapping between
+entities and fieldsets. Here are fieldsets for User and and City entities.
 
-> If you are not comfortable with Fieldsets and how they should work, please refer to [this part of Zend Framework 2 documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html).
+> If you are not comfortable with Fieldsets and how they should work, please refer to [this part of Zend Framework 2 
+documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html).
 
 First the User fieldset :
 
@@ -1271,7 +1334,9 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
 
 ```
 
-Now, let's say that we have one form where a logged user can only change his name. This specific form does not allow the user to change this city, and the fields of the city are not even rendered in the form. Naively, this form would be like this :
+Now, let's say that we have one form where a logged user can only change his name. This specific form does not allow
+the user to change this city, and the fields of the city are not even rendered in the form. Naively, this form would 
+be like this :
 
 ```php
 namespace Application\Form;
@@ -1310,7 +1375,9 @@ class EditNameForm extends Form
 
 > Once again, if you are not familiar with the concepts here, please read the [official documentation about that](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html).
 
-Here, we create a simple form called "EditSimpleForm". Because we set the validation group, all the inputs related to city (postCode and name of the city) won't be validated, which is exactly what we want. The action will look something like this :
+Here, we create a simple form called "EditSimpleForm". Because we set the validation group, all the inputs related
+to city (postCode and name of the city) won't be validated, which is exactly what we want. The action will look 
+something like this :
 
 ```php
 public function editNameAction()
@@ -1336,16 +1403,25 @@ public function editNameAction()
 }
 ```
 
-This looks good, isn't it ? However, if we check the queries that are made (for instance using the awesome [ZendDeveloperTools module](https://github.com/zendframework/ZendDeveloperTools)), we will see that a request is made to fetch data for the City relationship of the user, and we hence have a completely useless database call, as this information is not rendered by the form.
+This looks good, isn't it ? However, if we check the queries that are made (for instance using the awesome
+[ZendDeveloperTools module](https://github.com/zendframework/ZendDeveloperTools)), we will see that a request is 
+made to fetch data for the City relationship of the user, and we hence have a completely useless database call, 
+as this information is not rendered by the form.
 
-You could ask, why ? Yes, we set the validation group, BUT the problem happens during the extracting phase. Here is how it works : when an object is bound to the form, this latter iterates through all its fields, and tries to extract the data from the object that is bound. In our example, here is how it work :
+You could ask, why ? Yes, we set the validation group, BUT the problem happens during the extracting phase. Here is 
+how it works : when an object is bound to the form, this latter iterates through all its fields, and tries to extract 
+the data from the object that is bound. In our example, here is how it work :
 
 1. It first arrives to the UserFieldset. The input are "name" (which is string field), and a "city" which is another fieldset (in our User entity, this is a OneToOne relationship to another entity). The hydrator will extract both the name and the city (which will be a Doctrine 2 Proxy object).
 2. Because the UserFieldset contains a reference to another Fieldset (in our case, a CityFieldset), it will, in turn, tries to extract the values of the City to populate the values of the CityFieldset. And here is the problem : City is a Proxy, and hence because the hydrator tries to extract its values (the name and postcode field), Doctrine will automatically fetch the object from the database in order to please the hydrator.
 
-This is absolutely normal, this is how ZF 2 forms work and what make them nearly magic, but in this specific case, it can leads to disastrous consequences. When you have very complex entities with a lot of OneToMany collections, imagine how many unnecessary calls can be made (actually, after discovering this problem, I've realized that my applications was doing 10 unnecessary database calls).
+This is absolutely normal, this is how ZF 2 forms work and what make them nearly magic, but in this specific case, it 
+can leads to disastrous consequences. When you have very complex entities with a lot of OneToMany collections, imagine
+how many unnecessary calls can be made (actually, after discovering this problem, I've realized that my applications was
+doing 10 unnecessary database calls).
 
-In fact, the fix is ultra simple : if you don't need specific fieldsets in a form, remove them. Here is the fix EditUserForm :
+In fact, the fix is ultra simple : if you don't need specific fieldsets in a form, remove them. Here is the fix 
+EditUserForm :
 
 ```php
 namespace Application\Form;
