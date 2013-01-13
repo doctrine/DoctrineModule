@@ -16,36 +16,11 @@ for more detailed documentation on the features provided by this module.
 Installation of DoctrineModule uses composer. For composer documentation, please refer to
 [getcomposer.org](http://getcomposer.org/).
 
-  1. `cd my/project/directory`
-  2. create or modify the `composer.json` file within your ZF2 application file with 
-     following contents:
+```sh
+php composer.phar require doctrine/doctrine-module
+# when asked for a version, type `0.*`
 
-     ```json
-     {
-         "minimum-stability": "dev",
-         "require": {
-             "doctrine/doctrine-module": "dev-master"
-         }
-     }
-     ```
-  3. install composer via `curl -s https://getcomposer.org/installer | php` (on windows, download
-     https://getcomposer.org/installer and execute it with PHP). Then run `php composer.phar install`
-  4. open `my/project/directory/configs/application.config.php` and add the following key to your `modules`:
+Then add `DoctrineModule` to your `config/application.config.php``
 
-     ```php
-     'DoctrineModule',
-     ```
-
-##Installation (without composer)
-
-  1. clone this repository to `vendor/DoctrineModule` in your ZF2 application
-  2. The module depends on various packages that you have to install and autoload in order to get 
-     it to work. Check the `require` section of the
-     [`composer.json`](https://github.com/doctrine/DoctrineORMModule/blob/master/composer.json)
-     file to see what these requirements are.
-  3. open `my/project/directory/configs/application.config.php` and add the following key to your `modules`:
-
-     ```php
-     'DoctrineModule',
-     ```
-
+Installation without composer is not officially supported, and requires you to install and autoload
+the dependencies specified in the `composer.json`.
