@@ -20,23 +20,26 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
+use InvalidArgumentException;
+use RuntimeException;
 use Traversable;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use DoctrineModule\Util\CollectionUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
-use Zend\Stdlib\Hydrator\HydratorInterface;
-use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
+use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
- * Hydrator based on Doctrine ObjectManager. Hydrates an object using a wrapped hydrator and
- * by retrieving associations by the given identifiers.
- * Please note that non-scalar values passed to the hydrator are considered identifiers too.
+ * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
+ * of extracting/hydrator objects in Doctrine, by handling most associations types.
+ *
+ * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instanciated once
+ * and be used with objects of different types). Most of the time, this won't be a problem as in a form we only
+ * create one hydrator. This is by design, because this hydrator uses metadata extensively, so it's more efficient
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.5.0
+ * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
  */
 class DoctrineObject extends AbstractHydrator
@@ -47,49 +50,38 @@ class DoctrineObject extends AbstractHydrator
     protected $objectManager;
 
     /**
+     * @var ObjectRepository
+     */
+    protected $objectRepository;
+
+    /**
      * @var ClassMetadata
      */
     protected $metadata;
 
     /**
-     * @var HydratorInterface
+     * @var bool
      */
-    protected $hydrator;
+    protected $byValue = true;
+
 
     /**
-     * @param ObjectManager     $objectManager
-     * @param HydratorInterface $hydrator
+     * Constructor
+     *
+     * @param ObjectManager $objectManager The ObjectManager to use
+     * @param string        $targetClass   The FQCN of the hydrated/extracted object
+     * @param bool          $byValue       If set to true, hydrator will always use entity's public API
      */
-    public function __construct(ObjectManager $objectManager, HydratorInterface $hydrator = null)
+    public function __construct(ObjectManager $objectManager, $targetClass, $byValue = true)
     {
-        $this->objectManager = $objectManager;
-
-        if (null === $hydrator) {
-            $hydrator = new ClassMethodsHydrator(false);
-        }
-
-        $this->setHydrator($hydrator);
-
         parent::__construct();
-    }
 
-    /**
-     * @param HydratorInterface $hydrator
-     * @return DoctrineObject
-     */
-    public function setHydrator(HydratorInterface $hydrator)
-    {
-        $this->hydrator = $hydrator;
+        $this->objectManager    = $objectManager;
+        $this->objectRepository = $objectManager->getRepository($targetClass);
+        $this->metadata         = $objectManager->getClassMetadata($targetClass);
+        $this->byValue          = (bool) $byValue;
 
-        return $this;
-    }
-
-    /**
-     * @return HydratorInterface
-     */
-    public function getHydrator()
-    {
-        return $this->hydrator;
+        $this->prepare();
     }
 
     /**
@@ -100,7 +92,11 @@ class DoctrineObject extends AbstractHydrator
      */
     public function extract($object)
     {
-        return $this->hydrator->extract($object);
+        if ($this->byValue) {
+            return $this->extractByValue($object);
+        }
+
+        return $this->extractByReference($object);
     }
 
     /**
@@ -108,94 +104,197 @@ class DoctrineObject extends AbstractHydrator
      *
      * @param  array  $data
      * @param  object $object
-     * @throws \Exception
      * @return object
      */
     public function hydrate(array $data, $object)
     {
-        $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
+        if ($this->byValue) {
+            return $this->hydrateByValue($data, $object);
+        }
 
-        $object = $this->tryConvertArrayToObject($data, $object);
+        return $this->hydrateByReference($data, $object);
+    }
 
-        foreach($data as $field => &$value) {
+    /**
+     * {@inheritDoc}
+     * @throws InvalidArgumentException If a strategy added to a collection does not extend AbstractCollectionStrategy
+     */
+    public function addStrategy($name, StrategyInterface $strategy)
+    {
+        if ($this->metadata->hasAssociation($name)) {
+            if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
+                throw new InvalidArgumentException(sprintf(
+                    'Strategies used for collections valued associations must inherit from
+                     Strategy\AbstractCollectionStrategy, %s given',
+                    get_class($strategy)
+                ));
+            }
 
-            $value = $this->hydrateValue($field, $value);
+            $strategy->setCollectionName($name)
+                     ->setClassMetadata($this->metadata);
+        }
 
-            if ($value === null) {
+        return parent::addStrategy($name, $strategy);
+    }
+
+
+    /**
+     * Prepare the hydrator by adding strategies to every collection valued associations
+     *
+     * @param  object $object
+     * @return DoctrineObject
+     */
+    protected function prepare()
+    {
+        $metadata     = $this->metadata;
+        $associations = $metadata->getAssociationNames();
+
+        foreach ($associations as $association) {
+            // We only need to prepare collection valued associations
+            if ($metadata->isCollectionValuedAssociation($association)) {
+                if ($this->byValue) {
+                    $this->addStrategy($association, new Strategy\AllowRemoveByValue());
+                } else {
+                    $this->addStrategy($association, new Strategy\AllowRemoveByReference());
+                }
+            }
+        }
+    }
+
+    /**
+     * Extract values from an object using a by-value logic (this means that it uses the entity
+     * API, in this case, getters)
+     *
+     * @param  object $object
+     * @throws RuntimeException
+     * @return array
+     */
+    protected function extractByValue($object)
+    {
+        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+        $methods    = get_class_methods($object);
+
+        $data = array();
+        foreach ($fieldNames as $fieldName) {
+            $getter = 'get' . ucfirst($fieldName);
+
+            // Ignore unknown fields
+            if (!in_array($getter, $methods)) {
                 continue;
             }
 
-            // @todo DateTime (and other types) conversion should be handled by doctrine itself in future
-            if (in_array($this->metadata->getTypeOfField($field), array('datetime', 'time', 'date'))) {
-                if (is_int($value)) {
-                    $dt = new DateTime();
-                    $dt->setTimestamp($value);
-                    $value = $dt;
-                } elseif (is_string($value)) {
-                    $value = new DateTime($value);
-                }
-            }
-
-            if ($this->metadata->hasAssociation($field)) {
-                $target = $this->metadata->getAssociationTargetClass($field);
-
-                if ($this->metadata->isSingleValuedAssociation($field)) {
-                    $value = $this->toOne($value, $target);
-                } elseif ($this->metadata->isCollectionValuedAssociation($field)) {
-                    $value = $this->toMany($value, $target);
-
-                    // Automatically merge collections using helper utility
-                    $propertyRefl = $this->metadata->getReflectionClass()->getProperty($field);
-                    $propertyRefl->setAccessible(true);
-
-                    $previousValue = $propertyRefl->getValue($object);
-                    $value = CollectionUtils::intersectUnion($previousValue, $value);
-                }
-            }
+            $data[$fieldName] = $this->extractValue($fieldName, $object->$getter());
         }
 
-        return $this->hydrator->hydrate($data, $object);
+        return $data;
     }
 
     /**
-     * @param  mixed  $valueOrObject
-     * @param  string $target
+     * Extract values from an object using a by-reference logic (this means that values are
+     * directly fetched without using the public API of the entity, in this case, getters)
+     *
+     * @param  object $object
+     * @return array
+     */
+    protected function extractByReference($object)
+    {
+        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+        $refl       = $this->metadata->getReflectionClass();
+
+        $data = array();
+        foreach ($fieldNames as $fieldName) {
+            $reflProperty = $refl->getProperty($fieldName);
+            $reflProperty->setAccessible(true);
+
+            $data[$fieldName] = $this->extractValue($fieldName, $reflProperty->getValue($object));
+        }
+
+        return $data;
+    }
+
+    /**
+     * Hydrate the object using a by-value logic (this means that it uses the entity API, in this
+     * case, setters)
+     *
+     * @param  array  $data
+     * @param  object $object
+     * @throws RuntimeException
      * @return object
      */
-    protected function toOne($valueOrObject, $target)
+    protected function hydrateByValue(array $data, $object)
     {
-        if ($valueOrObject instanceof $target) {
-            return $valueOrObject;
-        }
+        $object   = $this->tryConvertArrayToObject($data, $object);
+        $metadata = $this->metadata;
 
-        return $this->find($target, $valueOrObject);
-    }
+        foreach ($data as $field => $value) {
+            $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
+            $setter = 'set' . ucfirst($field);
 
-    /**
-     * @param  mixed $valueOrObject
-     * @param  string $target
-     * @return ArrayCollection
-     */
-    protected function toMany($valueOrObject, $target)
-    {
-        if (!is_array($valueOrObject) && !$valueOrObject instanceof Traversable) {
-            $valueOrObject = (array) $valueOrObject;
-        }
+            if ($metadata->hasAssociation($field)) {
+                $target = $metadata->getAssociationTargetClass($field);
 
-        $values = new ArrayCollection();
+                if ($metadata->isSingleValuedAssociation($field)) {
+                    if (!method_exists($object, $setter)) {
+                        continue;
+                    }
 
-        // In order to avoid to make a "find" against an empty value (for instance when a collection contains
-        // an empty value. However, please note that as a side-effect, the empty string '' cannot be used as
-        // an identifier
-        foreach($valueOrObject as $value) {
-            if ($value instanceof $target) {
-                $values[] = $value;
-            } elseif ($value !== null && $value !== '') {
-                $values[] = $this->find($target, $value);
+                    $value = $this->toOne($target, $this->hydrateValue($field, $value));
+                    $object->$setter($value);
+                } elseif ($metadata->isCollectionValuedAssociation($field)) {
+                    $this->toMany($object, $field, $target, $value);
+                }
+            } else {
+                if (!method_exists($object, $setter)) {
+                    continue;
+                }
+
+                $object->$setter($value);
             }
         }
 
-        return $values;
+        return $object;
+    }
+
+    /**
+     * Hydrate the object using a by-reference logic (this means that values are modified directly without
+     * using the public API, in this case setters, and hence override any logic that could be done in those
+     * setters)
+     *
+     * @param  array  $data
+     * @param  object $object
+     * @return object
+     */
+    protected function hydrateByReference(array $data, $object)
+    {
+        $object   = $this->tryConvertArrayToObject($data, $object);
+        $metadata = $this->metadata;
+        $refl     = $metadata->getReflectionClass();
+
+        foreach ($data as $field => $value) {
+            // Ignore unknown fields
+            if (!$refl->hasProperty($field)) {
+                continue;
+            }
+
+            $value        = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
+            $reflProperty = $refl->getProperty($field);
+            $reflProperty->setAccessible(true);
+
+            if ($metadata->hasAssociation($field)) {
+                $target = $metadata->getAssociationTargetClass($field);
+
+                if ($metadata->isSingleValuedAssociation($field)) {
+                    $value = $this->toOne($target, $this->hydrateValue($field, $value));
+                    $reflProperty->setValue($object, $value);
+                } elseif ($metadata->isCollectionValuedAssociation($field)) {
+                    $this->toMany($object, $field, $target, $value);
+                }
+            } else {
+                $reflProperty->setValue($object, $value);
+            }
+        }
+
+        return $object;
     }
 
     /**
@@ -203,13 +302,14 @@ class DoctrineObject extends AbstractHydrator
      * an identifier for the object. This is useful in a context of updating existing entities, without ugly
      * tricks like setting manually the existing id directly into the entity
      *
-     * @param  array  $data
+     * @param  array  $data   The data that may contain identifiers keys
      * @param  object $object
      * @return object
      */
     protected function tryConvertArrayToObject($data, $object)
     {
-        $identifierNames  = $this->metadata->getIdentifierFieldNames($object);
+        $metadata         = $this->metadata;
+        $identifierNames  = $metadata->getIdentifierFieldNames($object);
         $identifierValues = array();
 
         if (empty($identifierNames)) {
@@ -224,16 +324,103 @@ class DoctrineObject extends AbstractHydrator
             $identifierValues[$identifierName] = $data[$identifierName];
         }
 
-        return $this->find(get_class($object), $identifierValues);
+        return $this->find($identifierValues);
     }
 
     /**
-     * @param  string    $target
-     * @param  mixed     $identifiers
+     * Handle ToOne associations
+     *
+     * @param  string $target
+     * @param  mixed  $value
      * @return object
      */
-    protected function find($target, $identifiers)
+    protected function toOne($target, $value)
     {
-        return $this->objectManager->find($target, $identifiers);
+        if ($value instanceof $target) {
+            return $value;
+        }
+
+        return $this->find($value);
+    }
+
+    /**
+     * Handle ToMany associations. In proper Doctrine design, Collections should not be swapped, so
+     * collections are always handled by reference. Internally, every collection is handled using specials
+     * strategies that inherit from AbstractCollectionStrategy class, and that add or remove elements but without
+     * changing the collection of the object
+     *
+     * @param  object $object
+     * @param  mixed  $collectionName
+     * @param  string $target
+     * @param  mixed  $values
+     * @return void
+     */
+    protected function toMany($object, $collectionName, $target, $values)
+    {
+        if (!is_array($values) && !$values instanceof Traversable) {
+            $values = (array) $values;
+        }
+
+        $collection = array();
+
+        // If the collection contains identifiers, fetch the objects from database
+        foreach($values as $value) {
+            if ($value instanceof $target) {
+                $collection[] = $value;
+            } elseif ($value !== null) {
+                $targetObject = $this->find($value);
+
+                if ($targetObject !== null) {
+                    $collection[] = $targetObject;
+                }
+            }
+        }
+
+        // Set the object so that the strategy can extract the Collection from it
+        $collectionStrategy = $this->getStrategy($collectionName);
+        $collectionStrategy->setObject($object);
+
+        // We could directly call hydrate method from the strategy, but if people want to override
+        // hydrateValue function, they can do it and do their own stuff
+        $this->hydrateValue($collectionName, $collection);
+    }
+
+    /**
+     * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
+     *
+     * @param  mixed  $value
+     * @param  string $typeOfField
+     * @return DateTime
+     */
+    protected function handleTypeConversions($value, $typeOfField)
+    {
+        switch($typeOfField) {
+            case 'datetime':
+            case 'time':
+            case 'date':
+                if (is_int($value)) {
+                    $dateTime = new DateTime();
+                    $dateTime->setTimestamp($value);
+                    $value = $dateTime;
+                } elseif (is_string($value)) {
+                    $value = new DateTime($value);
+                }
+
+                break;
+            default:
+        }
+
+        return $value;
+    }
+
+    /**
+     * Find an object by its identifiers
+     *
+     * @param  mixed   $identifiers
+     * @return object
+     */
+    protected function find($identifiers)
+    {
+        return $this->objectRepository->find($identifiers);
     }
 }
