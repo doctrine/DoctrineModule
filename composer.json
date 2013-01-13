@@ -38,19 +38,28 @@
     "require": {
         "php": ">=5.3.3",
         "doctrine/common": ">=2.3-dev,<2.5-dev",
-        "doctrine/data-fixtures": "1.*",
         "symfony/console": ">=2.0.13",
-        "zendframework/zendframework": "2.*"
+        "zendframework/zend-authentication": "2.*",
+        "zendframework/zend-cache": "2.*",
+        "zendframework/zend-paginator": "2.*",
+        "zendframework/zend-stdlib": "2.*",
+        "zendframework/zend-mvc": "2.*",
+        "zendframework/zend-servicemanager": "2.*",
+        "zendframework/zend-validator": "2.*"
     },
-    "minimum-stability": "alpha",
+    "suggest": {
+        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
+    },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
-            "DoctrineModule\\": "src/"
+            "DoctrineModule\\": "src/",
+            "DoctrineModuleTest\\": "tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.6.x-dev"
+            "dev-master": "0.7.x-dev"
         }
     },
     "bin": [
