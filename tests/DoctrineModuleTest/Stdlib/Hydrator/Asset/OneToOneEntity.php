@@ -26,10 +26,10 @@ class OneToOneEntity
         return $this->id;
     }
 
-    public function setToOne(SimpleEntity $entity, $modifyValue = true)
+    public function setToOne(SimpleEntity $entity = null, $modifyValue = true)
     {
         // Modify the value to illustrate the difference between by value and by reference
-        if ($modifyValue) {
+        if ($modifyValue && $entity !== null) {
             $entity->setField('Modified from setToOne setter', false);
         }
 

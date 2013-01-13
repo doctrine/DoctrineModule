@@ -227,10 +227,6 @@ class DoctrineObject extends AbstractHydrator
         $metadata = $this->metadata;
 
         foreach ($data as $field => $value) {
-            if (null === $value) {
-                continue;
-            }
-
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
             $setter = 'set' . ucfirst($field);
 
@@ -275,8 +271,8 @@ class DoctrineObject extends AbstractHydrator
         $refl     = $metadata->getReflectionClass();
 
         foreach ($data as $field => $value) {
-            // Ignore unknown fields or null values
-            if (null === $value || !$refl->hasProperty($field)) {
+            // Ignore unknown fields
+            if (!$refl->hasProperty($field)) {
                 continue;
             }
 
@@ -367,12 +363,11 @@ class DoctrineObject extends AbstractHydrator
 
         $collection = array();
 
-        // If the collection contains identifiers, fetch the objects from database. A small consequence from
-        // this logic : a primary key whose value is empty string ('') is not allowed
+        // If the collection contains identifiers, fetch the objects from database
         foreach($values as $value) {
             if ($value instanceof $target) {
                 $collection[] = $value;
-            } elseif ($value !== null && $value !== '') {
+            } elseif ($value !== null) {
                 $targetObject = $this->find($value);
 
                 if ($targetObject !== null) {

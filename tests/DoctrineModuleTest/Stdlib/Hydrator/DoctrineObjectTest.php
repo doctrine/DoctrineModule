@@ -518,7 +518,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $data = array('toOne' => null);
 
-        $this->metadata->expects($this->never())
+        $this->metadata->expects($this->once())
                        ->method('hasAssociation');
 
         $object = $this->hydratorByValue->hydrate($data, $entity);
@@ -533,7 +533,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $data = array('toOne' => null);
 
-        $this->metadata->expects($this->never())
+        $this->metadata->expects($this->once())
                        ->method('hasAssociation');
 
         $object = $this->hydratorByReference->hydrate($data, $entity);
@@ -1077,7 +1077,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($initialCollection, $modifiedCollection);
     }
 
-    public function testAvoidFailingLookupsForEmptyIdentifiers()
+    public function testCanLookupsForEmptyIdentifiers()
     {
         // When using hydration by reference, it won't use the public API of the entity to set values (setters)
         $entity = new Asset\OneToManyEntity();
@@ -1085,51 +1085,29 @@ class DoctrineObjectTest extends BaseTestCase
 
         $data = array(
             'entities' => array(
-                2, 3, ''
+                ''
             )
         );
-
-        $entityInDatabaseWithIdOfTwo = new Asset\SimpleEntity();
-        $entityInDatabaseWithIdOfTwo->setId(2);
-        $entityInDatabaseWithIdOfTwo->setField('foo', false);
-
-        $entityInDatabaseWithIdOfThree = new Asset\SimpleEntity();
-        $entityInDatabaseWithIdOfThree->setId(3);
-        $entityInDatabaseWithIdOfThree->setField('bar', false);
+        $entityInDatabaseWithEmptyId = new Asset\SimpleEntity();
+        $entityInDatabaseWithEmptyId->setId('');
+        $entityInDatabaseWithEmptyId->setField('baz', false);
 
         $this->objectRepository->expects($this->any())
                                ->method('find')
-                               ->with($this->logicalOr(
-                                    $this->equalTo(2),
-                                    $this->equalTo(3)
-                               ))
-                               ->will($this->returnCallback(function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                                    if ($arg === 2) {
-                                        return $entityInDatabaseWithIdOfTwo;
-                                    } elseif ($arg === 3) {
-                                        return $entityInDatabaseWithIdOfThree;
-                                    }
-                               }));
+                               ->with('')
+                               ->will($this->returnValue($entityInDatabaseWithEmptyId));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
 
         $entities = $entity->getEntities(false);
+        $entity = $entities[0];
 
-        $this->assertEquals(2, count($entities));
+        $this->assertEquals(1, count($entities));
 
-        foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
-            $this->assertContains('Modified from addEntities adder', $en->getField(false));
-        }
-
-        $this->assertEquals(2, $entities[0]->getId());
-        $this->assertSame($entityInDatabaseWithIdOfTwo, $entities[0]);
-
-        $this->assertEquals(3, $entities[1]->getId());
-        $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertSame($entityInDatabaseWithEmptyId, $entity);
     }
 
     public function testHandleDateTimeConversionUsingByValue()
