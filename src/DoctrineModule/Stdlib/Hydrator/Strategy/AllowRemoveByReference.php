@@ -19,9 +19,6 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
-use LogicException;
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in
  * the original collection, then this strategy remove elements from the original collection. For instance, if the

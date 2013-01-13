@@ -123,6 +123,7 @@ class DoctrineObject extends AbstractHydrator
 
     /**
      * {@inheritDoc}
+     * @throws InvalidArgumentException If a strategy added to a collection does not extend AbstractCollectionStrategy
      */
     public function addStrategy($name, StrategyInterface $strategy)
     {

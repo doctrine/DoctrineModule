@@ -19,9 +19,6 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
-use LogicException;
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in
  * the original collection, then this strategy will not remove those elements. At most, it will add new elements. For
@@ -45,7 +42,7 @@ class DisallowRemoveByReference extends AbstractCollectionStrategy
         $collection      = $this->getCollectionFromObjectByReference();
         $collectionArray = $collection->toArray();
 
-        $toAdd = new ArrayCollection(array_udiff($value, $collectionArray, array($this, 'compareObjects')));
+        $toAdd = array_udiff($value, $collectionArray, array($this, 'compareObjects'));
 
         foreach ($toAdd as $element) {
             $collection->add($element);

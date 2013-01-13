@@ -141,7 +141,7 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
 
         if (!method_exists($object, $getter)) {
             throw new InvalidArgumentException(sprintf(
-                '%s method to access Collection %s in object %s does not exist',
+                'The getter %s to access collection %s in object %s does not exist',
                 $getter,
                 $this->getCollectionName(),
                 get_class($object)
