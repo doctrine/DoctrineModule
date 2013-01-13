@@ -60,11 +60,6 @@ class DoctrineObject extends AbstractHydrator
     protected $metadata;
 
     /**
-     * @var string
-     */
-    protected $targetClass;
-
-    /**
      * @var bool
      */
     protected $byValue = true;
@@ -84,7 +79,6 @@ class DoctrineObject extends AbstractHydrator
         $this->objectManager    = $objectManager;
         $this->objectRepository = $objectManager->getRepository($targetClass);
         $this->metadata         = $objectManager->getClassMetadata($targetClass);
-        $this->targetClass      = (string) $targetClass;
         $this->byValue          = (bool) $byValue;
 
         $this->prepare();
