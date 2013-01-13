@@ -168,6 +168,10 @@ class DoctrineObject extends AbstractHydrator
             return $valueOrObject;
         }
 
+        if ($valueOrObject == '') {
+            return null;
+        }
+
         return $this->find($target, $valueOrObject);
     }
 

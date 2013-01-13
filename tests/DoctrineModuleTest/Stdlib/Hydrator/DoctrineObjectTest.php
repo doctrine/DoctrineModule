@@ -761,4 +761,38 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertEquals($modifiedData, $extract);
     }
+
+    public function testEmptyStringOnAssocationFieldIsHydratedAsNull()
+    {
+        $data = array(
+            'country' => ''
+        );
+        
+        $this->metadata->expects($this->exactly(1))
+             ->method('getTypeOfField')
+             ->with($this->equalTo('country'))
+             ->will($this->returnValue('integer'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('hasAssociation')
+            ->with($this->equalTo('country'))
+            ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('getAssociationTargetClass')
+            ->with($this->equalTo('country'))
+            ->will($this->returnValue('stdClass'));
+
+        $this->metadata->expects($this->exactly(1))
+            ->method('isSingleValuedAssociation')
+            ->with($this->equalTo('country'))
+            ->will($this->returnValue(true));
+    	
+		$this->objectManager->expects($this->exactly(0))
+             ->method('find')
+             ->will($this->returnValue(new stdClass()));
+
+        $object = $this->hydrator->hydrate($data, new stdClass());
+		$this->assertNull($object->country);
+    }
 }
