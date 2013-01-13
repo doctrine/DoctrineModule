@@ -30,7 +30,7 @@ use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
- * This hydrator has been completely refactored for DoctrineModule 0.6.0. It provides an easy and powerful way
+ * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
  * of extracting/hydrator objects in Doctrine, by handling most associations types.
  *
  * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instanciated once
@@ -39,7 +39,7 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.6.0
+ * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
  */
 class DoctrineObject extends AbstractHydrator
@@ -73,9 +73,9 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Constructor
      *
-     * @param ObjectManager $objectManager
-     * @param string        $targetClass
-     * @param bool          $byValue
+     * @param ObjectManager $objectManager The ObjectManager to use
+     * @param string        $targetClass   The FQCN of the hydrated/extracted object
+     * @param bool          $byValue       If set to true, hydrator will always use entity's public API
      */
     public function __construct(ObjectManager $objectManager, $targetClass, $byValue = true)
     {
@@ -84,7 +84,7 @@ class DoctrineObject extends AbstractHydrator
         $this->objectManager    = $objectManager;
         $this->objectRepository = $objectManager->getRepository($targetClass);
         $this->metadata         = $objectManager->getClassMetadata($targetClass);
-        $this->targetClass      = $targetClass;
+        $this->targetClass      = (string) $targetClass;
         $this->byValue          = (bool) $byValue;
 
         $this->prepare();
@@ -98,7 +98,7 @@ class DoctrineObject extends AbstractHydrator
      */
     public function extract($object)
     {
-        if ($this->byValue === true) {
+        if ($this->byValue) {
             return $this->extractByValue($object);
         }
 
@@ -114,7 +114,7 @@ class DoctrineObject extends AbstractHydrator
      */
     public function hydrate(array $data, $object)
     {
-        if ($this->byValue === true) {
+        if ($this->byValue) {
             return $this->hydrateByValue($data, $object);
         }
 
@@ -126,8 +126,17 @@ class DoctrineObject extends AbstractHydrator
      */
     public function addStrategy($name, StrategyInterface $strategy)
     {
-        if ($strategy instanceof Strategy\AbstractCollectionStrategy) {
-            $strategy->setCollectionName($name);
+        if ($this->metadata->hasAssociation($name)) {
+            if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
+                throw new InvalidArgumentException(sprintf(
+                    'Strategies used for collections valued associations must inherit from
+                     Strategy\AbstractCollectionStrategy, %s given',
+                    get_class($strategy)
+                ));
+            }
+
+            $strategy->setCollectionName($name)
+                     ->setClassMetadata($this->metadata);
         }
 
         return parent::addStrategy($name, $strategy);
@@ -148,7 +157,11 @@ class DoctrineObject extends AbstractHydrator
         foreach ($associations as $association) {
             // We only need to prepare collection valued associations
             if ($metadata->isCollectionValuedAssociation($association)) {
-                $this->addStrategy($association, new Strategy\AllowRemove());
+                if ($this->byValue) {
+                    $this->addStrategy($association, new Strategy\AllowRemoveByValue());
+                } else {
+                    $this->addStrategy($association, new Strategy\AllowRemoveByReference());
+                }
             }
         }
     }
@@ -219,7 +232,7 @@ class DoctrineObject extends AbstractHydrator
         $metadata = $this->metadata;
 
         foreach ($data as $field => $value) {
-            if ($value === null) {
+            if (null === $value) {
                 continue;
             }
 
@@ -230,13 +243,20 @@ class DoctrineObject extends AbstractHydrator
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
+                    if (!method_exists($object, $setter)) {
+                        continue;
+                    }
+
                     $value = $this->toOne($target, $this->hydrateValue($field, $value));
                     $object->$setter($value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    // Collections are always handled "by reference", it will directly modify the collection
                     $this->toMany($object, $field, $target, $value);
                 }
             } else {
+                if (!method_exists($object, $setter)) {
+                    continue;
+                }
+
                 $object->$setter($value);
             }
         }
@@ -261,7 +281,7 @@ class DoctrineObject extends AbstractHydrator
 
         foreach ($data as $field => $value) {
             // Ignore unknown fields or null values
-            if ($value === null || !$refl->hasProperty($field)) {
+            if (null === $value || !$refl->hasProperty($field)) {
                 continue;
             }
 
@@ -276,7 +296,6 @@ class DoctrineObject extends AbstractHydrator
                     $value = $this->toOne($target, $this->hydrateValue($field, $value));
                     $reflProperty->setValue($object, $value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    // Collections are always handled "by reference", it will directly modify the collection
                     $this->toMany($object, $field, $target, $value);
                 }
             } else {
@@ -292,7 +311,7 @@ class DoctrineObject extends AbstractHydrator
      * an identifier for the object. This is useful in a context of updating existing entities, without ugly
      * tricks like setting manually the existing id directly into the entity
      *
-     * @param  array  $data
+     * @param  array  $data   The data that may contain identifiers keys
      * @param  object $object
      * @return object
      */
@@ -330,10 +349,6 @@ class DoctrineObject extends AbstractHydrator
             return $value;
         }
 
-        if ($value === '') {
-            return null;
-        }
-
         return $this->find($value);
     }
 
@@ -363,23 +378,21 @@ class DoctrineObject extends AbstractHydrator
             if ($value instanceof $target) {
                 $collection[] = $value;
             } elseif ($value !== null && $value !== '') {
-                $collection[] = $this->find($value);
+                $targetObject = $this->find($value);
+
+                if ($targetObject !== null) {
+                    $collection[] = $targetObject;
+                }
             }
         }
 
         // Set the object so that the strategy can extract the Collection from it
         $collectionStrategy = $this->getStrategy($collectionName);
+        $collectionStrategy->setObject($object);
 
-        if (!$collectionStrategy instanceof Strategy\AbstractCollectionStrategy) {
-            throw new InvalidArgumentException(sprintf(
-                'Strategies used for collections valued associations must inherit from
-                 Strategy\AbstractCollectionStrategy, %s given',
-                get_class($collectionStrategy)
-            ));
-        }
-
-        $collectionStrategy->setObject($object)
-            ->hydrate($collection);
+        // We could directly call hydrate method from the strategy, but if people want to override
+        // hydrateValue function, they can do it and do their own stuff
+        $this->hydrateValue($collectionName, $collection);
     }
 
     /**

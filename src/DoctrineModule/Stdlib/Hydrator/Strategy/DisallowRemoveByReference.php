@@ -28,33 +28,28 @@ use Doctrine\Common\Collections\ArrayCollection;
  * instance, if the collection initially contains elements A and B, and that the new collection contains elements B
  * and C, then the final collection will contain elements A, B and C.
  *
+ * This strategy is by reference, this means it won't use the public API to remove elements
+ *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.6.0
+ * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
  */
-class DisallowRemove extends AbstractCollectionStrategy
+class DisallowRemoveByReference extends AbstractCollectionStrategy
 {
     /**
      * {@inheritDoc}
      */
     public function hydrate($value)
     {
-        // AllowRemove strategy need "adder"
-        $adder   = 'add' . ucfirst($this->collectionName);
+        $collection      = $this->getCollectionFromObjectByReference();
+        $collectionArray = $collection->toArray();
 
-        if (!method_exists($this->object, $adder)) {
-            throw new LogicException(sprintf(
-                'AllowRemove strategy for DoctrineModule hydrator requires %s to be defined in %s
-                 entity domain code, but it seems to be missing',
-                $adder, get_class($this->object)
-            ));
+        $toAdd = new ArrayCollection(array_udiff($value, $collectionArray, array($this, 'compareObjects')));
+
+        foreach ($toAdd as $element) {
+            $collection->add($element);
         }
-
-        $collection = $this->getCollectionFromObject()->toArray();
-        $toAdd      = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
-
-        $this->object->$adder($toAdd);
 
         return $collection;
     }

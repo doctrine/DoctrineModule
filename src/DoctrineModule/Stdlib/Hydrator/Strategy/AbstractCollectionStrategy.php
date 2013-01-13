@@ -21,25 +21,31 @@ namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
 use InvalidArgumentException;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.6.0
+ * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
  */
 abstract class AbstractCollectionStrategy implements StrategyInterface
 {
     /**
-     * @var object
-     */
-    protected $object;
-
-    /**
      * @var string
      */
     protected $collectionName;
+
+    /**
+     * @var ClassMetadata
+     */
+    protected $metadata;
+
+    /**
+     * @var object
+     */
+    protected $object;
 
 
     /**
@@ -62,6 +68,28 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
     public function getCollectionName()
     {
         return $this->collectionName;
+    }
+
+    /**
+     * Set the class metadata
+     *
+     * @param  ClassMetadata $classMetadata
+     * @return AbstractCollectionStrategy
+     */
+    public function setClassMetadata(ClassMetadata $classMetadata)
+    {
+        $this->metadata = $classMetadata;
+        return $this;
+    }
+
+    /**
+     * Get the class metadata
+     *
+     * @return ClassMetadata
+     */
+    public function getClassMetadata()
+    {
+        return $this->metadata;
     }
 
     /**
@@ -102,26 +130,43 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
     }
 
     /**
-     * Get the collection value from the object. It first tries to get it using the getter and then trying to get
-     * if using the public property (if it exists)
+     * Return the collection by value (using the public API)
      *
      * @return Collection
      */
-    protected function getCollectionFromObject()
+    protected function getCollectionFromObjectByValue()
     {
         $object = $this->getObject();
-        $getter = 'get' . ucfirst($this->collectionName);
+        $getter = 'get' . ucfirst($this->getCollectionName());
 
-        // Getter
-        if (method_exists($object, $getter)) {
-            return $object->$getter();
+        if (!method_exists($object, $getter)) {
+            throw new InvalidArgumentException(sprintf(
+                '%s method to access Collection %s in object %s does not exist',
+                $getter,
+                $this->getCollectionName(),
+                get_class($object)
+            ));
         }
 
-        // Public property
-        if (isset($object->{$this->collectionName})) {
-            return $object->{$this->collectionName};
-        }
+        return $object->$getter();
     }
+
+    /**
+     * Return the collection by reference (not using the public API)
+     *
+     * @return Collection
+     */
+    protected function getCollectionFromObjectByReference()
+    {
+        $object       = $this->getObject();
+        $refl         = $this->getClassMetadata()->getReflectionClass();
+        $reflProperty = $refl->getProperty($this->getCollectionName());
+
+        $reflProperty->setAccessible(true);
+
+        return $reflProperty->getValue($object);
+    }
+
 
     /**
      * This method is used internally by array_udiff to check if two objects are equal, according to their

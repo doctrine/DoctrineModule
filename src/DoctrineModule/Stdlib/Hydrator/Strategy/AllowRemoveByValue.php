@@ -28,12 +28,14 @@ use Doctrine\Common\Collections\ArrayCollection;
  * collection initially contains elements A and B, and that the new collection contains elements B and C, then the
  * final collection will contain elements B and C (while element A will be asked to be removed).
  *
+ * This strategy is by value, this means it will use the public API (in this case, adder and remover)
+ *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.6.0
+ * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
  */
-class AllowRemove extends AbstractCollectionStrategy
+class AllowRemoveByValue extends AbstractCollectionStrategy
 {
     /**
      * {@inheritDoc}
@@ -52,7 +54,7 @@ class AllowRemove extends AbstractCollectionStrategy
             ));
         }
 
-        $collection = $this->getCollectionFromObject()->toArray();
+        $collection = $this->getCollectionFromObjectByValue()->toArray();
         $toAdd      = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
         $toRemove   = new ArrayCollection(array_udiff($collection, $value, array($this, 'compareObjects')));
 

@@ -639,11 +639,6 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($toMany2, $entities[1]);
     }
 
-    /**
-     * Note : here the test results are exactly the same than by value. This is because strategies call adder
-     * and remover, and hence access to the collections via a public API. This is often the best way to do it
-     * as it's often needed to correctly handle bi-directional relationships (inverse and owning sides)
-     */
     public function testHydrateOneToManyAssociationByReference()
     {
         // When using hydration by value, it will use the public API of the entity to set values (setters)
@@ -673,7 +668,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -834,7 +829,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -844,11 +839,6 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
     }
 
-    /**
-     * Note : here the test results are exactly the same than by value. This is because strategies call adder
-     * and remover, and hence access to the collections via a public API. This is often the best way to do it
-     * as it's often needed to correctly handle bi-directional relationships (inverse and owning sides)
-     */
     public function testHydrateOneToManyAssociationByReferenceUsingIdentifiersForRelations()
     {
         // When using hydration by reference, it won't use the public API of the entity to set values (setters)
@@ -892,7 +882,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -932,7 +922,7 @@ class DoctrineObjectTest extends BaseTestCase
         );
 
         // Use a DisallowRemove strategy
-        $this->hydratorByValue->addStrategy('entities', new Strategy\DisallowRemove());
+        $this->hydratorByValue->addStrategy('entities', new Strategy\DisallowRemoveByValue());
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
         $entities = $entity->getEntities(false);
@@ -957,7 +947,7 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function testHydrateOneToManyAssociationByReferenceUsingDisallowRemoveStrategy()
     {
-        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        // When using hydration by reference, it won't use the public API of the entity to set values (setters)
         $toMany1 = new Asset\SimpleEntity();
         $toMany1->setId(2);
         $toMany1->setField('foo', false);
@@ -985,7 +975,7 @@ class DoctrineObjectTest extends BaseTestCase
         );
 
         // Use a DisallowRemove strategy
-        $this->hydratorByReference->addStrategy('entities', new Strategy\DisallowRemove());
+        $this->hydratorByReference->addStrategy('entities', new Strategy\DisallowRemoveByReference());
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
         $entities = $entity->getEntities(false);
@@ -996,6 +986,11 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
+
+            // Only the third element is new so the adder has not been called on it
+            if ($en === $toMany3) {
+                $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
+            }
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -1167,10 +1162,10 @@ class DoctrineObjectTest extends BaseTestCase
     {
         $this->configureObjectManagerForOneToManyEntity();
 
-        $this->assertInstanceOf('DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemove', $this->hydratorByValue->getStrategy('entities'));
+        $this->assertInstanceOf('DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue', $this->hydratorByValue->getStrategy('entities'));
         $this->assertEquals('entities', $this->hydratorByValue->getStrategy('entities')->getCollectionName());
 
-        $this->assertInstanceOf('DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemove', $this->hydratorByReference->getStrategy('entities'));
+        $this->assertInstanceOf('DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference', $this->hydratorByReference->getStrategy('entities'));
         $this->assertEquals('entities', $this->hydratorByReference->getStrategy('entities')->getCollectionName());
     }
 }

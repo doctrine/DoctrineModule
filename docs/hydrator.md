@@ -641,19 +641,26 @@ and extracting phase. All those strategies extend from the class
 
 DoctrineModule provides two strategies out of the box:
 
-1. `DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemove`: this is the default strategy, it removes old elements that are not in the new collection.
-2. `DoctrineModule\Stdlib\Hydrator\Strategy\DisallowRemove`: this strategy does not remove old elements even if they are not in the new collection.
+1. `DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue`: this is the default strategy, it removes old elements that are not in the new collection.
+2. `DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference`: this is the default strategy (if set to byReference), it removes old elements that are not in the new collection.
+3. `DoctrineModule\Stdlib\Hydrator\Strategy\DisallowRemoveByValue`: this strategy does not remove old elements even if they are not in the new collection.
+4. `DoctrineModule\Stdlib\Hydrator\Strategy\DisallowRemoveByReference`: this strategy does not remove old elements even if they are not in the new collection.
 
-As a consequence, when using `AllowRemove`, you need to define both adder (eg. addTags) and remover (eg. removeTags).
-On the other hand, when using the `DisallowRemove` strategy, you must always define at least the adder, but the remover
+As a consequence, when using `AllowRemove*`, you need to define both adder (eg. addTags) and remover (eg. removeTags).
+On the other hand, when using the `DisallowRemove*` strategy, you must always define at least the adder, but the remover
 is optional (because elements are never removed).
 
 The following table illustrate the difference between the two strategies
 
 | Strategy | Initial collection | Submitted collection | Result |
 | -------- | ------------------ | -------------------- | ------ |
-| AllowRemove | A, B  | B, C | B, C
-| DisallowRemove | A, B  | B, C | A, B, C
+| AllowRemove* | A, B  | B, C | B, C
+| DisallowRemove* | A, B  | B, C | A, B, C
+
+The difference between ByValue and ByReference is that when using strategies that end by ByReference, it won't use
+the public API of your entity (adder and remover) - you don't even need to define them -. It will directly add and
+remove elements directly from the collection.
+
 
 #### Changing the strategy
 
@@ -664,7 +671,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
 
 $hydrator = new DoctrineHydrator($entityManager, 'Application\Entity\BlogPost');
-$hydrator->addStrategy('tags', new Strategy\DisallowRemove());
+$hydrator->addStrategy('tags', new Strategy\DisallowRemoveByValue());
 ```
 
 Note that you can also add strategies to simple fields.
@@ -743,9 +750,6 @@ echo $data['foo']; // prints 'bar'
 ```
 
 It now only prints "bar", which shows clearly that the getter has not been called.
-
-> Note: There is only one exception: collections. Collections strategies always call the adder/remover of the public 
-API of your entity.
 
 
 ### A complete example using Zend\Form
@@ -1104,9 +1108,6 @@ Here is the action for create a new blog post:
 
 ```php
 
-use Application\Entity\BlogPost;
-use Application\Form\CreateBlogPostForm;
-
 public function createAction()
 {
 	// Create the form
@@ -1120,7 +1121,8 @@ public function createAction()
 		$form->setData($this->request->getPost());
 		
 		if ($form->isValid()) {
-			// Persist your $blogPost
+			$this->entityManager->persist($blogPost);
+            $this->entityManager->flush();
 		}
 	}
 	
@@ -1131,9 +1133,6 @@ public function createAction()
 The update form is similar, instead that we get the blog post from database instead of creating an empty one:
 
 ```php
-
-use Application\Entity\BlogPost;
-use Application\Form\UpdateBlogPostForm;
 
 public function editAction()
 {
@@ -1148,7 +1147,8 @@ public function editAction()
 		$form->setData($this->request->getPost());
 		
 		if ($form->isValid()) {
-			// Update your $blogPost
+		    // Save the changes
+            $this->entityManager->flush();
 		}
 	}
 	
@@ -1186,9 +1186,6 @@ Imagine the following entity :
 
 ```php
 namespace Application\Entity;
-
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
