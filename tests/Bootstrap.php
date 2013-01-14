@@ -21,34 +21,14 @@ use DoctrineModuleTest\ServiceManagerTestCase;
 
 chdir(__DIR__);
 
-$previousDir = '.';
-
-while (!file_exists('config/application.config.php')) {
-    $dir = dirname(getcwd());
-
-    if ($previousDir === $dir) {
-        throw new RuntimeException(
-            'Unable to locate "config/application.config.php":'
-            . ' is DoctrineModule in a sub-directory of your application skeleton?'
-        );
-    }
-
-    $previousDir = $dir;
-    chdir($dir);
+if (
+    ! ($loader = @include __DIR__ . '/../vendor/autoload.php')
+    && ! ($loader = @include __DIR__ . '/../vendor/autoload.php')
+) {
+    throw new RuntimeException('vendor/autoload.php could not be found. Run composer installation');
 }
 
-switch (true){
-    case file_exists(__DIR__ . '/../vendor/autoload.php'):
-        $loader = include_once __DIR__ . '/../vendor/autoload.php';
-        break;
-    case file_exists(__DIR__ . '/../../../autoload.php'):
-        $loader = include_once __DIR__ . '/../../../autoload.php';
-        break;
-    default:
-        throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
-}
-
-$loader->add('DoctrineModuleTest', __DIR__);
+$loader->add('DoctrineModuleTest\\', __DIR__);
 
 if (!$config = @include __DIR__ . '/TestConfiguration.php') {
     $config = require __DIR__ . '/TestConfiguration.php.dist';

@@ -20,6 +20,7 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
+use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
@@ -50,11 +51,6 @@ class DoctrineObject extends AbstractHydrator
     protected $objectManager;
 
     /**
-     * @var ObjectRepository
-     */
-    protected $objectRepository;
-
-    /**
      * @var ClassMetadata
      */
     protected $metadata;
@@ -77,7 +73,6 @@ class DoctrineObject extends AbstractHydrator
         parent::__construct();
 
         $this->objectManager    = $objectManager;
-        $this->objectRepository = $objectManager->getRepository($targetClass);
         $this->metadata         = $objectManager->getClassMetadata($targetClass);
         $this->byValue          = (bool) $byValue;
 
@@ -123,11 +118,13 @@ class DoctrineObject extends AbstractHydrator
     {
         if ($this->metadata->hasAssociation($name)) {
             if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
-                throw new InvalidArgumentException(sprintf(
-                    'Strategies used for collections valued associations must inherit from
-                     Strategy\AbstractCollectionStrategy, %s given',
-                    get_class($strategy)
-                ));
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Strategies used for collections valued associations must inherit from '
+                        . 'Strategy\AbstractCollectionStrategy, %s given',
+                        get_class($strategy)
+                    )
+                );
             }
 
             $strategy->setCollectionName($name)
@@ -137,12 +134,10 @@ class DoctrineObject extends AbstractHydrator
         return parent::addStrategy($name, $strategy);
     }
 
-
     /**
      * Prepare the hydrator by adding strategies to every collection valued associations
      *
-     * @param  object $object
-     * @return DoctrineObject
+     * @return void
      */
     protected function prepare()
     {
@@ -324,7 +319,7 @@ class DoctrineObject extends AbstractHydrator
             $identifierValues[$identifierName] = $data[$identifierName];
         }
 
-        return $this->find($identifierValues);
+        return $this->find($identifierValues, $metadata->getName());
     }
 
     /**
@@ -340,7 +335,7 @@ class DoctrineObject extends AbstractHydrator
             return $value;
         }
 
-        return $this->find($value);
+        return $this->find($value, $target);
     }
 
     /**
@@ -364,11 +359,11 @@ class DoctrineObject extends AbstractHydrator
         $collection = array();
 
         // If the collection contains identifiers, fetch the objects from database
-        foreach($values as $value) {
+        foreach ($values as $value) {
             if ($value instanceof $target) {
                 $collection[] = $value;
             } elseif ($value !== null) {
-                $targetObject = $this->find($value);
+                $targetObject = $this->find($value, $target);
 
                 if ($targetObject !== null) {
                     $collection[] = $targetObject;
@@ -378,6 +373,18 @@ class DoctrineObject extends AbstractHydrator
 
         // Set the object so that the strategy can extract the Collection from it
         $collectionStrategy = $this->getStrategy($collectionName);
+
+        // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
+        if ( ! $collectionStrategy instanceof AbstractCollectionStrategy) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Strategies used for collections valued associations must inherit from '
+                    . 'Strategy\AbstractCollectionStrategy, %s given',
+                    get_class($collectionStrategy)
+                )
+            );
+        }
+
         $collectionStrategy->setObject($object);
 
         // We could directly call hydrate method from the strategy, but if people want to override
@@ -417,10 +424,12 @@ class DoctrineObject extends AbstractHydrator
      * Find an object by its identifiers
      *
      * @param  mixed   $identifiers
-     * @return object
+     * @param  string  $targetClass
+     *
+     * @return object|null
      */
-    protected function find($identifiers)
+    protected function find($identifiers, $targetClass)
     {
-        return $this->objectRepository->find($identifiers);
+        return $this->objectManager->find($targetClass, $identifiers);
     }
 }
