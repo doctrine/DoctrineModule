@@ -31,12 +31,6 @@ class DoctrineObjectTest extends BaseTestCase
     protected $objectManager;
 
     /**
-     * @var \Doctrine\Common\Persistence\ObjectRepository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectRepository;
-
-
-    /**
      * setUp
      */
     public function setUp()
@@ -45,11 +39,6 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->metadata         = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $this->objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $this->objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-
-        $this->objectManager->expects($this->any())
-                            ->method('getRepository')
-                            ->will($this->returnValue($this->objectRepository));
 
         $this->objectManager->expects($this->any())
                             ->method('getClassMetadata')
@@ -60,6 +49,9 @@ class DoctrineObjectTest extends BaseTestCase
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
 
+        $this->metadata->expects($this->any())
+                       ->method('getName')
+                       ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
         $this->metadata->expects($this->any())
                        ->method('getAssociationNames')
                        ->will($this->returnValue(array()));
@@ -319,10 +311,12 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfOne->setId(1);
         $entityInDatabaseWithIdOfOne->setField('bar', false);
 
-        $this->objectRepository->expects($this->once())
-                               ->method('find')
-                               ->with(array('id' => 1))
-                               ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+        $this
+            ->objectManager
+            ->expects($this->once())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 1))
+            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
@@ -423,10 +417,12 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfOne->setId(1);
         $entityInDatabaseWithIdOfOne->setField('bar', false);
 
-        $this->objectRepository->expects($this->once())
-                               ->method('find')
-                               ->with(1)
-                               ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+        $this
+            ->objectManager
+            ->expects($this->once())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', 1)
+            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
@@ -448,10 +444,12 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfOne->setId(1);
         $entityInDatabaseWithIdOfOne->setField('bar', false);
 
-        $this->objectRepository->expects($this->once())
-                               ->method('find')
-                               ->with(1)
-                               ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+        $this
+            ->objectManager
+            ->expects($this->once())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', 1)
+            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
@@ -473,10 +471,12 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfOne->setId(1);
         $entityInDatabaseWithIdOfOne->setField('bar', false);
 
-        $this->objectRepository->expects($this->once())
-                               ->method('find')
-                               ->with(array('id' => 1))
-                               ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+        $this
+            ->objectManager
+            ->expects($this->once())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 1))
+            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
@@ -498,10 +498,12 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfOne->setId(1);
         $entityInDatabaseWithIdOfOne->setField('bar', false);
 
-        $this->objectRepository->expects($this->once())
-                               ->method('find')
-                               ->with(array('id' => 1))
-                               ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+        $this
+            ->objectManager
+            ->expects($this->once())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 1))
+            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
@@ -698,24 +700,32 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfThree->setId(3);
         $entityInDatabaseWithIdOfThree->setField('bar', false);
 
-        $this->objectRepository->expects($this->any())
+        $this
+            ->objectManager
+            ->expects($this->exactly(2))
             ->method('find')
-            ->with($this->logicalOr(
-                $this->equalTo(2),
-                $this->equalTo(3)
-            ))
-            ->will($this->returnCallback(function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                if ($arg === 2) {
-                    return $entityInDatabaseWithIdOfTwo;
-                } elseif ($arg === 3) {
-                    return $entityInDatabaseWithIdOfThree;
+            ->with(
+                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                $this->logicalOr(
+                    $this->equalTo(2),
+                    $this->equalTo(3)
+                )
+            )
+            ->will($this->returnCallback(
+                function($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                    if ($arg === 2) {
+                        return $entityInDatabaseWithIdOfTwo;
+                    } elseif ($arg === 3) {
+                        return $entityInDatabaseWithIdOfThree;
+                    }
                 }
-            }));
+            ));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
 
+        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
@@ -752,24 +762,32 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfThree->setId(3);
         $entityInDatabaseWithIdOfThree->setField('bar', false);
 
-        $this->objectRepository->expects($this->any())
-                               ->method('find')
-                               ->with($this->logicalOr(
-                                    $this->equalTo(array('id' => 2)),
-                                    $this->equalTo(array('id' => 3))
-                               ))
-                               ->will($this->returnCallback(function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                                    if ($arg['id'] === 2) {
-                                        return $entityInDatabaseWithIdOfTwo;
-                                    } elseif ($arg['id'] === 3) {
-                                        return $entityInDatabaseWithIdOfThree;
-                                    }
-                               }));
+        $this
+            ->objectManager
+            ->expects($this->exactly(2))
+            ->method('find')
+            ->with(
+                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                $this->logicalOr(
+                    $this->equalTo(array('id' => 2)),
+                    $this->equalTo(array('id' => 3))
+                )
+            )
+            ->will($this->returnCallback(
+                function($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                    if ($arg['id'] === 2) {
+                        return $entityInDatabaseWithIdOfTwo;
+                    } elseif ($arg['id'] === 3) {
+                        return $entityInDatabaseWithIdOfThree;
+                    }
+                }
+            ));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
 
+        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
@@ -806,19 +824,26 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfThree->setId(3);
         $entityInDatabaseWithIdOfThree->setField('bar', false);
 
-        $this->objectRepository->expects($this->any())
-                               ->method('find')
-                               ->with($this->logicalOr(
-                                    $this->equalTo(array('id' => 2)),
-                                    $this->equalTo(array('id' => 3))
-                               ))
-                               ->will($this->returnCallback(function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                                    if ($arg['id'] === 2) {
-                                        return $entityInDatabaseWithIdOfTwo;
-                                    } elseif ($arg['id'] === 3) {
-                                        return $entityInDatabaseWithIdOfThree;
-                                    }
-                               }));
+        $this
+            ->objectManager
+            ->expects($this->exactly(2))
+            ->method('find')
+            ->with(
+                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                $this->logicalOr(
+                    $this->equalTo(array('id' => 2)),
+                    $this->equalTo(array('id' => 3))
+                )
+            )
+            ->will($this->returnCallback(
+                function($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                    if ($arg['id'] === 2) {
+                        return $entityInDatabaseWithIdOfTwo;
+                    } elseif ($arg['id'] === 3) {
+                        return $entityInDatabaseWithIdOfThree;
+                    }
+                }
+            ));
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
@@ -859,19 +884,26 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfThree->setId(3);
         $entityInDatabaseWithIdOfThree->setField('bar', false);
 
-        $this->objectRepository->expects($this->any())
+        $this
+            ->objectManager
+            ->expects($this->any())
             ->method('find')
-            ->with($this->logicalOr(
-                $this->equalTo(2),
-                $this->equalTo(3)
-            ))
-            ->will($this->returnCallback(function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+            ->with(
+                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                $this->logicalOr(
+                    $this->equalTo(2),
+                    $this->equalTo(3)
+                )
+            )
+            ->will($this->returnCallback(
+                function($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
                     if ($arg === 2) {
                         return $entityInDatabaseWithIdOfTwo;
                     } elseif ($arg === 3) {
                         return $entityInDatabaseWithIdOfThree;
                     }
-                }));
+                }
+            ));
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
@@ -1057,19 +1089,26 @@ class DoctrineObjectTest extends BaseTestCase
         $entity->addEntities(new ArrayCollection(array($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree)));
         $initialCollection = $entity->getEntities(false);
 
-        $this->objectRepository->expects($this->any())
-                               ->method('find')
-                               ->with($this->logicalOr(
-                                    $this->equalTo(2),
-                                    $this->equalTo(3)
-                                ))
-                               ->will($this->returnCallback(function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                                    if ($arg === 2) {
-                                        return $entityInDatabaseWithIdOfTwo;
-                                    } elseif ($arg === 3) {
-                                        return $entityInDatabaseWithIdOfThree;
-                                    }
-                               }));
+        $this
+            ->objectManager
+            ->expects($this->any())
+            ->method('find')
+            ->with(
+                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                $this->logicalOr(
+                    $this->equalTo(2),
+                    $this->equalTo(3)
+                )
+            )
+            ->will($this->returnCallback(
+                function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                    if ($arg === 2) {
+                        return $entityInDatabaseWithIdOfTwo;
+                    } elseif ($arg === 3) {
+                        return $entityInDatabaseWithIdOfThree;
+                    }
+                }
+            ));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
@@ -1092,10 +1131,12 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithEmptyId->setId('');
         $entityInDatabaseWithEmptyId->setField('baz', false);
 
-        $this->objectRepository->expects($this->any())
-                               ->method('find')
-                               ->with('')
-                               ->will($this->returnValue($entityInDatabaseWithEmptyId));
+        $this
+            ->objectManager
+            ->expects($this->any())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', '')
+            ->will($this->returnValue($entityInDatabaseWithEmptyId));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
