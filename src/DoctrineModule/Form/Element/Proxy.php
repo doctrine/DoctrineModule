@@ -186,15 +186,11 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
-     * @param $targetEntity
-     * @return string|null
+     * @return \Closure|null
      */
-    public function getLabelGenerator($targetEntity)
+    public function getLabelGenerator()
     {
-        if (is_callable($this->labelGenerator)) {
-            return call_user_func($this->labelGenerator, $targetEntity);
-        }
-        return null;
+        return $this->labelGenerator;
     }
 
     /**
@@ -236,6 +232,19 @@ class Proxy implements ObjectManagerAwareInterface
     public function getFindMethod()
     {
         return $this->findMethod;
+    }
+
+    /**
+     * @param $targetEntity
+     * @return string|null
+     */
+    protected function createLabel($targetEntity)
+    {
+        $labelGenerator = $this->getLabelGenerator();
+        if (is_callable($labelGenerator)) {
+            return call_user_func($labelGenerator, $targetEntity);
+        }
+        return null;
     }
 
     /**
@@ -347,7 +356,7 @@ class Proxy implements ObjectManagerAwareInterface
             $options[''] = '';
         } else {
             foreach ($objects as $key => $object) {
-                if (!is_null(($createdLabel = $this->getLabelGenerator($object)))) {
+                if (!is_null(($createdLabel = $this->createLabel($object)))) {
                     $label = $createdLabel;
                 }  elseif (($property = $this->property)) {
                     if ($this->isMethod == false && !$metadata->hasField($property)) {
