@@ -116,7 +116,7 @@ class DoctrineObject extends AbstractHydrator
      */
     public function addStrategy($name, StrategyInterface $strategy)
     {
-        if ($this->metadata->hasAssociation($name)) {
+        if ($this->metadata->hasAssociation($name) && $this->metadata->isCollectionValuedAssociation($name)) {
             if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
                 throw new InvalidArgumentException(
                     sprintf(
