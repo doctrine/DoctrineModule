@@ -233,7 +233,12 @@ class DoctrineObject extends AbstractHydrator
                         continue;
                     }
 
-                    $value = $this->toOne($target, $this->hydrateValue($field, $value));
+                    $value = $this->hydrateValue($field, $value);
+
+                    if (null !== $value || !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()) {
+                        $value = $this->toOne($target, $value);
+                    }
+
                     $object->$setter($value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
                     $this->toMany($object, $field, $target, $value);
