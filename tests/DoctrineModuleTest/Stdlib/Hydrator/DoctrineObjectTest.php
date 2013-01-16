@@ -186,6 +186,62 @@ class DoctrineObjectTest extends BaseTestCase
         $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', false);
     }
 
+    public function configureObjectManagerForOneToOneEntityNotNullable()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable');
+
+        $this->metadata->expects($this->any())
+                       ->method('getFieldNames')
+                       ->will($this->returnValue(array('id')));
+
+        $this->metadata->expects($this->any())
+                       ->method('getAssociationNames')
+                       ->will($this->returnValue(array('toOne')));
+
+        $this->metadata->expects($this->any())
+                       ->method('getTypeOfField')
+                       ->with($this->logicalOr(
+                            $this->equalTo('id'),
+                            $this->equalTo('toOne')))
+                       ->will($this->returnCallback(function($arg) {
+                                if ($arg === 'id') {
+                                    return 'integer';
+                                } elseif ($arg === 'toOne') {
+                                    return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                                }
+                       }));
+
+        $this->metadata->expects($this->any())
+                       ->method('hasAssociation')
+                       ->with($this->logicalOr(
+                            $this->equalTo('id'),
+                            $this->equalTo('toOne')))
+                       ->will($this->returnCallback(function($arg) {
+                                if ($arg === 'id') {
+                                    return false;
+                                } elseif ($arg === 'toOne') {
+                                    return true;
+                                }
+                       }));
+
+        $this->metadata->expects($this->any())
+                       ->method('isSingleValuedAssociation')
+                       ->with('toOne')
+                       ->will($this->returnValue(true));
+
+        $this->metadata->expects($this->any())
+                       ->method('getAssociationTargetClass')
+                       ->with('toOne')
+                       ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+
+        $this->metadata->expects($this->any())
+                       ->method('getReflectionClass')
+                       ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', true);
+        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', false);
+    }
+
     public function configureObjectManagerForOneToManyEntity()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity');
@@ -1186,5 +1242,35 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertInstanceOf('DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference', $this->hydratorByReference->getStrategy('entities'));
         $this->assertEquals('entities', $this->hydratorByReference->getStrategy('entities')->getCollectionName());
+    }
+
+    public function testAssertNullValueHydratedForOneToOneWithOptionalMethodSignature()
+    {
+        $entity = new Asset\OneToOneEntity();
+        $this->configureObjectManagerForOneToOneEntity();
+
+        $data = array('toOne' => null);
+
+        $this->objectManager->expects($this->never())
+                            ->method('find');
+
+        $object = $this->hydratorByValue->hydrate($data, $entity);
+        $this->assertNull($object->getToOne(false));
+    }
+
+    public function testAssertNullValueNotUsedAsIdentifierForOneToOneWithNonOptionalMethodSignature()
+    {
+        $entity = new Asset\OneToOneEntityNotNullable();
+        $entity->setToOne(new Asset\SimpleEntity());
+
+        $this->configureObjectManagerForOneToOneEntityNotNullable();
+
+        $data = array('toOne' => null);
+
+        $this->objectManager->expects($this->never())
+                            ->method('find');
+
+        $object = $this->hydratorByValue->hydrate($data, $entity);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $object->getToOne(false));
     }
 }
