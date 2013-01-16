@@ -633,6 +633,21 @@ class BlogPost
 }
 ```
 
+##### Handling of null values
+
+When a null value is passed to a OneToOne or ManyToOne field, for example;
+
+```php
+$data = array(
+    'city' => null
+);
+```
+
+The hydrator will check whether the setCity() method on the Entity allows null values and acts accordingly, the following describes the process that happens when a null value is received:
+
+1. If the setCity() method DOES NOT allow null values i.e. `function setCity(City $city)`, the null is silently ignored and will not be hydrated.
+2. If the setCity() method DOES allow null values i.e. `function setCity(City $city = null)`, the null value will be hydrated.
+
 ### Collections strategy
 
 By default, every collections association has a special strategy attached to it that is called during the hydrating 
