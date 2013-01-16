@@ -235,7 +235,9 @@ class DoctrineObject extends AbstractHydrator
 
                     $value = $this->hydrateValue($field, $value);
 
-                    if (null !== $value || !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()) {
+                    if (null === $value && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()) {
+                        continue;
+                    } elseif (null !== $value) {
                         $value = $this->toOne($target, $value);
                     }
 
