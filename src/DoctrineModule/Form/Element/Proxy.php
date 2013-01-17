@@ -25,8 +25,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
-class Proxy
-    implements ObjectManagerAwareInterface
+class Proxy implements ObjectManagerAwareInterface
 {
     /**
      * @var array

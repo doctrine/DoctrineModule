@@ -31,8 +31,7 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class ProxyTest extends
-    PHPUnit_Framework_TestCase
+class ProxyTest extends PHPUnit_Framework_TestCase
 {
     protected $metadata;
 
@@ -78,7 +77,7 @@ class ProxyTest extends
     public function testExceptionThrownForMissingFindMethodName()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata    = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->once())
@@ -88,8 +87,8 @@ class ProxyTest extends
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class' => $objectClass,
-            'find_method' => array('no_name')
+            'target_class'   => $objectClass,
+            'find_method'    => array('no_name')
         ));
 
         $this->proxy->getValueOptions();
@@ -98,7 +97,7 @@ class ProxyTest extends
     public function testExceptionFindMethodNameNotExistentInRepository()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata    = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
@@ -115,8 +114,8 @@ class ProxyTest extends
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class' => $objectClass,
-            'find_method' => array('name' => 'NotExistent'),
+            'target_class'   => $objectClass,
+            'find_method'    => array('name' => 'NotExistent'),
         ));
 
         $this->setExpectedException('RuntimeException',
@@ -179,7 +178,7 @@ class ProxyTest extends
         $this->prepareProxy();
 
         $this->proxy->setOptions(array(
-            'property' => 'name',
+            'property'  => 'name',
             'is_method' => true
         ));
 
@@ -243,8 +242,8 @@ class ProxyTest extends
     protected function prepareProxy()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $objectOne = new FormObject;
-        $objectTwo = new FormObject;
+        $objectOne   = new FormObject;
+        $objectTwo   = new FormObject;
 
         $objectOne->setId(1)
             ->setUsername('object one username')
@@ -266,16 +265,16 @@ class ProxyTest extends
         $metadata->expects($this->exactly(2))
             ->method('getIdentifierValues')
             ->will($this->returnCallback(function () use ($objectOne, $objectTwo) {
-            $input = func_get_args();
-            $input = array_shift($input);
-            if ($input == $objectOne) {
-                return array('id' => 1);
-            } else if ($input == $objectTwo) {
-                return array('id' => 2);
-            } else {
-                return array();
-            }
-        }));
+                $input = func_get_args();
+                $input = array_shift($input);
+                if ($input == $objectOne) {
+                    return array('id' => 1);
+                } else if ($input == $objectTwo) {
+                    return array('id' => 2);
+                } else {
+                    return array();
+                }
+            }));
 
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository->expects($this->once())
@@ -294,7 +293,7 @@ class ProxyTest extends
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class' => $objectClass
+            'target_class'   => $objectClass
         ));
 
         $this->metadata = $metadata;
@@ -303,8 +302,8 @@ class ProxyTest extends
     protected function prepareFilteredProxy()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $objectOne = new FormObject;
-        $objectTwo = new FormObject;
+        $objectOne   = new FormObject;
+        $objectTwo   = new FormObject;
 
         $objectOne->setId(1)
             ->setUsername('object one username')
@@ -326,16 +325,16 @@ class ProxyTest extends
         $metadata->expects($this->exactly(2))
             ->method('getIdentifierValues')
             ->will($this->returnCallback(function () use ($objectOne, $objectTwo) {
-            $input = func_get_args();
-            $input = array_shift($input);
-            if ($input == $objectOne) {
-                return array('id' => 1);
-            } else if ($input == $objectTwo) {
-                return array('id' => 2);
-            } else {
-                return array();
-            }
-        }));
+                $input = func_get_args();
+                $input = array_shift($input);
+                if ($input == $objectOne) {
+                    return array('id' => 1);
+                } else if ($input == $objectTwo) {
+                    return array('id' => 2);
+                } else {
+                    return array();
+                }
+            }));
 
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository->expects($this->once())
@@ -355,9 +354,9 @@ class ProxyTest extends
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class' => $objectClass,
-            'find_method' => array(
-                'name' => 'findBy',
+            'target_class'   => $objectClass,
+            'find_method'    => array(
+                'name'   => 'findBy',
                 'params' => array(
                     'criteria' => array(
                         'email' => 'object one email'
@@ -395,7 +394,7 @@ class ProxyTest extends
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class' => $objectClass
+            'target_class'   => $objectClass
         ));
 
         $this->metadata = $metadata;
