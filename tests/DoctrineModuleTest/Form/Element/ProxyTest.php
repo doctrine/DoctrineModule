@@ -31,9 +31,11 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class ProxyTest extends PHPUnit_Framework_TestCase
+class ProxyTest extends
+    PHPUnit_Framework_TestCase
 {
     protected $metadata;
+
     protected $proxy;
 
     /**
@@ -43,7 +45,6 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->proxy = new Proxy;
-
     }
 
     /**
@@ -65,7 +66,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     public function testExceptionThrownForMissingTargetClass()
     {
         $this->proxy->setOptions(array(
-            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager')
         ));
         $this->proxy->getValueOptions();
     }
@@ -87,7 +88,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class'   => $objectClass,
+            'target_class' => $objectClass,
             'find_method' => array('no_name')
         ));
 
@@ -114,11 +115,12 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class'   => $objectClass,
+            'target_class' => $objectClass,
             'find_method' => array('name' => 'NotExistent'),
         ));
 
-        $this->setExpectedException('RuntimeException', 'Method "NotExistent" could not be found in respository "' . get_class($objectRepository).'"');
+        $this->setExpectedException('RuntimeException',
+            'Method "NotExistent" could not be found in respository "' . get_class($objectRepository) . '"');
 
         $this->proxy->getValueOptions();
     }
@@ -156,7 +158,9 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(array('property' => 'email'));
+        $this->proxy->setOptions(array(
+            'property' => 'email'
+        ));
 
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
@@ -174,7 +178,10 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(array('property' => 'name', 'is_method' => true));
+        $this->proxy->setOptions(array(
+            'property' => 'name',
+            'is_method' => true
+        ));
 
         $this->metadata->expects($this->never())
             ->method('hasField');
@@ -190,9 +197,11 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(array('label_generator' => function($targetEntity) {
-            return $targetEntity->getEmail();
-        }));
+        $this->proxy->setOptions(array(
+            'label_generator' => function ($targetEntity) {
+                return $targetEntity->getEmail();
+            }
+        ));
 
         $this->metadata->expects($this->never())
             ->method('hasField');
@@ -208,9 +217,12 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->setExpectedException('InvalidArgumentException', 'Property "label_generator" needs to be a callable function or a \Closure');
+        $this->setExpectedException('InvalidArgumentException',
+            'Property "label_generator" needs to be a callable function or a \Closure');
 
-        $this->proxy->setOptions(array('label_generator' => 'I throw an InvalidArgumentException'));
+        $this->proxy->setOptions(array(
+            'label_generator' => 'I throw an InvalidArgumentException'
+        ));
     }
 
     public function testCanWorkWithEmptyTables()
@@ -231,8 +243,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     protected function prepareProxy()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $objectOne   = new FormObject;
-        $objectTwo   = new FormObject;
+        $objectOne = new FormObject;
+        $objectTwo = new FormObject;
 
         $objectOne->setId(1)
             ->setUsername('object one username')
@@ -248,27 +260,22 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->setFirstname('object two firstname')
             ->setSurname('object two surname');
 
-        $result = new ArrayCollection(array(
-            $objectOne,
-            $objectTwo
-        ));
+        $result = new ArrayCollection(array($objectOne, $objectTwo));
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata->expects($this->exactly(2))
             ->method('getIdentifierValues')
-            ->will($this->returnCallback(
-            function() use ($objectOne, $objectTwo) {
-                $input = func_get_args();
-                $input = array_shift($input);
-                if ($input == $objectOne) {
-                    return array('id' => 1);
-                } else if ($input == $objectTwo) {
-                    return array('id' => 2);
-                } else {
-                    return array();
-                }
+            ->will($this->returnCallback(function () use ($objectOne, $objectTwo) {
+            $input = func_get_args();
+            $input = array_shift($input);
+            if ($input == $objectOne) {
+                return array('id' => 1);
+            } else if ($input == $objectTwo) {
+                return array('id' => 2);
+            } else {
+                return array();
             }
-        ));
+        }));
 
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository->expects($this->once())
@@ -281,14 +288,13 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($metadata));
 
-        $objectManager->expects($this->once())
-            ->method('getRepository')
+        $objectManager->expects($this->once())->method('getRepository')
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class'   => $objectClass
+            'target_class' => $objectClass
         ));
 
         $this->metadata = $metadata;
@@ -297,8 +303,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     protected function prepareFilteredProxy()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $objectOne   = new FormObject;
-        $objectTwo   = new FormObject;
+        $objectOne = new FormObject;
+        $objectTwo = new FormObject;
 
         $objectOne->setId(1)
             ->setUsername('object one username')
@@ -314,27 +320,22 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->setFirstname('object two firstname')
             ->setSurname('object two surname');
 
-        $result = new ArrayCollection(array(
-            $objectOne,
-            $objectTwo
-        ));
+        $result = new ArrayCollection(array($objectOne, $objectTwo));
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata->expects($this->exactly(2))
             ->method('getIdentifierValues')
-            ->will($this->returnCallback(
-            function() use ($objectOne, $objectTwo) {
-                $input = func_get_args();
-                $input = array_shift($input);
-                if ($input == $objectOne) {
-                    return array('id' => 1);
-                } else if ($input == $objectTwo) {
-                    return array('id' => 2);
-                } else {
-                    return array();
-                }
+            ->will($this->returnCallback(function () use ($objectOne, $objectTwo) {
+            $input = func_get_args();
+            $input = array_shift($input);
+            if ($input == $objectOne) {
+                return array('id' => 1);
+            } else if ($input == $objectTwo) {
+                return array('id' => 2);
+            } else {
+                return array();
             }
-        ));
+        }));
 
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository->expects($this->once())
@@ -354,11 +355,14 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class'   => $objectClass,
-            'find_method' => array('name' => 'findBy',
-                                   'params' => array(
-                                       'criteria' => array('email' => 'object one email'),
-                                   ),
+            'target_class' => $objectClass,
+            'find_method' => array(
+                'name' => 'findBy',
+                'params' => array(
+                    'criteria' => array(
+                        'email' => 'object one email'
+                    )
+                ),
             ),
         ));
 
@@ -391,7 +395,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->proxy->setOptions(array(
             'object_manager' => $objectManager,
-            'target_class'   => $objectClass
+            'target_class' => $objectClass
         ));
 
         $this->metadata = $metadata;

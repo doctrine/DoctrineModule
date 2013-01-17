@@ -25,7 +25,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
-class Proxy implements ObjectManagerAwareInterface
+class Proxy
+    implements ObjectManagerAwareInterface
 {
     /**
      * @var array
@@ -99,6 +100,7 @@ class Proxy implements ObjectManagerAwareInterface
         if (empty($this->valueOptions)) {
             $this->loadValueOptions();
         }
+
         return $this->valueOptions;
     }
 
@@ -108,6 +110,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function getObjects()
     {
         $this->loadObjects();
+
         return $this->objects;
     }
 
@@ -120,6 +123,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function setObjectManager(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
+
         return $this;
     }
 
@@ -142,6 +146,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function setTargetClass($targetClass)
     {
         $this->targetClass = $targetClass;
+
         return $this;
     }
 
@@ -164,6 +169,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function setProperty($property)
     {
         $this->property = $property;
+
         return $this;
     }
 
@@ -207,7 +213,8 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setIsMethod($method)
     {
-        $this->isMethod = (bool)$method;
+        $this->isMethod = (bool) $method;
+
         return $this;
     }
 
@@ -227,6 +234,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function setFindMethod($findMethod)
     {
         $this->findMethod = $findMethod;
+
         return $this;
     }
 
@@ -307,7 +315,7 @@ class Proxy implements ObjectManagerAwareInterface
             return;
         }
 
-        $findMethod = (array)$this->getFindMethod();
+        $findMethod = (array) $this->getFindMethod();
         if (!$findMethod) {
             $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
         } else {
@@ -393,7 +401,7 @@ class Proxy implements ObjectManagerAwareInterface
                         ));
                     }
 
-                    $label = (string)$object;
+                    $label = (string) $object;
                 }
 
                 if (count($identifier) > 1) {
