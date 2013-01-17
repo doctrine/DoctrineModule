@@ -1178,17 +1178,6 @@ Although using the hydrator is like magical as it abstracts most of the tedious 
 leads to performance issues in some situations. Please carefully read the following paragraphs in order to know how 
 to solve (and avoid !) them.
 
-#### Make hydrator get a reference instead of a database call
-
-By default, the DoctrineModule hydrator performs a "find" operation for every relationships, and hence retrieving the
-whole entity from database. This is not always the wanted behaviour (but it can be !), and it can leads to performance
-problems. Most of the time, what you want is just retrieving a reference to this object, instead of fetching it from 
-database.
-
-If you are using Doctrine 2 ORM, you have to use the hydrator from DoctrineORMModule (instead of the one from 
-DoctrineModule). The usage is exactly the same, except that instead of a `find` call, it makes a `getReference` 
-call. This is up to you to choose the right hydrator for your specific need.
-
 #### Unwanting side-effect
 
 You have to be very careful when you are using DoctrineModule hydrator with complex entities that contain a lot of 
