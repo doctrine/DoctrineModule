@@ -66,7 +66,7 @@ class ObjectRepositoryTest extends BaseTestCase
                 'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
             )
         );
-        $adapter->setCredentialValue('a credential');
+        $adapter->setCredential('a credential');
         $adapter->authenticate();
     }
 
@@ -84,7 +84,7 @@ class ObjectRepositoryTest extends BaseTestCase
             )
         );
 
-        $adapter->setIdentityValue('an identity');
+        $adapter->setIdentity('an identity');
         $adapter->authenticate();
     }
 
@@ -135,8 +135,8 @@ class ObjectRepositoryTest extends BaseTestCase
             )
         );
 
-        $adapter->setIdentityValue('a username');
-        $adapter->setCredentialValue('a password');
+        $adapter->setIdentity('a username');
+        $adapter->setCredential('a password');
 
         $result = $adapter->authenticate();
 
@@ -175,8 +175,8 @@ class ObjectRepositoryTest extends BaseTestCase
             )
         );
 
-        $adapter->setIdentityValue('a username');
-        $adapter->setCredentialValue('a password');
+        $adapter->setIdentity('a username');
+        $adapter->setCredential('a password');
 
         $result = $adapter->authenticate();
 
@@ -210,7 +210,7 @@ class ObjectRepositoryTest extends BaseTestCase
         );
 
         $adapter->setIdentityValue('a username');
-        $adapter->setCredentialValue('a password');
+        $adapter->setCredential('a password');
         $adapter->authenticate();
     }
 
@@ -242,14 +242,14 @@ class ObjectRepositoryTest extends BaseTestCase
             )
         );
 
-        $adapter->setIdentityValue('username');
-        $adapter->setCredentialValue('password');
+        $adapter->setIdentity('username');
+        $adapter->setCredential('password');
 
         $result = $adapter->authenticate();
 
         $this->assertTrue($result->isValid());
 
-        $adapter->setCredentialValue('wrong password');
+        $adapter->setCredential('wrong password');
         $result = $adapter->authenticate();
 
         $this->assertFalse($result->isValid());
@@ -275,8 +275,8 @@ class ObjectRepositoryTest extends BaseTestCase
             )
         );
 
-        $adapter->setIdentityValue('a username');
-        $adapter->setCredentialValue('a password');
+        $adapter->setIdentity('a username');
+        $adapter->setCredential('a password');
 
         $adapter->authenticate();
     }
