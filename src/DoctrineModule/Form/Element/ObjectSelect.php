@@ -64,8 +64,9 @@ class ObjectSelect extends SelectElement
      */
     public function getValueOptions()
     {
-        if (empty($this->valueOptions)) {
-            $this->setValueOptions($this->getProxy()->getValueOptions());
+        $proxyValues = $this->getProxy()->getValueOptions();
+        if (empty($this->valueOptions) && !empty($proxyValues)) {
+            $this->setValueOptions($proxyValues);
         }
         return $this->valueOptions;
     }
