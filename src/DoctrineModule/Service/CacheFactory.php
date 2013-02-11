@@ -72,6 +72,11 @@ class CacheFactory extends AbstractFactory
             $cache->setRedis($instance);
         }
 
+        $namespace = $options->getNamespace();
+        if(is_string($namespace)) {
+            $cache->setNamespace($namespace);
+        }
+
         return $cache;
     }
 
