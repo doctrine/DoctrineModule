@@ -73,7 +73,7 @@ class CacheFactory extends AbstractFactory
         }
 
         $namespace = $options->getNamespace();
-        if(is_string($namespace)) {
+        if (is_string($namespace)) {
             $cache->setNamespace($namespace);
         }
 
