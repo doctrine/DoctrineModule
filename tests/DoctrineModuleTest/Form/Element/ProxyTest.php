@@ -22,6 +22,7 @@ namespace DoctrineModuleTest\Form\Element;
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
+use DoctrineModuleTest\Form\Element\TestAsset\ProxiedFormObject;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -199,6 +200,69 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->prepareFilteredProxy();
         
         $this->proxy->getValueOptions();
+    }
+
+    public function testGetValueWillCallLoadOnProxiedObject()
+    {
+        $this->prepareProxyForProxiedObjects();
+
+        $objectOne   = new ProxiedFormObject;
+        $objectOne->setProxiedData(array(
+            'id' => 1,
+        ));
+
+        $this->assertEquals(1, $this->proxy->getValue($objectOne));
+    }
+
+    public function testGetValueWillCallLoadOnProxiedObjectCollection()
+    {
+        $this->prepareProxyForProxiedObjects();
+
+        $objectOne   = new ProxiedFormObject;
+        $objectTwo   = new ProxiedFormObject;
+
+        $objectOne->setProxiedData(array(
+            'id' => 1,
+        ));
+        $objectTwo->setProxiedData(array(
+            'id' => 2,
+        ));
+
+        $collection = new ArrayCollection(array(
+            $objectOne,
+            $objectTwo
+        ));
+
+        $this->assertEquals(array(1, 2), $this->proxy->getValue($collection));
+    }
+
+    protected function prepareProxyForProxiedObjects()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\ProxiedFormObject';
+
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata->expects($this->any())
+            ->method('getIdentifierValues')
+            ->will($this->returnCallback(
+            function() {
+                $input = func_get_args();
+                $input = array_shift($input);
+                return array('id' => $input->getId());
+            }
+        ));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->any())
+            ->method('getClassMetadata')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($metadata));
+
+        $this->proxy->setOptions(array(
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass
+        ));
+
+        $this->metadata = $metadata;
     }
 
     protected function prepareProxy()
