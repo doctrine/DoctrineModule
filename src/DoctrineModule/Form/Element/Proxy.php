@@ -21,6 +21,7 @@ namespace DoctrineModule\Form\Element;
 
 use RuntimeException;
 use ReflectionMethod;
+use Doctrine\ORM\Proxy\Proxy as DoctrineORMProxy;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
@@ -235,6 +236,10 @@ class Proxy implements ObjectManagerAwareInterface
             } else {
                 $metadata   = $om->getClassMetadata(get_class($value));
                 $identifier = $metadata->getIdentifierFieldNames();
+
+                if ($value instanceof DoctrineORMProxy && !$value->__isInitialized()) {
+                    $value->__load();
+                }
 
                 // TODO: handle composite (multiple) identifiers
                 if (count($identifier) > 1) {
