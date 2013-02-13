@@ -22,6 +22,7 @@ namespace DoctrineModule\Form\Element;
 use RuntimeException;
 use ReflectionMethod;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\Proxy as PersistenceProxy;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
@@ -227,6 +228,11 @@ class Proxy implements ObjectManagerAwareInterface
             if ($value instanceof Collection) {
                 $data = array();
                 foreach($value as $object) {
+
+                    if ($object instanceof PersistenceProxy) {
+                        $object->__load();
+                    }
+
                     $values = $metadata->getIdentifierValues($object);
                     $data[] = array_shift($values);
                 }
@@ -235,6 +241,10 @@ class Proxy implements ObjectManagerAwareInterface
             } else {
                 $metadata   = $om->getClassMetadata(get_class($value));
                 $identifier = $metadata->getIdentifierFieldNames();
+
+                if ($value instanceof PersistenceProxy) {
+                    $value->__load();
+                }
 
                 // TODO: handle composite (multiple) identifiers
                 if (count($identifier) > 1) {
