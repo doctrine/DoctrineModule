@@ -70,24 +70,25 @@ class ObjectManagerInitializer implements InitializerInterface
 	 * Get ObjectManager instance from ServiceLocatorInterface
 	 * @access protected
 	 * @param ServiceLocatorInterface $serviceLocator
-	 * @throws \Zend\Mvc\Exception\DomainException
+	 * @throws ServiceNotFoundException
 	 * @return ObjectManager
 	 */
 	protected function getObjectManager(ServiceLocatorInterface $serviceLocator)
 	{
-		// setup ObjectManager instance to null
+		// setup object manager instance
 		$objectManager = null;
 
 		// check we have a AbstractPluginManager instance
 		if ($serviceLocator instanceof AbstractPluginManager) {
 
-			// get ObjectManager instance from AbstractPluginManager
+			// return ObjectManager instance from AbstractPluginManager
 			$objectManager = $serviceLocator->getServiceLocator()->get($this->getServiceName());
+		}
 
-		// check we have a ServiceManager instance
-		} else if ($serviceLocator instanceof ServiceManager) {
+		// check we have a ServiceManager instance and not an ObjectManager
+		if (($serviceLocator instanceof ServiceManager) && !($objectManager instanceof ObjectManager)) {
 
-			// get ObjectManager instance from ServiceManager
+			// return ObjectManager instance from ServiceManager
 			$objectManager = $serviceLocator->get($this->getServiceName());
 		}
 
