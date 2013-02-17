@@ -21,7 +21,7 @@ namespace DoctrineModule\Service;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use Zend\Mvc\Exception\DomainException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -94,8 +94,12 @@ class ObjectManagerInitializer implements InitializerInterface
 		// check we have ObjectManager instance
 		if (!($objectManager instanceof ObjectManager)) {
 
-			// throw exception
-			throw new DomainException('Unable to retrieve instance of "\Doctrine\Common\Persistence\ObjectManager"');
+			// throw service not found exception
+			throw new ServiceNotFoundException(sprintf(
+				'Retrieved service "%s" is not an instance of Doctrine\Common\Persistence\ObjectManager, "%s" given',
+				(is_object($objectManager)) ? get_class($objectManager) : gettype($objectManager),
+				$this->getServiceName()
+			));
 		}
 
 		// return ObjectManager instance
