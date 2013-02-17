@@ -27,11 +27,28 @@ use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 
-abstract class AbstractObjectManagerInitializer implements InitializerInterface
+class ObjectManagerInitializer implements InitializerInterface
 {
 
 	/**
+	 * @var string
+	 */
+	protected $serviceName;
+
+	/**
+	 * Class constructor
+	 * @access public
+	 * @param string $serviceName Service name to retrieve ObjectManager instance
+	 */
+	public function __construct($serviceName)
+	{
+		// set service name to use
+		$this->setServiceName($serviceName);
+	}
+
+	/**
 	 * Initialize instance according ObjectManagerAwareInterface
+	 * @access public
 	 * @param ObjectManagerAwareInterface $instance
 	 * @param ServiceLocatorInterface $serviceLocator
 	 * @return void
@@ -86,10 +103,27 @@ abstract class AbstractObjectManagerInitializer implements InitializerInterface
 	}
 
 	/**
-	 * Get service name to retrieve ObjectManager instance
-	 * @access protected
+	 * Set service name to retrieve ObjectManager instance
+	 * @access public
+	 * @param string $serviceName Service name to retrieve ObjectManager instance
 	 * @return string
 	 */
-	abstract protected function getServiceName();
+	public function setServiceName($serviceName)
+	{
+		// store service name used to retrieve ObjectManager
+		$this->serviceName = $serviceName;
+		return $this;
+	}
+
+	/**
+	 * Get service name to retrieve ObjectManager instance
+	 * @access public
+	 * @return string
+	 */
+	public function getServiceName()
+	{
+		// return service name used to retrieve ObjectManager
+		return $this->serviceName;
+	}
 
 }
