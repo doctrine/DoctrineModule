@@ -30,105 +30,106 @@ use Zend\ServiceManager\ServiceManager;
 class ObjectManagerInitializer implements InitializerInterface
 {
 
-	/**
-	 * @var string
-	 */
-	protected $serviceName;
+    /**
+     * @var string
+     */
+    protected $serviceName;
 
-	/**
-	 * Class constructor
-	 * @access public
-	 * @param string $serviceName Service name to retrieve ObjectManager instance
-	 */
-	public function __construct($serviceName)
-	{
-		// set service name to use
-		$this->setServiceName($serviceName);
-	}
+    /**
+     * Class constructor
+     * @access public
+     * @param string $serviceName Service name to retrieve ObjectManager instance
+     */
+    public function __construct($serviceName)
+    {
+        // set service name to use
+        $this->setServiceName($serviceName);
+    }
 
-	/**
-	 * Initialize instance according ObjectManagerAwareInterface
-	 * @access public
-	 * @param ObjectManagerAwareInterface $instance
-	 * @param ServiceLocatorInterface $serviceLocator
-	 * @return void
-	 */
-	public function initialize($instance, ServiceLocatorInterface $serviceLocator)
-	{
-		// check we have an ObjectManagerAwareInterface instance
-		if ($instance instanceof ObjectManagerAwareInterface) {
+    /**
+     * Initialize instance according ObjectManagerAwareInterface
+     * @access public
+     * @param  ObjectManagerAwareInterface $instance
+     * @param  ServiceLocatorInterface     $serviceLocator
+     * @return void
+     */
+    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
+    {
+        // check we have an ObjectManagerAwareInterface instance
+        if ($instance instanceof ObjectManagerAwareInterface) {
 
-			// get ObjectManager instance
-			$objectManager = $this->getObjectManager($serviceLocator);
+            // get ObjectManager instance
+            $objectManager = $this->getObjectManager($serviceLocator);
 
-			// set ObjectManager to instance
-			$instance->setObjectManager($objectManager);
-		}
-	}
+            // set ObjectManager to instance
+            $instance->setObjectManager($objectManager);
+        }
+    }
 
-	/**
-	 * Get ObjectManager instance from ServiceLocatorInterface
-	 * @access protected
-	 * @param ServiceLocatorInterface $serviceLocator
-	 * @throws ServiceNotFoundException
-	 * @return ObjectManager
-	 */
-	protected function getObjectManager(ServiceLocatorInterface $serviceLocator)
-	{
-		// setup object manager instance
-		$objectManager = null;
+    /**
+     * Get ObjectManager instance from ServiceLocatorInterface
+     * @access protected
+     * @param  ServiceLocatorInterface  $serviceLocator
+     * @throws ServiceNotFoundException
+     * @return ObjectManager
+     */
+    protected function getObjectManager(ServiceLocatorInterface $serviceLocator)
+    {
+        // setup object manager instance
+        $objectManager = null;
 
-		// check we have a AbstractPluginManager instance
-		if ($serviceLocator instanceof AbstractPluginManager) {
+        // check we have a AbstractPluginManager instance
+        if ($serviceLocator instanceof AbstractPluginManager) {
 
-			// return ObjectManager instance from AbstractPluginManager
-			$objectManager = $serviceLocator->getServiceLocator()->get($this->getServiceName());
-		}
+            // return ObjectManager instance from AbstractPluginManager
+            $objectManager = $serviceLocator->getServiceLocator()->get($this->getServiceName());
+        }
 
-		// check we have a ServiceManager instance and not an ObjectManager
-		if (($serviceLocator instanceof ServiceManager) && !($objectManager instanceof ObjectManager)) {
+        // check we have a ServiceManager instance and not an ObjectManager
+        if (($serviceLocator instanceof ServiceManager) && !($objectManager instanceof ObjectManager)) {
 
-			// return ObjectManager instance from ServiceManager
-			$objectManager = $serviceLocator->get($this->getServiceName());
-		}
+            // return ObjectManager instance from ServiceManager
+            $objectManager = $serviceLocator->get($this->getServiceName());
+        }
 
-		// check we have ObjectManager instance
-		if (!($objectManager instanceof ObjectManager)) {
+        // check we have ObjectManager instance
+        if (!($objectManager instanceof ObjectManager)) {
 
-			// throw service not found exception
-			throw new ServiceNotFoundException(sprintf(
-				'Retrieved service "%s" is not an instance of Doctrine\Common\Persistence\ObjectManager, "%s" given',
-				$this->getServiceName(),
-				(is_object($objectManager)) ? get_class($objectManager) : gettype($objectManager)
-			));
-		}
+            // throw service not found exception
+            throw new ServiceNotFoundException(sprintf(
+                'Retrieved service "%s" is not an instance of Doctrine\Common\Persistence\ObjectManager, "%s" given',
+                $this->getServiceName(),
+                (is_object($objectManager)) ? get_class($objectManager) : gettype($objectManager)
+            ));
+        }
 
-		// return ObjectManager instance
-		return $objectManager;
-	}
+        // return ObjectManager instance
+        return $objectManager;
+    }
 
-	/**
-	 * Set service name to retrieve ObjectManager instance
-	 * @access public
-	 * @param string $serviceName Service name to retrieve ObjectManager instance
-	 * @return string
-	 */
-	public function setServiceName($serviceName)
-	{
-		// store service name used to retrieve ObjectManager
-		$this->serviceName = $serviceName;
-		return $this;
-	}
+    /**
+     * Set service name to retrieve ObjectManager instance
+     * @access public
+     * @param  string $serviceName Service name to retrieve ObjectManager instance
+     * @return string
+     */
+    public function setServiceName($serviceName)
+    {
+        // store service name used to retrieve ObjectManager
+        $this->serviceName = $serviceName;
 
-	/**
-	 * Get service name to retrieve ObjectManager instance
-	 * @access public
-	 * @return string
-	 */
-	public function getServiceName()
-	{
-		// return service name used to retrieve ObjectManager
-		return $this->serviceName;
-	}
+        return $this;
+    }
+
+    /**
+     * Get service name to retrieve ObjectManager instance
+     * @access public
+     * @return string
+     */
+    public function getServiceName()
+    {
+        // return service name used to retrieve ObjectManager
+        return $this->serviceName;
+    }
 
 }

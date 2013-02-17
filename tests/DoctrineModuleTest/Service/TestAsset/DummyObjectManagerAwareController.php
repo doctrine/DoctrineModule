@@ -26,27 +26,28 @@ use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 class DummyObjectManagerAwareController extends AbstractActionController implements ObjectManagerAwareInterface
 {
 
-	protected $objectManager;
+    protected $objectManager;
 
-	/**
-	 * Set the object manager
-	 *
-	 * @param ObjectManager $objectManager
-	 */
-	public function setObjectManager(ObjectManager $objectManager)
-	{
-		$this->objectManager = $objectManager;
-		return $this;
-	}
+    /**
+     * Set the object manager
+     *
+     * @param ObjectManager $objectManager
+     */
+    public function setObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
 
-	/**
-	 * Get the object manager
-	 *
-	 * @return ObjectManager
-	 */
-	public function getObjectManager()
-	{
-		return $this->objectManager;
-	}
+        return $this;
+    }
+
+    /**
+     * Get the object manager
+     *
+     * @return ObjectManager
+     */
+    public function getObjectManager()
+    {
+        return $this->objectManager;
+    }
 
 }
