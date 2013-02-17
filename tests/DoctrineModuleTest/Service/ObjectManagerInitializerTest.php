@@ -20,10 +20,6 @@
 namespace DoctrineModuleTest\Service;
 
 use DoctrineModule\Service\ObjectManagerInitializer;
-use Zend\EventManager\EventManager;
-use Zend\EventManager\SharedEventManager;
-use Zend\Mvc\Controller\ControllerManager;
-use Zend\Mvc\Controller\PluginManager;
 use Zend\ServiceManager\ServiceManager;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 
@@ -32,137 +28,104 @@ use PHPUnit_Framework_TestCase as BaseTestCase;
  */
 class ObjectManagerInitializerTest extends BaseTestCase
 {
+    /**
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::__construct
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::initialize
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::getObjectManager
+     */
+    public function testInitialize()
+    {
+        $initializer    = new ObjectManagerInitializer('test-object-manager');
+        $serviceLocator = $this->getMock('Zend\\ServiceManager\\ServiceLocatorInterface');
+        $objectManager  = $this->getMock('Doctrine\\Common\\Persistence\\ObjectManager');
+        $instance    = $this->getMock('DoctrineModule\\Persistence\\ObjectManagerAwareInterface');
+
+        $instance
+            ->expects($this->once())
+            ->method('setObjectManager')
+            ->with($objectManager);
+
+        $serviceLocator
+            ->expects($this->any())
+            ->method('has')
+            ->with('test-object-manager')
+            ->will($this->returnValue(true));
+
+        $serviceLocator
+            ->expects($this->any())
+            ->method('get')
+            ->with('test-object-manager')
+            ->will($this->returnValue($objectManager));
+
+        $initializer->initialize($instance, $serviceLocator);
+    }
 
     /**
-     * @var ServiceManager
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::__construct
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::initialize
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::getObjectManager
      */
-    protected $services;
+    public function testInitializesWithPluginManagerWithParentServiceManager()
+    {
+        $initializer    = new ObjectManagerInitializer('test-object-manager');
+        $pluginManager  = $this->getMock('Zend\\ServiceManager\\AbstractPluginManager');
+        $serviceLocator = $this->getMock('Zend\\ServiceManager\\ServiceLocatorInterface');
+        $objectManager  = $this->getMock('Doctrine\\Common\\Persistence\\ObjectManager');
+        $instance       = $this->getMock('DoctrineModule\\Persistence\\ObjectManagerAwareInterface');
+
+        $instance
+            ->expects($this->once())
+            ->method('setObjectManager')
+            ->with($objectManager);
+
+        $pluginManager
+            ->expects($this->any())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceLocator));
+
+        $serviceLocator
+            ->expects($this->any())
+            ->method('has')
+            ->with('test-object-manager')
+            ->will($this->returnValue(true));
+
+        $serviceLocator
+            ->expects($this->any())
+            ->method('get')
+            ->with('test-object-manager')
+            ->will($this->returnValue($objectManager));
+
+        $initializer->initialize($instance, $pluginManager);
+    }
 
     /**
-     * @var ControllerManager
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::__construct
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::initialize
+     * @covers \DoctrineModule\Service\ObjectManagerInitializer::getObjectManager
      */
-    protected $controllers;
-
-    /**
-     * @var EventManager
-     */
-    protected $events;
-
-    /**
-     * @var SharedEventManager
-     */
-    protected $sharedEvents;
-
-    /**
-     * @var PluginManager
-     */
-    protected $plugins;
-
-    public function setUp()
+    public function testDisallowsInvalidObjectManager()
     {
-        // setup EventManager
-        $this->events = new EventManager();
-        $this->sharedEvents = new SharedEventManager;
-        $this->events->setSharedManager($this->sharedEvents);
+        $initializer    = new ObjectManagerInitializer('test-object-manager');
+        $serviceLocator = $this->getMock('Zend\\ServiceManager\\ServiceLocatorInterface');
+        $instance       = $this->getMock('DoctrineModule\\Persistence\\ObjectManagerAwareInterface');
 
-        // setup PluginManager
-        $this->plugins  = new PluginManager();
+        $instance
+            ->expects($this->never())
+            ->method('setObjectManager');
 
-        // setup ServiceManager
-        $this->services = new ServiceManager();
-        $this->services->setService('EventManager', $this->events);
-        $this->services->setService('SharedEventManager', $this->sharedEvents);
-        $this->services->setService('Zend\ServiceManager\ServiceLocatorInterface', $this->services);
-        $this->services->setService('ControllerPluginManager', $this->plugins);
-        $this->services->addInitializer(new ObjectManagerInitializer('Doctrine\Common\Persistence\ObjectManager'));
+        $serviceLocator
+            ->expects($this->any())
+            ->method('has')
+            ->with('test-object-manager')
+            ->will($this->returnValue(true));
 
-        // setup ControllerManager
-        $this->controllers = new ControllerManager();
-        $this->controllers->setServiceLocator($this->services);
-        $this->controllers->addInitializer(new ObjectManagerInitializer('Doctrine\Common\Persistence\ObjectManager'));
+        $serviceLocator
+            ->expects($this->any())
+            ->method('get')
+            ->with('test-object-manager')
+            ->will($this->returnValue(new \stdClass()));
+
+        $this->setExpectedException('Zend\\ServiceManager\\Exception\\ServiceNotFoundException');
+        $initializer->initialize($instance, $serviceLocator);
     }
-
-    public function testWillSetAndGetServiceName()
-    {
-        // get ObjectmanagerInitializer
-        $initializer = new ObjectManagerInitializer('Doctrine\Common\Persistence\ObjectManager');
-        $this->assertEquals('Doctrine\Common\Persistence\ObjectManager', $initializer->getServiceName());
-    }
-
-    public function testWillInitializeControllerWithObjectManager()
-    {
-        // get mock for Doctrine\Common\Persistence\ObjectManager
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-
-        // configure service manager
-        $this->services->setFactory('Doctrine\Common\Persistence\ObjectManager', function() use ($objectManager) {
-            return $objectManager;
-        });
-
-        // configure controller manager
-        $this->controllers->setFactory('TestAsset\DummyObjectManagerAwareController', function() {
-            return new TestAsset\DummyObjectManagerAwareController();
-        });
-
-        /** @var TestAsset\DummyObjectManagerAwareController $controller get controller */
-        $controller = $this->controllers->get('TestAsset\DummyObjectManagerAwareController');
-        $this->assertSame($objectManager, $controller->getObjectManager());
-    }
-
-    public function testWillInitializeControllerWithoutObjectManagerThrowException()
-    {
-        // get mock for Doctrine\Common\Persistence\ObjectRepository (to throw exception)
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-
-        // configure service manager
-        $this->services->setFactory('Doctrine\Common\Persistence\ObjectManager', function() use ($objectManager) {
-            return $objectManager;
-        });
-
-        // configure controller manager
-        $this->controllers->setFactory('TestAsset\DummyObjectManagerAwareController', function() {
-            return new TestAsset\DummyObjectManagerAwareController();
-        });
-
-        // get controller and check ServiceNotFoundException is throw
-        $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
-        $this->controllers->get('TestAsset\DummyObjectManagerAwareController');
-    }
-
-    public function testWillInitializeServiceWithObjectManager()
-    {
-        // get mock for Doctrine\Common\Persistence\ObjectManager
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-
-        // configure service manager
-        $this->services->setFactory('Doctrine\Common\Persistence\ObjectManager', function() use ($objectManager) {
-            return $objectManager;
-        });
-        $this->services->setFactory('TestAsset\DummyObjectManagerAwareService', function() {
-            return new TestAsset\DummyObjectManagerAwareService();
-        });
-
-        /** @var TestAsset\DummyObjectManagerAwareService $service get service */
-        $service = $this->services->get('TestAsset\DummyObjectManagerAwareService');
-        $this->assertSame($objectManager, $service->getObjectManager());
-    }
-
-    public function testWillInitializeServiceWithoutObjectManagerThrowException()
-    {
-        // get mock for Doctrine\Common\Persistence\ObjectRepository (to throw exception)
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-
-        // configure service manager
-        $this->services->setFactory('Doctrine\Common\Persistence\ObjectManager', function() use ($objectManager) {
-            return $objectManager;
-        });
-        $this->services->setFactory('TestAsset\DummyObjectManagerAwareService', function() {
-            return new TestAsset\DummyObjectManagerAwareService();
-        });
-
-        // get service and check ServiceNotFoundException is throw
-        $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
-        $this->services->get('TestAsset\DummyObjectManagerAwareService');
-    }
-
 }
