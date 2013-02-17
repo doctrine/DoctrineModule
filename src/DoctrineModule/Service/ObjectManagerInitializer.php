@@ -98,8 +98,8 @@ class ObjectManagerInitializer implements InitializerInterface
 			// throw service not found exception
 			throw new ServiceNotFoundException(sprintf(
 				'Retrieved service "%s" is not an instance of Doctrine\Common\Persistence\ObjectManager, "%s" given',
-				(is_object($objectManager)) ? get_class($objectManager) : gettype($objectManager),
-				$this->getServiceName()
+				$this->getServiceName(),
+				(is_object($objectManager)) ? get_class($objectManager) : gettype($objectManager)
 			));
 		}
 
