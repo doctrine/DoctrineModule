@@ -217,7 +217,10 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function hydrateByValue(array $data, $object)
     {
-        $object   = $this->tryConvertArrayToObject($data, $object);
+        $tryObject = $this->tryConvertArrayToObject($data, $object);
+        if (is_object($tryObject)) {
+            $object = $tryObject;
+        }
         $metadata = $this->metadata;
 
         foreach ($data as $field => $value) {
