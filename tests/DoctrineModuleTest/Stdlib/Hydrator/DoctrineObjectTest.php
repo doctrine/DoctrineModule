@@ -1273,4 +1273,60 @@ class DoctrineObjectTest extends BaseTestCase
         $object = $this->hydratorByValue->hydrate($data, $entity);
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $object->getToOne(false));
     }
+
+    public function testUsesStrategyOnSimpleFieldsWhenHydratingByValue()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntity();
+        $this->configureObjectManagerForSimpleEntity();
+        $data = array('field' => 'foo');
+
+        $this->hydratorByValue->addStrategy('field', new Asset\SimpleStrategy());
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('From setter: modified while hydrating', $entity->getField(false));
+    }
+
+    public function testUsesStrategyOnSimpleFieldsWhenHydratingByReference()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntity();
+        $this->configureObjectManagerForSimpleEntity();
+        $data = array('field' => 'foo');
+
+        $this->hydratorByReference->addStrategy('field', new Asset\SimpleStrategy());
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('modified while hydrating', $entity->getField(false));
+    }
+
+    public function testUsesStrategyOnSimpleFieldsWhenExtractingByValue()
+    {
+        $entity = new Asset\SimpleEntity();
+        $entity->setId(2);
+        $entity->setField('foo', false);
+
+        $this->configureObjectManagerForSimpleEntity();
+
+        $this->hydratorByValue->addStrategy('field', new Asset\SimpleStrategy());
+        $data = $this->hydratorByValue->extract($entity);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals(array('id' => 2, 'field' => 'modified while extracting'), $data);
+    }
+
+    public function testUsesStrategyOnSimpleFieldsWhenExtractingByReference()
+    {
+        $entity = new Asset\SimpleEntity();
+        $entity->setId(2);
+        $entity->setField('foo', false);
+
+        $this->configureObjectManagerForSimpleEntity();
+
+        $this->hydratorByReference->addStrategy('field', new Asset\SimpleStrategy());
+        $data = $this->hydratorByReference->extract($entity);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals(array('id' => 2, 'field' => 'modified while extracting'), $data);
+    }
 }
