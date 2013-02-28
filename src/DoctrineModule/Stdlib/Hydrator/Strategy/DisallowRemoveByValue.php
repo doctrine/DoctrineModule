@@ -21,6 +21,7 @@ namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
 use LogicException;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Util\Inflector;
 
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in
@@ -43,7 +44,7 @@ class DisallowRemoveByValue extends AbstractCollectionStrategy
     public function hydrate($value)
     {
         // Modify collection name
-        $collectionName = ucfirst($this->collectionName);
+        $collectionName = Inflector::classify($this->collectionName);
 
         // Remove plural from string
         if (substr($collectionName, -1) == "s") {
