@@ -4,6 +4,7 @@ namespace DoctrineModuleTest\Stdlib\Hydrator\Asset;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity;
 
 class OneToManyEntity
 {
@@ -33,23 +34,21 @@ class OneToManyEntity
         return $this->id;
     }
 
-    public function addEntities(Collection $entities, $modifyValue = true)
+    public function addEntitie(SimpleEntity $entities, $modifyValue = true)
     {
-        foreach ($entities as $entity) {
-            // Modify the value to illustrate the difference between by value and by reference
-            if ($modifyValue) {
-                $entity->setField('Modified from addEntities adder', false);
-            }
-
-            $this->entities->add($entity);
+        // Modify the value to illustrate the difference between by value and by reference
+        if($modifyValue) {
+            $entities->setField('Modified from addEntities adder', false);
         }
+
+        $this->entities[] = $entities;
+
+        return $this;
     }
 
-    public function removeEntities(Collection $entities)
+    public function removeEntitie(SimpleEntity $entities)
     {
-        foreach ($entities as $entity) {
-            $this->entities->removeElement($entity);
-        }
+        $this->entities->removeElement($entities);
     }
 
     public function getEntities($modifyValue = true)

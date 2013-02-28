@@ -42,9 +42,17 @@ class AllowRemoveByValue extends AbstractCollectionStrategy
      */
     public function hydrate($value)
     {
+        // Modify collection name
+        $collectionName = ucfirst($this->collectionName);
+
+        // Remove plural from string
+        if (substr($collectionName, -1) == "s") {
+            $collectionName = substr($collectionName, 0, -1);
+        }
+
         // AllowRemove strategy need "adder" and "remover"
-        $adder   = 'add' . ucfirst($this->collectionName);
-        $remover = 'remove' . ucfirst($this->collectionName);
+        $adder   = 'add' . $collectionName;
+        $remover = 'remove' . $collectionName;
 
         if (!method_exists($this->object, $adder) || !method_exists($this->object, $remover)) {
             throw new LogicException(sprintf(
@@ -55,11 +63,16 @@ class AllowRemoveByValue extends AbstractCollectionStrategy
         }
 
         $collection = $this->getCollectionFromObjectByValue()->toArray();
+
         $toAdd      = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
         $toRemove   = new ArrayCollection(array_udiff($collection, $value, array($this, 'compareObjects')));
 
-        $this->object->$adder($toAdd);
-        $this->object->$remover($toRemove);
+        foreach($toAdd as $entity) {
+            $this->object->$adder($entity);
+        }
+        foreach($toRemove as $entity) {
+            $this->object->$remover($entity);
+        }
 
         return $collection;
     }
