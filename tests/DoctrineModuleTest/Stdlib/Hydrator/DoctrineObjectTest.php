@@ -609,11 +609,10 @@ class DoctrineObjectTest extends BaseTestCase
         $toMany2->setId(3);
         $toMany2->setField('bar', false);
 
-        $collection = new ArrayCollection(array($toMany1, $toMany2));
-
         $entity = new Asset\OneToManyEntity();
         $entity->setId(4);
-        $entity->addEntities($collection);
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
 
         $this->configureObjectManagerForOneToManyEntity();
 
@@ -639,11 +638,10 @@ class DoctrineObjectTest extends BaseTestCase
         $toMany2->setId(3);
         $toMany2->setField('bar', false);
 
-        $collection = new ArrayCollection(array($toMany1, $toMany2));
-
         $entity = new Asset\OneToManyEntity();
         $entity->setId(4);
-        $entity->addEntities($collection);
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
 
         $this->configureObjectManagerForOneToManyEntity();
 
@@ -674,7 +672,8 @@ class DoctrineObjectTest extends BaseTestCase
 
         $data = array(
             'entities' => array(
-                $toMany1, $toMany2
+                $toMany1,
+                $toMany2,
             )
         );
 
@@ -999,7 +998,8 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForOneToManyEntity();
 
         // Initally add two elements
-        $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
 
         // The hydrated collection contains two other elements, one of them is new, and one of them is missing
         // in the new strategy
@@ -1052,7 +1052,8 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForOneToManyEntity();
 
         // Initally add two elements
-        $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
 
         // The hydrated collection contains two other elements, one of them is new, and one of them is missing
         // in the new strategy
@@ -1111,8 +1112,11 @@ class DoctrineObjectTest extends BaseTestCase
             )
         );
 
+        // Initally add two elements
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
+
         // Set the initial collection
-        $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
         $initialCollection = $entity->getEntities(false);
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
@@ -1141,8 +1145,11 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfThree->setId(3);
         $entityInDatabaseWithIdOfThree->setField('bar', false);
 
+        // Initally add two elements
+        $entity->addEntitie($entityInDatabaseWithIdOfTwo);
+        $entity->addEntitie($entityInDatabaseWithIdOfThree);
+
         // Set the initial collection
-        $entity->addEntities(new ArrayCollection(array($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree)));
         $initialCollection = $entity->getEntities(false);
 
         $this
