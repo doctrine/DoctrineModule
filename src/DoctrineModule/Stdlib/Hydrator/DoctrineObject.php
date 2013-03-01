@@ -363,6 +363,7 @@ class DoctrineObject extends AbstractHydrator
      * @param  mixed  $collectionName
      * @param  string $target
      * @param  mixed  $values
+     * @throws InvalidArgumentException
      * @return void
      */
     protected function toMany($object, $collectionName, $target, $values)
@@ -395,7 +396,8 @@ class DoctrineObject extends AbstractHydrator
 
                     // Create or load target object
                     if($createTargetObject) {
-                        $targetObject = $this->hydrateByValue($value, new $target);
+                        $hydrator = new DoctrineObject($this->objectManager, $target, $this->byValue);
+                        $targetObject = $hydrator->hydrate($value, new $target);
                     } else {
                         $criteria = array();
                         $criteriaKeys = array_intersect_key(array_keys($value), $identifierNames);
@@ -415,25 +417,29 @@ class DoctrineObject extends AbstractHydrator
             }
         }
 
-        // Set the object so that the strategy can extract the Collection from it
-        $collectionStrategy = $this->getStrategy($collectionName);
+        // If collection is empty, stop hydratating
+        if(!empty($collection)) {
 
-        // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
-        if ( ! $collectionStrategy instanceof AbstractCollectionStrategy) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Strategies used for collections valued associations must inherit from '
-                    . 'Strategy\AbstractCollectionStrategy, %s given',
-                    get_class($collectionStrategy)
-                )
-            );
+            // Set the object so that the strategy can extract the Collection from it
+            $collectionStrategy = $this->getStrategy($collectionName);
+
+            // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
+            if ( ! $collectionStrategy instanceof AbstractCollectionStrategy) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Strategies used for collections valued associations must inherit from '
+                            . 'Strategy\AbstractCollectionStrategy, %s given',
+                        get_class($collectionStrategy)
+                    )
+                );
+            }
+
+            $collectionStrategy->setObject($object);
+
+            // We could directly call hydrate method from the strategy, but if people want to override
+            // hydrateValue function, they can do it and do their own stuff
+            $this->hydrateValue($collectionName, $collection);
         }
-
-        $collectionStrategy->setObject($object);
-
-        // We could directly call hydrate method from the strategy, but if people want to override
-        // hydrateValue function, they can do it and do their own stuff
-        $this->hydrateValue($collectionName, $collection);
     }
 
     /**
