@@ -27,6 +27,7 @@ use Traversable;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Util\Inflector;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
@@ -46,20 +47,24 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 class DoctrineObject extends AbstractHydrator
 {
     /**
+     * @var bool
+     */
+    protected $byValue = true;
+
+    /**
+     * @var array
+     */
+    protected $metadata = array();
+
+    /**
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var ClassMetadata
+     * @var string
      */
-    protected $metadata;
-
-    /**
-     * @var bool
-     */
-    protected $byValue = true;
-
+    protected $targetClass;
 
     /**
      * Constructor
@@ -72,9 +77,9 @@ class DoctrineObject extends AbstractHydrator
     {
         parent::__construct();
 
-        $this->objectManager    = $objectManager;
-        $this->metadata         = $objectManager->getClassMetadata($targetClass);
-        $this->byValue          = (bool) $byValue;
+        $this->objectManager = $objectManager;
+        $this->byValue       = (bool) $byValue;
+        $this->targetClass   = $targetClass;
 
         $this->prepare();
     }
@@ -116,7 +121,9 @@ class DoctrineObject extends AbstractHydrator
      */
     public function addStrategy($name, StrategyInterface $strategy)
     {
-        if ($this->metadata->hasAssociation($name) && $this->metadata->isCollectionValuedAssociation($name)) {
+        $metadata = $this->getClassMetadata($this->targetClass);
+
+        if ($metadata->hasAssociation($name) && $metadata->isCollectionValuedAssociation($name)) {
             if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
                 throw new InvalidArgumentException(
                     sprintf(
@@ -128,7 +135,7 @@ class DoctrineObject extends AbstractHydrator
             }
 
             $strategy->setCollectionName($name)
-                     ->setClassMetadata($this->metadata);
+                     ->setClassMetadata($metadata);
         }
 
         return parent::addStrategy($name, $strategy);
@@ -141,7 +148,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function prepare()
     {
-        $metadata     = $this->metadata;
+        $metadata     = $this->getClassMetadata($this->targetClass);
         $associations = $metadata->getAssociationNames();
 
         foreach ($associations as $association) {
@@ -166,7 +173,8 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByValue($object)
     {
-        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+        $metadata = $this->getClassMetadata($object);
+        $fieldNames = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
         $methods    = get_class_methods($object);
 
         $data = array();
@@ -193,8 +201,9 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByReference($object)
     {
-        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
-        $refl       = $this->metadata->getReflectionClass();
+        $metadata = $this->getClassMetadata($object);
+        $fieldNames = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
+        $refl       = $metadata->getReflectionClass();
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
@@ -218,8 +227,8 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function hydrateByValue(array $data, $object)
     {
+        $metadata = $this->getClassMetadata($object);
         $object   = $this->tryConvertArrayToObject($data, $object);
-        $metadata = $this->metadata;
 
         foreach ($data as $field => $value) {
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
@@ -269,7 +278,7 @@ class DoctrineObject extends AbstractHydrator
     protected function hydrateByReference(array $data, $object)
     {
         $object   = $this->tryConvertArrayToObject($data, $object);
-        $metadata = $this->metadata;
+        $metadata = $this->getClassMetadata($object);
         $refl     = $metadata->getReflectionClass();
 
         foreach ($data as $field => $value) {
@@ -310,7 +319,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function tryConvertArrayToObject($data, $object)
     {
-        $metadata         = $this->metadata;
+        $metadata         = $this->getClassMetadata($object);
         $identifierNames  = $metadata->getIdentifierFieldNames($object);
         $identifierValues = array();
 
@@ -355,6 +364,7 @@ class DoctrineObject extends AbstractHydrator
      * @param  mixed  $collectionName
      * @param  string $target
      * @param  mixed  $values
+     * @throws InvalidArgumentException
      * @return void
      */
     protected function toMany($object, $collectionName, $target, $values)
@@ -367,36 +377,82 @@ class DoctrineObject extends AbstractHydrator
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
-            if ($value instanceof $target) {
-                $collection[] = $value;
-            } elseif ($value !== null) {
-                $targetObject = $this->find($value, $target);
+            if ($value !== null) {
+                if ($value instanceof $target) {
+                    $targetObject = $value;
+                } elseif (is_array($value)) {
+                    $createTargetObject = false;
+                    $identifierNames = $this->getClassMetadata($target)->getIdentifierFieldNames();
+
+                    // Verify if array contains an identifiers
+                    if(empty($identifierNames)) {
+                        $createTargetObject = true;
+                    } else {
+                        foreach($identifierNames as $field) {
+                            if(!isset($value[$field]) || empty($value[$field])) {
+                                $createTargetObject = true;
+                            }
+                        }
+                    }
+
+                    // Create or load target object
+                    if($createTargetObject) {
+                        $hydrator = new DoctrineObject($this->objectManager, $target, $this->byValue);
+                        $targetObject = $hydrator->hydrate($value, new $target);
+                    } else {
+                        $criteria = array();
+                        $criteriaKeys = array_intersect_key(array_keys($value), $identifierNames);
+                        foreach($criteriaKeys as $key) {
+                            $criteria[$key] = $value[$key];
+                        }
+
+                        $targetObject = $this->find($criteria, $target);
+                    }
+                } else {
+                    $targetObject = $this->find($value, $target);
+                }
 
                 if ($targetObject !== null) {
+                    $targetField = $this->getClassMetadata($object)->getAssociationMappedByTargetField($collectionName);
+
+                    if(!empty($targetField)) {
+                        $targetMethodName = Inflector::classify($targetField);
+                        $targetMethodGet = 'get' . $targetMethodName;
+                        $targetMethodSet = 'set' . $targetMethodName;
+
+                        // Set instance of current object to target object
+                        if(method_exists($targetObject, $targetMethodGet) && null === $targetObject->$targetMethodGet()) {
+                            $targetObject->$targetMethodSet($object);
+                        }
+                    }
+
                     $collection[] = $targetObject;
                 }
             }
         }
 
-        // Set the object so that the strategy can extract the Collection from it
-        $collectionStrategy = $this->getStrategy($collectionName);
+        // Collection is not empty, continue hydratating
+        if(!empty($collection)) {
+            // Set the object so that the strategy can extract the Collection from it
+            $collectionStrategy = $this->getStrategy($collectionName);
 
-        // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
-        if ( ! $collectionStrategy instanceof AbstractCollectionStrategy) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Strategies used for collections valued associations must inherit from '
-                    . 'Strategy\AbstractCollectionStrategy, %s given',
-                    get_class($collectionStrategy)
-                )
-            );
+            // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
+            if ( ! $collectionStrategy instanceof AbstractCollectionStrategy) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Strategies used for collections valued associations must inherit from '
+                            . 'Strategy\AbstractCollectionStrategy, %s given',
+                        get_class($collectionStrategy)
+                    )
+                );
+            }
+
+            $collectionStrategy->setObject($object);
+
+            // We could directly call hydrate method from the strategy, but if people want to override
+            // hydrateValue function, they can do it and do their own stuff
+            $this->hydrateValue($collectionName, $collection);
         }
-
-        $collectionStrategy->setObject($object);
-
-        // We could directly call hydrate method from the strategy, but if people want to override
-        // hydrateValue function, they can do it and do their own stuff
-        $this->hydrateValue($collectionName, $collection);
     }
 
     /**
@@ -438,5 +494,22 @@ class DoctrineObject extends AbstractHydrator
     protected function find($identifiers, $targetClass)
     {
         return $this->objectManager->find($targetClass, $identifiers);
+    }
+
+    /**
+     * Get object metadata
+     *
+     * @param  string|object $classOrClassName
+     * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
+     */
+    protected function getClassMetadata($classOrClassName)
+    {
+        $className = $classOrClassName;
+
+        if(is_object($classOrClassName)) {
+            $className = get_class($classOrClassName);
+        }
+
+        return $this->objectManager->getClassMetadata($className);
     }
 }
