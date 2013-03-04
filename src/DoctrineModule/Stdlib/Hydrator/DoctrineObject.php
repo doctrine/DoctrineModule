@@ -27,6 +27,7 @@ use Traversable;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Util\Inflector;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
@@ -412,14 +413,26 @@ class DoctrineObject extends AbstractHydrator
                 }
 
                 if ($targetObject !== null) {
+                    $targetField = $this->getClassMetadata($object)->getAssociationMappedByTargetField($collectionName);
+
+                    if(!empty($targetField)) {
+                        $targetMethodName = Inflector::classify($targetField);
+                        $targetMethodGet = 'get' . $targetMethodName;
+                        $targetMethodSet = 'set' . $targetMethodName;
+
+                        // Set instance of current object to target object
+                        if(method_exists($targetObject, $targetMethodGet) && null === $targetObject->$targetMethodGet()) {
+                            $targetObject->$targetMethodSet($object);
+                        }
+                    }
+
                     $collection[] = $targetObject;
                 }
             }
         }
 
-        // If collection is empty, stop hydratating
+        // Collection is not empty, continue hydratating
         if(!empty($collection)) {
-
             // Set the object so that the strategy can extract the Collection from it
             $collectionStrategy = $this->getStrategy($collectionName);
 

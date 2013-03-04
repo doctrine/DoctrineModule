@@ -466,6 +466,51 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($toManyTwo, $entities[1]);
     }
 
+    public function testHydrateOneToManyAssociationByValueWithParentEntity()
+    {
+        // Add metadata for used entities
+        $this->addMetadataForOneToManyEntity();
+        $this->addMetadataForSimpleEntityWithParent();
+
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $toManyOne = new Asset\SimpleEntityWithParent();
+        $toManyOne->setId(2);
+        $toManyOne->setField('foo', false);
+
+        $toManyTwo = new Asset\SimpleEntityWithParent();
+        $toManyTwo->setId(3);
+        $toManyTwo->setField('bar', false);
+
+        $entity = new Asset\OneToManyEntity();
+
+        $data = array(
+            'entities' => array(
+                $toManyOne,
+                $toManyTwo,
+            )
+        );
+
+        $entity = $this->getHydratorByValue($entity)->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+
+        $entities = $entity->getEntities(false);
+
+        foreach ($entities as $en) {
+            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInternalType('integer', $en->getId());
+            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+        }
+
+        $this->assertEquals(2, $entities[0]->getId());
+        $this->assertSame($toManyOne, $entities[0]);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entities[0]->getParent());
+
+        $this->assertEquals(3, $entities[1]->getId());
+        $this->assertSame($toManyTwo, $entities[1]);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entities[1]->getParent());
+    }
+
     public function testHydrateOneToManyAssociationByValueAsArray()
     {
         // Add metadata for used entities
@@ -592,6 +637,54 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertEquals(3, $entities[1]->getId());
         $this->assertSame($toManyTwo, $entities[1]);
+    }
+
+    public function testHydrateOneToManyAssociationByReferenceWithParentEntity()
+    {
+        // Add metadata for used entities
+        $this->addMetadataForOneToManyEntity();
+        $this->addMetadataForSimpleEntityWithParent();
+
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $toManyOne = new Asset\SimpleEntityWithParent();
+        $toManyOne->setId(2);
+        $toManyOne->setField('foo', false);
+
+        $toManyTwo = new Asset\SimpleEntityWithParent();
+        $toManyTwo->setId(3);
+        $toManyTwo->setField('bar', false);
+
+        $entity = new Asset\OneToManyEntity();
+
+        $data = array(
+            'entities' => array(
+                $toManyOne,
+                $toManyTwo
+            )
+        );
+
+        $entity = $this->getHydratorByReference($entity)->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+
+        $entities = $entity->getEntities(false);
+
+        foreach ($entities as $en) {
+            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInternalType('integer', $en->getId());
+            $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
+        }
+
+        $this->assertEquals(2, $entities[0]->getId());
+        $this->assertSame($toManyOne, $entities[0]);
+
+        $this->assertEquals(3, $entities[1]->getId());
+        $this->assertSame($toManyTwo, $entities[1]);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entities[0]->getParent());
+
+        $this->assertEquals($toManyTwo->getId(), $data['entities'][1]->getId());
+        $this->assertSame($toManyTwo, $data['entities'][1]);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entities[1]->getParent());
     }
 
     public function testHydrateOneToManyReferenceByValueAsArray()
@@ -1445,6 +1538,51 @@ class DoctrineObjectTest extends BaseTestCase
         $this->metadata[$entityName] = $metadata;
     }
 
+    protected function addMetadataForSimpleEntityWithParent()
+    {
+        $entityName = 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithParent';
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $metadata->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue($entityName));
+
+        $metadata->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+
+        $metadata->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'field')));
+
+        $metadata->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr(
+                $this->equalTo('id'),
+                $this->equalTo('field')))
+            ->will($this->returnCallback(function($arg) {
+                if ($arg === 'id') {
+                    return 'integer';
+                } elseif ($arg === 'field') {
+                    return 'string';
+                }
+            }));
+
+        $metadata->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $metadata->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $metadata->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue(new ReflectionClass($entityName)));
+
+        $this->metadata[$entityName] = $metadata;
+    }
+
     protected function addMetadataForSimpleEntityWithDateTime()
     {
         $entityName = 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime';
@@ -1461,15 +1599,15 @@ class DoctrineObjectTest extends BaseTestCase
         $metadata->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->logicalOr(
-                    $this->equalTo('id'),
-                    $this->equalTo('date')))
+                $this->equalTo('id'),
+                $this->equalTo('date')))
             ->will($this->returnCallback(function($arg) {
-                        if ($arg === 'id') {
-                            return 'integer';
-                        } elseif ($arg === 'date') {
-                            return 'datetime';
-                        }
-                    }));
+                if ($arg === 'id') {
+                    return 'integer';
+                } elseif ($arg === 'date') {
+                    return 'datetime';
+                }
+            }));
 
         $metadata->expects($this->any())
             ->method('hasAssociation')
@@ -1502,28 +1640,28 @@ class DoctrineObjectTest extends BaseTestCase
         $metadata->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->logicalOr(
-                    $this->equalTo('id'),
-                    $this->equalTo('toOne')))
+                $this->equalTo('id'),
+                $this->equalTo('toOne')))
             ->will($this->returnCallback(function($arg) {
-                        if ($arg === 'id') {
-                            return 'integer';
-                        } elseif ($arg === 'toOne') {
-                            return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
-                        }
-                    }));
+                if ($arg === 'id') {
+                    return 'integer';
+                } elseif ($arg === 'toOne') {
+                    return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                }
+            }));
 
         $metadata->expects($this->any())
             ->method('hasAssociation')
             ->with($this->logicalOr(
-                    $this->equalTo('id'),
-                    $this->equalTo('toOne')))
+                $this->equalTo('id'),
+                $this->equalTo('toOne')))
             ->will($this->returnCallback(function($arg) {
-                        if ($arg === 'id') {
-                            return false;
-                        } elseif ($arg === 'toOne') {
-                            return true;
-                        }
-                    }));
+                if ($arg === 'id') {
+                    return false;
+                } elseif ($arg === 'toOne') {
+                    return true;
+                }
+            }));
 
         $metadata->expects($this->any())
             ->method('isSingleValuedAssociation')
@@ -1558,28 +1696,28 @@ class DoctrineObjectTest extends BaseTestCase
         $metadata->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->logicalOr(
-                    $this->equalTo('id'),
-                    $this->equalTo('toOne')))
+                $this->equalTo('id'),
+                $this->equalTo('toOne')))
             ->will($this->returnCallback(function($arg) {
-                        if ($arg === 'id') {
-                            return 'integer';
-                        } elseif ($arg === 'toOne') {
-                            return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
-                        }
-                    }));
+                if ($arg === 'id') {
+                    return 'integer';
+                } elseif ($arg === 'toOne') {
+                    return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                }
+            }));
 
         $metadata->expects($this->any())
             ->method('hasAssociation')
             ->with($this->logicalOr(
-                    $this->equalTo('id'),
-                    $this->equalTo('toOne')))
+                $this->equalTo('id'),
+                $this->equalTo('toOne')))
             ->will($this->returnCallback(function($arg) {
-                        if ($arg === 'id') {
-                            return false;
-                        } elseif ($arg === 'toOne') {
-                            return true;
-                        }
-                    }));
+                if ($arg === 'id') {
+                    return false;
+                } elseif ($arg === 'toOne') {
+                    return true;
+                }
+            }));
 
         $metadata->expects($this->any())
             ->method('isSingleValuedAssociation')
@@ -1614,28 +1752,37 @@ class DoctrineObjectTest extends BaseTestCase
         $metadata->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->logicalOr(
-                    $this->equalTo('id'),
-                    $this->equalTo('entities')))
+                $this->equalTo('id'),
+                $this->equalTo('entities')))
             ->will($this->returnCallback(function($arg) {
-                        if ($arg === 'id') {
-                            return 'integer';
-                        } elseif ($arg === 'entities') {
-                            return 'Doctrine\Common\Collections\ArrayCollection';
-                        }
-                    }));
+                if ($arg === 'id') {
+                    return 'integer';
+                } elseif ($arg === 'entities') {
+                    return 'Doctrine\Common\Collections\ArrayCollection';
+                }
+            }));
 
         $metadata->expects($this->any())
             ->method('hasAssociation')
             ->with($this->logicalOr(
-                    $this->equalTo('id'),
-                    $this->equalTo('entities')))
+                $this->equalTo('id'),
+                $this->equalTo('entities')))
             ->will($this->returnCallback(function($arg) {
-                        if ($arg === 'id') {
-                            return false;
-                        } elseif ($arg === 'entities') {
-                            return true;
-                        }
-                    }));
+                if ($arg === 'id') {
+                    return false;
+                } elseif ($arg === 'entities') {
+                    return true;
+                }
+            }));
+
+        $metadata->expects($this->any())
+            ->method('getAssociationMappedByTargetField')
+            ->with($this->equalTo('entities'))
+            ->will($this->returnCallback(function($arg) {
+                if ($arg === 'entities') {
+                    return 'parent';
+                }
+            }));
 
         $metadata->expects($this->any())
             ->method('isSingleValuedAssociation')
