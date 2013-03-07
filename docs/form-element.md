@@ -13,7 +13,7 @@ For this to work, you need to specify at least an `object_manager`,
 the `target_class` to use and a `property` of the class to use as the Label.
 
 #### Configuring Dependencies
-Before you use DoctrineModule\Form\Element\ObjectSelect on you form you'll need configure
+Before you use DoctrineModule\Form\Element\ObjectSelect on your form you'll need configure
 the injection by adding the following lines to your Module.php:
 
 ```php
@@ -37,7 +37,7 @@ public function getFormElementConfig()
 ```
 
 #### Calling the Form
-Instead of instance the form with the default new Form() statement you'll need to do as below:
+Instead of create an instance of the form by the default new Form() statement you'll need to do as below:
 
 ```php
 $forms = $this->getServiceLocator()->get('FormElementManager');
