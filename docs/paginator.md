@@ -2,7 +2,7 @@
 
 DoctrineModule provides a simple Paginator adapter that can be used with DoctrineCollection.
 
-> Note : if you are using Doctrine 2 ORM, what you are looking for is more likely a Paginator adapter that can be used with Doctrine 2 Paginators. Hopefully, DoctrineORMModule provides such a paginator adapter. You can find the documentation here :
+> Note : if you are using Doctrine 2 ORM, what you are looking for is probably a Paginator adapter that can be used with Doctrine 2 Paginators. Luckily, DoctrineORMModule provides such a paginator adapter. You can find the documentation here :
 
 ### Simple example
 
