@@ -12,6 +12,39 @@ Add a `DoctrineModule\Form\Element\ObjectSelect`,
 For this to work, you need to specify at least an `object_manager`, 
 the `target_class` to use and a `property` of the class to use as the Label.
 
+#### Configuring Dependencies
+Before you use DoctrineModule\Form\Element\ObjectSelect on you form you'll need configure
+the injection by adding the following lines to your Module.php:
+
+```php
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+...
+public function getFormElementConfig()
+{
+    return array(
+        'initializers' => array(
+            'ObjectManagerInitializer' => function ($element, $formElements) {
+                if ($element instanceof ObjectManagerAwareInterface) {
+                    $services      = $formElements->getServiceLocator();
+                    $entityManager = $services->get('Doctrine\ORM\EntityManager');
+
+                    $element->setObjectManager($entityManager);
+                }
+            },
+        ),
+    );
+}
+```
+
+#### Calling the Form
+Instead of instance the form with the default new Form() statement you'll need to do as below:
+
+```php
+$forms = $this->getServiceLocator()->get('FormElementManager');
+$myForm = $forms->get('Application\Form\MyForm');
+```
+
+
 #### Example 1 : simple example
 ```php
 
