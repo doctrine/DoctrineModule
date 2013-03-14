@@ -17,10 +17,10 @@ Installation of DoctrineModule uses composer. For composer documentation, please
 [getcomposer.org](http://getcomposer.org/).
 
 ```sh
-php composer.phar require doctrine/doctrine-module
-# when asked for a version, type `0.*`
+php composer.phar require doctrine/doctrine-module:0.*
+```
 
-Then add `DoctrineModule` to your `config/application.config.php``
+Then add `DoctrineModule` to your `config/application.config.php`
 
 Installation without composer is not officially supported, and requires you to install and autoload
 the dependencies specified in the `composer.json`.
