@@ -250,6 +250,7 @@ class DoctrineObject extends AbstractHydrator
                     continue;
                 }
 
+                $value = $this->hydrateValue($field, $value);
                 $object->$setter($value);
             }
         }
