@@ -332,6 +332,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+
         $this->hydratorByValue = new DoctrineObjectHydrator(
             $this->objectManager,
             'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity',
@@ -437,6 +443,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
 
         $this->hydratorByValue = new DoctrineObjectHydrator(
             $this->objectManager,
