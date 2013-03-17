@@ -206,12 +206,15 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('getTypeOfField')
                        ->with($this->logicalOr(
                             $this->equalTo('id'),
-                            $this->equalTo('toOne')))
+                            $this->equalTo('toOne'),
+                            $this->equalTo('field')))
                        ->will($this->returnCallback(function($arg) {
                                 if ($arg === 'id') {
                                     return 'integer';
                                 } elseif ($arg === 'toOne') {
                                     return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                                } elseif ($arg === 'field') {
+                                    return 'string';
                                 }
                        }));
 
@@ -219,9 +222,10 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('hasAssociation')
                        ->with($this->logicalOr(
                             $this->equalTo('id'),
-                            $this->equalTo('toOne')))
+                            $this->equalTo('toOne'),
+                            $this->equalTo('field')))
                        ->will($this->returnCallback(function($arg) {
-                                if ($arg === 'id') {
+                                if ($arg === 'id' || $arg === 'field') {
                                     return false;
                                 } elseif ($arg === 'toOne') {
                                     return true;
@@ -574,7 +578,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', $entity);
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
-        $this->assertEquals('foo', $entityInDatabaseWithIdOfOne->getField());
+        $this->assertEquals('From getter: Modified from setToOne setter', $entityInDatabaseWithIdOfOne->getField());
     }
 
     public function testHydrateOneToOneAssociationByReferenceUsingIdentifierArrayForRelation()
