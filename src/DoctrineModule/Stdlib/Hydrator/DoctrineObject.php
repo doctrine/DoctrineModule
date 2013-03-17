@@ -332,6 +332,11 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Handle ToOne associations
      *
+     * When $value is an array but is not the $target's identifiers, $value is
+     * most likely an array of fieldset data.  The identifiers will be determined
+     * and a target instance will be initialized and then hydrated.  The hydrated
+     * target will be returned.
+     *
      * @param  string $target
      * @param  mixed  $value
      * @return object
@@ -340,6 +345,15 @@ class DoctrineObject extends AbstractHydrator
     {
         if ($value instanceof $target) {
             return $value;
+        }
+
+        $metadata = $this->objectManager->getClassMetadata($target);
+        if (is_array($value) && array_keys($value) != $metadata->getIdentifier()) {
+            // $value is most likely an array of fieldset data
+            $identifiers = array_intersect_key($value, array_flip($metadata->getIdentifier()));
+            $object = $this->find($identifiers, $target) ?: new $target;
+            $hydrator = new DoctrineObject($this->objectManager, $target, $this->byValue);
+            return $hydrator->hydrate($value, $object);
         }
 
         return $this->find($value, $target);

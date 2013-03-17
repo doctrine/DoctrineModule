@@ -182,6 +182,10 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('getReflectionClass')
                        ->will($this->returnValue($refl));
 
+        $this->metadata->expects($this->any())
+                       ->method('getIdentifier')
+                       ->will($this->returnValue(array('id')));
+
         $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', true);
         $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', false);
     }
@@ -202,12 +206,15 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('getTypeOfField')
                        ->with($this->logicalOr(
                             $this->equalTo('id'),
-                            $this->equalTo('toOne')))
+                            $this->equalTo('toOne'),
+                            $this->equalTo('field')))
                        ->will($this->returnCallback(function($arg) {
                                 if ($arg === 'id') {
                                     return 'integer';
                                 } elseif ($arg === 'toOne') {
                                     return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                                } elseif ($arg === 'field') {
+                                    return 'string';
                                 }
                        }));
 
@@ -215,9 +222,10 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('hasAssociation')
                        ->with($this->logicalOr(
                             $this->equalTo('id'),
-                            $this->equalTo('toOne')))
+                            $this->equalTo('toOne'),
+                            $this->equalTo('field')))
                        ->will($this->returnCallback(function($arg) {
-                                if ($arg === 'id') {
+                                if ($arg === 'id' || $arg === 'field') {
                                     return false;
                                 } elseif ($arg === 'toOne') {
                                     return true;
@@ -237,6 +245,10 @@ class DoctrineObjectTest extends BaseTestCase
         $this->metadata->expects($this->any())
                        ->method('getReflectionClass')
                        ->will($this->returnValue($refl));
+
+        $this->metadata->expects($this->any())
+                       ->method('getIdentifier')
+                       ->will($this->returnValue(array('id')));
 
         $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', true);
         $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', false);
@@ -539,6 +551,34 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
+    }
+
+    public function testHydrateOneToOneAssociationByValueUsingFullArrayForRelation()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\OneToOneEntityNotNullable;
+        $this->configureObjectManagerForOneToOneEntityNotNullable();
+
+        // Use entity of id 1 as relation
+        $data = array('toOne' => array('id' => 1, 'field' => 'foo'));
+
+        $entityInDatabaseWithIdOfOne = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfOne->setId(1);
+        $entityInDatabaseWithIdOfOne->setField('bar', false);
+
+        $this
+            ->objectManager
+            ->expects($this->once())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 1))
+            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', $entity);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
+        $this->assertEquals('From getter: Modified from setToOne setter', $entityInDatabaseWithIdOfOne->getField());
     }
 
     public function testHydrateOneToOneAssociationByReferenceUsingIdentifierArrayForRelation()
