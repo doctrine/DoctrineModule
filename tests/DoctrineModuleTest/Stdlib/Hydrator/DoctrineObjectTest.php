@@ -182,6 +182,10 @@ class DoctrineObjectTest extends BaseTestCase
                        ->method('getReflectionClass')
                        ->will($this->returnValue($refl));
 
+        $this->metadata->expects($this->any())
+                       ->method('getIdentifier')
+                       ->will($this->returnValue(array('id')));
+
         $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', true);
         $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', false);
     }
@@ -237,6 +241,10 @@ class DoctrineObjectTest extends BaseTestCase
         $this->metadata->expects($this->any())
                        ->method('getReflectionClass')
                        ->will($this->returnValue($refl));
+
+        $this->metadata->expects($this->any())
+                       ->method('getIdentifier')
+                       ->will($this->returnValue(array('id')));
 
         $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', true);
         $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', false);
