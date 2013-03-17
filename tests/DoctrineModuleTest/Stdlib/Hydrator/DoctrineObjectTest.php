@@ -790,15 +790,27 @@ class DoctrineObjectTest extends BaseTestCase
             ->objectManager
             ->expects($this->once())
             ->method('find')
-            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 1))
+            ->with(
+                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                array('id' => 1)
+            )
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', $entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertInstanceOf(
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable',
+            $entity
+        );
+        $this->assertInstanceOf(
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            $entity->getToOne(false)
+        );
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
-        $this->assertEquals('From getter: Modified from setToOne setter', $entityInDatabaseWithIdOfOne->getField());
+        $this->assertEquals(
+            'From getter: Modified from setToOne setter',
+            $entityInDatabaseWithIdOfOne->getField()
+        );
     }
 
     public function testHydrateOneToOneAssociationByReferenceUsingIdentifierArrayForRelation()
@@ -1484,7 +1496,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DateTime', $entity->getDate());
         $this->assertEquals($now, $entity->getDate()->getTimestamp());
     }
-    
+
     public function testEmptyStringIsNotConvertedToDateTime()
     {
         $entity = new Asset\SimpleEntityWithDateTime();

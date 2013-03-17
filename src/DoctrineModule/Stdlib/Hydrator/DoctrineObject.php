@@ -358,10 +358,12 @@ class DoctrineObject extends AbstractHydrator
         $metadata = $this->objectManager->getClassMetadata($target);
         if (is_array($value) && array_keys($value) != $metadata->getIdentifier()) {
             // $value is most likely an array of fieldset data
-            $identifiers = array_intersect_key($value, array_flip($metadata->getIdentifier()));
+            $identifiers = array_intersect_key(
+                $value,
+                array_flip($metadata->getIdentifier())
+            );
             $object = $this->find($identifiers, $target) ?: new $target;
-            $hydrator = new DoctrineObject($this->objectManager, $target, $this->byValue);
-            return $hydrator->hydrate($value, $object);
+            return $this->hydrate($value, $object);
         }
 
         return $this->find($value, $target);
@@ -404,7 +406,6 @@ class DoctrineObject extends AbstractHydrator
         }
 
         // Set the object so that the strategy can extract the Collection from it
-        
         /** @var \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy $collectionStrategy */
         $collectionStrategy = $this->getStrategy($collectionName);
         $collectionStrategy->setObject($object);
@@ -430,7 +431,6 @@ class DoctrineObject extends AbstractHydrator
                 if ('' === $value) {
                     return null;
                 }
-                
                 if (is_int($value)) {
                     $dateTime = new DateTime();
                     $dateTime->setTimestamp($value);
