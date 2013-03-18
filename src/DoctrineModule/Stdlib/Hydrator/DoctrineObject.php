@@ -352,7 +352,7 @@ class DoctrineObject extends AbstractHydrator
             // $value is most likely an array of fieldset data
             $identifiers = array_intersect_key($value, array_flip($metadata->getIdentifier()));
             $object = $this->find($identifiers, $target) ?: new $target;
-            $hydrator = new DoctrineObject($this->objectManager, $target);
+            $hydrator = new DoctrineObject($this->objectManager, $target, $this->byValue);
             return $hydrator->hydrate($value, $object);
         }
 
