@@ -69,7 +69,7 @@ class ObjectRepositoryTest extends BaseTestCase
             'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
             'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
         ));
-        $adapter->setCredentialValue('a credetential');
+        $adapter->setCredentialValue('a credential');
         $adapter->authenticate();
     }
 

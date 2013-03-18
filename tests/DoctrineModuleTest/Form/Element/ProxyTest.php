@@ -118,7 +118,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             'find_method' => array('name' => 'NotExistent'),
         ));
 
-        $this->setExpectedException('RuntimeException', 'Method "NotExistent" could not be found in respository "' . get_class($objectRepository).'"');
+        $this->setExpectedException('RuntimeException', 'Method "NotExistent" could not be found in repository "' . get_class($objectRepository).'"');
 
         $this->proxy->getValueOptions();
     }
