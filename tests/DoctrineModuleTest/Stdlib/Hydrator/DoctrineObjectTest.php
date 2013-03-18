@@ -998,7 +998,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = new Asset\OneToManyEntity();
         $this->configureObjectManagerForOneToManyEntity();
 
-        // Initally add two elements
+        // Initially add two elements
         $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
 
         // The hydrated collection contains two other elements, one of them is new, and one of them is missing
@@ -1051,7 +1051,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = new Asset\OneToManyEntity();
         $this->configureObjectManagerForOneToManyEntity();
 
-        // Initally add two elements
+        // Initially add two elements
         $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
 
         // The hydrated collection contains two other elements, one of them is new, and one of them is missing
