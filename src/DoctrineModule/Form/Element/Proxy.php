@@ -272,7 +272,7 @@ class Proxy implements ObjectManagerAwareInterface
             $repository = $this->objectManager->getRepository($this->targetClass);
             if (!method_exists($repository, $findMethodName)) {
                 throw new RuntimeException(sprintf(
-                    'Method "%s" could not be found in respository "%s"',
+                    'Method "%s" could not be found in repository "%s"',
                     $findMethodName,
                     get_class($repository)
                 ));

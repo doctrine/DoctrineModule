@@ -258,7 +258,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testGetItemReturnsNullOnMissingItem()
     {
-        $this->assertNull($this->_storage->getItem('unknwon'));
+        $this->assertNull($this->_storage->getItem('unknown'));
     }
 
     public function testGetItemSetsSuccessFlag()
@@ -653,7 +653,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(10, $this->_storage->getItem('key'));
     }
 
-    public function testIncrementItemsResturnsKeyValuePairsOfWrittenItems()
+    public function testIncrementItemsReturnsKeyValuePairsOfWrittenItems()
     {
         $this->assertTrue($this->_storage->setItem('key1', 10));
 
