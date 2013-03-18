@@ -348,7 +348,7 @@ class DoctrineObject extends AbstractHydrator
         }
 
         $metadata = $this->objectManager->getClassMetadata($target);
-        if (is_array($value) && !$metadata->isIdentifier($value)) {
+        if (is_array($value) && array_keys($value) != $metadata->getIdentifier()) {
             // $value is most likely an array of fieldset data
             $identifiers = array_intersect_key($value, array_flip($metadata->getIdentifier()));
             $object = $this->find($identifiers, $target) ?: new $target;
