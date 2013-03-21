@@ -13,27 +13,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
 
-use DoctrineModuleTest\ServiceManagerTestCase;
+namespace DoctrineModuleTest\Component\Console\Output;
 
-chdir(__DIR__);
+use PHPUnit_Framework_TestCase as TestCase;
 
-if (
-    ! ($loader = @include __DIR__ . '/../vendor/autoload.php')
-    && ! ($loader = @include __DIR__ . '/../../../autoload.php')
-) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Run composer installation');
+class PropertyOutputTest extends TestCase {
+
+	public function testWrite() {
+		$message = 'message';
+
+		$output = new \DoctrineModule\Component\Console\Output\PropertyOutput();
+		$output->write($message);
+		$this->assertEquals($message, $output->getMessage());
+	}
 }
-
-$loader->add('DoctrineModuleTest\\', __DIR__);
-
-if (!$config = @include __DIR__ . '/TestConfiguration.php') {
-    $config = require __DIR__ . '/TestConfiguration.php.dist';
-}
-
-ServiceManagerTestCase::setConfiguration(
-    isset($config) ? $config : array()
-);
