@@ -24,11 +24,17 @@ use DoctrineModule\Service\CacheFactory;
 use DoctrineModule\Service\ZendStorageCacheFactory;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
+use Zend\EventManager\EventInterface;
 use Zend\Loader\AutoloaderFactory;
 use Zend\Loader\StandardAutoloader;
+use Zend\Console\Adapter\AdapterInterface as Console;
+
+use DoctrineModule\Component\Console\Input\StringInput;
+use DoctrineModule\Component\Console\Output\PropertyOutput;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
@@ -43,10 +49,16 @@ class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface,
     ServiceProviderInterface,
-    InitProviderInterface
+    InitProviderInterface,
+    BootstrapListenerInterface
 {
 
-    /**
+	/**
+	 * @var \Zend\ServiceManager\ServiceLocatorInterface
+	 */
+	private $serviceManager;
+
+	/**
      * {@inheritDoc}
      */
     public function init(ModuleManagerInterface $moduleManager)
@@ -57,6 +69,14 @@ class Module implements
             }
         );
     }
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function onBootstrap(EventInterface $e)
+	{
+		$this->serviceManager = $e->getTarget()->getServiceManager();
+	}
 
     /**
      * {@inheritDoc}
@@ -101,4 +121,18 @@ class Module implements
             ),
         );
     }
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getConsoleUsage(Console $console) {
+		$input = new StringInput('list');
+		$output = new PropertyOutput();
+
+		$cli = $this->serviceManager->get('doctrine.cli');
+
+		$cli->run($input, $output);
+
+		return $output->getMessage();
+	}
 }
