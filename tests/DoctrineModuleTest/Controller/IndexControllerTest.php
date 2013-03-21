@@ -13,27 +13,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
 
-use DoctrineModuleTest\ServiceManagerTestCase;
+namespace DoctrineModuleTest\Controller;
 
-chdir(__DIR__);
+use Zend\Http\Request;
+use Zend\Http\Response;
+use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 
-if (
-    ! ($loader = @include __DIR__ . '/../vendor/autoload.php')
-    && ! ($loader = @include __DIR__ . '/../../../autoload.php')
-) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Run composer installation');
+class IndexControllerTest extends AbstractConsoleControllerTestCase {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setUp() {
+		$this->setApplicationConfig(
+			include __DIR__ . '/../../TestConfiguration.php.dist'
+		);
+
+		parent::setUp();
+	}
+
+	public function testIndexActionCanBeAccessed() {
+		$request = new \Zend\Console\Request(array('scriptname.php', 'list'));
+		$this->dispatch($request);
+
+		$this->assertResponseStatusCode(0);
+		$this->assertModuleName('doctrinemodule');
+		$this->assertControllerName('doctrinemodule\controller\index');
+		$this->assertControllerClass('indexcontroller');
+		$this->assertActionName('index');
+		$this->assertMatchedRouteName('cliapp');
+	}
 }
-
-$loader->add('DoctrineModuleTest\\', __DIR__);
-
-if (!$config = @include __DIR__ . '/TestConfiguration.php') {
-    $config = require __DIR__ . '/TestConfiguration.php.dist';
-}
-
-ServiceManagerTestCase::setConfiguration(
-    isset($config) ? $config : array()
-);
