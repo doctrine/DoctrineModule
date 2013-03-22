@@ -24,47 +24,52 @@ use Zend\Mvc\Router\RoutePluginManager;
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 use DoctrineModuleTest\ServiceManagerTestCase;
 
-class SymfonyCliTest extends ServiceManagerTestCase {
+class SymfonyCliTest extends ServiceManagerTestCase
+{
 
-	/**
-	 * @var \Zend\ServiceManager\ServiceLocatorInterface
-	 */
-	private $routePluginManager;
+    /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    private $routePluginManager;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setUp() {
-		$this->routePluginManager = new RoutePluginManager();
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        $this->routePluginManager = new RoutePluginManager();
 
-		$this->routePluginManager->setServiceLocator($this->getServiceManager());
-		parent::setUp();
-	}
+        $this->routePluginManager->setServiceLocator($this->getServiceManager());
+        parent::setUp();
+    }
 
-	public function testMatching() {
-		$request = new Request(array('scriptname.php', 'list'));
-		$route = new SymfonyCli();
-		$route->setServiceLocator($this->routePluginManager);
-		$match = $route->match($request);
+    public function testMatching()
+    {
+        $request = new Request(array('scriptname.php', 'list'));
+        $route = new SymfonyCli();
+        $route->setServiceLocator($this->routePluginManager);
+        $match = $route->match($request);
 
-		$this->assertInstanceOf('Zend\Mvc\Router\Console\RouteMatch', $match, "The route matches");
-	}
+        $this->assertInstanceOf('Zend\Mvc\Router\Console\RouteMatch', $match, "The route matches");
+    }
 
-	public function testMatchingWithParams() {
-		$request = new Request(array('scriptname.php', 'list', '--help'));
-		$route = new SymfonyCli();
-		$route->setServiceLocator($this->routePluginManager);
-		$match = $route->match($request);
+    public function testMatchingWithParams()
+    {
+        $request = new Request(array('scriptname.php', 'list', '--help'));
+        $route = new SymfonyCli();
+        $route->setServiceLocator($this->routePluginManager);
+        $match = $route->match($request);
 
-		$this->assertInstanceOf('Zend\Mvc\Router\Console\RouteMatch', $match, "The route matches");
-	}
+        $this->assertInstanceOf('Zend\Mvc\Router\Console\RouteMatch', $match, "The route matches");
+    }
 
-	public function testNotMatching() {
-		$request = new Request(array('scriptname.php', 'unknowncommand'));
-		$route = new SymfonyCli();
-		$route->setServiceLocator($this->routePluginManager);
-		$match = $route->match($request);
+    public function testNotMatching()
+    {
+        $request = new Request(array('scriptname.php', 'unknowncommand'));
+        $route = new SymfonyCli();
+        $route->setServiceLocator($this->routePluginManager);
+        $match = $route->match($request);
 
-		$this->assertNull($match, "The route must not match");
-	}
+        $this->assertNull($match, "The route must not match");
+    }
 }

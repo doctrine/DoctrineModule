@@ -22,28 +22,31 @@ use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 
-class IndexControllerTest extends AbstractConsoleControllerTestCase {
+class IndexControllerTest extends AbstractConsoleControllerTestCase
+{
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setUp() {
-		$this->setApplicationConfig(
-			include __DIR__ . '/../../TestConfiguration.php.dist'
-		);
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        $this->setApplicationConfig(
+            include __DIR__ . '/../../TestConfiguration.php.dist'
+        );
 
-		parent::setUp();
-	}
+        parent::setUp();
+    }
 
-	public function testIndexActionCanBeAccessed() {
-		$request = new \Zend\Console\Request(array('scriptname.php', 'list'));
-		$this->dispatch($request);
+    public function testIndexActionCanBeAccessed()
+    {
+        $request = new \Zend\Console\Request(array('scriptname.php', 'list'));
+        $this->dispatch($request);
 
-		$this->assertResponseStatusCode(0);
-		$this->assertModuleName('doctrinemodule');
-		$this->assertControllerName('doctrinemodule\controller\index');
-		$this->assertControllerClass('indexcontroller');
-		$this->assertActionName('index');
-		$this->assertMatchedRouteName('cliapp');
-	}
+        $this->assertResponseStatusCode(0);
+        $this->assertModuleName('doctrinemodule');
+        $this->assertControllerName('doctrinemodule\controller\index');
+        $this->assertControllerClass('indexcontroller');
+        $this->assertActionName('index');
+        $this->assertMatchedRouteName('cliapp');
+    }
 }

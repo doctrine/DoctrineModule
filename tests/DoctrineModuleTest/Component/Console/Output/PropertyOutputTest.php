@@ -20,13 +20,15 @@ namespace DoctrineModuleTest\Component\Console\Output;
 
 use PHPUnit_Framework_TestCase as TestCase;
 
-class PropertyOutputTest extends TestCase {
+class PropertyOutputTest extends TestCase
+{
 
-	public function testWrite() {
-		$message = 'message';
+    public function testWrite()
+    {
+        $message = 'message';
 
-		$output = new \DoctrineModule\Component\Console\Output\PropertyOutput();
-		$output->write($message);
-		$this->assertEquals($message, $output->getMessage());
-	}
+        $output = new \DoctrineModule\Component\Console\Output\PropertyOutput();
+        $output->write($message);
+        $this->assertEquals($message, $output->getMessage());
+    }
 }

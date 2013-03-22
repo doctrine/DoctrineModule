@@ -16,31 +16,30 @@
  * and is licensed under the MIT license.
  */
 
-namespace DoctrineModule\Controller;
+namespace DoctrineModuleTest\Component\Console\Input;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use DoctrineModule\Component\Console\Input\StringInput;
+use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Console\Request;
 use DoctrineModule\Component\Console\Input\RequestInput;
 
-/**
- * Index controller
- *
- * @license MIT
- * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
- */
-class IndexController extends AbstractActionController
+class RequestInputTest extends TestCase
 {
 
-    /**
-     * Index action
-     */
-    public function indexAction()
+    public function testParamsCorrectlySetted()
     {
+        $params = array(
+            'scriptname.php',
+            'list',
+            '--help'
+        );
 
-        $input = new RequestInput($this->getRequest());
+        $request = new Request($params);
 
-        $cli = $this->getServiceLocator()->get('doctrine.cli');
+        $input = new RequestInput($request);
 
-        $cli->run($input);
+        array_shift($params);
+
+        $this->assertTrue($input->hasParameterOption('list'));
+        $this->assertTrue($input->hasParameterOption('--help'));
     }
 }

@@ -27,49 +27,54 @@ use \Symfony\Component\Console\Formatter\OutputFormatterInterface;
  * @license MIT
  * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class PropertyOutput extends Output {
+class PropertyOutput extends Output
+{
 
-	/**
-	 * @var
-	 */
-	private $message;
+    /**
+     * @var string
+     */
+    private $message;
 
-	/**
-	 * @param int $verbosity
-	 * @param null $decorated
-	 * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
-	 */
-	public function __construct($verbosity = self::VERBOSITY_NORMAL, $decorated = null, OutputFormatterInterface $formatter = null) {
-		if (null === $decorated) {
-			$decorated = $this->hasColorSupport();
-		}
+    /**
+     * @param int $verbosity
+     * @param null $decorated
+     * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
+     */
+    public function __construct($verbosity = self::VERBOSITY_NORMAL, $decorated = null, OutputFormatterInterface $formatter = null)
+    {
+        if (null === $decorated) {
+            $decorated = $this->hasColorSupport();
+        }
 
-		parent::__construct($verbosity, $decorated, $formatter);
-	}
+        parent::__construct($verbosity, $decorated, $formatter);
+    }
 
-	/**
-	 * @param string $message
-	 * @param bool $newline
-	 */
-	protected function doWrite($message, $newline) {
-		$this->message = $message;
-	}
+    /**
+     * @param string $message
+     * @param bool $newline
+     */
+    protected function doWrite($message, $newline)
+    {
+        $this->message = $message;
+    }
 
-	/**
-	 * @return mixed
-	 */
-	public function getMessage() {
-		return $this->message;
-	}
+    /**
+     * @return mixed
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-	/**
-	 * @return bool
-	 */
-	protected function hasColorSupport() {
-		if (DIRECTORY_SEPARATOR == '\\') {
-			return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
-		}
+    /**
+     * @return bool
+     */
+    protected function hasColorSupport()
+    {
+        if (DIRECTORY_SEPARATOR == '\\') {
+            return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
+        }
 
-		return function_exists('posix_isatty') && @posix_isatty(STDOUT);
-	}
+        return function_exists('posix_isatty') && @posix_isatty(STDOUT);
+    }
 }

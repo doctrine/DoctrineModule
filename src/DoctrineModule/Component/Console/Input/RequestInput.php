@@ -16,31 +16,35 @@
  * and is licensed under the MIT license.
  */
 
-namespace DoctrineModule\Controller;
+namespace DoctrineModule\Component\Console\Input;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use DoctrineModule\Component\Console\Input\StringInput;
-use DoctrineModule\Component\Console\Input\RequestInput;
+use Symfony\Component\Console\Input\ArrayInput;
+use Zend\Console\Request;
 
 /**
- * Index controller
+ * RequestInput represents an input provided as an console request.
  *
  * @license MIT
  * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class IndexController extends AbstractActionController
+class RequestInput extends ArrayInput
 {
 
     /**
-     * Index action
+     * Constructor
+     *
+     * @param \Zend\Console\Request $request
+     * @param \Symfony\Component\Console\Input\InputDefinition $definition
      */
-    public function indexAction()
+    public function __construct(Request $request, InputDefinition $definition = null)
     {
+        $parameters = array();
+        foreach ($request->getParams() as $key => $param) {
+            if (is_numeric($key)) {
+                $parameters[] = $param;
+            }
+        }
 
-        $input = new RequestInput($this->getRequest());
-
-        $cli = $this->getServiceLocator()->get('doctrine.cli');
-
-        $cli->run($input);
+        parent::__construct($parameters, $definition);
     }
 }
