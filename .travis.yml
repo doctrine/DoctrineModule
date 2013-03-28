@@ -15,4 +15,4 @@ before_script:
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/clover.xml
   - php build/coverage-checker.php build/clover.xml 55
-  - ./vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/
+  - sh -c "if [ '$TRAVIS_PHP_VERSION' != '5.3' ]; then ./vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/; fi"
