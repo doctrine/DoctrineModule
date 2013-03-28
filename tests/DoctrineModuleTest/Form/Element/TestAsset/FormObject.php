@@ -65,6 +65,8 @@ class FormObject
 
     /**
      * @param int $id
+     *
+     * @return self
      */
     public function setId($id)
     {
@@ -74,6 +76,8 @@ class FormObject
 
     /**
      * @param string $email
+     *
+     * @return self
      */
     public function setEmail($email)
     {
@@ -91,6 +95,8 @@ class FormObject
 
     /**
      * @param string $password
+     *
+     * @return self
      */
     public function setPassword($password)
     {
@@ -108,6 +114,8 @@ class FormObject
 
     /**
      * @param string $username
+     *
+     * @return self
      */
     public function setUsername($username)
     {
@@ -125,6 +133,8 @@ class FormObject
 
     /**
      * @param string $firstname
+     *
+     * @return self
      */
     public function setFirstname($firstname)
     {
@@ -142,6 +152,8 @@ class FormObject
 
     /**
      * @param string $surname
+     *
+     * @return self
      */
     public function setSurname($surname)
     {
