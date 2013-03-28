@@ -132,7 +132,9 @@ class ObjectRepository implements AdapterInterface
     {
         $this->setup();
         $options  = $this->options;
-        $identity = $options->getObjectRepository()->findOneBy(array($options->getIdentityProperty() => $this->identityValue));
+        $identity = $options
+            ->getObjectRepository()
+            ->findOneBy(array($options->getIdentityProperty() => $this->identityValue));
 
         if (!$identity) {
             $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
@@ -165,13 +167,15 @@ class ObjectRepository implements AdapterInterface
         } elseif (property_exists($identity, $credentialProperty)) {
             $documentCredential = $identity->{$credentialProperty};
         } else {
-            throw new Exception\UnexpectedValueException(sprintf(
-                'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
-                $credentialProperty,
-                get_class($identity),
-                get_class($identity),
-                $getter
-            ));
+            throw new Exception\UnexpectedValueException(
+                sprintf(
+                    'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
+                    $credentialProperty,
+                    get_class($identity),
+                    get_class($identity),
+                    $getter
+                )
+            );
         }
 
         $credentialValue = $this->credentialValue;
@@ -205,14 +209,15 @@ class ObjectRepository implements AdapterInterface
     {
         if (null === $this->identityValue) {
             throw new Exception\RuntimeException(
-                'A value for the identity was not provided prior to authentication with ObjectRepository authentication '
-                    . 'adapter'
+                'A value for the identity was not provided prior to authentication with ObjectRepository'
+                . ' authentication adapter'
             );
         }
 
         if (null === $this->credentialValue) {
             throw new Exception\RuntimeException(
-                'A credential value was not provided prior to authentication with ObjectRepository authentication adapter'
+                'A credential value was not provided prior to authentication with ObjectRepository'
+                . ' authentication adapter'
             );
         }
 

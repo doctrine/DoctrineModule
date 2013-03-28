@@ -52,11 +52,13 @@ class ZendStorageCacheFactory extends CacheFactory
         $cache = $sl->get($instance);
 
         if (!$cache instanceof StorageInterface) {
-            throw new RuntimeException(sprintf(
-                'Retrieved storage "%s" is not a Zend\Cache\Storage\StorageInterface instance, %s found',
-                $instance,
-                is_object($cache) ? get_class($cache) : getType($cache)
-            ));
+            throw new RuntimeException(
+                sprintf(
+                    'Retrieved storage "%s" is not a Zend\Cache\Storage\StorageInterface instance, %s found',
+                    $instance,
+                    is_object($cache) ? get_class($cache) : getType($cache)
+                )
+            );
         }
 
         return new ZendStorageCache($cache);
