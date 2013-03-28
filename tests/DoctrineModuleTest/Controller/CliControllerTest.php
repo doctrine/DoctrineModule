@@ -16,31 +16,37 @@
  * and is licensed under the MIT license.
  */
 
-namespace DoctrineModule\Controller;
+namespace DoctrineModuleTest\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use DoctrineModule\Component\Console\Input\StringInput;
-use DoctrineModule\Component\Console\Input\RequestInput;
+use Zend\Http\Request;
+use Zend\Http\Response;
+use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 
-/**
- * Index controller
- *
- * @license MIT
- * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
- */
-class IndexController extends AbstractActionController
+class CliControllerTest extends AbstractConsoleControllerTestCase
 {
 
     /**
-     * Index action
+     * {@inheritDoc}
      */
-    public function indexAction()
+    public function setUp()
     {
+        $this->setApplicationConfig(
+            include __DIR__ . '/../../TestConfiguration.php.dist'
+        );
 
-        $input = new RequestInput($this->getRequest());
+        parent::setUp();
+    }
 
-        $cli = $this->getServiceLocator()->get('doctrine.cli');
+    public function testIndexActionCanBeAccessed()
+    {
+        $request = new \Zend\Console\Request(array('scriptname.php', 'list'));
+        $this->dispatch($request);
 
-        $cli->run($input);
+        $this->assertResponseStatusCode(0);
+        $this->assertModuleName('doctrinemodule');
+        $this->assertControllerName('doctrinemodule\controller\cli');
+        $this->assertControllerClass('clicontroller');
+        $this->assertActionName('cli');
+        $this->assertMatchedRouteName('cliapp');
     }
 }

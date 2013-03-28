@@ -56,7 +56,7 @@ return array(
 
 	'controllers' => array(
 		'invokables' => array(
-			'DoctrineModule\Controller\Index' => 'DoctrineModule\Controller\IndexController'
+			'DoctrineModule\Controller\Cli' => 'DoctrineModule\Controller\CliController'
 		)
 	),
 
@@ -73,8 +73,8 @@ return array(
 					'type' => 'symfonycli',
 					'options' => array(
 						'defaults' => array(
-							'controller' => 'DoctrineModule\Controller\Index',
-							'action' => 'index'
+							'controller' => 'DoctrineModule\Controller\Cli',
+							'action' => 'cli'
 						)
 					)
 				)
