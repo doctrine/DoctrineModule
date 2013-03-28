@@ -13,27 +13,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
 
-use DoctrineModuleTest\ServiceManagerTestCase;
+namespace DoctrineModule\Controller;
 
-chdir(__DIR__);
+use Zend\Mvc\Controller\AbstractActionController;
+use DoctrineModule\Component\Console\Input\StringInput;
+use DoctrineModule\Component\Console\Input\RequestInput;
 
-if (
-    ! ($loader = @include __DIR__ . '/../vendor/autoload.php')
-    && ! ($loader = @include __DIR__ . '/../../../autoload.php')
-) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Run composer installation');
+/**
+ * Index controller
+ *
+ * @license MIT
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
+ */
+class CliController extends AbstractActionController
+{
+
+    /**
+     * Index action
+     */
+    public function cliAction()
+    {
+
+        $input = new RequestInput($this->getRequest());
+
+        $cli = $this->getServiceLocator()->get('doctrine.cli');
+
+        $cli->run($input);
+    }
 }
-
-$loader->add('DoctrineModuleTest\\', __DIR__);
-
-if (!$config = @include __DIR__ . '/TestConfiguration.php') {
-    $config = require __DIR__ . '/TestConfiguration.php.dist';
-}
-
-ServiceManagerTestCase::setConfiguration(
-    isset($config) ? $config : array()
-);

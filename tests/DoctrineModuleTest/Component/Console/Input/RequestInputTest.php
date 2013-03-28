@@ -13,27 +13,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
 
-use DoctrineModuleTest\ServiceManagerTestCase;
+namespace DoctrineModuleTest\Component\Console\Input;
 
-chdir(__DIR__);
+use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Console\Request;
+use DoctrineModule\Component\Console\Input\RequestInput;
 
-if (
-    ! ($loader = @include __DIR__ . '/../vendor/autoload.php')
-    && ! ($loader = @include __DIR__ . '/../../../autoload.php')
-) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Run composer installation');
+class RequestInputTest extends TestCase
+{
+
+    public function testParamsCorrectlySetted()
+    {
+        $params = array(
+            'scriptname.php',
+            'list',
+            '--help'
+        );
+
+        $request = new Request($params);
+
+        $input = new RequestInput($request);
+
+        array_shift($params);
+
+        $this->assertTrue($input->hasParameterOption('list'));
+        $this->assertTrue($input->hasParameterOption('--help'));
+    }
 }
-
-$loader->add('DoctrineModuleTest\\', __DIR__);
-
-if (!$config = @include __DIR__ . '/TestConfiguration.php') {
-    $config = require __DIR__ . '/TestConfiguration.php.dist';
-}
-
-ServiceManagerTestCase::setConfiguration(
-    isset($config) ? $config : array()
-);

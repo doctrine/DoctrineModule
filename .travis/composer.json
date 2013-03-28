@@ -1,6 +1,7 @@
 {
     "minimum-stability": "dev",
     "require": {
+        "zendframework/zend-test": "2.*",
         "doctrine/doctrine-module": "dev-master"
     }
 }

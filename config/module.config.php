@@ -53,4 +53,32 @@ return array(
             ),
         ),
     ),
+
+	'controllers' => array(
+		'invokables' => array(
+			'DoctrineModule\Controller\Cli' => 'DoctrineModule\Controller\CliController'
+		)
+	),
+
+	'route_manager' => array(
+		'invokables' => array(
+			'symfonycli' => 'DoctrineModule\Mvc\Router\Console\SymfonyCli',
+		),
+	),
+
+	'console' => array(
+		'router' => array(
+			'routes' => array(
+				'cliapp' => array(
+					'type' => 'symfonycli',
+					'options' => array(
+						'defaults' => array(
+							'controller' => 'DoctrineModule\Controller\Cli',
+							'action' => 'cli'
+						)
+					)
+				)
+			)
+		)
+	),
 );

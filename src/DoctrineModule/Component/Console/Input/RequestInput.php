@@ -13,27 +13,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
 
-use DoctrineModuleTest\ServiceManagerTestCase;
+namespace DoctrineModule\Component\Console\Input;
 
-chdir(__DIR__);
+use Symfony\Component\Console\Input\ArrayInput;
+use Zend\Console\Request;
 
-if (
-    ! ($loader = @include __DIR__ . '/../vendor/autoload.php')
-    && ! ($loader = @include __DIR__ . '/../../../autoload.php')
-) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Run composer installation');
+/**
+ * RequestInput represents an input provided as an console request.
+ *
+ * @license MIT
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
+ */
+class RequestInput extends ArrayInput
+{
+
+    /**
+     * Constructor
+     *
+     * @param \Zend\Console\Request $request
+     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     */
+    public function __construct(Request $request, InputDefinition $definition = null)
+    {
+        $parameters = array();
+        foreach ($request->getParams() as $key => $param) {
+            if (is_numeric($key)) {
+                $parameters[] = $param;
+            }
+        }
+
+        parent::__construct($parameters, $definition);
+    }
 }
-
-$loader->add('DoctrineModuleTest\\', __DIR__);
-
-if (!$config = @include __DIR__ . '/TestConfiguration.php') {
-    $config = require __DIR__ . '/TestConfiguration.php.dist';
-}
-
-ServiceManagerTestCase::setConfiguration(
-    isset($config) ? $config : array()
-);
