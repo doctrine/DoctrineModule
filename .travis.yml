@@ -14,5 +14,5 @@ before_script:
 
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/clover.xml
-  - php build/coverage-checker.php build/clover.xml 80
+  - php build/coverage-checker.php build/clover.xml 55
   - ./vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/
