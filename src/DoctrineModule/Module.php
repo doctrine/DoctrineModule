@@ -51,9 +51,11 @@ class Module implements
      */
     public function init(ModuleManagerInterface $moduleManager)
     {
-        AnnotationRegistry::registerLoader(function($className) {
-            return class_exists($className);
-        });
+        AnnotationRegistry::registerLoader(
+            function ($className) {
+                return class_exists($className);
+            }
+        );
     }
 
     /**
