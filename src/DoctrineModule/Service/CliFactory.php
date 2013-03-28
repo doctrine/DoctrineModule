@@ -59,10 +59,8 @@ class CliFactory implements FactoryInterface
         if (null === $this->events) {
             /* @var $events \Zend\EventManager\EventManagerInterface */
             $events = $sm->get('EventManager');
-            $events->addIdentifiers(array(
-                __CLASS__,
-                'doctrine'
-            ));
+
+            $events->addIdentifiers(array(__CLASS__, 'doctrine'));
 
             $this->events = $events;
         }

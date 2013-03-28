@@ -46,11 +46,14 @@ class DisallowRemoveByValue extends AbstractCollectionStrategy
         $adder   = 'add' . ucfirst($this->collectionName);
 
         if (!method_exists($this->object, $adder)) {
-            throw new LogicException(sprintf(
-                'AllowRemove strategy for DoctrineModule hydrator requires %s to be defined in %s
-                 entity domain code, but it seems to be missing',
-                $adder, get_class($this->object)
-            ));
+            throw new LogicException(
+                sprintf(
+                    'AllowRemove strategy for DoctrineModule hydrator requires %s to be defined in %s
+                     entity domain code, but it seems to be missing',
+                    $adder,
+                    get_class($this->object)
+                )
+            );
         }
 
         $collection = $this->getCollectionFromObjectByValue()->toArray();

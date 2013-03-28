@@ -92,7 +92,8 @@ class ObjectRepository implements StorageInterface
      * 
      * @return mixed
      */
-    public function readKeyOnly(){
+    public function readKeyOnly()
+    {
         return $identity = $this->options->getStorage()->read();
     }
     
