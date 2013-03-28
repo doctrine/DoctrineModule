@@ -54,11 +54,11 @@ class Selectable implements AdapterInterface
     public function __construct(DoctrineSelectable $selectable, DoctrineCriteria $criteria = null)
     {
         if (null === $criteria) {
-            $criteria = DoctrineCriteria::create();
+            $criteria = new DoctrineCriteria();
         }
 
         $this->selectable = $selectable;
-        $this->criteria   = $criteria;
+        $this->criteria   = clone $criteria;
     }
 
     /**
@@ -77,6 +77,6 @@ class Selectable implements AdapterInterface
      */
     public function count()
     {
-        return count($this->collection);
+        return $this->selectable->matching($this->criteria)->count();
     }
 }
