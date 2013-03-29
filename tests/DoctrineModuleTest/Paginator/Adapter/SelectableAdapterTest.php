@@ -40,7 +40,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 
         $selectable->expects($this->once())
                    ->method('matching')
-                   ->with($this->callback(function (Criteria $criteria) {
+                   ->with($this->callback(function (Criteria $criteria) use ($this) {
                         $this->assertEquals(0, $criteria->getFirstResult());
                         $this->assertEquals(10, $criteria->getMaxResults());
 
@@ -62,7 +62,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria) {
+            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $this) {
                 // Criteria are cloned internally
                 $this->assertNotEquals($innerCriteria, $criteria);
                 $this->assertEquals(0, $innerCriteria->getFirstResult());
@@ -86,7 +86,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $criteria) {
+            ->with($this->callback(function (Criteria $criteria) use($this) {
                 $this->assertEquals(10, $criteria->getFirstResult());
                 $this->assertEquals(10, $criteria->getMaxResults());
 
@@ -108,7 +108,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria) {
+            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $this) {
                 // Criteria are cloned internally
                 $this->assertNotEquals($innerCriteria, $criteria);
                 $this->assertEquals(10, $innerCriteria->getFirstResult());
