@@ -38,11 +38,13 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
         $adapter    = new SelectableAdapter($selectable);
 
+        $me = $this;
+
         $selectable->expects($this->once())
                    ->method('matching')
-                   ->with($this->callback(function (Criteria $criteria) use ($this) {
-                        $this->assertEquals(0, $criteria->getFirstResult());
-                        $this->assertEquals(10, $criteria->getMaxResults());
+                   ->with($this->callback(function (Criteria $criteria) use ($me) {
+                        $me->assertEquals(0, $criteria->getFirstResult());
+                        $me->assertEquals(10, $criteria->getMaxResults());
 
                         return true;
                    }))
@@ -60,14 +62,16 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
         $adapter    = new SelectableAdapter($selectable, $criteria);
 
+        $me = $this;
+
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $this) {
+            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $me) {
                 // Criteria are cloned internally
-                $this->assertNotEquals($innerCriteria, $criteria);
-                $this->assertEquals(0, $innerCriteria->getFirstResult());
-                $this->assertEquals(10, $innerCriteria->getMaxResults());
-                $this->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
+                $me->assertNotEquals($innerCriteria, $criteria);
+                $me->assertEquals(0, $innerCriteria->getFirstResult());
+                $me->assertEquals(10, $innerCriteria->getMaxResults());
+                $me->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
 
                 return true;
             }))
@@ -84,11 +88,13 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
         $adapter    = new SelectableAdapter($selectable);
 
+        $me = $this;
+
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $criteria) use($this) {
-                $this->assertEquals(10, $criteria->getFirstResult());
-                $this->assertEquals(10, $criteria->getMaxResults());
+            ->with($this->callback(function (Criteria $criteria) use($me) {
+                $me->assertEquals(10, $criteria->getFirstResult());
+                $me->assertEquals(10, $criteria->getMaxResults());
 
                 return true;
             }))
@@ -106,14 +112,16 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
         $adapter    = new SelectableAdapter($selectable, $criteria);
 
+        $me = $this;
+        
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $this) {
+            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $me) {
                 // Criteria are cloned internally
-                $this->assertNotEquals($innerCriteria, $criteria);
-                $this->assertEquals(10, $innerCriteria->getFirstResult());
-                $this->assertEquals(10, $innerCriteria->getMaxResults());
-                $this->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
+                $me->assertNotEquals($innerCriteria, $criteria);
+                $me->assertEquals(10, $innerCriteria->getFirstResult());
+                $me->assertEquals(10, $innerCriteria->getMaxResults());
+                $me->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
 
                 return true;
             }))
