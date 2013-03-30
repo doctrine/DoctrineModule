@@ -34,7 +34,7 @@ use PHPUnit_Framework_TestCase;
 class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers SelectableAdapter::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
     public function testGetItemsAtOffsetZeroWithEmptyCriteria()
     {
@@ -60,7 +60,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SelectableAdapter::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
     public function testGetItemsAtOffsetZeroWithNonEmptyCriteria()
     {
@@ -90,7 +90,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SelectableAdapter::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
     public function testGetItemsAtOffsetTenWithEmptyCriteria()
     {
@@ -116,7 +116,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SelectableAdapter::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
     public function testGetItemsAtOffsetTenWithNonEmptyCriteria()
     {
@@ -146,7 +146,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SelectableAdapter::count
+     * @covers \DoctrineModule\Paginator\Adapter\Selectable::count
      */
     public function testReturnsCorrectCount()
     {
