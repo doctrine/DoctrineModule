@@ -33,6 +33,9 @@ use PHPUnit_Framework_TestCase;
  */
 class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers SelectableAdapter::getItems
+     */
     public function testGetItemsAtOffsetZeroWithEmptyCriteria()
     {
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
@@ -56,6 +59,9 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @covers SelectableAdapter::getItems
+     */
     public function testGetItemsAtOffsetZeroWithNonEmptyCriteria()
     {
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
@@ -83,6 +89,9 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @covers SelectableAdapter::getItems
+     */
     public function testGetItemsAtOffsetTenWithEmptyCriteria()
     {
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
@@ -106,6 +115,9 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @covers SelectableAdapter::getItems
+     */
     public function testGetItemsAtOffsetTenWithNonEmptyCriteria()
     {
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
@@ -113,7 +125,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $adapter    = new SelectableAdapter($selectable, $criteria);
 
         $me = $this;
-        
+
         $selectable->expects($this->once())
             ->method('matching')
             ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $me) {
@@ -133,6 +145,9 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @covers SelectableAdapter::count
+     */
     public function testReturnsCorrectCount()
     {
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
