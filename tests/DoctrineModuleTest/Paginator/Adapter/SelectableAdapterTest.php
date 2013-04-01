@@ -43,15 +43,20 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 
         $me = $this;
 
-        $selectable->expects($this->once())
-                   ->method('matching')
-                   ->with($this->callback(function (Criteria $criteria) use ($me) {
+        $selectable
+            ->expects($this->once())
+            ->method('matching')
+            ->with(
+                $this->callback(
+                    function (Criteria $criteria) use ($me) {
                         $me->assertEquals(0, $criteria->getFirstResult());
                         $me->assertEquals(10, $criteria->getMaxResults());
 
                         return true;
-                   }))
-                   ->will($this->returnValue(new ArrayCollection(range(1, 10))));
+                    }
+                )
+            )
+            ->will($this->returnValue(new ArrayCollection(range(1, 10))));
 
         $expected = range(1, 10);
         $actual   = $adapter->getItems(0, 10);
@@ -72,15 +77,19 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $me) {
-                // Criteria are cloned internally
-                $me->assertNotEquals($innerCriteria, $criteria);
-                $me->assertEquals(0, $innerCriteria->getFirstResult());
-                $me->assertEquals(10, $innerCriteria->getMaxResults());
-                $me->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
+            ->with(
+                $this->callback(
+                    function (Criteria $innerCriteria) use ($criteria, $me) {
+                        // Criteria are cloned internally
+                        $me->assertNotEquals($innerCriteria, $criteria);
+                        $me->assertEquals(0, $innerCriteria->getFirstResult());
+                        $me->assertEquals(10, $innerCriteria->getMaxResults());
+                        $me->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
 
-                return true;
-            }))
+                        return true;
+                    }
+                )
+            )
             ->will($this->returnValue(new ArrayCollection(range(1, 10))));
 
         $expected = range(1, 10);
@@ -101,12 +110,16 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $criteria) use($me) {
-                $me->assertEquals(10, $criteria->getFirstResult());
-                $me->assertEquals(10, $criteria->getMaxResults());
+            ->with(
+                $this->callback(
+                    function (Criteria $criteria) use ($me) {
+                        $me->assertEquals(10, $criteria->getFirstResult());
+                        $me->assertEquals(10, $criteria->getMaxResults());
 
-                return true;
-            }))
+                        return true;
+                    }
+                )
+            )
             ->will($this->returnValue(new ArrayCollection(range(11, 20))));
 
         $expected = range(11, 20);
@@ -128,15 +141,19 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 
         $selectable->expects($this->once())
             ->method('matching')
-            ->with($this->callback(function (Criteria $innerCriteria) use ($criteria, $me) {
-                // Criteria are cloned internally
-                $me->assertNotEquals($innerCriteria, $criteria);
-                $me->assertEquals(10, $innerCriteria->getFirstResult());
-                $me->assertEquals(10, $innerCriteria->getMaxResults());
-                $me->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
+            ->with(
+                $this->callback(
+                    function (Criteria $innerCriteria) use ($criteria, $me) {
+                        // Criteria are cloned internally
+                        $me->assertNotEquals($innerCriteria, $criteria);
+                        $me->assertEquals(10, $innerCriteria->getFirstResult());
+                        $me->assertEquals(10, $innerCriteria->getMaxResults());
+                        $me->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
 
-                return true;
-            }))
+                        return true;
+                    }
+                )
+            )
             ->will($this->returnValue(new ArrayCollection(range(11, 20))));
 
         $expected = range(11, 20);
