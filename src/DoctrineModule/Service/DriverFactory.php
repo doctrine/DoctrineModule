@@ -124,6 +124,9 @@ class DriverFactory extends AbstractFactory
             }
 
             foreach ($drivers as $namespace => $driverName) {
+                if (null === $driverName) {
+                    continue;
+                }
                 $options = $this->getOptions($sl, 'driver', $driverName);
                 $driver->addDriver($this->createDriver($sl, $options), $namespace);
             }
