@@ -174,8 +174,9 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setIsMethod($method)
     {
-    	$this->isMethod = (bool) $method;
-    	return $this;
+        $this->isMethod = (bool) $method;
+
+        return $this;
     }
     
     /**
@@ -183,7 +184,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function getIsMethod()
     {
-    	return $this->isMethod;
+        return $this->isMethod;
     }
 
     /** Set the findMethod property to specify the method to use on repository
@@ -226,7 +227,7 @@ class Proxy implements ObjectManagerAwareInterface
         if (is_object($value)) {
             if ($value instanceof Collection) {
                 $data = array();
-                foreach($value as $object) {
+                foreach ($value as $object) {
                     $values = $metadata->getIdentifierValues($object);
                     $data[] = array_shift($values);
                 }
@@ -251,6 +252,8 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Load objects
      *
+     * @throws \RuntimeException
+     *
      * @return void
      */
     protected function loadObjects()
@@ -271,11 +274,13 @@ class Proxy implements ObjectManagerAwareInterface
 
             $repository = $this->objectManager->getRepository($this->targetClass);
             if (!method_exists($repository, $findMethodName)) {
-                throw new RuntimeException(sprintf(
-                    'Method "%s" could not be found in repository "%s"',
-                    $findMethodName,
-                    get_class($repository)
-                ));
+                throw new RuntimeException(
+                    sprintf(
+                        'Method "%s" could not be found in repository "%s"',
+                        $findMethodName,
+                        get_class($repository)
+                    )
+                );
             }
 
             $r = new ReflectionMethod($repository, $findMethodName);
@@ -318,29 +323,32 @@ class Proxy implements ObjectManagerAwareInterface
             foreach ($objects as $key => $object) {
                 if (($property = $this->property)) {
                     if ($this->isMethod == false && !$metadata->hasField($property)) {
-                        throw new RuntimeException(sprintf(
-                            'Property "%s" could not be found in object "%s"',
-                            $property,
-                            $targetClass
-                        ));
+                        throw new RuntimeException(
+                            sprintf(
+                                'Property "%s" could not be found in object "%s"',
+                                $property,
+                                $targetClass
+                            )
+                        );
                     }
 
                     $getter = 'get' . ucfirst($property);
                     if (!is_callable(array($object, $getter))) {
-                        throw new RuntimeException(sprintf(
-                            'Method "%s::%s" is not callable',
-                            $this->targetClass,
-                            $getter
-                        ));
+                        throw new RuntimeException(
+                            sprintf('Method "%s::%s" is not callable', $this->targetClass, $getter)
+                        );
                     }
 
                     $label = $object->{$getter}();
                 } else {
                     if (!is_callable(array($object, '__toString'))) {
-                        throw new RuntimeException(sprintf(
-                            '%s must have a "__toString()" method defined if you have not set a property or method to use.',
-                            $targetClass
-                        ));
+                        throw new RuntimeException(
+                            sprintf(
+                                '%s must have a "__toString()" method defined if you have not set a property'
+                                . ' or method to use.',
+                                $targetClass
+                            )
+                        );
                     }
 
                     $label = (string) $object;

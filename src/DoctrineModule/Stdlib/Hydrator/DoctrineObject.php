@@ -25,7 +25,6 @@ use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
@@ -235,7 +234,9 @@ class DoctrineObject extends AbstractHydrator
 
                     $value = $this->hydrateValue($field, $value);
 
-                    if (null === $value && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()) {
+                    if (null === $value
+                        && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
+                    ) {
                         continue;
                     } elseif (null !== $value) {
                         $value = $this->toOne($target, $value);
@@ -355,6 +356,9 @@ class DoctrineObject extends AbstractHydrator
      * @param  mixed  $collectionName
      * @param  string $target
      * @param  mixed  $values
+     *
+     * @throws \InvalidArgumentException
+     *
      * @return void
      */
     protected function toMany($object, $collectionName, $target, $values)
@@ -382,7 +386,7 @@ class DoctrineObject extends AbstractHydrator
         $collectionStrategy = $this->getStrategy($collectionName);
 
         // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
-        if ( ! $collectionStrategy instanceof AbstractCollectionStrategy) {
+        if (! $collectionStrategy instanceof AbstractCollectionStrategy) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Strategies used for collections valued associations must inherit from '
