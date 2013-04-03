@@ -121,7 +121,7 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 					array(
 						'name' => 'DoctrineModule\Validator\NoObjectExists',
 						'options' => array(
-							'object_manager' => $entityManager->getRepository('Application\Entity\User'),
+							'object_repository' => $entityManager->getRepository('Application\Entity\User'),
 							'fields' => 'email'
 						)
 					)
@@ -141,7 +141,7 @@ You can change the default message of the validators the following way :
 	array(
 		'name' => 'DoctrineModule\Validator\NoObjectExists',
 		'options' => array(
-			'object_manager' => $this->getEntityManager()->getRepository('Application\Entity\User'),
+			'object_repository' => $this->getEntityManager()->getRepository('Application\Entity\User'),
 			'fields' => 'email'
 		),
 		**'messages' => array(
