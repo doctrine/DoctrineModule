@@ -156,7 +156,7 @@ $data = array(
 
 $appointment = $hydrator->hydrate($data, $appointment);
 
-echo get_class($city->getTime()); // prints "DateTime"
+echo get_class($appointment->getTime()); // prints "DateTime"
 ```
 
 As you can see, the hydrator automatically converted the timestamp to a DateTime object during the hydration, hence 
