@@ -293,7 +293,7 @@ class DoctrineObject extends AbstractHydrator
                     $this->toMany($object, $field, $target, $value);
                 }
             } else {
-                $reflProperty->setValue($object, $this->hydrateValue('field', $value));
+                $reflProperty->setValue($object, $this->hydrateValue($field, $value));
             }
         }
 
