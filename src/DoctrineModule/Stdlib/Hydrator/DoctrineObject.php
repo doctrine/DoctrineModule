@@ -33,7 +33,7 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
  * of extracting/hydrator objects in Doctrine, by handling most associations types.
  *
- * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instanciated once
+ * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instantiated once
  * and be used with objects of different types). Most of the time, this won't be a problem as in a form we only
  * create one hydrator. This is by design, because this hydrator uses metadata extensively, so it's more efficient
  *
