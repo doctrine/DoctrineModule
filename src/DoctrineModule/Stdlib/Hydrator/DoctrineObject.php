@@ -218,10 +218,11 @@ class DoctrineObject extends AbstractHydrator
     protected function hydrateByValue(array $data, $object)
     {
         $tryObject = $this->tryConvertArrayToObject($data, $object);
+        $metadata  = $this->metadata;
+
         if (is_object($tryObject)) {
             $object = $tryObject;
         }
-        $metadata = $this->metadata;
 
         foreach ($data as $field => $value) {
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
