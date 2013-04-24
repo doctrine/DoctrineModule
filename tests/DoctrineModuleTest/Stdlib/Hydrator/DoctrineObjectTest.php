@@ -751,11 +751,10 @@ class DoctrineObjectTest extends BaseTestCase
         $toMany2->setId(3);
         $toMany2->setField('bar', false);
 
-        $collection = new ArrayCollection(array($toMany1, $toMany2));
-
         $entity = new Asset\OneToManyEntity();
         $entity->setId(4);
-        $entity->addEntities($collection);
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
 
         $this->configureObjectManagerForOneToManyEntity();
 
@@ -781,11 +780,10 @@ class DoctrineObjectTest extends BaseTestCase
         $toMany2->setId(3);
         $toMany2->setField('bar', false);
 
-        $collection = new ArrayCollection(array($toMany1, $toMany2));
-
         $entity = new Asset\OneToManyEntity();
         $entity->setId(4);
-        $entity->addEntities($collection);
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
 
         $this->configureObjectManagerForOneToManyEntity();
 
@@ -829,7 +827,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertContains('Modified from addEntitie adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -868,7 +866,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertNotContains('Modified from addEntitie adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -930,7 +928,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertContains('Modified from addEntitie adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -993,7 +991,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertContains('Modified from addEntitie adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -1055,7 +1053,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertNotContains('Modified from addEntitie adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -1116,7 +1114,7 @@ class DoctrineObjectTest extends BaseTestCase
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
             $this->assertInternalType('integer', $en->getId());
-            $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
+            $this->assertNotContains('Modified from addEntitie adder', $en->getField(false));
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -1145,7 +1143,8 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForOneToManyEntity();
 
         // Initially add two elements
-        $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
 
         // The hydrated collection contains two other elements, one of them is new, and one of them is missing
         // in the new strategy
@@ -1198,7 +1197,8 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForOneToManyEntity();
 
         // Initially add two elements
-        $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
 
         // The hydrated collection contains two other elements, one of them is new, and one of them is missing
         // in the new strategy
@@ -1223,7 +1223,7 @@ class DoctrineObjectTest extends BaseTestCase
 
             // Only the third element is new so the adder has not been called on it
             if ($en === $toMany3) {
-                $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
+                $this->assertNotContains('Modified from addEntitie adder', $en->getField(false));
             }
         }
 
@@ -1258,7 +1258,8 @@ class DoctrineObjectTest extends BaseTestCase
         );
 
         // Set the initial collection
-        $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
+        $entity->addEntitie($toMany1);
+        $entity->addEntitie($toMany2);
         $initialCollection = $entity->getEntities(false);
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
@@ -1288,7 +1289,8 @@ class DoctrineObjectTest extends BaseTestCase
         $entityInDatabaseWithIdOfThree->setField('bar', false);
 
         // Set the initial collection
-        $entity->addEntities(new ArrayCollection(array($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree)));
+        $entity->addEntitie($entityInDatabaseWithIdOfTwo);
+        $entity->addEntitie($entityInDatabaseWithIdOfThree);
         $initialCollection = $entity->getEntities(false);
 
         $this
