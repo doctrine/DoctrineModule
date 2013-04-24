@@ -7,3 +7,5 @@
  * `DoctrineModule\Authentication\Adapter\ObjectRepository` now inherits logic from
    `Zend\Authentication\Adapter\AbstractAdapter` as of [#156](https://github.com/doctrine/DoctrineModule/pull/156).
    Methods `setIdentityValue`, `getIdentityValue`, `setCredentialValue`, `getCredentialValue` are now deprecated.
+ * It is now possible to set the cache namespace in the cache configuration as
+   of [#164](https://github.com/doctrine/DoctrineModule/pull/164)
