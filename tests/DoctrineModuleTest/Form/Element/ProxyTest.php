@@ -169,11 +169,11 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(array(
-            'property' => 'email'
-        ));
+        $this->proxy->setOptions(array('property' => 'email'));
 
-        $this->metadata->expects($this->exactly(2))
+        $this
+            ->metadata
+            ->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('email'))
             ->will($this->returnValue(true));
@@ -189,10 +189,12 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(array(
-            'property'  => 'name',
-            'is_method' => true
-        ));
+        $this->proxy->setOptions(
+            array(
+                'property'  => 'name',
+                'is_method' => true,
+            )
+        );
 
         $this->metadata->expects($this->never())
             ->method('hasField');
@@ -208,11 +210,13 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(array(
-            'label_generator' => function ($targetEntity) {
-                return $targetEntity->getEmail();
-            }
-        ));
+        $this->proxy->setOptions(
+            array(
+                'label_generator' => function ($targetEntity) {
+                    return $targetEntity->getEmail();
+                }
+            )
+        );
 
         $this->metadata->expects($this->never())
             ->method('hasField');
