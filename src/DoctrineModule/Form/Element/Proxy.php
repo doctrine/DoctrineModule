@@ -51,7 +51,12 @@ class Proxy implements ObjectManagerAwareInterface
      * @var
      */
     protected $property;
-    
+
+    /**
+     * @var callable $labelGenerator A callable used to create a label based on an item in the collection an Entity
+     */
+    protected $labelGenerator;
+
     /**
      * @var
      */
@@ -75,11 +80,15 @@ class Proxy implements ObjectManagerAwareInterface
         if (isset($options['property'])) {
             $this->setProperty($options['property']);
         }
-        
+
+        if (isset($options['label_generator'])) {
+            $this->setLabelGenerator($options['label_generator']);
+        }
+
         if (isset($options['find_method'])) {
             $this->setFindMethod($options['find_method']);
         }
-        
+
         if (isset($options['is_method'])) {
             $this->setIsMethod($options['is_method']);
         }
@@ -90,6 +99,7 @@ class Proxy implements ObjectManagerAwareInterface
         if (empty($this->valueOptions)) {
             $this->loadValueOptions();
         }
+
         return $this->valueOptions;
     }
 
@@ -99,6 +109,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function getObjects()
     {
         $this->loadObjects();
+
         return $this->objects;
     }
 
@@ -111,6 +122,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function setObjectManager(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
+
         return $this;
     }
 
@@ -133,6 +145,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function setTargetClass($targetClass)
     {
         $this->targetClass = $targetClass;
+
         return $this;
     }
 
@@ -155,6 +168,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function setProperty($property)
     {
         $this->property = $property;
+
         return $this;
     }
 
@@ -165,7 +179,35 @@ class Proxy implements ObjectManagerAwareInterface
     {
         return $this->property;
     }
-    
+
+    /**
+     * Set the label generator callable that is responsible for generating labels for the items in the collection
+     *
+     * @param callable $callable A callable used to create a label based off of an Entity
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return void
+     */
+    public function setLabelGenerator($callable)
+    {
+        if (! is_callable($callable)) {
+            throw new \InvalidArgumentException(
+                'Property "label_generator" needs to be a callable function or a \Closure'
+            );
+        }
+
+        $this->labelGenerator = $callable;
+    }
+
+    /**
+     * @return callable|null
+     */
+    public function getLabelGenerator()
+    {
+        return $this->labelGenerator;
+    }
+
     /**
      * Set if the property is a method to use as the label in the options
      *
@@ -178,7 +220,7 @@ class Proxy implements ObjectManagerAwareInterface
 
         return $this;
     }
-    
+
     /**
      * @return mixed
      */
@@ -195,6 +237,7 @@ class Proxy implements ObjectManagerAwareInterface
     public function setFindMethod($findMethod)
     {
         $this->findMethod = $findMethod;
+
         return $this;
     }
 
@@ -206,6 +249,19 @@ class Proxy implements ObjectManagerAwareInterface
     public function getFindMethod()
     {
         return $this->findMethod;
+    }
+
+    /**
+     * @param $targetEntity
+     * @return string|null
+     */
+    protected function generateLabel($targetEntity)
+    {
+        if (null === ($labelGenerator = $this->getLabelGenerator())) {
+            return null;
+        }
+
+        return call_user_func($labelGenerator, $targetEntity);
     }
 
     /**
@@ -261,7 +317,7 @@ class Proxy implements ObjectManagerAwareInterface
         if (!empty($this->objects)) {
             return;
         }
-        
+
         $findMethod = (array) $this->getFindMethod();
         if (!$findMethod) {
             $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
@@ -269,7 +325,7 @@ class Proxy implements ObjectManagerAwareInterface
             if (!isset($this->findMethod['name'])) {
                 throw new RuntimeException('No method name was set');
             }
-            $findMethodName = $findMethod['name'];
+            $findMethodName   = $findMethod['name'];
             $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : null;
 
             $repository = $this->objectManager->getRepository($this->targetClass);
@@ -283,7 +339,7 @@ class Proxy implements ObjectManagerAwareInterface
                 );
             }
 
-            $r = new ReflectionMethod($repository, $findMethodName);
+            $r    = new ReflectionMethod($repository, $findMethodName);
             $args = array();
             foreach ($r->getParameters() as $param) {
                 if (array_key_exists(strtolower($param->getName()), $findMethodParams)) {
@@ -321,7 +377,9 @@ class Proxy implements ObjectManagerAwareInterface
             $options[''] = '';
         } else {
             foreach ($objects as $key => $object) {
-                if (($property = $this->property)) {
+                if (null !== ($generatedLabel = $this->generateLabel($object))) {
+                    $label = $generatedLabel;
+                } elseif ($property = $this->property) {
                     if ($this->isMethod == false && !$metadata->hasField($property)) {
                         throw new RuntimeException(
                             sprintf(
