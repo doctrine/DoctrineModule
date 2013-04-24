@@ -37,7 +37,6 @@
         "symfony/console":                    ">=2.0.13",
         "zendframework/zend-authentication":  ">=2.1",
         "zendframework/zend-cache":           ">=2.1",
-        "zendframework/zend-config":          ">=2.1",
         "zendframework/zend-paginator":       ">=2.1",
         "zendframework/zend-stdlib":          ">=2.1",
         "zendframework/zend-mvc":             ">=2.1",
