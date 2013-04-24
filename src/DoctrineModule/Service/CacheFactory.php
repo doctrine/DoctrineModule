@@ -19,6 +19,7 @@
 
 namespace DoctrineModule\Service;
 
+use Doctrine\Common\Cache\CacheProvider;
 use RuntimeException;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
@@ -37,13 +38,15 @@ class CacheFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
+     *
      * @return \Doctrine\Common\Cache\Cache
+     *
      * @throws RuntimeException
      */
-    public function createService(ServiceLocatorInterface $sl)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
         /** @var $options \DoctrineModule\Options\Cache */
-        $options = $this->getOptions($sl, 'cache');
+        $options = $this->getOptions($serviceLocator, 'cache');
         $class   = $options->getClass();
 
         if (!$class) {
@@ -57,8 +60,9 @@ class CacheFactory extends AbstractFactory
         }
 
         $instance = $options->getInstance();
-        if (is_string($instance) && $sl->has($instance)) {
-            $instance = $sl->get($instance);
+
+        if (is_string($instance) && $serviceLocator->has($instance)) {
+            $instance = $serviceLocator->get($instance);
         }
 
         if ($cache instanceof MemcacheCache) {
@@ -72,8 +76,9 @@ class CacheFactory extends AbstractFactory
             $cache->setRedis($instance);
         }
 
-        $namespace = $options->getNamespace();
-        if (is_string($namespace)) {
+        ;
+
+        if ($cache instanceof CacheProvider && ($namespace = $options->getNamespace())) {
             $cache->setNamespace($namespace);
         }
 
