@@ -53,7 +53,7 @@ class Proxy implements ObjectManagerAwareInterface
     protected $property;
 
     /**
-     * @var $labelGenerator A callable function or a \Closure to create a label based off of an Entity
+     * @var callable $labelGenerator A callable function or a \Closure to create a label based off of an Entity
      */
     protected $labelGenerator;
 
@@ -181,14 +181,16 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
-     * @param $callable A callable function or a \Closure to create a label based off of an Entity
+     * @param callable $callable A callable function or a \Closure to create a label based off of an Entity
      * @throws \InvalidArgumentException
      * @return Proxy
      */
     public function setLabelGenerator($callable)
     {
-        if (false === is_callable($callable)) {
-            throw new \InvalidArgumentException('Property "label_generator" needs to be a callable function or a \Closure');
+        if (! is_callable($callable)) {
+            throw new \InvalidArgumentException(
+                'Property "label_generator" needs to be a callable function or a \Closure'
+            );
         }
 
         $this->labelGenerator = $callable;

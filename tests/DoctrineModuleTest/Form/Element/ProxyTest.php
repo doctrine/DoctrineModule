@@ -228,12 +228,12 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->setExpectedException('InvalidArgumentException',
-            'Property "label_generator" needs to be a callable function or a \Closure');
+        $this->setExpectedException(
+            'InvalidArgumentException',
+            'Property "label_generator" needs to be a callable function or a \Closure'
+        );
 
-        $this->proxy->setOptions(array(
-            'label_generator' => 'I throw an InvalidArgumentException'
-        ));
+        $this->proxy->setOptions(array('label_generator' => 'I throw an InvalidArgumentException'));
     }
 
     public function testCanWorkWithEmptyTables()
@@ -275,7 +275,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata
-            ->expects($this->exactly(2))
+            ->expects($this->any())
             ->method('getIdentifierValues')
             ->will(
                 $this->returnCallback(
@@ -295,17 +295,19 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             );
 
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $objectRepository->expects($this->once())
+        $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectManager->expects($this->once())
+        $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($metadata));
 
-        $objectManager->expects($this->once())->method('getRepository')
+        $objectManager
+            ->expects($this->any())
+            ->method('getRepository')
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
