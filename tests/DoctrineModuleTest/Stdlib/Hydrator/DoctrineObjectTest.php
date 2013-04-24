@@ -115,6 +115,64 @@ class DoctrineObjectTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForSimpleEntityWithStringId()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'field')));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('field')))
+            ->will($this->returnValue('string'));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+    
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            false
+        );
+    }
+
     public function configureObjectManagerForSimpleEntityWithDateTime()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime');
@@ -480,6 +538,24 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('From setter: foo', $entity->getField(false));
+    }
+
+    /**
+     * When using hydration by value, it will use the public API of the entity to set values (setters)
+     *
+     * @covers \DoctrineModule\Stdlib\Hydrator\DoctrineObject::hydrateByValue
+     */
+    public function testCanHydrateSimpleEntityWithStringIdByValue()
+    {
+        $entity = new Asset\SimpleEntity();
+        $data   = array('id' => 'bar', 'field' => 'foo');
+
+        $this->configureObjectManagerForSimpleEntityWithStringId();
+    
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+    
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
         $this->assertEquals('From setter: foo', $entity->getField(false));
     }
