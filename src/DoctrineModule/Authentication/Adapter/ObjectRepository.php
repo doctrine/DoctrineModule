@@ -199,8 +199,8 @@ class ObjectRepository extends AbstractAdapter
     {
         if (null === $this->identity) {
             throw new Exception\RuntimeException(
-                'A value for the identity was not provided prior to authentication with ObjectRepository authentication '
-                . 'adapter'
+                'A value for the identity was not provided prior to authentication with ObjectRepository '
+                . 'authentication adapter'
             );
         }
 
