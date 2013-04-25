@@ -131,7 +131,7 @@ $this->add(
 );
 ```
 
-# Example 4 :  Using with a custom DQL
+### Example 4 :  Using with a custom DQL
 
 If you must make a custom query using a DQL you can specify the option 'is_dql'
 The first field from your resultset will be the label and the second one will be the value,
