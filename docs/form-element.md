@@ -1,15 +1,15 @@
 ## Form Elements
 
-DoctrineModule comes with functionality that can automatically fill the 
-`ValueOptions` of Select, MultiCheckbox or Radio Form Elements with data from a 
+DoctrineModule comes with functionality that can automatically fill the
+`ValueOptions` of Select, MultiCheckbox or Radio Form Elements with data from a
 `ObjectRepository`.
 
 ### Usage
 
-Add a `DoctrineModule\Form\Element\ObjectSelect`, 
-`DoctrineModule\Form\Element\ObjectRadio` or 
+Add a `DoctrineModule\Form\Element\ObjectSelect`,
+`DoctrineModule\Form\Element\ObjectRadio` or
 `DoctrineModule\Form\Element\ObjectMultiCheckbox` to your Form.
-For this to work, you need to specify at least an `object_manager`, 
+For this to work, you need to specify at least an `object_manager`,
 the `target_class` to use and a `property` of the class to use as the Label.
 
 #### Example 1 : simple example
@@ -24,7 +24,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 class MyForm extends Form implements ObjectManagerAwareInterface
 {
     protected $objectManager;
-	
+
     public function init()
     {
         $this->add(
@@ -39,20 +39,20 @@ class MyForm extends Form implements ObjectManagerAwareInterface
             )
         );
     }
-    
+
     public function setObjectManager(ObjectManager $objectManager)
     {
     	$this->objectManager = $objectManager;
     }
-    
+
     public function getObjectManager()
     {
     	return $this->objectManager;
-    }    
+    }
 }
 ```
 
-When the Form gets rendered the `findAll` method of the `ObjectRepository` will 
+When the Form gets rendered the `findAll` method of the `ObjectRepository` will
 be executed by default.
 
 ### Example 2 : modifying the label
@@ -103,9 +103,9 @@ $this->add(
 
 ### Example 3 : extended version
 
-If you don't need or want the entire repository you can specify a `find_method` 
-to use. This method must exist in the repository. The following example executes 
-the `findBy` method and passes in the specified parameters, but when using 
+If you don't need or want the entire repository you can specify a `find_method`
+to use. This method must exist in the repository. The following example executes
+the `findBy` method and passes in the specified parameters, but when using
 custom repositories you can do even more advanced queries!
 Also you can specify a method as a property by setting `is_method` to true.
 
@@ -127,6 +127,29 @@ $this->add(
                 ),
             ),
         ),
+    )
+);
+```
+
+# Example 4 :  Using with a custom DQL
+
+If you must make a custom query using a DQL you can specify the option 'is_dql'
+The first field from your resultset will be the label and the second one will be the value,
+If your DQL returns only one field, it'll be used as label and value
+
+```php
+$this->add(
+    array(
+        'name' => 'uf',
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'options' => array(
+            'object_manager' => $this->getObjectManager(),
+            'target_class'   => 'Module\Entity\User',
+            'is_dql' => true,
+            'find_method'    => array(
+                'name'   => 'myCustomMethodWithDQL'
+            )
+        )
     )
 );
 ```
