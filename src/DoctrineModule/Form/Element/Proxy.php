@@ -63,6 +63,11 @@ class Proxy implements ObjectManagerAwareInterface
     protected $isMethod;
 
     /**
+     * @var
+     */
+    protected $isDQL;
+
+    /**
      * @var ObjectManager
      */
     protected $objectManager;
@@ -91,6 +96,10 @@ class Proxy implements ObjectManagerAwareInterface
 
         if (isset($options['is_method'])) {
             $this->setIsMethod($options['is_method']);
+        }
+
+        if (isset($options['is_dql'])) {
+            $this->setIsDQL($options['is_dql']);
         }
     }
 
@@ -222,6 +231,19 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
+     * Set if the results come from a custom DQL
+     *
+     * @param  boolean         $dql
+     * @return Proxy
+     */
+    public function setIsDQL($dql)
+    {
+        $this->isDQL = (bool) $dql;
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getIsMethod()
@@ -271,6 +293,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function getValue($value)
     {
+
         if (!($om = $this->getObjectManager())) {
             throw new RuntimeException('No object manager was set');
         }
@@ -352,6 +375,23 @@ class Proxy implements ObjectManagerAwareInterface
         }
     }
 
+    private function loadValueOptionsFromDQL()
+    {
+        $data = $this->getObjects();
+
+        $options = array();
+
+        foreach ($data as $item) {
+            $item = array_values($item);
+            $options[] = array(
+                'label' => $item[0],
+                'value' => isset($item[1]) ? $item[1] : $item[0]
+            );
+        }
+
+        return $options;
+    }
+
     /**
      * Load value options
      *
@@ -360,6 +400,12 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected function loadValueOptions()
     {
+
+        if ($this->isDQL) {
+            $this->valueOptions = $this->loadValueOptionsFromDQL();
+            return;
+        }
+
         if (!($om = $this->objectManager)) {
             throw new RuntimeException('No object manager was set');
         }
@@ -376,6 +422,7 @@ class Proxy implements ObjectManagerAwareInterface
         if (empty($objects)) {
             $options[''] = '';
         } else {
+
             foreach ($objects as $key => $object) {
                 if (null !== ($generatedLabel = $this->generateLabel($object))) {
                     $label = $generatedLabel;
