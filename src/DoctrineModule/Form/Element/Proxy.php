@@ -427,7 +427,7 @@ class Proxy implements ObjectManagerAwareInterface
                 if (null !== ($generatedLabel = $this->generateLabel($object))) {
                     $label = $generatedLabel;
                 } elseif ($property = $this->property) {
-                    if ($this->isMethod == false && !isset($object->$property)) {
+                    if ($this->isMethod == false && !$metadata->hasField($property)) {
                         throw new RuntimeException(
                             sprintf(
                                 'Property "%s" could not be found in object "%s"',
