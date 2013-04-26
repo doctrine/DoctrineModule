@@ -58,11 +58,6 @@ class DoctrineObject extends AbstractHydrator
      */
     protected $byValue = true;
 
-    /**
-     * @var string
-     */
-    protected $preparedFor = '';
-
 
     /**
      * Constructor
@@ -114,30 +109,6 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * {@inheritDoc}
-     * @throws InvalidArgumentException If a strategy added to a collection does not extend AbstractCollectionStrategy
-     */
-    public function addStrategy($name, StrategyInterface $strategy)
-    {
-        if ($this->metadata->hasAssociation($name) && $this->metadata->isCollectionValuedAssociation($name)) {
-            if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Strategies used for collections valued associations must inherit from '
-                        . 'Strategy\AbstractCollectionStrategy, %s given',
-                        get_class($strategy)
-                    )
-                );
-            }
-
-            $strategy->setCollectionName($name)
-                     ->setClassMetadata($this->metadata);
-        }
-
-        return parent::addStrategy($name, $strategy);
-    }
-
-    /**
      * Prepare the hydrator by adding strategies to every collection valued associations
      *
      * @param  object $object
@@ -145,27 +116,45 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function prepare($object)
     {
-        // Don't prepare twice the hydrator if it was previously used for the same object
-        $objectClass = get_class($object);
-        if ($this->preparedFor === $objectClass) {
-            return;
-        }
+        $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
+        $this->prepareStrategies();
+    }
 
-        $this->preparedFor = $objectClass;
-        $this->metadata    = $this->objectManager->getClassMetadata($this->preparedFor);
-        $associations      = $this->metadata->getAssociationNames();
-
-        // Reset strategies as it's prepared for a new type of object
-        $this->strategies = new ArrayObject();
+    /**
+     * Prepare strategies before the hydrator is used
+     *
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    protected function prepareStrategies()
+    {
+        $associations = $this->metadata->getAssociationNames();
 
         foreach ($associations as $association) {
-            // We only need to prepare collection valued associations
             if ($this->metadata->isCollectionValuedAssociation($association)) {
-                if ($this->byValue) {
-                    $this->addStrategy($association, new Strategy\AllowRemoveByValue());
-                } else {
-                    $this->addStrategy($association, new Strategy\AllowRemoveByReference());
+                // Add a strategy if the association has none set by user
+                if (!$this->hasStrategy($association)) {
+                    if ($this->byValue) {
+                        $this->addStrategy($association, new Strategy\AllowRemoveByValue());
+                    } else {
+                        $this->addStrategy($association, new Strategy\AllowRemoveByReference());
+                    }
                 }
+
+                $strategy = $this->getStrategy($association);
+
+                if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'Strategies used for collections valued associations must inherit from '
+                                . 'Strategy\AbstractCollectionStrategy, %s given',
+                            get_class($strategy)
+                        )
+                    );
+                }
+
+                $strategy->setCollectionName($association)
+                         ->setClassMetadata($this->metadata);
             }
         }
     }
