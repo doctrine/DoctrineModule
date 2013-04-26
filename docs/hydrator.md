@@ -156,7 +156,7 @@ $data = array(
 
 $appointment = $hydrator->hydrate($data, $appointment);
 
-echo get_class($city->getTime()); // prints "DateTime"
+echo get_class($appointment->getTime()); // prints "DateTime"
 ```
 
 As you can see, the hydrator automatically converted the timestamp to a DateTime object during the hydration, hence 
@@ -310,7 +310,7 @@ echo $blogPost->getTitle(); // prints "The best blog post in the world !"
 echo $blogPost->getUser()->getId(); // prints 2
 ```
 
-**NOTE** : when using association whose primary key is not compound, you can rewrite the following more succintely:
+**NOTE** : when using association whose primary key is not compound, you can rewrite the following more succinctly:
 
 ```php
 $data = array(
@@ -960,7 +960,7 @@ class Tag
 #### The fieldsets
 
 We now need to create two fieldsets that will map those entities. With Zend Framework 2, it's a good practice to create
-one fieldset per entity in order to reuse them accross many forms.
+one fieldset per entity in order to reuse them across many forms.
 
 Here is the fieldset for the Tag. Notice that in this example, I added a hidden input whose name is "id". This is 
 needed for editing. Most of the time, when you create the Blog Post for the first time, the tags does not exist. 

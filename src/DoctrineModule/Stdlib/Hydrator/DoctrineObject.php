@@ -25,7 +25,6 @@ use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
@@ -34,7 +33,7 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
  * of extracting/hydrator objects in Doctrine, by handling most associations types.
  *
- * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instanciated once
+ * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instantiated once
  * and be used with objects of different types). Most of the time, this won't be a problem as in a form we only
  * create one hydrator. This is by design, because this hydrator uses metadata extensively, so it's more efficient
  *
@@ -218,8 +217,12 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function hydrateByValue(array $data, $object)
     {
-        $object   = $this->tryConvertArrayToObject($data, $object);
-        $metadata = $this->metadata;
+        $tryObject = $this->tryConvertArrayToObject($data, $object);
+        $metadata  = $this->metadata;
+
+        if (is_object($tryObject)) {
+            $object = $tryObject;
+        }
 
         foreach ($data as $field => $value) {
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
@@ -235,7 +238,9 @@ class DoctrineObject extends AbstractHydrator
 
                     $value = $this->hydrateValue($field, $value);
 
-                    if (null === $value && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()) {
+                    if (null === $value
+                        && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
+                    ) {
                         continue;
                     } elseif (null !== $value) {
                         $value = $this->toOne($target, $value);
@@ -292,7 +297,7 @@ class DoctrineObject extends AbstractHydrator
                     $this->toMany($object, $field, $target, $value);
                 }
             } else {
-                $reflProperty->setValue($object, $this->hydrateValue('field', $value));
+                $reflProperty->setValue($object, $this->hydrateValue($field, $value));
             }
         }
 
@@ -369,6 +374,9 @@ class DoctrineObject extends AbstractHydrator
      * @param  mixed  $collectionName
      * @param  string $target
      * @param  mixed  $values
+     *
+     * @throws \InvalidArgumentException
+     *
      * @return void
      */
     protected function toMany($object, $collectionName, $target, $values)
@@ -396,7 +404,7 @@ class DoctrineObject extends AbstractHydrator
         $collectionStrategy = $this->getStrategy($collectionName);
 
         // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
-        if ( ! $collectionStrategy instanceof AbstractCollectionStrategy) {
+        if (! $collectionStrategy instanceof AbstractCollectionStrategy) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Strategies used for collections valued associations must inherit from '

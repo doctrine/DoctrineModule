@@ -49,270 +49,498 @@ class DoctrineObjectTest extends BaseTestCase
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
 
-        $this->metadata->expects($this->any())
-                       ->method('getName')
-                       ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
-        $this->metadata->expects($this->any())
-                       ->method('getAssociationNames')
-                       ->will($this->returnValue(array()));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
 
-        $this->metadata->expects($this->any())
-                       ->method('getFieldNames')
-                       ->will($this->returnValue(array('id', 'field')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'field')));
 
-        $this->metadata->expects($this->any())
-                       ->method('getTypeOfField')
-                       ->with($this->logicalOr(
-                            $this->equalTo('id'),
-                            $this->equalTo('field')))
-                       ->will($this->returnCallback(function($arg) {
-                            if ($arg === 'id') {
-                                return 'integer';
-                            } elseif ($arg === 'field') {
-                                return 'string';
-                            }
-                       }));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('field')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ('id' === $arg) {
+                            return 'integer';
+                        } elseif ('field' === $arg) {
+                            return 'string';
+                        }
 
-        $this->metadata->expects($this->any())
-                       ->method('hasAssociation')
-                       ->will($this->returnValue(false));
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
 
-        $this->metadata->expects($this->any())
-                       ->method('getIdentifierFieldNames')
-                       ->will($this->returnValue(array('id')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
 
-        $this->metadata->expects($this->any())
-                       ->method('getReflectionClass')
-                       ->will($this->returnValue($refl));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', false);
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            false
+        );
+    }
+
+    public function configureObjectManagerForSimpleEntityWithStringId()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'field')));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('field')))
+            ->will($this->returnValue('string'));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+    
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+    
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            false
+        );
     }
 
     public function configureObjectManagerForSimpleEntityWithDateTime()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime');
 
-        $this->metadata->expects($this->any())
-                       ->method('getAssociationNames')
-                       ->will($this->returnValue(array()));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
 
-        $this->metadata->expects($this->any())
-                       ->method('getFieldNames')
-                       ->will($this->returnValue(array('id', 'date')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
 
-        $this->metadata->expects($this->any())
-                       ->method('getTypeOfField')
-                       ->with($this->logicalOr(
-                            $this->equalTo('id'),
-                            $this->equalTo('date')))
-                       ->will($this->returnCallback(function($arg) {
-                                if ($arg === 'id') {
-                                    return 'integer';
-                                } elseif ($arg === 'date') {
-                                    return 'datetime';
-                                }
-                            }));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'date')));
 
-        $this->metadata->expects($this->any())
-                       ->method('hasAssociation')
-                       ->will($this->returnValue(false));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('id'),
+                    $this->equalTo('date'),
+                    $this->equalTo('field')
+                )
+            )
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'date') {
+                            return 'datetime';
+                        } elseif ($arg === 'field') {
+                            return 'string';
+                        }
 
-        $this->metadata->expects($this->any())
-                       ->method('getIdentifierFieldNames')
-                       ->will($this->returnValue(array('id')));
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
 
-        $this->metadata->expects($this->any())
-                       ->method('getReflectionClass')
-                       ->will($this->returnValue($refl));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime', true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime', false);
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime',
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime',
+            false
+        );
     }
 
     public function configureObjectManagerForOneToOneEntity()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity');
 
-        $this->metadata->expects($this->any())
-                       ->method('getFieldNames')
-                       ->will($this->returnValue(array('id')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id')));
 
-        $this->metadata->expects($this->any())
-                       ->method('getAssociationNames')
-                       ->will($this->returnValue(array('toOne')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
 
-        $this->metadata->expects($this->any())
-                       ->method('getTypeOfField')
-                       ->with($this->logicalOr(
-                            $this->equalTo('id'),
-                            $this->equalTo('toOne')))
-                       ->will($this->returnCallback(function($arg) {
-                                if ($arg === 'id') {
-                                    return 'integer';
-                                } elseif ($arg === 'toOne') {
-                                    return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
-                                }
-                       }));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array('toOne')));
 
-        $this->metadata->expects($this->any())
-                       ->method('hasAssociation')
-                       ->with($this->logicalOr(
-                            $this->equalTo('id'),
-                            $this->equalTo('toOne')))
-                       ->will($this->returnCallback(function($arg) {
-                                if ($arg === 'id') {
-                                    return false;
-                                } elseif ($arg === 'toOne') {
-                                    return true;
-                                }
-                       }));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('toOne')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'toOne') {
+                            return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                        }
 
-        $this->metadata->expects($this->any())
-                       ->method('isSingleValuedAssociation')
-                       ->with('toOne')
-                       ->will($this->returnValue(true));
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
 
-        $this->metadata->expects($this->any())
-                       ->method('getAssociationTargetClass')
-                       ->with('toOne')
-                       ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('toOne')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return false;
+                        } elseif ($arg === 'toOne') {
+                            return true;
+                        }
 
-        $this->metadata->expects($this->any())
-                       ->method('getReflectionClass')
-                       ->will($this->returnValue($refl));
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
 
-        $this->metadata->expects($this->any())
-                       ->method('getIdentifier')
-                       ->will($this->returnValue(array('id')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isSingleValuedAssociation')
+            ->with('toOne')
+            ->will($this->returnValue(true));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', false);
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationTargetClass')
+            ->with('toOne')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity',
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity',
+            false
+        );
     }
 
     public function configureObjectManagerForOneToOneEntityNotNullable()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable');
 
-        $this->metadata->expects($this->any())
-                       ->method('getFieldNames')
-                       ->will($this->returnValue(array('id')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id')));
 
-        $this->metadata->expects($this->any())
-                       ->method('getAssociationNames')
-                       ->will($this->returnValue(array('toOne')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
 
-        $this->metadata->expects($this->any())
-                       ->method('getTypeOfField')
-                       ->with($this->logicalOr(
-                            $this->equalTo('id'),
-                            $this->equalTo('toOne'),
-                            $this->equalTo('field')))
-                       ->will($this->returnCallback(function($arg) {
-                                if ($arg === 'id') {
-                                    return 'integer';
-                                } elseif ($arg === 'toOne') {
-                                    return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
-                                } elseif ($arg === 'field') {
-                                    return 'string';
-                                }
-                       }));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array('toOne')));
 
-        $this->metadata->expects($this->any())
-                       ->method('hasAssociation')
-                       ->with($this->logicalOr(
-                            $this->equalTo('id'),
-                            $this->equalTo('toOne'),
-                            $this->equalTo('field')))
-                       ->will($this->returnCallback(function($arg) {
-                                if ($arg === 'id' || $arg === 'field') {
-                                    return false;
-                                } elseif ($arg === 'toOne') {
-                                    return true;
-                                }
-                       }));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('id'),
+                    $this->equalTo('toOne'),
+                    $this->equalTo('field')
+                )
+            )
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'toOne') {
+                            return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                        } elseif ($arg === 'field') {
+                            return 'string';
+                        }
 
-        $this->metadata->expects($this->any())
-                       ->method('isSingleValuedAssociation')
-                       ->with('toOne')
-                       ->will($this->returnValue(true));
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
 
-        $this->metadata->expects($this->any())
-                       ->method('getAssociationTargetClass')
-                       ->with('toOne')
-                       ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('id'),
+                    $this->equalTo('toOne'),
+                    $this->equalTo('field')
+                )
+            )
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id' || $arg === 'field') {
+                            return false;
+                        } elseif ($arg === 'toOne') {
+                            return true;
+                        }
 
-        $this->metadata->expects($this->any())
-                       ->method('getReflectionClass')
-                       ->will($this->returnValue($refl));
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
 
-        $this->metadata->expects($this->any())
-                       ->method('getIdentifier')
-                       ->will($this->returnValue(array('id')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isSingleValuedAssociation')
+            ->with('toOne')
+            ->will($this->returnValue(true));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable', false);
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationTargetClass')
+            ->with('toOne')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable',
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable',
+            false
+        );
     }
 
     public function configureObjectManagerForOneToManyEntity()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity');
 
-        $this->metadata->expects($this->any())
-                       ->method('getFieldNames')
-                       ->will($this->returnValue(array('id')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id')));
 
-        $this->metadata->expects($this->any())
-                       ->method('getAssociationNames')
-                       ->will($this->returnValue(array('entities')));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array('entities')));
 
-        $this->metadata->expects($this->any())
-                       ->method('getTypeOfField')
-                       ->with($this->logicalOr(
-                            $this->equalTo('id'),
-                            $this->equalTo('entities')))
-                       ->will($this->returnCallback(function($arg) {
-                            if ($arg === 'id') {
-                                return 'integer';
-                            } elseif ($arg === 'entities') {
-                                return 'Doctrine\Common\Collections\ArrayCollection';
-                            }
-                       }));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('entities')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'entities') {
+                            return 'Doctrine\Common\Collections\ArrayCollection';
+                        }
 
-        $this->metadata->expects($this->any())
-                       ->method('hasAssociation')
-                       ->with($this->logicalOr(
-                            $this->equalTo('id'),
-                            $this->equalTo('entities')))
-                       ->will($this->returnCallback(function($arg) {
-                            if ($arg === 'id') {
-                                return false;
-                            } elseif ($arg === 'entities') {
-                                return true;
-                            }
-                       }));
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
 
-        $this->metadata->expects($this->any())
-                       ->method('isSingleValuedAssociation')
-                       ->with('entities')
-                       ->will($this->returnValue(false));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('entities')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return false;
+                        } elseif ($arg === 'entities') {
+                            return true;
+                        }
 
-        $this->metadata->expects($this->any())
-                       ->method('isCollectionValuedAssociation')
-                       ->with('entities')
-                       ->will($this->returnValue(true));
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
 
-        $this->metadata->expects($this->any())
-                       ->method('getAssociationTargetClass')
-                       ->with('entities')
-                       ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isSingleValuedAssociation')
+            ->with('entities')
+            ->will($this->returnValue(false));
 
-        $this->metadata->expects($this->any())
-                       ->method('getReflectionClass')
-                       ->will($this->returnValue($refl));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isCollectionValuedAssociation')
+            ->with('entities')
+            ->will($this->returnValue(true));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', true);
-        $this->hydratorByReference = new DoctrineObjectHydrator($this->objectManager, 'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', false);
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationTargetClass')
+            ->with('entities')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity',
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity',
+            false
+        );
     }
 
     public function testCanExtractSimpleEntityByValue()
@@ -350,6 +578,24 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('From setter: foo', $entity->getField(false));
+    }
+
+    /**
+     * When using hydration by value, it will use the public API of the entity to set values (setters)
+     *
+     * @covers \DoctrineModule\Stdlib\Hydrator\DoctrineObject::hydrateByValue
+     */
+    public function testCanHydrateSimpleEntityWithStringIdByValue()
+    {
+        $entity = new Asset\SimpleEntity();
+        $data   = array('id' => 'bar', 'field' => 'foo');
+
+        $this->configureObjectManagerForSimpleEntityWithStringId();
+    
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+    
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
         $this->assertEquals('From setter: foo', $entity->getField(false));
     }
@@ -802,20 +1048,21 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('find')
             ->with(
                 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
-                $this->logicalOr(
-                    $this->equalTo(2),
-                    $this->equalTo(3)
-                )
+                $this->logicalOr($this->equalTo(2), $this->equalTo(3))
             )
-            ->will($this->returnCallback(
-                function($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                    if ($arg === 2) {
-                        return $entityInDatabaseWithIdOfTwo;
-                    } elseif ($arg === 3) {
-                        return $entityInDatabaseWithIdOfThree;
+            ->will(
+                $this->returnCallback(
+                    function ($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                        if ($arg === 2) {
+                            return $entityInDatabaseWithIdOfTwo;
+                        } elseif ($arg === 3) {
+                            return $entityInDatabaseWithIdOfThree;
+                        }
+
+                        throw new \InvalidArgumentException();
                     }
-                }
-            ));
+                )
+            );
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
@@ -864,20 +1111,21 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('find')
             ->with(
                 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
-                $this->logicalOr(
-                    $this->equalTo(array('id' => 2)),
-                    $this->equalTo(array('id' => 3))
-                )
+                $this->logicalOr($this->equalTo(array('id' => 2)), $this->equalTo(array('id' => 3)))
             )
-            ->will($this->returnCallback(
-                function($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                    if ($arg['id'] === 2) {
-                        return $entityInDatabaseWithIdOfTwo;
-                    } elseif ($arg['id'] === 3) {
-                        return $entityInDatabaseWithIdOfThree;
+            ->will(
+                $this->returnCallback(
+                    function ($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                        if ($arg['id'] === 2) {
+                            return $entityInDatabaseWithIdOfTwo;
+                        } elseif ($arg['id'] === 3) {
+                            return $entityInDatabaseWithIdOfThree;
+                        }
+
+                        throw new \InvalidArgumentException();
                     }
-                }
-            ));
+                )
+            );
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
@@ -926,20 +1174,21 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('find')
             ->with(
                 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
-                $this->logicalOr(
-                    $this->equalTo(array('id' => 2)),
-                    $this->equalTo(array('id' => 3))
-                )
+                $this->logicalOr($this->equalTo(array('id' => 2)), $this->equalTo(array('id' => 3)))
             )
-            ->will($this->returnCallback(
-                function($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                    if ($arg['id'] === 2) {
-                        return $entityInDatabaseWithIdOfTwo;
-                    } elseif ($arg['id'] === 3) {
-                        return $entityInDatabaseWithIdOfThree;
+            ->will(
+                $this->returnCallback(
+                    function ($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                        if ($arg['id'] === 2) {
+                            return $entityInDatabaseWithIdOfTwo;
+                        } elseif ($arg['id'] === 3) {
+                            return $entityInDatabaseWithIdOfThree;
+                        }
+
+                        throw new \InvalidArgumentException();
                     }
-                }
-            ));
+                )
+            );
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
@@ -986,20 +1235,21 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('find')
             ->with(
                 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
-                $this->logicalOr(
-                    $this->equalTo(2),
-                    $this->equalTo(3)
-                )
+                $this->logicalOr($this->equalTo(2), $this->equalTo(3))
             )
-            ->will($this->returnCallback(
-                function($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                    if ($arg === 2) {
-                        return $entityInDatabaseWithIdOfTwo;
-                    } elseif ($arg === 3) {
-                        return $entityInDatabaseWithIdOfThree;
+            ->will(
+                $this->returnCallback(
+                    function ($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                        if ($arg === 2) {
+                            return $entityInDatabaseWithIdOfTwo;
+                        } elseif ($arg === 3) {
+                            return $entityInDatabaseWithIdOfThree;
+                        }
+
+                        throw new \InvalidArgumentException();
                     }
-                }
-            ));
+                )
+            );
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
@@ -1038,7 +1288,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = new Asset\OneToManyEntity();
         $this->configureObjectManagerForOneToManyEntity();
 
-        // Initally add two elements
+        // Initially add two elements
         $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
 
         // The hydrated collection contains two other elements, one of them is new, and one of them is missing
@@ -1091,7 +1341,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = new Asset\OneToManyEntity();
         $this->configureObjectManagerForOneToManyEntity();
 
-        // Initally add two elements
+        // Initially add two elements
         $entity->addEntities(new ArrayCollection(array($toMany1, $toMany2)));
 
         // The hydrated collection contains two other elements, one of them is new, and one of them is missing
@@ -1191,20 +1441,19 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('find')
             ->with(
                 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
-                $this->logicalOr(
-                    $this->equalTo(2),
-                    $this->equalTo(3)
-                )
+                $this->logicalOr($this->equalTo(2), $this->equalTo(3))
             )
-            ->will($this->returnCallback(
-                function($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
-                    if ($arg === 2) {
-                        return $entityInDatabaseWithIdOfTwo;
-                    } elseif ($arg === 3) {
+            ->will(
+                $this->returnCallback(
+                    function ($arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                        if ($arg === 2) {
+                            return $entityInDatabaseWithIdOfTwo;
+                        }
+
                         return $entityInDatabaseWithIdOfThree;
                     }
-                }
-            ));
+                )
+            );
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
@@ -1277,10 +1526,16 @@ class DoctrineObjectTest extends BaseTestCase
     {
         $this->configureObjectManagerForOneToManyEntity();
 
-        $this->assertInstanceOf('DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue', $this->hydratorByValue->getStrategy('entities'));
+        $this->assertInstanceOf(
+            'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue',
+            $this->hydratorByValue->getStrategy('entities')
+        );
         $this->assertEquals('entities', $this->hydratorByValue->getStrategy('entities')->getCollectionName());
 
-        $this->assertInstanceOf('DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference', $this->hydratorByReference->getStrategy('entities'));
+        $this->assertInstanceOf(
+            'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference',
+            $this->hydratorByReference->getStrategy('entities')
+        );
         $this->assertEquals('entities', $this->hydratorByReference->getStrategy('entities')->getCollectionName());
     }
 

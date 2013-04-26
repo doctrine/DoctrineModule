@@ -35,30 +35,28 @@ class NoObjectExistsTest extends BaseTestCase
     public function testCanValidateWithNoAvailableObjectInRepository()
     {
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->will($this->returnValue(null));
 
-        $validator = new NoObjectExists(array(
-            'object_repository' => $repository,
-            'fields'            => 'matchKey',
-        ));
+        $validator = new NoObjectExists(array('object_repository' => $repository, 'fields' => 'matchKey'));
+
         $this->assertTrue($validator->isValid('matchValue'));
     }
 
     public function testCannotValidateWithAvailableObjectInRepository()
     {
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->will($this->returnValue(new stdClass()));
 
-        $validator = new NoObjectExists(array(
-            'object_repository' => $repository,
-            'fields'            => 'matchKey',
-        ));
+        $validator = new NoObjectExists(array('object_repository' => $repository, 'fields' => 'matchKey'));
+
         $this->assertFalse($validator->isValid('matchValue'));
     }
 }

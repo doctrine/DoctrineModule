@@ -195,10 +195,9 @@ class Authentication extends AbstractOptions
     public function setIdentityProperty($identityProperty)
     {
         if (!is_string($identityProperty) || $identityProperty === '') {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Provided $identityProperty is invalid, %s given',
-                gettype($identityProperty)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf('Provided $identityProperty is invalid, %s given', gettype($identityProperty))
+            );
         }
 
         $this->identityProperty = $identityProperty;
@@ -222,10 +221,9 @@ class Authentication extends AbstractOptions
     public function setCredentialProperty($credentialProperty)
     {
         if (!is_string($credentialProperty) || $credentialProperty === '') {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Provided $credentialProperty is invalid, %s given',
-                gettype($credentialProperty)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf('Provided $credentialProperty is invalid, %s given', gettype($credentialProperty))
+            );
         }
 
         $this->credentialProperty = $credentialProperty;
@@ -249,10 +247,12 @@ class Authentication extends AbstractOptions
     public function setCredentialCallable($credentialCallable)
     {
         if (!is_callable($credentialCallable)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '"%s" is not a callable',
-                is_string($credentialCallable) ? $credentialCallable : gettype($credentialCallable)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '"%s" is not a callable',
+                    is_string($credentialCallable) ? $credentialCallable : gettype($credentialCallable)
+                )
+            );
         }
 
         $this->credentialCallable = $credentialCallable;
@@ -269,11 +269,10 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     *
      * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
      */
-    public function getClassMetadata() {
-
+    public function getClassMetadata()
+    {
         if ($this->classMetadata) {
             return $this->classMetadata;
         }
@@ -285,26 +284,28 @@ class Authentication extends AbstractOptions
      *
      * @param \Doctrine\Common\Persistence\Mapping\ClassMetadata $classMetadata
      */
-    public function setClassMetadata(ClassMetadata $classMetadata) {
+    public function setClassMetadata(ClassMetadata $classMetadata)
+    {
         $this->classMetadata = $classMetadata;
     }
 
     /**
-     *
      * @return \Zend\Authentication\Storage\StorageInterface
      */
-    public function getStorage() {
-        if ( ! $this->storage instanceof StorageInterface){
+    public function getStorage()
+    {
+        if (! $this->storage instanceof StorageInterface) {
             $this->storage = new SessionStorage();
         }
+
         return $this->storage;
     }
 
     /**
-     *
      * @param \Zend\Authentication\Storage\StorageInterface $storage
      */
-    public function setStorage(StorageInterface $storage) {
+    public function setStorage(StorageInterface $storage)
+    {
         $this->storage = $storage;
     }
 }

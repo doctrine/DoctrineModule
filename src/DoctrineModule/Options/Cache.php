@@ -103,7 +103,7 @@ class Cache extends AbstractOptions
      */
     public function setNamespace($namespace)
     {
-        $this->namespace = $namespace;
+        $this->namespace = (string) $namespace;
 
         return $this;
     }

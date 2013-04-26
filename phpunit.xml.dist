@@ -1,0 +1,16 @@
+<phpunit
+    bootstrap="./tests/Bootstrap.php"
+    colors="true"
+    backupGlobals="false"
+>
+    <testsuites>
+        <testsuite name="DoctrineModule Test Suite">
+            <directory>./tests/DoctrineModuleTest</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
