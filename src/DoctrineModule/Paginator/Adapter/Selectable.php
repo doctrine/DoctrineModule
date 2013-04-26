@@ -19,7 +19,6 @@
 
 namespace DoctrineModule\Paginator\Adapter;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
 use Doctrine\Common\Collections\Criteria as DoctrineCriteria;
 use Zend\Paginator\Adapter\AdapterInterface;
@@ -73,6 +72,6 @@ class Selectable implements AdapterInterface
      */
     public function count()
     {
-        return count($this->selectable->matching(new Criteria()));
+        return count($this->selectable->matching(new DoctrineCriteria()));
     }
 }

@@ -20,22 +20,20 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
-use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
  * of extracting/hydrator objects in Doctrine, by handling most associations types.
  *
- * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instantiated once
- * and be used with objects of different types). Most of the time, this won't be a problem as in a form we only
- * create one hydrator. This is by design, because this hydrator uses metadata extensively, so it's more efficient
+ * Starting from DoctrineModule 0.8.0, the hydrator can be used multiple times with different objects
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
@@ -64,18 +62,14 @@ class DoctrineObject extends AbstractHydrator
      * Constructor
      *
      * @param ObjectManager $objectManager The ObjectManager to use
-     * @param string        $targetClass   The FQCN of the hydrated/extracted object
      * @param bool          $byValue       If set to true, hydrator will always use entity's public API
      */
-    public function __construct(ObjectManager $objectManager, $targetClass, $byValue = true)
+    public function __construct(ObjectManager $objectManager, $byValue = true)
     {
         parent::__construct();
 
-        $this->objectManager    = $objectManager;
-        $this->metadata         = $objectManager->getClassMetadata($targetClass);
-        $this->byValue          = (bool) $byValue;
-
-        $this->prepare();
+        $this->objectManager = $objectManager;
+        $this->byValue       = (bool) $byValue;
     }
 
     /**
@@ -86,6 +80,8 @@ class DoctrineObject extends AbstractHydrator
      */
     public function extract($object)
     {
+        $this->prepare($object);
+
         if ($this->byValue) {
             return $this->extractByValue($object);
         }
@@ -102,6 +98,8 @@ class DoctrineObject extends AbstractHydrator
      */
     public function hydrate(array $data, $object)
     {
+        $this->prepare($object);
+
         if ($this->byValue) {
             return $this->hydrateByValue($data, $object);
         }
@@ -110,47 +108,52 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * {@inheritDoc}
-     * @throws InvalidArgumentException If a strategy added to a collection does not extend AbstractCollectionStrategy
+     * Prepare the hydrator by adding strategies to every collection valued associations
+     *
+     * @param  object $object
+     * @return void
      */
-    public function addStrategy($name, StrategyInterface $strategy)
+    protected function prepare($object)
     {
-        if ($this->metadata->hasAssociation($name) && $this->metadata->isCollectionValuedAssociation($name)) {
-            if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Strategies used for collections valued associations must inherit from '
-                        . 'Strategy\AbstractCollectionStrategy, %s given',
-                        get_class($strategy)
-                    )
-                );
-            }
-
-            $strategy->setCollectionName($name)
-                     ->setClassMetadata($this->metadata);
-        }
-
-        return parent::addStrategy($name, $strategy);
+        $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
+        $this->prepareStrategies();
     }
 
     /**
-     * Prepare the hydrator by adding strategies to every collection valued associations
+     * Prepare strategies before the hydrator is used
      *
+     * @throws \InvalidArgumentException
      * @return void
      */
-    protected function prepare()
+    protected function prepareStrategies()
     {
-        $metadata     = $this->metadata;
-        $associations = $metadata->getAssociationNames();
+        $associations = $this->metadata->getAssociationNames();
 
         foreach ($associations as $association) {
-            // We only need to prepare collection valued associations
-            if ($metadata->isCollectionValuedAssociation($association)) {
-                if ($this->byValue) {
-                    $this->addStrategy($association, new Strategy\AllowRemoveByValue());
-                } else {
-                    $this->addStrategy($association, new Strategy\AllowRemoveByReference());
+            if ($this->metadata->isCollectionValuedAssociation($association)) {
+                // Add a strategy if the association has none set by user
+                if (!$this->hasStrategy($association)) {
+                    if ($this->byValue) {
+                        $this->addStrategy($association, new Strategy\AllowRemoveByValue());
+                    } else {
+                        $this->addStrategy($association, new Strategy\AllowRemoveByReference());
+                    }
                 }
+
+                $strategy = $this->getStrategy($association);
+
+                if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'Strategies used for collections valued associations must inherit from '
+                                . 'Strategy\AbstractCollectionStrategy, %s given',
+                            get_class($strategy)
+                        )
+                    );
+                }
+
+                $strategy->setCollectionName($association)
+                         ->setClassMetadata($this->metadata);
             }
         }
     }
@@ -387,19 +390,9 @@ class DoctrineObject extends AbstractHydrator
         }
 
         // Set the object so that the strategy can extract the Collection from it
+        
+        /** @var \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy $collectionStrategy */
         $collectionStrategy = $this->getStrategy($collectionName);
-
-        // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
-        if (! $collectionStrategy instanceof AbstractCollectionStrategy) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Strategies used for collections valued associations must inherit from '
-                    . 'Strategy\AbstractCollectionStrategy, %s given',
-                    get_class($collectionStrategy)
-                )
-            );
-        }
-
         $collectionStrategy->setObject($object);
 
         // We could directly call hydrate method from the strategy, but if people want to override
