@@ -26,6 +26,7 @@ use RuntimeException;
 use Traversable;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
@@ -33,9 +34,7 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
  * of extracting/hydrator objects in Doctrine, by handling most associations types.
  *
- * Note that now a hydrator is bound to a specific entity (while more standard hydrators can be instantiated once
- * and be used with objects of different types). Most of the time, this won't be a problem as in a form we only
- * create one hydrator. This is by design, because this hydrator uses metadata extensively, so it's more efficient
+ * Starting from DoctrineModule 0.8.0, the hydrator can be used multiple times with different objects
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
@@ -59,23 +58,24 @@ class DoctrineObject extends AbstractHydrator
      */
     protected $byValue = true;
 
+    /**
+     * @var string
+     */
+    protected $preparedFor = '';
+
 
     /**
      * Constructor
      *
      * @param ObjectManager $objectManager The ObjectManager to use
-     * @param string        $targetClass   The FQCN of the hydrated/extracted object
      * @param bool          $byValue       If set to true, hydrator will always use entity's public API
      */
-    public function __construct(ObjectManager $objectManager, $targetClass, $byValue = true)
+    public function __construct(ObjectManager $objectManager, $byValue = true)
     {
         parent::__construct();
 
-        $this->objectManager    = $objectManager;
-        $this->metadata         = $objectManager->getClassMetadata($targetClass);
-        $this->byValue          = (bool) $byValue;
-
-        $this->prepare();
+        $this->objectManager = $objectManager;
+        $this->byValue       = (bool) $byValue;
     }
 
     /**
@@ -86,6 +86,8 @@ class DoctrineObject extends AbstractHydrator
      */
     public function extract($object)
     {
+        $this->prepare($object);
+
         if ($this->byValue) {
             return $this->extractByValue($object);
         }
@@ -102,6 +104,8 @@ class DoctrineObject extends AbstractHydrator
      */
     public function hydrate(array $data, $object)
     {
+        $this->prepare($object);
+
         if ($this->byValue) {
             return $this->hydrateByValue($data, $object);
         }
@@ -136,16 +140,27 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Prepare the hydrator by adding strategies to every collection valued associations
      *
+     * @param  object $object
      * @return void
      */
-    protected function prepare()
+    protected function prepare($object)
     {
-        $metadata     = $this->metadata;
-        $associations = $metadata->getAssociationNames();
+        // Don't prepare twice the hydrator if it was previously used for the same object
+        $objectClass = get_class($object);
+        if ($this->preparedFor === $objectClass) {
+            return;
+        }
+
+        $this->preparedFor = $objectClass;
+        $this->metadata    = $this->objectManager->getClassMetadata($this->preparedFor);
+        $associations      = $this->metadata->getAssociationNames();
+
+        // Reset strategies as it's prepared for a new type of object
+        $this->strategies = new ArrayObject();
 
         foreach ($associations as $association) {
             // We only need to prepare collection valued associations
-            if ($metadata->isCollectionValuedAssociation($association)) {
+            if ($this->metadata->isCollectionValuedAssociation($association)) {
                 if ($this->byValue) {
                     $this->addStrategy($association, new Strategy\AllowRemoveByValue());
                 } else {
