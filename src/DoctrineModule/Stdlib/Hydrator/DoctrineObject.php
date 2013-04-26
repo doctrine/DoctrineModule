@@ -153,7 +153,7 @@ class DoctrineObject extends AbstractHydrator
                 }
 
                 $strategy->setCollectionName($association)
-                    ->setClassMetadata($this->metadata);
+                         ->setClassMetadata($this->metadata);
             }
         }
     }
