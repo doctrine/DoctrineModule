@@ -20,15 +20,14 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
-use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
@@ -391,19 +390,9 @@ class DoctrineObject extends AbstractHydrator
         }
 
         // Set the object so that the strategy can extract the Collection from it
+        
+        /** @var \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy $collectionStrategy */
         $collectionStrategy = $this->getStrategy($collectionName);
-
-        // Even if this check is applied in addStrategy, subclasses may inject invalid strategies
-        if (! $collectionStrategy instanceof AbstractCollectionStrategy) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Strategies used for collections valued associations must inherit from '
-                    . 'Strategy\AbstractCollectionStrategy, %s given',
-                    get_class($collectionStrategy)
-                )
-            );
-        }
-
         $collectionStrategy->setObject($object);
 
         // We could directly call hydrate method from the strategy, but if people want to override
