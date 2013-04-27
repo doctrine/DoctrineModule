@@ -9,3 +9,5 @@
    Methods `setIdentityValue`, `getIdentityValue`, `setCredentialValue`, `getCredentialValue` are now deprecated.
  * It is now possible to set the cache namespace in the cache configuration as
    of [#164](https://github.com/doctrine/DoctrineModule/pull/164)
+ * Create a hydrator does not require a targetClass anymore. This means you must modify the way you create hydrator
+   by replacing this: `$hydrator = new Hydrator($objectManager, 'Application\Entity\User')` by `$hydrator = new Hydrator($objectManager)`
