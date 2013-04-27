@@ -18,29 +18,26 @@
 
 namespace DoctrineModuleTest\Controller;
 
-use Zend\Http\Request;
-use Zend\Http\Response;
+use Zend\Console\Request;
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 
 class CliControllerTest extends AbstractConsoleControllerTestCase
 {
-
     /**
      * {@inheritDoc}
      */
     public function setUp()
     {
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../TestConfiguration.php.dist'
-        );
-
+        $this->setApplicationConfig(include __DIR__ . '/../../TestConfiguration.php.dist');
         parent::setUp();
     }
 
+    /**
+     * Verifies that the controller handling the DoctrineModule CLI functionality can be reached
+     */
     public function testIndexActionCanBeAccessed()
     {
-        $request = new \Zend\Console\Request(array('scriptname.php', 'list'));
-        $this->dispatch($request);
+        $this->dispatch(new Request(array('scriptname.php', 'list')));
 
         $this->assertResponseStatusCode(0);
         $this->assertModuleName('doctrinemodule');

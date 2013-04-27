@@ -18,8 +18,8 @@
 
 namespace DoctrineModule\Controller;
 
+use Symfony\Component\Console\Application;
 use Zend\Mvc\Controller\AbstractActionController;
-use DoctrineModule\Component\Console\Input\StringInput;
 use DoctrineModule\Component\Console\Input\RequestInput;
 
 /**
@@ -30,17 +30,24 @@ use DoctrineModule\Component\Console\Input\RequestInput;
  */
 class CliController extends AbstractActionController
 {
+    /**
+     * @var \Symfony\Component\Console\Application
+     */
+    protected $cliApplication;
 
     /**
-     * Index action
+     * @param \Symfony\Component\Console\Application $cliApplication
+     */
+    public function __construct(Application $cliApplication)
+    {
+        $this->cliApplication = $cliApplication;
+    }
+
+    /**
+     * Index action - runs the console application
      */
     public function cliAction()
     {
-
-        $input = new RequestInput($this->getRequest());
-
-        $cli = $this->getServiceLocator()->get('doctrine.cli');
-
-        $cli->run($input);
+        $this->cliApplication->run(new RequestInput($this->getRequest()));
     }
 }
