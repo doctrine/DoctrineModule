@@ -63,31 +63,31 @@ return array(
         ),
     ),
 
-	'controllers' => array(
-		'invokables' => array(
-			'DoctrineModule\Controller\Cli' => 'DoctrineModule\Controller\CliController'
-		)
-	),
+    'controllers' => array(
+        'factories' => array(
+            'DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory'
+        )
+    ),
 
-	'route_manager' => array(
-		'invokables' => array(
-			'symfonycli' => 'DoctrineModule\Mvc\Router\Console\SymfonyCli',
-		),
-	),
+    'route_manager' => array(
+        'invokables' => array(
+            'symfonycli' => 'DoctrineModule\Mvc\Router\Console\SymfonyCli',
+        ),
+    ),
 
-	'console' => array(
-		'router' => array(
-			'routes' => array(
-				'cliapp' => array(
-					'type' => 'symfonycli',
-					'options' => array(
-						'defaults' => array(
-							'controller' => 'DoctrineModule\Controller\Cli',
-							'action' => 'cli'
-						)
-					)
-				)
-			)
-		)
-	),
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'cliapp' => array(
+                    'type' => 'symfonycli',
+                    'options' => array(
+                        'defaults' => array(
+                            'controller' => 'DoctrineModule\Controller\Cli',
+                            'action' => 'cli'
+                        )
+                    )
+                )
+            )
+        )
+    ),
 );
