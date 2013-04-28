@@ -44,6 +44,6 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
         $this->assertControllerName('doctrinemodule\controller\cli');
         $this->assertControllerClass('clicontroller');
         $this->assertActionName('cli');
-        $this->assertMatchedRouteName('cliapp');
+        $this->assertMatchedRouteName('doctrine_cli');
     }
 }

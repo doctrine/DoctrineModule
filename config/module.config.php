@@ -70,20 +70,20 @@ return array(
     ),
 
     'route_manager' => array(
-        'invokables' => array(
-            'symfonycli' => 'DoctrineModule\Mvc\Router\Console\SymfonyCli',
+        'factories' => array(
+            'symfony_cli' => 'DoctrineModule\Service\SymfonyCliRouteFactory',
         ),
     ),
 
     'console' => array(
         'router' => array(
             'routes' => array(
-                'cliapp' => array(
-                    'type' => 'symfonycli',
+                'doctrine_cli' => array(
+                    'type' => 'symfony_cli',
                     'options' => array(
                         'defaults' => array(
                             'controller' => 'DoctrineModule\Controller\Cli',
-                            'action' => 'cli'
+                            'action' => 'cli',
                         )
                     )
                 )
