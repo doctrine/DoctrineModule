@@ -22,9 +22,17 @@ use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Console\Request;
 use DoctrineModule\Component\Console\Input\RequestInput;
 
+/**
+ * Tests for {@see \DoctrineModule\Component\Console\Input\RequestInput}
+ *
+ * @license MIT
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
+ */
 class RequestInputTest extends TestCase
 {
-
+    /**
+     * @covers \DoctrineModule\Component\Console\Input\RequestInput
+     */
     public function testParamsCorrectlySetted()
     {
         $params = array(
