@@ -37,6 +37,12 @@ class SymfonyCliRouteFactory implements FactoryInterface
         /* @var $application \Symfony\Component\Console\Application */
         $application = $serviceLocator->getServiceLocator()->get('doctrine.cli');
 
-        return new SymfonyCli($application);
+        return new SymfonyCli(
+            $application,
+            array(
+                'controller' => 'DoctrineModule\Controller\Cli',
+                'action'     => 'cli',
+            )
+        );
     }
 }
