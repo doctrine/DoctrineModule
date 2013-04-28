@@ -42,7 +42,6 @@ use DoctrineModule\Component\Console\Output\PropertyOutput;
  */
 class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
 {
-
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
