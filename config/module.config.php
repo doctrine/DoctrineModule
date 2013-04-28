@@ -18,6 +18,11 @@
  */
 
 return array(
+    'doctrine_factories' => array(
+        'cache'        => 'DoctrineModule\Service\CacheFactory',
+        'eventmanager' => 'DoctrineModule\Service\EventManagerFactory',
+        'driver'       => 'DoctrineModule\Service\DriverFactory',
+    ),
     'doctrine' => array(
         'cache' => array(
             'apc' => array(
@@ -60,6 +65,12 @@ return array(
                 'class'     => 'Doctrine\Common\Cache\ZendDataCache',
                 'namespace' => 'DoctrineModule',
             ),
+        ),
+    ),
+
+    'service_manager' => array(
+        'abstract_factories' => array(
+            'DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory',
         ),
     ),
 
