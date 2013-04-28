@@ -18,13 +18,11 @@
 
 namespace DoctrineModule\Mvc\Router\Console;
 
+use Symfony\Component\Console\Application;
 use Zend\Mvc\Router\Console\RouteInterface;
 use Zend\Stdlib\RequestInterface as Request;
 use Zend\Mvc\Router\Console\RouteMatch;
 use Zend\Console\Request as ConsoleRequest;
-use Zend\Mvc\Router\Exception;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Route matching commands in Symfony CLI
@@ -32,13 +30,12 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @license MIT
  * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class SymfonyCli implements RouteInterface, ServiceLocatorAwareInterface
+class SymfonyCli implements RouteInterface
 {
-
     /**
-     * @var ServiceLocatorInterface
+     * @var \Symfony\Component\Console\Application
      */
-    private $routePluginManager;
+    protected $cliApplication;
 
     /**
      * Default values.
@@ -48,34 +45,29 @@ class SymfonyCli implements RouteInterface, ServiceLocatorAwareInterface
     protected $defaults;
 
     /**
-     * Create a new colon console route.
+     * Constructor
      *
-     * @param  array $defaults
-     * @return SymfonyCli
+     * @param \Symfony\Component\Console\Application $cliApplication
+     * @param array                                  $defaults
      */
-    public function __construct(array $defaults = array())
+    public function __construct(Application $cliApplication, array $defaults = array())
     {
-        $this->defaults = $defaults;
+        $this->cliApplication = $cliApplication;
+        $this->defaults       = $defaults;
     }
 
     /**
-     * @param \Zend\Stdlib\RequestInterface $request
-     * @return null|\Zend\Mvc\Router\Console\RouteMatch|\Zend\Mvc\Router\RouteMatch
+     * {@inheritDoc}
      */
     public function match(Request $request)
     {
-        $routePluginManager = $this->getServiceLocator();
-        $serviceLocator = $routePluginManager->getServiceLocator();
-
         if (!$request instanceof ConsoleRequest) {
             return null;
         }
 
         $params = $request->getParams()->toArray();
 
-        $cli = $serviceLocator->get('doctrine.cli');
-
-        if (!isset($params[0]) || !$cli->has($params[0])) {
+        if (! isset($params[0]) || ! $this->cliApplication->has($params[0])) {
             return null;
         }
 
@@ -83,17 +75,19 @@ class SymfonyCli implements RouteInterface, ServiceLocatorAwareInterface
     }
 
     /**
-     * @param array $params
-     * @param array $options
-     * @return mixed|string
+     * Disabled.
+     *
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException this method is disabled
      */
     public function assemble(array $params = array(), array $options = array())
     {
-        return '';
+        throw new \BadMethodCallException('Unsupported');
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getAssembledParams()
     {
@@ -101,44 +95,14 @@ class SymfonyCli implements RouteInterface, ServiceLocatorAwareInterface
     }
 
     /**
-     * @param array $options
-     * @return SymfonyCli|void
-     * @throws \Zend\Mvc\Router\Exception\InvalidArgumentException
+     * Disabled.
+     *
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException this method is disabled
      */
     public static function factory($options = array())
     {
-        if ($options instanceof Traversable) {
-            $options = ArrayUtils::iteratorToArray($options);
-        } elseif (!is_array($options)) {
-            throw new Exception\InvalidArgumentException(__METHOD__ . ' expects an array or Traversable set of options');
-        }
-
-        if (!isset($options['defaults'])) {
-            $options['defaults'] = array();
-        }
-
-        return new static (
-            $options['defaults']
-        );
-    }
-
-    /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $routePluginManager
-     */
-    public function setServiceLocator(ServiceLocatorInterface $routePluginManager)
-    {
-        $this->routePluginManager = $routePluginManager;
-    }
-
-    /**
-     * Get service locator
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->routePluginManager;
+        throw new \BadMethodCallException('Unsupported');
     }
 }
