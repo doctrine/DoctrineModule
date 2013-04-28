@@ -21,3 +21,5 @@
    console in `./vendor/bin/doctrine-module` is deprecated.
  * The module does not implement `Zend\ModuleManager\Feature\AutoloaderProviderInterface` anymore. Please use
    [composer](http://getcomposer.org/) autoloading or setup autoloading yourself.
+ * Service `doctrine.cache.zendcachestorage` was removed from the pre-configured services as of
+   [#226](https://github.com/doctrine/DoctrineModule/pull/226).
