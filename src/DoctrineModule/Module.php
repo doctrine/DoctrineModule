@@ -78,7 +78,8 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
     /**
      * {@inheritDoc}
      */
-    public function getConsoleUsage(Console $console) {
+    public function getConsoleUsage(Console $console)
+    {
         $output = new PropertyOutput();
         $cli    = $this->serviceManager->get('doctrine.cli');
 

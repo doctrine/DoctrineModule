@@ -41,7 +41,7 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $serviceManagerUtil = new ServiceManagerTestCase();
+        $serviceManagerUtil   = new ServiceManagerTestCase();
         $this->serviceManager = $serviceManagerUtil->getServiceManager();
     }
 
@@ -99,7 +99,6 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
             array('doctrine.foo', false),
             array('doctrine.foo.bar', false),
             array('doctrine.cache.bar', false),
-            // @TODO integrate this additional cache factory too
             //array('doctrine.cache.zendcachestorage'),
         );
     }
