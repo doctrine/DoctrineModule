@@ -16,12 +16,33 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-return array(
-    'modules' => array(
-        'DoctrineModule',
-    ),
-    'module_listener_options' => array(
-        'config_glob_paths' => array(),
-        'module_paths' => array(),
-    ),
-);
+
+namespace DoctrineModule\Service;
+
+use DoctrineModule\Mvc\Router\Console\SymfonyCli;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+/**
+ * Factory responsible of instantiating {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}
+ */
+class SymfonyCliRouteFactory implements FactoryInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        /* @var $serviceLocator \Zend\ServiceManager\AbstractPluginManager */
+        /* @var $application \Symfony\Component\Console\Application */
+        $application = $serviceLocator->getServiceLocator()->get('doctrine.cli');
+
+        return new SymfonyCli(
+            $application,
+            array(
+                'controller' => 'DoctrineModule\Controller\Cli',
+                'action'     => 'cli',
+            )
+        );
+    }
+}

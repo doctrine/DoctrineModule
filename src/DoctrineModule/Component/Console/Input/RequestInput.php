@@ -13,21 +13,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Component\Console\Input;
+
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputDefinition;
+use Zend\Console\Request;
 
 /**
- * Version
+ * RequestInput represents an input provided as an console request.
  *
  * @license MIT
- * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class Version
+class RequestInput extends ArrayInput
 {
-    const VERSION = '0.8.0';
+    /**
+     * Constructor
+     *
+     * @param \Zend\Console\Request $request
+     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     */
+    public function __construct(Request $request, InputDefinition $definition = null)
+    {
+        $parameters = array();
+
+        foreach ($request->getParams() as $key => $param) {
+            if (is_numeric($key)) {
+                $parameters[] = $param;
+            }
+        }
+
+        parent::__construct($parameters, $definition);
+    }
 }

@@ -44,5 +44,5 @@ if (file_exists(__DIR__ . '/TestConfiguration.php')) {
     $config = require __DIR__ . '/TestConfiguration.php.dist';
 }
 
-ServiceManagerTestCase::setServiceManagerConfiguration($config);
+ServiceManagerTestCase::setConfiguration($config);
 unset($files, $file, $loader, $config);

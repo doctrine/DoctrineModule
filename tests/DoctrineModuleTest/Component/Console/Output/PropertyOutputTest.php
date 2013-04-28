@@ -13,15 +13,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
-return array(
-    'modules' => array(
-        'DoctrineModule',
-    ),
-    'module_listener_options' => array(
-        'config_glob_paths' => array(),
-        'module_paths' => array(),
-    ),
-);
+
+namespace DoctrineModuleTest\Component\Console\Output;
+
+use PHPUnit_Framework_TestCase as TestCase;
+
+/**
+ * Tests for {@see \DoctrineModule\Component\Console\Output\PropertyOutput}
+ *
+ * @license MIT
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
+ */
+class PropertyOutputTest extends TestCase
+{
+
+    /**
+     * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
+     */
+    public function testWrite()
+    {
+        $message = 'message';
+
+        $output = new \DoctrineModule\Component\Console\Output\PropertyOutput();
+        $output->write($message);
+        $this->assertEquals($message, $output->getMessage());
+    }
+}

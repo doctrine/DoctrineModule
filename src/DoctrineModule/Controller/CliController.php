@@ -13,21 +13,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Controller;
+
+use Symfony\Component\Console\Application;
+use Zend\Mvc\Controller\AbstractActionController;
+use DoctrineModule\Component\Console\Input\RequestInput;
 
 /**
- * Version
+ * Index controller
  *
  * @license MIT
- * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class Version
+class CliController extends AbstractActionController
 {
-    const VERSION = '0.8.0';
+    /**
+     * @var \Symfony\Component\Console\Application
+     */
+    protected $cliApplication;
+
+    /**
+     * @param \Symfony\Component\Console\Application $cliApplication
+     */
+    public function __construct(Application $cliApplication)
+    {
+        $this->cliApplication = $cliApplication;
+    }
+
+    /**
+     * Index action - runs the console application
+     */
+    public function cliAction()
+    {
+        $this->cliApplication->run(new RequestInput($this->getRequest()));
+    }
 }
