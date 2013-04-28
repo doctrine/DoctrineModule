@@ -19,3 +19,5 @@
    [#137](https://github.com/doctrine/DoctrineModule/pull/137). From now on, you can simply run
    `php ./public/index.php` in a standard zf2 skeleton application and the tools will be available in there. The
    console in `./vendor/bin/doctrine-module` is deprecated.
+ * The module does not implement `Zend\ModuleManager\Feature\AutoloaderProviderInterface` anymore. Please use
+   [composer](http://getcomposer.org/) autoloading or setup autoloading yourself.
