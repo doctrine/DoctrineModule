@@ -17,17 +17,34 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Service;
+
+use DoctrineModule\Controller\CliController;
+use Symfony\Component\Console\Application;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
 
 /**
- * Version
+ * Factory responsible of instantiating an {@see \DoctrineModule\Controller\CliController}
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Version
+class CliControllerFactory implements FactoryInterface
 {
-    const VERSION = '0.8.0';
+    /**
+     * {@inheritDoc}
+     *
+     * @return \DoctrineModule\Controller\CliController
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        /* @var $serviceLocator \Zend\ServiceManager\AbstractPluginManager */
+        /* @var $application \Symfony\Component\Console\Application */
+        $application = $serviceLocator->getServiceLocator()->get('doctrine.cli');
+
+        return new CliController($application);
+    }
 }

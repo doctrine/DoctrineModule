@@ -13,21 +13,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
+ * and is licensed under the MIT license.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModuleTest\Component\Console\Input;
+
+use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Console\Request;
+use DoctrineModule\Component\Console\Input\RequestInput;
 
 /**
- * Version
+ * Tests for {@see \DoctrineModule\Component\Console\Input\RequestInput}
  *
  * @license MIT
- * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class Version
+class RequestInputTest extends TestCase
 {
-    const VERSION = '0.8.0';
+    /**
+     * @covers \DoctrineModule\Component\Console\Input\RequestInput
+     */
+    public function testParamsCorrectlySetted()
+    {
+        $params = array(
+            'scriptname.php',
+            'list',
+            '--help'
+        );
+
+        $request = new Request($params);
+
+        $input = new RequestInput($request);
+
+        array_shift($params);
+
+        $this->assertTrue($input->hasParameterOption('list'));
+        $this->assertTrue($input->hasParameterOption('--help'));
+    }
 }
