@@ -18,14 +18,6 @@
  */
 
 return array(
-    'doctrine_factories' => array(
-        'cache'                 => 'DoctrineModule\Service\CacheFactory',
-        'eventmanager'          => 'DoctrineModule\Service\EventManagerFactory',
-        'driver'                => 'DoctrineModule\Service\DriverFactory',
-        'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
-        'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
-        'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
-    ),
     'doctrine' => array(
         'cache' => array(
             'apc' => array(
@@ -69,6 +61,17 @@ return array(
                 'namespace' => 'DoctrineModule',
             ),
         ),
+    ),
+
+    // Factory mappings - used to define which factory to use to instantiate a particular doctrine
+    // service type
+    'doctrine_factories' => array(
+        'cache'                 => 'DoctrineModule\Service\CacheFactory',
+        'eventmanager'          => 'DoctrineModule\Service\EventManagerFactory',
+        'driver'                => 'DoctrineModule\Service\DriverFactory',
+        'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
+        'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
+        'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
     ),
 
     'service_manager' => array(
