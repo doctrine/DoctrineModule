@@ -108,7 +108,7 @@ class Module implements
         return array(
             'factories' => array(
                 'doctrine.cli'                    => 'DoctrineModule\Service\CliFactory',
-                'doctrine.cache.apc'              => new CacheFactory('apc'),
+                /*'doctrine.cache.apc'              => new CacheFactory('apc'),
                 'doctrine.cache.array'            => new CacheFactory('array'),
                 'doctrine.cache.filesystem'       => new CacheFactory('filesystem'),
                 'doctrine.cache.memcache'         => new CacheFactory('memcache'),
@@ -117,7 +117,7 @@ class Module implements
                 'doctrine.cache.wincache'         => new CacheFactory('wincache'),
                 'doctrine.cache.xcache'           => new CacheFactory('xcache'),
                 'doctrine.cache.zenddata'         => new CacheFactory('zenddata'),
-                'doctrine.cache.zendcachestorage' => new ZendStorageCacheFactory('zendcachestorage'),
+                'doctrine.cache.zendcachestorage' => new ZendStorageCacheFactory('zendcachestorage'),*/
             ),
         );
     }

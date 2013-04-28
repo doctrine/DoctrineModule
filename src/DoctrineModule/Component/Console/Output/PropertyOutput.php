@@ -29,7 +29,6 @@ use \Symfony\Component\Console\Formatter\OutputFormatterInterface;
  */
 class PropertyOutput extends Output
 {
-
     /**
      * @var string
      */
@@ -40,8 +39,11 @@ class PropertyOutput extends Output
      * @param null $decorated
      * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
      */
-    public function __construct($verbosity = self::VERBOSITY_NORMAL, $decorated = null, OutputFormatterInterface $formatter = null)
-    {
+    public function __construct(
+        $verbosity = self::VERBOSITY_NORMAL,
+        $decorated = null,
+        OutputFormatterInterface $formatter = null
+    ) {
         if (null === $decorated) {
             $decorated = $this->hasColorSupport();
         }
@@ -71,7 +73,7 @@ class PropertyOutput extends Output
      */
     protected function hasColorSupport()
     {
-        if (DIRECTORY_SEPARATOR == '\\') {
+        if (DIRECTORY_SEPARATOR === '\\') {
             return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
         }
 
