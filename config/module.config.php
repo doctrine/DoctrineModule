@@ -69,6 +69,9 @@ return array(
     ),
 
     'service_manager' => array(
+        'factories' => array(
+            'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
+        ),
         'abstract_factories' => array(
             'DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory',
         ),
