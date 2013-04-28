@@ -78,8 +78,8 @@ class CliFactory implements FactoryInterface
         $cli->setName('DoctrineModule Command Line Interface');
         $cli->setVersion(Version::VERSION);
         $cli->setHelperSet(new HelperSet);
-		$cli->setCatchExceptions(true);
-		$cli->setAutoExit(false);
+        $cli->setCatchExceptions(true);
+        $cli->setAutoExit(false);
 
         // Load commands using event
         $this->getEventManager($sl)->trigger('loadCli.post', $cli, array('ServiceManager' => $sl));

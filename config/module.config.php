@@ -19,9 +19,12 @@
 
 return array(
     'doctrine_factories' => array(
-        'cache'        => 'DoctrineModule\Service\CacheFactory',
-        'eventmanager' => 'DoctrineModule\Service\EventManagerFactory',
-        'driver'       => 'DoctrineModule\Service\DriverFactory',
+        'cache'                 => 'DoctrineModule\Service\CacheFactory',
+        'eventmanager'          => 'DoctrineModule\Service\EventManagerFactory',
+        'driver'                => 'DoctrineModule\Service\DriverFactory',
+        'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
+        'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
+        'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
     ),
     'doctrine' => array(
         'cache' => array(
@@ -94,12 +97,6 @@ return array(
             'routes' => array(
                 'doctrine_cli' => array(
                     'type' => 'symfony_cli',
-                    'options' => array(
-                        'defaults' => array(
-                            'controller' => 'DoctrineModule\Controller\Cli',
-                            'action' => 'cli',
-                        )
-                    )
                 )
             )
         )
