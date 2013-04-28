@@ -26,6 +26,9 @@ use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 /**
  * Tests for {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}
  *
+ * @license MIT
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
+ *
  * @covers \DoctrineModule\Mvc\Router\Console\SymfonyCli
  */
 class SymfonyCliTest extends PHPUnit_Framework_TestCase

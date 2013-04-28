@@ -20,9 +20,18 @@ namespace DoctrineModuleTest\Component\Console\Output;
 
 use PHPUnit_Framework_TestCase as TestCase;
 
+/**
+ * Tests for {@see \DoctrineModule\Component\Console\Output\PropertyOutput}
+ *
+ * @license MIT
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
+ */
 class PropertyOutputTest extends TestCase
 {
 
+    /**
+     * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
+     */
     public function testWrite()
     {
         $message = 'message';

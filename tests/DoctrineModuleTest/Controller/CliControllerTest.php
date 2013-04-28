@@ -21,6 +21,14 @@ namespace DoctrineModuleTest\Controller;
 use Zend\Console\Request;
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 
+/**
+ * Tests for {@see \DoctrineModule\Controller\CliController}
+ *
+ * @license MIT
+ * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
+ *
+ * @covers \DoctrineModule\Controller\CliController
+ */
 class CliControllerTest extends AbstractConsoleControllerTestCase
 {
     /**
