@@ -38,7 +38,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        return false !== $this->getFactoryMapping($serviceLocator, $name);
+        return false !== $this->getFactoryMapping($serviceLocator, $requestedName);
     }
 
     /**
@@ -46,7 +46,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $mappings = $this->getFactoryMapping($serviceLocator, $name);
+        $mappings = $this->getFactoryMapping($serviceLocator, $requestedName);
 
         if (! $mappings) {
             throw new ServiceNotFoundException();
