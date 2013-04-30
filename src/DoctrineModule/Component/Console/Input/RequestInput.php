@@ -18,7 +18,7 @@
 
 namespace DoctrineModule\Component\Console\Input;
 
-use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Zend\Console\Request;
 
@@ -28,7 +28,7 @@ use Zend\Console\Request;
  * @license MIT
  * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class RequestInput extends StringInput
+class RequestInput extends ArgvInput
 {
     /**
      * Constructor
@@ -38,11 +38,13 @@ class RequestInput extends StringInput
      */
     public function __construct(Request $request, InputDefinition $definition = null)
     {
-        $parameters = '';
+        $parameters = array(
+            null,
+        );
 
         foreach ($request->getParams() as $key => $param) {
             if (is_numeric($key)) {
-                $parameters .= $param . ' ';
+                $parameters[] = $param;
             }
         }
 
