@@ -53,7 +53,7 @@ class CacheFactory extends AbstractFactory
             throw new RuntimeException('Cache must have a class name to instantiate');
         }
 
-        if ($this->name == 'filesystem') {
+        if ('filesystem' === $this->name) {
             $cache = new $class($options->getDirectory());
         } else {
             $cache = new $class;
