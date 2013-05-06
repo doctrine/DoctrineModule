@@ -77,8 +77,11 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         $serviceType = $matches['serviceType'];
         $serviceName = $matches['serviceName'];
 
-        if (! isset($config['doctrine_factories'][$serviceType])
-            || ! isset($config['doctrine'][$serviceType][$serviceName])
+        if (! isset($config['doctrine_factories'][$serviceType]) ||
+            (
+                ! isset($config['doctrine'][$serviceType][$serviceName]) &&
+               (strpos($serviceType, 'authentication') !== 0 && isset($config['doctrine']['authentication']))
+            )
         ) {
             return false;
         }
