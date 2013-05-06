@@ -80,7 +80,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         if (! isset($config['doctrine_factories'][$serviceType]) ||
             (
                 ! isset($config['doctrine'][$serviceType][$serviceName]) &&
-               (strpos($serviceType, 'authentication') !== 0 && isset($config['doctrine']['authentication']))
+                !(strpos($serviceType, 'authentication') === 0 && isset($config['doctrine']['authentication']))
             )
         ) {
             return false;
