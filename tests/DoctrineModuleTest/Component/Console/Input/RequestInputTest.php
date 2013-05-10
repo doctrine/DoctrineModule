@@ -38,7 +38,8 @@ class RequestInputTest extends TestCase
         $params = array(
             'scriptname.php',
             'list',
-            '--help'
+            '--help',
+            '--foo=bar'
         );
 
         $request = new Request($params);
@@ -49,5 +50,6 @@ class RequestInputTest extends TestCase
 
         $this->assertTrue($input->hasParameterOption('list'));
         $this->assertTrue($input->hasParameterOption('--help'));
+        $this->assertSame('bar', $input->getParameterOption('--foo'));
     }
 }
