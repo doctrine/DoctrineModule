@@ -420,6 +420,10 @@ class DoctrineObject extends AbstractHydrator
             case 'datetime':
             case 'time':
             case 'date':
+                if ('' === $value) {
+                    return null;
+                }
+                
                 if (is_int($value)) {
                     $dateTime = new DateTime();
                     $dateTime->setTimestamp($value);

@@ -1442,6 +1442,18 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DateTime', $entity->getDate());
         $this->assertEquals($now, $entity->getDate()->getTimestamp());
     }
+    
+    public function testEmptyStringIsNotConvertedToDateTime()
+    {
+        $entity = new Asset\SimpleEntityWithDateTime();
+        $this->configureObjectManagerForSimpleEntityWithDateTime();
+
+        $data = array('date' => '');
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertNull($entity->getDate());
+    }
 
     public function testAssertStrategiesForCollectionsAreAlwaysAddedWhenHydratorIsConstructed()
     {
