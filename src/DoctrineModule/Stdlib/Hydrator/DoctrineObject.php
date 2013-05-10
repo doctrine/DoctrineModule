@@ -420,7 +420,7 @@ class DoctrineObject extends AbstractHydrator
             case 'datetime':
             case 'time':
             case 'date':
-                if ($value === '') {
+                if ('' === $value) {
                     return null;
                 }
                 
