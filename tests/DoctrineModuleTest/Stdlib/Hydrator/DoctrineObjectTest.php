@@ -105,12 +105,10 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->hydratorByValue = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
             true
         );
         $this->hydratorByReference = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
             false
         );
     }
@@ -118,7 +116,7 @@ class DoctrineObjectTest extends BaseTestCase
     public function configureObjectManagerForSimpleEntityWithStringId()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
-    
+
         $this
             ->metadata
             ->expects($this->any())
@@ -129,46 +127,44 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getAssociationNames')
             ->will($this->returnValue(array()));
-    
+
         $this
             ->metadata
             ->expects($this->any())
             ->method('getFieldNames')
             ->will($this->returnValue(array('id', 'field')));
-    
+
         $this
             ->metadata
             ->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('field')))
             ->will($this->returnValue('string'));
-    
+
         $this
             ->metadata
             ->expects($this->any())
             ->method('hasAssociation')
             ->will($this->returnValue(false));
-    
+
         $this
             ->metadata
             ->expects($this->any())
             ->method('getIdentifierFieldNames')
             ->will($this->returnValue(array('id')));
-    
+
         $this
             ->metadata
             ->expects($this->any())
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
-    
+
         $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
             true
         );
         $this->hydratorByReference = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
             false
         );
     }
@@ -228,12 +224,10 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->hydratorByValue = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime',
             true
         );
         $this->hydratorByReference = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime',
             false
         );
     }
@@ -314,12 +308,10 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->hydratorByValue = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity',
             true
         );
         $this->hydratorByReference = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity',
             false
         );
     }
@@ -400,12 +392,10 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->hydratorByValue = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable',
             true
         );
         $this->hydratorByReference = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable',
             false
         );
     }
@@ -493,12 +483,10 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity',
             true
         );
         $this->hydratorByReference = new DoctrineObjectHydrator(
             $this->objectManager,
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity',
             false
         );
     }
@@ -553,9 +541,9 @@ class DoctrineObjectTest extends BaseTestCase
         $data   = array('id' => 'bar', 'field' => 'foo');
 
         $this->configureObjectManagerForSimpleEntityWithStringId();
-    
+
         $entity = $this->hydratorByValue->hydrate($data, $entity);
-    
+
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
         $this->assertEquals('From setter: foo', $entity->getField(false));
     }
@@ -1453,34 +1441,6 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
         $this->assertNull($entity->getDate());
-    }
-
-    public function testAssertStrategiesForCollectionsAreAlwaysAddedWhenHydratorIsConstructed()
-    {
-        $this->configureObjectManagerForOneToManyEntity();
-
-        $this->assertTrue($this->hydratorByValue->hasStrategy('entities'));
-        $this->assertTrue($this->hydratorByReference->hasStrategy('entities'));
-
-        $this->assertFalse($this->hydratorByValue->hasStrategy('id'));
-        $this->assertFalse($this->hydratorByReference->hasStrategy('id'));
-    }
-
-    public function testAssertDefaultStrategyForCollectionsIsAllowRemove()
-    {
-        $this->configureObjectManagerForOneToManyEntity();
-
-        $this->assertInstanceOf(
-            'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue',
-            $this->hydratorByValue->getStrategy('entities')
-        );
-        $this->assertEquals('entities', $this->hydratorByValue->getStrategy('entities')->getCollectionName());
-
-        $this->assertInstanceOf(
-            'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference',
-            $this->hydratorByReference->getStrategy('entities')
-        );
-        $this->assertEquals('entities', $this->hydratorByReference->getStrategy('entities')->getCollectionName());
     }
 
     public function testAssertNullValueHydratedForOneToOneWithOptionalMethodSignature()

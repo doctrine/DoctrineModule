@@ -9,17 +9,5 @@
    Methods `setIdentityValue`, `getIdentityValue`, `setCredentialValue`, `getCredentialValue` are now deprecated.
  * It is now possible to set the cache namespace in the cache configuration as
    of [#164](https://github.com/doctrine/DoctrineModule/pull/164)
- * All services named with the `doctrine.<something>.<name>` pattern are now handled by
-   `DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory`, which simplifies the instantiation logic for
-   different occurrences of `<name>` as of [#226](https://github.com/doctrine/DoctrineModule/pull/226) and
-   [#76](https://github.com/doctrine/DoctrineModule/pull/76)
- * The CLI tools are now also available as a standard ZF2 console as of
-   [#226](https://github.com/doctrine/DoctrineModule/pull/226),
-   [#200](https://github.com/doctrine/DoctrineModule/pull/200) and
-   [#137](https://github.com/doctrine/DoctrineModule/pull/137). From now on, you can simply run
-   `php ./public/index.php` in a standard zf2 skeleton application and the tools will be available in there. The
-   console in `./vendor/bin/doctrine-module` is deprecated.
- * The module does not implement `Zend\ModuleManager\Feature\AutoloaderProviderInterface` anymore. Please use
-   [composer](http://getcomposer.org/) autoloading or setup autoloading yourself.
- * Service `doctrine.cache.zendcachestorage` was removed from the pre-configured services as of
-   [#226](https://github.com/doctrine/DoctrineModule/pull/226).
+ * Create a hydrator does not require a targetClass anymore. This means you must modify the way you create hydrator
+   by replacing this: `$hydrator = new Hydrator($objectManager, 'Application\Entity\User')` by `$hydrator = new Hydrator($objectManager)`
