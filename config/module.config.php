@@ -61,6 +61,18 @@ return array(
                 'namespace' => 'DoctrineModule',
             ),
         ),
+        'authentication' => array(
+            'default' => array() //default authentication options should be set in either the odm or orm modules
+        ),
+        'authenticationadapter' => array(
+            'default' => true,
+        ),
+        'authenticationstorage' => array(
+            'default' => true,
+        ),
+        'authenticationservice' => array(
+            'default' => true,
+        )
     ),
 
     // Factory mappings - used to define which factory to use to instantiate a particular doctrine
