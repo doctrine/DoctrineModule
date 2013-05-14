@@ -56,7 +56,10 @@ class DisallowRemoveByValue extends AbstractCollectionStrategy
             );
         }
 
-        $collection = $this->getCollectionFromObjectByValue()->toArray();
+        $collection = $this->getCollectionFromObjectByValue();
+        if (!is_array($collection)) {
+            $collection = $collection->toArray();
+        }
         $toAdd      = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
 
         $this->object->$adder($toAdd);
