@@ -491,6 +491,97 @@ class DoctrineObjectTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForOneToManyArrayEntity()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyArrayEntity');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array('entities')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('entities')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'entities') {
+                            return 'Doctrine\Common\Collections\ArrayCollection';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('entities')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return false;
+                        } elseif ($arg === 'entities') {
+                            return true;
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isSingleValuedAssociation')
+            ->with('entities')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isCollectionValuedAssociation')
+            ->with('entities')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationTargetClass')
+            ->with('entities')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
     public function testCanExtractSimpleEntityByValue()
     {
         // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
@@ -834,6 +925,39 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($toMany2, $data['entities'][1]);
     }
 
+    /**
+     * @depends testExtractOneToManyAssociationByValue
+     */
+    public function testExtractOneToManyByValueWithArray()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $collection = new ArrayCollection(array($toMany1, $toMany2));
+
+        $entity = new Asset\OneToManyArrayEntity();
+        $entity->setId(4);
+        $entity->addEntities($collection);
+
+        $this->configureObjectManagerForOneToManyArrayEntity();
+
+        $data = $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(4, $data['id']);
+        $this->assertInternalType('array', $data['entities']);
+
+        $this->assertEquals($toMany1->getId(), $data['entities'][0]->getId());
+        $this->assertSame($toMany1, $data['entities'][0]);
+        $this->assertEquals($toMany2->getId(), $data['entities'][1]->getId());
+        $this->assertSame($toMany2, $data['entities'][1]);
+    }
+
     public function testExtractOneToManyAssociationByReference()
     {
         // When using extraction by reference, it won't use the public API of the entity to retrieve values (getters)
@@ -852,6 +976,39 @@ class DoctrineObjectTest extends BaseTestCase
         $entity->addEntities($collection);
 
         $this->configureObjectManagerForOneToManyEntity();
+
+        $data = $this->hydratorByReference->extract($entity);
+
+        $this->assertEquals(4, $data['id']);
+        $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $data['entities']);
+
+        $this->assertEquals($toMany1->getId(), $data['entities'][0]->getId());
+        $this->assertSame($toMany1, $data['entities'][0]);
+        $this->assertEquals($toMany2->getId(), $data['entities'][1]->getId());
+        $this->assertSame($toMany2, $data['entities'][1]);
+    }
+
+    /**
+     * @depends testExtractOneToManyAssociationByReference
+     */
+    public function testExtractOneToManyArrayByReference()
+    {
+        // When using extraction by reference, it won't use the public API of the entity to retrieve values (getters)
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $collection = new ArrayCollection(array($toMany1, $toMany2));
+
+        $entity = new Asset\OneToManyArrayEntity();
+        $entity->setId(4);
+        $entity->addEntities($collection);
+
+        $this->configureObjectManagerForOneToManyArrayEntity();
 
         $data = $this->hydratorByReference->extract($entity);
 
@@ -903,6 +1060,48 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($toMany2, $entities[1]);
     }
 
+    /**
+     * @depends testHydrateOneToManyAssociationByValue
+     */
+    public function testHydrateOneToManyArrayByValue()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $entity = new Asset\OneToManyArrayEntity();
+        $this->configureObjectManagerForOneToManyArrayEntity();
+
+        $data = array(
+            'entities' => array(
+                $toMany1, $toMany2
+            )
+        );
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyArrayEntity', $entity);
+
+        $entities = $entity->getEntities(false);
+
+        foreach ($entities as $en) {
+            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInternalType('integer', $en->getId());
+            $this->assertContains('Modified from addEntities adder', $en->getField(false));
+        }
+
+        $this->assertEquals(2, $entities[0]->getId());
+        $this->assertSame($toMany1, $entities[0]);
+
+        $this->assertEquals(3, $entities[1]->getId());
+        $this->assertSame($toMany2, $entities[1]);
+    }
+
     public function testHydrateOneToManyAssociationByReference()
     {
         // When using hydration by value, it will use the public API of the entity to set values (setters)
@@ -926,6 +1125,48 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+
+        $entities = $entity->getEntities(false);
+
+        foreach ($entities as $en) {
+            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInternalType('integer', $en->getId());
+            $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
+        }
+
+        $this->assertEquals(2, $entities[0]->getId());
+        $this->assertSame($toMany1, $entities[0]);
+
+        $this->assertEquals(3, $entities[1]->getId());
+        $this->assertSame($toMany2, $entities[1]);
+    }
+
+    /**
+     * @depends testHydrateOneToManyAssociationByReference
+     */
+    public function testHydrateOneToManyArrayByReference()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $entity = new Asset\OneToManyArrayEntity();
+        $this->configureObjectManagerForOneToManyArrayEntity();
+
+        $data = array(
+            'entities' => array(
+                $toMany1, $toMany2
+            )
+        );
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyArrayEntity', $entity);
 
         $entities = $entity->getEntities(false);
 
@@ -1430,7 +1671,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DateTime', $entity->getDate());
         $this->assertEquals($now, $entity->getDate()->getTimestamp());
     }
-    
+
     public function testEmptyStringIsNotConvertedToDateTime()
     {
         $entity = new Asset\SimpleEntityWithDateTime();
