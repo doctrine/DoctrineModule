@@ -26,7 +26,7 @@ class SimpleEntityWithDateTime
         return $this->id;
     }
 
-    public function setDate(DateTime $date)
+    public function setDate(DateTime $date = null)
     {
         $this->date = $date;
     }

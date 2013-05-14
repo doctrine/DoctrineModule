@@ -21,36 +21,87 @@ return array(
     'doctrine' => array(
         'cache' => array(
             'apc' => array(
-                'class' => 'Doctrine\Common\Cache\ApcCache',
+                'class'     => 'Doctrine\Common\Cache\ApcCache',
+                'namespace' => 'DoctrineModule',
             ),
             'array' => array(
                 'class' => 'Doctrine\Common\Cache\ArrayCache',
+                'namespace' => 'DoctrineModule',
             ),
             'filesystem' => array(
-                'class' => 'Doctrine\Common\Cache\FilesystemCache',
+                'class'     => 'Doctrine\Common\Cache\FilesystemCache',
                 'directory' => 'data/DoctrineModule/cache',
+                'namespace' => 'DoctrineModule',
             ),
             'memcache' => array(
-                'class'    => 'Doctrine\Common\Cache\MemcacheCache',
-                'instance' => 'my_memcache_alias',
+                'class'     => 'Doctrine\Common\Cache\MemcacheCache',
+                'instance'  => 'my_memcache_alias',
+                'namespace' => 'DoctrineModule',
             ),
             'memcached' => array(
-                'class'    => 'Doctrine\Common\Cache\MemcachedCache',
-                'instance' => 'my_memcached_alias',
+                'class'     => 'Doctrine\Common\Cache\MemcachedCache',
+                'instance'  => 'my_memcached_alias',
+                'namespace' => 'DoctrineModule',
             ),
             'redis' => array(
-                'class'    => 'Doctrine\Common\Cache\RedisCache',
-                'instance' => 'my_redis_alias',
+                'class'     => 'Doctrine\Common\Cache\RedisCache',
+                'instance'  => 'my_redis_alias',
+                'namespace' => 'DoctrineModule',
             ),
             'wincache' => array(
-                'class' => 'Doctrine\Common\Cache\WinCacheCache',
+                'class'     => 'Doctrine\Common\Cache\WinCacheCache',
+                'namespace' => 'DoctrineModule',
             ),
             'xcache' => array(
-                'class' => 'Doctrine\Common\Cache\XcacheCache',
+                'class'     => 'Doctrine\Common\Cache\XcacheCache',
+                'namespace' => 'DoctrineModule',
             ),
             'zenddata' => array(
-                'class' => 'Doctrine\Common\Cache\ZendDataCache',
+                'class'     => 'Doctrine\Common\Cache\ZendDataCache',
+                'namespace' => 'DoctrineModule',
             ),
         ),
+    ),
+
+    // Factory mappings - used to define which factory to use to instantiate a particular doctrine
+    // service type
+    'doctrine_factories' => array(
+        'cache'                 => 'DoctrineModule\Service\CacheFactory',
+        'eventmanager'          => 'DoctrineModule\Service\EventManagerFactory',
+        'driver'                => 'DoctrineModule\Service\DriverFactory',
+        'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
+        'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
+        'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
+    ),
+
+    'service_manager' => array(
+        'factories' => array(
+            'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
+        ),
+        'abstract_factories' => array(
+            'DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory',
+        ),
+    ),
+
+    'controllers' => array(
+        'factories' => array(
+            'DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory'
+        )
+    ),
+
+    'route_manager' => array(
+        'factories' => array(
+            'symfony_cli' => 'DoctrineModule\Service\SymfonyCliRouteFactory',
+        ),
+    ),
+
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'doctrine_cli' => array(
+                    'type' => 'symfony_cli',
+                )
+            )
+        )
     ),
 );

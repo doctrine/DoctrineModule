@@ -104,7 +104,7 @@ class ZendStorageCacheTest extends PHPUnit_Framework_TestCase
         $cache = $this->getCacheDriver();
         $stats = $cache->getStats();
 
-        $this->assertArrayHasKey(Cache::STATS_HITS,   $stats);
+        $this->assertArrayHasKey(Cache::STATS_HITS, $stats);
         $this->assertArrayHasKey(Cache::STATS_MISSES, $stats);
         $this->assertArrayHasKey(Cache::STATS_UPTIME, $stats);
         $this->assertArrayHasKey(Cache::STATS_MEMORY_USAGE, $stats);
