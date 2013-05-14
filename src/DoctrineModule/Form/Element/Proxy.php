@@ -322,7 +322,7 @@ class Proxy implements ObjectManagerAwareInterface
         if (!$findMethod) {
             $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
         } else {
-            if (!isset($this->findMethod['name'])) {
+            if (!isset($findMethod['name'])) {
                 throw new RuntimeException('No method name was set');
             }
             $findMethodName   = $findMethod['name'];
