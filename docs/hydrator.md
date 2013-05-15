@@ -373,6 +373,35 @@ class BlogPost
 }
 ```
 
+It's also possible to use a nested fieldset for the User data.  The hydrator will
+use the mapping data to determine the identifiers for the toOne relation and either
+attempt to find the existing record or instanciate a new target instance which will
+be hydrated before it is passed to the BlogPost entity.
+
+**NOTE** : you're not really allowing users to be added via a blog post, are you?
+
+```php
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+
+$hydrator = new DoctrineHydrator($entityManager, 'Application\Entity\BlogPost');
+$blogPost = new BlogPost();
+
+$data = array(
+	'title' => 'Art thou mad?',
+	'user' => array(
+		'id' => '',
+		'username' => 'willshakes',
+		'password' => '2BorN0t2B'
+	)
+);
+
+$blogPost = $hydrator->hydrate($data, $blogPost);
+
+echo $blogPost->getUser()->getUsername(); // prints willshakes
+echo $blogPost->getUser()->getPassword(); // prints 2BorN0t2B
+```
+
+
 
 #### Example 3 : OneToMany association
 
