@@ -19,6 +19,7 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
+use Doctrine\Common\Collections\Collection;
 use LogicException;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -56,7 +57,12 @@ class DisallowRemoveByValue extends AbstractCollectionStrategy
             );
         }
 
-        $collection = $this->getCollectionFromObjectByValue()->toArray();
+        $collection = $this->getCollectionFromObjectByValue();
+
+        if ($collection instanceof Collection) {
+            $collection = $collection->toArray();
+        }
+
         $toAdd      = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
 
         $this->object->$adder($toAdd);

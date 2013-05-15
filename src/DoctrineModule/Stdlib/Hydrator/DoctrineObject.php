@@ -146,7 +146,7 @@ class DoctrineObject extends AbstractHydrator
                     throw new InvalidArgumentException(
                         sprintf(
                             'Strategies used for collections valued associations must inherit from '
-                                . 'Strategy\AbstractCollectionStrategy, %s given',
+                            . 'Strategy\AbstractCollectionStrategy, %s given',
                             get_class($strategy)
                         )
                     );
