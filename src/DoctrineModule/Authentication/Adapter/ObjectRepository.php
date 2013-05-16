@@ -181,7 +181,7 @@ class ObjectRepository implements AdapterInterface
             $credentialValue = call_user_func($callable, $identity, $credentialValue);
         }
 
-        if ($credentialValue !== true && $credentialValue != $documentCredential) {
+        if ($credentialValue !== true && $credentialValue !== $documentCredential) {
             $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_CREDENTIAL_INVALID;
             $this->authenticationResultInfo['messages'][] = 'Supplied credential is invalid.';
 

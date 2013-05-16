@@ -266,4 +266,29 @@ class ObjectRepositoryTest extends BaseTestCase
 
         $adapter->authenticate();
     }
+
+    public function testWillNotCastAuthCredentialValue()
+    {
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $adapter          = new ObjectRepositoryAdapter();
+        $entity           = new IdentityObject();
+
+        $entity->setPassword(0);
+        $adapter->setOptions(
+            array(
+                 'object_repository'   => $objectRepository,
+                 'credential_property' => 'password',
+                 'identity_property'   => 'username'
+            )
+        );
+        $adapter->setIdentityValue('a username');
+        $adapter->setCredentialValue('00000');
+        $objectRepository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with($this->equalTo(array('username' => 'a username')))
+            ->will($this->returnValue($entity));
+
+        $this->assertFalse($adapter->authenticate()->isValid());
+    }
 }
