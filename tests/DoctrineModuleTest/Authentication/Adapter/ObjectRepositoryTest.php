@@ -283,9 +283,9 @@ class ObjectRepositoryTest extends BaseTestCase
 
     public function testWillNotCastAuthCredentialValue()
     {
-        $objectRepository =  $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $adapter = new ObjectRepositoryAdapter();
-        $entity  = new IdentityObject();
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $adapter          = new ObjectRepositoryAdapter();
+        $entity           = new IdentityObject();
 
         $entity->setPassword(0);
         $adapter->setOptions(
