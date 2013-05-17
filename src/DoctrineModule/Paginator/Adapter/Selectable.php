@@ -20,7 +20,7 @@
 namespace DoctrineModule\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
-use Doctrine\Common\Collections\Criteria as DoctrineCriteria;
+use Doctrine\Common\Collections\Criteria;
 use Zend\Paginator\Adapter\AdapterInterface;
 
 /**
@@ -39,7 +39,7 @@ class Selectable implements AdapterInterface
     protected $selectable;
 
     /**
-     * @var DoctrineCriteria
+     * @var \Doctrine\Common\Collections\Criteria
      */
     protected $criteria;
 
@@ -50,10 +50,10 @@ class Selectable implements AdapterInterface
      * @param \Doctrine\Common\Collections\Selectable    $selectable
      * @param \Doctrine\Common\Collections\Criteria|null $criteria
      */
-    public function __construct(DoctrineSelectable $selectable, DoctrineCriteria $criteria = null)
+    public function __construct(DoctrineSelectable $selectable, Criteria $criteria = null)
     {
         $this->selectable = $selectable;
-        $this->criteria   = $criteria ? clone $criteria : new DoctrineCriteria();
+        $this->criteria   = $criteria ? clone $criteria : new Criteria();
     }
 
     /**
@@ -61,8 +61,7 @@ class Selectable implements AdapterInterface
      */
     public function getItems($offset, $itemCountPerPage)
     {
-        $this->criteria->setFirstResult($offset)
-                       ->setMaxResults($itemCountPerPage);
+        $this->criteria->setFirstResult($offset)->setMaxResults($itemCountPerPage);
 
         return $this->selectable->matching($this->criteria)->toArray();
     }
@@ -72,6 +71,11 @@ class Selectable implements AdapterInterface
      */
     public function count()
     {
-        return count($this->selectable->matching(new DoctrineCriteria()));
+        $criteria = clone $this->criteria;
+
+        $criteria->setFirstResult(null);
+        $criteria->setMaxResults(null);
+
+        return count($this->selectable->matching($criteria));
     }
 }

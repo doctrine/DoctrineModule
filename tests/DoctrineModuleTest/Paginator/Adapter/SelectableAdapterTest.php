@@ -168,12 +168,27 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     public function testReturnsCorrectCount()
     {
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
-        $adapter    = new SelectableAdapter($selectable);
+        $expression = Criteria::expr()->eq('foo', 'bar');
+        $criteria   = new Criteria($expression, array('baz' => Criteria::DESC), 10, 20);
+        $adapter    = new SelectableAdapter($selectable, $criteria);
 
         $selectable->expects($this->once())
             ->method('matching')
+            ->with(
+                $this->callback(
+                    function (Criteria $criteria) use ($expression) {
+                        return $criteria->getWhereExpression() == $expression
+                            && (array('baz' => Criteria::DESC) === $criteria->getOrderings())
+                            && null === $criteria->getFirstResult()
+                            && null === $criteria->getMaxResults();
+                    }
+                )
+            )
             ->will($this->returnValue(new ArrayCollection(range(1, 101))));
 
         $this->assertEquals(101, $adapter->count());
+
+        $this->assertSame(10, $criteria->getFirstResult(), 'Original criteria was not modified');
+        $this->assertSame(20, $criteria->getMaxResults(), 'Original criteria was not modified');
     }
 }
