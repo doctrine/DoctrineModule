@@ -113,6 +113,74 @@ class DoctrineObjectTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForSimpleIsEntity()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'done')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('done')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ('id' === $arg) {
+                            return 'integer';
+                        } elseif ('done' === $arg) {
+                            return 'boolean';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
     public function configureObjectManagerForSimpleEntityWithStringId()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
@@ -1833,5 +1901,18 @@ class DoctrineObjectTest extends BaseTestCase
         $data = $this->hydratorByReference->extract($entity);
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
         $this->assertEquals(array('id' => 2, 'field' => 'modified while extracting'), $data);
+    }
+
+    public function testCanExtractIsserByValue()
+    {
+        $entity = new Asset\SimpleIsEntity();
+        $entity->setId(2);
+        $entity->setDone(true);
+
+        $this->configureObjectManagerForSimpleIsEntity();
+
+        $data = $this->hydratorByValue->extract($entity);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity', $entity);
+        $this->assertEquals(array('id' => 2, 'done' => true), $data);
     }
 }

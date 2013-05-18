@@ -176,9 +176,9 @@ class DoctrineObject extends AbstractHydrator
             $getter = 'get' . ucfirst($fieldName);
             $isser  = 'is' . ucfirst($fieldName);
 
-            if (isset($methods[$getter])) {
+            if (in_array($getter, $methods)) {
                 $data[$fieldName] = $this->extractValue($fieldName, $object->$getter());
-            } elseif (isset($methods[$isser])) {
+            } elseif (in_array($isser, $methods)) {
                 $data[$fieldName] = $this->extractValue($fieldName, $object->$isser());
             }
 
