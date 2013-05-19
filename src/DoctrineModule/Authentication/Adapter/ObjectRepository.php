@@ -70,6 +70,14 @@ class ObjectRepository extends AbstractAdapter
         $this->options = $options;
         return $this;
     }
+    
+    /**
+     * @return AuthenticationOptions
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
 
     /**
      * Set the value to be used as the identity
