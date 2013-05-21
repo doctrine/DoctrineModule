@@ -17,34 +17,60 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Service;
+namespace DoctrineModule\Factory;
 
 use InvalidArgumentException;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
-use DoctrineModule\Service\AbstractFactory;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory responsible for creating EventManager instances
  */
-class EventManagerFactory extends AbstractFactory
+class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
+
+    const OPTIONS_CLASS = '\DoctrineModule\Options\EventManager';
+
+    protected $serviceLocator;
+
     /**
      * {@inheritDoc}
      */
-    public function createService(ServiceLocatorInterface $sl)
+    public function getServiceLocator() {
+        return $this->serviceLocator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function create($options)
     {
-        /** @var $options \DoctrineModule\Options\EventManager */
-        $options      = $this->getOptions($sl, 'eventmanager');
+
+        $optionsClass = self::OPTIONS_CLASS;
+
+        if (is_array($options) || $options instanceof \Traversable){
+            $options = new $optionsClass($options);
+        } else if ( ! $options instanceof $optionsClass){
+            throw new \InvalidArgumentException();
+        }
+
         $eventManager = new EventManager();
 
         foreach ($options->getSubscribers() as $subscriberName) {
             $subscriber = $subscriberName;
 
             if (is_string($subscriber)) {
-                if ($sl->has($subscriber)) {
-                    $subscriber = $sl->get($subscriber);
+                if ($this->serviceLocator->has($subscriber)) {
+                    $subscriber = $this->serviceLocator->get($subscriber);
                 } elseif (class_exists($subscriber)) {
                     $subscriber = new $subscriber();
                 }
@@ -56,7 +82,6 @@ class EventManagerFactory extends AbstractFactory
             }
 
             $subscriberType = is_object($subscriberName) ? get_class($subscriberName) : $subscriberName;
-
             throw new InvalidArgumentException(
                 sprintf(
                     'Invalid event subscriber "%s" given, must be a service name, '
@@ -67,15 +92,5 @@ class EventManagerFactory extends AbstractFactory
         }
 
         return $eventManager;
-    }
-
-    /**
-     * Get the class name of the options associated with this factory.
-     *
-     * @return string
-     */
-    public function getOptionsClass()
-    {
-        return 'DoctrineModule\Options\EventManager';
     }
 }

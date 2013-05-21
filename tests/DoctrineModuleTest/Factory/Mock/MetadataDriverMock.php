@@ -1,6 +1,6 @@
 <?php
 
-namespace DoctrineModuleTest\Service\Mock;
+namespace DoctrineModuleTest\Factory\Mock;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;

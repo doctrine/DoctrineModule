@@ -16,44 +16,69 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Service\Authentication;
 
-use DoctrineModule\Authentication\Storage\ObjectRepository;
-use DoctrineModule\Service\AbstractFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+namespace DoctrineModule\Options\Authentication;
+
+use Doctrine\Common\Persistence\ObjectManager;
+use Zend\Stdlib\AbstractOptions as BaseAbstractOptions;
 
 /**
- * Factory to create authentication storage object.
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
+ * @since   0.5.0
+ * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class StorageFactory extends AbstractFactory
+class AbstractOptions extends BaseAbstractOptions
 {
     /**
-     * {@inheritDoc}
+     * A valid object implementing ObjectManager interface
      *
-     * @return \DoctrineModule\Authentication\Storage\ObjectRepository
+     * @var ObjectManager
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    protected $objectManager;
+
+    /**
+     * Entity's class name
+     *
+     * @var string
+     */
+    protected $identityClass;
+
+    /**
+     * @param  ObjectManager $objectManager
+     * @return Repository
+     */
+    public function setObjectManager(ObjectManager $objectManager)
     {
-        /* @var $options \DoctrineModule\Options\Authentication */
-        $options = $this->getOptions($serviceLocator, 'authentication');
-
-        if (is_string($objectManager = $options->getObjectManager())) {
-            $options->setObjectManager($serviceLocator->get($objectManager));
-        }
-
-        return new ObjectRepository($options);
+        $this->objectManager = $objectManager;
+        return $this;
     }
 
     /**
-     * {@inheritDoc}
+     * @return ObjectManager
      */
-    public function getOptionsClass()
+    public function getObjectManager()
     {
-        return 'DoctrineModule\Options\Authentication';
+        return $this->objectManager;
+    }
+
+    /**
+     * @param string $identityClass
+     * @return Repository
+     */
+    public function setIdentityClass($identityClass)
+    {
+        $this->identityClass = $identityClass;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentityClass()
+    {
+        return $this->identityClass;
     }
 }

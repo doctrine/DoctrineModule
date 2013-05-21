@@ -65,9 +65,9 @@ class Driver extends AbstractOptions
     protected $extension = null;
 
     /**
-     * Set the driver keys to use which are assembled as
-     * "doctrine.driver.{key}" and pulled from the service
-     * locator. This option is only valid for DriverChain.
+     * May be driver instances, or service names which will
+     * return a driver from the ServiceManager.
+     * This option is only valid for DriverChain.
      *
      * @var array
      */
@@ -86,7 +86,7 @@ class Driver extends AbstractOptions
      */
     public function getCache()
     {
-        return "doctrine.cache.{$this->cache}";
+        return $this->cache;
     }
 
     /**

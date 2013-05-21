@@ -17,14 +17,14 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Service;
+namespace DoctrineModule\Factory;
 
 use Doctrine\Common\Cache\CacheProvider;
 use RuntimeException;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use Doctrine\Common\Cache\RedisCache;
-use DoctrineModule\Service\AbstractFactory;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -34,8 +34,27 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class CacheFactory extends AbstractFactory
+class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
+
+    const OPTIONS_CLASS = '\DoctrineModule\Options\Cache';
+
+    protected $serviceLocator;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getServiceLocator() {
+        return $this->serviceLocator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+        $this->serviceLocator = $serviceLocator;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -43,26 +62,31 @@ class CacheFactory extends AbstractFactory
      *
      * @throws RuntimeException
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function create($options)
     {
-        /** @var $options \DoctrineModule\Options\Cache */
-        $options = $this->getOptions($serviceLocator, 'cache');
+        $optionsClass = self::OPTIONS_CLASS;
+
+        if (is_array($options) || $options instanceof \Traversable){
+            $options = new $optionsClass($options);
+        } else if ( ! $options instanceof $optionsClass){
+            throw new \InvalidArgumentException();
+        }
+
         $class   = $options->getClass();
 
         if (!$class) {
             throw new RuntimeException('Cache must have a class name to instantiate');
         }
 
-        if ('filesystem' === $this->name) {
+        if ($options->getDirectory() != null) {
             $cache = new $class($options->getDirectory());
         } else {
             $cache = new $class;
         }
 
         $instance = $options->getInstance();
-
-        if (is_string($instance) && $serviceLocator->has($instance)) {
-            $instance = $serviceLocator->get($instance);
+        if (is_string($instance) && $this->serviceLocator->has($instance)) {
+            $instance = $this->serviceLocator->get($instance);
         }
 
         if ($cache instanceof MemcacheCache) {
@@ -83,13 +107,5 @@ class CacheFactory extends AbstractFactory
         }
 
         return $cache;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOptionsClass()
-    {
-        return 'DoctrineModule\Options\Cache';
     }
 }

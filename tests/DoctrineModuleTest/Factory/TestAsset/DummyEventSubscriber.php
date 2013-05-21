@@ -16,40 +16,30 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Service\Authentication;
 
-use DoctrineModule\Service\AbstractFactory;
-use Zend\Authentication\AuthenticationService;
-use Zend\ServiceManager\ServiceLocatorInterface;
+namespace DoctrineModuleTest\Factory\TestAsset;
+
+use Doctrine\Common\EventSubscriber;
 
 /**
- * Factory to create authentication service object.
- *
- * @license MIT
- * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Tim Roediger <superdweebie@gmail.com>
+ * Dummy event subscriber used to test injections
  */
-class AuthenticationServiceFactory extends AbstractFactory
+class DummyEventSubscriber implements EventSubscriber
 {
     /**
-     *
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @return \Zend\Authentication\AuthenticationService
+     * Empty callback method
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function dummy()
     {
-        return new AuthenticationService(
-            $serviceLocator->get('doctrine.authenticationstorage.' . $this->getName()),
-            $serviceLocator->get('doctrine.authenticationadapter.' . $this->getName())
-        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getOptionsClass()
+    public function getSubscribedEvents()
     {
-        throw new \BadMethodCallException('Not implemented');
+        return array(
+            'dummy'
+        );
     }
 }

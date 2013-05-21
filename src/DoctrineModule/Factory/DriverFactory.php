@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Service;
+namespace DoctrineModule\Factory;
 
 use InvalidArgumentException;
 use Doctrine\Common\Annotations;
@@ -25,47 +25,52 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
-use DoctrineModule\Options\Driver as DriverOptions;
-use DoctrineModule\Service\AbstractFactory;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * MappingDriver ServiceManager factory
+ * MappingDriver factory
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class DriverFactory extends AbstractFactory
+class DriverFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
+
+    const OPTIONS_CLASS = '\DoctrineModule\Options\Driver';
+
+    protected $serviceLocator;
+
     /**
      * {@inheritDoc}
-     * @return MappingDriver
      */
-    public function createService(ServiceLocatorInterface $sl)
-    {
-        /* @var $options DriverOptions */
-        $options = $this->getOptions($sl, 'driver');
-
-        return $this->createDriver($sl, $options);
+    public function getServiceLocator() {
+        return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getOptionsClass()
-    {
-        return 'DoctrineModule\Options\Driver';
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
-     * @param  ServiceLocatorInterface  $sl
-     * @param  DriverOptions            $options
-     * @throws InvalidArgumentException
+     * {@inheritDoc}
      * @return MappingDriver
      */
-    protected function createDriver(ServiceLocatorInterface $sl, DriverOptions $options)
+    public function create($options)
     {
+
+        $optionsClass = self::OPTIONS_CLASS;
+
+        if (is_array($options) || $options instanceof \Traversable){
+            $options = new $optionsClass($options);
+        } else if ( ! $options instanceof $optionsClass){
+            throw new \InvalidArgumentException();
+        }
+
         $class = $options->getClass();
 
         if (!$class) {
@@ -86,7 +91,7 @@ class DriverFactory extends AbstractFactory
             $reader = new Annotations\AnnotationReader;
             $reader = new Annotations\CachedReader(
                 new Annotations\IndexedReader($reader),
-                $sl->get($options->getCache())
+                $this->serviceLocator->get($options->getCache())
             );
             /* @var $driver MappingDriver */
             $driver = new $class($reader, $paths);
@@ -123,12 +128,15 @@ class DriverFactory extends AbstractFactory
                 $drivers = array($drivers);
             }
 
-            foreach ($drivers as $namespace => $driverName) {
-                if (null === $driverName) {
+            foreach ($drivers as $namespace => $childDriver) {
+                if (null === $childDriver) {
                     continue;
                 }
-                $options = $this->getOptions($sl, 'driver', $driverName);
-                $driver->addDriver($this->createDriver($sl, $options), $namespace);
+                if (is_string($childDriver)){
+                    $driver->addDriver($this->serviceLocator->get($childDriver), $namespace);
+                    continue;
+                }
+                $driver->addDriver($childDriver, $namespace);
             }
         }
 

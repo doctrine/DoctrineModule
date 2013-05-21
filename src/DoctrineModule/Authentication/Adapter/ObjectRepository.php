@@ -19,7 +19,7 @@
 
 namespace DoctrineModule\Authentication\Adapter;
 
-use DoctrineModule\Options\Authentication as AuthenticationOptions;
+use DoctrineModule\Options\Authentication\Adapter as Options;
 use Zend\Authentication\Adapter\AbstractAdapter;
 use Zend\Authentication\Adapter\Exception;
 use Zend\Authentication\Result as AuthenticationResult;
@@ -63,14 +63,14 @@ class ObjectRepository extends AbstractAdapter
      */
     public function setOptions($options)
     {
-        if (!$options instanceof AuthenticationOptions) {
-            $options = new AuthenticationOptions($options);
+        if (!$options instanceof Options) {
+            $options = new Options($options);
         }
 
         $this->options = $options;
         return $this;
     }
-    
+
     /**
      * @return AuthenticationOptions
      */
@@ -131,7 +131,8 @@ class ObjectRepository extends AbstractAdapter
         $this->setup();
         $options  = $this->options;
         $identity = $options
-            ->getObjectRepository()
+            ->getObjectManager()
+            ->getRepository($options->getIdentityClass())
             ->findOneBy(array($options->getIdentityProperty() => $this->identity));
 
         if (!$identity) {

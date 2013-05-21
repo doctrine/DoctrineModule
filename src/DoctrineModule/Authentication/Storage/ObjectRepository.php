@@ -19,7 +19,7 @@
 
 namespace DoctrineModule\Authentication\Storage;
 
-use DoctrineModule\Options\Authentication as AuthenticationOptions;
+use DoctrineModule\Options\Authentication\Storage as Options;
 use Zend\Authentication\Storage\StorageInterface;
 
 /**
@@ -45,14 +45,14 @@ class ObjectRepository implements StorageInterface
      */
     public function setOptions($options)
     {
-        if (!$options instanceof AuthenticationOptions) {
-            $options = new AuthenticationOptions($options);
+        if (!$options instanceof Options) {
+            $options = new Options($options);
         }
 
         $this->options = $options;
         return $this;
     }
-    
+
     /**
      * Constructor
      *
@@ -80,7 +80,7 @@ class ObjectRepository implements StorageInterface
     public function read()
     {
         if (($identity = $this->options->getStorage()->read())) {
-            return $this->options->getObjectRepository()->find($identity);
+            return $this->options->getObjectManager()->getRepository($this->options->getIdentityClass())->find($identity);
         }
 
         return null;
@@ -89,21 +89,21 @@ class ObjectRepository implements StorageInterface
     /**
      * Will return the key of the identity. If only the key is needed, this avoids an
      * unnecessary db call
-     * 
+     *
      * @return mixed
      */
     public function readKeyOnly()
     {
         return $identity = $this->options->getStorage()->read();
     }
-    
+
     /**
      * @param  object $identity
      * @return void
      */
     public function write($identity)
     {
-        $metadataInfo     = $this->options->getClassMetadata();
+        $metadataInfo     = $this->options->getObjectManager()->getClassMetadata($this->options->getIdentityClass());
         $identifierValues = $metadataInfo->getIdentifierValues($identity);
 
         $this->options->getStorage()->write($identifierValues);

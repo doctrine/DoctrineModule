@@ -16,10 +16,11 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Service\Authentication;
+namespace DoctrineModule\Factory\Authentication;
 
-use DoctrineModule\Authentication\Adapter\ObjectRepository;
-use DoctrineModule\Service\AbstractFactory;
+use DoctrineModule\Authentication\Adapter\ObjectRepository as Adapter;
+use DoctrineModule\Factory\AbstractFactoryInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -30,30 +31,46 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @since   0.1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class AdapterFactory extends AbstractFactory
+class AdapterFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
+
+    const OPTIONS_CLASS = '\DoctrineModule\Options\Authentication\Adapter';
+
+    protected $serviceLocator;
+
     /**
      * {@inheritDoc}
-     *
-     * @return \DoctrineModule\Authentication\Adapter\ObjectRepository
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        /* @var $options \DoctrineModule\Options\Authentication */
-        $options = $this->getOptions($serviceLocator, 'authentication');
-
-        if (is_string($objectManager = $options->getObjectManager())) {
-            $options->setObjectManager($serviceLocator->get($objectManager));
-        }
-
-        return new ObjectRepository($options);
+    public function getServiceLocator() {
+        return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getOptionsClass()
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return \DoctrineModule\Authentication\Adapter\ObjectRepository
+     */
+    public function create($options)
     {
-        return 'DoctrineModule\Options\Authentication';
+        $optionsClass = self::OPTIONS_CLASS;
+
+        if (is_string($objectManager = $options['object_manager'])) {
+            $options['object_manager'] = $this->serviceLocator->get($objectManager);
+        }
+
+        if (is_array($options) || $options instanceof \Traversable){
+            $options = new $optionsClass($options);
+        } else if ( ! $options instanceof $optionsClass){
+            throw new \InvalidArgumentException();
+        }
+
+        return new Adapter($options);
     }
 }

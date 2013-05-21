@@ -1,3 +1,32 @@
+# 1.0
+
+ * Dependency to zendframework has been bumped from `~2.1` to `~2.2`
+ * `DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory` has changed name to
+   `DoctrineModule\ServiceFactory\DoctrineServiceAbstractFactory` to make clear that it is not an abstract class.
+ * Configuration has changed significantly. Most services are created by `DoctrineModule\ServiceFactory\DoctrineServiceAbstractFactory`,
+   and expects configuration to follow this pattern:
+       - All service names should start with `doctrine.`.
+       - All service names should use `.` to delimit words in name
+       - All service names should survive `Zend\ServiceManager\ServiceManager`'s cannonacalization process.
+         If they do not, aliases will not work. In practice, this means service names should be all lower case,
+         and should not include the characters `_-\`.
+       - If a service with name `doctrine.foo.bar.baz` is requested, then the service called `doctrine.foo.bar` will
+         be fetched from the ServiceManager. The `doctrine.foo.bar` instance must be an object implementing
+        `DoctrineModule\Factory\AbstractFactory`. `$instnace::create($options)` will be called to create the oringally
+        requested `doctrine.foo.bar.baz` service. The `$options` passed to `create` will be an array taken from
+        the application config: `$config['doctrine']['foo']['bar']['baz']`s.
+       - For example in the ORM module, `$config['doctrine']['connection']['orm_default']` is moved
+         to `$config['doctrine']['orm']['connection']['default']`. And, aquiring the EntityManager from the ServiceManager changes
+         from `doctrine.entitymanager.orm_default` to `doctrine.orm.entitymanager.default`.
+ * Configuration for authentication services has been rearranged to follow the pattern above, with separate
+   config keys for `adapter`, `storage`, and `service`.
+ * Authentication configuration no longer supports setting `objectRepository`. You must set both `objectManager` and
+   `identityClass`. This significantly simplifies the code, and allows a flat config for easy caching.
+ * Most of the factories that were in `DoctrineModule\Service` have been moved to `DoctrineModule\Factory`. This is because
+   they are not actual service factories to be consumed by the ServiceManager. Rather they are consumed by DoctrineServiceAbstractFactory.
+ * When configuring drivers, the cache key must now be a full service name. eg `doctrine.cache.array`.
+ * When configuring a driver chain, the `$options->drivers` array may contain driver instances, or complete service names.
+
 # 0.8.0
 
  * Dependency to zendframework has been bumped from `2.*` to `~2.1`

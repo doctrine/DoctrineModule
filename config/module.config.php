@@ -65,41 +65,45 @@ return array(
         //These authentication settings are a hack to tide things over until version 1.0
         //Normall doctrineModule should have no mention of odm or orm
         'authentication' => array(
-            //default authentication options should be set in either the odm or orm modules
-            'odm_default' => array(),
-            'orm_default' => array(),            
-        ),
-        'authenticationadapter' => array(
-            'odm_default' => true,
-            'orm_default' => true,            
-        ),
-        'authenticationstorage' => array(
-            'odm_default' => true,
-            'orm_default' => true,            
-        ),
-        'authenticationservice' => array(
-            'odm_default' => true,
-            'orm_default' => true,            
-        )        
-    ),
-
-    // Factory mappings - used to define which factory to use to instantiate a particular doctrine
-    // service type
-    'doctrine_factories' => array(
-        'cache'                 => 'DoctrineModule\Service\CacheFactory',
-        'eventmanager'          => 'DoctrineModule\Service\EventManagerFactory',
-        'driver'                => 'DoctrineModule\Service\DriverFactory',
-        'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
-        'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
-        'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
+            'adapter' => array(
+                'default' => array(
+                    //'object_manager' => 'doctrine.odm.documentmanager.default' || 'doctrine.orm.entitymanager.default',
+                    //'identity_class' => 'Application\Model\User',
+                    'identity_property' => 'username',
+                    'credential_property' => 'password'
+                )
+            ),
+            'storage' => array(
+                'default' => array(
+                    //'object_manager' => 'doctrine.odm.documentmanager.default' || 'doctrine.orm.entitymanager.default',
+                    //'identity_class' => 'Application\Model\User',
+                    //'storage' => defaults to 'Zend\Authentication\Storage\SessionStorage',
+                )
+            ),
+            'service' => array(
+                'default' => array(
+                    'adapter' => 'doctrine.authentication.adapter.default',
+                    'storage' => 'doctrine.authentication.storage.default'
+                )
+            )
+        )
     ),
 
     'service_manager' => array(
+        'invokables' => array(
+            'doctrine.factory.cache'                     => 'DoctrineModule\Factory\CacheFactory',
+            'doctrine.factory.eventmanager'              => 'DoctrineModule\Factory\EventManagerFactory',
+            'doctrine.factory.driver'                    => 'DoctrineModule\Factory\DriverFactory',
+            'doctrine.factory.authentication.repository' => 'DoctrineModule\Factory\Authentication\RepositoryFactory',
+            'doctrine.factory.authentication.adapter'    => 'DoctrineModule\Factory\Authentication\AdapterFactory',
+            'doctrine.factory.authentication.storage'    => 'DoctrineModule\Factory\Authentication\StorageFactory',
+            'doctrine.factory.authentication.service'    => 'DoctrineModule\Factory\Authentication\AuthenticationServiceFactory',
+        ),
         'factories' => array(
             'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
         ),
         'abstract_factories' => array(
-            'DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory',
+            'DoctrineModule' => 'DoctrineModule\Service\DoctrineServiceAbstractFactory',
         ),
     ),
 
