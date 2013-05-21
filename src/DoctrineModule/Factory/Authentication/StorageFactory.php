@@ -16,11 +16,11 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Service\Authentication;
+namespace DoctrineModule\Factory\Authentication;
 
-use DoctrineModule\Authentication\Storage\ObjectRepository;
-use DoctrineModule\Service\AbstractFactory;
-use Zend\Authentication\Storage\Session as SessionStorage;
+use DoctrineModule\Authentication\Storage\ObjectRepository as Storage;
+use DoctrineModule\Factory\AbstractFactoryInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -31,34 +31,53 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @since   0.1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class StorageFactory extends AbstractFactory
+class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
+    const OPTIONS_CLASS = '\DoctrineModule\Options\Authentication\Storage';
+
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $serviceLocator;
+
     /**
      * {@inheritDoc}
-     *
-     * @return \DoctrineModule\Authentication\Storage\ObjectRepository
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        /* @var $options \DoctrineModule\Options\Authentication */
-        $options = $this->getOptions($serviceLocator, 'authentication');
-
-        if (is_string($objectManager = $options->getObjectManager())) {
-            $options->setObjectManager($serviceLocator->get($objectManager));
-        }
-
-        if (is_string($storage = $options->getStorage())) {
-            $options->setStorage($serviceLocator->get($storage));
-        }
-
-        return new ObjectRepository($options);
+    public function getServiceLocator() {
+        return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getOptionsClass()
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+        $this->serviceLocator = $serviceLocator;
+    }
+    
+    /**
+     * {@inheritDoc}
+     *
+     * @return \DoctrineModule\Authentication\Storage\ObjectRepository
+     */
+    public function create($options)
     {
-        return 'DoctrineModule\Options\Authentication';
+        $optionsClass = self::OPTIONS_CLASS;
+
+        if (is_array($options) || $options instanceof \Traversable){
+            /* @var $options \DoctrineModule\Options\Authentication\Storage */
+            $options = new $optionsClass($options);
+        } else if ( ! $options instanceof $optionsClass){
+            throw new \InvalidArgumentException();
+        }
+
+        if (is_string($objectManager = $options->getObjectManager())) {
+            $options->setObjectManager($this->serviceLocator->get($objectManager));
+        }
+
+        if (is_string($storage = $options->getStorage())) {
+            $options->setStorage($this->serviceLocator->get($storage));
+        }
+
+        return new Storage($options);
     }
 }

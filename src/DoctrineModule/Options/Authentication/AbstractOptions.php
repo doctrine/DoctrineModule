@@ -16,40 +16,69 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Service\Authentication;
 
-use DoctrineModule\Service\AbstractFactory;
-use Zend\Authentication\AuthenticationService;
-use Zend\ServiceManager\ServiceLocatorInterface;
+namespace DoctrineModule\Options\Authentication;
+
+use Doctrine\Common\Persistence\ObjectManager;
+use Zend\Stdlib\AbstractOptions as BaseAbstractOptions;
 
 /**
- * Factory to create authentication service object.
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
+ * @since   0.5.0
+ * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class AuthenticationServiceFactory extends AbstractFactory
+class AbstractOptions extends BaseAbstractOptions
 {
     /**
+     * A valid object implementing ObjectManager interface
      *
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @return \Zend\Authentication\AuthenticationService
+     * @var ObjectManager
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    protected $objectManager;
+
+    /**
+     * Entity's class name
+     *
+     * @var string
+     */
+    protected $identityClass;
+
+    /**
+     * @param  ObjectManager $objectManager
+     * @return Repository
+     */
+    public function setObjectManager(ObjectManager $objectManager)
     {
-        return new AuthenticationService(
-            $serviceLocator->get('doctrine.authenticationstorage.' . $this->getName()),
-            $serviceLocator->get('doctrine.authenticationadapter.' . $this->getName())
-        );
+        $this->objectManager = $objectManager;
+        return $this;
     }
 
     /**
-     * {@inheritDoc}
+     * @return ObjectManager
      */
-    public function getOptionsClass()
+    public function getObjectManager()
     {
-        throw new \BadMethodCallException('Not implemented');
+        return $this->objectManager;
+    }
+
+    /**
+     * @param string $identityClass
+     * @return Repository
+     */
+    public function setIdentityClass($identityClass)
+    {
+        $this->identityClass = $identityClass;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentityClass()
+    {
+        return $this->identityClass;
     }
 }

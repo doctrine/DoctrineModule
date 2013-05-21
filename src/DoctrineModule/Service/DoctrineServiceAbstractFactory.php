@@ -17,28 +17,34 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\ServiceFactory;
+namespace DoctrineModule\Service;
 
+use DoctrineModule\Factory\AbstractFactoryInterface as DoctrineModuleAbstractFactoryInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Abstract service factory capable of instantiating services whose names match the
- * pattern <code>doctrine.$serviceType.$serviceName</doctrine>
+ * pattern <code>doctrine.foo.bar.baz</code>
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
+ * @author  Tim Roediger  <superdweebie@gmail.com>
  */
-class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
+class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
 {
+
+    const DOCTRINE_PREFIX = 'doctrine';
+    const FACTORY_PREFIX  = 'factory';
+
     /**
      * {@inheritDoc}
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        return false !== $this->getFactoryMapping($serviceLocator, $requestedName);
+        return false !== $this->getFactoryMapping($serviceLocator, $name);
     }
 
     /**
@@ -46,17 +52,16 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $mappings = $this->getFactoryMapping($serviceLocator, $requestedName);
+        $mapping = $this->getFactoryMapping($serviceLocator, $name);
 
-        if (! $mappings) {
-            throw new ServiceNotFoundException();
+        /* @var $factory \DoctrineModule\Factory\AbstractFactoryInterface */
+        $factory = $serviceLocator->get($mapping['factoryName']);
+
+        if ( ! $factory instanceof DoctrineModuleAbstractFactoryInterface){
+            throw new ServiceNotFoundException(sprintf('%s service did not return an instance of \DoctrineModule\Factory\AbstractFactoryInterface', $mapping['factoryName']));
         }
 
-        $factoryClass = $mappings['factoryClass'];
-        /* @var $factory \DoctrineModule\Service\AbstractFactory */
-        $factory      = new $factoryClass($mappings['serviceName']);
-
-        return $factory->createService($serviceLocator);
+        return $factory->create($mapping['options']);
     }
 
     /**
@@ -67,42 +72,32 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
      */
     private function getFactoryMapping(ServiceLocatorInterface $serviceLocator, $name)
     {
-        $matches = array();
+        $pieces = explode('.', $name);
 
-        if (! preg_match('/^doctrine\.((?<mappingType>orm|odm)\.|)(?<serviceType>[a-z0-9_]+)\.(?<serviceName>[a-z0-9_]+)$/', $name, $matches)) {
+        if (count($pieces) < 2){
+            return false;
+        }
+        if (array_shift($pieces) != self::DOCTRINE_PREFIX){
+            return false;
+        }
+        if ($pieces[0] == self::FACTORY_PREFIX){
             return false;
         }
 
-        $config      = $serviceLocator->get('Config');
-        $mappingType = $matches['mappingType'];
-        $serviceType = $matches['serviceType'];
-        $serviceName = $matches['serviceName'];
+        $factoryName = implode('.', array_merge([self::DOCTRINE_PREFIX, self::FACTORY_PREFIX], array_slice($pieces, 0, count($pieces) - 1)));
 
-        if ($mappingType == ''){
-            if ( ! isset($config['doctrine_factories'][$serviceType]) ||
-                 ! isset($config['doctrine'][$serviceType][$serviceName])
-            ){
+        $options = $serviceLocator->get('Config')['doctrine'];
+        foreach ($pieces as $piece){
+            if (isset($options[$piece])){
+                $options = $options[$piece];
+            } else {
                 return false;
             }
-
-            return array(
-                'serviceType'  => $serviceType,
-                'serviceName'  => $serviceName,
-                'factoryClass' => $config['doctrine_factories'][$serviceType],
-            );
-        } else {
-            if ( ! isset($config['doctrine_factories'][$mappingType]) ||
-                 ! isset($config['doctrine_factories'][$mappingType][$serviceType]) ||
-                 ! isset($config['doctrine'][$mappingType][$serviceType][$serviceName])
-            ){
-                return false;
-            }
-
-            return array(
-                'serviceType'  => $serviceType,
-                'serviceName'  => $serviceName,
-                'factoryClass' => $config['doctrine_factories'][$mappingType][$serviceType],
-            );
         }
+
+        return [
+            'factoryName' => $factoryName,
+            'options'     => $options
+        ];
     }
 }

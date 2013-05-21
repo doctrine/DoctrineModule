@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\ServiceFactory;
+namespace DoctrineModuleTest\Service;
 
 use DoctrineModuleTest\ServiceManagerTestCase;
 use PHPUnit_Framework_TestCase;

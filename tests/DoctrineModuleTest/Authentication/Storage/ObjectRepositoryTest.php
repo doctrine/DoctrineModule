@@ -51,11 +51,21 @@ class ObjectRepositoryTest extends BaseTestCase
                  ->method('getIdentifierValues')
                  ->with($this->equalTo($entity))
                  ->will($this->returnValue($entity->getUsername()));
-        
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->exactly(1))
+                      ->method('getRepository')
+                      ->with($this->equalTo('IdentityObject'))
+                      ->will($this->returnValue($objectRepository));
+        $objectManager->expects($this->exactly(1))
+                      ->method('getClassMetadata')
+                      ->with($this->equalTo('IdentityObject'))
+                      ->will($this->returnValue($metadata));
+
         $storage = new ObjectRepositoryStorage(
             array(
-                'objectRepository' => $objectRepository,
-                'classMetadata' => $metadata,
+                'object_manager'      => $objectManager,
+                'identity_class'      => 'IdentityObject',
                 'storage' => new NonPersistentStorage()
             )
         );
@@ -65,7 +75,7 @@ class ObjectRepositoryTest extends BaseTestCase
 
         $result = $storage->read();
         $this->assertEquals($entity, $result);
-        
+
         $key = $storage->readKeyOnly();
         $this->assertEquals('a username', $key);
     }

@@ -19,12 +19,11 @@
 
 namespace DoctrineModuleTest\Service;
 
-use DoctrineModule\Service\CacheFactory;
+use DoctrineModule\Factory\CacheFactory;
 use PHPUnit_Framework_TestCase as BaseTestCase;
-use Zend\ServiceManager\ServiceManager;
 
 /**
- * Test for {@see \DoctrineModule\Service\CacheFactory}
+ * Test for {@see \DoctrineModule\Factory\CacheFactory}
  *
  * @author Marco Pivetta <ocramius@gmail.com>
  */
@@ -35,25 +34,12 @@ class CacheFactoryTest extends BaseTestCase
      */
     public function testWillSetNamespace()
     {
-        $factory        = new CacheFactory('foo');
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Configuration',
-            array(
-                 'doctrine' => array(
-                     'cache' => array(
-                         'foo' => array(
-                             'namespace' => 'bar',
-                         ),
-                     ),
-                 ),
-            )
-        );
+        $factory = new CacheFactory;
 
         /* @var $service \Doctrine\Common\Cache\ArrayCache */
-        $service = $factory->createService($serviceManager);
+        $instance = $factory->create(array('namespace' => 'bar'));
 
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $service);
-        $this->assertSame('bar', $service->getNamespace());
+        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $instance);
+        $this->assertSame('bar', $instance->getNamespace());
     }
 }

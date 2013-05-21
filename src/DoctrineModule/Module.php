@@ -25,7 +25,6 @@ use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
 use Zend\EventManager\EventInterface;
-use Zend\Loader\StandardAutoloader;
 use Zend\Console\Adapter\AdapterInterface as Console;
 
 use Symfony\Component\Console\Input\StringInput;

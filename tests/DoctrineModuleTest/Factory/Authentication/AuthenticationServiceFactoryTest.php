@@ -17,12 +17,12 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Service\Authentication;
+namespace DoctrineModuleTest\Factory\Authentication;
 
-use DoctrineModule\Service\Authentication\AuthenticationServiceFactory;
-use DoctrineModule\Service\Authentication\AdapterFactory;
-use DoctrineModule\Service\Authentication\StorageFactory;
+use DoctrineModule\Authentication\Adapter\ObjectRepository as Adapter;
+use DoctrineModule\Factory\Authentication\AuthenticationServiceFactory;
 use PHPUnit_Framework_TestCase as BaseTestCase;
+use Zend\Authentication\Storage\NonPersistent as NonPersistentStorage;
 use Zend\ServiceManager\ServiceManager;
 
 class AuthenticationServiceFactoryTest extends BaseTestCase
@@ -30,31 +30,18 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
     public function testWillInstantiateFromFQCN()
     {
 
-        $name = 'testFactory';
-        $factory = new AuthenticationServiceFactory($name);
-
-        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $factory = new AuthenticationServiceFactory;
 
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Configuration',
-            array(
-                'doctrine' => array(
-                    'authentication' => array(
-                        $name => array(
-                            'objectManager' => $objectManager,
-                            'identityClass' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
-                            'identityProperty' => 'username',
-                            'credentialProperty' => 'password'
-                        ),
-                    ),
-                ),
-            )
-        );
-        $serviceManager->setFactory('doctrine.authenticationadapter.' . $name, new AdapterFactory($name));
-        $serviceManager->setFactory('doctrine.authenticationstorage.' . $name, new StorageFactory($name));
+        $serviceManager->setService('testAdapter', new Adapter);
+        $serviceManager->setService('testStorage', new NonPersistentStorage);
 
-        $authenticationService = $factory->createService($serviceManager);
+        $factory->setServiceLocator($serviceManager);
+
+        $authenticationService = $factory->create(array(
+            'adapter' => 'testAdapter',
+            'storage' => 'testStorage'
+        ));
         $this->assertInstanceOf('Zend\Authentication\AuthenticationService', $authenticationService);
     }
 }

@@ -17,40 +17,24 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Service\Authentication;
+namespace DoctrineModuleTest\Factory\Authentication;
 
-use DoctrineModule\Service\Authentication\StorageFactory;
+use DoctrineModule\Factory\Authentication\StorageFactory;
 use PHPUnit_Framework_TestCase as BaseTestCase;
-use Zend\ServiceManager\ServiceManager;
 
 class StorageFactoryTest extends BaseTestCase
 {
     public function testWillInstantiateFromFQCN()
     {
-        $name = 'testFactory';
-        $factory = new StorageFactory($name);
+        $factory = new StorageFactory;
 
         $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Configuration',
-            array(
-                'doctrine' => array(
-                    'authentication' => array(
-                        $name => array(
-                            'objectManager' => $objectManager,
-                            'identityClass' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
-                            'identityProperty' => 'username',
-                            'credentialProperty' => 'password'
-                        ),
-                    ),
-                ),
-            )
-        );
-
-        $adapter = $factory->createService($serviceManager);
-        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
+        $storage = $factory->create(array(
+            'object_manager' => $objectManager,
+            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+        ));
+        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $storage);
     }
 
     public function testCanInstantiateStorageFromServiceLocator()
@@ -77,10 +61,12 @@ class StorageFactoryTest extends BaseTestCase
             ->with('some_storage')
             ->will($this->returnValue($storage));
 
+        $factory->setServiceLocator($serviceLocator);
+
 
         $this->assertInstanceOf(
             'DoctrineModule\Authentication\Storage\ObjectRepository',
-            $factory->createService($serviceLocator)
+            $factory->create(array())
         );
     }
 }

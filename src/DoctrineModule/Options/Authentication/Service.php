@@ -17,29 +17,55 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Service\TestAsset;
+namespace DoctrineModule\Options\Authentication;
 
-use Doctrine\Common\EventSubscriber;
+use Zend\Authentication\Adapter\AdapterInterface;
+use Zend\Authentication\Storage\StorageInterface;
+use Zend\Stdlib\AbstractOptions as ZendAbstractOptions;
 
 /**
- * Dummy event subscriber used to test injections
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @since   0.5.0
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class DummyEventSubscriber implements EventSubscriber
+class Service extends ZendAbstractOptions
 {
-    /**
-     * Empty callback method
+
+     /**
+     *
+     * @var \Zend\Authentication\Storage\AdapterInterface;
      */
-    public function dummy()
-    {
+    protected $adapter;
+
+     /**
+     *
+     * @var \Zend\Authentication\Storage\StorageInterface;
+     */
+    protected $storage;
+
+    public function getAdapter() {
+        return $this->adapter;
+    }
+
+    public function setAdapter(AdapterInterface $adapter) {
+        $this->adapter = $adapter;
     }
 
     /**
-     * {@inheritDoc}
+     * @return \Zend\Authentication\Storage\StorageInterface
      */
-    public function getSubscribedEvents()
+    public function getStorage()
     {
-        return array(
-            'dummy'
-        );
+        return $this->storage;
+    }
+
+    /**
+     * @param \Zend\Authentication\Storage\StorageInterface $storage
+     */
+    public function setStorage(StorageInterface $storage)
+    {
+        $this->storage = $storage;
     }
 }
