@@ -84,7 +84,7 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
             return false;
         }
 
-        $factoryName = implode('.', array_merge([self::DOCTRINE_PREFIX, self::FACTORY_PREFIX], array_slice($pieces, 0, count($pieces) - 1)));
+        $factoryName = implode('.', array_merge(array(self::DOCTRINE_PREFIX, self::FACTORY_PREFIX), array_slice($pieces, 0, count($pieces) - 1)));
 
         $options = $serviceLocator->get('Config')['doctrine'];
         foreach ($pieces as $piece){
