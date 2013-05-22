@@ -34,7 +34,7 @@
  * When configuring a driver chain, the `$options->drivers` array may contain driver instances, or complete service names. eg:
 
 
-    'driver' => array(
+    `'driver' => array(
          'default' => array(
              'drivers' => array(
                  'My\Namespace' => 'doctrine.driver.mydriver'
@@ -44,7 +44,7 @@
              'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
              'paths' => array('path/to/my/namespace')
          ),
-     ),
+     ),`
 
 # 0.8.0
 
