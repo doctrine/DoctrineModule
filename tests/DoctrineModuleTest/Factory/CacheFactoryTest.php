@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Service;
+namespace DoctrineModuleTest\Factory;
 
 use DoctrineModule\Factory\CacheFactory;
 use PHPUnit_Framework_TestCase as BaseTestCase;
@@ -30,7 +30,7 @@ use PHPUnit_Framework_TestCase as BaseTestCase;
 class CacheFactoryTest extends BaseTestCase
 {
     /**
-     * @covers \DoctrineModule\Service\CacheFactory::createService
+     * @covers \DoctrineModule\Factory\CacheFactory::create
      */
     public function testWillSetNamespace()
     {
