@@ -45,11 +45,13 @@ class Service extends ZendAbstractOptions
      */
     protected $storage;
 
-    public function getAdapter() {
+    public function getAdapter()
+    {
         return $this->adapter;
     }
 
-    public function setAdapter(AdapterInterface $adapter) {
+    public function setAdapter(AdapterInterface $adapter)
+    {
         $this->adapter = $adapter;
     }
 

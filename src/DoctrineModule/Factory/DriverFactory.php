@@ -45,14 +45,16 @@ class DriverFactory implements AbstractFactoryInterface, ServiceLocatorAwareInte
     /**
      * {@inheritDoc}
      */
-    public function getServiceLocator() {
+    public function getServiceLocator()
+    {
         return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
         $this->serviceLocator = $serviceLocator;
     }
 

@@ -41,14 +41,16 @@ class AuthenticationServiceFactory implements AbstractFactoryInterface, ServiceL
     /**
      * {@inheritDoc}
      */
-    public function getServiceLocator() {
+    public function getServiceLocator()
+    {
         return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
         $this->serviceLocator = $serviceLocator;
     }
 
@@ -61,17 +63,17 @@ class AuthenticationServiceFactory implements AbstractFactoryInterface, ServiceL
     {
         $optionsClass = self::OPTIONS_CLASS;
 
-        if (isset($options['adapter']) && is_string($adapter = $options['adapter'])) {
+        if (isset($options['adapter']) && is_string($adapter = $options['adapter'])){
             $options['adapter'] = $this->serviceLocator->get($adapter);
         }
 
-        if (isset($options['storage']) && is_string($storage = $options['storage'])) {
+        if (isset($options['storage']) && is_string($storage = $options['storage'])){
             $options['storage'] = $this->serviceLocator->get($storage);
         }
 
         if (is_array($options) || $options instanceof \Traversable){
             $options = new $optionsClass($options);
-        } else if ( ! $options instanceof $optionsClass){
+        } elseif (! $options instanceof $optionsClass){
             throw new \InvalidArgumentException();
         }
 

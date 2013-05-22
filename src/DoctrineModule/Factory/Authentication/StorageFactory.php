@@ -41,14 +41,16 @@ class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
     /**
      * {@inheritDoc}
      */
-    public function getServiceLocator() {
+    public function getServiceLocator()
+    {
         return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
         $this->serviceLocator = $serviceLocator;
     }
 
@@ -62,13 +64,13 @@ class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
 
         $optionsClass = self::OPTIONS_CLASS;
 
-        if (is_string($objectManager = $options['object_manager'])) {
+        if (is_string($objectManager = $options['object_manager'])){
             $options['object_manager'] = $this->serviceLocator->get($objectManager);
         }
 
         if (is_array($options) || $options instanceof \Traversable){
             $options = new $optionsClass($options);
-        } else if ( ! $options instanceof $optionsClass){
+        } elseif (! $options instanceof $optionsClass){
             throw new \InvalidArgumentException();
         }
 
