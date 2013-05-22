@@ -19,7 +19,7 @@
 
 namespace DoctrineModuleTest\Factory\Authentication;
 
-use DoctrineModule\Authentication\Adapter\ObjectRepository as Adapter;
+use DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter;
 use DoctrineModule\Factory\Authentication\AuthenticationServiceFactory;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\Authentication\Storage\NonPersistent as NonPersistentStorage;
@@ -33,7 +33,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         $factory = new AuthenticationServiceFactory;
 
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('testAdapter', new Adapter);
+        $serviceManager->setService('testAdapter', new ObjectRepositoryAdapter);
         $serviceManager->setService('testStorage', new NonPersistentStorage);
 
         $factory->setServiceLocator($serviceManager);

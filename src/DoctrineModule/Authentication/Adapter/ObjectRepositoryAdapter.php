@@ -33,7 +33,7 @@ use Zend\Authentication\Result as AuthenticationResult;
  * @author  Tim Roediger <superdweebie@gmail.com>
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
-class ObjectRepository extends AbstractAdapter
+class ObjectRepositoryAdapter extends AbstractAdapter
 {
     /**
      * @var AuthenticationOptions

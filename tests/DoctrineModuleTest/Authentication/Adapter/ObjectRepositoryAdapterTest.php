@@ -20,7 +20,7 @@
 namespace DoctrineModuleTest\Authentication\Adapter;
 
 use PHPUnit_Framework_TestCase as BaseTestCase;
-use DoctrineModule\Authentication\Adapter\ObjectRepository as ObjectRepositoryAdapter;
+use DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject;
 
@@ -31,7 +31,7 @@ use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentity
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ObjectRepositoryTest extends BaseTestCase
+class ObjectRepositoryAdapterTest extends BaseTestCase
 {
     public function testWillRejectInvalidIdentityProperty()
     {
