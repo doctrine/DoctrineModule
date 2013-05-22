@@ -19,6 +19,7 @@
 
 namespace DoctrineModule\Options\Authentication;
 
+use Zend\Authentication\Storage\Session as SessionStorage;
 use Zend\Authentication\Storage\StorageInterface;
 
 /**
