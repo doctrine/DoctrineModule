@@ -34,7 +34,7 @@ use PHPUnit_Framework_TestCase;
 class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\SelectableAdapter::getItems
      */
     public function testGetItemsAtOffsetZeroWithEmptyCriteria()
     {
