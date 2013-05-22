@@ -97,7 +97,8 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
             )
         );
 
-        $options = $serviceLocator->get('Config')['doctrine'];
+        $options = $serviceLocator->get('Config');
+        $options = $options['doctrine'];
         foreach ($pieces as $piece) {
             if (isset($options[$piece])) {
                 $options = $options[$piece];
