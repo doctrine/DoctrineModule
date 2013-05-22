@@ -24,49 +24,30 @@ use PHPUnit_Framework_TestCase as BaseTestCase;
 
 class StorageFactoryTest extends BaseTestCase
 {
-    public function testWillInstantiateFromFQCN()
-    {
-        $factory = new StorageFactory;
-
-        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-
-        $storage = $factory->create(array(
-            'object_manager' => $objectManager,
-            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
-        ));
-        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $storage);
-    }
-
     public function testCanInstantiateStorageFromServiceLocator()
     {
         $factory        = new StorageFactory('testFactory');
         $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
         $storage        = $this->getMock('Zend\Authentication\Storage\StorageInterface');
-        $config         = array(
-            'doctrine' => array(
-                'authentication' => array(
-                    'testFactory' => array('storage' => 'some_storage')
-                ),
-            )
-        );
+        $objectManager  =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceLocator
             ->expects($this->at(0))
-            ->method('get')
-            ->with('Configuration')
-            ->will($this->returnValue($config));
-        $serviceLocator
-            ->expects($this->at(1))
             ->method('get')
             ->with('some_storage')
             ->will($this->returnValue($storage));
 
         $factory->setServiceLocator($serviceLocator);
 
-
         $this->assertInstanceOf(
             'DoctrineModule\Authentication\Storage\ObjectRepository',
-            $factory->create(array())
+            $factory->create(
+                array(
+                     'object_manager' => $objectManager,
+                     'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                     'storage'        => 'some_storage',
+                )
+            )
         );
     }
 }

@@ -33,7 +33,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-    const OPTIONS_CLASS = '\DoctrineModule\Options\Authentication\Storage';
+    const OPTIONS_CLASS = 'DoctrineModule\Options\Authentication\Storage';
 
     /**
      * @var ServiceLocatorInterface
@@ -43,17 +43,19 @@ class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
     /**
      * {@inheritDoc}
      */
-    public function getServiceLocator() {
+    public function getServiceLocator()
+    {
         return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
         $this->serviceLocator = $serviceLocator;
     }
-    
+
     /**
      * {@inheritDoc}
      *
@@ -61,12 +63,13 @@ class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
      */
     public function create($options)
     {
+
         $optionsClass = self::OPTIONS_CLASS;
 
-        if (is_array($options) || $options instanceof \Traversable){
+        if (is_array($options) || $options instanceof \Traversable) {
             /* @var $options \DoctrineModule\Options\Authentication\Storage */
             $options = new $optionsClass($options);
-        } else if ( ! $options instanceof $optionsClass){
+        } elseif ( ! $options instanceof $optionsClass){
             throw new \InvalidArgumentException();
         }
 

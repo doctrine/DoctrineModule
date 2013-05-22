@@ -38,14 +38,16 @@ class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwa
     /**
      * {@inheritDoc}
      */
-    public function getServiceLocator() {
+    public function getServiceLocator()
+    {
         return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
         $this->serviceLocator = $serviceLocator;
     }
 
@@ -65,18 +67,18 @@ class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwa
 
         $eventManager = new EventManager();
 
-        foreach ($options->getSubscribers() as $subscriberName) {
+        foreach ($options->getSubscribers() as $subscriberName){
             $subscriber = $subscriberName;
 
             if (is_string($subscriber)) {
-                if ($this->serviceLocator->has($subscriber)) {
+                if ($this->serviceLocator->has($subscriber)){
                     $subscriber = $this->serviceLocator->get($subscriber);
                 } elseif (class_exists($subscriber)) {
                     $subscriber = new $subscriber();
                 }
             }
 
-            if ($subscriber instanceof EventSubscriber) {
+            if ($subscriber instanceof EventSubscriber){
                 $eventManager->addEventSubscriber($subscriber);
                 continue;
             }

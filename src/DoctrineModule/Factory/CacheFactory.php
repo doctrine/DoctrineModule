@@ -44,14 +44,16 @@ class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInter
     /**
      * {@inheritDoc}
      */
-    public function getServiceLocator() {
+    public function getServiceLocator()
+    {
         return $this->serviceLocator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
         $this->serviceLocator = $serviceLocator;
     }
 
@@ -89,13 +91,13 @@ class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInter
             $instance = $this->serviceLocator->get($instance);
         }
 
-        if ($cache instanceof MemcacheCache) {
+        if ($cache instanceof MemcacheCache){
             /* @var $cache MemcacheCache */
             $cache->setMemcache($instance);
-        } elseif ($cache instanceof MemcachedCache) {
+        } elseif ($cache instanceof MemcachedCache){
             /* @var $cache MemcachedCache */
             $cache->setMemcached($instance);
-        } elseif ($cache instanceof RedisCache) {
+        } elseif ($cache instanceof RedisCache){
             /* @var $cache RedisCache */
             $cache->setRedis($instance);
         }

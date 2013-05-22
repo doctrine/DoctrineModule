@@ -80,7 +80,10 @@ class ObjectRepository implements StorageInterface
     public function read()
     {
         if (($identity = $this->options->getStorage()->read())) {
-            return $this->options->getObjectManager()->getRepository($this->options->getIdentityClass())->find($identity);
+            return $this->options
+                ->getObjectManager()
+                ->getRepository($this->options->getIdentityClass())
+                ->find($identity);
         }
 
         return null;
