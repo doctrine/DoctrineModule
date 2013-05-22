@@ -99,8 +99,8 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \DoctrineModule\Paginator\Adapter\SelectableAdaper::getItems
-     */
+     * @covers \DoctrineModule\Paginator\Adapter\SelectableAdapter::getItems
+     */      
     public function testGetItemsAtOffsetTenWithEmptyCriteria()
     {
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
