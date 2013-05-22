@@ -56,7 +56,7 @@ class EventManagerFactoryTest extends BaseTestCase
 
         /* $var $eventManager \Doctrine\Common\EventManager */
         $eventManager = $factory->create(
-             array(
+            array(
                 'subscribers' => array(
                     $subscriber,
                 ),
@@ -103,11 +103,11 @@ class EventManagerFactoryTest extends BaseTestCase
 
         $this->setExpectedException('InvalidArgumentException');
         $factory->create(
-             array(
+            array(
                 'subscribers' => array(
                     'non-existing-subscriber'
                 ),
-             )
+            )
         );
     }
 }
