@@ -68,9 +68,9 @@ class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInter
     {
         $optionsClass = self::OPTIONS_CLASS;
 
-        if (is_array($options) || $options instanceof \Traversable){
+        if (is_array($options) || $options instanceof \Traversable) {
             $options = new $optionsClass($options);
-        } else if ( ! $options instanceof $optionsClass){
+        } elseif (! $options instanceof $optionsClass) {
             throw new \InvalidArgumentException();
         }
 
@@ -91,13 +91,13 @@ class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInter
             $instance = $this->serviceLocator->get($instance);
         }
 
-        if ($cache instanceof MemcacheCache){
+        if ($cache instanceof MemcacheCache) {
             /* @var $cache MemcacheCache */
             $cache->setMemcache($instance);
-        } elseif ($cache instanceof MemcachedCache){
+        } elseif ($cache instanceof MemcachedCache) {
             /* @var $cache MemcachedCache */
             $cache->setMemcached($instance);
-        } elseif ($cache instanceof RedisCache){
+        } elseif ($cache instanceof RedisCache) {
             /* @var $cache RedisCache */
             $cache->setRedis($instance);
         }

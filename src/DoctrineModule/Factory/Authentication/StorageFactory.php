@@ -34,7 +34,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
     const OPTIONS_CLASS = 'DoctrineModule\Options\Authentication\Storage';
-
+    
     /**
      * @var ServiceLocatorInterface
      */

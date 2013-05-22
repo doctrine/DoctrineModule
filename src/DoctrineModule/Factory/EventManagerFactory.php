@@ -59,26 +59,26 @@ class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwa
 
         $optionsClass = self::OPTIONS_CLASS;
 
-        if (is_array($options) || $options instanceof \Traversable){
+        if (is_array($options) || $options instanceof \Traversable) {
             $options = new $optionsClass($options);
-        } else if ( ! $options instanceof $optionsClass){
+        } elseif (! $options instanceof $optionsClass) {
             throw new \InvalidArgumentException();
         }
 
         $eventManager = new EventManager();
 
-        foreach ($options->getSubscribers() as $subscriberName){
+        foreach ($options->getSubscribers() as $subscriberName) {
             $subscriber = $subscriberName;
 
             if (is_string($subscriber)) {
-                if ($this->serviceLocator->has($subscriber)){
+                if ($this->serviceLocator->has($subscriber)) {
                     $subscriber = $this->serviceLocator->get($subscriber);
                 } elseif (class_exists($subscriber)) {
                     $subscriber = new $subscriber();
                 }
             }
 
-            if ($subscriber instanceof EventSubscriber){
+            if ($subscriber instanceof EventSubscriber) {
                 $eventManager->addEventSubscriber($subscriber);
                 continue;
             }

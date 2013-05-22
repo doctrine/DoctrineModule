@@ -30,12 +30,14 @@ class AdapterFactoryTest extends BaseTestCase
         $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $factory = new AdapterFactory;
-        $adapter = $factory->create(array(
-            'object_manager' => $objectManager,
-            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
-            'identity_property' => 'username',
-            'credential_property' => 'password'
-        ));
+        $adapter = $factory->create(
+            array(
+                'object_manager' => $objectManager,
+                'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                'identity_property' => 'username',
+                'credential_property' => 'password'
+            )
+        );
 
         $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepository', $adapter);
     }

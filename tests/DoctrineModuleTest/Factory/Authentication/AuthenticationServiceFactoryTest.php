@@ -38,10 +38,12 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
 
         $factory->setServiceLocator($serviceManager);
 
-        $authenticationService = $factory->create(array(
-            'adapter' => 'testAdapter',
-            'storage' => 'testStorage'
-        ));
+        $authenticationService = $factory->create(
+            array(
+                'adapter' => 'testAdapter',
+                'storage' => 'testStorage'
+            )
+        );
         $this->assertInstanceOf('Zend\Authentication\AuthenticationService', $authenticationService);
     }
 }

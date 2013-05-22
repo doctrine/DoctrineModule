@@ -31,47 +31,30 @@ class DriverFactoryTest extends BaseTestCase
     public function testCreateDriver()
     {
         $factory = new DriverFactory;
-        $driver = $factory->create(array(
-            'class' => 'DoctrineModuleTest\Factory\Mock\MetadataDriverMock',
-        ));
+        $driver = $factory->create(
+             array(
+                'class' => 'DoctrineModuleTest\Factory\Mock\MetadataDriverMock',
+            )
+        );
         $this->assertInstanceOf('DoctrineModuleTest\Factory\Mock\MetadataDriverMock', $driver);
     }
 
     public function testCreateDriverChain()
     {
-//        $serviceManager = new ServiceManager();
-//        $serviceManager->setService(
-//            'Configuration',
-//            array(
-//                'doctrine' => array(
-//                    'driver' => array(
-//                        'testDriver' => array(
-//                            'class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock',
-//                        ),
-//                        'testChainDriver' => array(
-//                            'class' => 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain',
-//                            'drivers' => array(
-//                                'Foo\Bar' => 'testDriver',
-//                                'Foo\Baz' => null,
-//                            ),
-//                        ),
-//                    ),
-//                ),
-//            )
-//        );
-
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass('testDriver', 'DoctrineModuleTest\Factory\Mock\MetadataDriverMock');
 
         $factory = new DriverFactory();
         $factory->setServiceLocator($serviceManager);
-        $driver = $factory->create(array(
-            'class' => 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain',
-            'drivers' => array(
-                'Foo\Bar' => 'testDriver',
-                'Foo\Baz' => null,
-            ),
-        ));
+        $driver = $factory->create(
+                array(
+               'class' => 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain',
+               'drivers' => array(
+                   'Foo\Bar' => 'testDriver',
+                   'Foo\Baz' => null,
+               ),
+           )
+        );
         $this->assertInstanceOf('Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain', $driver);
         $drivers = $driver->getDrivers();
         $this->assertCount(1, $drivers);
