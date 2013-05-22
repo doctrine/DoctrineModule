@@ -39,6 +39,6 @@ class AdapterFactoryTest extends BaseTestCase
             )
         );
 
-        $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepository', $adapter);
+        $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter', $adapter);
     }
 }

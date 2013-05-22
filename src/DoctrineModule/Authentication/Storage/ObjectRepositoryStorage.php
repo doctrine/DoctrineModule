@@ -30,7 +30,7 @@ use Zend\Authentication\Storage\StorageInterface;
  * @since   0.5.0
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
-class ObjectRepository implements StorageInterface
+class ObjectRepositoryStorage implements StorageInterface
 {
 
     /**

@@ -36,6 +36,6 @@ class StorageFactoryTest extends BaseTestCase
                 'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
             )
         );
-        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $storage);
+        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepositoryStorage', $storage);
     }
 }

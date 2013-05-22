@@ -19,30 +19,41 @@
 
 namespace DoctrineModule\Paginator\Adapter;
 
-use Doctrine\Common\Collections\Collection as DoctrineCollection;
+use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
+use Doctrine\Common\Collections\Criteria;
 use Zend\Paginator\Adapter\AdapterInterface;
 
 /**
- * Base module for Doctrine ORM.
+ * Provides a wrapper around a Selectable object
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Collection implements AdapterInterface
+class SelectableAdapter implements AdapterInterface
 {
     /**
-     * @var DoctrineCollection
+     * @var DoctrineSelectable
      */
-    protected $collection;
+    protected $selectable;
 
     /**
-     * @param DoctrineCollection $collection
+     * @var \Doctrine\Common\Collections\Criteria
      */
-    public function __construct(DoctrineCollection $collection)
+    protected $criteria;
+
+    /**
+     * Create a paginator around a Selectable object. You can also provide an optional Criteria object with
+     * some predefined filters
+     *
+     * @param \Doctrine\Common\Collections\Selectable    $selectable
+     * @param \Doctrine\Common\Collections\Criteria|null $criteria
+     */
+    public function __construct(DoctrineSelectable $selectable, Criteria $criteria = null)
     {
-        $this->collection = $collection;
+        $this->selectable = $selectable;
+        $this->criteria   = $criteria ? clone $criteria : new Criteria();
     }
 
     /**
@@ -50,7 +61,9 @@ class Collection implements AdapterInterface
      */
     public function getItems($offset, $itemCountPerPage)
     {
-        return array_values($this->collection->slice($offset, $itemCountPerPage));
+        $this->criteria->setFirstResult($offset)->setMaxResults($itemCountPerPage);
+
+        return $this->selectable->matching($this->criteria)->toArray();
     }
 
     /**
@@ -58,6 +71,11 @@ class Collection implements AdapterInterface
      */
     public function count()
     {
-        return count($this->collection);
+        $criteria = clone $this->criteria;
+
+        $criteria->setFirstResult(null);
+        $criteria->setMaxResults(null);
+
+        return count($this->selectable->matching($criteria));
     }
 }

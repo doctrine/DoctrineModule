@@ -18,7 +18,7 @@
  */
 namespace DoctrineModule\Factory\Authentication;
 
-use DoctrineModule\Authentication\Adapter\ObjectRepository as Adapter;
+use DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter;
 use DoctrineModule\Factory\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -73,6 +73,6 @@ class AdapterFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
             throw new \InvalidArgumentException();
         }
 
-        return new Adapter($options);
+        return new ObjectRepositoryAdapter($options);
     }
 }

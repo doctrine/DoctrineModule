@@ -18,7 +18,7 @@
  */
 namespace DoctrineModule\Factory\Authentication;
 
-use DoctrineModule\Authentication\Storage\ObjectRepository as Storage;
+use DoctrineModule\Authentication\Storage\ObjectRepositoryStorage;
 use DoctrineModule\Factory\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -74,6 +74,6 @@ class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
             throw new \InvalidArgumentException();
         }
 
-        return new Storage($options);
+        return new ObjectRepositoryStorage($options);
     }
 }
