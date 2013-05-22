@@ -29,21 +29,22 @@
  * Authentication configuration no longer supports setting `objectRepository`. You must set both `objectManager` and
    `identityClass`. This significantly simplifies the code, and allows a flat config for easy caching.
  * Most of the factories that were in `DoctrineModule\Service` have been moved to `DoctrineModule\Factory`. This is because
-   they are not actual service factories to be consumed by the ServiceManager. Rather they are consumed by DoctrineServiceAbstractFactory.
+   they are not actual service factories to be consumed by the ServiceManager. Rather they are consumed by `DoctrineServiceAbstractFactory`.
  * When configuring drivers, the cache key must now be a full service name. eg `doctrine.cache.array`.
  * When configuring a driver chain, the `$options->drivers` array may contain driver instances, or complete service names. eg:
 
-       'driver' => array(
-            'default' => array(
-                'drivers' => array(
-                    'My\Namespace' => 'doctrine.driver.mydriver'
-                ),
-            ),
-            'mydriver' => array(
-                'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
-                'paths' => array('path/to/my/namespace')
-            ),
-        ),
+
+    'driver' => array(
+         'default' => array(
+             'drivers' => array(
+                 'My\Namespace' => 'doctrine.driver.mydriver'
+             ),
+         ),
+         'mydriver' => array(
+             'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
+             'paths' => array('path/to/my/namespace')
+         ),
+     ),
 
 # 0.8.0
 
