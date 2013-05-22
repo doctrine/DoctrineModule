@@ -155,6 +155,9 @@ class ObjectRepositoryTest extends BaseTestCase
 
     public function testAuthenticationWithPublicProperties()
     {
+
+        $identityClass = 'DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject';
+
         $entity = new PublicPropertiesIdentityObject();
         $entity->username = 'a username';
         $entity->password = 'a password';
@@ -169,16 +172,16 @@ class ObjectRepositoryTest extends BaseTestCase
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->exactly(2))
                       ->method('getRepository')
-                      ->with($this->equalTo('DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject'))
+                      ->with($this->equalTo($identityClass))
                       ->will($this->returnValue($objectRepository));
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions(
             array(
                 'object_manager'      => $objectManager,
-                'identity_class'      => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject',
+                'identity_class'      => $identityClass,
                 'credential_property' => 'password',
-                'identity_property' => 'username'
+                'identity_property'   => 'username'
             )
         );
 

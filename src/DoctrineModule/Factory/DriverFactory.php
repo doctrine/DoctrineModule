@@ -67,9 +67,9 @@ class DriverFactory implements AbstractFactoryInterface, ServiceLocatorAwareInte
 
         $optionsClass = self::OPTIONS_CLASS;
 
-        if (is_array($options) || $options instanceof \Traversable){
+        if (is_array($options) || $options instanceof \Traversable) {
             $options = new $optionsClass($options);
-        } else if ( ! $options instanceof $optionsClass){
+        } elseif (! $options instanceof $optionsClass) {
             throw new \InvalidArgumentException();
         }
 
@@ -134,7 +134,7 @@ class DriverFactory implements AbstractFactoryInterface, ServiceLocatorAwareInte
                 if (null === $childDriver) {
                     continue;
                 }
-                if (is_string($childDriver)){
+                if (is_string($childDriver)) {
                     $driver->addDriver($this->serviceLocator->get($childDriver), $namespace);
                     continue;
                 }

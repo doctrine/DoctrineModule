@@ -36,11 +36,13 @@ class EventManagerFactoryTest extends BaseTestCase
         $factory->setServiceLocator(new ServiceManager);
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->create(array(
-            'subscribers' => array(
-                __NAMESPACE__ . '\TestAsset\DummyEventSubscriber'
-            ),
-        ));
+        $eventManager = $factory->create(
+            array(
+                'subscribers' => array(
+                    __NAMESPACE__ . '\TestAsset\DummyEventSubscriber'
+                ),
+            )
+        );
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners('dummy');
@@ -53,11 +55,13 @@ class EventManagerFactoryTest extends BaseTestCase
         $subscriber = new DummyEventSubscriber();
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->create(array(
-            'subscribers' => array(
-                $subscriber,
-            ),
-        ));
+        $eventManager = $factory->create(
+             array(
+                'subscribers' => array(
+                    $subscriber,
+                ),
+            )
+        );
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners();
@@ -76,11 +80,13 @@ class EventManagerFactoryTest extends BaseTestCase
         $factory->setServiceLocator($serviceManager);
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->create(array(
-            'subscribers' => array(
-                'dummy-subscriber'
-            ),
-        ));
+        $eventManager = $factory->create(
+            array(
+                'subscribers' => array(
+                    'dummy-subscriber'
+                ),
+            )
+        );
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners();
@@ -96,10 +102,12 @@ class EventManagerFactoryTest extends BaseTestCase
         $factory->setServiceLocator(new ServiceManager);
 
         $this->setExpectedException('InvalidArgumentException');
-        $factory->create(array(
-            'subscribers' => array(
-                'non-existing-subscriber'
-            ),
-        ));
+        $factory->create(
+             array(
+                'subscribers' => array(
+                    'non-existing-subscriber'
+                ),
+             )
+        );
     }
 }

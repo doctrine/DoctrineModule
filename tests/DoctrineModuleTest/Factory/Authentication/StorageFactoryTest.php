@@ -30,10 +30,12 @@ class StorageFactoryTest extends BaseTestCase
 
         $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $storage = $factory->create(array(
-            'object_manager' => $objectManager,
-            'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
-        ));
+        $storage = $factory->create(
+            array(
+                'object_manager' => $objectManager,
+                'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+            )
+        );
         $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $storage);
     }
 }
