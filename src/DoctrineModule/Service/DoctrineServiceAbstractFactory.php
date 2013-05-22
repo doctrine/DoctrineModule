@@ -58,9 +58,11 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
         $factory = $serviceLocator->get($mapping['factoryName']);
 
         if (! $factory instanceof DoctrineModuleAbstractFactoryInterface) {
-            throw new ServiceNotFoundException(sprintf(
-                '%s service did not return an instance of \DoctrineModule\Factory\AbstractFactoryInterface',
-                $mapping['factoryName'])
+            throw new ServiceNotFoundException(
+                sprintf(
+                    '%s service did not return an instance of \DoctrineModule\Factory\AbstractFactoryInterface',
+                    $mapping['factoryName']
+                )
             );
         }
 
@@ -87,24 +89,26 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
             return false;
         }
 
-        $factoryName = implode('.', array_merge(
-            array(self::DOCTRINE_PREFIX, self::FACTORY_PREFIX),
-            array_slice($pieces, 0, count($pieces) - 1)
-        ));
+        $factoryName = implode(
+            '.',
+            array_merge(
+                array(self::DOCTRINE_PREFIX, self::FACTORY_PREFIX),
+                array_slice($pieces, 0, count($pieces) - 1)
+            )
+        );
 
-        $options = $serviceLocator->get('Config');
-        $options = $options['doctrine'];
+        $options = $serviceLocator->get('Config')['doctrine'];
         foreach ($pieces as $piece) {
-            if (isset($options[$piece])){
+            if (isset($options[$piece])) {
                 $options = $options[$piece];
             } else {
                 return false;
             }
         }
 
-        return [
+        return array(
             'factoryName' => $factoryName,
             'options'     => $options
-        ];
+        );
     }
 }
