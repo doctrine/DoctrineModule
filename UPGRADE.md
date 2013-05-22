@@ -31,10 +31,11 @@
  * Most of the factories that were in `DoctrineModule\Service` have been moved to `DoctrineModule\Factory`. This is because
    they are not actual service factories to be consumed by the ServiceManager. Rather they are consumed by `DoctrineServiceAbstractFactory`.
  * When configuring drivers, the cache key must now be a full service name. eg `doctrine.cache.array`.
- * When configuring a driver chain, the `$options->drivers` array may contain driver instances, or complete service names. eg:
+ * When configuring a driver chain, the `$options->drivers` array may contain driver instances, or complete service names.
 
+eg:
 
-    `'driver' => array(
+    'driver' => array(
          'default' => array(
              'drivers' => array(
                  'My\Namespace' => 'doctrine.driver.mydriver'
@@ -44,7 +45,7 @@
              'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
              'paths' => array('path/to/my/namespace')
          ),
-     ),`
+     ),
 
 # 0.8.0
 
