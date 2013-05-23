@@ -50,7 +50,6 @@ class ObjectRepositoryStorage implements StorageInterface
         }
 
         $this->options = $options;
-        return $this;
     }
 
     /**
