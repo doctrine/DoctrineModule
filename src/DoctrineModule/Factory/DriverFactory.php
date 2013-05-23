@@ -25,6 +25,8 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
+use DoctrineModule\Exception;
+use DoctrineModule\Options\DriverOptions;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -37,9 +39,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class DriverFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
-    const OPTIONS_CLASS = '\DoctrineModule\Options\Driver';
-
+    /**
+     * @var ServiceLocatorInterface
+     */
     protected $serviceLocator;
 
     /**
@@ -64,13 +66,10 @@ class DriverFactory implements AbstractFactoryInterface, ServiceLocatorAwareInte
      */
     public function create($options)
     {
-
-        $optionsClass = self::OPTIONS_CLASS;
-
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new $optionsClass($options);
-        } elseif (! $options instanceof $optionsClass) {
-            throw new \InvalidArgumentException();
+            $options = new DriverOptions($options);
+        } elseif (! $options instanceof DriverOptions) {
+            throw new Exception\InvalidArgumentException();
         }
 
         $class = $options->getClass();

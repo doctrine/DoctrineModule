@@ -16,41 +16,15 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-
-namespace DoctrineModule\Options\Authentication;
-
-use Zend\Authentication\Storage\Session as SessionStorage;
-use Zend\Authentication\Storage\StorageInterface;
+namespace DoctrineModule\Exception;
 
 /**
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.5.0
- * @author  Michaël Gallego <mic.gallego@gmail.com>
+ * @since   1.0
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Storage extends AbstractOptions
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
-    /**
-     * This is the storage instance that the object key will be stored in.
-     *
-     * @var \Zend\Authentication\Storage\StorageInterface|string
-     */
-    protected $storage = 'DoctrineModule\Authentication\Storage\Session';
-
-    /**
-     * @return \Zend\Authentication\Storage\StorageInterface|string
-     */
-    public function getStorage()
-    {
-        return $this->storage;
-    }
-
-    /**
-     * @param \Zend\Authentication\Storage\StorageInterface|string $storage
-     */
-    public function setStorage($storage)
-    {
-        $this->storage = $storage;
-    }
 }

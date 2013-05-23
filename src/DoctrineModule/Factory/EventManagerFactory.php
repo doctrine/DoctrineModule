@@ -22,6 +22,8 @@ namespace DoctrineModule\Factory;
 use InvalidArgumentException;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
+use DoctrineModule\Exception;
+use DoctrineModule\Options\EventManagerOptions;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -30,9 +32,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
-    const OPTIONS_CLASS = '\DoctrineModule\Options\EventManager';
-
+    /**
+     * @var ServiceLocatorInterface
+     */
     protected $serviceLocator;
 
     /**
@@ -56,13 +58,10 @@ class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwa
      */
     public function create($options)
     {
-
-        $optionsClass = self::OPTIONS_CLASS;
-
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new $optionsClass($options);
-        } elseif (! $options instanceof $optionsClass) {
-            throw new \InvalidArgumentException();
+            $options = new EventManagerOptions($options);
+        } elseif (! $options instanceof EventManagerOptions) {
+            throw new Exception\InvalidArgumentException();
         }
 
         $eventManager = new EventManager();

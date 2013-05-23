@@ -1,12 +1,15 @@
 # 1.0
 
  * Dependency to zendframework has been bumped from `~2.1` to `~2.2`
+ * Dependency to doctrine/common has been bumped from `>=2.3,<2.5-dev` to `>=2.4,<2.6-dev`
  * Class name changes:
        - `DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory` -> `DoctrineModule\ServiceFactory\DoctrineServiceAbstractFactory`
        - `DoctrineModule\Authentication\Adapter\ObjectRepository` -> `DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter`
        - `DoctrineModule\Authentication\Storage\ObjectRepository` -> `DoctrineModule\Authentication\Storage\ObjectRepositoryStorage`
        - `DoctrineModule\Paginator\Adatper\Collection` -> `DoctrineModule\Paginator\Adatper\CollectionAdapter`
        - `DoctrineModule\Paginator\Adatper\Selectable` -> ``DoctrineModule\Paginator\Adatper\SelectableAdater`
+       - All `DoctrineModule\Options\*.php` -> `DoctrineModule\Options\*Options.php`
+ * Any fluent interfaces have been removed.
  * Configuration has changed significantly. Most services are created by `DoctrineModule\ServiceFactory\DoctrineServiceAbstractFactory`,
    and expects configuration to follow this pattern:
        - All service names should start with `doctrine.`.

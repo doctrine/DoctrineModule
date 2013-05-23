@@ -17,24 +17,66 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Factory;
+namespace DoctrineModule\Options\Authentication;
+
+use Doctrine\Common\Persistence\ObjectManager;
+use Zend\Stdlib\AbstractOptions;
 
 /**
- * Interface used by DoctrineModule\Service\DoctrineServiceAbstractFactory
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
+ * @since   0.5.0
+ * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-interface AbstractFactoryInterface
+class AbstractAuthenticationOptions extends AbstractOptions
 {
+    /**
+     * A valid object implementing ObjectManager interface
+     *
+     * @var ObjectManager
+     */
+    protected $objectManager;
 
     /**
-     * Create an instance of the desired service
-     * The options class should be an array, instance of \Traverable or an instance of an options class
+     * Entity's class name
      *
-     * @param $options mixed
-     * @return object
+     * @var string
      */
-    public function create($options);
+    protected $identityClass;
+
+    /**
+     * @param  ObjectManager $objectManager
+     * @return Repository
+     */
+    public function setObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
+     * @return ObjectManager
+     */
+    public function getObjectManager()
+    {
+        return $this->objectManager;
+    }
+
+    /**
+     * @param string $identityClass
+     * @return Repository
+     */
+    public function setIdentityClass($identityClass)
+    {
+        $this->identityClass = $identityClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentityClass()
+    {
+        return $this->identityClass;
+    }
 }

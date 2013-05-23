@@ -18,7 +18,9 @@
  */
 namespace DoctrineModule\Factory\Authentication;
 
+use DoctrineModule\Exception;
 use DoctrineModule\Factory\AbstractFactoryInterface;
+use DoctrineModule\Options\Authentication\ServiceOptions;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -33,9 +35,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class AuthenticationServiceFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
-    const OPTIONS_CLASS = '\DoctrineModule\Options\Authentication\Service';
-
+    /**
+     * @var ServiceLocatorInterface
+     */
     protected $serviceLocator;
 
     /**
@@ -61,8 +63,6 @@ class AuthenticationServiceFactory implements AbstractFactoryInterface, ServiceL
      */
     public function create($options)
     {
-        $optionsClass = self::OPTIONS_CLASS;
-
         if (isset($options['adapter']) && is_string($adapter = $options['adapter'])) {
             $options['adapter'] = $this->serviceLocator->get($adapter);
         }
@@ -72,9 +72,9 @@ class AuthenticationServiceFactory implements AbstractFactoryInterface, ServiceL
         }
 
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new $optionsClass($options);
-        } elseif (! $options instanceof $optionsClass) {
-            throw new \InvalidArgumentException();
+            $options = new ServiceOptions($options);
+        } elseif (! $options instanceof ServiceOptions) {
+            throw new Exception\InvalidArgumentException();
         }
 
         return new AuthenticationService(

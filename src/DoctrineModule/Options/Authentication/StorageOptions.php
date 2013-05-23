@@ -19,8 +19,8 @@
 
 namespace DoctrineModule\Options\Authentication;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Zend\Stdlib\AbstractOptions as BaseAbstractOptions;
+use Zend\Authentication\Storage\Session as SessionStorage;
+use Zend\Authentication\Storage\StorageInterface;
 
 /**
  *
@@ -28,57 +28,29 @@ use Zend\Stdlib\AbstractOptions as BaseAbstractOptions;
  * @link    http://www.doctrine-project.org/
  * @since   0.5.0
  * @author  Michaël Gallego <mic.gallego@gmail.com>
- * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class AbstractOptions extends BaseAbstractOptions
+class StorageOptions extends AbstractAuthenticationOptions
 {
     /**
-     * A valid object implementing ObjectManager interface
+     * This is the storage instance that the object key will be stored in.
      *
-     * @var ObjectManager
+     * @var \Zend\Authentication\Storage\StorageInterface|string
      */
-    protected $objectManager;
+    protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
     /**
-     * Entity's class name
-     *
-     * @var string
+     * @return \Zend\Authentication\Storage\StorageInterface|string
      */
-    protected $identityClass;
-
-    /**
-     * @param  ObjectManager $objectManager
-     * @return Repository
-     */
-    public function setObjectManager(ObjectManager $objectManager)
+    public function getStorage()
     {
-        $this->objectManager = $objectManager;
-        return $this;
+        return $this->storage;
     }
 
     /**
-     * @return ObjectManager
+     * @param \Zend\Authentication\Storage\StorageInterface|string $storage
      */
-    public function getObjectManager()
+    public function setStorage($storage)
     {
-        return $this->objectManager;
-    }
-
-    /**
-     * @param string $identityClass
-     * @return Repository
-     */
-    public function setIdentityClass($identityClass)
-    {
-        $this->identityClass = $identityClass;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentityClass()
-    {
-        return $this->identityClass;
+        $this->storage = $storage;
     }
 }

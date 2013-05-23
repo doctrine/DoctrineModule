@@ -28,9 +28,8 @@ use Zend\Authentication\Adapter\Exception;
  * @since   0.5.0
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
-class Adapter extends AbstractOptions
+class AdapterOptions extends AbstractAuthenticationOptions
 {
-
     /**
      * Property to use for the identity
      *
@@ -48,7 +47,7 @@ class Adapter extends AbstractOptions
     /**
      * Callable function to check if a credential is valid
      *
-     * @var mixed
+     * @var Callable
      */
     protected $credentialCallable;
 
@@ -59,7 +58,6 @@ class Adapter extends AbstractOptions
     public function setIdentityClass($identityClass)
     {
         $this->identityClass = $identityClass;
-        return $this;
     }
 
     /**
@@ -123,7 +121,7 @@ class Adapter extends AbstractOptions
     }
 
     /**
-     * @param  mixed $credentialCallable
+     * @param  Callable $credentialCallable
      * @throws Exception\InvalidArgumentException
      * @return Authentication
      */
@@ -144,7 +142,7 @@ class Adapter extends AbstractOptions
     }
 
     /**
-     * @return mixed
+     * @return Callable
      */
     public function getCredentialCallable()
     {

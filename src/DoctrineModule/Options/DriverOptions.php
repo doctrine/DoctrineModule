@@ -28,7 +28,7 @@ use Zend\Stdlib\AbstractOptions;
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class Driver extends AbstractOptions
+class DriverOptions extends AbstractOptions
 {
     /**
      * The class name of the Driver.
