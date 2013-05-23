@@ -82,8 +82,6 @@ class AdapterOptions extends AbstractAuthenticationOptions
         }
 
         $this->identityProperty = $identityProperty;
-
-        return $this;
     }
 
     /**
@@ -108,8 +106,6 @@ class AdapterOptions extends AbstractAuthenticationOptions
         }
 
         $this->credentialProperty = $credentialProperty;
-
-        return $this;
     }
 
     /**
@@ -137,8 +133,6 @@ class AdapterOptions extends AbstractAuthenticationOptions
         }
 
         $this->credentialCallable = $credentialCallable;
-
-        return $this;
     }
 
     /**

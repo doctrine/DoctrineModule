@@ -66,8 +66,6 @@ class CacheOptions extends AbstractOptions
     public function setClass($class)
     {
         $this->class = $class;
-
-        return $this;
     }
 
     /**
@@ -85,8 +83,6 @@ class CacheOptions extends AbstractOptions
     public function setInstance($instance)
     {
         $this->instance = $instance;
-
-        return $this;
     }
 
     /**
@@ -104,8 +100,6 @@ class CacheOptions extends AbstractOptions
     public function setNamespace($namespace)
     {
         $this->namespace = (string) $namespace;
-
-        return $this;
     }
 
     /**
@@ -123,8 +117,6 @@ class CacheOptions extends AbstractOptions
     public function setDirectory($directory)
     {
         $this->directory = $directory;
-
-        return $this;
     }
 
     /**

@@ -68,7 +68,6 @@ class ObjectRepositoryAdapter extends AbstractAdapter
         }
 
         $this->options = $options;
-        return $this;
     }
 
     /**
@@ -89,7 +88,6 @@ class ObjectRepositoryAdapter extends AbstractAdapter
     public function setIdentityValue($identityValue)
     {
         $this->identity = $identityValue;
-        return $this;
     }
 
     /**
@@ -111,7 +109,6 @@ class ObjectRepositoryAdapter extends AbstractAdapter
     public function setCredentialValue($credentialValue)
     {
         $this->credential = $credentialValue;
-        return $this;
     }
 
     /**

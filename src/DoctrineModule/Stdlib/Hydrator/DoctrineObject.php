@@ -22,11 +22,9 @@ namespace DoctrineModule\Stdlib\Hydrator;
 use DateTime;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
-use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
-use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 
@@ -153,8 +151,8 @@ class DoctrineObject extends AbstractHydrator
                     );
                 }
 
-                $strategy->setCollectionName($association)
-                         ->setClassMetadata($this->metadata);
+                $strategy->setCollectionName($association);
+                $strategy->setClassMetadata($this->metadata);
             }
         }
     }
