@@ -16,21 +16,24 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
+namespace DoctrineModule\Builder\Authentication;
 
-namespace DoctrineModule\Factory;
-
-use InvalidArgumentException;
-use Doctrine\Common\EventManager;
-use Doctrine\Common\EventSubscriber;
+use DoctrineModule\Authentication\Storage\ObjectRepositoryStorage;
 use DoctrineModule\Exception;
-use DoctrineModule\Options\EventManagerOptions;
+use DoctrineModule\Builder\AbstractBuilderInterface;
+use DoctrineModule\Options\Authentication\StorageOptions;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Factory responsible for creating EventManager instances
+ * Builder to create authentication storage object.
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @since   0.1.0
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class StorageBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface
@@ -55,43 +58,25 @@ class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwa
 
     /**
      * {@inheritDoc}
+     *
+     * @return \DoctrineModule\Authentication\Storage\ObjectRepositoryStorage
      */
-    public function create($options)
+    public function build($options)
     {
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new EventManagerOptions($options);
-        } elseif (! $options instanceof EventManagerOptions) {
+            $options = new StorageOptions($options);
+        } elseif ( ! $options instanceof StorageOptions){
             throw new Exception\InvalidArgumentException();
         }
 
-        $eventManager = new EventManager();
-
-        foreach ($options->getSubscribers() as $subscriberName) {
-            $subscriber = $subscriberName;
-
-            if (is_string($subscriber)) {
-                if ($this->serviceLocator->has($subscriber)) {
-                    $subscriber = $this->serviceLocator->get($subscriber);
-                } elseif (class_exists($subscriber)) {
-                    $subscriber = new $subscriber();
-                }
-            }
-
-            if ($subscriber instanceof EventSubscriber) {
-                $eventManager->addEventSubscriber($subscriber);
-                continue;
-            }
-
-            $subscriberType = is_object($subscriberName) ? get_class($subscriberName) : $subscriberName;
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Invalid event subscriber "%s" given, must be a service name, '
-                    . 'class name or an instance implementing Doctrine\Common\EventSubscriber',
-                    is_string($subscriberType) ? $subscriberType : gettype($subscriberType)
-                )
-            );
+        if (is_string($objectManager = $options->getObjectManager())) {
+            $options->setObjectManager($this->serviceLocator->get($objectManager));
         }
 
-        return $eventManager;
+        if (is_string($storage = $options->getStorage())) {
+            $options->setStorage($this->serviceLocator->get($storage));
+        }
+
+        return new ObjectRepositoryStorage($options);
     }
 }

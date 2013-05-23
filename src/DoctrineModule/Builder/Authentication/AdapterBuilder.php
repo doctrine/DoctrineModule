@@ -16,24 +16,24 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Factory\Authentication;
+namespace DoctrineModule\Builder\Authentication;
 
 use DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter;
 use DoctrineModule\Exception;
 use DoctrineModule\Options\Authentication\AdapterOptions;
-use DoctrineModule\Factory\AbstractFactoryInterface;
+use DoctrineModule\Builder\AbstractBuilderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Factory to create authentication adapter object.
+ * Builder to create authentication adapter object.
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @since   0.1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class AdapterFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class AdapterBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      *
@@ -62,7 +62,7 @@ class AdapterFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
      *
      * @return \DoctrineModule\Authentication\Adapter\ObjectRepository
      */
-    public function create($options)
+    public function build($options)
     {
         if (is_string($objectManager = $options['object_manager'])) {
             $options['object_manager'] = $this->serviceLocator->get($objectManager);

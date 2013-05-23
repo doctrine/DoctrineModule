@@ -19,7 +19,7 @@
 
 namespace DoctrineModule\Service;
 
-use DoctrineModule\Factory\AbstractFactoryInterface as DoctrineModuleAbstractFactoryInterface;
+use DoctrineModule\Builder\AbstractBuilderInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -37,14 +37,14 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
 {
 
     const DOCTRINE_PREFIX = 'doctrine';
-    const FACTORY_PREFIX  = 'factory';
+    const BUILDER_PREFIX  = 'builder';
 
     /**
      * {@inheritDoc}
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        return false !== $this->getFactoryMapping($serviceLocator, $name);
+        return false !== $this->getBuilderMapping($serviceLocator, $name);
     }
 
     /**
@@ -52,21 +52,21 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $mapping = $this->getFactoryMapping($serviceLocator, $name);
+        $mapping = $this->getBuilderMapping($serviceLocator, $name);
 
-        /* @var $factory \DoctrineModule\Factory\AbstractFactoryInterface */
-        $factory = $serviceLocator->get($mapping['factoryName']);
+        /* @var $builder \DoctrineModule\Builder\AbstractBuilderInterface */
+        $builder = $serviceLocator->get($mapping['builderName']);
 
-        if (! $factory instanceof DoctrineModuleAbstractFactoryInterface) {
+        if (! $builder instanceof AbstractBuilderInterface) {
             throw new ServiceNotFoundException(
                 sprintf(
-                    '%s service did not return an instance of \DoctrineModule\Factory\AbstractFactoryInterface',
-                    $mapping['factoryName']
+                    '%s service did not return an instance of \DoctrineModule\Builder\AbstractBuilderInterface',
+                    $mapping['builderName']
                 )
             );
         }
 
-        return $factory->create($mapping['options']);
+        return $builder->build($mapping['options']);
     }
 
     /**
@@ -75,7 +75,7 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
      *
      * @return bool|array
      */
-    private function getFactoryMapping(ServiceLocatorInterface $serviceLocator, $name)
+    private function getBuilderMapping(ServiceLocatorInterface $serviceLocator, $name)
     {
         $pieces = explode('.', $name);
 
@@ -85,14 +85,14 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
         if (array_shift($pieces) !== self::DOCTRINE_PREFIX) {
             return false;
         }
-        if ($pieces[0] === self::FACTORY_PREFIX) {
+        if ($pieces[0] === self::BUILDER_PREFIX) {
             return false;
         }
 
-        $factoryName = implode(
+        $builderName = implode(
             '.',
             array_merge(
-                array(self::DOCTRINE_PREFIX, self::FACTORY_PREFIX),
+                array(self::DOCTRINE_PREFIX, self::BUILDER_PREFIX),
                 array_slice($pieces, 0, count($pieces) - 1)
             )
         );
@@ -108,7 +108,7 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
         }
 
         return array(
-            'factoryName' => $factoryName,
+            'builderName' => $builderName,
             'options'     => $options
         );
     }

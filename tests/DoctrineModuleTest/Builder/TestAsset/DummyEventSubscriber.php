@@ -17,29 +17,29 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Factory;
+namespace DoctrineModuleTest\Builder\TestAsset;
 
-use DoctrineModule\Factory\CacheFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use Doctrine\Common\EventSubscriber;
 
 /**
- * Test for {@see \DoctrineModule\Factory\CacheFactory}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
+ * Dummy event subscriber used to test injections
  */
-class CacheFactoryTest extends BaseTestCase
+class DummyEventSubscriber implements EventSubscriber
 {
     /**
-     * @covers \DoctrineModule\Factory\CacheFactory::create
+     * Empty callback method
      */
-    public function testWillSetNamespace()
+    public function dummy()
     {
-        $factory = new CacheFactory;
+    }
 
-        /* @var $service \Doctrine\Common\Cache\ArrayCache */
-        $instance = $factory->create(array('namespace' => 'bar'));
-
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $instance);
-        $this->assertSame('bar', $instance->getNamespace());
+    /**
+     * {@inheritDoc}
+     */
+    public function getSubscribedEvents()
+    {
+        return array(
+            'dummy'
+        );
     }
 }

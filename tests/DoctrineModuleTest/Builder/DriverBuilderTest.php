@@ -17,36 +17,36 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Factory;
+namespace DoctrineModuleTest\Builder;
 
-use DoctrineModule\Factory\DriverFactory;
+use DoctrineModule\Builder\DriverBuilder;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**
  * Base test case to be used when a service manager instance is required
  */
-class DriverFactoryTest extends BaseTestCase
+class DriverBuilderTest extends BaseTestCase
 {
     public function testCreateDriver()
     {
-        $factory = new DriverFactory;
-        $driver = $factory->create(
+        $builder = new DriverBuilder;
+        $driver = $builder->build(
             array(
-                'class' => 'DoctrineModuleTest\Factory\Mock\MetadataDriverMock',
+                'class' => 'DoctrineModuleTest\Builder\Mock\MetadataDriverMock',
             )
         );
-        $this->assertInstanceOf('DoctrineModuleTest\Factory\Mock\MetadataDriverMock', $driver);
+        $this->assertInstanceOf('DoctrineModuleTest\Builder\Mock\MetadataDriverMock', $driver);
     }
 
     public function testCreateDriverChain()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setInvokableClass('testDriver', 'DoctrineModuleTest\Factory\Mock\MetadataDriverMock');
+        $serviceManager->setInvokableClass('testDriver', 'DoctrineModuleTest\Builder\Mock\MetadataDriverMock');
 
-        $factory = new DriverFactory();
-        $factory->setServiceLocator($serviceManager);
-        $driver = $factory->create(
+        $builder = new DriverBuilder();
+        $builder->setServiceLocator($serviceManager);
+        $driver = $builder->build(
             array(
                 'class' => 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain',
                 'drivers' => array(
@@ -59,6 +59,6 @@ class DriverFactoryTest extends BaseTestCase
         $drivers = $driver->getDrivers();
         $this->assertCount(1, $drivers);
         $this->assertArrayHasKey('Foo\Bar', $drivers);
-        $this->assertInstanceOf('DoctrineModuleTest\Factory\Mock\MetadataDriverMock', $drivers['Foo\Bar']);
+        $this->assertInstanceOf('DoctrineModuleTest\Builder\Mock\MetadataDriverMock', $drivers['Foo\Bar']);
     }
 }

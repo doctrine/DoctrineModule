@@ -92,13 +92,13 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'DoctrineModule\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session',
-            'doctrine.factory.cache'                     => 'DoctrineModule\Factory\CacheFactory',
-            'doctrine.factory.eventmanager'              => 'DoctrineModule\Factory\EventManagerFactory',
-            'doctrine.factory.driver'                    => 'DoctrineModule\Factory\DriverFactory',
-            'doctrine.factory.authentication.repository' => 'DoctrineModule\Factory\Authentication\RepositoryFactory',
-            'doctrine.factory.authentication.adapter'    => 'DoctrineModule\Factory\Authentication\AdapterFactory',
-            'doctrine.factory.authentication.storage'    => 'DoctrineModule\Factory\Authentication\StorageFactory',
-            'doctrine.factory.authentication.service'    => 'DoctrineModule\Factory\Authentication\AuthenticationServiceFactory',
+            'doctrine.builder.cache'                        => 'DoctrineModule\Builder\CacheBuilder',
+            'doctrine.builder.eventmanager'                 => 'DoctrineModule\Builder\EventManagerBuilder',
+            'doctrine.builder.driver'                       => 'DoctrineModule\Builder\DriverBuilder',
+            'doctrine.builder.authentication.repository'    => 'DoctrineModule\Builder\Authentication\RepositoryBuilder',
+            'doctrine.builder.authentication.adapter'       => 'DoctrineModule\Builder\Authentication\AdapterBuilder',
+            'doctrine.builder.authentication.storage'       => 'DoctrineModule\Builder\Authentication\StorageBuilder',
+            'doctrine.builder.authentication.service'       => 'DoctrineModule\Builder\Authentication\AuthenticationServiceBuilder',
         ),
         'factories' => array(
             'doctrine.cli' => 'DoctrineModule\Service\CliFactory',

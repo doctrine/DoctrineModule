@@ -17,29 +17,24 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Factory\TestAsset;
-
-use Doctrine\Common\EventSubscriber;
+namespace DoctrineModule\Builder;
 
 /**
- * Dummy event subscriber used to test injections
+ * Interface used by builders consumed by DoctrineModule\Service\DoctrineServiceAbstractFactory
+ *
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class DummyEventSubscriber implements EventSubscriber
+interface AbstractBuilderInterface
 {
-    /**
-     * Empty callback method
-     */
-    public function dummy()
-    {
-    }
 
     /**
-     * {@inheritDoc}
+     * Create an instance of the desired service
+     * The options class should be an array, instance of \Traverable or an instance of an options class
+     *
+     * @param $options mixed
+     * @return object
      */
-    public function getSubscribedEvents()
-    {
-        return array(
-            'dummy'
-        );
-    }
+    public function build($options);
 }

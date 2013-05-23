@@ -17,16 +17,16 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Factory\Authentication;
+namespace DoctrineModuleTest\Builder\Authentication;
 
-use DoctrineModule\Factory\Authentication\StorageFactory;
+use DoctrineModule\Builder\Authentication\StorageBuilder;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 
-class StorageFactoryTest extends BaseTestCase
+class StorageBuilderTest extends BaseTestCase
 {
     public function testCanInstantiateStorageFromServiceLocator()
     {
-        $factory        = new StorageFactory('testFactory');
+        $builder        = new StorageBuilder('testFactory');
         $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
         $storage        = $this->getMock('Zend\Authentication\Storage\StorageInterface');
         $objectManager  =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
@@ -37,11 +37,11 @@ class StorageFactoryTest extends BaseTestCase
             ->with('some_storage')
             ->will($this->returnValue($storage));
 
-        $factory->setServiceLocator($serviceLocator);
+        $builder->setServiceLocator($serviceLocator);
 
         $this->assertInstanceOf(
             'DoctrineModule\Authentication\Storage\ObjectRepositoryStorage',
-            $factory->create(
+            $builder->build(
                 array(
                      'object_manager' => $objectManager,
                      'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',

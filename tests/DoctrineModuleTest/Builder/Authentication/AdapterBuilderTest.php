@@ -17,33 +17,28 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Factory\Authentication;
+namespace DoctrineModuleTest\Builder\Authentication;
 
-use DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter;
-use DoctrineModule\Factory\Authentication\AuthenticationServiceFactory;
+use DoctrineModule\Builder\Authentication\AdapterBuilder;
 use PHPUnit_Framework_TestCase as BaseTestCase;
-use Zend\Authentication\Storage\NonPersistent as NonPersistentStorage;
-use Zend\ServiceManager\ServiceManager;
 
-class AuthenticationServiceFactoryTest extends BaseTestCase
+class AdapterBuilderTest extends BaseTestCase
 {
     public function testWillInstantiateFromFQCN()
     {
 
-        $factory = new AuthenticationServiceFactory;
+        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService('testAdapter', new ObjectRepositoryAdapter);
-        $serviceManager->setService('testStorage', new NonPersistentStorage);
-
-        $factory->setServiceLocator($serviceManager);
-
-        $authenticationService = $factory->create(
+        $builder = new AdapterBuilder;
+        $adapter = $builder->build(
             array(
-                'adapter' => 'testAdapter',
-                'storage' => 'testStorage'
+                'object_manager' => $objectManager,
+                'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                'identity_property' => 'username',
+                'credential_property' => 'password'
             )
         );
-        $this->assertInstanceOf('Zend\Authentication\AuthenticationService', $authenticationService);
+
+        $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter', $adapter);
     }
 }

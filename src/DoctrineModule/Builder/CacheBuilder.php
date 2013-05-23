@@ -16,24 +16,26 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Factory\Authentication;
 
-use DoctrineModule\Authentication\Storage\ObjectRepositoryStorage;
+namespace DoctrineModule\Builder;
+
+use Doctrine\Common\Cache\CacheProvider;
+use Doctrine\Common\Cache\MemcacheCache;
+use Doctrine\Common\Cache\MemcachedCache;
+use Doctrine\Common\Cache\RedisCache;
 use DoctrineModule\Exception;
-use DoctrineModule\Factory\AbstractFactoryInterface;
-use DoctrineModule\Options\Authentication\StorageOptions;
+use DoctrineModule\Options\CacheOptions;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Factory to create authentication storage object.
+ * Cache ServiceManager factory
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Tim Roediger <superdweebie@gmail.com>
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class CacheBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface
@@ -59,24 +61,52 @@ class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
     /**
      * {@inheritDoc}
      *
-     * @return \DoctrineModule\Authentication\Storage\ObjectRepositoryStorage
+     * @return \Doctrine\Common\Cache\Cache
+     *
+     * @throws RuntimeException
      */
-    public function create($options)
+    public function build($options)
     {
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new StorageOptions($options);
-        } elseif ( ! $options instanceof StorageOptions){
+            $options = new CacheOptions($options);
+        } elseif (! $options instanceof CacheOptions) {
             throw new Exception\InvalidArgumentException();
         }
 
-        if (is_string($objectManager = $options->getObjectManager())) {
-            $options->setObjectManager($this->serviceLocator->get($objectManager));
+        $class   = $options->getClass();
+
+        if (!$class) {
+            throw new RuntimeException('Cache must have a class name to instantiate');
         }
 
-        if (is_string($storage = $options->getStorage())) {
-            $options->setStorage($this->serviceLocator->get($storage));
+        if ($options->getDirectory() !== null) {
+            $cache = new $class($options->getDirectory());
+        } else {
+            $cache = new $class;
         }
 
-        return new ObjectRepositoryStorage($options);
+        $instance = $options->getInstance();
+        if (is_string($instance) && $this->serviceLocator->has($instance)) {
+            $instance = $this->serviceLocator->get($instance);
+        }
+
+        if ($cache instanceof MemcacheCache) {
+            /* @var $cache MemcacheCache */
+            $cache->setMemcache($instance);
+        } elseif ($cache instanceof MemcachedCache) {
+            /* @var $cache MemcachedCache */
+            $cache->setMemcached($instance);
+        } elseif ($cache instanceof RedisCache) {
+            /* @var $cache RedisCache */
+            $cache->setRedis($instance);
+        }
+
+        ;
+
+        if ($cache instanceof CacheProvider && ($namespace = $options->getNamespace())) {
+            $cache->setNamespace($namespace);
+        }
+
+        return $cache;
     }
 }

@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Factory;
+namespace DoctrineModule\Builder;
 
 use InvalidArgumentException;
 use Doctrine\Common\Annotations;
@@ -37,7 +37,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class DriverFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class DriverBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface
@@ -64,7 +64,7 @@ class DriverFactory implements AbstractFactoryInterface, ServiceLocatorAwareInte
      * {@inheritDoc}
      * @return MappingDriver
      */
-    public function create($options)
+    public function build($options)
     {
         if (is_array($options) || $options instanceof \Traversable) {
             $options = new DriverOptions($options);
