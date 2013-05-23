@@ -16,25 +16,28 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-namespace DoctrineModule\Factory\Authentication;
+namespace DoctrineModule\Builder\Authentication;
 
-use DoctrineModule\Authentication\Storage\ObjectRepositoryStorage;
 use DoctrineModule\Exception;
-use DoctrineModule\Factory\AbstractFactoryInterface;
-use DoctrineModule\Options\Authentication\StorageOptions;
+use DoctrineModule\Builder\AbstractBuilderInterface;
+use DoctrineModule\Options\Authentication\ServiceOptions;
+use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Factory to create authentication storage object.
+ * Builder to create authentication service object.
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @since   0.1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class AuthenticationServiceBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
 {
+    /**
+     * @var ServiceLocatorInterface
+     */
     protected $serviceLocator;
 
     /**
@@ -54,22 +57,29 @@ class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
     }
 
     /**
-     * {@inheritDoc}
      *
-     * @return \DoctrineModule\Authentication\Storage\ObjectRepositoryStorage
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @return \Zend\Authentication\AuthenticationService
      */
-    public function create($options)
+    public function build($options)
     {
-        if (is_string($objectManager = $options['object_manager'])) {
-            $options['object_manager'] = $this->serviceLocator->get($objectManager);
+        if (isset($options['adapter']) && is_string($adapter = $options['adapter'])) {
+            $options['adapter'] = $this->serviceLocator->get($adapter);
+        }
+
+        if (isset($options['storage']) && is_string($storage = $options['storage'])) {
+            $options['storage'] = $this->serviceLocator->get($storage);
         }
 
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new StorageOptions($options);
-        } elseif (! $options instanceof StorageOptions) {
+            $options = new ServiceOptions($options);
+        } elseif (! $options instanceof ServiceOptions) {
             throw new Exception\InvalidArgumentException();
         }
 
-        return new ObjectRepositoryStorage($options);
+        return new AuthenticationService(
+            $options->getStorage(),
+            $options->getAdapter()
+        );
     }
 }

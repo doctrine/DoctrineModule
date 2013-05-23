@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Factory;
+namespace DoctrineModule\Builder;
 
 use InvalidArgumentException;
 use Doctrine\Common\EventManager;
@@ -28,9 +28,9 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Factory responsible for creating EventManager instances
+ * Builder responsible for creating EventManager instances
  */
-class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class EventManagerBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface
@@ -56,7 +56,7 @@ class EventManagerFactory implements AbstractFactoryInterface, ServiceLocatorAwa
     /**
      * {@inheritDoc}
      */
-    public function create($options)
+    public function build($options)
     {
         if (is_array($options) || $options instanceof \Traversable) {
             $options = new EventManagerOptions($options);

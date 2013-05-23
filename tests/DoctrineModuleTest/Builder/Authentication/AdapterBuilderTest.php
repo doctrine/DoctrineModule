@@ -17,25 +17,28 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Factory\Authentication;
+namespace DoctrineModuleTest\Builder\Authentication;
 
-use DoctrineModule\Factory\Authentication\StorageFactory;
+use DoctrineModule\Builder\Authentication\AdapterBuilder;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 
-class StorageFactoryTest extends BaseTestCase
+class AdapterBuilderTest extends BaseTestCase
 {
     public function testWillInstantiateFromFQCN()
     {
-        $factory = new StorageFactory;
 
         $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $storage = $factory->create(
+        $builder = new AdapterBuilder;
+        $adapter = $builder->build(
             array(
                 'object_manager' => $objectManager,
                 'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                'identity_property' => 'username',
+                'credential_property' => 'password'
             )
         );
-        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepositoryStorage', $storage);
+
+        $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter', $adapter);
     }
 }

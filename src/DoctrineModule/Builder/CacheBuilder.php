@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Factory;
+namespace DoctrineModule\Builder;
 
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\MemcacheCache;
@@ -35,7 +35,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class CacheBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface
@@ -65,7 +65,7 @@ class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInter
      *
      * @throws RuntimeException
      */
-    public function create($options)
+    public function build($options)
     {
         if (is_array($options) || $options instanceof \Traversable) {
             $options = new CacheOptions($options);

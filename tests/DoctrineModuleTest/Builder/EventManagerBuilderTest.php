@@ -17,26 +17,26 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Factory;
+namespace DoctrineModuleTest\Builder;
 
 use PHPUnit_Framework_TestCase as BaseTestCase;
-use DoctrineModule\Factory\EventManagerFactory;
+use DoctrineModule\Builder\EventManagerBuilder;
 use Zend\ServiceManager\ServiceManager;
-use DoctrineModuleTest\Factory\TestAsset\DummyEventSubscriber;
+use DoctrineModuleTest\Builder\TestAsset\DummyEventSubscriber;
 
 /**
  * Base test case to be used when a service manager instance is required
  */
-class EventManagerFactoryTest extends BaseTestCase
+class EventManagerBuilderTest extends BaseTestCase
 {
     public function testWillInstantiateFromFQCN()
     {
 
-        $factory = new EventManagerFactory();
-        $factory->setServiceLocator(new ServiceManager);
+        $builder = new EventManagerBuilder();
+        $builder->setServiceLocator(new ServiceManager);
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->create(
+        $eventManager = $builder->build(
             array(
                 'subscribers' => array(
                     __NAMESPACE__ . '\TestAsset\DummyEventSubscriber'
@@ -51,11 +51,11 @@ class EventManagerFactoryTest extends BaseTestCase
 
     public function testWillAttachEventListenersFromConfiguredInstances()
     {
-        $factory = new EventManagerFactory;
+        $builder = new EventManagerBuilder;
         $subscriber = new DummyEventSubscriber();
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->create(
+        $eventManager = $builder->build(
             array(
                 'subscribers' => array(
                     $subscriber,
@@ -73,14 +73,14 @@ class EventManagerFactoryTest extends BaseTestCase
     public function testWillAttachEventListenersFromServiceManagerAlias()
     {
 
-        $factory = new EventManagerFactory();
+        $builder = new EventManagerBuilder();
         $subscriber = new DummyEventSubscriber();
         $serviceManager = new ServiceManager();
         $serviceManager->setService('dummy-subscriber', $subscriber);
-        $factory->setServiceLocator($serviceManager);
+        $builder->setServiceLocator($serviceManager);
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->create(
+        $eventManager = $builder->build(
             array(
                 'subscribers' => array(
                     'dummy-subscriber'
@@ -98,11 +98,11 @@ class EventManagerFactoryTest extends BaseTestCase
     public function testWillRefuseNonExistingSubscriber()
     {
 
-        $factory = new EventManagerFactory;
-        $factory->setServiceLocator(new ServiceManager);
+        $builder = new EventManagerBuilder;
+        $builder->setServiceLocator(new ServiceManager);
 
         $this->setExpectedException('InvalidArgumentException');
-        $factory->create(
+        $builder->build(
             array(
                 'subscribers' => array(
                     'non-existing-subscriber'

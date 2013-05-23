@@ -17,24 +17,29 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Factory;
+namespace DoctrineModuleTest\Builder;
+
+use DoctrineModule\Builder\CacheBuilder;
+use PHPUnit_Framework_TestCase as BaseTestCase;
 
 /**
- * Interface used by DoctrineModule\Service\DoctrineServiceAbstractFactory
+ * Test for {@see \DoctrineModule\Builder\CacheBuilder}
  *
- * @license MIT
- * @link    http://www.doctrine-project.org/
- * @author  Tim Roediger <superdweebie@gmail.com>
+ * @author Marco Pivetta <ocramius@gmail.com>
  */
-interface AbstractFactoryInterface
+class CacheBuilderTest extends BaseTestCase
 {
-
     /**
-     * Create an instance of the desired service
-     * The options class should be an array, instance of \Traverable or an instance of an options class
-     *
-     * @param $options mixed
-     * @return object
+     * @covers \DoctrineModule\Builder\CacheBuilder::build
      */
-    public function create($options);
+    public function testWillSetNamespace()
+    {
+        $builder = new CacheBuilder;
+
+        /* @var $service \Doctrine\Common\Cache\ArrayCache */
+        $instance = $builder->build(array('namespace' => 'bar'));
+
+        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $instance);
+        $this->assertSame('bar', $instance->getNamespace());
+    }
 }
