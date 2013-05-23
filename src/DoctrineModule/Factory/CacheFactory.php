@@ -20,10 +20,11 @@
 namespace DoctrineModule\Factory;
 
 use Doctrine\Common\Cache\CacheProvider;
-use RuntimeException;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use Doctrine\Common\Cache\RedisCache;
+use DoctrineModule\Exception;
+use DoctrineModule\Options\CacheOptions;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -36,9 +37,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
-    const OPTIONS_CLASS = '\DoctrineModule\Options\Cache';
-
+    /**
+     * @var ServiceLocatorInterface
+     */
     protected $serviceLocator;
 
     /**
@@ -66,12 +67,10 @@ class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInter
      */
     public function create($options)
     {
-        $optionsClass = self::OPTIONS_CLASS;
-
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new $optionsClass($options);
-        } elseif (! $options instanceof $optionsClass) {
-            throw new \InvalidArgumentException();
+            $options = new CacheOptions($options);
+        } elseif (! $options instanceof CacheOptions) {
+            throw new Exception\InvalidArgumentException();
         }
 
         $class   = $options->getClass();
@@ -80,7 +79,7 @@ class CacheFactory implements AbstractFactoryInterface, ServiceLocatorAwareInter
             throw new RuntimeException('Cache must have a class name to instantiate');
         }
 
-        if ($options->getDirectory() != null) {
+        if ($options->getDirectory() !== null) {
             $cache = new $class($options->getDirectory());
         } else {
             $cache = new $class;

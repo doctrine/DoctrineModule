@@ -19,6 +19,8 @@
 namespace DoctrineModule\Factory\Authentication;
 
 use DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter;
+use DoctrineModule\Exception;
+use DoctrineModule\Options\Authentication\AdapterOptions;
 use DoctrineModule\Factory\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -33,9 +35,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class AdapterFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
-    const OPTIONS_CLASS = '\DoctrineModule\Options\Authentication\Adapter';
-
+    /**
+     *
+     * @var ServiceLocatorInterface
+     */
     protected $serviceLocator;
 
     /**
@@ -61,16 +64,14 @@ class AdapterFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
      */
     public function create($options)
     {
-        $optionsClass = self::OPTIONS_CLASS;
-
         if (is_string($objectManager = $options['object_manager'])) {
             $options['object_manager'] = $this->serviceLocator->get($objectManager);
         }
 
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new $optionsClass($options);
-        } elseif (! $options instanceof $optionsClass) {
-            throw new \InvalidArgumentException();
+            $options = new AdapterOptions($options);
+        } elseif (! $options instanceof AdapterOptions) {
+            throw new Exception\InvalidArgumentException();
         }
 
         return new ObjectRepositoryAdapter($options);

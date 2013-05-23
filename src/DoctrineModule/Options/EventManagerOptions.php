@@ -17,68 +17,44 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Options\Authentication;
+namespace DoctrineModule\Options;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Zend\Stdlib\AbstractOptions as BaseAbstractOptions;
+use Zend\Stdlib\AbstractOptions;
 
 /**
+ * EventManager options
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.5.0
- * @author  Michaël Gallego <mic.gallego@gmail.com>
- * @author  Tim Roediger <superdweebie@gmail.com>
+ * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class AbstractOptions extends BaseAbstractOptions
+class EventManagerOptions extends AbstractOptions
 {
     /**
-     * A valid object implementing ObjectManager interface
+     * An array of subscribers. The array can contain the FQN of the
+     * class to instantiate OR a string to be located with the
+     * service locator.
      *
-     * @var ObjectManager
+     * @var array
      */
-    protected $objectManager;
+    protected $subscribers = array();
 
     /**
-     * Entity's class name
-     *
-     * @var string
+     * @param  array $subscribers
+     * @return self
      */
-    protected $identityClass;
-
-    /**
-     * @param  ObjectManager $objectManager
-     * @return Repository
-     */
-    public function setObjectManager(ObjectManager $objectManager)
+    public function setSubscribers($subscribers)
     {
-        $this->objectManager = $objectManager;
+        $this->subscribers = $subscribers;
+
         return $this;
     }
 
     /**
-     * @return ObjectManager
+     * @return array
      */
-    public function getObjectManager()
+    public function getSubscribers()
     {
-        return $this->objectManager;
-    }
-
-    /**
-     * @param string $identityClass
-     * @return Repository
-     */
-    public function setIdentityClass($identityClass)
-    {
-        $this->identityClass = $identityClass;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentityClass()
-    {
-        return $this->identityClass;
+        return $this->subscribers;
     }
 }

@@ -19,7 +19,7 @@
 
 namespace DoctrineModule\Authentication\Storage;
 
-use DoctrineModule\Options\Authentication\Storage as Options;
+use DoctrineModule\Options\Authentication\StorageOptions;
 use Zend\Authentication\Storage\StorageInterface;
 
 /**
@@ -45,8 +45,8 @@ class ObjectRepositoryStorage implements StorageInterface
      */
     public function setOptions($options)
     {
-        if (!$options instanceof Options) {
-            $options = new Options($options);
+        if (!$options instanceof StorageOptions) {
+            $options = new StorageOptions($options);
         }
 
         $this->options = $options;

@@ -19,7 +19,9 @@
 namespace DoctrineModule\Factory\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepositoryStorage;
+use DoctrineModule\Exception;
 use DoctrineModule\Factory\AbstractFactoryInterface;
+use DoctrineModule\Options\Authentication\StorageOptions;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -33,9 +35,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
-    const OPTIONS_CLASS = '\DoctrineModule\Options\Authentication\Storage';
-
     protected $serviceLocator;
 
     /**
@@ -57,21 +56,18 @@ class StorageFactory implements AbstractFactoryInterface, ServiceLocatorAwareInt
     /**
      * {@inheritDoc}
      *
-     * @return \DoctrineModule\Authentication\Storage\ObjectRepository
+     * @return \DoctrineModule\Authentication\Storage\ObjectRepositoryStorage
      */
     public function create($options)
     {
-
-        $optionsClass = self::OPTIONS_CLASS;
-
         if (is_string($objectManager = $options['object_manager'])) {
             $options['object_manager'] = $this->serviceLocator->get($objectManager);
         }
 
         if (is_array($options) || $options instanceof \Traversable) {
-            $options = new $optionsClass($options);
-        } elseif (! $options instanceof $optionsClass) {
-            throw new \InvalidArgumentException();
+            $options = new StorageOptions($options);
+        } elseif (! $options instanceof StorageOptions) {
+            throw new Exception\InvalidArgumentException();
         }
 
         return new ObjectRepositoryStorage($options);

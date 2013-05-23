@@ -16,58 +16,15 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-
-namespace DoctrineModule\Options\Authentication;
-
-use Zend\Authentication\Adapter\AdapterInterface;
-use Zend\Authentication\Storage\StorageInterface;
-use Zend\Stdlib\AbstractOptions as ZendAbstractOptions;
+namespace DoctrineModule\Exception;
 
 /**
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.5.0
+ * @since   1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Service extends ZendAbstractOptions
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
-
-     /**
-     *
-     * @var \Zend\Authentication\Storage\AdapterInterface;
-     */
-    protected $adapter;
-
-     /**
-     *
-     * @var \Zend\Authentication\Storage\StorageInterface;
-     */
-    protected $storage;
-
-    public function getAdapter()
-    {
-        return $this->adapter;
-    }
-
-    public function setAdapter(AdapterInterface $adapter)
-    {
-        $this->adapter = $adapter;
-    }
-
-    /**
-     * @return \Zend\Authentication\Storage\StorageInterface
-     */
-    public function getStorage()
-    {
-        return $this->storage;
-    }
-
-    /**
-     * @param \Zend\Authentication\Storage\StorageInterface $storage
-     */
-    public function setStorage(StorageInterface $storage)
-    {
-        $this->storage = $storage;
-    }
 }

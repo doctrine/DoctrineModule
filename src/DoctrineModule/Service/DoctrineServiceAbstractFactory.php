@@ -82,10 +82,10 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
         if (count($pieces) < 2) {
             return false;
         }
-        if (array_shift($pieces) != self::DOCTRINE_PREFIX) {
+        if (array_shift($pieces) !== self::DOCTRINE_PREFIX) {
             return false;
         }
-        if ($pieces[0] == self::FACTORY_PREFIX) {
+        if ($pieces[0] === self::FACTORY_PREFIX) {
             return false;
         }
 
