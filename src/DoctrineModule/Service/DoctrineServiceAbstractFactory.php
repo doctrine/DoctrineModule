@@ -19,7 +19,7 @@
 
 namespace DoctrineModule\Service;
 
-use DoctrineModule\Builder\AbstractBuilderInterface;
+use DoctrineModule\Builder\BuilderInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -57,7 +57,7 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
         /* @var $builder \DoctrineModule\Builder\AbstractBuilderInterface */
         $builder = $serviceLocator->get($mapping['builderName']);
 
-        if (! $builder instanceof AbstractBuilderInterface) {
+        if (! $builder instanceof BuilderInterface) {
             throw new ServiceNotFoundException(
                 sprintf(
                     '%s service did not return an instance of \DoctrineModule\Builder\AbstractBuilderInterface',
