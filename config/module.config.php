@@ -20,46 +20,43 @@
 return array(
     'doctrine' => array(
         'cache' => array(
-            'apc' => array(
-                'class'     => 'Doctrine\Common\Cache\ApcCache',
-                'namespace' => 'DoctrineModule',
-            ),
-            'array' => array(
-                'class' => 'Doctrine\Common\Cache\ArrayCache',
-                'namespace' => 'DoctrineModule',
-            ),
-            'filesystem' => array(
-                'class'     => 'Doctrine\Common\Cache\FilesystemCache',
-                'directory' => 'data/DoctrineModule/cache',
-                'namespace' => 'DoctrineModule',
-            ),
-            'memcache' => array(
-                'class'     => 'Doctrine\Common\Cache\MemcacheCache',
-                'instance'  => 'my_memcache_alias',
-                'namespace' => 'DoctrineModule',
-            ),
+//            'apc' => array(
+//                'namespace' => 'DoctrineModule',
+//            ),
+//            'array' => array(
+//                'namespace' => 'DoctrineModule',
+//            ),
+//            'filesystem' => array(
+//                'directory' => 'data/DoctrineModule/cache',
+//                'namespace' => 'DoctrineModule',
+//            ),
+//            'memcache' => array(
+//                'instance'  => 'doctrine.memcache.localhost',
+//                'namespace' => 'DoctrineModule',
+//            ),
             'memcached' => array(
-                'class'     => 'Doctrine\Common\Cache\MemcachedCache',
-                'instance'  => 'my_memcached_alias',
-                'namespace' => 'DoctrineModule',
+                'instance'  => 'my_memcached_instance',
+//                'namespace' => 'DoctrineModule',
             ),
             'redis' => array(
-                'class'     => 'Doctrine\Common\Cache\RedisCache',
                 'instance'  => 'my_redis_alias',
-                'namespace' => 'DoctrineModule',
+//                'namespace' => 'DoctrineModule',
             ),
-            'wincache' => array(
-                'class'     => 'Doctrine\Common\Cache\WinCacheCache',
-                'namespace' => 'DoctrineModule',
-            ),
-            'xcache' => array(
-                'class'     => 'Doctrine\Common\Cache\XcacheCache',
-                'namespace' => 'DoctrineModule',
-            ),
-            'zenddata' => array(
-                'class'     => 'Doctrine\Common\Cache\ZendDataCache',
-                'namespace' => 'DoctrineModule',
-            ),
+//            'wincache' => array(
+//                'namespace' => 'DoctrineModule',
+//            ),
+//            'xcache' => array(
+//                'namespace' => 'DoctrineModule',
+//            ),
+//            'zenddata' => array(
+//                'namespace' => 'DoctrineModule',
+//            ),
+        ),
+        'memcache' => array(
+            'localhost' => array(
+                'host' => 'localhost',
+                'port' => 11211,
+             )
         ),
         
         //These authentication settings are a hack to tide things over until version 1.0
@@ -92,7 +89,6 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'DoctrineModule\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session',
-            'doctrine.builder.cache'                        => 'DoctrineModule\Builder\CacheBuilder',
             'doctrine.builder.eventmanager'                 => 'DoctrineModule\Builder\EventManagerBuilder',
             'doctrine.builder.driver'                       => 'DoctrineModule\Builder\DriverBuilder',
             'doctrine.builder.authentication.repository'    => 'DoctrineModule\Builder\Authentication\RepositoryBuilder',
@@ -101,7 +97,16 @@ return array(
             'doctrine.builder.authentication.service'       => 'DoctrineModule\Builder\Authentication\AuthenticationServiceBuilder',
         ),
         'factories' => array(
-            'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
+            'doctrine.cache.apc'        => 'DoctrineModule\Service\Cache\ApcCacheFactory',
+            'doctrine.cache.array'      => 'DoctrineModule\Service\Cache\ArrayCacheFactory',
+            'doctrine.cache.filesystem' => 'DoctrineModule\Service\Cache\FilesystemCacheFactory',
+            'doctrine.cache.memcache'   => 'DoctrineModule\Service\Cache\MemcacheCacheFactory',
+            'doctrine.cache.memcached'  => 'DoctrineModule\Service\Cache\MemcachedCacheFactory',
+            'doctrine.cache.redis'      => 'DoctrineModule\Service\Cache\RedisCacheFactory',
+            'doctrine.cache.wincache'   => 'DoctrineModule\Service\Cache\WincacheCacheFactory',
+            'doctrine.cache.xcache'     => 'DoctrineModule\Service\Cache\XcacheCacheFactory',
+            'doctrine.cache.zenddata'   => 'DoctrineModule\Service\Cache\ZendDataCacheFactory',
+            'doctrine.cli'              => 'DoctrineModule\Service\CliFactory',
         ),
         'abstract_factories' => array(
             'DoctrineModule' => 'DoctrineModule\Service\DoctrineServiceAbstractFactory',

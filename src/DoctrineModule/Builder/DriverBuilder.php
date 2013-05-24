@@ -37,7 +37,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class DriverBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
+class DriverBuilder implements BuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface
