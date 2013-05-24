@@ -2,6 +2,7 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator;
 
+use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use ReflectionClass;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -674,6 +675,23 @@ class DoctrineObjectTest extends BaseTestCase
             $this->objectManager,
             false
         );
+    }
+
+    public function testObjectIsPassedForContextToStrategies()
+    {
+        $entity = new Asset\ContextEntity();
+        $entity->setId(2);
+        $entity->setField('foo', false);
+
+        $this->configureObjectManagerForSimpleEntity();
+
+        $hydrator = $this->hydratorByValue;
+        $entity   = $hydrator->hydrate(['id' => 3, 'field' => 'bar'], $entity);
+        $this->assertEquals(array('id' => 3, 'field' => 'bar'), $hydrator->extract($entity));
+
+        $hydrator->addStrategy('id', new ContextStrategy());
+        $entity   = $hydrator->hydrate(['id' => 3, 'field' => 'bar'], $entity);
+        $this->assertEquals(array('id' => '3barbar', 'field' => 'bar'), $hydrator->extract($entity));
     }
 
     public function testCanExtractSimpleEntityByValue()
