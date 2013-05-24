@@ -19,7 +19,7 @@
 namespace DoctrineModule\Builder\Authentication;
 
 use DoctrineModule\Exception;
-use DoctrineModule\Builder\AbstractBuilderInterface;
+use DoctrineModule\Builder\BuilderInterface;
 use DoctrineModule\Options\Authentication\ServiceOptions;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -33,7 +33,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @since   0.1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class AuthenticationServiceBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
+class AuthenticationServiceBuilder implements BuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface

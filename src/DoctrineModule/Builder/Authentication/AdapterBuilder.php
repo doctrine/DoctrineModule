@@ -21,7 +21,7 @@ namespace DoctrineModule\Builder\Authentication;
 use DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter;
 use DoctrineModule\Exception;
 use DoctrineModule\Options\Authentication\AdapterOptions;
-use DoctrineModule\Builder\AbstractBuilderInterface;
+use DoctrineModule\Builder\BuilderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -33,7 +33,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @since   0.1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class AdapterBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
+class AdapterBuilder implements BuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      *

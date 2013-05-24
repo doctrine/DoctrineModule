@@ -17,29 +17,38 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Builder;
+namespace DoctrineModule\Service\Cache;
 
-use DoctrineModule\Builder\CacheBuilder;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use Doctrine\Common\Cache\WinCacheCache;
+use DoctrineModule\Options\Cache\WinCacheCacheOptions;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
 
 /**
- * Test for {@see \DoctrineModule\Builder\CacheBuilder}
  *
- * @author Marco Pivetta <ocramius@gmail.com>
+ * @license MIT
+ * @link    http://www.doctrine-project.org/
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class CacheBuilderTest extends BaseTestCase
+class WinCacheCacheFactory implements FactoryInterface
 {
     /**
-     * @covers \DoctrineModule\Builder\CacheBuilder::build
+     * {@inheritDoc}
+     * @return Application
      */
-    public function testWillSetNamespace()
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $builder = new CacheBuilder;
+        $config = $serviceLocator->get('Config');
+        if (isset($config['doctrine']['cache']['wincache'])){
+            $options = new WinCacheCacheOptions($config['doctrine']['cache']['wincache']);
+        } else {
+            $options = new WinCacheCacheOptions();
+        }
 
-        /* @var $service \Doctrine\Common\Cache\ArrayCache */
-        $instance = $builder->build(array('namespace' => 'bar'));
+        $instance = new WinCacheCache;
+        $instance->setNamespace($options->getNamespace());
 
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $instance);
-        $this->assertSame('bar', $instance->getNamespace());
+        return $instance;
     }
 }

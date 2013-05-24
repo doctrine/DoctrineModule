@@ -20,7 +20,7 @@ namespace DoctrineModule\Builder\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepositoryStorage;
 use DoctrineModule\Exception;
-use DoctrineModule\Builder\AbstractBuilderInterface;
+use DoctrineModule\Builder\BuilderInterface;
 use DoctrineModule\Options\Authentication\StorageOptions;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -33,7 +33,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @since   0.1.0
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class StorageBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
+class StorageBuilder implements BuilderInterface, ServiceLocatorAwareInterface
 {
     protected $serviceLocator;
 

@@ -30,7 +30,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Builder responsible for creating EventManager instances
  */
-class EventManagerBuilder implements AbstractBuilderInterface, ServiceLocatorAwareInterface
+class EventManagerBuilder implements BuilderInterface, ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface

@@ -17,24 +17,35 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule\Builder;
+namespace DoctrineModule\Options\Cache;
 
 /**
- * Interface used by builders consumed by DoctrineModule\Service\DoctrineServiceAbstractFactory
+ * Cache options
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-interface AbstractBuilderInterface
+class MemcachedCacheOptions extends AbstractCacheOptions
 {
+    /**
+     * @var \Memcache
+     */
+    protected $instance;
 
     /**
-     * Create an instance of the desired service
-     * The options class should be an array, instance of \Traverable or an instance of an options class
-     *
-     * @param $options mixed
-     * @return object
+     * @return \Memcache
      */
-    public function build($options);
+    public function getInstance()
+    {
+        return $this->instance;
+    }
+
+    /**
+     * @param \Memcache $memcache
+     */
+    public function setInstance(\Memcached $instance)
+    {
+        $this->instance = $instance;
+    }
 }
