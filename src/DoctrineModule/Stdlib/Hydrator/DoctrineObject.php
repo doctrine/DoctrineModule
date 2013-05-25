@@ -177,9 +177,9 @@ class DoctrineObject extends AbstractHydrator
             $isser  = 'is' . ucfirst($fieldName);
 
             if (in_array($getter, $methods)) {
-                $data[$fieldName] = $this->extractValue($fieldName, $object->$getter());
+                $data[$fieldName] = $this->extractValue($fieldName, $object->$getter(), $object);
             } elseif (in_array($isser, $methods)) {
-                $data[$fieldName] = $this->extractValue($fieldName, $object->$isser());
+                $data[$fieldName] = $this->extractValue($fieldName, $object->$isser(), $object);
             }
 
             // Unknown fields are ignored
@@ -205,7 +205,7 @@ class DoctrineObject extends AbstractHydrator
             $reflProperty = $refl->getProperty($fieldName);
             $reflProperty->setAccessible(true);
 
-            $data[$fieldName] = $this->extractValue($fieldName, $reflProperty->getValue($object));
+            $data[$fieldName] = $this->extractValue($fieldName, $reflProperty->getValue($object), $object);
         }
 
         return $data;
@@ -241,7 +241,7 @@ class DoctrineObject extends AbstractHydrator
                         continue;
                     }
 
-                    $value = $this->hydrateValue($field, $value);
+                    $value = $this->hydrateValue($field, $value, $data);
 
                     if (null === $value
                         && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
@@ -260,7 +260,7 @@ class DoctrineObject extends AbstractHydrator
                     continue;
                 }
 
-                $object->$setter($this->hydrateValue($field, $value));
+                $object->$setter($this->hydrateValue($field, $value, $data));
             }
         }
 
@@ -296,13 +296,13 @@ class DoctrineObject extends AbstractHydrator
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
-                    $value = $this->toOne($target, $this->hydrateValue($field, $value));
+                    $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
                     $reflProperty->setValue($object, $value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
                     $this->toMany($object, $field, $target, $value);
                 }
             } else {
-                $reflProperty->setValue($object, $this->hydrateValue($field, $value));
+                $reflProperty->setValue($object, $this->hydrateValue($field, $value, $data));
             }
         }
 
@@ -415,7 +415,7 @@ class DoctrineObject extends AbstractHydrator
 
         // We could directly call hydrate method from the strategy, but if people want to override
         // hydrateValue function, they can do it and do their own stuff
-        $this->hydrateValue($collectionName, $collection);
+        $this->hydrateValue($collectionName, $collection, $values);
     }
 
     /**
