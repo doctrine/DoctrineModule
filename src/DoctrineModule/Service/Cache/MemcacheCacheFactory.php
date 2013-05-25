@@ -42,9 +42,6 @@ class MemcacheCacheFactory implements FactoryInterface
         $config = $serviceLocator->get('Config');
         if (isset($config['doctrine']['cache']['memcache'])){
             $config = $config['doctrine']['cache']['memcache'];
-            if (! isset($config['instance'])){
-                $config['instanace'] = 'doctrine.memcache.localhost';
-            }
             if (is_string($config['instance'])){
                 $config['instnace'] = $serviceLocator->get($config['instance']);
             }
