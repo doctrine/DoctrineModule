@@ -30,10 +30,10 @@ return array(
 //                'directory' => 'data/DoctrineModule/cache',
 //                'namespace' => 'DoctrineModule',
 //            ),
-//            'memcache' => array(
-//                'instance'  => 'doctrine.memcache.localhost',
+            'memcache' => array(
+                'instance'  => 'my_memcache_instance',
 //                'namespace' => 'DoctrineModule',
-//            ),
+            ),
             'memcached' => array(
                 'instance'  => 'my_memcached_instance',
 //                'namespace' => 'DoctrineModule',
@@ -52,29 +52,22 @@ return array(
 //                'namespace' => 'DoctrineModule',
 //            ),
         ),
-        'memcache' => array(
-            'localhost' => array(
-                'host' => 'localhost',
-                'port' => 11211,
-             )
-        ),
         
         //These authentication settings are a hack to tide things over until version 1.0
         //Normall doctrineModule should have no mention of odm or orm
         'authentication' => array(
             'adapter' => array(
                 'default' => array(
-                    //'object_manager' => 'doctrine.odm.documentmanager.default' || 'doctrine.orm.entitymanager.default',
-                    //'identity_class' => 'Application\Model\User',
+                    'object_manager' => 'doctrine.objectmanager.default',
+                    'identity_class' => 'Application\Model\User',
                     'identity_property' => 'username',
                     'credential_property' => 'password'
                 )
             ),
             'storage' => array(
                 'default' => array(
-                    //'object_manager' => 'doctrine.odm.documentmanager.default' || 'doctrine.orm.entitymanager.default',
-                    //'identity_class' => 'Application\Model\User',
-                    //'storage' => defaults to 'Zend\Authentication\Storage\SessionStorage',
+                    'object_manager' => 'doctrine.objectmanager.default',
+                    'identity_class' => 'Application\Model\User',
                 )
             ),
             'service' => array(

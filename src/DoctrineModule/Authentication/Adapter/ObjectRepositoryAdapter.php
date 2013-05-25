@@ -127,9 +127,7 @@ class ObjectRepositoryAdapter extends AbstractAdapter
     {
         $this->setup();
         $options  = $this->options;
-        $identity = $options
-            ->getObjectManager()
-            ->getRepository($options->getIdentityClass())
+        $identity = $options->getRepository()
             ->findOneBy(array($options->getIdentityProperty() => $this->identity));
 
         if (!$identity) {

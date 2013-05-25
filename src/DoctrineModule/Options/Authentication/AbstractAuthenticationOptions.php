@@ -47,8 +47,7 @@ class AbstractAuthenticationOptions extends AbstractOptions
     protected $identityClass;
 
     /**
-     * @param  ObjectManager $objectManager
-     * @return Repository
+     * @param  ObjectManager $objectManager     
      */
     public function setObjectManager(ObjectManager $objectManager)
     {
@@ -64,8 +63,7 @@ class AbstractAuthenticationOptions extends AbstractOptions
     }
 
     /**
-     * @param string $identityClass
-     * @return Repository
+     * @param string $identityClass    
      */
     public function setIdentityClass($identityClass)
     {
@@ -78,5 +76,13 @@ class AbstractAuthenticationOptions extends AbstractOptions
     public function getIdentityClass()
     {
         return $this->identityClass;
+    }
+    
+    /**
+     * @return Repository
+     */
+    public function getRepository()
+    {
+        return $this->getObjectManager()->getRepository($this->getIdentityClass());        
     }
 }
