@@ -83,6 +83,6 @@ class AbstractAuthenticationOptions extends AbstractOptions
      */
     public function getRepository()
     {
-        return $this->getObjectManager()->getRepository($this->getIdentityClass());        
+        return $this->getObjectManager()->getRepository($this->getIdentityClass());
     }
 }

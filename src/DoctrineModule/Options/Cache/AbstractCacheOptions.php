@@ -29,7 +29,7 @@ use Zend\Stdlib\AbstractOptions;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 abstract class AbstractCacheOptions extends AbstractOptions
-{              
+{
     /**
      * Namespace to prefix all cache ids with.
      *

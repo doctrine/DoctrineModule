@@ -24,7 +24,6 @@ use DoctrineModule\Options\Cache\ZendDataCacheOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-
 /**
  *
  * @license MIT
@@ -40,7 +39,7 @@ class ArrayCacheFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        if (isset($config['doctrine']['cache']['zenddata'])){
+        if (isset($config['doctrine']['cache']['zenddata'])) {
             $options = new ZendDataCacheOptions($config['doctrine']['cache']['zenddata']);
         } else {
             $options = new ZendDataCacheOptions();
