@@ -686,11 +686,11 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForSimpleEntity();
 
         $hydrator = $this->hydratorByValue;
-        $entity   = $hydrator->hydrate(['id' => 3, 'field' => 'bar'], $entity);
+        $entity   = $hydrator->hydrate(array('id' => 3, 'field' => 'bar'), $entity);
         $this->assertEquals(array('id' => 3, 'field' => 'bar'), $hydrator->extract($entity));
 
         $hydrator->addStrategy('id', new ContextStrategy());
-        $entity   = $hydrator->hydrate(['id' => 3, 'field' => 'bar'], $entity);
+        $entity   = $hydrator->hydrate(array('id' => 3, 'field' => 'bar'), $entity);
         $this->assertEquals(array('id' => '3barbar', 'field' => 'bar'), $hydrator->extract($entity));
     }
 
