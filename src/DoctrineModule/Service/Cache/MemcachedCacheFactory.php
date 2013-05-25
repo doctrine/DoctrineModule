@@ -20,10 +20,9 @@
 namespace DoctrineModule\Service\Cache;
 
 use Doctrine\Common\Cache\MemcachedCache;
-use DoctrineModule\Options\Cache\MemcacheCachedOptions;
+use DoctrineModule\Options\Cache\MemcachedCacheOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-
 
 /**
  *
@@ -40,9 +39,9 @@ class MemcachedCacheFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        if (isset($config['doctrine']['cache']['memcached'])){
+        if (isset($config['doctrine']['cache']['memcached'])) {
             $config = $config['doctrine']['cache']['memcached'];
-            if (! isset($config['instance']) && is_string($config['instance'])){
+            if (! isset($config['instance']) && is_string($config['instance'])) {
                 $config['instnace'] = $serviceLocator->get($config['instance']);
             }
             $options = new MemcachedCacheOptions($config);

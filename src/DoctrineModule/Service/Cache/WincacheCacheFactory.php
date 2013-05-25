@@ -24,7 +24,6 @@ use DoctrineModule\Options\Cache\WinCacheCacheOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-
 /**
  *
  * @license MIT
@@ -40,7 +39,7 @@ class WinCacheCacheFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        if (isset($config['doctrine']['cache']['wincache'])){
+        if (isset($config['doctrine']['cache']['wincache'])) {
             $options = new WinCacheCacheOptions($config['doctrine']['cache']['wincache']);
         } else {
             $options = new WinCacheCacheOptions();

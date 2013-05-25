@@ -53,8 +53,10 @@ class ServiceOptions extends AbstractOptions
      */
     public function getAdapter()
     {
-        if (! $this->adapter instanceof AdapterInterface){
-            throw Exception\RuntimeException('Authentication Adapter must implement Zend\Authentication\Adaper\AdpaterInterface');
+        if (! $this->adapter instanceof AdapterInterface) {
+            throw Exception\RuntimeException(
+                'Authentication Adapter must implement Zend\Authentication\Adaper\AdpaterInterface'
+            );
         }
         return $this->adapter;
     }

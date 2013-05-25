@@ -24,7 +24,6 @@ use DoctrineModule\Options\Cache\ApcCacheOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-
 /**
  *
  * @license MIT
@@ -40,7 +39,7 @@ class ApcCacheFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        if (isset($config['doctrine']['cache']['apc'])){
+        if (isset($config['doctrine']['cache']['apc'])) {
             $options = new ApcCacheOptions($config['doctrine']['cache']['apc']);
         } else {
             $options = new ApcCacheOptions();

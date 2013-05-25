@@ -24,7 +24,6 @@ use DoctrineModule\Options\Cache\XcacheCacheOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-
 /**
  *
  * @license MIT
@@ -40,7 +39,7 @@ class XcacheCacheFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        if (isset($config['doctrine']['cache']['xcache'])){
+        if (isset($config['doctrine']['cache']['xcache'])) {
             $options = new XcacheCacheOptions($config['doctrine']['cache']['xcache']);
         } else {
             $options = new XcacheCacheOptions();

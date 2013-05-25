@@ -24,7 +24,6 @@ use DoctrineModule\Options\Cache\MemcacheCacheOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-
 /**
  *
  * @license MIT
@@ -40,9 +39,9 @@ class MemcacheCacheFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        if (isset($config['doctrine']['cache']['memcache'])){
+        if (isset($config['doctrine']['cache']['memcache'])) {
             $config = $config['doctrine']['cache']['memcache'];
-            if (is_string($config['instance'])){
+            if (is_string($config['instance'])) {
                 $config['instnace'] = $serviceLocator->get($config['instance']);
             }
             $options = new MemcacheCacheOptions($config);

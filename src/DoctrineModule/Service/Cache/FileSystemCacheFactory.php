@@ -24,7 +24,6 @@ use DoctrineModule\Options\Cache\FilesystemCacheOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-
 /**
  *
  * @license MIT
@@ -40,7 +39,7 @@ class FilesystemCacheFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        if (isset($config['doctrine']['cache']['filesystem'])){
+        if (isset($config['doctrine']['cache']['filesystem'])) {
             $options = new FilesystemCacheOptions($config['doctrine']['cache']['filesystem']);
         } else {
             $options = new FilesystemCacheOptions();

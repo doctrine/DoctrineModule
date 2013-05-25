@@ -24,7 +24,6 @@ use DoctrineModule\Options\Cache\RedisCacheOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-
 /**
  *
  * @license MIT
@@ -40,9 +39,9 @@ class RedisCacheFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        if (isset($config['doctrine']['cache']['redis'])){
+        if (isset($config['doctrine']['cache']['redis'])) {
             $config = $config['doctrine']['cache']['redis'];
-            if (isset($config['instance']) && is_string($config['instance'])){
+            if (isset($config['instance']) && is_string($config['instance'])) {
                 $config['instnace'] = $serviceLocator->get($config['instance']);
             }
             $options = new RedisCacheOptions($config);
