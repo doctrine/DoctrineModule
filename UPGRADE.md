@@ -8,6 +8,7 @@
        - `DoctrineModule\Authentication\Storage\ObjectRepository` -> `DoctrineModule\Authentication\Storage\ObjectRepositoryStorage`
        - `DoctrineModule\Paginator\Adatper\Collection` -> `DoctrineModule\Paginator\Adatper\CollectionAdapter`
        - `DoctrineModule\Paginator\Adatper\Selectable` -> ``DoctrineModule\Paginator\Adatper\SelectableAdater`
+       - `DoctrineModule\Stdlib\Hydrator\DoctrineObject` -> `DoctrineModule\Stdlib\Hydrator\ObjectHydrator`
        - All `DoctrineModule\Options\*.php` -> `DoctrineModule\Options\*Options.php`
  * Any fluent interfaces have been removed.
  * Configuration has changed significantly. Most services are created by `DoctrineModule\ServiceFactory\DoctrineServiceAbstractFactory`,

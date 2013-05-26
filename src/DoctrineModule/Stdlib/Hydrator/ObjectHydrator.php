@@ -39,7 +39,7 @@ use Zend\Stdlib\Hydrator\AbstractHydrator;
  * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
  */
-class DoctrineObject extends AbstractHydrator
+class ObjectHydrator extends AbstractHydrator
 {
     /**
      * @var ObjectManager

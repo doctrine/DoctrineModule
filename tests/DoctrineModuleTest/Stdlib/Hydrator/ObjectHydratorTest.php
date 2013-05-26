@@ -6,18 +6,18 @@ use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use ReflectionClass;
 use Doctrine\Common\Collections\ArrayCollection;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
+use DoctrineModule\Stdlib\Hydrator\ObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
 
-class DoctrineObjectTest extends BaseTestCase
+class ObjectHydratorTest extends BaseTestCase
 {
     /**
-     * @var DoctrineObjectHydrator
+     * @var ObjectHydrator
      */
     protected $hydratorByValue;
 
     /**
-     * @var DoctrineObjectHydrator
+     * @var ObjectHydrator
      */
     protected $hydratorByReference;
 
@@ -104,11 +104,11 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue = new ObjectHydrator(
             $this->objectManager,
             true
         );
-        $this->hydratorByReference = new DoctrineObjectHydrator(
+        $this->hydratorByReference = new ObjectHydrator(
             $this->objectManager,
             false
         );
@@ -172,11 +172,11 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue = new ObjectHydrator(
             $this->objectManager,
             true
         );
-        $this->hydratorByReference = new DoctrineObjectHydrator(
+        $this->hydratorByReference = new ObjectHydrator(
             $this->objectManager,
             false
         );
@@ -228,11 +228,11 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new ObjectHydrator(
             $this->objectManager,
             true
         );
-        $this->hydratorByReference = new DoctrineObjectHydrator(
+        $this->hydratorByReference = new ObjectHydrator(
             $this->objectManager,
             false
         );
@@ -291,11 +291,11 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue = new ObjectHydrator(
             $this->objectManager,
             true
         );
-        $this->hydratorByReference = new DoctrineObjectHydrator(
+        $this->hydratorByReference = new ObjectHydrator(
             $this->objectManager,
             false
         );
@@ -381,11 +381,11 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getIdentifier')
             ->will($this->returnValue(array("id")));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue = new ObjectHydrator(
             $this->objectManager,
             true
         );
-        $this->hydratorByReference = new DoctrineObjectHydrator(
+        $this->hydratorByReference = new ObjectHydrator(
             $this->objectManager,
             false
         );
@@ -485,11 +485,11 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getIdentifier')
             ->will($this->returnValue(array("id")));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue = new ObjectHydrator(
             $this->objectManager,
             true
         );
-        $this->hydratorByReference = new DoctrineObjectHydrator(
+        $this->hydratorByReference = new ObjectHydrator(
             $this->objectManager,
             false
         );
@@ -576,11 +576,11 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new ObjectHydrator(
             $this->objectManager,
             true
         );
-        $this->hydratorByReference = new DoctrineObjectHydrator(
+        $this->hydratorByReference = new ObjectHydrator(
             $this->objectManager,
             false
         );
@@ -667,11 +667,11 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue     = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new ObjectHydrator(
             $this->objectManager,
             true
         );
-        $this->hydratorByReference = new DoctrineObjectHydrator(
+        $this->hydratorByReference = new ObjectHydrator(
             $this->objectManager,
             false
         );
@@ -736,7 +736,7 @@ class DoctrineObjectTest extends BaseTestCase
     /**
      * When using hydration by value, it will use the public API of the entity to set values (setters)
      *
-     * @covers \DoctrineModule\Stdlib\Hydrator\DoctrineObject::hydrateByValue
+     * @covers \DoctrineModule\Stdlib\Hydrator\ObjectHydrator::hydrateByValue
      */
     public function testCanHydrateSimpleEntityWithStringIdByValue()
     {
