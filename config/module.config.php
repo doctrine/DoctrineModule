@@ -20,41 +20,30 @@
 return array(
     'doctrine' => array(
         'cache' => array(
-//            'apc' => array(
-//                'namespace' => 'DoctrineModule',
-//            ),
-//            'array' => array(
-//                'namespace' => 'DoctrineModule',
-//            ),
-//            'filesystem' => array(
+            'apc' => array(
+            ),
+            'array' => array(
+            ),
+            'filesystem' => array(
 //                'directory' => 'data/DoctrineModule/cache',
-//                'namespace' => 'DoctrineModule',
-//            ),
+            ),
             'memcache' => array(
                 'instance'  => 'my_memcache_instance',
-//                'namespace' => 'DoctrineModule',
             ),
             'memcached' => array(
                 'instance'  => 'my_memcached_instance',
-//                'namespace' => 'DoctrineModule',
             ),
             'redis' => array(
                 'instance'  => 'my_redis_alias',
-//                'namespace' => 'DoctrineModule',
             ),
-//            'wincache' => array(
-//                'namespace' => 'DoctrineModule',
-//            ),
-//            'xcache' => array(
-//                'namespace' => 'DoctrineModule',
-//            ),
-//            'zenddata' => array(
-//                'namespace' => 'DoctrineModule',
-//            ),
+            'wincache' => array(
+            ),
+            'xcache' => array(
+            ),
+            'zenddata' => array(
+            ),
         ),
         
-        //These authentication settings are a hack to tide things over until version 1.0
-        //Normall doctrineModule should have no mention of odm or orm
         'authentication' => array(
             'adapter' => array(
                 'default' => array(
