@@ -17,17 +17,44 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Options\Authentication;
+
+use Zend\Authentication\Storage\Session as SessionStorage;
+use Zend\Authentication\Storage\StorageInterface;
 
 /**
- * Version
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @since   0.5.0
+ * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
-class Version
+class StorageOptions extends AbstractAuthenticationOptions
 {
-    const VERSION = '1.0.0';
+    /**
+     * This is the storage instance that the object key will be stored in.
+     *
+     * @var \Zend\Authentication\Storage\StorageInterface;
+     */
+    protected $storage;
+
+    /**
+     * @return \Zend\Authentication\Storage\StorageInterface
+     */
+    public function getStorage()
+    {
+        if (! $this->storage instanceof StorageInterface) {
+            $this->storage = new SessionStorage();
+        }
+
+        return $this->storage;
+    }
+
+    /**
+     * @param \Zend\Authentication\Storage\StorageInterface $storage
+     */
+    public function setStorage(StorageInterface $storage)
+    {
+        $this->storage = $storage;
+    }
 }

@@ -17,17 +17,42 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Options;
+
+use Zend\Stdlib\AbstractOptions;
 
 /**
- * Version
+ * EventManager options
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class Version
+class EventManagerOptions extends AbstractOptions
 {
-    const VERSION = '1.0.0';
+    /**
+     * An array of subscribers. The array can contain the FQN of the
+     * class to instantiate OR a string to be located with the
+     * service locator.
+     *
+     * @var array
+     */
+    protected $subscribers = array();
+
+    /**
+     * @param  array $subscribers
+     * @return self
+     */
+    public function setSubscribers($subscribers)
+    {
+        $this->subscribers = $subscribers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubscribers()
+    {
+        return $this->subscribers;
+    }
 }

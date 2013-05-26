@@ -17,17 +17,37 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Service\Cache;
+
+use Doctrine\Common\Cache\ApcCache;
+use DoctrineModule\Options\Cache\ApcCacheOptions;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Version
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Version
+class ApcCacheFactory implements FactoryInterface
 {
-    const VERSION = '1.0.0';
+    /**
+     * {@inheritDoc}
+     * @return Application
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $config = $serviceLocator->get('Config');
+        if (isset($config['doctrine']['cache']['apc'])) {
+            $options = new ApcCacheOptions($config['doctrine']['cache']['apc']);
+        } else {
+            $options = new ApcCacheOptions();
+        }
+
+        $instance = new ApcCache;
+        $instance->setNamespace($options->getNamespace());
+
+        return $instance;
+    }
 }

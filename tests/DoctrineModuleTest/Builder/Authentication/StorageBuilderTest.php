@@ -17,17 +17,25 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModuleTest\Builder\Authentication;
 
-/**
- * Version
- *
- * @license MIT
- * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
- */
-class Version
+use DoctrineModule\Builder\Authentication\StorageBuilder;
+use PHPUnit_Framework_TestCase as BaseTestCase;
+
+class StorageBuilderTest extends BaseTestCase
 {
-    const VERSION = '1.0.0';
+    public function testWillInstantiateFromFQCN()
+    {
+        $builder = new StorageBuilder;
+
+        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
+        $storage = $builder->build(
+            array(
+                'object_manager' => $objectManager,
+                'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+            )
+        );
+        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepositoryStorage', $storage);
+    }
 }

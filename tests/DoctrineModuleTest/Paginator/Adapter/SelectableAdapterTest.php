@@ -20,7 +20,7 @@
 namespace DoctrineModuleTest\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Criteria;
-use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
+use DoctrineModule\Paginator\Adapter\SelectableAdapter;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit_Framework_TestCase;
 
@@ -34,7 +34,7 @@ use PHPUnit_Framework_TestCase;
 class SelectableAdapterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\SelectableAdapter::getItems
      */
     public function testGetItemsAtOffsetZeroWithEmptyCriteria()
     {
@@ -65,7 +65,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\SelectableAdapter::getItems
      */
     public function testGetItemsAtOffsetZeroWithNonEmptyCriteria()
     {
@@ -99,7 +99,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\SelectableAdapter::getItems
      */
     public function testGetItemsAtOffsetTenWithEmptyCriteria()
     {
@@ -129,7 +129,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
+     * @covers \DoctrineModule\Paginator\Adapter\SelectableAdapter::getItems
      */
     public function testGetItemsAtOffsetTenWithNonEmptyCriteria()
     {
@@ -163,7 +163,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::count
+     * @covers \DoctrineModule\Paginator\Adapter\SelectableAdapter::count
      */
     public function testReturnsCorrectCount()
     {

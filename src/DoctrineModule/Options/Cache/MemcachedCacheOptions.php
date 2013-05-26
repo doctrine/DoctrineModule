@@ -17,17 +17,35 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Options\Cache;
 
 /**
- * Version
+ * Cache options
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Version
+class MemcachedCacheOptions extends AbstractCacheOptions
 {
-    const VERSION = '1.0.0';
+    /**
+     * @var \Memcache
+     */
+    protected $instance;
+
+    /**
+     * @return \Memcache
+     */
+    public function getInstance()
+    {
+        return $this->instance;
+    }
+
+    /**
+     * @param \Memcache $memcache
+     */
+    public function setInstance(\Memcached $instance)
+    {
+        $this->instance = $instance;
+    }
 }

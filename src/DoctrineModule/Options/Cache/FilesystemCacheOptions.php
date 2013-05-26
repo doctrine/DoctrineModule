@@ -17,17 +17,41 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Options\Cache;
 
 /**
- * Version
+ * Cache options
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Version
+class FilesystemCacheOptions extends AbstractCacheOptions
 {
-    const VERSION = '1.0.0';
+    /**
+     * Directory to save cache files in
+     *
+     * @var string
+     */
+    protected $directory = 'data/DoctrineModule/cache';
+
+    /**
+     * Directory to save cache files in
+     *
+     * @return string
+     */
+    public function getDirectory()
+    {
+        return $this->directory;
+    }
+
+    /**
+     * Directory to save cache files in
+     *
+     * @param string $directory
+     */
+    public function setDirectory($directory)
+    {
+        $this->directory = (string) $directory;
+    }
 }

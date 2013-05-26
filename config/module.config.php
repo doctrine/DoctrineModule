@@ -21,85 +21,76 @@ return array(
     'doctrine' => array(
         'cache' => array(
             'apc' => array(
-                'class'     => 'Doctrine\Common\Cache\ApcCache',
-                'namespace' => 'DoctrineModule',
             ),
             'array' => array(
-                'class' => 'Doctrine\Common\Cache\ArrayCache',
-                'namespace' => 'DoctrineModule',
             ),
             'filesystem' => array(
-                'class'     => 'Doctrine\Common\Cache\FilesystemCache',
-                'directory' => 'data/DoctrineModule/cache',
-                'namespace' => 'DoctrineModule',
+//                'directory' => 'data/DoctrineModule/cache',
             ),
             'memcache' => array(
-                'class'     => 'Doctrine\Common\Cache\MemcacheCache',
-                'instance'  => 'my_memcache_alias',
-                'namespace' => 'DoctrineModule',
+                'instance'  => 'my_memcache_instance',
             ),
             'memcached' => array(
-                'class'     => 'Doctrine\Common\Cache\MemcachedCache',
-                'instance'  => 'my_memcached_alias',
-                'namespace' => 'DoctrineModule',
+                'instance'  => 'my_memcached_instance',
             ),
             'redis' => array(
-                'class'     => 'Doctrine\Common\Cache\RedisCache',
                 'instance'  => 'my_redis_alias',
-                'namespace' => 'DoctrineModule',
             ),
             'wincache' => array(
-                'class'     => 'Doctrine\Common\Cache\WinCacheCache',
-                'namespace' => 'DoctrineModule',
             ),
             'xcache' => array(
-                'class'     => 'Doctrine\Common\Cache\XcacheCache',
-                'namespace' => 'DoctrineModule',
             ),
             'zenddata' => array(
-                'class'     => 'Doctrine\Common\Cache\ZendDataCache',
-                'namespace' => 'DoctrineModule',
             ),
         ),
         
-        //These authentication settings are a hack to tide things over until version 1.0
-        //Normall doctrineModule should have no mention of odm or orm
         'authentication' => array(
-            //default authentication options should be set in either the odm or orm modules
-            'odm_default' => array(),
-            'orm_default' => array(),            
-        ),
-        'authenticationadapter' => array(
-            'odm_default' => true,
-            'orm_default' => true,            
-        ),
-        'authenticationstorage' => array(
-            'odm_default' => true,
-            'orm_default' => true,            
-        ),
-        'authenticationservice' => array(
-            'odm_default' => true,
-            'orm_default' => true,            
-        )        
-    ),
-
-    // Factory mappings - used to define which factory to use to instantiate a particular doctrine
-    // service type
-    'doctrine_factories' => array(
-        'cache'                 => 'DoctrineModule\Service\CacheFactory',
-        'eventmanager'          => 'DoctrineModule\Service\EventManagerFactory',
-        'driver'                => 'DoctrineModule\Service\DriverFactory',
-        'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
-        'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
-        'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
+            'adapter' => array(
+                'default' => array(
+                    'object_manager' => 'doctrine.objectmanager.default',
+                    'identity_class' => 'Application\Model\User',
+                    'identity_property' => 'username',
+                    'credential_property' => 'password'
+                )
+            ),
+            'storage' => array(
+                'default' => array(
+                    'object_manager' => 'doctrine.objectmanager.default',
+                    'identity_class' => 'Application\Model\User',
+                )
+            ),
+            'service' => array(
+                'default' => array(
+                    'adapter' => 'doctrine.authentication.adapter.default',
+                    'storage' => 'doctrine.authentication.storage.default'
+                )
+            )
+        )
     ),
 
     'service_manager' => array(
+        'invokables' => array(
+            'doctrine.builder.eventmanager'              => 'DoctrineModule\Builder\EventManagerBuilder',
+            'doctrine.builder.driver'                    => 'DoctrineModule\Builder\DriverBuilder',
+            'doctrine.builder.authentication.repository' => 'DoctrineModule\Builder\Authentication\RepositoryBuilder',
+            'doctrine.builder.authentication.adapter'    => 'DoctrineModule\Builder\Authentication\AdapterBuilder',
+            'doctrine.builder.authentication.storage'    => 'DoctrineModule\Builder\Authentication\StorageBuilder',
+            'doctrine.builder.authentication.service'    => 'DoctrineModule\Builder\Authentication\AuthenticationServiceBuilder',
+        ),
         'factories' => array(
-            'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
+            'doctrine.cache.apc'        => 'DoctrineModule\Service\Cache\ApcCacheFactory',
+            'doctrine.cache.array'      => 'DoctrineModule\Service\Cache\ArrayCacheFactory',
+            'doctrine.cache.filesystem' => 'DoctrineModule\Service\Cache\FilesystemCacheFactory',
+            'doctrine.cache.memcache'   => 'DoctrineModule\Service\Cache\MemcacheCacheFactory',
+            'doctrine.cache.memcached'  => 'DoctrineModule\Service\Cache\MemcachedCacheFactory',
+            'doctrine.cache.redis'      => 'DoctrineModule\Service\Cache\RedisCacheFactory',
+            'doctrine.cache.wincache'   => 'DoctrineModule\Service\Cache\WincacheCacheFactory',
+            'doctrine.cache.xcache'     => 'DoctrineModule\Service\Cache\XcacheCacheFactory',
+            'doctrine.cache.zenddata'   => 'DoctrineModule\Service\Cache\ZendDataCacheFactory',
+            'doctrine.cli'              => 'DoctrineModule\Service\CliFactory',
         ),
         'abstract_factories' => array(
-            'DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory',
+            'DoctrineModule' => 'DoctrineModule\Service\DoctrineServiceAbstractFactory',
         ),
     ),
 

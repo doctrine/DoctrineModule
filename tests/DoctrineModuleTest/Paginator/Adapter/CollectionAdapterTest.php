@@ -19,7 +19,7 @@
 
 namespace DoctrineModuleTest\Paginator\Adapter;
 
-use DoctrineModule\Paginator\Adapter\Collection as CollectionAdapter;
+use DoctrineModule\Paginator\Adapter\CollectionAdapter;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit_Framework_TestCase;
 

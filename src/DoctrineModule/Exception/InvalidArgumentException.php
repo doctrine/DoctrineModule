@@ -16,18 +16,15 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-
-namespace DoctrineModule;
+namespace DoctrineModule\Exception;
 
 /**
- * Version
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @since   1.0
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Version
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
-    const VERSION = '1.0.0';
 }

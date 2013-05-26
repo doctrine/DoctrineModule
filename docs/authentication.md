@@ -84,10 +84,10 @@ class Module
             'factories' => array(
                 'Zend\Authentication\AuthenticationService' => function($serviceManager) {
                     // If you are using DoctrineORMModule:
-                    return $serviceManager->get('doctrine.authenticationservice.orm_default');
+                    return $serviceManager->get('doctrine.authenticationservice.default');
 
                     // If you are using DoctrineODMModule:
-                    return $serviceManager->get('doctrine.authenticationservice.odm_default');
+                    return $serviceManager->get('doctrine.authenticationservice.default');
                 }
             )
         );
@@ -95,7 +95,7 @@ class Module
 }
 ```
 
-Please note that Iam using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 view helper.
+Please note that I am using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 view helper.
 
 #### Using the AuthenticationService
 
