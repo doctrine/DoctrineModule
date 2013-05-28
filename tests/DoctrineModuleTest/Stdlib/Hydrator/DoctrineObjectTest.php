@@ -1035,12 +1035,12 @@ class DoctrineObjectTest extends BaseTestCase
     {
         // When using hydration by reference, it won't use the public API of the entity to retrieve values (setters)
         $entity = new Asset\OneToOneEntity();
+
         $this->configureObjectManagerForOneToOneEntity();
+        $this->objectManager->expects($this->never())->method('find');
+        $this->metadata->expects($this->once())->method('hasAssociation');
 
         $data = array('toOne' => null);
-
-        $this->metadata->expects($this->once())
-                       ->method('hasAssociation');
 
         $object = $this->hydratorByReference->hydrate($data, $entity);
         $this->assertNull($object->getToOne(false));
@@ -1838,12 +1838,12 @@ class DoctrineObjectTest extends BaseTestCase
     public function testAssertNullValueHydratedForOneToOneWithOptionalMethodSignature()
     {
         $entity = new Asset\OneToOneEntity();
+
         $this->configureObjectManagerForOneToOneEntity();
+        $this->objectManager->expects($this->never())->method('find');
 
         $data = array('toOne' => null);
 
-        $this->objectManager->expects($this->never())
-                            ->method('find');
 
         $object = $this->hydratorByValue->hydrate($data, $entity);
         $this->assertNull($object->getToOne(false));
@@ -1852,14 +1852,12 @@ class DoctrineObjectTest extends BaseTestCase
     public function testAssertNullValueNotUsedAsIdentifierForOneToOneWithNonOptionalMethodSignature()
     {
         $entity = new Asset\OneToOneEntityNotNullable();
-        $entity->setToOne(new Asset\SimpleEntity());
 
+        $entity->setToOne(new Asset\SimpleEntity());
         $this->configureObjectManagerForOneToOneEntityNotNullable();
+        $this->objectManager->expects($this->never())->method('find');
 
         $data = array('toOne' => null);
-
-        $this->objectManager->expects($this->never())
-                            ->method('find');
 
         $object = $this->hydratorByValue->hydrate($data, $entity);
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $object->getToOne(false));
