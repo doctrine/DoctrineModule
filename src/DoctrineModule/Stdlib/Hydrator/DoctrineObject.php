@@ -27,6 +27,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
 use Zend\Stdlib\ArrayObject;
+use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 
 /**
@@ -237,18 +238,16 @@ class DoctrineObject extends AbstractHydrator
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
-                    if (!method_exists($object, $setter)) {
+                    if (! method_exists($object, $setter)) {
                         continue;
                     }
 
-                    $value = $this->hydrateValue($field, $value, $data);
+                    $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
 
                     if (null === $value
                         && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
                     ) {
                         continue;
-                    } elseif (null !== $value) {
-                        $value = $this->toOne($target, $value);
                     }
 
                     $object->$setter($value);
@@ -256,7 +255,7 @@ class DoctrineObject extends AbstractHydrator
                     $this->toMany($object, $field, $target, $value);
                 }
             } else {
-                if (!method_exists($object, $setter)) {
+                if (! method_exists($object, $setter)) {
                     continue;
                 }
 
@@ -353,11 +352,8 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function toOne($target, $value)
     {
-        if ($value instanceof $target) {
-            return $value;
-        }
-
         $metadata = $this->objectManager->getClassMetadata($target);
+
         if (is_array($value) && array_keys($value) != $metadata->getIdentifier()) {
             // $value is most likely an array of fieldset data
             $identifiers = array_intersect_key(
@@ -396,16 +392,15 @@ class DoctrineObject extends AbstractHydrator
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
-            if ($value instanceof $target) {
-                $collection[] = $value;
-            } elseif ($value !== null) {
-                $targetObject = $this->find($value, $target);
-
-                if ($targetObject !== null) {
-                    $collection[] = $targetObject;
-                }
-            }
+            $collection[] = $this->find($value, $target);
         }
+
+        $collection = array_filter(
+            $collection,
+            function ($item) {
+                return null !== $item;
+            }
+        );
 
         // Set the object so that the strategy can extract the Collection from it
 
@@ -451,15 +446,50 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Find an object by its identifiers
+     * Find an object by a given target class and identifier
      *
      * @param  mixed   $identifiers
      * @param  string  $targetClass
      *
      * @return object|null
      */
-    protected function find($identifiers, $targetClass)
+    private function find($identifiers, $targetClass)
     {
+        if ($identifiers instanceof $targetClass) {
+            return $identifiers;
+        }
+
+        if ($this->isNullIdentifier($identifiers)) {
+            return null;
+        }
+
         return $this->objectManager->find($targetClass, $identifiers);
+    }
+
+    /**
+     * Verifies if a provided identifier is to be considered null
+     *
+     * @param  mixed $identifier
+     *
+     * @return bool
+     */
+    private function isNullIdentifier($identifier)
+    {
+        if (null === $identifier) {
+            return true;
+        }
+
+        if ($identifier instanceof Traversable || is_array($identifier)) {
+            $nonNullIdentifiers = array_filter(
+                ArrayUtils::iteratorToArray($identifier),
+                function ($value) {
+                    return null !== $value;
+                }
+            );
+
+            return empty($nonNullIdentifiers);
+        }
+
+        return false;
     }
 }
