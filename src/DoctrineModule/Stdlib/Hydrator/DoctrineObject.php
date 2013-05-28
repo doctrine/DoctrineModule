@@ -453,7 +453,7 @@ class DoctrineObject extends AbstractHydrator
      *
      * @return object|null
      */
-    private function find($identifiers, $targetClass)
+    protected function find($identifiers, $targetClass)
     {
         if ($identifiers instanceof $targetClass) {
             return $identifiers;
