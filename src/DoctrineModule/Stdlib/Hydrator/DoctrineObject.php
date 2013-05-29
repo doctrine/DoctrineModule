@@ -90,9 +90,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
      */
     public function extract($object)
     {
-        $this->prepare($object);
-
-        return $this->wrappedHydrator->extract($object);
+        return $this->getWrappedHydrator($object)->extract( $object);
     }
 
     /**
@@ -104,26 +102,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
      */
     public function hydrate(array $data, $object)
     {
-        $this->prepare($object);
-
-        return $this->wrappedHydrator->hydrate($data, $object);
-    }
-
-    /**
-     * Prepare the hydrator by adding strategies to every collection valued associations
-     *
-     * @param  object $object
-     * @return void
-     */
-    protected function prepare($object)
-    {
-        $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
-
-        if ($this->byValue) {
-            $this->wrappedHydrator = new ByValueObjectHydrator($this->objectManager, $this->getStrategyContainer());
-        } else {
-            $this->wrappedHydrator = new ByReferenceHydrator($this->objectManager, $this->getStrategyContainer());
-        }
+        return $this->getWrappedHydrator($object)->hydrate($data, $object);
     }
 
     /**
@@ -179,5 +158,29 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
             $this->objectManager/*,
             $this->metadata*/
         );
+    }
+
+    /**
+     * @param object $object
+     *
+     * @return HydratorInterface
+     */
+    private function getWrappedHydrator($object)
+    {
+        // @todo there should be one hydrator per object type
+
+        if ($this->wrappedHydrator) {
+            return $this->wrappedHydrator;
+        }
+
+        $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
+
+        if ($this->byValue) {
+            $this->wrappedHydrator = new ByValueObjectHydrator($this->objectManager, $this->getStrategyContainer());
+        } else {
+            $this->wrappedHydrator = new ByReferenceHydrator($this->objectManager, $this->getStrategyContainer());
+        }
+
+        return $this->wrappedHydrator;
     }
 }
