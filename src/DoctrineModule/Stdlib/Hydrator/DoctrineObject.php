@@ -22,7 +22,6 @@ namespace DoctrineModule\Stdlib\Hydrator;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
-use DoctrineModule\Stdlib\Hydrator\Strategy\DoctrineFieldStrategy;
 use InvalidArgumentException;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\Hydrator\HydratorInterface;
