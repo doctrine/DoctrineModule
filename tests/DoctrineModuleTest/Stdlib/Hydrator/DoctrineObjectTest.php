@@ -89,6 +89,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('hasAssociation')
             ->will($this->returnValue(false));
 
@@ -157,6 +163,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('hasAssociation')
             ->will($this->returnValue(false));
 
@@ -209,6 +221,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getTypeOfField')
             ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('field')))
             ->will($this->returnValue('string'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
 
         $this
             ->metadata
@@ -276,6 +294,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('hasAssociation')
             ->will($this->returnValue(false));
 
@@ -335,6 +359,12 @@ class DoctrineObjectTest extends BaseTestCase
                     }
                 )
             );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
 
         $this
             ->metadata
@@ -437,6 +467,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('hasAssociation')
             ->with(
                 $this->logicalOr(
@@ -533,6 +569,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('hasAssociation')
             ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('entities')))
             ->will(
@@ -620,6 +662,12 @@ class DoctrineObjectTest extends BaseTestCase
                     }
                 )
             );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
 
         $this
             ->metadata

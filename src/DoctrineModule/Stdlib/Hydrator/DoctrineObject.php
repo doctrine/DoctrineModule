@@ -23,12 +23,14 @@ use DateTime;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
+use DoctrineModule\Stdlib\Hydrator\Strategy\DoctrineFieldStrategy;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
+use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
@@ -40,6 +42,8 @@ use Zend\Stdlib\Hydrator\AbstractHydrator;
  * @link    http://www.doctrine-project.org/
  * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
+ *
+ * @todo support multiple metadata at once
  */
 class DoctrineObject extends AbstractHydrator
 {
@@ -58,6 +62,10 @@ class DoctrineObject extends AbstractHydrator
      */
     protected $byValue = true;
 
+    /**
+     * @var StrategyInterface[]
+     */
+    protected $fieldStrategies = array();
 
     /**
      * Constructor
@@ -156,6 +164,10 @@ class DoctrineObject extends AbstractHydrator
                 $strategy->setCollectionName($association)
                          ->setClassMetadata($this->metadata);
             }
+        }
+
+        foreach (array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames()) as $field) {
+            $this->fieldStrategies[] = new DoctrineFieldStrategy($this->metadata, $field);
         }
     }
 
