@@ -29,24 +29,18 @@ use RuntimeException;
 use Traversable;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
-use Zend\Stdlib\Hydrator\StrategyEnabledInterface;
 
 /**
- * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
- * of extracting/hydrator objects in Doctrine, by handling most associations types.
- *
- * Starting from DoctrineModule 0.8.0, the hydrator can be used multiple times with different objects
+ * @todo docs
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.7.0
- * @author  Michael Gallego <mic.gallego@gmail.com>
- *
- * @todo support multiple metadata at once
+ * @since   0.8.0
+ * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
+class ByReferenceHydrator extends AbstractHydrator
 {
     /**
      * @var ObjectManager
@@ -59,31 +53,15 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
     protected $metadata;
 
     /**
-     * @var bool
-     */
-    protected $byValue = true;
-
-    /**
      * @var StrategyInterface[]
      */
     protected $fieldStrategies = array();
 
-    /**
-     * Constructor
-     *
-     * @param ObjectManager $objectManager The ObjectManager to use
-     * @param bool          $byValue       If set to true, hydrator will always use entity's public API
-     */
-    public function __construct(ObjectManager $objectManager, $byValue = true)
+    public function __construct(ObjectManager $objectManager)
     {
-        $this->objectManager = $objectManager;
-        $this->byValue       = (bool) $byValue;
+        parent::__construct();
 
-        if ($byValue) {
-            $this->wrappedHydrator = new ByValueObjectHydrator($objectManager);
-        } else {
-            $this->wrappedHydrator = new ByReferenceHydrator($objectManager);
-        }
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -96,7 +74,18 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
     {
         $this->prepare($object);
 
-        return $this->wrappedHydrator->extract($object);
+        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+        $refl       = $this->metadata->getReflectionClass();
+
+        $data = array();
+        foreach ($fieldNames as $fieldName) {
+            $reflProperty = $refl->getProperty($fieldName);
+            $reflProperty->setAccessible(true);
+
+            $data[$fieldName] = $this->extractValue($fieldName, $reflProperty->getValue($object), $object);
+        }
+
+        return $data;
     }
 
     /**
@@ -110,7 +99,35 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
     {
         $this->prepare($object);
 
-        return $this->wrappedHydrator->hydrate($data, $object);
+        $object   = $this->tryConvertArrayToObject($data, $object);
+        $metadata = $this->metadata;
+        $refl     = $metadata->getReflectionClass();
+
+        foreach ($data as $field => $value) {
+            // Ignore unknown fields
+            if (!$refl->hasProperty($field)) {
+                continue;
+            }
+
+            $value        = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
+            $reflProperty = $refl->getProperty($field);
+            $reflProperty->setAccessible(true);
+
+            if ($metadata->hasAssociation($field)) {
+                $target = $metadata->getAssociationTargetClass($field);
+
+                if ($metadata->isSingleValuedAssociation($field)) {
+                    $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
+                    $reflProperty->setValue($object, $value);
+                } elseif ($metadata->isCollectionValuedAssociation($field)) {
+                    $this->toMany($object, $field, $target, $value);
+                }
+            } else {
+                $reflProperty->setValue($object, $this->hydrateValue($field, $value, $data));
+            }
+        }
+
+        return $object;
     }
 
     /**
@@ -122,6 +139,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
     protected function prepare($object)
     {
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
+
         $this->prepareStrategies();
     }
 
@@ -152,169 +170,20 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
                     throw new InvalidArgumentException(
                         sprintf(
                             'Strategies used for collections valued associations must inherit from '
-                            . 'Strategy\AbstractCollectionStrategy, %s given',
+                                . 'Strategy\AbstractCollectionStrategy, %s given',
                             get_class($strategy)
                         )
                     );
                 }
 
                 $strategy->setCollectionName($association)
-                         ->setClassMetadata($this->metadata);
+                    ->setClassMetadata($this->metadata);
             }
         }
 
         foreach (array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames()) as $field) {
             $this->fieldStrategies[] = new DoctrineFieldStrategy($this->metadata, $field);
         }
-    }
-
-    /**
-     * Extract values from an object using a by-value logic (this means that it uses the entity
-     * API, in this case, getters)
-     *
-     * @param  object $object
-     * @throws RuntimeException
-     * @return array
-     */
-    protected function extractByValue($object)
-    {
-        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
-        $methods    = get_class_methods($object);
-
-        $data = array();
-        foreach ($fieldNames as $fieldName) {
-            $getter = 'get' . ucfirst($fieldName);
-            $isser  = 'is' . ucfirst($fieldName);
-
-            if (in_array($getter, $methods)) {
-                $data[$fieldName] = $this->extractValue($fieldName, $object->$getter(), $object);
-            } elseif (in_array($isser, $methods)) {
-                $data[$fieldName] = $this->extractValue($fieldName, $object->$isser(), $object);
-            }
-
-            // Unknown fields are ignored
-        }
-
-        return $data;
-    }
-
-    /**
-     * Extract values from an object using a by-reference logic (this means that values are
-     * directly fetched without using the public API of the entity, in this case, getters)
-     *
-     * @param  object $object
-     * @return array
-     */
-    protected function extractByReference($object)
-    {
-        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
-        $refl       = $this->metadata->getReflectionClass();
-
-        $data = array();
-        foreach ($fieldNames as $fieldName) {
-            $reflProperty = $refl->getProperty($fieldName);
-            $reflProperty->setAccessible(true);
-
-            $data[$fieldName] = $this->extractValue($fieldName, $reflProperty->getValue($object), $object);
-        }
-
-        return $data;
-    }
-
-    /**
-     * Hydrate the object using a by-value logic (this means that it uses the entity API, in this
-     * case, setters)
-     *
-     * @param  array  $data
-     * @param  object $object
-     * @throws RuntimeException
-     * @return object
-     */
-    protected function hydrateByValue(array $data, $object)
-    {
-        $tryObject = $this->tryConvertArrayToObject($data, $object);
-        $metadata  = $this->metadata;
-
-        if (is_object($tryObject)) {
-            $object = $tryObject;
-        }
-
-        foreach ($data as $field => $value) {
-            $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
-            $setter = 'set' . ucfirst($field);
-
-            if ($metadata->hasAssociation($field)) {
-                $target = $metadata->getAssociationTargetClass($field);
-
-                if ($metadata->isSingleValuedAssociation($field)) {
-                    if (! method_exists($object, $setter)) {
-                        continue;
-                    }
-
-                    $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
-
-                    if (null === $value
-                        && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
-                    ) {
-                        continue;
-                    }
-
-                    $object->$setter($value);
-                } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    $this->toMany($object, $field, $target, $value);
-                }
-            } else {
-                if (! method_exists($object, $setter)) {
-                    continue;
-                }
-
-                $object->$setter($this->hydrateValue($field, $value, $data));
-            }
-        }
-
-        return $object;
-    }
-
-    /**
-     * Hydrate the object using a by-reference logic (this means that values are modified directly without
-     * using the public API, in this case setters, and hence override any logic that could be done in those
-     * setters)
-     *
-     * @param  array  $data
-     * @param  object $object
-     * @return object
-     */
-    protected function hydrateByReference(array $data, $object)
-    {
-        $object   = $this->tryConvertArrayToObject($data, $object);
-        $metadata = $this->metadata;
-        $refl     = $metadata->getReflectionClass();
-
-        foreach ($data as $field => $value) {
-            // Ignore unknown fields
-            if (!$refl->hasProperty($field)) {
-                continue;
-            }
-
-            $value        = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
-            $reflProperty = $refl->getProperty($field);
-            $reflProperty->setAccessible(true);
-
-            if ($metadata->hasAssociation($field)) {
-                $target = $metadata->getAssociationTargetClass($field);
-
-                if ($metadata->isSingleValuedAssociation($field)) {
-                    $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
-                    $reflProperty->setValue($object, $value);
-                } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    $this->toMany($object, $field, $target, $value);
-                }
-            } else {
-                $reflProperty->setValue($object, $this->hydrateValue($field, $value, $data));
-            }
-        }
-
-        return $object;
     }
 
     /**
@@ -500,41 +369,5 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
         }
 
         return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addStrategy($name, StrategyInterface $strategy)
-    {
-        $this->wrappedHydrator->addStrategy($name, $strategy);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getStrategy($name)
-    {
-        return $this->wrappedHydrator->getStrategy($name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function hasStrategy($name)
-    {
-        return $this->wrappedHydrator->hasStrategy($name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeStrategy($name)
-    {
-        $this->wrappedHydrator->removeStrategy($name);
-
-        return $this;
     }
 }

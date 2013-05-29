@@ -20,7 +20,6 @@
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
 use InvalidArgumentException;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
@@ -41,7 +40,7 @@ class DoctrineFieldStrategy implements StrategyInterface
         $this->fieldName     = (string) $fieldName;
 
         if (! ($classMetadata->hasField($fieldName) || $classMetadata->hasAssociation($fieldName))) {
-            throw new \InvalidArgumentException(sprintf('Provided metadata has no field named "%s"', $fieldName));
+            throw new InvalidArgumentException(sprintf('Provided metadata has no field named "%s"', $fieldName));
         }
     }
 
