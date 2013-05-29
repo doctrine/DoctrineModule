@@ -51,6 +51,8 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
 
     /**
      * @var ClassMetadata
+     *
+     * @deprecated metadata for the object being currently hydrated
      */
     protected $metadata;
 
@@ -60,9 +62,14 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
     protected $byValue = true;
 
     /**
-     * @var StrategyInterface[]
+     * @var StrategiesContainer[]
      */
-    protected $fieldStrategies = array();
+    protected $strategiesContainers = array();
+
+    /**
+     * @var HydratorInterface|null
+     */
+    protected $wrappedHydrator;
 
     /**
      * Constructor
@@ -74,12 +81,6 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
     {
         $this->objectManager = $objectManager;
         $this->byValue       = (bool) $byValue;
-
-        if ($byValue) {
-            $this->wrappedHydrator = new ByValueObjectHydrator($objectManager);
-        } else {
-            $this->wrappedHydrator = new ByReferenceHydrator($objectManager);
-        }
     }
 
     /**
@@ -118,6 +119,13 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
     protected function prepare($object)
     {
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
+
+        if ($this->byValue) {
+            $this->wrappedHydrator = new ByValueObjectHydrator($this->objectManager, $this->getStrategyContainer());
+        } else {
+            $this->wrappedHydrator = new ByReferenceHydrator($this->objectManager, $this->getStrategyContainer());
+        }
+
         $this->prepareStrategies();
     }
 
@@ -158,10 +166,6 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
                          ->setClassMetadata($this->metadata);
             }
         }
-
-        foreach (array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames()) as $field) {
-            $this->fieldStrategies[] = new DoctrineFieldStrategy($this->metadata, $field);
-        }
     }
 
     /**
@@ -169,7 +173,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
      */
     public function addStrategy($name, StrategyInterface $strategy)
     {
-        $this->wrappedHydrator->addStrategy($name, $strategy);
+        $this->getStrategyContainer()->addStrategy($name, $strategy);
 
         return $this;
     }
@@ -179,7 +183,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
      */
     public function getStrategy($name)
     {
-        return $this->wrappedHydrator->getStrategy($name);
+        return $this->getStrategyContainer()->getStrategy($name);
     }
 
     /**
@@ -187,7 +191,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
      */
     public function hasStrategy($name)
     {
-        return $this->wrappedHydrator->hasStrategy($name);
+        return $this->getStrategyContainer()->hasStrategy($name);
     }
 
     /**
@@ -195,8 +199,27 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
      */
     public function removeStrategy($name)
     {
-        $this->wrappedHydrator->removeStrategy($name);
+        $this->getStrategyContainer()->removeStrategy($name);
 
         return $this;
+    }
+
+    /**
+     * @return StrategiesContainer
+     */
+    private function getStrategyContainer()
+    {
+        // @todo there should be one container per object type
+        // $objectName = $this->metadata->getName();
+        $objectName = 'foo';
+
+        if (isset($this->strategiesContainers[$objectName])) {
+            return $this->strategiesContainers[$objectName];
+        }
+
+        return $this->strategiesContainers[$objectName] = new StrategiesContainer(
+            $this->objectManager/*,
+            $this->metadata*/
+        );
     }
 }

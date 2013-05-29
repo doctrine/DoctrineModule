@@ -25,11 +25,11 @@ use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\DoctrineFieldStrategy;
 use InvalidArgumentException;
-use RuntimeException;
 use Traversable;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
@@ -40,7 +40,7 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
  * @since   0.8.0
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ByValueObjectHydrator extends AbstractHydrator
+class ByValueObjectHydrator implements HydratorInterface
 {
     /**
      * @var ObjectManager
@@ -53,20 +53,14 @@ class ByValueObjectHydrator extends AbstractHydrator
     protected $metadata;
 
     /**
-     * @var bool
+     * @var StrategiesContainer
      */
-    protected $byValue = true;
+    protected $strategiesContainer;
 
-    /**
-     * @var StrategyInterface[]
-     */
-    protected $fieldStrategies = array();
-
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager, StrategiesContainer $strategiesContainer)
     {
-        parent::__construct();
-
-        $this->objectManager = $objectManager;
+        $this->objectManager       = $objectManager;
+        $this->strategiesContainer = $strategiesContainer;
     }
 
     /**
@@ -162,6 +156,7 @@ class ByValueObjectHydrator extends AbstractHydrator
     protected function prepare($object)
     {
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
+
         $this->prepareStrategies();
     }
 
@@ -178,15 +173,11 @@ class ByValueObjectHydrator extends AbstractHydrator
         foreach ($associations as $association) {
             if ($this->metadata->isCollectionValuedAssociation($association)) {
                 // Add a strategy if the association has none set by user
-                if (!$this->hasStrategy($association)) {
-                    if ($this->byValue) {
-                        $this->addStrategy($association, new Strategy\AllowRemoveByValue());
-                    } else {
-                        $this->addStrategy($association, new Strategy\AllowRemoveByReference());
-                    }
+                if (!$this->strategiesContainer->hasStrategy($association)) {
+                    $this->strategiesContainer->addStrategy($association, new Strategy\AllowRemoveByValue());
                 }
 
-                $strategy = $this->getStrategy($association);
+                $strategy = $this->strategiesContainer->getStrategy($association);
 
                 if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
                     throw new InvalidArgumentException(
@@ -201,10 +192,6 @@ class ByValueObjectHydrator extends AbstractHydrator
                 $strategy->setCollectionName($association)
                     ->setClassMetadata($this->metadata);
             }
-        }
-
-        foreach (array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames()) as $field) {
-            $this->fieldStrategies[] = new DoctrineFieldStrategy($this->metadata, $field);
         }
     }
 
@@ -305,7 +292,7 @@ class ByValueObjectHydrator extends AbstractHydrator
         // Set the object so that the strategy can extract the Collection from it
 
         /** @var \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy $collectionStrategy */
-        $collectionStrategy = $this->getStrategy($collectionName);
+        $collectionStrategy = $this->strategiesContainer->getStrategy($collectionName);
         $collectionStrategy->setObject($object);
 
         // We could directly call hydrate method from the strategy, but if people want to override
@@ -391,5 +378,23 @@ class ByValueObjectHydrator extends AbstractHydrator
         }
 
         return false;
+    }
+
+    private function extractValue($name, $value, $object = null)
+    {
+        if ($this->strategiesContainer->hasStrategy($name)) {
+            $strategy = $this->strategiesContainer->getStrategy($name);
+            $value = $strategy->extract($value, $object);
+        }
+        return $value;
+    }
+
+    private function hydrateValue($name, $value, $data = null)
+    {
+        if ($this->strategiesContainer->hasStrategy($name)) {
+            $strategy = $this->strategiesContainer->getStrategy($name);
+            $value = $strategy->hydrate($value, $data);
+        }
+        return $value;
     }
 }
