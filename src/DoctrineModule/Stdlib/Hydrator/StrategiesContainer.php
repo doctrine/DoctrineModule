@@ -10,6 +10,7 @@ namespace DoctrineModule\Stdlib\Hydrator;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\CompositeStrategy;
+use DoctrineModule\Stdlib\Hydrator\Strategy\FieldTypeConverterStrategy;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 use Zend\Stdlib\Hydrator\StrategyEnabledInterface;
 
@@ -49,10 +50,15 @@ class StrategiesContainer implements StrategyEnabledInterface
 
     public function prepare($object)
     {
-        throw new \BadMethodCallException('TBD');
-        //$this->metadata = $this->objectManager->getClassMetadata(get_class($object));
+        $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
 
-        // @todo load strategies here
+        $fieldTypeConverters = array();
+
+        foreach ($this->metadata->getFieldNames() as $fieldName) {
+            $fieldTypeConverters[$fieldName] = new FieldTypeConverterStrategy($this->metadata, $fieldName);
+        }
+
+        $this->baseStrategies = $fieldTypeConverters;
     }
 
     /**

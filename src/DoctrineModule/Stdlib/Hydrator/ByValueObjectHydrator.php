@@ -112,7 +112,6 @@ class ByValueObjectHydrator implements HydratorInterface
         }
 
         foreach ($data as $field => $value) {
-            $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
             $setter = 'set' . ucfirst($field);
 
             if ($metadata->hasAssociation($field)) {
@@ -157,6 +156,7 @@ class ByValueObjectHydrator implements HydratorInterface
     {
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
 
+        $this->strategiesContainer->prepare($object);
         $this->prepareStrategies();
     }
 
@@ -298,38 +298,6 @@ class ByValueObjectHydrator implements HydratorInterface
         // We could directly call hydrate method from the strategy, but if people want to override
         // hydrateValue function, they can do it and do their own stuff
         $this->hydrateValue($collectionName, $collection, $values);
-    }
-
-    /**
-     * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
-     *
-     * @param  mixed  $value
-     * @param  string $typeOfField
-     * @return DateTime
-     */
-    protected function handleTypeConversions($value, $typeOfField)
-    {
-        switch($typeOfField) {
-            case 'datetime':
-            case 'time':
-            case 'date':
-                if ('' === $value) {
-                    return null;
-                }
-
-                if (is_int($value)) {
-                    $dateTime = new DateTime();
-                    $dateTime->setTimestamp($value);
-                    $value = $dateTime;
-                } elseif (is_string($value)) {
-                    $value = new DateTime($value);
-                }
-
-                break;
-            default:
-        }
-
-        return $value;
     }
 
     /**
