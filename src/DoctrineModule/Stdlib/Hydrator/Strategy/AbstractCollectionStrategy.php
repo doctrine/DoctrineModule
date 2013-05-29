@@ -185,6 +185,6 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      */
     protected function compareObjects($a, $b)
     {
-        return strcmp(spl_object_hash($a), spl_object_hash($b));
+        return $a === $b ? 0 : 1;
     }
 }
