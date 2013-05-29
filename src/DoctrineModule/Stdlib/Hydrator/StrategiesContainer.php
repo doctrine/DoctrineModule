@@ -10,6 +10,7 @@ namespace DoctrineModule\Stdlib\Hydrator;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\CompositeStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\FieldTypeConverterStrategy;
+use DoctrineModule\Stdlib\Hydrator\Strategy\ToManyAssociationStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\ToOneAssociationStrategy;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 use Zend\Stdlib\Hydrator\StrategyEnabledInterface;
@@ -61,6 +62,17 @@ class StrategiesContainer implements StrategyEnabledInterface
                 $this->registerBaseStrategy(
                     $associationName,
                     new ToOneAssociationStrategy(
+                        $this->objectManager,
+                        $this->metadata,
+                        $associationName
+                    )
+                );
+            }
+
+            if ($this->metadata->isCollectionValuedAssociation($associationName)) {
+                $this->registerBaseStrategy(
+                    $associationName,
+                    new ToManyAssociationStrategy(
                         $this->objectManager,
                         $this->metadata,
                         $associationName

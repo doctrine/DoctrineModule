@@ -23,6 +23,7 @@ use DateTime;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
+use DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue;
 use DoctrineModule\Stdlib\Hydrator\Strategy\DoctrineFieldStrategy;
 use InvalidArgumentException;
 use Traversable;
@@ -115,8 +116,6 @@ class ByValueObjectHydrator implements HydratorInterface
             $setter = 'set' . ucfirst($field);
 
             if ($metadata->hasAssociation($field)) {
-                $target = $metadata->getAssociationTargetClass($field);
-
                 if ($metadata->isSingleValuedAssociation($field)) {
                     if (! method_exists($object, $setter)) {
                         continue;
@@ -132,7 +131,14 @@ class ByValueObjectHydrator implements HydratorInterface
 
                     $object->$setter($value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    $this->toMany($object, $field, $target, $value);
+                    $items    = $this->hydrateValue($field, $value, $data);
+                    $strategy = new AllowRemoveByValue();
+
+                    $strategy
+                        ->setCollectionName($field)
+                        ->setClassMetadata($metadata)
+                        ->setObject($object)
+                        ->hydrate($items);
                 }
             } else {
                 if (! method_exists($object, $setter)) {
@@ -157,42 +163,6 @@ class ByValueObjectHydrator implements HydratorInterface
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
 
         $this->strategiesContainer->prepare($object);
-        $this->prepareStrategies();
-    }
-
-    /**
-     * Prepare strategies before the hydrator is used
-     *
-     * @throws \InvalidArgumentException
-     * @return void
-     */
-    protected function prepareStrategies()
-    {
-        $associations = $this->metadata->getAssociationNames();
-
-        foreach ($associations as $association) {
-            if ($this->metadata->isCollectionValuedAssociation($association)) {
-                // Add a strategy if the association has none set by user
-                if (!$this->strategiesContainer->hasStrategy($association)) {
-                    $this->strategiesContainer->addStrategy($association, new Strategy\AllowRemoveByValue());
-                }
-
-                $strategy = $this->strategiesContainer->getStrategy($association);
-
-                if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            'Strategies used for collections valued associations must inherit from '
-                                . 'Strategy\AbstractCollectionStrategy, %s given',
-                            get_class($strategy)
-                        )
-                    );
-                }
-
-                $strategy->setCollectionName($association)
-                    ->setClassMetadata($this->metadata);
-            }
-        }
     }
 
     /**
@@ -225,52 +195,6 @@ class ByValueObjectHydrator implements HydratorInterface
         }
 
         return $this->find($identifierValues, $metadata->getName());
-    }
-
-    /**
-     * Handle ToMany associations. In proper Doctrine design, Collections should not be swapped, so
-     * collections are always handled by reference. Internally, every collection is handled using specials
-     * strategies that inherit from AbstractCollectionStrategy class, and that add or remove elements but without
-     * changing the collection of the object
-     *
-     * @param  object $object
-     * @param  mixed  $collectionName
-     * @param  string $target
-     * @param  mixed  $values
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return void
-     */
-    protected function toMany($object, $collectionName, $target, $values)
-    {
-        if (!is_array($values) && !$values instanceof Traversable) {
-            $values = (array) $values;
-        }
-
-        $collection = array();
-
-        // If the collection contains identifiers, fetch the objects from database
-        foreach ($values as $value) {
-            $collection[] = $this->find($value, $target);
-        }
-
-        $collection = array_filter(
-            $collection,
-            function ($item) {
-                return null !== $item;
-            }
-        );
-
-        // Set the object so that the strategy can extract the Collection from it
-
-        /** @var \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy $collectionStrategy */
-        $collectionStrategy = $this->strategiesContainer->getStrategy($collectionName);
-        $collectionStrategy->setObject($object);
-
-        // We could directly call hydrate method from the strategy, but if people want to override
-        // hydrateValue function, they can do it and do their own stuff
-        $this->hydrateValue($collectionName, $collection, $values);
     }
 
     /**

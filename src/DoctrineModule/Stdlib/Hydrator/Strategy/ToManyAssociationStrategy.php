@@ -51,9 +51,7 @@ class ToManyAssociationStrategy implements StrategyInterface
      */
     public function hydrate($values)
     {
-        $targetMetadata = $this->objectManager->getClassMetadata(
-            $this->metadata->getAssociationTargetClass($this->associationName)
-        );
+        $targetClass    = $this->metadata->getAssociationTargetClass($this->associationName);
 
         if (! is_array($values) && !$values instanceof Traversable) {
             $values = (array) $values;
@@ -63,23 +61,18 @@ class ToManyAssociationStrategy implements StrategyInterface
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
-            $collection[] = $this->objectManager->find($targetMetadata->getName(), $value);
+            if ($value instanceof $targetClass) {
+                $collection[] = $value;
+            } else {
+                $collection[] = $this->objectManager->find($targetClass, $value);
+            }
         }
 
-        $collection = array_filter(
+        return array_filter(
             $collection,
             function ($item) {
                 return null !== $item;
             }
         );
-
-        return $collection;
-
-        // Set the object so that the strategy can extract the Collection from it
-
-        /** @var \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy $collectionStrategy */
-        // @todo
-        //$collectionStrategy = $this->strategiesContainer->getStrategy($collectionName);
-        //$collectionStrategy->setObject($object);
     }
 }
