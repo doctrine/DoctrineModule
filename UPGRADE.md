@@ -20,7 +20,7 @@
          and should not include the characters `_-\ /`.
        - If a service with name `doctrine.foo.bar.baz` is requested, then `DoctrineServiceAbstractFactory` will get the service
         called `doctrine.factory.foo.bar` from the ServiceManager. The `doctrine.factory.foo.bar` instance must be an object implementing
-        `DoctrineModule\Factory\AbstractFactoryInterface`. `$instnace::create($options)` will be called to create the oringally
+        `DoctrineModule\Factory\AbstractFactoryInterface`. `$instanace::create($options)` will be called to create the oringally
         requested `doctrine.foo.bar.baz` service. The `$options` passed to `create` will be an array taken from
         the application config: `$config['doctrine']['foo']['bar']['baz']`s.
        - For example in the config options for the default EventManager should be placed in
@@ -32,7 +32,7 @@
    config keys for `adapter`, `storage`, and `service`. See `module.config.php`.
  * Authentication configuration no longer supports setting `objectRepository`. You must set both `objectManager` and
    `identityClass`. This significantly simplifies the code, and allows a flat config for easy caching.
- * Most of the factories that were in `DoctrineModule\Service` have been moved to `DoctrineModule\Factory`. This is because
+ * Most of the factories that were in `DoctrineModule\Service` have been moved to `DoctrineModule\Builder`. This is because
    they are not actual service factories to be consumed by the ServiceManager. Rather they are consumed by `DoctrineServiceAbstractFactory`.
  * When configuring drivers, the cache key must now be a full service name. eg `doctrine.cache.array`.
  * When configuring a driver chain, the `$options->drivers` array may contain driver instances, or complete service names.
