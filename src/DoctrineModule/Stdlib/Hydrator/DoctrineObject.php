@@ -124,47 +124,6 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
         } else {
             $this->wrappedHydrator = new ByReferenceHydrator($this->objectManager, $this->getStrategyContainer());
         }
-
-        $this->prepareStrategies();
-    }
-
-    /**
-     * Prepare strategies before the hydrator is used
-     *
-     * @throws \InvalidArgumentException
-     * @return void
-     */
-    protected function prepareStrategies()
-    {
-        $associations = $this->metadata->getAssociationNames();
-
-        foreach ($associations as $association) {
-            if ($this->metadata->isCollectionValuedAssociation($association)) {
-                // Add a strategy if the association has none set by user
-                if (!$this->hasStrategy($association)) {
-                    if ($this->byValue) {
-                        $this->addStrategy($association, new Strategy\AllowRemoveByValue());
-                    } else {
-                        $this->addStrategy($association, new Strategy\AllowRemoveByReference());
-                    }
-                }
-
-                $strategy = $this->getStrategy($association);
-
-                if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            'Strategies used for collections valued associations must inherit from '
-                            . 'Strategy\AbstractCollectionStrategy, %s given',
-                            get_class($strategy)
-                        )
-                    );
-                }
-
-                $strategy->setCollectionName($association)
-                         ->setClassMetadata($this->metadata);
-            }
-        }
     }
 
     /**
