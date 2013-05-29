@@ -122,7 +122,7 @@ class ByValueObjectHydrator implements HydratorInterface
                         continue;
                     }
 
-                    $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
+                    $value = $this->hydrateValue($field, $value, $data);
 
                     if (null === $value
                         && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
@@ -203,6 +203,8 @@ class ByValueObjectHydrator implements HydratorInterface
      * @param  array  $data   The data that may contain identifiers keys
      * @param  object $object
      * @return object
+     *
+     * @todo should probably be removed, as we don't care about what instance of the object is being hydrated
      */
     protected function tryConvertArrayToObject($data, $object)
     {

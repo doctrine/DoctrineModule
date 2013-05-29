@@ -11,6 +11,7 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\CompositeStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\FieldTypeConverterStrategy;
+use DoctrineModule\Stdlib\Hydrator\Strategy\ToOneAssociationStrategy;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 use Zend\Stdlib\Hydrator\StrategyEnabledInterface;
 
@@ -55,10 +56,23 @@ class StrategiesContainer implements StrategyEnabledInterface
         $fieldTypeConverters = array();
 
         foreach ($this->metadata->getFieldNames() as $fieldName) {
-            $fieldTypeConverters[$fieldName] = new FieldTypeConverterStrategy($this->metadata, $fieldName);
+            $this->registerBaseStrategy($fieldName, new FieldTypeConverterStrategy($this->metadata, $fieldName));
         }
 
-        $this->baseStrategies = $fieldTypeConverters;
+        $toManyAssociationStrategies = array();
+
+        foreach ($this->metadata->getAssociationNames() as $associationName) {
+            if ($this->metadata->isSingleValuedAssociation($associationName)) {
+                $this->registerBaseStrategy(
+                    $associationName,
+                    new ToOneAssociationStrategy(
+                        $this->objectManager,
+                        $this->metadata,
+                        $associationName
+                    )
+                );
+            }
+        }
     }
 
     /**
@@ -126,5 +140,13 @@ class StrategiesContainer implements StrategyEnabledInterface
         unset($this->strategies[$name], $this->customStrategies[$name]);
 
         return $this;
+    }
+
+    private function registerBaseStrategy($name, StrategyInterface $strategy) {
+        if (isset($this->baseStrategies[$name])) {
+            $this->baseStrategies[$name] = new CompositeStrategy($strategy, $this->baseStrategies[$name]);
+        } else {
+            $this->baseStrategies[$name] = $strategy;
+        }
     }
 }

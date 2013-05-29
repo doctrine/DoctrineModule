@@ -186,6 +186,8 @@ class ByReferenceHydrator implements HydratorInterface
      * @param  array  $data   The data that may contain identifiers keys
      * @param  object $object
      * @return object
+     *
+     * @todo should probably be removed, as we don't care about what instance of the object is being hydrated
      */
     protected function tryConvertArrayToObject($data, $object)
     {
