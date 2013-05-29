@@ -116,8 +116,7 @@ class ByReferenceHydrator implements HydratorInterface
                 $target = $metadata->getAssociationTargetClass($field);
 
                 if ($metadata->isSingleValuedAssociation($field)) {
-                    $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
-                    $reflProperty->setValue($object, $value);
+                    $reflProperty->setValue($object, $this->hydrateValue($field, $value, $data));
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
                     $this->toMany($object, $field, $target, $value);
                 }
@@ -208,35 +207,6 @@ class ByReferenceHydrator implements HydratorInterface
         }
 
         return $this->find($identifierValues, $metadata->getName());
-    }
-
-    /**
-     * Handle ToOne associations
-     *
-     * When $value is an array but is not the $target's identifiers, $value is
-     * most likely an array of fieldset data. The identifiers will be determined
-     * and a target instance will be initialized and then hydrated. The hydrated
-     * target will be returned.
-     *
-     * @param  string $target
-     * @param  mixed  $value
-     * @return object
-     */
-    protected function toOne($target, $value)
-    {
-        $metadata = $this->objectManager->getClassMetadata($target);
-
-        if (is_array($value) && array_keys($value) != $metadata->getIdentifier()) {
-            // $value is most likely an array of fieldset data
-            $identifiers = array_intersect_key(
-                $value,
-                array_flip($metadata->getIdentifier())
-            );
-            $object = $this->find($identifiers, $target) ?: new $target;
-            return $this->hydrate($value, $object);
-        }
-
-        return $this->find($value, $target);
     }
 
     /**

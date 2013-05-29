@@ -7,7 +7,6 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\CompositeStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\FieldTypeConverterStrategy;
@@ -53,13 +52,9 @@ class StrategiesContainer implements StrategyEnabledInterface
     {
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
 
-        $fieldTypeConverters = array();
-
         foreach ($this->metadata->getFieldNames() as $fieldName) {
             $this->registerBaseStrategy($fieldName, new FieldTypeConverterStrategy($this->metadata, $fieldName));
         }
-
-        $toManyAssociationStrategies = array();
 
         foreach ($this->metadata->getAssociationNames() as $associationName) {
             if ($this->metadata->isSingleValuedAssociation($associationName)) {
@@ -142,6 +137,10 @@ class StrategiesContainer implements StrategyEnabledInterface
         return $this;
     }
 
+    /**
+     * @param string            $name
+     * @param StrategyInterface $strategy
+     */
     private function registerBaseStrategy($name, StrategyInterface $strategy) {
         if (isset($this->baseStrategies[$name])) {
             $this->baseStrategies[$name] = new CompositeStrategy($strategy, $this->baseStrategies[$name]);

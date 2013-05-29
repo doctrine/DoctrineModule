@@ -228,35 +228,6 @@ class ByValueObjectHydrator implements HydratorInterface
     }
 
     /**
-     * Handle ToOne associations
-     *
-     * When $value is an array but is not the $target's identifiers, $value is
-     * most likely an array of fieldset data. The identifiers will be determined
-     * and a target instance will be initialized and then hydrated. The hydrated
-     * target will be returned.
-     *
-     * @param  string $target
-     * @param  mixed  $value
-     * @return object
-     */
-    protected function toOne($target, $value)
-    {
-        $metadata = $this->objectManager->getClassMetadata($target);
-
-        if (is_array($value) && array_keys($value) != $metadata->getIdentifier()) {
-            // $value is most likely an array of fieldset data
-            $identifiers = array_intersect_key(
-                $value,
-                array_flip($metadata->getIdentifier())
-            );
-            $object = $this->find($identifiers, $target) ?: new $target;
-            return $this->hydrate($value, $object);
-        }
-
-        return $this->find($value, $target);
-    }
-
-    /**
      * Handle ToMany associations. In proper Doctrine design, Collections should not be swapped, so
      * collections are always handled by reference. Internally, every collection is handled using specials
      * strategies that inherit from AbstractCollectionStrategy class, and that add or remove elements but without
