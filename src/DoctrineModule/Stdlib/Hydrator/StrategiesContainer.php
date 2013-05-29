@@ -12,6 +12,7 @@ use DoctrineModule\Stdlib\Hydrator\Strategy\CompositeStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\FieldTypeConverterStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\ToManyAssociationStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\ToOneAssociationStrategy;
+use Zend\Stdlib\Exception\InvalidArgumentException;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 use Zend\Stdlib\Hydrator\StrategyEnabledInterface;
 
@@ -121,11 +122,7 @@ class StrategiesContainer implements StrategyEnabledInterface
             $this->customStrategies['*'];
         }
 
-        throw new \Zend\Stdlib\Exception\InvalidArgumentException(sprintf(
-            '%s: no strategy by name of "%s", and no wildcard strategy present',
-            __METHOD__,
-            $name
-        ));
+        throw new InvalidArgumentException(sprintf('No strategy "%s" nor wildcard strategy present', $name));
     }
 
     /**
@@ -153,7 +150,8 @@ class StrategiesContainer implements StrategyEnabledInterface
      * @param string            $name
      * @param StrategyInterface $strategy
      */
-    private function registerBaseStrategy($name, StrategyInterface $strategy) {
+    private function registerBaseStrategy($name, StrategyInterface $strategy)
+    {
         if (isset($this->baseStrategies[$name])) {
             $this->baseStrategies[$name] = new CompositeStrategy($strategy, $this->baseStrategies[$name]);
         } else {

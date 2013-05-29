@@ -19,19 +19,13 @@
 
 namespace DoctrineModule\Stdlib\Hydrator;
 
-use DateTime;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
-use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue;
-use DoctrineModule\Stdlib\Hydrator\Strategy\DoctrineFieldStrategy;
-use InvalidArgumentException;
 use Traversable;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
-use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
  * @todo docs
@@ -99,6 +93,7 @@ class ByValueHydrator implements HydratorInterface
      *
      * @param  array  $data
      * @param  object $object
+     *
      * @return object
      */
     public function hydrate(array $data, $object)
@@ -155,8 +150,7 @@ class ByValueHydrator implements HydratorInterface
     /**
      * Prepare the hydrator by adding strategies to every collection valued associations
      *
-     * @param  object $object
-     * @return void
+     * @param object $object
      */
     protected function prepare($object)
     {
@@ -172,7 +166,8 @@ class ByValueHydrator implements HydratorInterface
      *
      * @param  array  $data   The data that may contain identifiers keys
      * @param  object $object
-     * @return object
+     *
+     * @return object|null
      *
      * @todo should probably be removed, as we don't care about what instance of the object is being hydrated
      */

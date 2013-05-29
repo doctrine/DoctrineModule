@@ -21,8 +21,6 @@ namespace DoctrineModule\Stdlib\Hydrator;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
-use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
-use InvalidArgumentException;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
@@ -90,7 +88,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
      */
     public function extract($object)
     {
-        return $this->getWrappedHydrator($object)->extract( $object);
+        return $this->getWrappedHydrator($object)->extract($object);
     }
 
     /**
@@ -154,10 +152,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
             return $this->strategiesContainers[$objectName];
         }
 
-        return $this->strategiesContainers[$objectName] = new StrategiesContainer(
-            $this->objectManager/*,
-            $this->metadata*/
-        );
+        return $this->strategiesContainers[$objectName] = new StrategiesContainer($this->objectManager);
     }
 
     /**
