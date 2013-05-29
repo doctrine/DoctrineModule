@@ -176,7 +176,7 @@ class DoctrineObject implements HydratorInterface, StrategyEnabledInterface
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
 
         if ($this->byValue) {
-            $this->wrappedHydrator = new ByValueObjectHydrator($this->objectManager, $this->getStrategyContainer());
+            $this->wrappedHydrator = new ByValueHydrator($this->objectManager, $this->getStrategyContainer());
         } else {
             $this->wrappedHydrator = new ByReferenceHydrator($this->objectManager, $this->getStrategyContainer());
         }

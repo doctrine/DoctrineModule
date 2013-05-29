@@ -41,7 +41,7 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
  * @since   0.8.0
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ByValueObjectHydrator implements HydratorInterface
+class ByValueHydrator implements HydratorInterface
 {
     /**
      * @var ObjectManager

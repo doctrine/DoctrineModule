@@ -9,6 +9,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
 
+/**
+ * @covers \DoctrineModule\Stdlib\Hydrator\DoctrineObject
+ * @covers \DoctrineModule\Stdlib\Hydrator\ByReferenceHydrator
+ * @covers \DoctrineModule\Stdlib\Hydrator\ByValueHydrator
+ * @covers \DoctrineModule\Stdlib\Hydrator\StrategiesContainer
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\CompositeStrategy
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\DisallowRemoveByReference
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\DisallowRemoveByValue
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\FieldTypeConverterStrategy
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\ToManyAssociationStrategy
+ * @covers \DoctrineModule\Stdlib\Hydrator\Strategy\ToOneAssociationStrategy
+ */
 class DoctrineObjectTest extends BaseTestCase
 {
     /**
@@ -783,8 +799,6 @@ class DoctrineObjectTest extends BaseTestCase
 
     /**
      * When using hydration by value, it will use the public API of the entity to set values (setters)
-     *
-     * @covers \DoctrineModule\Stdlib\Hydrator\DoctrineObject::hydrateByValue
      */
     public function testCanHydrateSimpleEntityWithStringIdByValue()
     {
