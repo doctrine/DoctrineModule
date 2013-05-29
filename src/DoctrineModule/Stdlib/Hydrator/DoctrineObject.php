@@ -19,16 +19,12 @@
 
 namespace DoctrineModule\Stdlib\Hydrator;
 
-use DateTime;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use DoctrineModule\Stdlib\Hydrator\Strategy\DoctrineFieldStrategy;
 use InvalidArgumentException;
-use RuntimeException;
-use Traversable;
 use Zend\Stdlib\ArrayObject;
-use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 use Zend\Stdlib\Hydrator\StrategyEnabledInterface;
