@@ -45,9 +45,8 @@ class FilesystemCacheFactory implements FactoryInterface
             $options = new FilesystemCacheOptions();
         }
 
-        $instance = new FilesystemCache;
+        $instance = new FilesystemCache($options->getDirectory());
         $instance->setNamespace($options->getNamespace());
-        $instance->setDirectory($options->getDirectory());
 
         return $instance;
     }
