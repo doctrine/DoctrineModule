@@ -1404,7 +1404,7 @@ something like this :
 public function editNameAction()
 {
 	// Create the form
-	$form = new EditNameForm();
+	$form = new EditNameForm($this->serviceLocator);
 
 	// Get the logged user (for more informations about userIdentity(), please read the Authentication doc)
 	$loggedUser = $this->userIdentity();
