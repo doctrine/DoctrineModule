@@ -54,7 +54,7 @@ class DoctrineServiceAbstractFactory implements AbstractFactoryInterface
     {
         $mapping = $this->getBuilderMapping($serviceLocator, $name);
 
-        /* @var $builder \DoctrineModule\Builder\AbstractBuilderInterface */
+        /* @var $builder \DoctrineModule\Builder\BuilderInterface */
         $builder = $serviceLocator->get($mapping['builderName']);
 
         if (! $builder instanceof BuilderInterface) {
