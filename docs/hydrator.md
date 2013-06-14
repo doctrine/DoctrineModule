@@ -965,19 +965,18 @@ name by modifying an existing Tag entity without creating a new tag (and removin
 namespace Application\Form;
 
 use Application\Entity\Tag;
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
 
 class TagFieldset extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct(ObjectManager $objectManager)
     {
         parent::__construct('tag');
-        $entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
-        $this->setHydrator(new DoctrineHydrator($entityManager))
+        $this->setHydrator(new DoctrineHydrator($objectManager))
              ->setObject(new Tag());
 
 		$this->add(array(
@@ -1016,19 +1015,18 @@ And the BlogPost fieldset:
 namespace Application\Form;
 
 use Application\Entity\BlogPost;
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
 
 class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct(ObjectManager $objectManager)
     {
         parent::__construct('blog-post');
-        $entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
-        $this->setHydrator(new DoctrineHydrator($entityManager))
+        $this->setHydrator(new DoctrineHydrator($objectManager))
              ->setObject(new BlogPost());
 
 		$this->add(array(
@@ -1036,7 +1034,7 @@ class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
 			'name' => 'title'
 		));
 
-		$tagFieldset = new TagFieldset($serviceManager);
+		$tagFieldset = new TagFieldset($objectManager);
         $this->add(array(
             'type'    => 'Zend\Form\Element\Collection',
             'name'    => 'tags',
@@ -1073,22 +1071,21 @@ Here is the create form:
 ```php
 namespace Application\Form;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Form;
-use Zend\ServiceManager\ServiceManager;
 
 class CreateBlogPostForm extends Form
 {
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct(ObjectManager $objectManager)
     {
         parent::__construct('create-blog-post-form');
-        $entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
 		// The form will hydrate an object of type "BlogPost"
-        $this->setHydrator(new DoctrineHydrator($entityManager));
+        $this->setHydrator(new DoctrineHydrator($objectManager));
 
         // Add the user fieldset, and set it as the base fieldset
-        $blogPostFieldset = new BlogPostFieldset($serviceManager);
+        $blogPostFieldset = new BlogPostFieldset($objectManager);
         $blogPostFieldset->setUseAsBaseFieldset(true);
         $this->add($blogPostFieldset);
 
@@ -1104,22 +1101,21 @@ And the update form:
 ```php
 namespace Application\Form;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Form;
-use Zend\ServiceManager\ServiceManager;
 
 class UpdateBlogPostForm extends Form
 {
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct(ObjectManager $objectManager)
     {
         parent::__construct('update-blog-post-form');
-        $entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
 		// The form will hydrate an object of type "BlogPost"
-        $this->setHydrator(new DoctrineHydrator($entityManager));
+        $this->setHydrator(new DoctrineHydrator($objectManager));
 
         // Add the user fieldset, and set it as the base fieldset
-        $blogPostFieldset = new BlogPostFieldset($serviceManager);
+        $blogPostFieldset = new BlogPostFieldset($objectManager);
         $blogPostFieldset->setUseAsBaseFieldset(true);
         $this->add($blogPostFieldset);
 
@@ -1145,8 +1141,11 @@ Here is the action for create a new blog post:
 
 public function createAction()
 {
-	// Create the form
-	$form = new CreateBlogPostForm($this->serviceLocator);
+    // Get your ObjectManager from the ServiceManager
+    $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+
+	// Create the form and inject the ObjectManager
+	$form = new CreateBlogPostForm($objectManager);
 
 	// Create a new, empty entity and bind it to the form
 	$blogPost = new BlogPost();
@@ -1171,8 +1170,11 @@ The update form is similar, instead that we get the blog post from database inst
 
 public function editAction()
 {
-	// Create the form
-	$form = new UpdateBlogPostForm($this->serviceLocator);
+    // Get your ObjectManager from the ServiceManager
+    $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+
+	// Create the form and inject the ObjectManager
+	$form = new UpdateBlogPostForm($objectManager);
 
 	// Create a new, empty entity and bind it to the form
 	$blogPost = $this->userService->get($this->params('blogPost_id'));
@@ -1251,19 +1253,18 @@ First the User fieldset :
 namespace Application\Form;
 
 use Application\Entity\User;
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
 
 class UserFieldset extends Fieldset implements InputFilterProviderInterface
 {
-	public function __construct(ServiceManager $serviceManager)
+	public function __construct(ObjectManager $objectManager)
 	{
 		parent::__construct('user');
-		$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
-		$this->setHydrator(new DoctrineHydrator($entityManager))
+		$this->setHydrator(new DoctrineHydrator($objectManager))
 			 ->setObject(new User());
 
 		$this->add(array(
@@ -1277,7 +1278,7 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
             )
        	));
 
-       	$cityFieldset = new CityFieldset($serviceManager);
+       	$cityFieldset = new CityFieldset($objectManager);
        	$cityFieldset->setLabel('Your city');
        	$cityFieldset->setName('city');
        	$this->add($cityFieldset);
@@ -1301,19 +1302,18 @@ And then the City fieldset :
 namespace Application\Form;
 
 use Application\Entity\City;
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
 
 class CityFieldset extends Fieldset implements InputFilterProviderInterface
 {
-	public function __construct(ServiceManager $serviceManager)
+	public function __construct(ObjectManager $objectManager)
 	{
 		parent::__construct('city');
-		$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
-		$this->setHydrator(new DoctrineHydrator($entityManager))
+		$this->setHydrator(new DoctrineHydrator($objectManager))
 			 ->setObject(new City());
 
 		$this->add(array(
@@ -1362,21 +1362,20 @@ be like this :
 ```php
 namespace Application\Form;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Form;
-use Zend\ServiceManager\ServiceManager;
 
 class EditNameForm extends Form
 {
-	public function __construct(ServiceManager $serviceManager)
+	public function __construct(ObjectManager $objectManager)
 	{
 		parent::__construct('edit-name-form');
-		$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
-		$this->setHydrator(new DoctrineHydrator($entityManager));
+		$this->setHydrator(new DoctrineHydrator($objectManager));
 
 		// Add the user fieldset, and set it as the base fieldset
-		$userFieldset = new UserFieldset($serviceManager);
+		$userFieldset = new UserFieldset($objectManager);
 		$userFieldset->setName('user');
 		$userFieldset->setUseAsBaseFieldset(true);
 		$this->add($userFieldset);
@@ -1403,8 +1402,11 @@ something like this :
 ```php
 public function editNameAction()
 {
-	// Create the form
-	$form = new EditNameForm($this->serviceLocator);
+    // Get your ObjectManager from the ServiceManager
+    $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+
+	// Create the form and inject the ObjectManager
+	$form = new EditNameForm($objectManager);
 
 	// Get the logged user (for more informations about userIdentity(), please read the Authentication doc)
 	$loggedUser = $this->userIdentity();
@@ -1447,21 +1449,20 @@ EditUserForm :
 ```php
 namespace Application\Form;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Form;
-use Zend\ServiceManager\ServiceManager;
 
 class EditNameForm extends Form
 {
-	public function __construct(ServiceManager $serviceManager)
+	public function __construct(ObjectManager $objectManager)
 	{
 		parent::__construct('edit-name-form');
-		$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
-		$this->setHydrator(new DoctrineHydrator($entityManager));
+		$this->setHydrator(new DoctrineHydrator($objectManager));
 
 		// Add the user fieldset, and set it as the base fieldset
-		$userFieldset = new UserFieldset($serviceManager);
+		$userFieldset = new UserFieldset($objectManager);
 		$userFieldset->setName('user');
 		$userFieldset->setUseAsBaseFieldset(true);
 
