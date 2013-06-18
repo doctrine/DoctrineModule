@@ -289,14 +289,10 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     * @return \Zend\Authentication\Storage\StorageInterface
+     * @return \Zend\Authentication\Storage\StorageInterface|string
      */
     public function getStorage()
     {
-        if (! $this->storage instanceof StorageInterface) {
-            $this->storage = new SessionStorage();
-        }
-
         return $this->storage;
     }
 

@@ -52,4 +52,35 @@ class StorageFactoryTest extends BaseTestCase
         $adapter = $factory->createService($serviceManager);
         $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
     }
+
+    public function testCanInstantiateStorageFromServiceLocator()
+    {
+        $name = 'testFactory';
+        $factory = new StorageFactory($name);
+
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'Configuration',
+            array(
+                'doctrine' => array(
+                    'authentication' => array(
+                        $name => array(
+                            'storage' => 'NonPersistent'
+                        ),
+                    ),
+                )
+            )
+        );
+        $serviceManager->setInvokableClass('NonPersistent', 'Zend\Authentication\Storage\NonPersistent');
+
+        $adapter = $factory->createService($serviceManager);
+        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
+
+        $reflProperty = new \ReflectionProperty($adapter, 'options');
+        $reflProperty->setAccessible(true);
+
+        $options = $reflProperty->getValue($adapter);
+
+        $this->assertInstanceOf('Zend\Authentication\Storage\NonPersistent', $options->getStorage());
+    }
 }
