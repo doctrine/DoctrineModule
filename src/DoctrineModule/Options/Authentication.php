@@ -126,7 +126,7 @@ class Authentication extends AbstractOptions
      *
      * @var \Zend\Authentication\Storage\StorageInterface|string;
      */
-    protected $storage;
+    protected $storage = 'Zend\Authentication\Storage\Session';
 
     /**
      * @param  string | ObjectManager $objectManager

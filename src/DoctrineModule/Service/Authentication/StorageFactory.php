@@ -20,6 +20,7 @@ namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Service\AbstractFactory;
+use Zend\Authentication\Storage\Session as SessionStorage;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
