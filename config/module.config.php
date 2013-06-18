@@ -61,26 +61,26 @@ return array(
                 'namespace' => 'DoctrineModule',
             ),
         ),
-        
+
         //These authentication settings are a hack to tide things over until version 1.0
         //Normall doctrineModule should have no mention of odm or orm
         'authentication' => array(
             //default authentication options should be set in either the odm or orm modules
             'odm_default' => array(),
-            'orm_default' => array(),            
+            'orm_default' => array(),
         ),
         'authenticationadapter' => array(
             'odm_default' => true,
-            'orm_default' => true,            
+            'orm_default' => true,
         ),
         'authenticationstorage' => array(
             'odm_default' => true,
-            'orm_default' => true,            
+            'orm_default' => true,
         ),
         'authenticationservice' => array(
             'odm_default' => true,
-            'orm_default' => true,            
-        )        
+            'orm_default' => true,
+        )
     ),
 
     // Factory mappings - used to define which factory to use to instantiate a particular doctrine
@@ -95,6 +95,9 @@ return array(
     ),
 
     'service_manager' => array(
+        'invokables' => array(
+            'DoctrineModule\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session'
+        ),
         'factories' => array(
             'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
         ),

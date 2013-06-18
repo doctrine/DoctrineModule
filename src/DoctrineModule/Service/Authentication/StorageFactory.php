@@ -20,6 +20,7 @@ namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Service\AbstractFactory;
+use Zend\Authentication\Storage\Session as SessionStorage;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -44,6 +45,10 @@ class StorageFactory extends AbstractFactory
 
         if (is_string($objectManager = $options->getObjectManager())) {
             $options->setObjectManager($serviceLocator->get($objectManager));
+        }
+
+        if (is_string($storage = $options->getStorage())) {
+            $options->setStorage($serviceLocator->get($storage));
         }
 
         return new ObjectRepository($options);
