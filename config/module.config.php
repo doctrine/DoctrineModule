@@ -96,7 +96,7 @@ return array(
 
     'service_manager' => array(
         'invokables' => array(
-            'Zend\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session'
+            'DoctrineModule\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session'
         ),
         'factories' => array(
             'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
