@@ -46,6 +46,10 @@ class StorageFactory extends AbstractFactory
             $options->setObjectManager($serviceLocator->get($objectManager));
         }
 
+        if (is_string($storage = $options->getStorage())) {
+            $options->setStorage($serviceLocator->get($storage));
+        }
+
         return new ObjectRepository($options);
     }
 

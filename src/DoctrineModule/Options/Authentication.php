@@ -109,7 +109,6 @@ class Authentication extends AbstractOptions
     protected $credentialCallable;
 
     /**
-     *
      * If an objectManager is not supplied, this metadata will be used
      * by DoctrineModule/Authentication/Storage/ObjectRepository
      *
@@ -125,7 +124,7 @@ class Authentication extends AbstractOptions
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
-     * @var \Zend\Authentication\Storage\StorageInterface;
+     * @var \Zend\Authentication\Storage\StorageInterface|string;
      */
     protected $storage;
 
@@ -302,9 +301,9 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     * @param \Zend\Authentication\Storage\StorageInterface $storage
+     * @param \Zend\Authentication\Storage\StorageInterface|string $storage
      */
-    public function setStorage(StorageInterface $storage)
+    public function setStorage($storage)
     {
         $this->storage = $storage;
     }
