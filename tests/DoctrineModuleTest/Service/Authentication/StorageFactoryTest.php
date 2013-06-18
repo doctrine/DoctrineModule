@@ -55,32 +55,32 @@ class StorageFactoryTest extends BaseTestCase
 
     public function testCanInstantiateStorageFromServiceLocator()
     {
-        $name = 'testFactory';
-        $factory = new StorageFactory($name);
-
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Configuration',
-            array(
-                'doctrine' => array(
-                    'authentication' => array(
-                        $name => array(
-                            'storage' => 'NonPersistent'
-                        ),
-                    ),
-                )
+        $factory        = new StorageFactory('testFactory');
+        $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $storage        = $this->getMock('Zend\Authentication\Storage\StorageInterface');
+        $config         = array(
+            'doctrine' => array(
+                'authentication' => array(
+                    'testFactory' => array('storage' => 'some_storage')
+                ),
             )
         );
-        $serviceManager->setInvokableClass('NonPersistent', 'Zend\Authentication\Storage\NonPersistent');
 
-        $adapter = $factory->createService($serviceManager);
-        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
+        $serviceLocator
+            ->expects($this->at(0))
+            ->method('get')
+            ->with('Configuration')
+            ->will($this->returnValue($config));
+        $serviceLocator
+            ->expects($this->at(1))
+            ->method('get')
+            ->with('some_storage')
+            ->will($this->returnValue($storage));
 
-        $reflProperty = new \ReflectionProperty($adapter, 'options');
-        $reflProperty->setAccessible(true);
 
-        $options = $reflProperty->getValue($adapter);
-
-        $this->assertInstanceOf('Zend\Authentication\Storage\NonPersistent', $options->getStorage());
+        $this->assertInstanceOf(
+            'DoctrineModule\Authentication\Storage\ObjectRepository',
+            $factory->createService($serviceLocator)
+        );
     }
 }
