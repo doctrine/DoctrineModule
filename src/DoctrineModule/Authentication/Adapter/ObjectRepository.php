@@ -59,7 +59,6 @@ class ObjectRepository extends AbstractAdapter
 
     /**
      * @param  array|AuthenticationOptions $options
-     * @return ObjectRepository
      */
     public function setOptions($options)
     {
@@ -70,7 +69,7 @@ class ObjectRepository extends AbstractAdapter
         $this->options = $options;
         return $this;
     }
-    
+
     /**
      * @return AuthenticationOptions
      */
@@ -79,51 +78,7 @@ class ObjectRepository extends AbstractAdapter
         return $this->options;
     }
 
-    /**
-     * Set the value to be used as the identity
-     *
-     * @param  mixed $identityValue
-     * @return ObjectRepository
-     * @deprecated use setIdentity instead
-     */
-    public function setIdentityValue($identityValue)
-    {
-        $this->identity = $identityValue;
-        return $this;
-    }
-
-    /**
-     * @return string
-     * @deprecated use getIdentity instead
-     */
-    public function getIdentityValue()
-    {
-        return $this->identity;
-    }
-
-    /**
-     * Set the credential value to be used.
-     *
-     * @param  mixed $credentialValue
-     * @return ObjectRepository
-     * @deprecated use setCredential instead
-     */
-    public function setCredentialValue($credentialValue)
-    {
-        $this->credential = $credentialValue;
-        return $this;
-    }
-
-    /**
-     * @return string
-     * @deprecated use getCredential instead
-     */
-    public function getCredentialValue()
-    {
-        return $this->credential;
-    }
-
-    /**
+    /*
      * {@inheritDoc}
      */
     public function authenticate()
