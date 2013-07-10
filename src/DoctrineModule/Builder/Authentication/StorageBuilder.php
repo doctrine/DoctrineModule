@@ -64,17 +64,18 @@ class StorageBuilder implements BuilderInterface, ServiceLocatorAwareInterface
     public function build($options)
     {
         if (is_array($options) || $options instanceof \Traversable) {
+
+            if ( isset($options['object_manager']) && is_string($options['object_manager'])) {
+                $options['object_manager'] = $this->serviceLocator->get($options['object_manager']);
+            }
+
+            if ( isset($options['storage']) && is_string($options['storage'])) {
+                $options['storage'] = $this->serviceLocator->get($options['storage']);
+            }
+
             $options = new StorageOptions($options);
         } elseif ( ! $options instanceof StorageOptions){
             throw new Exception\InvalidArgumentException();
-        }
-
-        if (is_string($objectManager = $options->getObjectManager())) {
-            $options->setObjectManager($this->serviceLocator->get($objectManager));
-        }
-
-        if (is_string($storage = $options->getStorage())) {
-            $options->setStorage($this->serviceLocator->get($storage));
         }
 
         return new ObjectRepositoryStorage($options);
