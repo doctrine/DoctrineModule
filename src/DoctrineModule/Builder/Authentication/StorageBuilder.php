@@ -65,16 +65,16 @@ class StorageBuilder implements BuilderInterface, ServiceLocatorAwareInterface
     {
         if (is_array($options) || $options instanceof \Traversable) {
 
-            if ( isset($options['object_manager']) && is_string($options['object_manager'])) {
+            if (isset($options['object_manager']) && is_string($options['object_manager'])) {
                 $options['object_manager'] = $this->serviceLocator->get($options['object_manager']);
             }
 
-            if ( isset($options['storage']) && is_string($options['storage'])) {
+            if (isset($options['storage']) && is_string($options['storage'])) {
                 $options['storage'] = $this->serviceLocator->get($options['storage']);
             }
 
             $options = new StorageOptions($options);
-        } elseif ( ! $options instanceof StorageOptions){
+        } elseif (! $options instanceof StorageOptions) {
             throw new Exception\InvalidArgumentException();
         }
 
