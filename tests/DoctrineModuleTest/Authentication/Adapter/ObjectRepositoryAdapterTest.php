@@ -226,7 +226,7 @@ class ObjectRepositoryAdapterTest extends BaseTestCase
             )
         );
 
-        $adapter->setIdentityValue('a username');
+        $adapter->setIdentity('a username');
         $adapter->setCredential('a password');
         $adapter->authenticate();
     }
