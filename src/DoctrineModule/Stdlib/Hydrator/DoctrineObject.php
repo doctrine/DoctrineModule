@@ -211,6 +211,7 @@ class DoctrineObject extends AbstractHydrator
             if (!$this->getFilter()->filter($fieldName)) {
                 continue;
             }
+
             $reflProperty = $refl->getProperty($fieldName);
             $reflProperty->setAccessible(true);
 
