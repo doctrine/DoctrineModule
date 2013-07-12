@@ -34,22 +34,25 @@ class StorageOptions extends AbstractAuthenticationOptions
     /**
      * This is the storage instance that the object key will be stored in.
      *
-     * @var \Zend\Authentication\Storage\StorageInterface|string
+     * @var \Zend\Authentication\Storage\StorageInterface
      */
-    protected $storage = 'DoctrineModule\Authentication\Storage\Session';
+    protected $storage;
 
     /**
-     * @return \Zend\Authentication\Storage\StorageInterface|string
+     * @return \Zend\Authentication\Storage\StorageInterface
      */
     public function getStorage()
     {
+        if (!isset($this->storage)){
+            $this->storage = new SessionStorage;
+        }
         return $this->storage;
     }
 
     /**
-     * @param \Zend\Authentication\Storage\StorageInterface|string $storage
+     * @param \Zend\Authentication\Storage\StorageInterface $storage
      */
-    public function setStorage($storage)
+    public function setStorage(StorageInterface $storage)
     {
         $this->storage = $storage;
     }
