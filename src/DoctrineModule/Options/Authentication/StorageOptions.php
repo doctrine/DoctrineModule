@@ -43,7 +43,7 @@ class StorageOptions extends AbstractAuthenticationOptions
      */
     public function getStorage()
     {
-        if (!isset($this->storage)){
+        if (!isset($this->storage)) {
             $this->storage = new SessionStorage;
         }
         return $this->storage;
