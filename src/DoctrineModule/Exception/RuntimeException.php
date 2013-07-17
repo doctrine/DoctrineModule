@@ -135,7 +135,8 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface
     {
         return new self(
             sprintf(
-                '%s must have a "__toString()" method defined if you have not set a property or method to use in %s (%d).',
+                '%s must have a "__toString()" method defined if you have not '
+                . 'set a property or method to use in %s (%d).',
                 $class,
                 $method,
                 $line
