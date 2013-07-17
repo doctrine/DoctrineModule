@@ -53,7 +53,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException DoctrineModule\Exception\RuntimeException
      * @expectedExceptionMessage No object manager was set
      */
     public function testExceptionThrownForMissingObjectManager()
@@ -63,7 +63,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException DoctrineModule\Exception\RuntimeException
      * @expectedExceptionMessage No target class was set
      */
     public function testExceptionThrownForMissingTargetClass()
@@ -77,8 +77,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No method name was set
+     * @expectedException DoctrineModule\Exception\RuntimeException
+     * @expectedExceptionMessage No find method name was set
      */
     public function testExceptionThrownForMissingFindMethodName()
     {
@@ -129,7 +129,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(
-            'RuntimeException',
+            'DoctrineModule\Exception\RuntimeException',
             'Method "NotExistent" could not be found in repository "' . get_class($objectRepository).'"'
         );
 

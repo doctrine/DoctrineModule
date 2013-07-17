@@ -27,4 +27,119 @@ namespace DoctrineModule\Exception;
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
+    /**
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function objectManagerNotSet($method, $line)
+    {
+        return new self(sprintf('No object manager was set in %s (%d).', $method, $line));
+    }
+
+    /**
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function targetClassNotSet($method, $line)
+    {
+        return new self(sprintf('No target class was set in %s (%d).', $method, $line));
+    }
+
+    /**
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function multipleIdentifiers($method, $line)
+    {
+        return new self(sprintf('Unable to handle multiple identifiers in %s (%d).', $method, $line));
+    }
+
+    /**
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function findMethodNameNotSet($method, $line)
+    {
+        return new self(sprintf('No find method name was set in %s (%d).', $method, $line));
+    }
+
+    /**
+     * @param  string $methodName
+     * @param  string $repository
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function invalidFindMethodName($methodName, $repository, $method, $line)
+    {
+        return new self(
+            sprintf(
+                'Method "%s" could not be found in repository "%s" in %s (%d).',
+                $methodName,
+                $repository,
+                $method,
+                $line
+            )
+        );
+    }
+
+    /**
+     * @param  string $propertyName
+     * @param  string $repository
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function invalidPropertyName($propertyName, $repository, $method, $line)
+    {
+        return new self(
+            sprintf(
+                'Propery "%s" could not be found in object "%s" in %s (%d).',
+                $properyName,
+                $repository,
+                $method,
+                $line
+            )
+        );
+    }
+
+    /**
+     * @param  string $methodName
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function methodNotCallable($methodName, $method, $line)
+    {
+        return new self(
+            sprintf(
+                'Method "%s" is not callable in %s (%d).',
+                $methodName,
+                $method,
+                $line
+            )
+        );
+    }
+
+    /**
+     * @param  string $class
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function noMethodOrToString($class, $method, $line)
+    {
+        return new self(
+            sprintf(
+                '%s must have a "__toString()" method defined if you have not set a property or method to use in %s (%d).',
+                $class,
+                $method,
+                $line
+            )
+        );
+    }
 }

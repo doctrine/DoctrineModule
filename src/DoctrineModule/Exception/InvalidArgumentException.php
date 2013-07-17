@@ -27,4 +27,19 @@ namespace DoctrineModule\Exception;
  */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
+    /**
+     * @param  string $method
+     * @param  int    $line
+     * @return RuntimeException
+     */
+    public static function invalidLabelGenerator($method, $line)
+    {
+        return new self(
+            sprintf(
+                'Property "label_generator" needs to be a callable function or a \Closure in $s (%s).',
+                $method,
+                $line
+            )
+        );
+    }
 }
