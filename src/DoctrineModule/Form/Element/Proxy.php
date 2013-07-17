@@ -274,20 +274,20 @@ class Proxy implements ObjectManagerAwareInterface
         }
 
         $metadata = $objectManager->getClassMetadata($targetClass);
+
         if (!is_object($value)) {
             return $value;
         }
 
         if ($value instanceof Collection) {
-            $data = array();
-            foreach ($value as $object) {
-                $values = $metadata->getIdentifierValues($object);
-                $data[] = array_shift($values);
-            }
+            return array_map(
+                function ($object) use ($metadata) {
+                    $identifier = $metadata->getIdentifierValues($object);
 
-            $value = $data;
-
-            return $value;
+                    return reset($identifier);
+                },
+                $value->toArray()
+            );
         }
 
         $metadata   = $objectManager->getClassMetadata(get_class($value));
