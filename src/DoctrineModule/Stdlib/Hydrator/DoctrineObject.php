@@ -171,9 +171,15 @@ class DoctrineObject extends AbstractHydrator
     {
         $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
         $methods    = get_class_methods($object);
+        $filter     = $object instanceof FilterProviderInterface
+            ? $object->getFilter()
+            : $this->filterComposite;
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
+            if ($filter && !$filter->filter($fieldName)) {
+                continue;
+            }
             $getter = 'get' . ucfirst($fieldName);
             $isser  = 'is' . ucfirst($fieldName);
 
@@ -200,9 +206,15 @@ class DoctrineObject extends AbstractHydrator
     {
         $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
         $refl       = $this->metadata->getReflectionClass();
+        $filter     = $object instanceof FilterProviderInterface
+            ? $object->getFilter()
+            : $this->filterComposite;
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
+            if ($filter && !$filter->filter($fieldName)) {
+                continue;
+            }
             $reflProperty = $refl->getProperty($fieldName);
             $reflProperty->setAccessible(true);
 
