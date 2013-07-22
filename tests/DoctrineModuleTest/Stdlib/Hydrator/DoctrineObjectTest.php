@@ -1931,4 +1931,213 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity', $entity);
         $this->assertEquals(array('id' => 2, 'done' => true), $data);
     }
+
+    public function testExtractOneToOneAssociationByValueWithOnlyId()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toOne = new Asset\SimpleEntity();
+        $toOne->setId(3);
+        $toOne->setField('foo', false);
+
+        $entity = new Asset\OneToOneEntity();
+        $entity->setId(2);
+        $entity->setToOne($toOne);
+
+        $this->configureObjectManagerForOneToOneEntity();
+
+        $this->hydratorByValue->addStrategy('toOne', new Strategy\ExtractIdByValue($this->objectManager)); 
+        $data = $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(2, $data['id']);
+        $this->assertEquals($toOne->getId(), $data['toOne']);
+    }
+
+    public function testExtractOneToOneAssociationByReferenceWithOnlyId()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toOne = new Asset\SimpleEntity();
+        $toOne->setId(3);
+        $toOne->setField('foo', false);
+
+        $entity = new Asset\OneToOneEntity();
+        $entity->setId(2);
+        $entity->setToOne($toOne);
+
+        $this->configureObjectManagerForOneToOneEntity();
+
+        $this->hydratorByValue->addStrategy('toOne', new Strategy\ExtractIdByReference($this->objectManager)); 
+        $data = $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(2, $data['id']);
+        $this->assertEquals($toOne->getId(), $data['toOne']);
+    }
+
+    public function testExtractOneToManyAssociationByValueWithOnlyId()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $collection = new ArrayCollection(array($toMany1, $toMany2));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+
+        $entity = new Asset\OneToManyEntity();
+        $entity->setId(4);
+        $entity->addEntities($collection);
+
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $this->hydratorByValue->addStrategy('entities', new Strategy\ExtractIdByValue($this->objectManager)); 
+        $data = $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(4, $data['id']);
+        $this->assertEquals(array(2, 3), $data['entities']);
+    }
+
+    public function testExtractOneToManyAssociationByReferenceWithOnlyId()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $collection = new ArrayCollection(array($toMany1, $toMany2));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+
+        $entity = new Asset\OneToManyEntity();
+        $entity->setId(4);
+        $entity->addEntities($collection);
+
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $this->hydratorByReference->addStrategy('entities', new Strategy\ExtractIdByReference($this->objectManager)); 
+        $data = $this->hydratorByReference->extract($entity);
+
+        $this->assertEquals(4, $data['id']);
+        $this->assertEquals(array(2, 3), $data['entities']);
+    }
+
+    public function testExtractOneToOneAssociationByValueWithRecursion()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toOne = new Asset\SimpleEntity();
+        $toOne->setId(3);
+        $toOne->setField('foo', false);
+
+        $entity = new Asset\OneToOneEntity();
+        $entity->setId(2);
+        $entity->setToOne($toOne);
+
+        $this->configureObjectManagerForOneToOneEntity();
+
+        $this->hydratorByValue->addStrategy('toOne', new Strategy\ExtractRecursiveByValue($this->objectManager)); 
+        $data = $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(2, $data['id']);
+        $this->assertEquals($toOne->getId(), $data['toOne']['id']);
+    }
+
+    public function testExtractOneToOneAssociationByReferenceWithRecursion()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toOne = new Asset\SimpleEntity();
+        $toOne->setId(3);
+        $toOne->setField('foo', false);
+
+        $entity = new Asset\OneToOneEntity();
+        $entity->setId(2);
+        $entity->setToOne($toOne);
+
+        $this->configureObjectManagerForOneToOneEntity();
+
+        $this->hydratorByReference->addStrategy('toOne', new Strategy\ExtractRecursiveByReference($this->objectManager)); 
+        $data = $this->hydratorByReference->extract($entity);
+
+        $this->assertEquals(2, $data['id']);
+        $this->assertEquals($toOne->getId(), $data['toOne']['id']);
+    }
+
+    public function testExtractOneToManyAssociationByValueWithRecursion()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $collection = new ArrayCollection(array($toMany1, $toMany2));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+
+        $entity = new Asset\OneToManyEntity();
+        $entity->setId(4);
+        $entity->addEntities($collection);
+
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $this->hydratorByValue->addStrategy('entities', new Strategy\ExtractRecursiveByValue($this->objectManager)); 
+        $data = $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(4, $data['id']);
+        $this->assertEquals(array(array('id' => 2), array('id' => 3)), $data['entities']);
+    }
+
+    public function testExtractOneToManyAssociationByReferenceWithRecursion()
+    {
+        // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $collection = new ArrayCollection(array($toMany1, $toMany2));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+
+        $entity = new Asset\OneToManyEntity();
+        $entity->setId(4);
+        $entity->addEntities($collection);
+
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $this->hydratorByReference->addStrategy('entities', new Strategy\ExtractRecursiveByReference($this->objectManager)); 
+        $data = $this->hydratorByReference->extract($entity);
+
+        $this->assertEquals(4, $data['id']);
+        $this->assertEquals(array(array('id' => 2), array('id' => 3)), $data['entities']);
+    }
+
 }
