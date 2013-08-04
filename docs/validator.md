@@ -1,6 +1,6 @@
 ## Validator
 
-DoctrineModule provides three validators that work out the box : `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` that allow to check if an entity or does not exists in database, respectively; `DoctrineModule\Validator\UniqueObject` that allows to check if a value is only used in one object. They work like any other standard Zend validators.
+DoctrineModule provides three validators that work out the box : `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` that allow to check if an entity exists or does not exists in database, respectively; `DoctrineModule\Validator\UniqueObject` that allows to check if a value is only used in one object. They work like any other standard Zend validators.
 
 All three validators accept the following options :
 
