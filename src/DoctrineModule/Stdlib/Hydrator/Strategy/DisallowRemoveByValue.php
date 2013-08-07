@@ -49,8 +49,8 @@ class DisallowRemoveByValue extends AbstractCollectionStrategy
         if (!method_exists($this->object, $adder)) {
             throw new LogicException(
                 sprintf(
-                    'AllowRemove strategy for DoctrineModule hydrator requires %s to be defined in %s
-                     entity domain code, but it seems to be missing',
+                    'DisallowRemove strategy for DoctrineModule hydrator requires %s to
+                     be defined in %s entity domain code, but it seems to be missing',
                     $adder,
                     get_class($this->object)
                 )
