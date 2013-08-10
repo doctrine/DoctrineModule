@@ -39,7 +39,9 @@ while (!file_exists('config/application.config.php')) {
     chdir($dir);
 }
 
-if (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
+if (is_readable('init_autoloader.php')) {
+    include_once 'init_autoloader.php';
+} elseif (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
     throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
 }
 
