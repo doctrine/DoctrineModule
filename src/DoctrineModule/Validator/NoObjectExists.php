@@ -51,7 +51,7 @@ class NoObjectExists extends ObjectExists
     /**
      * @var array Values to match against during exclusion
      */
-    protected $excludeValues;
+    protected $excludedValues = array();
 
     /**
      * {@inheritDoc}
@@ -81,18 +81,17 @@ class NoObjectExists extends ObjectExists
     {
         if (isset($this->excludeField)) {
             $methodName = 'get' . ucfirst($this->excludeField);
+
             if (method_exists($match, $methodName)) {
                 $checkAgainst = $match->{$methodName}();
-                return in_array($checkAgainst, $this->excludeValues);
+
+                return in_array($checkAgainst, $this->excludedValues);
             } else {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'Can\'t access getter for property "%s" it isn\'t defined or public',
-                    $this->excludeField
-                ));
+                return false;
             }
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -106,13 +105,12 @@ class NoObjectExists extends ObjectExists
         if (isset($exclude['field']) && isset($exclude['value'])) {
             if (is_string($exclude['field'])) {
                 $this->excludeField = $exclude['field'];
-            }
-            else {
+            } else {
                 throw new Exception\InvalidArgumentException(
                     '`field` key in "exclude" option must contain a string value.'
                 );
             }
-            $this->excludeValues = is_array($exclude['value']) ? $exclude['value'] : [$exclude['value']];
+            $this->excludedValues = is_array($exclude['value']) ? $exclude['value'] : [$exclude['value']];
         }
     }
 }
