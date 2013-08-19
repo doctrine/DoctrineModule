@@ -23,6 +23,7 @@ use RuntimeException;
 use ReflectionMethod;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\Proxy as PersistenceProxy;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
 class Proxy implements ObjectManagerAwareInterface
@@ -292,6 +293,10 @@ class Proxy implements ObjectManagerAwareInterface
             } else {
                 $metadata   = $om->getClassMetadata(get_class($value));
                 $identifier = $metadata->getIdentifierFieldNames();
+                
+                if ($value instanceof PersistenceProxy) {
+                    $value->__load();
+                }
 
                 // TODO: handle composite (multiple) identifiers
                 if (count($identifier) > 1) {
