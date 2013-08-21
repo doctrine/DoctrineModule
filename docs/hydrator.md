@@ -93,8 +93,8 @@ echo $dataArray['name']; // prints "Paris"
 ```
 
 As you can see from this example, in simple cases, the DoctrineModule hydrator provides nearly no benefits over a
-simpler hydrator like "ClassMethods". However, even in those cases, I suggest you to use it, as it performs automatically
-conversions between types. For instance, it can converts timestamp to DateTime (which is the type used by Doctrine to
+simpler hydrator like "ClassMethods". However, even in those cases, I suggest you to use it, as it performs automatic
+conversions between types. For instance, it can convert timestamp to DateTime (which is the type used by Doctrine to
 represent dates):
 
 ```php
