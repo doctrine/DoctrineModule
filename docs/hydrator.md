@@ -503,7 +503,7 @@ class Tag
 	protected $blogPost;
 
 	/**
-	 * @ORM\Content(type="string")
+	 * @ORM\Column(type="string")
 	 */
 	protected $name;
 
@@ -898,7 +898,7 @@ class Tag
 	protected $blogPost;
 
 	/**
-	 * @ORM\Content(type="string")
+	 * @ORM\Column(type="string")
 	 */
 	protected $name;
 
