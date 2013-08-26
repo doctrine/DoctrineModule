@@ -1141,11 +1141,11 @@ Here is the action for create a new blog post:
 
 public function createAction()
 {
-    // Get your ObjectManager from the ServiceManager
-    $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+    // Get your EntityManager from the ServiceManager
+    $this->entityManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
 
-	// Create the form and inject the ObjectManager
-	$form = new CreateBlogPostForm($objectManager);
+	// Create the form and inject the EntityManager
+	$form = new CreateBlogPostForm($this->entityManager);
 
 	// Create a new, empty entity and bind it to the form
 	$blogPost = new BlogPost();
@@ -1155,8 +1155,8 @@ public function createAction()
 		$form->setData($this->request->getPost());
 
 		if ($form->isValid()) {
-			$this->entityManager->persist($blogPost);
-            $this->entityManager->flush();
+                    $this->entityManager->persist($blogPost);
+                    $this->entityManager->flush();
 		}
 	}
 
@@ -1170,11 +1170,11 @@ The update form is similar, instead that we get the blog post from database inst
 
 public function editAction()
 {
-    // Get your ObjectManager from the ServiceManager
-    $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+    // Get your EntityManager from the ServiceManager
+    $this->entityManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
 
-	// Create the form and inject the ObjectManager
-	$form = new UpdateBlogPostForm($objectManager);
+	// Create the form and inject the EntityManager
+	$form = new UpdateBlogPostForm($this->entityManager);
 
 	// Create a new, empty entity and bind it to the form
 	$blogPost = $this->userService->get($this->params('blogPost_id'));
@@ -1185,7 +1185,7 @@ public function editAction()
 
 		if ($form->isValid()) {
 		    // Save the changes
-            $this->entityManager->flush();
+                    $this->entityManager->flush();
 		}
 	}
 
