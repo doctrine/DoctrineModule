@@ -1155,8 +1155,8 @@ public function createAction()
 		$form->setData($this->request->getPost());
 
 		if ($form->isValid()) {
-                    $objectManager->persist($blogPost);
-                    $objectManager->flush();
+			$objectManager->persist($blogPost);
+			$objectManager->flush();
 		}
 	}
 
@@ -1185,7 +1185,7 @@ public function editAction()
 
 		if ($form->isValid()) {
 		    // Save the changes
-                    $objectManager->flush();
+		    $objectManager->flush();
 		}
 	}
 
