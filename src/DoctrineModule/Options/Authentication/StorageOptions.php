@@ -19,7 +19,6 @@
 
 namespace DoctrineModule\Options\Authentication;
 
-use Zend\Authentication\Storage\Session as SessionStorage;
 use Zend\Authentication\Storage\StorageInterface;
 
 /**
@@ -34,12 +33,12 @@ class StorageOptions extends AbstractAuthenticationOptions
     /**
      * This is the storage instance that the object key will be stored in.
      *
-     * @var \Zend\Authentication\Storage\StorageInterface|string
+     * @var \Zend\Authentication\Storage\StorageInterfac
      */
     protected $storage;
 
     /**
-     * @return \Zend\Authentication\Storage\StorageInterface|string
+     * @return \Zend\Authentication\Storage\StorageInterface
      */
     public function getStorage()
     {
@@ -47,9 +46,9 @@ class StorageOptions extends AbstractAuthenticationOptions
     }
 
     /**
-     * @param \Zend\Authentication\Storage\StorageInterface|string $storage
+     * @param \Zend\Authentication\Storage\StorageInterface $storage
      */
-    public function setStorage($storage)
+    public function setStorage(StorageInterface $storage)
     {
         $this->storage = $storage;
     }
