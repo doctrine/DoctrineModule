@@ -36,7 +36,7 @@ class StorageOptions extends AbstractAuthenticationOptions
      *
      * @var \Zend\Authentication\Storage\StorageInterface|string
      */
-    protected $storage = 'DoctrineModule\Authentication\Storage\Session';
+    protected $storage;
 
     /**
      * @return \Zend\Authentication\Storage\StorageInterface|string
