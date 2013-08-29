@@ -43,7 +43,7 @@ return array(
             'zenddata' => array(
             ),
         ),
-        
+
         'authentication' => array(
             'adapter' => array(
                 'default' => array(
@@ -57,6 +57,7 @@ return array(
                 'default' => array(
                     'object_manager' => 'doctrine.objectmanager.default',
                     'identity_class' => 'Application\Model\User',
+                    'storage'        => 'DoctrineModule\Authentication\Storage\Session'
                 )
             ),
             'service' => array(
