@@ -30,7 +30,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @link    http://www.doctrine-project.org/
  * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class ArrayCacheFactory implements FactoryInterface
+class ZendDataCacheFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
