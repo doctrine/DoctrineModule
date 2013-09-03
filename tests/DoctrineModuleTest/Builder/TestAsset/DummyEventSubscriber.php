@@ -17,17 +17,29 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModuleTest\Builder\TestAsset;
+
+use Doctrine\Common\EventSubscriber;
 
 /**
- * Version
- *
- * @license MIT
- * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * Dummy event subscriber used to test injections
  */
-class Version
+class DummyEventSubscriber implements EventSubscriber
 {
-    const VERSION = '1.0.0';
+    /**
+     * Empty callback method
+     */
+    public function dummy()
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSubscribedEvents()
+    {
+        return array(
+            'dummy'
+        );
+    }
 }

@@ -17,17 +17,15 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Options\Cache;
 
 /**
- * Version
+ * Cache options
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Version
+class XCacheCacheOptions extends AbstractCacheOptions
 {
-    const VERSION = '1.0.0';
 }

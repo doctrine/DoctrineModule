@@ -17,17 +17,37 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Service\Cache;
+
+use Doctrine\Common\Cache\XcacheCache;
+use DoctrineModule\Options\Cache\XcacheCacheOptions;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Version
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Version
+class XcacheCacheFactory implements FactoryInterface
 {
-    const VERSION = '1.0.0';
+    /**
+     * {@inheritDoc}
+     * @return Application
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $config = $serviceLocator->get('Config');
+        if (isset($config['doctrine']['cache']['xcache'])) {
+            $options = new XcacheCacheOptions($config['doctrine']['cache']['xcache']);
+        } else {
+            $options = new XcacheCacheOptions();
+        }
+
+        $instance = new XcacheCache;
+        $instance->setNamespace($options->getNamespace());
+
+        return $instance;
+    }
 }

@@ -17,17 +17,40 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Options\Cache;
+
+use Zend\Stdlib\AbstractOptions;
 
 /**
- * Version
+ * Cache options
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
-class Version
+abstract class AbstractCacheOptions extends AbstractOptions
 {
-    const VERSION = '1.0.0';
+    /**
+     * Namespace to prefix all cache ids with.
+     *
+     * @var string
+     */
+    protected $namespace = 'DoctrineModule';
+
+    /**
+     * @param  string $namespace
+     * @return self
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = (string) $namespace;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
 }

@@ -122,8 +122,6 @@ class Proxy implements ObjectManagerAwareInterface
     public function setObjectManager(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
-
-        return $this;
     }
 
     /**
@@ -145,8 +143,6 @@ class Proxy implements ObjectManagerAwareInterface
     public function setTargetClass($targetClass)
     {
         $this->targetClass = $targetClass;
-
-        return $this;
     }
 
     /**
@@ -168,8 +164,6 @@ class Proxy implements ObjectManagerAwareInterface
     public function setProperty($property)
     {
         $this->property = $property;
-
-        return $this;
     }
 
     /**
@@ -217,8 +211,6 @@ class Proxy implements ObjectManagerAwareInterface
     public function setIsMethod($method)
     {
         $this->isMethod = (bool) $method;
-
-        return $this;
     }
 
     /**
@@ -237,8 +229,6 @@ class Proxy implements ObjectManagerAwareInterface
     public function setFindMethod($findMethod)
     {
         $this->findMethod = $findMethod;
-
-        return $this;
     }
 
     /**

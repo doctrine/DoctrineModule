@@ -1,3 +1,56 @@
+# 1.0
+
+ * Dependency to zendframework has been bumped from `~2.1` to `~2.2`
+ * Dependency to doctrine/common has been bumped from `>=2.3,<2.5-dev` to `>=2.4,<2.6-dev`
+ * Class name changes:
+       - `DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory` -> `DoctrineModule\ServiceFactory\DoctrineServiceAbstractFactory`
+       - `DoctrineModule\Authentication\Adapter\ObjectRepository` -> `DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter`
+       - `DoctrineModule\Authentication\Storage\ObjectRepository` -> `DoctrineModule\Authentication\Storage\ObjectRepositoryStorage`
+       - `DoctrineModule\Paginator\Adatper\Collection` -> `DoctrineModule\Paginator\Adatper\CollectionAdapter`
+       - `DoctrineModule\Paginator\Adatper\Selectable` -> ``DoctrineModule\Paginator\Adatper\SelectableAdater`
+       - `DoctrineModule\Stdlib\Hydrator\DoctrineObject` -> `DoctrineModule\Stdlib\Hydrator\ObjectHydrator`
+       - All `DoctrineModule\Options\*.php` -> `DoctrineModule\Options\*Options.php`
+ * Any fluent interfaces have been removed.
+ * Configuration has changed significantly. Most services are created by `DoctrineModule\ServiceFactory\DoctrineServiceAbstractFactory`,
+   and expects configuration to follow this pattern:
+       - All service names should start with `doctrine.`.
+       - All service names should use `.` to delimit words in the service name
+       - All service names should survive `Zend\ServiceManager\ServiceManager`'s cannonacalization process unchanged.
+         If they do not, getting the service directly will work, but aliases will not. In practice, this means service names should be all lower case,
+         and should not include the characters `_-\ /`.
+       - If a service with name `doctrine.foo.bar.baz` is requested, then `DoctrineServiceAbstractFactory` will get the service
+        called `doctrine.factory.foo.bar` from the ServiceManager. The `doctrine.factory.foo.bar` instance must be an object implementing
+        `DoctrineModule\Factory\AbstractFactoryInterface`. `$instanace::create($options)` will be called to create the oringally
+        requested `doctrine.foo.bar.baz` service. The `$options` passed to `create` will be an array taken from
+        the application config: `$config['doctrine']['foo']['bar']['baz']`s.
+       - For example in the config options for the default EventManager should be placed in
+         `$config['doctrine']['eventmanager']['default']`. The EventManager will be created by a
+         `DoctrineModule\Factory\EventManagerFactory` which is fetched from the ServiceManager with the service
+         name `doctrine.factory.eventmanager`. To get a configured instance of the default EventManager call
+         `$serviceManager->get('doctrine.eventmanager.default')`.
+ * Configuration for authentication services has been rearranged to follow the pattern above, with separate
+   config keys for `adapter`, `storage`, and `service`. See `module.config.php`.
+ * Authentication configuration no longer supports setting `objectRepository`. You must set both `objectManager` and
+   `identityClass`. This significantly simplifies the code, and allows a flat config for easy caching.
+ * Most of the factories that were in `DoctrineModule\Service` have been moved to `DoctrineModule\Builder`. This is because
+   they are not actual service factories to be consumed by the ServiceManager. Rather they are consumed by `DoctrineServiceAbstractFactory`.
+ * When configuring drivers, the cache key must now be a full service name. eg `doctrine.cache.array`.
+ * When configuring a driver chain, the `$options->drivers` array may contain driver instances, or complete service names.
+
+eg:
+
+    'driver' => array(
+         'default' => array(
+             'drivers' => array(
+                 'My\Namespace' => 'doctrine.driver.mydriver'
+             ),
+         ),
+         'mydriver' => array(
+             'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
+             'paths' => array('path/to/my/namespace')
+         ),
+     ),
+
 # 0.8.0
 
  * Dependency to zendframework has been bumped from `2.*` to `~2.1`

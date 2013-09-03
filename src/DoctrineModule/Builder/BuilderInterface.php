@@ -17,17 +17,24 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Builder;
 
 /**
- * Version
+ * Interface used by builders consumed by DoctrineModule\Service\DoctrineServiceAbstractFactory
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Version
+interface BuilderInterface
 {
-    const VERSION = '1.0.0';
+
+    /**
+     * Create an instance of the desired service
+     * The options class should be an array, instance of \Traverable or an instance of an options class
+     *
+     * @param $options mixed
+     * @return object
+     */
+    public function build($options);
 }

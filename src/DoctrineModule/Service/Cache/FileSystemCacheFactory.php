@@ -17,17 +17,37 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModule\Service\Cache;
+
+use Doctrine\Common\Cache\FilesystemCache;
+use DoctrineModule\Options\Cache\FilesystemCacheOptions;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Version
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @author  Tim Roediger <superdweebie@gmail.com>
  */
-class Version
+class FilesystemCacheFactory implements FactoryInterface
 {
-    const VERSION = '1.0.0';
+    /**
+     * {@inheritDoc}
+     * @return Application
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $config = $serviceLocator->get('Config');
+        if (isset($config['doctrine']['cache']['filesystem'])) {
+            $options = new FilesystemCacheOptions($config['doctrine']['cache']['filesystem']);
+        } else {
+            $options = new FilesystemCacheOptions();
+        }
+
+        $instance = new FilesystemCache($options->getDirectory());
+        $instance->setNamespace($options->getNamespace());
+
+        return $instance;
+    }
 }

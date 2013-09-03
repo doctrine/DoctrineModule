@@ -17,17 +17,28 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModule;
+namespace DoctrineModuleTest\Builder\Authentication;
 
-/**
- * Version
- *
- * @license MIT
- * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
- */
-class Version
+use DoctrineModule\Builder\Authentication\AdapterBuilder;
+use PHPUnit_Framework_TestCase as BaseTestCase;
+
+class AdapterBuilderTest extends BaseTestCase
 {
-    const VERSION = '1.0.0';
+    public function testWillInstantiateFromFQCN()
+    {
+
+        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
+        $builder = new AdapterBuilder;
+        $adapter = $builder->build(
+            array(
+                'object_manager' => $objectManager,
+                'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                'identity_property' => 'username',
+                'credential_property' => 'password'
+            )
+        );
+
+        $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepositoryAdapter', $adapter);
+    }
 }
