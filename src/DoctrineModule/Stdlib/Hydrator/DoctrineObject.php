@@ -177,6 +177,10 @@ class DoctrineObject extends AbstractHydrator
             $getter = 'get' . ucfirst($fieldName);
             $isser  = 'is' . ucfirst($fieldName);
 
+            if (!$this->getFilter()->filter($fieldName)) {
+                continue;
+            }
+
             if (in_array($getter, $methods)) {
                 $data[$fieldName] = $this->extractValue($fieldName, $object->$getter(), $object);
             } elseif (in_array($isser, $methods)) {
@@ -202,7 +206,12 @@ class DoctrineObject extends AbstractHydrator
         $refl       = $this->metadata->getReflectionClass();
 
         $data = array();
+
         foreach ($fieldNames as $fieldName) {
+            if (!$this->getFilter()->filter($fieldName)) {
+                continue;
+            }
+
             $reflProperty = $refl->getProperty($fieldName);
             $reflProperty->setAccessible(true);
 
