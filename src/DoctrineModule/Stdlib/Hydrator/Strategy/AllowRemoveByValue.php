@@ -63,6 +63,8 @@ class AllowRemoveByValue extends AbstractCollectionStrategy
 
         if ($collection instanceof Collection) {
             $collection = $collection->toArray();
+        } else {
+            $collection = array();
         }
 
         $toAdd      = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
