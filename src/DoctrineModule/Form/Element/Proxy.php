@@ -326,7 +326,7 @@ class Proxy implements ObjectManagerAwareInterface
                 throw new RuntimeException('No method name was set');
             }
             $findMethodName   = $findMethod['name'];
-            $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : null;
+            $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : array();
 
             $repository = $this->objectManager->getRepository($this->targetClass);
             if (!method_exists($repository, $findMethodName)) {
