@@ -70,12 +70,12 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @var bool
      */
-    protected $includeEmptyOption = false;
+    protected $displayEmptyItem = false;
 
     /**
      * @var string
      */
-    protected $emptyOptionLabel = '';
+    protected $emptyItemLabel = '';
 
     public function setOptions($options)
     {
@@ -103,12 +103,12 @@ class Proxy implements ObjectManagerAwareInterface
             $this->setIsMethod($options['is_method']);
         }
 
-        if (isset($options['include_empty_option'])) {
-            $this->setIncludeEmptyOption($options['include_empty_option']);
+        if (isset($options['display_empty_item'])) {
+            $this->setDisplayEmptyItem($options['display_empty_item']);
         }
 
-        if (isset($options['empty_option_label'])) {
-            $this->setEmptyOptionLabel($options['empty_option_label']);
+        if (isset($options['empty_item_label'])) {
+            $this->setEmptyItemLabel($options['empty_item_label']);
         }
     }
 
@@ -134,12 +134,12 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set the label for the empty option
      *
-     * @param string          $emptyOptionLabel
+     * @param string          $emptyItemLabel
      * @return Proxy
      */
-    public function setEmptyOptionLabel($emptyOptionLabel)
+    public function setEmptyItemLabel($emptyItemLabel)
     {
-        $this->emptyOptionLabel = $emptyOptionLabel;
+        $this->emptyItemLabel = $emptyItemLabel;
 
         return $this;
     }
@@ -147,20 +147,20 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @return string
      */
-    public function getEmptyOptionLabel()
+    public function getEmptyItemLabel()
     {
-        return $this->emptyOptionLabel;
+        return $this->emptyItemLabel;
     }
 
     /**
      * Set a flag, whether to include the empty option at the beginning or not
      *
-     * @param boolean         $includeEmptyOption
+     * @param boolean         $displayEmptyItem
      * @return Proxy
      */
-    public function setIncludeEmptyOption($includeEmptyOption)
+    public function setDisplayEmptyItem($displayEmptyItem)
     {
-        $this->includeEmptyOption = $includeEmptyOption;
+        $this->displayEmptyItem = $displayEmptyItem;
 
         return $this;
     }
@@ -168,9 +168,9 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @return boolean
      */
-    public function getIncludeEmptyOption()
+    public function getDisplayEmptyItem()
     {
-        return $this->includeEmptyOption;
+        return $this->displayEmptyItem;
     }
 
     /**
@@ -433,9 +433,10 @@ class Proxy implements ObjectManagerAwareInterface
         $objects    = $this->getObjects();
         $options    = array();
 
-        if ($this->includeEmptyOption || empty($objects)) {
-            $options[''] = $this->getEmptyOptionLabel();
+        if ($this->displayEmptyItem || empty($objects)) {
+            $options[''] = $this->getEmptyItemLabel();
         }
+
         if (!empty($objects)) {
             foreach ($objects as $key => $object) {
                 if (null !== ($generatedLabel = $this->generateLabel($object))) {

@@ -142,11 +142,11 @@ $this->add(
         'type' => 'DoctrineModule\Form\Element\ObjectSelect',
         'name' => 'name',
         'options' => array(
-            'object_manager'       => $this->getObjectManager(),
-            'target_class'         => 'Module\Entity\SomeEntity',
-            'property'             => 'property',
-            'include_empty_option' => true,
-            'empty_option_label'   => '---',
+            'object_manager'     => $this->getObjectManager(),
+            'target_class'       => 'Module\Entity\SomeEntity',
+            'property'           => 'property',
+            'display_empty_item' => true,
+            'empty_item_label'   => '---',
         ),
     )
 );
