@@ -130,3 +130,24 @@ $this->add(
     )
 );
 ```
+
+### Example 4 : including an empty option
+
+If you want to include an empty option at the top, set the `include_empty_option` setting to true.
+You can also specify the `empty_option_label` setting, the default is an empty string.
+
+```php
+$this->add(
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager'     => $this->getObjectManager(),
+            'target_class'       => 'Module\Entity\SomeEntity',
+            'property'           => 'property',
+            'display_empty_item' => true,
+            'empty_item_label'   => '---',
+        ),
+    )
+);
+```
