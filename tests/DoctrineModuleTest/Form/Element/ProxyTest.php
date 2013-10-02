@@ -206,6 +206,22 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    public function testDisplayEmptyItemAndEmptyItemLabelOptionsUsedForGetValueOptions()
+    {
+        $this->prepareProxy();
+
+        $this->proxy->setOptions(
+            array(
+                'display_empty_item' => true,
+                'empty_item_label'   => '---',
+            )
+        );
+
+        $result = $this->proxy->getValueOptions();
+        $this->assertArrayHasKey('', $result);
+        $this->assertEquals($result[''], '---');
+    }
+
     public function testLabelGeneratorUsedForGetValueOptions()
     {
         $this->prepareProxy();

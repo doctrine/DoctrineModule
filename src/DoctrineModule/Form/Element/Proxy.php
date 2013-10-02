@@ -67,6 +67,16 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected $objectManager;
 
+    /**
+     * @var bool
+     */
+    protected $displayEmptyItem = false;
+
+    /**
+     * @var string
+     */
+    protected $emptyItemLabel = '';
+
     public function setOptions($options)
     {
         if (isset($options['object_manager'])) {
@@ -92,6 +102,14 @@ class Proxy implements ObjectManagerAwareInterface
         if (isset($options['is_method'])) {
             $this->setIsMethod($options['is_method']);
         }
+
+        if (isset($options['display_empty_item'])) {
+            $this->setDisplayEmptyItem($options['display_empty_item']);
+        }
+
+        if (isset($options['empty_item_label'])) {
+            $this->setEmptyItemLabel($options['empty_item_label']);
+        }
     }
 
     public function getValueOptions()
@@ -111,6 +129,48 @@ class Proxy implements ObjectManagerAwareInterface
         $this->loadObjects();
 
         return $this->objects;
+    }
+
+    /**
+     * Set the label for the empty option
+     *
+     * @param string          $emptyItemLabel
+     * @return Proxy
+     */
+    public function setEmptyItemLabel($emptyItemLabel)
+    {
+        $this->emptyItemLabel = $emptyItemLabel;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmptyItemLabel()
+    {
+        return $this->emptyItemLabel;
+    }
+
+    /**
+     * Set a flag, whether to include the empty option at the beginning or not
+     *
+     * @param boolean         $displayEmptyItem
+     * @return Proxy
+     */
+    public function setDisplayEmptyItem($displayEmptyItem)
+    {
+        $this->displayEmptyItem = $displayEmptyItem;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDisplayEmptyItem()
+    {
+        return $this->displayEmptyItem;
     }
 
     /**
@@ -373,9 +433,11 @@ class Proxy implements ObjectManagerAwareInterface
         $objects    = $this->getObjects();
         $options    = array();
 
-        if (empty($objects)) {
-            $options[''] = '';
-        } else {
+        if ($this->displayEmptyItem || empty($objects)) {
+            $options[''] = $this->getEmptyItemLabel();
+        }
+
+        if (!empty($objects)) {
             foreach ($objects as $key => $object) {
                 if (null !== ($generatedLabel = $this->generateLabel($object))) {
                     $label = $generatedLabel;
