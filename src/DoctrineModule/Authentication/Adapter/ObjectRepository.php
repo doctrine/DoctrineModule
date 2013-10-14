@@ -129,10 +129,8 @@ class ObjectRepository extends AbstractAdapter
     public function authenticate()
     {
         $this->setup();
-        $options  = $this->options;
-        $identity = $options
-            ->getObjectRepository()
-            ->findOneBy(array($options->getIdentityProperty() => $this->identity));
+
+        $identity = $this->findIdentityObject();
 
         if (!$identity) {
             $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
@@ -239,5 +237,20 @@ class ObjectRepository extends AbstractAdapter
             $this->authenticationResultInfo['identity'],
             $this->authenticationResultInfo['messages']
         );
+    }
+
+    /**
+     * @return null|object The found identity object or NULL if it was not found
+     */
+    protected function findIdentityObject()
+    {
+        $repository = $this->options->getObjectRepository();
+        $method     = $this->options->getObjectRepositoryMethod();
+
+        if ($method) {
+            return call_user_func_array(array($repository, $method), array($this->identity));
+        }
+
+        return $repository->findOneBy(array($this->options->getIdentityProperty() => $this->identity));
     }
 }

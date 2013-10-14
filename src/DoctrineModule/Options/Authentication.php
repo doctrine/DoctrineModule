@@ -81,6 +81,13 @@ class Authentication extends AbstractOptions
     protected $objectRepository;
 
     /**
+     * A property of the configured object repository that can retrieve an identity object from an identity value
+     *
+     * @var null|string
+     */
+    protected $objectRepositoryMethod;
+
+    /**
      * Entity's class name
      *
      * @var string
@@ -166,6 +173,23 @@ class Authentication extends AbstractOptions
         }
 
         return $this->objectManager->getRepository($this->identityClass);
+    }
+
+    /**
+     * @param null|string $objectRepositoryMethod
+     * @return $this
+     */
+    public function setObjectRepositoryMethod($objectRepositoryMethod)
+    {
+        $this->objectRepositoryMethod = $objectRepositoryMethod;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getObjectRepositoryMethod()
+    {
+        return $this->objectRepositoryMethod;
     }
 
     /**
