@@ -55,7 +55,7 @@ class PropertyOutput extends Output
      * @param string $message
      * @param bool $newline
      */
-    protected function doWrite($message, $newline)
+    public function doWrite($message, $newline)
     {
         $this->message = $message;
     }
