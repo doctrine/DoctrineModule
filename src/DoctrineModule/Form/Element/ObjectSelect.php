@@ -56,6 +56,12 @@ class ObjectSelect extends SelectElement
      */
     public function setValue($value)
     {
+        $multiple = $this->getAttribute('multiple');
+
+        if (true === $multiple || 'multiple' === $multiple) {
+            return parent::setValue(array_map(array($this->getProxy(), 'getValue'), $value));
+        }
+
         return parent::setValue($this->getProxy()->getValue($value));
     }
 
