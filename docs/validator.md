@@ -74,7 +74,7 @@ class User extends Form
        	));
 
        	$emailInput->getValidatorChain()
-                      ->addValidator($noObjectExistsValidator);
+                      ->attach($noObjectExistsValidator);
 	}
 }
 ```
