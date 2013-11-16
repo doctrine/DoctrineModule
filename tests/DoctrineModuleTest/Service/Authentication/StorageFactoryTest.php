@@ -33,6 +33,10 @@ class StorageFactoryTest extends BaseTestCase
         $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
+        $serviceManager->setInvokableClass(
+            'DoctrineModule\Authentication\Storage\Session',
+            'Zend\Authentication\Storage\Session'
+        );
         $serviceManager->setService(
             'Configuration',
             array(
