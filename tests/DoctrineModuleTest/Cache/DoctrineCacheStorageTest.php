@@ -716,4 +716,26 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         $this->options->setWritable(false);
         $this->assertSame(array('key'), $this->storage->touchItems(array('key')));
     }
+
+    public function testSetItemAndSetItemsCallSaveWithTtl()
+    {
+        $ttl = rand();
+
+        $provider = $this->getMock('Doctrine\Common\Cache\ArrayCache');
+        $provider->expects($this->exactly(4))
+                 ->method('save')
+                 ->with($this->anything(), $this->anything(), $ttl);
+
+        $this->storage = new DoctrineCacheStorage($this->options, $provider);
+
+        $this->options->setTtl($ttl);
+        $this->storage->setItem('key', 'value');
+
+        $items = array(
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => 'value3'
+        );
+        $this->storage->setItems($items);
+    }
 }
