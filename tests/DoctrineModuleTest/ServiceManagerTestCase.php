@@ -19,14 +19,13 @@
 
 namespace DoctrineModuleTest;
 
-use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
 
 /**
  * Base test case to be used when a service manager instance is required
  */
-class ServiceManagerTestCase extends BaseTestCase
+class ServiceManagerTestCase
 {
     /**
      * @var array

@@ -8,6 +8,7 @@ use ReflectionClass;
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
+use DoctrineModule\Stdlib\Hydrator\Filter;
 
 class DoctrineObjectTest extends BaseTestCase
 {
@@ -1930,5 +1931,39 @@ class DoctrineObjectTest extends BaseTestCase
         $data = $this->hydratorByValue->extract($entity);
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity', $entity);
         $this->assertEquals(array('id' => 2, 'done' => true), $data);
+    }
+
+    public function testExtractWithPropertyNameFilterByValue()
+    {
+        $entity = new Asset\SimpleEntity();
+        $entity->setId(2);
+        $entity->setField('foo', false);
+
+        $filter = new Filter\PropertyName(array('id'), false);
+
+        $this->configureObjectManagerForSimpleEntity();
+
+        $this->hydratorByValue->addFilter('propertyname', $filter);
+        $data = $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(2, $data['id']);
+        $this->assertEquals(array('id'), array_keys($data), 'Only the "id" field should have been extracted.');
+    }
+
+    public function testExtractWithPropertyNameFilterByReference()
+    {
+        $entity = new Asset\SimpleEntity();
+        $entity->setId(2);
+        $entity->setField('foo', false);
+
+        $filter = new Filter\PropertyName(array('id'), false);
+
+        $this->configureObjectManagerForSimpleEntity();
+
+        $this->hydratorByReference->addFilter('propertyname', $filter);
+        $data = $this->hydratorByReference->extract($entity);
+
+        $this->assertEquals(2, $data['id']);
+        $this->assertEquals(array('id'), array_keys($data), 'Only the "id" field should have been extracted.');
     }
 }
