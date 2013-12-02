@@ -6,7 +6,7 @@ use DoctrineModule\Module;
 use DoctrineModuleTest\ServiceManagerTestCase;
 
 /**
- * @covers ZfcDatagrid\Module
+ * @covers DoctrineModule\Module
  */
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
@@ -43,7 +43,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $module->onBootstrap($event);
     }
 
-    public function testConfig()
+    public function testGetConfig()
     {
         $module = new Module();
         
