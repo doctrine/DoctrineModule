@@ -57,7 +57,11 @@ class PropertyOutput extends Output
      */
     protected function doWrite($message, $newline)
     {
-        $this->message = $message;
+        if($this->message === null){
+            $this->message = '';
+        }
+        
+        $this->message .= $message.$newline;
     }
 
     /**
