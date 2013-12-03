@@ -25,7 +25,7 @@ use DoctrineModuleTest\ServiceManagerTestCase;
 
 /**
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
- * @covers DoctrineModule\Module
+ * @covers \DoctrineModule\Module
  */
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
