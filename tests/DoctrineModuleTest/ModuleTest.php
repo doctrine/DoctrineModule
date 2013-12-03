@@ -109,21 +109,12 @@ class ModuleTest extends PHPUnit_Framework_TestCase
      */
     public function testGetConsoleUsage()
     {
-        $console = $this->getMock('Zend\Console\Adapter\AbstractAdapter');
-        
-        $eventMock = $this->eventMock;
-        $sm = $eventMock->getTarget()->getServiceManager();
-        $cli = $sm->get('doctrine.cli');
-        
-        $excepted = $cli->getHelp();
-        $excepted = strip_tags($excepted);
-        
         $module = new Module();
-        $module->onBootstrap($eventMock);
+        $module->onBootstrap($$this->eventMock);
         
+        $console = $this->getMock('Zend\Console\Adapter\AbstractAdapter');
         $actual = $module->getConsoleUsage($console);
         
-        $this->assertStringStartsWith('DoctrineModule Command Line Interface', $actual);
-        $this->assertStringEndsWith('Lists commands' . "\n", $actual);
+        $this->assertStringMatchesFormat("DoctrineModule Command Line Interface%aLists commands\n", $actual);
     }
 }
