@@ -19,7 +19,7 @@
 namespace DoctrineModuleTest\Component\Console\Output;
 
 use PHPUnit_Framework_TestCase as TestCase;
-uuse DoctrineModule\Component\Console\Output\PropertyOutput;
+use DoctrineModule\Component\Console\Output\PropertyOutput;
 
 /**
  * Tests for {@see \DoctrineModule\Component\Console\Output\PropertyOutput}
