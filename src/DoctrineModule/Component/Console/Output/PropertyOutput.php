@@ -32,7 +32,7 @@ class PropertyOutput extends Output
     /**
      * @var string
      */
-    private $message;
+    private $message = '';
 
     /**
      * @param int $verbosity
@@ -57,10 +57,6 @@ class PropertyOutput extends Output
      */
     protected function doWrite($message, $newline)
     {
-        if($this->message === null){
-            $this->message = '';
-        }
-        
         $this->message .= $message.$newline;
     }
 
