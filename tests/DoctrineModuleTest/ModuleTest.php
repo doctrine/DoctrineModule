@@ -115,6 +115,6 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $console = $this->getMock('Zend\Console\Adapter\AbstractAdapter');
         $actual = $module->getConsoleUsage($console);
         
-        $this->assertStringMatchesFormat("DoctrineModule Command Line Interface%aLists commands\n", $actual);
+        $this->assertStringMatchesFormat("DoctrineModule Command Line Interface%aLists commands", $actual);
     }
 }
