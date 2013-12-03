@@ -52,7 +52,7 @@ class PropertyOutputTest extends TestCase
         $output->write($message, PHP_EOL);
         $output->write($message2, PHP_EOL);
         
-        $shouldBe = $message . PHP_EOL . $message2.PHP_EOL;
-        $this->assertEquals($shouldBe, $output->getMessage());
+        $expected = $message . PHP_EOL . $message2 . PHP_EOL;
+        $this->assertEquals($expected, $output->getMessage());
     }
 }
