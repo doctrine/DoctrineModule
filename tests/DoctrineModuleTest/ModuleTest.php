@@ -65,23 +65,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testOnBootstrap()
     {
         $module = new Module();
-        
-        $serviceManagerUtil = new ServiceManagerTestCase();
-        
-        $appMock = $this->getMock('Zend\Mvc\Application', array(), array(
-            array(),
-            $serviceManagerUtil->getServiceManager()
-        ));
-        $appMock->expects($this->any())
-            ->method('getServiceManager')
-            ->will($this->returnValue($serviceManagerUtil->getServiceManager()));
-        
-        $event = $this->getMock('Zend\EventManager\Event');
-        $event->expects($this->any())
-            ->method('getTarget')
-            ->will($this->returnValue($appMock));
-        
-        $module->onBootstrap($event);
+        $module->onBootstrap($this->eventMock);
     }
 
     public function testGetConfig()
