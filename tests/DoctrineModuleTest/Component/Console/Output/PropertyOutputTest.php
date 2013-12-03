@@ -42,7 +42,9 @@ class PropertyOutputTest extends TestCase
         $this->assertEquals($message, $output->getMessage());
     }
     
-        
+    /**
+     * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
+     */
     public function testWriteConcat()
     {
         $message = 'message';
