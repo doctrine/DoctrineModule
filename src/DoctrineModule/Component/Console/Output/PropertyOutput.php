@@ -63,7 +63,7 @@ class PropertyOutput extends Output
             $newline = '';
         }
         
-        $this->message .= $message . newline;
+        $this->message .= $message . $newline;
     }
 
     /**
