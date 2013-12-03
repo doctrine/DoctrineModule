@@ -20,6 +20,7 @@
 namespace DoctrineModuleTest;
 
 use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use DoctrineModule\Module;
 use DoctrineModuleTest\ServiceManagerTestCase;
 
@@ -30,6 +31,39 @@ use DoctrineModuleTest\ServiceManagerTestCase;
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * 
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    private $appMock;
+
+    /**
+     * 
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventMock;
+
+    public function setUp()
+    {
+        $serviceManagerUtil = new ServiceManagerTestCase();
+        
+        $this->appMock = $this->getMock('Zend\Mvc\Application', array(), array(
+            array(),
+            $serviceManagerUtil->getServiceManager()
+        ));
+        $this->appMock->expects($this->any())
+            ->method('getServiceManager')
+            ->will($this->returnValue($serviceManagerUtil->getServiceManager()));
+        
+        $this->eventMock = $this->getMock('Zend\EventManager\Event');
+        $this->eventMock->expects($this->any())
+            ->method('getTarget')
+            ->will($this->returnValue($this->appMock));
+    }
+    
+    /**
+     * @covers \DoctrineModule\Module
+     */
     public function testInterfaces()
     {
         $module = new Module();
@@ -40,28 +74,18 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\ModuleManager\Feature\ConfigProviderInterface', $module);
     }
 
+    /**
+     * @covers \DoctrineModule\Module::onBootstrap
+     */
     public function testOnBootstrap()
     {
         $module = new Module();
-        
-        $serviceManagerUtil = new ServiceManagerTestCase();
-        
-        $appMock = $this->getMock('Zend\Mvc\Application', array(), array(
-            array(),
-            $serviceManagerUtil->getServiceManager()
-        ));
-        $appMock->expects($this->any())
-            ->method('getServiceManager')
-            ->will($this->returnValue($serviceManagerUtil->getServiceManager()));
-        
-        $event = $this->getMock('Zend\EventManager\Event');
-        $event->expects($this->any())
-            ->method('getTarget')
-            ->will($this->returnValue($appMock));
-        
-        $module->onBootstrap($event);
+        $module->onBootstrap($this->eventMock);
     }
 
+    /**
+     * @covers \DoctrineModule\Module::getConfig
+     */
     public function testGetConfig()
     {
         $module = new Module();
@@ -77,5 +101,46 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('console', $config);
         
         $this->assertSame($config, unserialize(serialize($config)));
+    }
+    
+    /**
+     * Should display the help message in plain message
+     * @covers \DoctrineModule\Module::getConsoleUsage
+     */
+    public function testGetConsoleUsage()
+    {
+        $cliMock = $this->getMock('Symfony\Component\Console\Application', array(
+            'setDispatcher',
+            'run'
+        ), array(), '', false, false);
+        $cliMock->expects($this->any())
+            ->method('run')
+            ->will($this->returnCallback(function ($input, $output)
+        {
+            if ($input == 'list') {
+                $output->write('start', true);
+                $output->write('Line2', true);
+                $output->write('Line3');
+                $output->write('Line4');
+                $output->write('end');
+            }
+        }));
+        
+        $sm = $this->eventMock->getTarget()->getServiceManager();
+        $cliOriginal = $sm->get('doctrine.cli');
+        
+        $sm->setAllowOverride(true);
+        $sm->setService('doctrine.cli', $cliMock);
+        
+        $module = new Module();
+        $module->onBootstrap($this->eventMock);
+        
+        $console = $this->getMock('Zend\Console\Adapter\AbstractAdapter');
+        $actual = $module->getConsoleUsage($console);
+        
+        $this->assertStringMatchesFormat("start%aend", $actual);
+        
+        $sm->setService('doctrine.cli', $cliOriginal);
+        $sm->setAllowOverride(false);
     }
 }
