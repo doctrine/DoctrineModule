@@ -30,6 +30,28 @@ use DoctrineModuleTest\ServiceManagerTestCase;
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
 
+    private $appMock;
+
+    private $eventMock;
+
+    public function setUp()
+    {
+        $serviceManagerUtil = new ServiceManagerTestCase();
+        
+        $this->appMock = $this->getMock('Zend\Mvc\Application', array(), array(
+            array(),
+            $serviceManagerUtil->getServiceManager()
+        ));
+        $this->appMock->expects($this->any())
+            ->method('getServiceManager')
+            ->will($this->returnValue($serviceManagerUtil->getServiceManager()));
+        
+        $this->eventMock = $this->getMock('Zend\EventManager\Event');
+        $this->eventMock->expects($this->any())
+            ->method('getTarget')
+            ->will($this->returnValue($this->appMock));
+    }
+    
     public function testInterfaces()
     {
         $module = new Module();
