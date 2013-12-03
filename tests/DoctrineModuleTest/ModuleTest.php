@@ -110,7 +110,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testGetConsoleUsage()
     {
         $module = new Module();
-        $module->onBootstrap($$this->eventMock);
+        $module->onBootstrap($this->eventMock);
         
         $console = $this->getMock('Zend\Console\Adapter\AbstractAdapter');
         $actual = $module->getConsoleUsage($console);
