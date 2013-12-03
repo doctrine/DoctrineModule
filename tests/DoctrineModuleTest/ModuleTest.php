@@ -61,6 +61,9 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->appMock));
     }
     
+    /**
+     * @covers \DoctrineModule\Module
+     */
     public function testInterfaces()
     {
         $module = new Module();
@@ -71,12 +74,18 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\ModuleManager\Feature\ConfigProviderInterface', $module);
     }
 
+    /**
+     * @covers \DoctrineModule\Module::onBootstrap
+     */
     public function testOnBootstrap()
     {
         $module = new Module();
         $module->onBootstrap($this->eventMock);
     }
 
+    /**
+     * @covers \DoctrineModule\Module::getConfig
+     */
     public function testGetConfig()
     {
         $module = new Module();
@@ -96,6 +105,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     
     /**
      * Should display the help message in plain message
+     * @covers \DoctrineModule\Module::getConsoleUsage
      */
     public function testGetConsoleUsage()
     {
