@@ -78,4 +78,27 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         
         $this->assertSame($config, unserialize(serialize($config)));
     }
+    
+    /**
+     * Should display the help message in plain message
+     */
+    public function testGetConsoleUsage()
+    {
+        $console = $this->getMock('Zend\Console\Adapter\AbstractAdapter');
+        
+        $eventMock = $this->eventMock;
+        $sm = $eventMock->getTarget()->getServiceManager();
+        $cli = $sm->get('doctrine.cli');
+        
+        $excepted = $cli->getHelp();
+        $excepted = strip_tags($excepted);
+        
+        $module = new Module();
+        $module->onBootstrap($eventMock);
+        
+        $actual = $module->getConsoleUsage($console);
+        
+        $this->assertStringStartsWith('DoctrineModule Command Line Interface', $actual);
+        $this->assertStringEndsWith('Lists commands' . "\n", $actual);
+    }
 }
