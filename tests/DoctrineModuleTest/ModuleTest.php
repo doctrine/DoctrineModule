@@ -20,6 +20,7 @@
 namespace DoctrineModuleTest;
 
 use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use DoctrineModule\Module;
 use DoctrineModuleTest\ServiceManagerTestCase;
 
@@ -30,8 +31,16 @@ use DoctrineModuleTest\ServiceManagerTestCase;
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * 
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
     private $appMock;
 
+    /**
+     * 
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
     private $eventMock;
 
     public function setUp()
