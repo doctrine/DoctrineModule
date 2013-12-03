@@ -115,16 +115,15 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         ), array(), '', false, false);
         $cliMock->expects($this->any())
             ->method('run')
-            ->will($this->returnCallback(function ($input, $output)
-        {
-            if ($input == 'list') {
-                $output->write('start', true);
-                $output->write('Line2', true);
-                $output->write('Line3');
-                $output->write('Line4');
-                $output->write('end');
-            }
-        }));
+            ->will($this->returnCallback(function ($input, $output) {
+                if ($input == 'list') {
+                    $output->write('start', true);
+                    $output->write('Line2', true);
+                    $output->write('Line3');
+                    $output->write('Line4');
+                    $output->write('end');
+                }
+            }));
         
         $sm = $this->eventMock->getTarget()->getServiceManager();
         $cliOriginal = $sm->get('doctrine.cli');
