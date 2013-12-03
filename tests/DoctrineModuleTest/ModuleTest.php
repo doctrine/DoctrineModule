@@ -1,4 +1,22 @@
 <?php
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the MIT license. For more information, see
+ * <http://www.doctrine-project.org>.
+ */
+ 
 namespace DoctrineModuleTest;
 
 use PHPUnit_Framework_TestCase;
@@ -6,6 +24,7 @@ use DoctrineModule\Module;
 use DoctrineModuleTest\ServiceManagerTestCase;
 
 /**
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @covers DoctrineModule\Module
  */
 class ModuleTest extends PHPUnit_Framework_TestCase
@@ -56,35 +75,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('controllers', $config);
         $this->assertArrayHasKey('route_manager', $config);
         $this->assertArrayHasKey('console', $config);
-    }
-
-    public function testGetConsoleUsage()
-    {
-        $this->markTestIncomplete(
-            'Need further work'
-        );
         
-        $serviceManagerUtil = new ServiceManagerTestCase();
-        
-        $appMock = $this->getMock('Zend\Mvc\Application', array(), array(
-            array(),
-            $serviceManagerUtil->getServiceManager()
-        ));
-        $appMock->expects($this->any())
-            ->method('getServiceManager')
-            ->will($this->returnValue($serviceManagerUtil->getServiceManager()));
-        
-        $event = $this->getMock('Zend\EventManager\Event');
-        $event->expects($this->any())
-            ->method('getTarget')
-            ->will($this->returnValue($appMock));
-        
-        $module = new Module();
-        $module->onBootstrap($event);
-        
-        $console = $this->getMock('Zend\Console\Adapter\AbstractAdapter');
-        
-        // $this->assertTrue(is_array($module->getConsoleUsage($console)));
-        // $this->assertCount(8, $module->getConsoleUsage($console));
+        $this->assertSame($config, unserialize(serialize($config)));
     }
 }
