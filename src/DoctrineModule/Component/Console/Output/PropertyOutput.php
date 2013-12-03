@@ -57,7 +57,7 @@ class PropertyOutput extends Output
      */
     protected function doWrite($message, $newline)
     {
-        $this->message .= $message . $newline;
+        $this->message .= $message . ($newline ? PHP_EOL : '');
     }
 
     /**
