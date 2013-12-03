@@ -32,7 +32,7 @@ class PropertyOutput extends Output
     /**
      * @var string
      */
-    private $message;
+    private $message = '';
 
     /**
      * @param int $verbosity
@@ -57,7 +57,13 @@ class PropertyOutput extends Output
      */
     protected function doWrite($message, $newline)
     {
-        $this->message = $message;
+        if ($newline !== false) {
+            $newline = PHP_EOL;
+        } else {
+            $newline = '';
+        }
+        
+        $this->message .= $message . $newline;
     }
 
     /**
