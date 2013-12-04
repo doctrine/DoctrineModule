@@ -110,7 +110,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testGetConsoleUsage()
     {
         if (! interface_exists('Symfony\Component\EventDispatcher\EventDispatcherInterface')) {
-            class_alias('DoctrineModuleTest\mockInterface', 'Symfony\Component\EventDispatcher\EventDispatcherInterface');
+            class_alias('DoctrineModuleTest\EventDispatcherInterfaceMock', 'Symfony\Component\EventDispatcher\EventDispatcherInterface');
         }
         
         $cliMock = $this->getMock('Symfony\Component\Console\Application', array(
