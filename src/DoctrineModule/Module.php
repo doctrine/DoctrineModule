@@ -45,7 +45,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
-    private $serviceManager;
+    protected $serviceManager;
 
     /**
      * {@inheritDoc}
