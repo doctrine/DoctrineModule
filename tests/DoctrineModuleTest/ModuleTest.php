@@ -20,6 +20,7 @@
 namespace DoctrineModuleTest;
 
 use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_Assert;
 use PHPUnit_Framework_MockObject_MockObject;
 use DoctrineModule\Module;
 use DoctrineModuleTest\ServiceManagerTestCase;
@@ -80,7 +81,14 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testOnBootstrap()
     {
         $module = new Module();
+        
+        $this->assertEquals(null, PHPUnit_Framework_Assert::readAttribute($module, 'serviceManager'));
         $module->onBootstrap($this->eventMock);
+        
+        $actual = PHPUnit_Framework_Assert::readAttribute($module, 'serviceManager');
+        $this->assertInstanceOf('Zend\ServiceManager\ServiceManager', $actual);
+        $this->assertSame($this->eventMock->getTarget()
+            ->getServiceManager(), $actual);
     }
 
     /**
