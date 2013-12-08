@@ -305,4 +305,28 @@ class ObjectRepositoryTest extends BaseTestCase
 
         $this->assertFalse($adapter->authenticate()->isValid());
     }
+
+    public function testWillUseRepositoryMethod()
+    {
+        $entity = new IdentityObject();
+        $entity->setPassword('The123Password');
+
+        $objectRepository = $this->getMock('DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObjectRepository');
+        $objectRepository
+            ->expects($this->once())
+            ->method('findByEmail')
+            ->with($this->equalTo('some@email.com'))
+            ->will($this->returnValue($entity));
+
+        $adapter = new ObjectRepositoryAdapter();
+        $adapter->setOptions(array(
+            'object_repository'         => $objectRepository,
+            'object_repository_method'  => 'findByEmail',
+            'credential_property'       => 'password',
+        ));
+        $adapter->setIdentity('some@email.com');
+        $adapter->setCredential('The123Password');
+
+        $this->assertTrue($adapter->authenticate()->isValid());
+    }
 }
