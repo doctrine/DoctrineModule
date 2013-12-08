@@ -37,7 +37,7 @@ class PropertyOutputTest extends TestCase
     {
         $message = 'message';
 
-        $output = new \DoctrineModule\Component\Console\Output\PropertyOutput();
+        $output = new PropertyOutput();
         $output->write($message);
         $this->assertEquals($message, $output->getMessage());
     }

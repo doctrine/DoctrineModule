@@ -45,7 +45,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
-    protected $serviceManager;
+    private $serviceManager;
 
     /**
      * {@inheritDoc}
@@ -80,8 +80,9 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
      */
     public function getConsoleUsage(Console $console)
     {
-        $output = new PropertyOutput();
+        /* @var $cli \Symfony\Component\Console\Application */
         $cli    = $this->serviceManager->get('doctrine.cli');
+        $output = new PropertyOutput();
 
         $cli->run(new StringInput('list'), $output);
 

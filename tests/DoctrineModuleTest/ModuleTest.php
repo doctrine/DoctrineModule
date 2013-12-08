@@ -24,6 +24,8 @@ use PHPUnit_Framework_Assert;
 use PHPUnit_Framework_MockObject_MockObject;
 use DoctrineModule\Module;
 use DoctrineModuleTest\ServiceManagerTestCase;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
@@ -33,62 +35,51 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 {
 
     /**
-     * 
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\Application
      */
-    private $appMock;
+    private $application;
 
     /**
-     * 
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\MvcEvent
      */
-    private $eventMock;
+    private $event;
+
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager
+     */
+    private $serviceManager;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Application
+     */
+    private $cli;
 
     public function setUp()
     {
-        $serviceManagerUtil = new ServiceManagerTestCase();
-        
-        $this->appMock = $this->getMock('Zend\Mvc\Application', array(), array(
-            array(),
-            $serviceManagerUtil->getServiceManager()
-        ));
-        $this->appMock->expects($this->any())
-            ->method('getServiceManager')
-            ->will($this->returnValue($serviceManagerUtil->getServiceManager()));
-        
-        $this->eventMock = $this->getMock('Zend\EventManager\Event');
-        $this->eventMock->expects($this->any())
-            ->method('getTarget')
-            ->will($this->returnValue($this->appMock));
-    }
-    
-    /**
-     * @covers \DoctrineModule\Module
-     */
-    public function testInterfaces()
-    {
-        $module = new Module();
-        
-        $this->assertInstanceOf('Zend\ModuleManager\Feature\InitProviderInterface', $module);
-        $this->assertInstanceOf('Zend\ModuleManager\Feature\BootstrapListenerInterface', $module);
-        $this->assertInstanceOf('Zend\ModuleManager\Feature\ConfigProviderInterface', $module);
-        $this->assertInstanceOf('Zend\ModuleManager\Feature\ConfigProviderInterface', $module);
-    }
+        $this->application    = $this->getMock('Zend\Mvc\Application', array(), array(), '', false);
+        $this->event          = $this->getMock('Zend\Mvc\MvcEvent');
+        $this->serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager');
+        $this->cli            = $this->getMock('Symfony\Component\Console\Application', array('run'));
 
-    /**
-     * @covers \DoctrineModule\Module::onBootstrap
-     */
-    public function testOnBootstrap()
-    {
-        $module = new Module();
-        
-        $this->assertEquals(null, PHPUnit_Framework_Assert::readAttribute($module, 'serviceManager'));
-        $module->onBootstrap($this->eventMock);
-        
-        $actual = PHPUnit_Framework_Assert::readAttribute($module, 'serviceManager');
-        $this->assertInstanceOf('Zend\ServiceManager\ServiceManager', $actual);
-        $this->assertSame($this->eventMock->getTarget()
-            ->getServiceManager(), $actual);
+        $this
+            ->serviceManager
+            ->expects($this->any())
+            ->method('get')
+            ->with('doctrine.cli')
+            ->will($this->returnValue($this->cli));
+
+        $this
+            ->application
+            ->expects($this->any())
+            ->method('getServiceManager')
+            ->will($this->returnValue($this->serviceManager));
+
+        $this
+            ->event
+            ->expects($this->any())
+            ->method('getTarget')
+            ->will($this->returnValue($this->application));
     }
 
     /**
@@ -117,45 +108,27 @@ class ModuleTest extends PHPUnit_Framework_TestCase
      */
     public function testGetConsoleUsage()
     {
-        if (! interface_exists('Symfony\Component\EventDispatcher\EventDispatcherInterface')) {
-            class_alias('DoctrineModuleTest\EventDispatcherInterfaceMock', 'Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        }
-        
-        $cliMock = $this->getMock('Symfony\Component\Console\Application', array(
-            'setDispatcher',
-            'run'
-        ), array(), '', false, false);
-        $cliMock->expects($this->any())
+        $this
+            ->cli
+            ->expects($this->once())
             ->method('run')
-            ->will($this->returnCallback(function ($input, $output) {
-                if ($input == 'list') {
-                    $output->write('start', true);
-                    $output->write('Line2', true);
-                    $output->write('Line3');
-                    $output->write('Line4');
-                    $output->write('end');
-                }
+            ->with(
+                $this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
+                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface')
+            )
+            ->will($this->returnCallback(function (InputInterface $input, OutputInterface $output) {
+                $output->write($input->getFirstArgument() . ' - TEST');
+                $output->write(' - More output');
             }));
-        
-        $sm = $this->eventMock->getTarget()->getServiceManager();
-        $cliOriginal = $sm->get('doctrine.cli');
-        
-        $sm->setAllowOverride(true);
-        $sm->setService('doctrine.cli', $cliMock);
-        
-        $module = new Module();
-        $module->onBootstrap($this->eventMock);
-        
-        $console = $this->getMock('Zend\Console\Adapter\AbstractAdapter');
-        $actual = $module->getConsoleUsage($console);
-        
-        $this->assertStringMatchesFormat("start%aend", $actual);
-        
-        $sm->setService('doctrine.cli', $cliOriginal);
-        $sm->setAllowOverride(false);
-    }
-}
 
-interface EventDispatcherInterfaceMock
-{
+
+        $module = new Module();
+
+        $module->onBootstrap($this->event);
+
+        $this->assertSame(
+            'list - TEST - More output',
+            $module->getConsoleUsage($this->getMock('Zend\Console\Adapter\AdapterInterface'))
+        );
+    }
 }
