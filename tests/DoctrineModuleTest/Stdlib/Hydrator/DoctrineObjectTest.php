@@ -765,6 +765,24 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals('foo', $entity->getField(false));
     }
 
+    /**
+     * When using hydration by reference, it won't use the public API of the entity to set values (getters)
+     *
+     * @covers \DoctrineModule\Stdlib\Hydrator\DoctrineObject::hydrateByReference
+     */
+    public function testCanHydrateSimpleEntityWithStringIdByReference()
+    {
+        $entity = new Asset\SimpleEntity();
+        $data   = array('id' => 'bar', 'field' => 'foo');
+
+        $this->configureObjectManagerForSimpleEntityWithStringId();
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('foo', $entity->getField(false));
+    }
+
     public function testReuseExistingEntityIfDataArrayContainsIdentifier()
     {
         // When using hydration by reference, it won't use the public API of the entity to set values (setters)

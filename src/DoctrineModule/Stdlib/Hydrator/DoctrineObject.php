@@ -289,9 +289,13 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function hydrateByReference(array $data, $object)
     {
-        $object   = $this->tryConvertArrayToObject($data, $object);
+        $tryObject   = $this->tryConvertArrayToObject($data, $object);
         $metadata = $this->metadata;
         $refl     = $metadata->getReflectionClass();
+
+        if (is_object($tryObject)) {
+            $object = $tryObject;
+        }
 
         foreach ($data as $field => $value) {
             // Ignore unknown fields
