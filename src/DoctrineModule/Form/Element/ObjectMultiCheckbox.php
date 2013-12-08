@@ -22,6 +22,7 @@ namespace DoctrineModule\Form\Element;
 use DoctrineModule\Form\Element\Proxy;
 use Zend\Form\Element\MultiCheckbox;
 use Zend\Form\Form;
+use Zend\Stdlib\ArrayUtils;
 
 class ObjectMultiCheckbox extends MultiCheckbox
 {
@@ -56,7 +57,15 @@ class ObjectMultiCheckbox extends MultiCheckbox
      */
     public function setValue($value)
     {
-        return parent::setValue($this->getProxy()->getValue($value));
+        if ($value instanceof \Traversable) {
+            $value = ArrayUtils::iteratorToArray($value);
+        } elseif ($value == null) {
+            return parent::setValue(array());
+        } elseif (!is_array($value)) {
+            $value = (array)$value;
+        }
+
+        return parent::setValue(array_map(array($this->getProxy(), 'getValue'), $value));
     }
 
     /**

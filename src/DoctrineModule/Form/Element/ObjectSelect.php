@@ -22,6 +22,7 @@ namespace DoctrineModule\Form\Element;
 use DoctrineModule\Form\Element\Proxy;
 use Zend\Form\Element\Select as SelectElement;
 use Zend\Form\Form;
+use Zend\Stdlib\ArrayUtils;
 
 class ObjectSelect extends SelectElement
 {
@@ -56,6 +57,20 @@ class ObjectSelect extends SelectElement
      */
     public function setValue($value)
     {
+        $multiple = $this->getAttribute('multiple');
+
+        if (true === $multiple || 'multiple' === $multiple) {
+            if ($value instanceof \Traversable) {
+                $value = ArrayUtils::iteratorToArray($value);
+            } elseif ($value == null) {
+                return parent::setValue(array());
+            } elseif (!is_array($value)) {
+                $value = (array)$value;
+            }
+
+            return parent::setValue(array_map(array($this->getProxy(), 'getValue'), $value));
+        }
+
         return parent::setValue($this->getProxy()->getValue($value));
     }
 
