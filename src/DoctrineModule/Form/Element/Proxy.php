@@ -110,6 +110,10 @@ class Proxy implements ObjectManagerAwareInterface
         if (isset($options['empty_item_label'])) {
             $this->setEmptyItemLabel($options['empty_item_label']);
         }
+
+        if(isset($options['objects'])) {
+            $this->setObjects($options['objects']) ;
+        }
     }
 
     public function getValueOptions()
@@ -119,6 +123,19 @@ class Proxy implements ObjectManagerAwareInterface
         }
 
         return $this->valueOptions;
+    }
+
+    /**
+     * Set objects to proxy 
+     *
+     * @param array           $objects
+     * @return Proxy
+    */
+    public function setObjects($objects)
+    {
+        $this->objects = $objects ;
+        
+        return $this ;
     }
 
     /**
