@@ -111,7 +111,7 @@ class Proxy implements ObjectManagerAwareInterface
             $this->setEmptyItemLabel($options['empty_item_label']);
         }
 
-        if(isset($options['objects'])) {
+        if (isset($options['objects'])) {
             $this->setObjects($options['objects']) ;
         }
     }
