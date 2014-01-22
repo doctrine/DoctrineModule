@@ -75,7 +75,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @var bool
      */
-    protected $disableLoading; = false ;
+    protected $disableLoading = false ;
 
     /**
      * @var string
