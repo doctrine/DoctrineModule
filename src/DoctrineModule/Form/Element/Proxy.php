@@ -73,6 +73,11 @@ class Proxy implements ObjectManagerAwareInterface
     protected $displayEmptyItem = false;
 
     /**
+     * @var bool
+     */
+    protected $disableLoading; = false ;
+
+    /**
      * @var string
      */
     protected $emptyItemLabel = '';
