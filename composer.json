@@ -33,7 +33,7 @@
     ],
     "require": {
         "php":                                ">=5.3.3",
-        "doctrine/common":                    ">=2.4,<2.5-dev",
+        "doctrine/common":                    ">=2.4,<2.6-dev",
         "symfony/console":                    "~2.2",
         "zendframework/zend-authentication":  "~2.2",
         "zendframework/zend-cache":           "~2.2",
