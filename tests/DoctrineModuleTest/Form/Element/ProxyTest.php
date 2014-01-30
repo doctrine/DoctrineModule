@@ -262,7 +262,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $objectManual = new FormObject;
 
-        $this->prepareProxy() ;        
+        $this->prepareProxy() ;
 
         $objectManual->setId(1)
             ->setUsername('object manual username')
