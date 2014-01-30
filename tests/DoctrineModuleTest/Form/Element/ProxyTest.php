@@ -244,6 +244,20 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    public function testDisableLoadingUsedForGetValueOptions()
+    {
+        $this->prepareProxy();
+
+        $this->proxy->setOptions(
+            array(
+                'disable_loading' => true
+            )
+        );
+
+        $result = $this->proxy->getDisableLoading();
+        $this->assertEquals($result, true);
+    }
+
     public function testExceptionThrownForNonCallableLabelGenerator()
     {
         $this->prepareProxy();
