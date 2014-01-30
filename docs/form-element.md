@@ -24,7 +24,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 class MyForm extends Form implements ObjectManagerAwareInterface
 {
     protected $objectManager;
-	
+    
     public function init()
     {
         $this->add(
@@ -42,12 +42,12 @@ class MyForm extends Form implements ObjectManagerAwareInterface
     
     public function setObjectManager(ObjectManager $objectManager)
     {
-    	$this->objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
     
     public function getObjectManager()
     {
-    	return $this->objectManager;
+        return $this->objectManager;
     }    
 }
 ```
@@ -147,6 +147,28 @@ $this->add(
             'property'           => 'property',
             'display_empty_item' => true,
             'empty_item_label'   => '---',
+        ),
+    )
+);
+```
+
+### Example 5 : manually set objects
+
+If you want options from the result of a custom query you can specify which `objects` to use.
+You can also disallow the proxy to load the entire repository if your ArrayCollection is empty
+by setting the `disable_loading` option to true.
+
+```php
+$this->add(
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager'     => $this->getObjectManager(),
+            'target_class'       => 'Module\Entity\SomeEntity',
+            'property'           => 'property',
+            'options'            => $arrayCollectionOfSomeEntities,
+            'disable_loading'    => true,
         ),
     )
 );

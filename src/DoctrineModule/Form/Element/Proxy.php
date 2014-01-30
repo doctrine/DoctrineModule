@@ -73,6 +73,11 @@ class Proxy implements ObjectManagerAwareInterface
     protected $displayEmptyItem = false;
 
     /**
+     * @var bool
+     */
+    protected $disableLoading = false ;
+
+    /**
      * @var string
      */
     protected $emptyItemLabel = '';
@@ -110,6 +115,14 @@ class Proxy implements ObjectManagerAwareInterface
         if (isset($options['empty_item_label'])) {
             $this->setEmptyItemLabel($options['empty_item_label']);
         }
+
+        if (isset($options['objects'])) {
+            $this->setObjects($options['objects']) ;
+        }
+
+        if (isset($options['disable_loading'])) {
+            $this->setDisableLoading($options['disable_loading']) ;
+        }
     }
 
     public function getValueOptions()
@@ -122,6 +135,19 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
+     * Set objects to proxy 
+     *
+     * @param array           $objects
+     * @return Proxy
+    */
+    public function setObjects($objects)
+    {
+        $this->objects = $objects;
+        
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getObjects()
@@ -129,6 +155,26 @@ class Proxy implements ObjectManagerAwareInterface
         $this->loadObjects();
 
         return $this->objects;
+    }
+
+    /**
+     * Set if Proxy should load objects even if object is empty
+     * @param boolean          $disableLoading
+     * @return Proxy
+     */
+    public function setDisableLoading($disableLoading)
+    {
+        $this->disableLoading = $disableLoading ;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisableLoading()
+    {
+        return $this->disableLoading;
     }
 
     /**
@@ -374,7 +420,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected function loadObjects()
     {
-        if (!empty($this->objects)) {
+        if (!empty($this->objects) || $this->getDisableLoading()) {
             return;
         }
 
