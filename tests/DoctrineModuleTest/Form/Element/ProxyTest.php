@@ -244,18 +244,44 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
-    public function testDisableLoadingUsedForGetValueOptions()
+    public function testDisableLoadingOptionUsedForGetValueOptions()
     {
         $this->prepareProxy();
 
         $this->proxy->setOptions(
             array(
-                'disable_loading' => true
+                'disable_loading' => true,
             )
         );
 
-        $result = $this->proxy->getDisableLoading();
-        $this->assertEquals($result, true);
+        $result = $this->proxy->getValueOptions();
+        $this->assertArrayNotHasKey(0, $result);
+    }
+
+    public function testObjectsOptionUsedForGetValueOptions()
+    {
+        $objectManual = new FormObject;
+
+        $this->prepareProxy() ;        
+
+        $objectManual->setId(1)
+            ->setUsername('object manual username')
+            ->setPassword('object manual password')
+            ->setEmail('object manual email')
+            ->setFirstname('object manual firstname')
+            ->setSurname('object manual surname') ;
+
+        $result = new ArrayCollection(array($objectManual));
+
+        $this->proxy->setOptions(
+            array(
+                'objects' => $result,
+            )
+        ) ;
+
+        $result = $this->proxy->getValueOptions() ;
+
+        $this->assertEquals($result[0]['label'], 'object manual username');
     }
 
     public function testExceptionThrownForNonCallableLabelGenerator()
