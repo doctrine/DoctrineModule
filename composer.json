@@ -32,34 +32,33 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php":                                ">=5.3.3",
+        "php":                                ">=5.3.23",
         "doctrine/common":                    ">=2.4,<2.6-dev",
-        "symfony/console":                    "~2.2",
-        "zendframework/zend-authentication":  "~2.2",
-        "zendframework/zend-cache":           "~2.2",
-        "zendframework/zend-paginator":       "~2.2",
-        "zendframework/zend-stdlib":          "~2.2",
-        "zendframework/zend-mvc":             "~2.2",
-        "zendframework/zend-servicemanager":  "~2.2",
-        "zendframework/zend-validator":       "~2.2"
+        "symfony/console":                    "~2.3",
+        "zendframework/zend-authentication":  "~2.3",
+        "zendframework/zend-cache":           "~2.3",
+        "zendframework/zend-paginator":       "~2.3",
+        "zendframework/zend-stdlib":          "~2.3",
+        "zendframework/zend-mvc":             "~2.3",
+        "zendframework/zend-servicemanager":  "~2.3",
+        "zendframework/zend-validator":       "~2.3"
     },
     "require-dev": {
         "phpunit/phpunit":             "~3.7",
-        "squizlabs/php_codesniffer":   "1.4.*",
-        "zendframework/zendframework": "~2.2"
+        "squizlabs/php_codesniffer":   "1.5.*",
+        "zendframework/zendframework": "~2.3"
     },
     "suggest": {
         "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
     },
     "autoload": {
         "psr-0": {
-            "DoctrineModule\\": "src/",
-            "DoctrineModuleTest\\": "tests/"
+            "DoctrineModule\\": "src/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.8.x-dev"
+            "dev-master": "0.9.x-dev"
         }
     },
     "bin": [
