@@ -4,7 +4,7 @@ before_commands:
 tools:
     php_code_coverage:
         enabled: true
-        test_command: ./vendor/vbin/phpunit -c phpunit.xml.dist
+        test_command: ./vendor/bin/phpunit -c phpunit.xml.dist
     php_code_sniffer:
         enabled: true
         config:
