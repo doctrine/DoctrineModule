@@ -4,15 +4,16 @@ php:
   - 5.3
   - 5.4
   - 5.5
+  - hhvm
 
 matrix:
   allow_failures:
-    - php: 5.5
+    - php: hhvm
 
 before_script:
-  - composer update --prefer-source --dev
+  - composer update --prefer-source
 
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/clover.xml
-  - php build/coverage-checker.php build/clover.xml 55
+  - sh -c "if [ '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then php build/coverage-checker.php build/clover.xml 70; fi"
   - sh -c "if [ '$TRAVIS_PHP_VERSION' != '5.3' ]; then ./vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/; fi"
