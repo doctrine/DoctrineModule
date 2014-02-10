@@ -65,7 +65,7 @@ class ObjectSelect extends SelectElement
             } elseif ($value == null) {
                 return parent::setValue(array());
             } elseif (!is_array($value)) {
-                $value = (array)$value;
+                $value = (array) $value;
             }
 
             return parent::setValue(array_map(array($this->getProxy(), 'getValue'), $value));
