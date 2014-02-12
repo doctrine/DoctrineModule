@@ -133,8 +133,8 @@ $this->add(
 
 ### Example 4 : including an empty option
 
-If you want to include an empty option at the top, set the `include_empty_option` setting to true.
-You can also specify the `empty_option_label` setting, the default is an empty string.
+If you want to include an empty option at the top, set the `display_empty_item` setting to true.
+You can also specify the `empty_item_label` setting, the default is an empty string.
 
 ```php
 $this->add(
