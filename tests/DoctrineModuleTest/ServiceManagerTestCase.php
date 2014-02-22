@@ -19,25 +19,24 @@
 
 namespace DoctrineModuleTest;
 
-use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
 
 /**
  * Base test case to be used when a service manager instance is required
  */
-class ServiceManagerTestCase extends BaseTestCase
+class ServiceManagerTestCase
 {
     /**
      * @var array
      */
-    private static $configuration = array();
+    protected static $configuration = array();
 
     /**
      * @static
      * @param array $configuration
      */
-    public static function setServiceManagerConfiguration(array $configuration)
+    public static function setConfiguration(array $configuration)
     {
         static::$configuration = $configuration;
     }
@@ -46,7 +45,7 @@ class ServiceManagerTestCase extends BaseTestCase
      * @static
      * @return array
      */
-    public static function getServiceManagerConfiguration()
+    public static function getConfiguration()
     {
         return static::$configuration;
     }
@@ -59,10 +58,16 @@ class ServiceManagerTestCase extends BaseTestCase
      */
     public function getServiceManager(array $configuration = null)
     {
-        $configuration = $configuration ?: static::getServiceManagerConfiguration();
-        $serviceManager = new ServiceManager(new ServiceManagerConfig($configuration));
-        $serviceManager->setService('ApplicationConfiguration', $configuration);
+        $configuration = $configuration ?: static::getConfiguration();
+        $serviceManager = new ServiceManager(
+            new ServiceManagerConfig(
+                isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
+            )
+        );
+
+        $serviceManager->setService('ApplicationConfig', $configuration);
         $serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
+
         /* @var $moduleManager \Zend\ModuleManager\ModuleManagerInterface */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();

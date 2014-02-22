@@ -20,15 +20,16 @@
 namespace DoctrineModule;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use DoctrineModule\Service\CacheFactory;
-use DoctrineModule\Service\ZendStorageCacheFactory;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
-use Zend\Loader\AutoloaderFactory;
+use Zend\EventManager\EventInterface;
 use Zend\Loader\StandardAutoloader;
+use Zend\Console\Adapter\AdapterInterface as Console;
+
+use Symfony\Component\Console\Input\StringInput;
+use DoctrineModule\Component\Console\Output\PropertyOutput;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
@@ -39,35 +40,31 @@ use Zend\Loader\StandardAutoloader;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Module implements
-    AutoloaderProviderInterface,
-    ConfigProviderInterface,
-    ServiceProviderInterface,
-    InitProviderInterface
+class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
 {
+    /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    private $serviceManager;
 
     /**
      * {@inheritDoc}
      */
     public function init(ModuleManagerInterface $moduleManager)
     {
-        AnnotationRegistry::registerLoader(function($className) {
-            return class_exists($className);
-        });
+        AnnotationRegistry::registerLoader(
+            function ($className) {
+                return class_exists($className);
+            }
+        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAutoloaderConfig()
+    public function onBootstrap(EventInterface $event)
     {
-        return array(
-            AutoloaderFactory::STANDARD_AUTOLOADER => array(
-                StandardAutoloader::LOAD_NS => array(
-                    __NAMESPACE__ => __DIR__,
-                ),
-            ),
-        );
+        $this->serviceManager = $event->getTarget()->getServiceManager();
     }
 
     /**
@@ -81,22 +78,14 @@ class Module implements
     /**
      * {@inheritDoc}
      */
-    public function getServiceConfig()
+    public function getConsoleUsage(Console $console)
     {
-        return array(
-            'factories' => array(
-                'doctrine.cli'                    => 'DoctrineModule\Service\CliFactory',
-                'doctrine.cache.apc'              => new CacheFactory('apc'),
-                'doctrine.cache.array'            => new CacheFactory('array'),
-                'doctrine.cache.filesystem'       => new CacheFactory('filesystem'),
-                'doctrine.cache.memcache'         => new CacheFactory('memcache'),
-                'doctrine.cache.memcached'        => new CacheFactory('memcached'),
-                'doctrine.cache.redis'            => new CacheFactory('redis'),
-                'doctrine.cache.wincache'         => new CacheFactory('wincache'),
-                'doctrine.cache.xcache'           => new CacheFactory('xcache'),
-                'doctrine.cache.zenddata'         => new CacheFactory('zenddata'),
-                'doctrine.cache.zendcachestorage' => new ZendStorageCacheFactory('zendcachestorage'),
-            ),
-        );
+        /* @var $cli \Symfony\Component\Console\Application */
+        $cli    = $this->serviceManager->get('doctrine.cli');
+        $output = new PropertyOutput();
+
+        $cli->run(new StringInput('list'), $output);
+
+        return $output->getMessage();
     }
 }

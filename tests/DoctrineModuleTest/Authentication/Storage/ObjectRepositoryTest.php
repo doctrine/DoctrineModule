@@ -52,11 +52,13 @@ class ObjectRepositoryTest extends BaseTestCase
                  ->with($this->equalTo($entity))
                  ->will($this->returnValue($entity->getUsername()));
         
-        $storage = new ObjectRepositoryStorage(array(
-            'objectRepository' => $objectRepository, 
-            'classMetadata' => $metadata, 
-            'storage' => new NonPersistentStorage()
-        ));
+        $storage = new ObjectRepositoryStorage(
+            array(
+                'objectRepository' => $objectRepository,
+                'classMetadata' => $metadata,
+                'storage' => new NonPersistentStorage()
+            )
+        );
 
         $storage->write($entity);
         $this->assertFalse($storage->isEmpty());

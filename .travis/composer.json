@@ -1,6 +1,0 @@
-{
-    "minimum-stability": "dev",
-    "require": {
-        "doctrine/doctrine-module": "dev-master"
-    }
-}

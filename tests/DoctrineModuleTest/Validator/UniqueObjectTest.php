@@ -138,7 +138,7 @@ class UniqueObjectTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Zend\Validator\Exception\RuntimeException
+     * @expectedException \Zend\Validator\Exception\RuntimeException
      * @expectedExceptionMessage Expected context to be an array but is null
      */
     public function testThrowsAnExceptionOnMissingContext()
@@ -165,7 +165,7 @@ class UniqueObjectTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Zend\Validator\Exception\RuntimeException
+     * @expectedException \Zend\Validator\Exception\RuntimeException
      * @expectedExceptionMessage Expected context to contain id
      */
     public function testThrowsAnExceptionOnMissingIdentifierInContext()
@@ -206,7 +206,7 @@ class UniqueObjectTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Zend\Validator\Exception\InvalidArgumentException
+     * @expectedException \Zend\Validator\Exception\InvalidArgumentException
      * @expectedExceptionMessage Option "object_manager" is required and must be
      *                           an instance of Doctrine\Common\Persistence\ObjectManager, nothing given
      */
@@ -223,7 +223,7 @@ class UniqueObjectTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Zend\Validator\Exception\InvalidArgumentException
+     * @expectedException \Zend\Validator\Exception\InvalidArgumentException
      * @expectedExceptionMessage Option "object_manager" is required and must be
      *                           an instance of Doctrine\Common\Persistence\ObjectManager, nothing given
      */

@@ -33,6 +33,10 @@ class StorageFactoryTest extends BaseTestCase
         $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
+        $serviceManager->setInvokableClass(
+            'DoctrineModule\Authentication\Storage\Session',
+            'Zend\Authentication\Storage\Session'
+        );
         $serviceManager->setService(
             'Configuration',
             array(
@@ -51,5 +55,36 @@ class StorageFactoryTest extends BaseTestCase
 
         $adapter = $factory->createService($serviceManager);
         $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
+    }
+
+    public function testCanInstantiateStorageFromServiceLocator()
+    {
+        $factory        = new StorageFactory('testFactory');
+        $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $storage        = $this->getMock('Zend\Authentication\Storage\StorageInterface');
+        $config         = array(
+            'doctrine' => array(
+                'authentication' => array(
+                    'testFactory' => array('storage' => 'some_storage')
+                ),
+            )
+        );
+
+        $serviceLocator
+            ->expects($this->at(0))
+            ->method('get')
+            ->with('Configuration')
+            ->will($this->returnValue($config));
+        $serviceLocator
+            ->expects($this->at(1))
+            ->method('get')
+            ->with('some_storage')
+            ->will($this->returnValue($storage));
+
+
+        $this->assertInstanceOf(
+            'DoctrineModule\Authentication\Storage\ObjectRepository',
+            $factory->createService($serviceLocator)
+        );
     }
 }

@@ -59,10 +59,8 @@ class CliFactory implements FactoryInterface
         if (null === $this->events) {
             /* @var $events \Zend\EventManager\EventManagerInterface */
             $events = $sm->get('EventManager');
-            $events->addIdentifiers(array(
-                __CLASS__,
-                'doctrine'
-            ));
+
+            $events->addIdentifiers(array(__CLASS__, 'doctrine'));
 
             $this->events = $events;
         }
@@ -80,6 +78,8 @@ class CliFactory implements FactoryInterface
         $cli->setName('DoctrineModule Command Line Interface');
         $cli->setVersion(Version::VERSION);
         $cli->setHelperSet(new HelperSet);
+        $cli->setCatchExceptions(true);
+        $cli->setAutoExit(false);
 
         // Load commands using event
         $this->getEventManager($sl)->trigger('loadCli.post', $cli, array('ServiceManager' => $sl));

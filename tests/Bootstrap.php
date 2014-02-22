@@ -19,21 +19,30 @@
 
 use DoctrineModuleTest\ServiceManagerTestCase;
 
-chdir(__DIR__);
+ini_set('error_reporting', E_ALL);
 
-if (
-    ! ($loader = @include __DIR__ . '/../vendor/autoload.php')
-    && ! ($loader = @include __DIR__ . '/../../../autoload.php')
-) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Run composer installation');
+$files = array(__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../autoload.php');
+
+foreach ($files as $file) {
+    if (file_exists($file)) {
+        $loader = require $file;
+
+        break;
+    }
 }
 
+if (! isset($loader)) {
+    throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
+}
+
+/* @var $loader \Composer\Autoload\ClassLoader */
 $loader->add('DoctrineModuleTest\\', __DIR__);
 
-if (!$config = @include __DIR__ . '/TestConfiguration.php') {
+if (file_exists(__DIR__ . '/TestConfiguration.php')) {
+    $config = require __DIR__ . '/TestConfiguration.php';
+} else {
     $config = require __DIR__ . '/TestConfiguration.php.dist';
 }
 
-ServiceManagerTestCase::setServiceManagerConfiguration(
-    isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
-);
+ServiceManagerTestCase::setConfiguration($config);
+unset($files, $file, $loader, $config);

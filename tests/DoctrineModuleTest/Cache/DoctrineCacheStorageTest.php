@@ -34,45 +34,44 @@ use Zend\Stdlib\ErrorHandler;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  * @todo extend \ZendTest\Cache\Storage\CommonAdapterTest instead
+ *
+ * @covers \DoctrineModule\Cache\DoctrineCacheStorage
  */
 class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var AdapterOptions
      */
-    protected $_options;
+    protected $options;
 
     /**
      * The storage adapter
      *
      * @var \Zend\Cache\Storage\StorageInterface
      */
-    protected $_storage;
+    protected $storage;
 
     /**
      * All datatypes of PHP
      *
      * @var string[]
      */
-    protected $_phpDatatypes = array(
-        'NULL', 'boolean', 'integer', 'double',
-        'string', 'array', 'object', 'resource'
-    );
+    protected $phpDatatypes = array('NULL', 'boolean', 'integer', 'double', 'string', 'array', 'object', 'resource');
 
     public function setUp()
     {
-        $this->_options = new AdapterOptions();
+        $this->options = new AdapterOptions();
         // @todo fix constructor as it is messy
-        $this->_storage = new DoctrineCacheStorage($this->_options, new ArrayCache());
+        $this->storage = new DoctrineCacheStorage($this->options, new ArrayCache());
 
         $this->assertInstanceOf(
             'Zend\Cache\Storage\StorageInterface',
-            $this->_storage,
+            $this->storage,
             'Storage adapter instance is needed for tests'
         );
         $this->assertInstanceOf(
             'Zend\Cache\Storage\Adapter\AdapterOptions',
-            $this->_options,
+            $this->options,
             'Options instance is needed for tests'
         );
     }
@@ -88,7 +87,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testOptionNamesValid()
     {
-        $options = $this->_storage->getOptions()->toArray();
+        $options = $this->storage->getOptions()->toArray();
         foreach ($options as $name => $value) {
             $this->assertRegExp(
                 '/^[a-z]+[a-z0-9_]*[a-z0-9]+$/',
@@ -100,7 +99,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testGettersAndSettersOfOptionsExists()
     {
-        $options = $this->_storage->getOptions();
+        $options = $this->storage->getOptions();
         foreach ($options->toArray() as $option => $value) {
             if ($option == 'adapter') {
                 // Skip this, as it's a "special" value
@@ -123,14 +122,14 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testOptionsGetAndSetDefault()
     {
-        $options = $this->_storage->getOptions();
-        $this->_storage->setOptions($options);
-        $this->assertSame($options, $this->_storage->getOptions());
+        $options = $this->storage->getOptions();
+        $this->storage->setOptions($options);
+        $this->assertSame($options, $this->storage->getOptions());
     }
 
     public function testOptionsFluentInterface()
     {
-        $options = $this->_storage->getOptions();
+        $options = $this->storage->getOptions();
         foreach ($options->toArray() as $option => $value) {
             $method = ucwords(str_replace('_', ' ', $option));
             $method = 'set' . str_replace(' ', '', $method);
@@ -142,46 +141,38 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertSame(
-            $this->_storage,
-            $this->_storage->setOptions($options),
+            $this->storage,
+            $this->storage->setOptions($options),
             "Method 'setOptions' doesn't implement the fluent interface"
         );
     }
 
     public function testGetCapabilities()
     {
-        $capabilities = $this->_storage->getCapabilities();
+        $capabilities = $this->storage->getCapabilities();
         $this->assertInstanceOf('Zend\Cache\Storage\Capabilities', $capabilities);
     }
 
     public function testDatatypesCapability()
     {
-        $capabilities = $this->_storage->getCapabilities();
+        $capabilities = $this->storage->getCapabilities();
         $datatypes = $capabilities->getSupportedDatatypes();
         $this->assertInternalType('array', $datatypes);
 
         foreach ($datatypes as $sourceType => $targetType) {
-            $this->assertContains(
-                $sourceType, $this->_phpDatatypes,
-                "Unknown source type '{$sourceType}'"
-            );
+            $this->assertContains($sourceType, $this->phpDatatypes, 'Unknown source type "' . $sourceType . '"');
+
             if (is_string($targetType)) {
-                $this->assertContains(
-                    $targetType, $this->_phpDatatypes,
-                    "Unknown target type '{$targetType}'"
-                );
+                $this->assertContains($targetType, $this->phpDatatypes, 'Unknown source type "' . $sourceType . '"');
             } else {
-                $this->assertInternalType(
-                    'bool', $targetType,
-                    "Target type must be a string or boolean"
-                );
+                $this->assertInternalType('bool', $targetType, 'Target type must be a string or boolean');
             }
         }
     }
 
     public function testSupportedMetadataCapability()
     {
-        $capabilities = $this->_storage->getCapabilities();
+        $capabilities = $this->storage->getCapabilities();
         $metadata = $capabilities->getSupportedMetadata();
         $this->assertInternalType('array', $metadata);
 
@@ -192,7 +183,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testTtlCapabilities()
     {
-        $capabilities = $this->_storage->getCapabilities();
+        $capabilities = $this->storage->getCapabilities();
 
         $this->assertInternalType('integer', $capabilities->getMaxTtl());
         $this->assertGreaterThanOrEqual(0, $capabilities->getMaxTtl());
@@ -207,7 +198,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testKeyCapabilities()
     {
-        $capabilities = $this->_storage->getCapabilities();
+        $capabilities = $this->storage->getCapabilities();
 
         $this->assertInternalType('integer', $capabilities->getMaxKeyLength());
         $this->assertGreaterThanOrEqual(-1, $capabilities->getMaxKeyLength());
@@ -219,29 +210,29 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testHasItemReturnsTrueOnValidItem()
     {
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $this->assertTrue($this->_storage->hasItem('key'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $this->assertTrue($this->storage->hasItem('key'));
     }
 
     public function testHasItemReturnsFalseOnMissingItem()
     {
-        $this->assertFalse($this->_storage->hasItem('key'));
+        $this->assertFalse($this->storage->hasItem('key'));
     }
 
     public function testHasItemNonReadable()
     {
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
 
-        $this->_options->setReadable(false);
-        $this->assertFalse($this->_storage->hasItem('key'));
+        $this->options->setReadable(false);
+        $this->assertFalse($this->storage->hasItem('key'));
     }
 
     public function testHasItemsReturnsKeysOfFoundItems()
     {
-        $this->assertTrue($this->_storage->setItem('key1', 'value1'));
-        $this->assertTrue($this->_storage->setItem('key2', 'value2'));
+        $this->assertTrue($this->storage->setItem('key1', 'value1'));
+        $this->assertTrue($this->storage->setItem('key2', 'value2'));
 
-        $result = $this->_storage->hasItems(array('missing', 'key1', 'key2'));
+        $result = $this->storage->hasItems(array('missing', 'key1', 'key2'));
         sort($result);
 
         $expectedResult = array('key1', 'key2');
@@ -250,15 +241,15 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testHasItemsReturnsEmptyArrayIfNonReadable()
     {
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
 
-        $this->_options->setReadable(false);
-        $this->assertEquals(array(), $this->_storage->hasItems(array('key')));
+        $this->options->setReadable(false);
+        $this->assertEquals(array(), $this->storage->hasItems(array('key')));
     }
 
     public function testGetItemReturnsNullOnMissingItem()
     {
-        $this->assertNull($this->_storage->getItem('unknwon'));
+        $this->assertNull($this->storage->getItem('unknown'));
     }
 
     public function testGetItemSetsSuccessFlag()
@@ -266,29 +257,29 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         $success = null;
 
         // $success = false on get missing item
-        $this->_storage->getItem('unknown', $success);
+        $this->storage->getItem('unknown', $success);
         $this->assertFalse($success);
 
         // $success = true on get valid item
-        $this->_storage->setItem('test', 'test');
-        $this->_storage->getItem('test', $success);
+        $this->storage->setItem('test', 'test');
+        $this->storage->getItem('test', $success);
         $this->assertTrue($success);
     }
 
     public function testGetItemReturnsNullIfNonReadable()
     {
-        $this->_options->setReadable(false);
+        $this->options->setReadable(false);
 
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $this->assertNull($this->_storage->getItem('key'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $this->assertNull($this->storage->getItem('key'));
     }
 
     public function testGetItemsReturnsKeyValuePairsOfFoundItems()
     {
-        $this->assertTrue($this->_storage->setItem('key1', 'value1'));
-        $this->assertTrue($this->_storage->setItem('key2', 'value2'));
+        $this->assertTrue($this->storage->setItem('key1', 'value1'));
+        $this->assertTrue($this->storage->setItem('key2', 'value2'));
 
-        $result = $this->_storage->getItems(array('missing', 'key1', 'key2'));
+        $result = $this->storage->getItems(array('missing', 'key1', 'key2'));
         ksort($result);
 
         $expectedResult = array(
@@ -300,19 +291,19 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testGetItemsReturnsEmptyArrayIfNonReadable()
     {
-        $this->_options->setReadable(false);
+        $this->options->setReadable(false);
 
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $this->assertEquals(array(), $this->_storage->getItems(array('key')));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $this->assertEquals(array(), $this->storage->getItems(array('key')));
     }
 
     public function testGetMetadata()
     {
-        $capabilities = $this->_storage->getCapabilities();
+        $capabilities = $this->storage->getCapabilities();
         $supportedMetadatas = $capabilities->getSupportedMetadata();
 
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $metadata = $this->_storage->getMetadata('key');
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $metadata = $this->storage->getMetadata('key');
 
         $this->assertInternalType('array', $metadata);
         foreach ($supportedMetadatas as $supportedMetadata) {
@@ -322,32 +313,32 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testGetMetadataReturnsFalseOnMissingItem()
     {
-        $this->assertFalse($this->_storage->getMetadata('unknown'));
+        $this->assertFalse($this->storage->getMetadata('unknown'));
     }
 
     public function testGetMetadataReturnsFalseIfNonReadable()
     {
-        $this->_options->setReadable(false);
+        $this->options->setReadable(false);
 
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $this->assertFalse($this->_storage->getMetadata('key'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $this->assertFalse($this->storage->getMetadata('key'));
     }
 
     public function testGetMetadatas()
     {
-        $capabilities = $this->_storage->getCapabilities();
+        $capabilities = $this->storage->getCapabilities();
         $supportedMetadatas = $capabilities->getSupportedMetadata();
 
         $items = array(
             'key1' => 'value1',
             'key2' => 'value2'
         );
-        $this->assertSame(array(), $this->_storage->setItems($items));
+        $this->assertSame(array(), $this->storage->setItems($items));
 
-        $metadatas = $this->_storage->getMetadatas(array_keys($items));
+        $metadatas = $this->storage->getMetadatas(array_keys($items));
         $this->assertInternalType('array', $metadatas);
         $this->assertSame(count($items), count($metadatas));
-        foreach ($metadatas as $k => $metadata) {
+        foreach ($metadatas as $metadata) {
             $this->assertInternalType('array', $metadata);
             foreach ($supportedMetadatas as $supportedMetadata) {
                 $this->assertArrayHasKey($supportedMetadata, $metadata);
@@ -357,21 +348,21 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testGetMetadatasReturnsEmptyArrayIfNonReadable()
     {
-        $this->_options->setReadable(false);
+        $this->options->setReadable(false);
 
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $this->assertEquals(array(), $this->_storage->getMetadatas(array('key')));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $this->assertEquals(array(), $this->storage->getMetadatas(array('key')));
     }
 
     public function testSetGetHasAndRemoveItem()
     {
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $this->assertEquals('value', $this->_storage->getItem('key'));
-        $this->assertTrue($this->_storage->hasItem('key'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $this->assertEquals('value', $this->storage->getItem('key'));
+        $this->assertTrue($this->storage->hasItem('key'));
 
-        $this->assertTrue($this->_storage->removeItem('key'));
-        $this->assertFalse($this->_storage->hasItem('key'));
-        $this->assertNull($this->_storage->getItem('key'));
+        $this->assertTrue($this->storage->removeItem('key'));
+        $this->assertFalse($this->storage->hasItem('key'));
+        $this->assertNull($this->storage->getItem('key'));
     }
 
     public function testSetGetHasAndRemoveItems()
@@ -382,33 +373,33 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
             'key3' => 'value3',
         );
 
-        $this->assertSame(array(), $this->_storage->setItems($items));
+        $this->assertSame(array(), $this->storage->setItems($items));
 
-        $rs = $this->_storage->getItems(array_keys($items));
+        $rs = $this->storage->getItems(array_keys($items));
         $this->assertInternalType('array', $rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
-        $rs = $this->_storage->hasItems(array_keys($items));
+        $rs = $this->storage->hasItems(array_keys($items));
         $this->assertInternalType('array', $rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);
         }
 
-        $this->assertSame(array('missing'), $this->_storage->removeItems(array('missing', 'key1', 'key3')));
+        $this->assertSame(array('missing'), $this->storage->removeItems(array('missing', 'key1', 'key3')));
         unset($items['key1'], $items['key3']);
 
-        $rs = $this->_storage->getItems(array_keys($items));
+        $rs = $this->storage->getItems(array_keys($items));
         $this->assertInternalType('array', $rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
-        $rs = $this->_storage->hasItems(array_keys($items));
+        $rs = $this->storage->hasItems(array_keys($items));
         $this->assertInternalType('array', $rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
@@ -419,31 +410,31 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
     public function testSetGetHasAndRemoveItemWithNamespace()
     {
         // write "key" to default namespace
-        $this->_options->setNamespace('defaultns1');
-        $this->assertTrue( $this->_storage->setItem('key', 'defaultns1') );
+        $this->options->setNamespace('defaultns1');
+        $this->assertTrue($this->storage->setItem('key', 'defaultns1'));
 
         // write "key" to an other default namespace
-        $this->_options->setNamespace('defaultns2');
-        $this->assertTrue( $this->_storage->setItem('key', 'defaultns2') );
+        $this->options->setNamespace('defaultns2');
+        $this->assertTrue($this->storage->setItem('key', 'defaultns2'));
 
         // test value of defaultns2
-        $this->assertTrue($this->_storage->hasItem('key'));
-        $this->assertEquals('defaultns2', $this->_storage->getItem('key') );
+        $this->assertTrue($this->storage->hasItem('key'));
+        $this->assertEquals('defaultns2', $this->storage->getItem('key'));
 
         // test value of defaultns1
-        $this->_options->setNamespace('defaultns1');
-        $this->assertTrue($this->_storage->hasItem('key'));
-        $this->assertEquals('defaultns1', $this->_storage->getItem('key') );
+        $this->options->setNamespace('defaultns1');
+        $this->assertTrue($this->storage->hasItem('key'));
+        $this->assertEquals('defaultns1', $this->storage->getItem('key'));
 
         // remove item of defaultns1
-        $this->_options->setNamespace('defaultns1');
-        $this->assertTrue($this->_storage->removeItem('key'));
-        $this->assertFalse($this->_storage->hasItem('key'));
+        $this->options->setNamespace('defaultns1');
+        $this->assertTrue($this->storage->removeItem('key'));
+        $this->assertFalse($this->storage->hasItem('key'));
 
         // remove item of defaultns2
-        $this->_options->setNamespace('defaultns2');
-        $this->assertTrue($this->_storage->removeItem('key'));
-        $this->assertFalse($this->_storage->hasItem('key'));
+        $this->options->setNamespace('defaultns2');
+        $this->assertTrue($this->storage->removeItem('key'));
+        $this->assertFalse($this->storage->hasItem('key'));
     }
 
     public function testSetGetHasAndRemoveItemsWithNamespace()
@@ -454,21 +445,21 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
             'key3' => 'value3',
         );
 
-        $this->_options->setNamespace('defaultns1');
-        $this->assertSame(array(), $this->_storage->setItems($items));
+        $this->options->setNamespace('defaultns1');
+        $this->assertSame(array(), $this->storage->setItems($items));
 
-        $this->_options->setNamespace('defaultns2');
-        $this->assertSame(array(),  $this->_storage->hasItems(array_keys($items)));
+        $this->options->setNamespace('defaultns2');
+        $this->assertSame(array(), $this->storage->hasItems(array_keys($items)));
 
-        $this->_options->setNamespace('defaultns1');
-        $rs = $this->_storage->getItems(array_keys($items));
+        $this->options->setNamespace('defaultns1');
+        $rs = $this->storage->getItems(array_keys($items));
         $this->assertInternalType('array', $rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
-        $rs = $this->_storage->hasItems(array_keys($items));
+        $rs = $this->storage->hasItems(array_keys($items));
         $this->assertInternalType('array', $rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
@@ -476,17 +467,17 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         }
 
         // remove the first and the last item
-        $this->assertSame(array('missing'), $this->_storage->removeItems(array('missing', 'key1', 'key3')));
+        $this->assertSame(array('missing'), $this->storage->removeItems(array('missing', 'key1', 'key3')));
         unset($items['key1'], $items['key3']);
 
-        $rs = $this->_storage->getItems(array_keys($items));
+        $rs = $this->storage->getItems(array_keys($items));
         $this->assertInternalType('array', $rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
-        $rs = $this->_storage->hasItems(array_keys($items));
+        $rs = $this->storage->hasItems(array_keys($items));
         $this->assertInternalType('array', $rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
@@ -496,7 +487,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testSetAndGetItemOfDifferentTypes()
     {
-        $capabilities = $this->_storage->getCapabilities();
+        $capabilities = $this->storage->getCapabilities();
 
         $types = array(
             'NULL'     => null,
@@ -518,212 +509,233 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
             }
 
             $value = $types[$sourceType];
-            $this->assertTrue($this->_storage->setItem('key', $value), "Failed to set type '{$sourceType}'");
+            $this->assertTrue($this->storage->setItem('key', $value), "Failed to set type '{$sourceType}'");
 
             if ($targetType === true) {
-                $this->assertSame($value, $this->_storage->getItem('key'));
+                $this->assertSame($value, $this->storage->getItem('key'));
             } elseif (is_string($targetType)) {
                 settype($value, $targetType);
-                $this->assertEquals($value, $this->_storage->getItem('key'));
+                $this->assertEquals($value, $this->storage->getItem('key'));
             }
         }
     }
 
     public function testSetItemReturnsFalseIfNonWritable()
     {
-        $this->_options->setWritable(false);
+        $this->options->setWritable(false);
 
-        $this->assertFalse($this->_storage->setItem('key', 'value'));
-        $this->assertFalse($this->_storage->hasItem('key'));
+        $this->assertFalse($this->storage->setItem('key', 'value'));
+        $this->assertFalse($this->storage->hasItem('key'));
     }
 
     public function testAddNewItem()
     {
-        $this->assertTrue($this->_storage->addItem('key', 'value'));
-        $this->assertTrue($this->_storage->hasItem('key'));
+        $this->assertTrue($this->storage->addItem('key', 'value'));
+        $this->assertTrue($this->storage->hasItem('key'));
     }
 
     public function testAddItemReturnsFalseIfItemAlreadyExists()
     {
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $this->assertFalse($this->_storage->addItem('key', 'newValue'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $this->assertFalse($this->storage->addItem('key', 'newValue'));
     }
 
     public function testAddItemReturnsFalseIfNonWritable()
     {
-        $this->_options->setWritable(false);
+        $this->options->setWritable(false);
 
-        $this->assertFalse($this->_storage->addItem('key', 'value'));
-        $this->assertFalse($this->_storage->hasItem('key'));
+        $this->assertFalse($this->storage->addItem('key', 'value'));
+        $this->assertFalse($this->storage->hasItem('key'));
     }
 
     public function testAddItemsReturnsFailedKeys()
     {
-        $this->assertTrue($this->_storage->setItem('key1', 'value1'));
+        $this->assertTrue($this->storage->setItem('key1', 'value1'));
 
-        $failedKeys = $this->_storage->addItems(array(
-            'key1' => 'XYZ',
-            'key2' => 'value2',
-        ));
+        $failedKeys = $this->storage->addItems(
+            array(
+                'key1' => 'XYZ',
+                'key2' => 'value2',
+            )
+        );
 
         $this->assertSame(array('key1'), $failedKeys);
-        $this->assertSame('value1', $this->_storage->getItem('key1'));
-        $this->assertTrue($this->_storage->hasItem('key2'));
+        $this->assertSame('value1', $this->storage->getItem('key1'));
+        $this->assertTrue($this->storage->hasItem('key2'));
     }
 
     public function testReplaceExistingItem()
     {
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
-        $this->assertTrue($this->_storage->replaceItem('key', 'anOtherValue'));
-        $this->assertEquals('anOtherValue', $this->_storage->getItem('key'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
+        $this->assertTrue($this->storage->replaceItem('key', 'anOtherValue'));
+        $this->assertEquals('anOtherValue', $this->storage->getItem('key'));
     }
 
     public function testReplaceItemReturnsFalseOnMissingItem()
     {
-        $this->assertFalse($this->_storage->replaceItem('missingKey', 'value'));
+        $this->assertFalse($this->storage->replaceItem('missingKey', 'value'));
     }
 
     public function testReplaceItemReturnsFalseIfNonWritable()
     {
-        $this->_storage->setItem('key', 'value');
-        $this->_options->setWritable(false);
+        $this->storage->setItem('key', 'value');
+        $this->options->setWritable(false);
 
-        $this->assertFalse($this->_storage->replaceItem('key', 'newvalue'));
-        $this->assertEquals('value', $this->_storage->getItem('key'));
+        $this->assertFalse($this->storage->replaceItem('key', 'newvalue'));
+        $this->assertEquals('value', $this->storage->getItem('key'));
     }
 
     public function testReplaceItemsReturnsFailedKeys()
     {
-        $this->assertTrue($this->_storage->setItem('key1', 'value1'));
+        $this->assertTrue($this->storage->setItem('key1', 'value1'));
 
-        $failedKeys = $this->_storage->replaceItems(array(
-            'key1' => 'XYZ',
-            'key2' => 'value2',
-        ));
+        $failedKeys = $this->storage->replaceItems(
+            array(
+                'key1' => 'XYZ',
+                'key2' => 'value2',
+            )
+        );
 
         $this->assertSame(array('key2'), $failedKeys);
-        $this->assertSame('XYZ', $this->_storage->getItem('key1'));
-        $this->assertFalse($this->_storage->hasItem('key2'));
+        $this->assertSame('XYZ', $this->storage->getItem('key1'));
+        $this->assertFalse($this->storage->hasItem('key2'));
     }
 
     public function testRemoveItemReturnsFalseOnMissingItem()
     {
-        $this->assertFalse($this->_storage->removeItem('missing'));
+        $this->assertFalse($this->storage->removeItem('missing'));
     }
 
     public function testRemoveItemsReturnsMissingKeys()
     {
-        $this->_storage->setItem('key', 'value');
-        $this->assertSame(array('missing'), $this->_storage->removeItems(array('key', 'missing')));
+        $this->storage->setItem('key', 'value');
+        $this->assertSame(array('missing'), $this->storage->removeItems(array('key', 'missing')));
     }
 
     public function testCheckAndSetItem()
     {
-        $this->assertTrue($this->_storage->setItem('key', 'value'));
+        $this->assertTrue($this->storage->setItem('key', 'value'));
 
         $success  = null;
         $casToken = null;
-        $this->assertEquals('value', $this->_storage->getItem('key', $success, $casToken));
+        $this->assertEquals('value', $this->storage->getItem('key', $success, $casToken));
         $this->assertNotNull($casToken);
 
-        $this->assertTrue($this->_storage->checkAndSetItem($casToken, 'key', 'newValue'));
-        $this->assertFalse($this->_storage->checkAndSetItem($casToken, 'key', 'failedValue'));
-        $this->assertEquals('newValue', $this->_storage->getItem('key'));
+        $this->assertTrue($this->storage->checkAndSetItem($casToken, 'key', 'newValue'));
+        $this->assertFalse($this->storage->checkAndSetItem($casToken, 'key', 'failedValue'));
+        $this->assertEquals('newValue', $this->storage->getItem('key'));
     }
 
     public function testIncrementItem()
     {
-        $this->assertTrue($this->_storage->setItem('counter', 10));
-        $this->assertEquals(15, $this->_storage->incrementItem('counter', 5));
-        $this->assertEquals(15, $this->_storage->getItem('counter'));
+        $this->assertTrue($this->storage->setItem('counter', 10));
+        $this->assertEquals(15, $this->storage->incrementItem('counter', 5));
+        $this->assertEquals(15, $this->storage->getItem('counter'));
     }
 
     public function testIncrementItemInitialValue()
     {
-        $this->assertEquals(5, $this->_storage->incrementItem('counter', 5));
-        $this->assertEquals(5, $this->_storage->getItem('counter'));
+        $this->assertEquals(5, $this->storage->incrementItem('counter', 5));
+        $this->assertEquals(5, $this->storage->getItem('counter'));
     }
 
     public function testIncrementItemReturnsFalseIfNonWritable()
     {
-        $this->_storage->setItem('key', 10);
-        $this->_options->setWritable(false);
+        $this->storage->setItem('key', 10);
+        $this->options->setWritable(false);
 
-        $this->assertFalse($this->_storage->incrementItem('key', 5));
-        $this->assertEquals(10, $this->_storage->getItem('key'));
+        $this->assertFalse($this->storage->incrementItem('key', 5));
+        $this->assertEquals(10, $this->storage->getItem('key'));
     }
 
-    public function testIncrementItemsResturnsKeyValuePairsOfWrittenItems()
+    public function testIncrementItemsReturnsKeyValuePairsOfWrittenItems()
     {
-        $this->assertTrue($this->_storage->setItem('key1', 10));
+        $this->assertTrue($this->storage->setItem('key1', 10));
 
-        $result = $this->_storage->incrementItems(array(
-            'key1' => 10,
-            'key2' => 10,
-        ));
+        $result = $this->storage->incrementItems(array('key1' => 10, 'key2' => 10));
+
         ksort($result);
 
-        $this->assertSame(array(
-            'key1' => 20,
-            'key2' => 10,
-        ), $result);
+        $this->assertSame(array('key1' => 20, 'key2' => 10), $result);
     }
 
     public function testIncrementItemsReturnsEmptyArrayIfNonWritable()
     {
-        $this->_storage->setItem('key', 10);
-        $this->_options->setWritable(false);
+        $this->storage->setItem('key', 10);
+        $this->options->setWritable(false);
 
-        $this->assertSame(array(), $this->_storage->incrementItems(array('key' => 5)));
-        $this->assertEquals(10, $this->_storage->getItem('key'));
+        $this->assertSame(array(), $this->storage->incrementItems(array('key' => 5)));
+        $this->assertEquals(10, $this->storage->getItem('key'));
     }
 
     public function testDecrementItem()
     {
-        $this->assertTrue($this->_storage->setItem('counter', 30));
-        $this->assertEquals(25, $this->_storage->decrementItem('counter', 5));
-        $this->assertEquals(25, $this->_storage->getItem('counter'));
+        $this->assertTrue($this->storage->setItem('counter', 30));
+        $this->assertEquals(25, $this->storage->decrementItem('counter', 5));
+        $this->assertEquals(25, $this->storage->getItem('counter'));
     }
 
     public function testDecrementItemInitialValue()
     {
-        $this->assertEquals(-5, $this->_storage->decrementItem('counter', 5));
-        $this->assertEquals(-5, $this->_storage->getItem('counter'));
+        $this->assertEquals(-5, $this->storage->decrementItem('counter', 5));
+        $this->assertEquals(-5, $this->storage->getItem('counter'));
     }
 
     public function testDecrementItemReturnsFalseIfNonWritable()
     {
-        $this->_storage->setItem('key', 10);
-        $this->_options->setWritable(false);
+        $this->storage->setItem('key', 10);
+        $this->options->setWritable(false);
 
-        $this->assertFalse($this->_storage->decrementItem('key', 5));
-        $this->assertEquals(10, $this->_storage->getItem('key'));
+        $this->assertFalse($this->storage->decrementItem('key', 5));
+        $this->assertEquals(10, $this->storage->getItem('key'));
     }
 
     public function testDecrementItemsReturnsEmptyArrayIfNonWritable()
     {
-        $this->_storage->setItem('key', 10);
-        $this->_options->setWritable(false);
+        $this->storage->setItem('key', 10);
+        $this->options->setWritable(false);
 
-        $this->assertSame(array(), $this->_storage->decrementItems(array('key' => 5)));
-        $this->assertEquals(10, $this->_storage->getItem('key'));
+        $this->assertSame(array(), $this->storage->decrementItems(array('key' => 5)));
+        $this->assertEquals(10, $this->storage->getItem('key'));
     }
 
     public function testTouchItemReturnsFalseOnMissingItem()
     {
-        $this->assertFalse($this->_storage->touchItem('missing'));
+        $this->assertFalse($this->storage->touchItem('missing'));
     }
 
     public function testTouchItemReturnsFalseIfNonWritable()
     {
-        $this->_options->setWritable(false);
+        $this->options->setWritable(false);
 
-        $this->assertFalse($this->_storage->touchItem('key'));
+        $this->assertFalse($this->storage->touchItem('key'));
     }
 
     public function testTouchItemsReturnsGivenKeysIfNonWritable()
     {
-        $this->_options->setWritable(false);
-        $this->assertSame(array('key'), $this->_storage->touchItems(array('key')));
+        $this->options->setWritable(false);
+        $this->assertSame(array('key'), $this->storage->touchItems(array('key')));
+    }
+
+    public function testSetItemAndSetItemsCallSaveWithTtl()
+    {
+        $ttl = rand();
+
+        $provider = $this->getMock('Doctrine\Common\Cache\ArrayCache');
+        $provider->expects($this->exactly(4))
+                 ->method('save')
+                 ->with($this->anything(), $this->anything(), $ttl);
+
+        $this->storage = new DoctrineCacheStorage($this->options, $provider);
+
+        $this->options->setTtl($ttl);
+        $this->storage->setItem('key', 'value');
+
+        $items = array(
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => 'value3'
+        );
+        $this->storage->setItems($items);
     }
 }

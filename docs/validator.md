@@ -1,6 +1,6 @@
 ## Validator
 
-DoctrineModule provides three validators that work out the box : `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` that allow to check if an entity or does not exists in database, respectively; `DoctrineModule\Validator\UniqueObject` that allows to check if a value is only used in one object. They work like any other standard Zend validators.
+DoctrineModule provides three validators that work out the box : `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` that allow to check if an entity exists or does not exists in database, respectively; `DoctrineModule\Validator\UniqueObject` that allows to check if a value is only used in one object. They work like any other standard Zend validators.
 
 All three validators accept the following options :
 
@@ -74,7 +74,7 @@ class User extends Form
        	));
 
        	$emailInput->getValidatorChain()
-                      ->addValidator($noObjectExistsValidator);
+                      ->attach($noObjectExistsValidator);
 	}
 }
 ```
@@ -121,7 +121,7 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 					array(
 						'name' => 'DoctrineModule\Validator\NoObjectExists',
 						'options' => array(
-							'object_manager' => $entityManager->getRepository('Application\Entity\User'),
+							'object_repository' => $entityManager->getRepository('Application\Entity\User'),
 							'fields' => 'email'
 						)
 					)
@@ -141,7 +141,7 @@ You can change the default message of the validators the following way :
 	array(
 		'name' => 'DoctrineModule\Validator\NoObjectExists',
 		'options' => array(
-			'object_manager' => $this->getEntityManager()->getRepository('Application\Entity\User'),
+			'object_repository' => $this->getEntityManager()->getRepository('Application\Entity\User'),
 			'fields' => 'email'
 		),
 		**'messages' => array(

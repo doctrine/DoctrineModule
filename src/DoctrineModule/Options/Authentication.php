@@ -109,7 +109,6 @@ class Authentication extends AbstractOptions
     protected $credentialCallable;
 
     /**
-     *
      * If an objectManager is not supplied, this metadata will be used
      * by DoctrineModule/Authentication/Storage/ObjectRepository
      *
@@ -125,9 +124,9 @@ class Authentication extends AbstractOptions
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
-     * @var \Zend\Authentication\Storage\StorageInterface;
+     * @var \Zend\Authentication\Storage\StorageInterface|string;
      */
-    protected $storage;
+    protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
     /**
      * @param  string | ObjectManager $objectManager
@@ -195,10 +194,9 @@ class Authentication extends AbstractOptions
     public function setIdentityProperty($identityProperty)
     {
         if (!is_string($identityProperty) || $identityProperty === '') {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Provided $identityProperty is invalid, %s given',
-                gettype($identityProperty)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf('Provided $identityProperty is invalid, %s given', gettype($identityProperty))
+            );
         }
 
         $this->identityProperty = $identityProperty;
@@ -222,10 +220,9 @@ class Authentication extends AbstractOptions
     public function setCredentialProperty($credentialProperty)
     {
         if (!is_string($credentialProperty) || $credentialProperty === '') {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Provided $credentialProperty is invalid, %s given',
-                gettype($credentialProperty)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf('Provided $credentialProperty is invalid, %s given', gettype($credentialProperty))
+            );
         }
 
         $this->credentialProperty = $credentialProperty;
@@ -249,10 +246,12 @@ class Authentication extends AbstractOptions
     public function setCredentialCallable($credentialCallable)
     {
         if (!is_callable($credentialCallable)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '"%s" is not a callable',
-                is_string($credentialCallable) ? $credentialCallable : gettype($credentialCallable)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '"%s" is not a callable',
+                    is_string($credentialCallable) ? $credentialCallable : gettype($credentialCallable)
+                )
+            );
         }
 
         $this->credentialCallable = $credentialCallable;
@@ -269,11 +268,10 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     *
      * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
      */
-    public function getClassMetadata() {
-
+    public function getClassMetadata()
+    {
         if ($this->classMetadata) {
             return $this->classMetadata;
         }
@@ -285,26 +283,24 @@ class Authentication extends AbstractOptions
      *
      * @param \Doctrine\Common\Persistence\Mapping\ClassMetadata $classMetadata
      */
-    public function setClassMetadata(ClassMetadata $classMetadata) {
+    public function setClassMetadata(ClassMetadata $classMetadata)
+    {
         $this->classMetadata = $classMetadata;
     }
 
     /**
-     *
-     * @return \Zend\Authentication\Storage\StorageInterface
+     * @return \Zend\Authentication\Storage\StorageInterface|string
      */
-    public function getStorage() {
-        if ( ! $this->storage instanceof StorageInterface){
-            $this->storage = new SessionStorage();
-        }
+    public function getStorage()
+    {
         return $this->storage;
     }
 
     /**
-     *
-     * @param \Zend\Authentication\Storage\StorageInterface $storage
+     * @param \Zend\Authentication\Storage\StorageInterface|string $storage
      */
-    public function setStorage(StorageInterface $storage) {
+    public function setStorage($storage)
+    {
         $this->storage = $storage;
     }
 }

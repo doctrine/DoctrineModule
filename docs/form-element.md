@@ -55,7 +55,53 @@ class MyForm extends Form implements ObjectManagerAwareInterface
 When the Form gets rendered the `findAll` method of the `ObjectRepository` will 
 be executed by default.
 
-### Example 2 : extended version
+### Example 2 : modifying the label
+
+In times you want to change the display of the label you will need to use the ```label_generator``` option.
+This option allows you to modify the label as much as you like. In this simple example i will concatenate two
+properties with a dash.
+
+```php
+$this->add(
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager'  => $this->getObjectManager(),
+            'target_class'    => 'Module\Entity\SomeEntity',
+            'label_generator' => function($targetEntity) {
+                return $targetEntity->getId() . ' - ' . $targetEntity->getTitle();
+            },
+        ),
+    )
+);
+```
+
+The callable function will always receive the target entity as a parameter so you will be able to use all
+functionalities your entities provide. Another example would be to completely switch out the labels in case
+your website has specific options to provide more accessible labels.
+
+```php
+$this->add(
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager'  => $this->getObjectManager(),
+            'target_class'    => 'Module\Entity\SomeEntity',
+            'label_generator' => function($targetEntity) use ($someSession) {
+                if ('accessible' === $someSession->getCurrentMode()) {
+                    return $targetEntity->getAccessibleLabel();
+                } else {
+                    return $targetEntity->getLabel();
+                }
+            },
+        ),
+    )
+);
+```
+
+### Example 3 : extended version
 
 If you don't need or want the entire repository you can specify a `find_method` 
 to use. This method must exist in the repository. The following example executes 
@@ -80,6 +126,27 @@ $this->add(
                     'orderBy'  => array('lastname' => 'ASC'),
                 ),
             ),
+        ),
+    )
+);
+```
+
+### Example 4 : including an empty option
+
+If you want to include an empty option at the top, set the `include_empty_option` setting to true.
+You can also specify the `empty_option_label` setting, the default is an empty string.
+
+```php
+$this->add(
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager'     => $this->getObjectManager(),
+            'target_class'       => 'Module\Entity\SomeEntity',
+            'property'           => 'property',
+            'display_empty_item' => true,
+            'empty_item_label'   => '---',
         ),
     )
 );
