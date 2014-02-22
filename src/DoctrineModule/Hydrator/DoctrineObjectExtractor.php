@@ -20,6 +20,8 @@ namespace DoctrineModule\Hydrator;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use DoctrineModule\Hydrator\Strategy\CollectionAssociationIdentifierExtractor;
+use DoctrineModule\Hydrator\Strategy\SingleAssociationIdentifierExtractor;
 use Zfr\Hydrator\AbstractExtractor;
 use Zfr\Hydrator\Protection\CircularExtractionTrait;
 
@@ -113,6 +115,14 @@ class DoctrineObjectExtractor extends AbstractExtractor
         $associationNames = $this->compositeFilter->filter($classMetadata->getAssociationNames());
 
         foreach ($associationNames as $associationName) {
+            if (!$this->hasStrategy($associationName)) {
+                if ($classMetadata->isSingleValuedAssociation($associationName)) {
+                    $this->addStrategy($associationName, new SingleAssociationIdentifierExtractor());
+                } else {
+                    $this->addStrategy($associationName, new CollectionAssociationIdentifierExtractor());
+                }
+            }
+
             $reflProperty = $reflClass->getProperty($associationName);
             $reflProperty->setAccessible(true);
 
