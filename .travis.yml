@@ -26,3 +26,4 @@ after_script:
       wget https://scrutinizer-ci.com/ocular.phar
       php ocular.phar code-coverage:upload --format=php-clover ./build/clover.xml
     }
+  - sh -c "if [ '$TRAVIS_PHP_VERSION' != '5.3' ]; then ./vendor/bin/phpcs --standard=vendor/doctrine/coding-standard/Doctrine ./src/ ./tests/; fi"
