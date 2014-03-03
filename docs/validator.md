@@ -142,11 +142,11 @@ You can change the default message of the validators the following way :
 		'name' => 'DoctrineModule\Validator\NoObjectExists',
 		'options' => array(
 			'object_repository' => $this->getEntityManager()->getRepository('Application\Entity\User'),
-			'fields' => 'email'
+			'fields' => 'email',
+			'messages' => array(
+				'objectFound' => 'Sorry guy, a user with this email already exists !'
+			),
 		),
-		**'messages' => array(
-			'objectFound' => 'Sorry guy, a user with this email already exists !'
-		)**
 	)
 )
 
