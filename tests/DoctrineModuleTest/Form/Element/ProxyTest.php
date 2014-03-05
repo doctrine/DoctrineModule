@@ -167,7 +167,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException(
             'RuntimeException',
-            'Required parameter "criteria" with no default value for method "findBy" in repository "' . \get_class($objectRepository) . '" was not provided'
+            'Required parameter "criteria" with no default value for method "findBy" in repository "'
+            . \get_class($objectRepository) . '" was not provided'
         );
 
         $this->proxy->getValueOptions();
