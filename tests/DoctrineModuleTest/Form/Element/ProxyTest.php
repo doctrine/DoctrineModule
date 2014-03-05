@@ -136,6 +136,43 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->getValueOptions();
     }
 
+    public function testExceptionThrownForMissingRequiredParameter()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $metadata    = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($metadata));
+
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($objectRepository));
+
+        $this->proxy->setOptions(
+            array(
+                'object_manager' => $objectManager,
+                'target_class'   => $objectClass,
+                'find_method'    => array(
+                    'name' => 'findBy',
+                    'params' => array()
+                )
+            )
+        );
+
+        $this->setExpectedException(
+            'RuntimeException',
+            'Required parameter "criteria" with no default value for method "findBy" in repository "' . \get_class($objectRepository) . '" was not provided'
+        );
+
+        $this->proxy->getValueOptions();
+    }
+
     public function testToStringIsUsedForGetValueOptions()
     {
         $this->prepareProxy();
