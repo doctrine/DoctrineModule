@@ -404,8 +404,18 @@ class Proxy implements ObjectManagerAwareInterface
             foreach ($r->getParameters() as $param) {
                 if (array_key_exists(strtolower($param->getName()), $findMethodParams)) {
                     $args[] = $findMethodParams[strtolower($param->getName())];
-                } else {
+                } elseif ($param->isDefaultValueAvailable()) {
                     $args[] = $param->getDefaultValue();
+                } elseif (!$param->isOptional()) {
+                    throw new RuntimeException(
+                        sprintf(
+                            'Required parameter "%s" with no default value for method "%s" in repository "%s"'
+                            . ' was not provided',
+                            $param->getName(),
+                            $findMethodName,
+                            get_class($repository)
+                        )
+                    );
                 }
             }
             $this->objects = $r->invokeArgs($repository, $args);
