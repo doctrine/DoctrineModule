@@ -241,4 +241,27 @@ class UniqueObjectTest extends BaseTestCase
             )
         );
     }
+
+    public function testCanValidateWithNotAvailableObjectInRepositoryByDateTimeObject()
+    {
+        $date       = new \DateTime("17 March 2014");
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(array('date' => $date))
+            ->will($this->returnValue(null));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
+        $validator = new UniqueObject(
+            array(
+                'object_repository' => $repository,
+                'object_manager'    => $objectManager,
+                'fields'            => 'date',
+            )
+        );
+
+        $this->assertTrue($validator->isValid($date));
+    }
 }
