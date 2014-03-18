@@ -76,6 +76,11 @@ class Proxy implements ObjectManagerAwareInterface
      * @var string
      */
     protected $emptyItemLabel = '';
+    
+    /**
+     * @var string
+     */
+    protected $idField = '';
 
     public function setOptions($options)
     {
@@ -109,6 +114,10 @@ class Proxy implements ObjectManagerAwareInterface
 
         if (isset($options['empty_item_label'])) {
             $this->setEmptyItemLabel($options['empty_item_label']);
+        }
+        
+        if (isset($options['id_field'])) {
+            $this->setIdField($options['id_field']);
         }
     }
 
@@ -310,6 +319,29 @@ class Proxy implements ObjectManagerAwareInterface
     {
         return $this->findMethod;
     }
+    
+    /** 
+     * Set id field form composite (multiple) identifiers
+     *
+     * @param string $idField
+     * @return Proxy
+     */
+    public function setIdField($field){
+        $this->idField = $field;
+
+        return $this;
+    }
+
+    /** 
+     * Get id field name for composite (multiple) identifiers
+     * 
+     * @return string
+     */
+    public function getIdField(){
+        return $this->idField;
+    }
+    
+    
 
     /**
      * @param $targetEntity
@@ -355,6 +387,16 @@ class Proxy implements ObjectManagerAwareInterface
 
                 // TODO: handle composite (multiple) identifiers
                 if (count($identifier) > 1) {
+                    $idField = $this->getIdField();
+                    if($idField && in_array($idField, $identifier)){
+                        $getter = 'get' . ucfirst($idField);
+                        if (!is_callable(array($value, $getter))) {
+                            throw new RuntimeException(
+                                sprintf('Method "%s::%s" is not callable', $this->targetClass, $getter)
+                            );
+                        }
+                        $value = $value->{$getter}();
+                    }
                     //$value = $key;
                 } else {
                     $value = current($metadata->getIdentifierValues($value));
@@ -485,7 +527,19 @@ class Proxy implements ObjectManagerAwareInterface
                 }
 
                 if (count($identifier) > 1) {
-                    $value = $key;
+                    $idField = $this->getIdField();
+                    if($idField && in_array($idField, $identifier)){
+                        $getter = 'get' . ucfirst($idField);
+                        if (!is_callable(array($object, $getter))) {
+                            throw new RuntimeException(
+                                sprintf('Method "%s::%s" is not callable', $this->targetClass, $getter)
+                            );
+                        }
+                        $value = $object->{$getter}();
+                    }else{
+                        $value = $key;
+                    }
+
                 } else {
                     $value = current($metadata->getIdentifierValues($object));
                 }
