@@ -387,6 +387,16 @@ class Proxy implements ObjectManagerAwareInterface
 
                 // TODO: handle composite (multiple) identifiers
                 if (count($identifier) > 1) {
+                    $idField = $this->getIdField();
+                    if($idField && in_array($idField, $identifier)){
+                        $getter = 'get' . ucfirst($idField);
+                        if (!is_callable(array($value, $getter))) {
+                            throw new RuntimeException(
+                                sprintf('Method "%s::%s" is not callable', $this->targetClass, $getter)
+                            );
+                        }
+                        $value = $value->{$getter}();
+                    }
                     //$value = $key;
                 } else {
                     $value = current($metadata->getIdentifierValues($value));
