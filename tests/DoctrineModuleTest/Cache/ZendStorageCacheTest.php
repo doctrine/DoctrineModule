@@ -64,6 +64,15 @@ class ZendStorageCacheTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($cache->fetch('test_object_key') instanceof \ArrayObject);
     }
 
+    public function testTtl()
+    {
+        $cache = $this->getCacheDriver();
+        $cache->save('test_ttl', 'testing ttl', 2);
+        $this->assertTrue($cache->contains('test_ttl'));
+        sleep(4);
+        $this->assertTrue($cache->contains('test_ttl'));
+    }
+
     public function testDeleteAll()
     {
         $cache = $this->getCacheDriver();
