@@ -72,8 +72,19 @@ class ZendStorageCache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = false)
     {
-        // @todo check if lifetime can be set
-        return $this->storage->setItem($id, $data);
+        if ($lifeTime) {
+            // TTL is per-storage in Zend\Cache\Storage\StorageInterface
+            $options = $this->storage->getOptions();
+            $oldTtl = $options->getTtl();
+            $options->setTtl($lifeTime);
+            $this->storage->setOptions($options);
+            $result = $this->storage->setItem($key, $value);
+            $options->setTtl($oldTtl);
+            $this->storage->setOptions($options);
+        } else {
+            $result = $this->storage->setItem($id, $data);
+        }
+        return $result;
     }
 
     /**
