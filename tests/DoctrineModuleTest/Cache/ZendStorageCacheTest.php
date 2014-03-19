@@ -21,6 +21,7 @@ namespace DoctrineModuleTest\Cache;
 
 use DoctrineModule\Cache\ZendStorageCache;
 use Doctrine\Common\Cache\Cache;
+use Zend\Cache\Storage\Adapter\Memcached;
 use Zend\Cache\Storage\Adapter\Memory;
 use PHPUnit_Framework_TestCase;
 
@@ -66,11 +67,24 @@ class ZendStorageCacheTest extends PHPUnit_Framework_TestCase
 
     public function testTtl()
     {
-        $cache = $this->getCacheDriver();
-        $cache->save('test_ttl', 'testing ttl', 2);
-        $this->assertTrue($cache->contains('test_ttl'));
-        sleep(4);
-        $this->assertTrue($cache->contains('test_ttl'));
+        $zfStorage = new Memory();
+
+        $zfStorage->getOptions()->setTtl(10);
+        $cache = new ZendStorageCache($zfStorage);
+
+        $cache->save('test_ttl1', 'test', 1);
+        $this->assertTrue($cache->contains('test_ttl1'));
+        sleep(3);
+        $this->assertFalse($cache->contains('test_ttl1'));
+
+        $zfStorage = new Memory();
+        $zfStorage->getOptions()->setTtl(2);
+        $cache = new ZendStorageCache($zfStorage);
+
+        $cache->save('test_ttl2', 'test', 2);
+        $this->assertTrue($cache->contains('test_ttl2'));
+        sleep(3);
+        $this->assertFalse($cache->contains('test_ttl2'));
     }
 
     public function testDeleteAll()
