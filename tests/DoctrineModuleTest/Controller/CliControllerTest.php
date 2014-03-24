@@ -20,6 +20,7 @@ namespace DoctrineModuleTest\Controller;
 
 use Zend\Console\Request;
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
+use DoctrineModuleTest\Controller\Mock\FailingCommand;
 
 /**
  * Tests for {@see \DoctrineModule\Controller\CliController}
@@ -38,6 +39,9 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
     {
         $this->setApplicationConfig(include __DIR__ . '/../../TestConfiguration.php.dist');
         parent::setUp();
+
+        $this->getApplicationServiceLocator()->get('doctrine.cli')
+            ->add(new FailingCommand());
     }
 
     /**
@@ -53,5 +57,19 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
         $this->assertControllerClass('clicontroller');
         $this->assertActionName('cli');
         $this->assertMatchedRouteName('doctrine_cli');
+    }
+
+    public function testNonZeroExitCode()
+    {
+        $this->dispatch(new Request(array('scriptname.php', 'fail')));
+
+        $this->assertNotResponseStatusCode(0);
+    }
+
+    public function testException()
+    {
+        $this->dispatch(new Request(array('scriptname.php', '-q', 'fail', '--exception')));
+
+        $this->assertNotResponseStatusCode(0);
     }
 }
