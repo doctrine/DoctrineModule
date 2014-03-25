@@ -69,7 +69,7 @@ return array(
 
 #### Creating the AuthenticationService
 
-Now that we have configured the authentication, we need still need to tell Zend Framework how to construct a correct ``Zend\Authentication\AuthenticationService`` instance. For this, add the following code in your Module.php class:
+Now that we have configured the authentication, we still need to tell Zend Framework how to construct a correct ``Zend\Authentication\AuthenticationService`` instance. For this, add the following code in your Module.php class:
 
 ```php
 namespace Application;
@@ -95,13 +95,13 @@ class Module
 }
 ```
 
-Please note that Iam using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 view helper.
+Please note that I am using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 view helper.
 
 #### Using the AuthenticationService
 
 Now that we have defined how to create a `Zend\Authentication\AuthenticationService` object, we can use it in our code. For more information about Zend authentication mechanisms, please read [the ZF 2 Authentication's documentation](http://framework.zend.com/manual/2.0/en/modules/zend.authentication.intro.html).
 
-Here is an example of you we could use it from a controller action (we stripped any Form things for simplicity):
+Here is an example of how we could use it from a controller action (we stripped any Form things for simplicity):
 
 ```php
 public function loginAction()
