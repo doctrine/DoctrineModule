@@ -11,7 +11,7 @@ The `DoctrineModule\Validator\UniqueObject` also needs the following option:
 
 * `object_manager` : an instance of an object manager.
 
-For the `use_context` option and other specifics to `DoctrineModule\Validator\UniqueObject` see [below](#UniqueObject).
+For the `use_context` option and other specifics to `DoctrineModule\Validator\UniqueObject` see [below](#uniqueobject).
 
 > Tip : to get an object repository (in Doctrine ORM this is called an entity repository) from an object manager (in Doctrine ORM this is called an entity manager), you need to call the `getRepository` function of any valid object manager instance, passing it the FQCN of the class. For instance, in the context of Doctrine 2 ORM, here is how you get the `object_repository` of the 'Application\Entity\User' entity :
 
