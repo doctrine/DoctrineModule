@@ -43,6 +43,14 @@ class ObjectSelect extends SelectElement
     }
 
     /**
+     * @param Proxy $proxy
+     */
+    public function setProxy(Proxy $proxy)
+    {
+        $this->proxy = $proxy;
+    }
+
+    /**
      * @param  array|\Traversable $options
      * @return ObjectSelect
      */
