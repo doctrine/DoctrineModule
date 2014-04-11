@@ -315,7 +315,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->prepareEmptyProxy(new \stdClass());
 
         $this->setExpectedException(
-            'InvalidArgumentException',
+            'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException',
             'must return array or Traversable'
         );
 

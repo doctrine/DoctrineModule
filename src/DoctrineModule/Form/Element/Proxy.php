@@ -382,7 +382,7 @@ class Proxy implements ObjectManagerAwareInterface
 
         $findMethod = (array) $this->getFindMethod();
         if (!$findMethod) {
-            $findMethod['name'] = 'findAll';
+            $findMethodName = 'findAll';
             $repository = $this->objectManager->getRepository($this->targetClass);
             $objects = $repository->findAll();
         } else {
@@ -426,12 +426,7 @@ class Proxy implements ObjectManagerAwareInterface
         }
 
         if (! is_array($objects) && ! $objects instanceof Traversable) {
-            throw new InvalidArgumentException(sprintf(
-                '"%s::%s()" must return array or Traversable, got "%s"',
-                get_class($repository),
-                $findMethod['name'],
-                is_object($objects) ? get_class($objects) : gettype($objects)
-            ));
+            throw Exception\InvalidRepositoryResultException::factory($repository, $findMethodName, $objects);
         }
 
         $this->objects = $objects;
