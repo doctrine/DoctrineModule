@@ -68,5 +68,4 @@ class ObjectRadioTest extends TestCase
         $this->assertEquals($options, $element->getValueOptions());
         $this->assertEquals($options, $element->getValueOptions());
     }
-
 }
