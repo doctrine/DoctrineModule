@@ -371,7 +371,7 @@ class Proxy implements ObjectManagerAwareInterface
      * Load objects
      *
      * @throws RuntimeException
-     * @throws InvalidArgumentException
+     * @throws Exception\InvalidRepositoryResultException
      * @return void
      */
     protected function loadObjects()
