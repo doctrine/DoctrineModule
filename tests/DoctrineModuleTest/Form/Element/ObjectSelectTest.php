@@ -20,10 +20,7 @@
 namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use DoctrineModule\Form\Element\ObjectMultiCheckbox;
 use DoctrineModule\Form\Element\ObjectSelect;
-use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Tests for the ObjectSelect element
@@ -33,7 +30,7 @@ use PHPUnit_Framework_TestCase;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 
-class ObjectSelectTest extends PHPUnit_Framework_TestCase
+class ObjectSelectTest extends ProxyAwareElementTestCase
 {
     /**
      * @var ArrayCollection
@@ -41,7 +38,7 @@ class ObjectSelectTest extends PHPUnit_Framework_TestCase
     protected $values;
 
     /**
-     * @var \DoctrineModule\Form\Element\ObjectSelect
+     * @var ObjectSelect
      */
     protected $element;
 
@@ -112,7 +109,7 @@ class ObjectSelectTest extends PHPUnit_Framework_TestCase
         $element->expects($this->never())
                 ->method('setValueOptions');
 
-        $element->setProxy($proxy);
+        $this->setProxyViaReflection($proxy, $element);
         $element->getInputSpecification();
         $this->assertEquals($options, $element->getValueOptions());
     }
@@ -126,79 +123,9 @@ class ObjectSelectTest extends PHPUnit_Framework_TestCase
               ->method('getValueOptions')
               ->will($this->returnValue($options));
 
-        $this->element->setProxy($proxy);
+        $this->setProxyViaReflection($proxy);
 
         $this->assertEquals($options, $this->element->getValueOptions());
         $this->assertEquals($options, $this->element->getValueOptions());
-    }
-
-    protected function prepareProxy()
-    {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $objectOne   = new FormObject();
-        $objectTwo   = new FormObject();
-
-        $objectOne->setId(1)
-            ->setUsername('object one username')
-            ->setPassword('object one password')
-            ->setEmail('object one email')
-            ->setFirstname('object one firstname')
-            ->setSurname('object one surname');
-
-        $objectTwo->setId(2)
-            ->setUsername('object two username')
-            ->setPassword('object two password')
-            ->setEmail('object two email')
-            ->setFirstname('object two firstname')
-            ->setSurname('object two surname');
-
-        $this->values = $result = new ArrayCollection(array($objectOne, $objectTwo));
-
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $metadata
-            ->expects($this->any())
-            ->method('getIdentifierValues')
-            ->will(
-                $this->returnCallback(
-                    function () use ($objectOne, $objectTwo) {
-                        $input = func_get_args();
-                        $input = array_shift($input);
-
-                        if ($input == $objectOne) {
-                            return array('id' => 1);
-                        } elseif ($input == $objectTwo) {
-                            return array('id' => 2);
-                        }
-
-                        return array();
-                    }
-                )
-            );
-
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $objectRepository->expects($this->any())
-            ->method('findAll')
-            ->will($this->returnValue($result));
-
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectManager->expects($this->any())
-            ->method('getClassMetadata')
-            ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
-
-        $objectManager
-            ->expects($this->any())
-            ->method('getRepository')
-            ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
-
-        $this->element->getProxy()->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass
-            )
-        );
-
-        $this->metadata = $metadata;
     }
 }

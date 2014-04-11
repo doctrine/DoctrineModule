@@ -20,10 +20,14 @@
 namespace DoctrineModuleTest\Form\Element;
 
 use DoctrineModule\Form\Element\ObjectRadio;
-use PHPUnit_Framework_TestCase as TestCase;
 
-class ObjectRadioTest extends TestCase
+class ObjectRadioTest extends ProxyAwareElementTestCase
 {
+    /**
+     * @var ObjectRadio
+     */
+    protected $element;
+
     /**
      * {@inheritDoc}.
      */
@@ -47,15 +51,13 @@ class ObjectRadioTest extends TestCase
         $element->expects($this->never())
             ->method('setValueOptions');
 
-        $element->setProxy($proxy);
+        $this->setProxyViaReflection($proxy, $element);
         $element->getInputSpecification();
         $this->assertEquals($options, $element->getValueOptions());
     }
 
     public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty()
     {
-        $element = new ObjectRadio();
-
         $options = array('foo' => 'bar');
 
         $proxy = $this->getMock('DoctrineModule\Form\Element\Proxy');
@@ -63,9 +65,9 @@ class ObjectRadioTest extends TestCase
             ->method('getValueOptions')
             ->will($this->returnValue($options));
 
-        $element->setProxy($proxy);
+        $this->setProxyViaReflection($proxy);
 
-        $this->assertEquals($options, $element->getValueOptions());
-        $this->assertEquals($options, $element->getValueOptions());
+        $this->assertEquals($options, $this->element->getValueOptions());
+        $this->assertEquals($options, $this->element->getValueOptions());
     }
 }
