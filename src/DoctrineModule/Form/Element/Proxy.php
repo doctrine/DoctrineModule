@@ -24,11 +24,12 @@ use ReflectionMethod;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use Traversable;
 
 class Proxy implements ObjectManagerAwareInterface
 {
     /**
-     * @var array
+     * @var array|Traversable
      */
     protected $objects;
 
@@ -380,7 +381,9 @@ class Proxy implements ObjectManagerAwareInterface
 
         $findMethod = (array) $this->getFindMethod();
         if (!$findMethod) {
-            $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
+            $findMethod['name'] = 'findAll';
+            $repository = $this->objectManager->getRepository($this->targetClass);
+            $objects = $repository->findAll();
         } else {
             if (!isset($findMethod['name'])) {
                 throw new RuntimeException('No method name was set');
@@ -418,8 +421,19 @@ class Proxy implements ObjectManagerAwareInterface
                     );
                 }
             }
-            $this->objects = $r->invokeArgs($repository, $args);
+            $objects = $r->invokeArgs($repository, $args);
         }
+
+        if (! is_array($objects) && ! $objects instanceof Traversable) {
+            throw new \InvalidArgumentException(sprintf(
+                '"%s::%s()" must return array or Traversable, got "%s"',
+                get_class($repository),
+                $findMethod['name'],
+                is_object($objects) ? get_class($objects) : gettype($objects)
+            ));
+        }
+
+        $this->objects = $objects;
     }
 
     /**
@@ -443,7 +457,7 @@ class Proxy implements ObjectManagerAwareInterface
         $objects    = $this->getObjects();
         $options    = array();
 
-        if ($this->displayEmptyItem || empty($objects)) {
+        if ($this->displayEmptyItem) {
             $options[''] = $this->getEmptyItemLabel();
         }
 
