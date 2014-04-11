@@ -100,7 +100,7 @@ class ObjectSelectTest extends PHPUnit_Framework_TestCase
 
     public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized()
     {
-        $element = $this->getMock('DoctrineModule\Form\Element\ObjectSelect', array('setValueOptions'));
+        $element = $this->getMock(get_class($this->element), array('setValueOptions'));
 
         $options = array();
 

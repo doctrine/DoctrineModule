@@ -79,6 +79,40 @@ class ObjectMultiCheckboxTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized()
+    {
+        $element = $this->getMock(get_class($this->element), array('setValueOptions'));
+
+        $options = array();
+
+        $proxy = $this->getMock('DoctrineModule\Form\Element\Proxy');
+        $proxy->expects($this->exactly(2))
+            ->method('getValueOptions')
+            ->will($this->returnValue($options));
+
+        $element->expects($this->never())
+            ->method('setValueOptions');
+
+        $element->setProxy($proxy);
+        $element->getInputSpecification();
+        $this->assertEquals($options, $element->getValueOptions());
+    }
+
+    public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty()
+    {
+        $options = array('foo' => 'bar');
+
+        $proxy = $this->getMock('DoctrineModule\Form\Element\Proxy');
+        $proxy->expects($this->once())
+            ->method('getValueOptions')
+            ->will($this->returnValue($options));
+
+        $this->element->setProxy($proxy);
+
+        $this->assertEquals($options, $this->element->getValueOptions());
+        $this->assertEquals($options, $this->element->getValueOptions());
+    }
+
     protected function prepareProxy()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
