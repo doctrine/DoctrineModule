@@ -426,7 +426,7 @@ class Proxy implements ObjectManagerAwareInterface
         }
 
         if (! is_array($objects) && ! $objects instanceof Traversable) {
-            throw Exception\InvalidRepositoryResultException::factory($repository, $findMethodName, $objects);
+            throw Exception\InvalidRepositoryResultException::create($repository, $findMethodName, $objects);
         }
 
         $this->objects = $objects;

@@ -27,9 +27,9 @@ class InvalidRepositoryResultException extends Exception
      * @param  $repository
      * @param  $methodName
      * @param  $objects
-     * @return InvalidRepositoryResultException
+     * @return self
      */
-    public static function factory($repository, $methodName, $objects)
+    public static function create($repository, $methodName, $objects)
     {
         return new self(sprintf(
             '"%s::%s()" must return array or Traversable, got "%s"',
