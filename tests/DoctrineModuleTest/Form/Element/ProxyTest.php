@@ -316,7 +316,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException(
             'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException',
-            'must return array or Traversable'
+            'return value must be an array or Traversable'
         );
 
         $this->proxy->getValueOptions();

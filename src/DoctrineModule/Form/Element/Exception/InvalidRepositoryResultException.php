@@ -23,19 +23,5 @@ use Exception;
 
 class InvalidRepositoryResultException extends Exception
 {
-    /**
-     * @param  $repository
-     * @param  $methodName
-     * @param  $objects
-     * @return self
-     */
-    public static function create($repository, $methodName, $objects)
-    {
-        return new self(sprintf(
-            '"%s::%s()" must return array or Traversable, got "%s"',
-            get_class($repository),
-            $methodName,
-            is_object($objects) ? get_class($objects) : gettype($objects)
-        ));
-    }
+
 }

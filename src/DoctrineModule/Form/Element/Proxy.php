@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Traversable;
+use Zend\Stdlib\Guard\GuardUtils;
 
 class Proxy implements ObjectManagerAwareInterface
 {
@@ -425,9 +426,11 @@ class Proxy implements ObjectManagerAwareInterface
             $objects = $r->invokeArgs($repository, $args);
         }
 
-        if (! is_array($objects) && ! $objects instanceof Traversable) {
-            throw Exception\InvalidRepositoryResultException::create($repository, $findMethodName, $objects);
-        }
+        GuardUtils::guardForArrayOrTraversable(
+            $objects,
+            sprintf('%s::%s() return value', get_class($repository), $findMethodName),
+            'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException'
+        );
 
         $this->objects = $objects;
     }
