@@ -19,9 +19,8 @@
 
 namespace DoctrineModule\Form\Element\Exception;
 
-use Exception;
+use InvalidArgumentException;
 
-class InvalidRepositoryResultException extends Exception
+class InvalidRepositoryResultException extends InvalidArgumentException
 {
-
 }
