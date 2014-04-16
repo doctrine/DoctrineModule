@@ -30,6 +30,7 @@ use PHPUnit_Framework_TestCase;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @covers  DoctrineModule\Form\Element\Proxy
  */
 class ProxyTest extends PHPUnit_Framework_TestCase
 {
@@ -302,6 +303,26 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $result);
     }
 
+    public function testCanWorkWithEmptyDataReturnedAsArray()
+    {
+        $this->prepareEmptyProxy(array());
+
+        $result = $this->proxy->getValueOptions();
+        $this->assertEquals(array(), $result);
+    }
+
+    public function testExceptionThrownForNonTraversableResults()
+    {
+        $this->prepareEmptyProxy(new \stdClass());
+
+        $this->setExpectedException(
+            'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException',
+            'return value must be an array or Traversable'
+        );
+
+        $this->proxy->getValueOptions();
+    }
+
     public function testUsingFindMethod()
     {
         $this->prepareFilteredProxy();
@@ -456,10 +477,13 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->metadata = $metadata;
     }
 
-    public function prepareEmptyProxy()
+    public function prepareEmptyProxy($result = null)
     {
+        if ($result === null) {
+            $result = new ArrayCollection();
+        }
+
         $objectClass      = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $result           = new ArrayCollection();
         $metadata         = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
