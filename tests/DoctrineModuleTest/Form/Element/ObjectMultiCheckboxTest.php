@@ -28,8 +28,8 @@ use DoctrineModule\Form\Element\ObjectMultiCheckbox;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @covers  DoctrineModule\Form\Element\ObjectMultiCheckbox
  */
-
 class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
 {
     /**

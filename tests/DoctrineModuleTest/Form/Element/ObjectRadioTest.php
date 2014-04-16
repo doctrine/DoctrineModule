@@ -21,6 +21,11 @@ namespace DoctrineModuleTest\Form\Element;
 
 use DoctrineModule\Form\Element\ObjectRadio;
 
+/**
+ * Tests for the ObjectRadio element
+ *
+ * @covers  DoctrineModule\Form\Element\ObjectRadio
+ */
 class ObjectRadioTest extends ProxyAwareElementTestCase
 {
     /**

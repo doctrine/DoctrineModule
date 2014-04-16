@@ -30,6 +30,7 @@ use PHPUnit_Framework_TestCase;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @covers  DoctrineModule\Form\Element\Proxy
  */
 class ProxyTest extends PHPUnit_Framework_TestCase
 {
