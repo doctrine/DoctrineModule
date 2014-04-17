@@ -151,7 +151,9 @@ class UniqueObject extends ObjectExists
             );
         }
 
-        if (is_object($context)) {
+        $className = $this->objectRepository->getClassName();
+
+        if ($context instanceof $className) {
             return $this->objectManager
                         ->getClassMetadata($this->objectRepository->getClassName())
                         ->getIdentifierValues($context);
