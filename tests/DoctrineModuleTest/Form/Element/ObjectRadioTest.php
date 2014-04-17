@@ -19,26 +19,17 @@
 
 namespace DoctrineModuleTest\Form\Element;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use DoctrineModule\Form\Element\ObjectMultiCheckbox;
+use DoctrineModule\Form\Element\ObjectRadio;
 
 /**
- * Tests for the ObjectMultiCheckbox element
+ * Tests for the ObjectRadio element
  *
- * @license MIT
- * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
- * @covers  DoctrineModule\Form\Element\ObjectMultiCheckbox
+ * @covers  DoctrineModule\Form\Element\ObjectRadio
  */
-class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
+class ObjectRadioTest extends ProxyAwareElementTestCase
 {
     /**
-     * @var ArrayCollection
-     */
-    protected $values;
-
-    /**
-     * @var ObjectMultiCheckbox
+     * @var ObjectRadio
      */
     protected $element;
 
@@ -48,33 +39,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->element = new ObjectMultiCheckbox();
-
-        $this->prepareProxy();
-    }
-
-    public function testSetValueWithCollection()
-    {
-        $this->element->setValue(
-            $this->values
-        );
-
-        $this->assertEquals(
-            array(1, 2),
-            $this->element->getValue()
-        );
-    }
-
-    public function testSetValueWithArray()
-    {
-        $this->element->setValue(
-            $this->values->toArray()
-        );
-
-        $this->assertEquals(
-            array(1, 2),
-            $this->element->getValue()
-        );
+        $this->element = new ObjectRadio();
     }
 
     public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized()

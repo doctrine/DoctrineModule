@@ -30,6 +30,7 @@ use PHPUnit_Framework_TestCase;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
+ * @covers  DoctrineModule\Form\Element\Proxy
  */
 class ProxyTest extends PHPUnit_Framework_TestCase
 {
@@ -131,6 +132,44 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException(
             'RuntimeException',
             'Method "NotExistent" could not be found in repository "' . get_class($objectRepository).'"'
+        );
+
+        $this->proxy->getValueOptions();
+    }
+
+    public function testExceptionThrownForMissingRequiredParameter()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $metadata    = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($metadata));
+
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($objectRepository));
+
+        $this->proxy->setOptions(
+            array(
+                'object_manager' => $objectManager,
+                'target_class'   => $objectClass,
+                'find_method'    => array(
+                    'name' => 'findBy',
+                    'params' => array()
+                )
+            )
+        );
+
+        $this->setExpectedException(
+            'RuntimeException',
+            'Required parameter "criteria" with no default value for method "findBy" in repository "'
+            . \get_class($objectRepository) . '" was not provided'
         );
 
         $this->proxy->getValueOptions();
@@ -262,6 +301,26 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $result = $this->proxy->getValueOptions();
         $this->assertEquals(array(), $result);
+    }
+
+    public function testCanWorkWithEmptyDataReturnedAsArray()
+    {
+        $this->prepareEmptyProxy(array());
+
+        $result = $this->proxy->getValueOptions();
+        $this->assertEquals(array(), $result);
+    }
+
+    public function testExceptionThrownForNonTraversableResults()
+    {
+        $this->prepareEmptyProxy(new \stdClass());
+
+        $this->setExpectedException(
+            'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException',
+            'return value must be an array or Traversable'
+        );
+
+        $this->proxy->getValueOptions();
     }
 
     public function testUsingFindMethod()
@@ -418,10 +477,13 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->metadata = $metadata;
     }
 
-    public function prepareEmptyProxy()
+    public function prepareEmptyProxy($result = null)
     {
+        if ($result === null) {
+            $result = new ArrayCollection();
+        }
+
         $objectClass      = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $result           = new ArrayCollection();
         $metadata         = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 

@@ -11,6 +11,8 @@ The `DoctrineModule\Validator\UniqueObject` also needs the following option:
 
 * `object_manager` : an instance of an object manager.
 
+For the `use_context` option and other specifics to `DoctrineModule\Validator\UniqueObject` see [below](#uniqueobject).
+
 > Tip : to get an object repository (in Doctrine ORM this is called an entity repository) from an object manager (in Doctrine ORM this is called an entity manager), you need to call the `getRepository` function of any valid object manager instance, passing it the FQCN of the class. For instance, in the context of Doctrine 2 ORM, here is how you get the `object_repository` of the 'Application\Entity\User' entity :
 
 ```php
@@ -142,11 +144,11 @@ You can change the default message of the validators the following way :
 		'name' => 'DoctrineModule\Validator\NoObjectExists',
 		'options' => array(
 			'object_repository' => $this->getEntityManager()->getRepository('Application\Entity\User'),
-			'fields' => 'email'
+			'fields' => 'email',
+			'messages' => array(
+				'objectFound' => 'Sorry guy, a user with this email already exists !'
+			),
 		),
-		**'messages' => array(
-			'objectFound' => 'Sorry guy, a user with this email already exists !'
-		)**
 	)
 )
 
@@ -160,3 +162,14 @@ $objectExistsValidator = new \DoctrineModule\Validator\ObjectExists(array(
 ```
 
 > Note : as you can see, in order to create a validator in your form objects, you need an object repository, and hence you need to have access to the service manager in order to fetch it (this is also the case for other features from DoctrineModule like custom Form elements). However, when dealing with complex forms, you can have a very deep hierarchy of fieldsets, and "transferring" the service manager from one fieldset to another can be a tedious task, and bring useless complexity to your code, especially if only the deepest fieldset effectively needs the service manager. When dealing with such cases, I have found that the simplest case is to use a Registry. I perfectly know that registry was removed from Zend Framework 2, and it is considered bad practice as it makes testing harder. However, for this very specific use case, I found that this is a nice way to solve the problem. But remember, don't tend to take the easy way out, and don't use this Registry trick every where in your program.
+
+### UniqueObject
+
+There are two things you have to think about when using `DoctrineModule\Validator\UniqueObject`. As mentioned above you have to pass an ObjectManager as `object_manager` option.
+Second, you have to pass a value for every identifier your entity has got.
+
+* If you leave out the `use_context` option or set it to `false` you have to pass an array containing the `fields`- and `identifier`-values into `isValid()`. When using `Zend\Form` this behaviour is needed if you're using fieldsets.
+* If you set the `use_context` option to `true` you have to pass the `fields`-values as first argument and an array containing the `identifier`-values as second argument into `isValid()`. When using `Zend\Form` without fieldsets, this behaviour would be needed.
+
+__Important:__ Whatever you choose, please ensure that the `identifier`-values are named by the field-names, not by the database-column.
+

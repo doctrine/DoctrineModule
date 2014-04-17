@@ -138,7 +138,7 @@ class ObjectExists extends AbstractValidator
      */
     protected function cleanSearchValue($value)
     {
-        $value = (array) $value;
+        $value = is_object($value) ? array($value) : (array) $value;
 
         if (ArrayUtils::isHashTable($value)) {
             $matchedFieldsValues = array();

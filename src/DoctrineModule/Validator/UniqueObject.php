@@ -48,6 +48,11 @@ class UniqueObject extends ObjectExists
      */
     protected $objectManager;
 
+    /**
+     * @var boolean
+     */
+    protected $useContext;
+
     /***
      * Constructor
      *
@@ -83,6 +88,7 @@ class UniqueObject extends ObjectExists
         }
 
         $this->objectManager = $options['object_manager'];
+        $this->useContext    = isset($options['use_context']) ? (boolean) $options['use_context'] : false;
     }
 
     /**
@@ -94,6 +100,10 @@ class UniqueObject extends ObjectExists
      */
     public function isValid($value, $context = null)
     {
+        if (!$this->useContext) {
+            $context = (array) $value;
+        }
+
         $value = $this->cleanSearchValue($value);
         $match = $this->objectRepository->findOneBy($value);
 

@@ -123,7 +123,12 @@ $this->add(
                 'name'   => 'findBy',
                 'params' => array(
                     'criteria' => array('active' => 1),
+                    
+                    // Use key 'orderBy' if using ORM
                     'orderBy'  => array('lastname' => 'ASC'),
+                    
+                    // Use key 'sort' if using ODM
+                    'sort'  => array('lastname' => 'ASC')
                 ),
             ),
         ),
