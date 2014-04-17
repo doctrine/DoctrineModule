@@ -139,16 +139,22 @@ class UniqueObject extends ObjectExists
     /**
      * Gets the identifiers from the context.
      *
-     * @param array $context
+     * @param  array|object $context
      * @return array
      * @throws Exception\RuntimeException
      */
-    protected function getExpectedIdentifiers(array $context = null)
+    protected function getExpectedIdentifiers($context = null)
     {
         if ($context === null) {
             throw new Exception\RuntimeException(
                 'Expected context to be an array but is null'
             );
+        }
+
+        if (is_object($context)) {
+            return $this->objectManager
+                        ->getClassMetadata($this->objectRepository->getClassName())
+                        ->getIdentifierValues($context);
         }
 
         $result = array();
