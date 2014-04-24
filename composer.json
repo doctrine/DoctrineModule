@@ -49,7 +49,8 @@
         "zendframework/zendframework": "~2.3"
     },
     "suggest": {
-        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
+        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
+        "zfcampus/zf-development-mode" : "Development mode to have a development application config per machine"
     },
     "autoload": {
         "psr-0": {
