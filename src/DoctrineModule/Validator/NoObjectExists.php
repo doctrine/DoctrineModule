@@ -33,7 +33,24 @@ class NoObjectExists extends ObjectExists
      * Error constants
      */
     const ERROR_OBJECT_FOUND    = 'objectFound';
+    
+    /**
+     * @var array
+     */
+    protected $exclude = null;
 
+    /**
+     *
+     * @param array $options
+     */
+    public function __construct($options)
+    {
+        parent::__construct($options);
+        if (array_key_exists('exclude', $options)) {
+            $this->setExclude($options['exclude']);
+        }
+    }
+    
     /**
      * @var array Message templates
      */
@@ -47,14 +64,46 @@ class NoObjectExists extends ObjectExists
     public function isValid($value)
     {
         $value = $this->cleanSearchValue($value);
-        $match = $this->objectRepository->findOneBy($value);
+        $criteria = $this->makeCriteria($value);
 
-        if (is_object($match)) {
+        /** @var Doctrine\Common\Collections\ArrayCollection */
+        $collection = $this->objectRepository->matching($criteria);
+
+        if ($collection->count()) {
             $this->error(self::ERROR_OBJECT_FOUND, $value);
 
             return false;
         }
 
         return true;
+    }
+    
+    /**
+     * Sets a new exclude clause
+     *
+     * @param array $exclude
+     * @return self Provides a fluent interface
+     */
+    public function setExclude($exclude)
+    {
+        $this->exclude = $exclude;
+        return $this;
+    }
+
+    /**
+     *
+     * @param array $value
+     * @return \Doctrine\Common\Collections\Criteria
+     */
+    public function makeCriteria($value)
+    {
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->eq(key($value), current($value)));
+
+        if($this->exclude) {
+            $criteria->andWhere(Criteria::expr()->neq($this->exclude['field'], $this->exclude['value']));
+        }
+
+        return $criteria;
     }
 }
