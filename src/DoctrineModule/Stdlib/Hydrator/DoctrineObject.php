@@ -29,6 +29,7 @@ use Traversable;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
+use Zend\Stdlib\Hydrator\Filter\FilterProviderInterface;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
