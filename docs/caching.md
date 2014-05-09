@@ -22,3 +22,51 @@ $adapterOptions = new \Zend\Cache\Storage\Adapter\AdapterOptions();
 $zendCacheStorage = new \DoctrineModule\Cache\DoctrineCacheStorageTest($adapterOptions, $zendCache);
 // now use $zendCacheStorage as a normal Zend\Cache\Storage\StorageInterface instance.
 ```
+
+
+### Caching queries, results and metadata
+
+If you want to set a cache for query, result and metadata, you can specify this inside your `module.config.php`
+
+```php
+'doctrine' => array(
+    'configuration' => array(
+        'orm_default' => array(
+            'query_cache'       => 'apc',
+            'result_cache'      => 'apc',
+            'metadata_cache'    => 'apc'
+        )
+    )
+),
+```
+
+The previous configuration take in consideration an Apc adapter. You can specify any other adapter that implements the `Doctrine\Common\Cache\Cache` interface.
+
+Example with Memcached
+
+```php
+'doctrine' => array(
+    'configuration' => array(
+        'orm_default' => array(
+            'query_cache'       => 'memcached',
+            'result_cache'      => 'memcached',
+            'metadata_cache'    => 'memcached'
+        )
+    )
+),
+```
+
+In this case you have to specify a custom factory in your service_manager configuration
+
+```php
+// module.config.php
+'service_manager' => array(
+    'factories' => array(
+        'my_memcached_alias' => function() {
+            $memcached = new \Memcached();
+            $memcached->addServer('localhost', 11211);
+            return $memcached;
+        },
+    ),
+),
+```
