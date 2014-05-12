@@ -44,6 +44,11 @@ class Selectable implements AdapterInterface
     protected $criteria;
 
     /**
+     * @var int|null
+     */
+    protected $itemsCount = null;
+
+    /**
      * Create a paginator around a Selectable object. You can also provide an optional Criteria object with
      * some predefined filters
      *
@@ -71,11 +76,15 @@ class Selectable implements AdapterInterface
      */
     public function count()
     {
+        if (null !== $this->itemsCount) {
+            return $this->itemsCount;
+        }
+
         $criteria = clone $this->criteria;
 
         $criteria->setFirstResult(null);
         $criteria->setMaxResults(null);
 
-        return count($this->selectable->matching($criteria));
+        return $this->itemsCount = count($this->selectable->matching($criteria));
     }
 }

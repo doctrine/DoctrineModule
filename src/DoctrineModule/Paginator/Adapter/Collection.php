@@ -38,6 +38,11 @@ class Collection implements AdapterInterface
     protected $collection;
 
     /**
+     * @var int|null
+     */
+    protected $itemsCount = null;
+
+    /**
      * @param DoctrineCollection $collection
      */
     public function __construct(DoctrineCollection $collection)
@@ -58,6 +63,10 @@ class Collection implements AdapterInterface
      */
     public function count()
     {
-        return count($this->collection);
+        if (null !== $this->itemsCount) {
+            return $this->itemsCount;
+        }
+
+        return $this->itemsCount = count($this->collection);
     }
 }
