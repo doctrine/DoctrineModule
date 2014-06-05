@@ -176,6 +176,12 @@ class DoctrineObject extends AbstractHydrator
             : $this->filterComposite;
 
         $data = array();
+        if ($this->metadata->inheritanceType !== \Doctrine\ORM\Mapping\ClassMetadata::INHERITANCE_TYPE_NONE) {
+            if (!empty($this->metadata->discriminatorColumn['name'])) {
+                $data[$this->metadata->discriminatorColumn['name']] = $this->metadata->discriminatorValue;
+            }
+        }
+
         foreach ($fieldNames as $fieldName) {
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
