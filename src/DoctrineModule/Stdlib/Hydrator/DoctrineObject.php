@@ -176,6 +176,10 @@ class DoctrineObject extends AbstractHydrator
             : $this->filterComposite;
 
         $data = array();
+        if ($this->metadata->getReflectionClass()->getParentClass()) {
+            $data['__CLASS'] = $this->metadata->getReflectionClass()->name;
+        }
+
         foreach ($fieldNames as $fieldName) {
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
