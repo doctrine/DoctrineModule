@@ -177,6 +177,9 @@ class DoctrineObject extends AbstractHydrator
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
+            if($this->hasNamingStrategy()) {
+                $fieldName = $this->getNamingStrategy()->hydrate($fieldName);
+            }
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
@@ -212,6 +215,9 @@ class DoctrineObject extends AbstractHydrator
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
+            if($this->hasNamingStrategy()) {
+                $fieldName = $this->getNamingStrategy()->hydrate($fieldName);
+            }
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
@@ -243,6 +249,9 @@ class DoctrineObject extends AbstractHydrator
         }
 
         foreach ($data as $field => $value) {
+            if($this->hasNamingStrategy()) {
+                $field = $this->getNamingStrategy()->hydrate($field);
+            }
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
             $setter = 'set' . ucfirst($field);
 
@@ -298,6 +307,9 @@ class DoctrineObject extends AbstractHydrator
         }
 
         foreach ($data as $field => $value) {
+            if($this->hasNamingStrategy()) {
+                $field = $this->getNamingStrategy()->hydrate($field);
+            }
             // Ignore unknown fields
             if (!$refl->hasProperty($field)) {
                 continue;
