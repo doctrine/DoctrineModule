@@ -177,9 +177,7 @@ class DoctrineObject extends AbstractHydrator
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
-            if ($this->hasNamingStrategy()) {
-                $fieldName = $this->getNamingStrategy()->hydrate($fieldName);
-            }
+            $fieldName = $this->computeFieldName($fieldName);
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
@@ -215,9 +213,7 @@ class DoctrineObject extends AbstractHydrator
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
-            if ($this->hasNamingStrategy()) {
-                $fieldName = $this->getNamingStrategy()->hydrate($fieldName);
-            }
+            $fieldName = $this->computeFieldName($fieldName);
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
@@ -249,9 +245,7 @@ class DoctrineObject extends AbstractHydrator
         }
 
         foreach ($data as $field => $value) {
-            if ($this->hasNamingStrategy()) {
-                $field = $this->getNamingStrategy()->hydrate($field);
-            }
+            $field  = $this->computeFieldName($field);
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
             $setter = 'set' . ucfirst($field);
 
@@ -307,9 +301,7 @@ class DoctrineObject extends AbstractHydrator
         }
 
         foreach ($data as $field => $value) {
-            if ($this->hasNamingStrategy()) {
-                $field = $this->getNamingStrategy()->hydrate($field);
-            }
+            $field = $this->computeFieldName($field);
             // Ignore unknown fields
             if (!$refl->hasProperty($field)) {
                 continue;
@@ -520,5 +512,20 @@ class DoctrineObject extends AbstractHydrator
         }
 
         return false;
+    }
+
+    /**
+     * Applies the naming strategy if there is one set
+     *
+     * @param string $field
+     *
+     * @return string
+     */
+    protected function computeFieldName($field)
+    {
+        if ($this->hasNamingStrategy()) {
+            return $this->getNamingStrategy()->hydrate($field);
+        }
+        return $field;
     }
 }
