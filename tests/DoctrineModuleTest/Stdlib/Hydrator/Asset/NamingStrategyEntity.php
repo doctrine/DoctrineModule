@@ -32,4 +32,4 @@ class NamingStrategyEntity
     {
         return $this->camelCase;
     }
-} 
+}
