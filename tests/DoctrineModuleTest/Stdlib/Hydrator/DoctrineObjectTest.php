@@ -2066,7 +2066,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForNamingStrategyEntity();
         $name = 'Baz';
         $this->hydratorByReference->setNamingStrategy(new UnderscoreNamingStrategy());
-        $entity = $this->hydratorByReference->hydrate(['camel_case' => $name], new NamingStrategyEntity());
+        $entity = $this->hydratorByReference->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
         $this->assertEquals($name, $entity->getCamelCase());
     }
 
@@ -2075,7 +2075,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForNamingStrategyEntity();
         $name = 'Qux';
         $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
-        $entity = $this->hydratorByValue->hydrate(['camel_case' => $name], new NamingStrategyEntity());
+        $entity = $this->hydratorByValue->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
         $this->assertEquals($name, $entity->getCamelCase());
     }
 }
