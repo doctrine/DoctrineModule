@@ -29,6 +29,7 @@ use Traversable;
 use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
+use Zend\Stdlib\Hydrator\Filter\FilterProviderInterface;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
@@ -177,17 +178,17 @@ class DoctrineObject extends AbstractHydrator
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
-            $fieldName = $this->computeFieldName($fieldName);
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
             $getter = 'get' . ucfirst($fieldName);
             $isser  = 'is' . ucfirst($fieldName);
 
+            $dataFieldName = $this->computeExtractFieldName($fieldName);
             if (in_array($getter, $methods)) {
-                $data[$fieldName] = $this->extractValue($fieldName, $object->$getter(), $object);
+                $data[$dataFieldName] = $this->extractValue($fieldName, $object->$getter(), $object);
             } elseif (in_array($isser, $methods)) {
-                $data[$fieldName] = $this->extractValue($fieldName, $object->$isser(), $object);
+                $data[$dataFieldName] = $this->extractValue($fieldName, $object->$isser(), $object);
             }
 
             // Unknown fields are ignored
@@ -213,14 +214,13 @@ class DoctrineObject extends AbstractHydrator
 
         $data = array();
         foreach ($fieldNames as $fieldName) {
-            $fieldName = $this->computeFieldName($fieldName);
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
             $reflProperty = $refl->getProperty($fieldName);
             $reflProperty->setAccessible(true);
 
-            $data[$fieldName] = $this->extractValue($fieldName, $reflProperty->getValue($object), $object);
+            $data[$this->computeExtractFieldName($fieldName)] = $this->extractValue($fieldName, $reflProperty->getValue($object), $object);
         }
 
         return $data;
@@ -245,7 +245,7 @@ class DoctrineObject extends AbstractHydrator
         }
 
         foreach ($data as $field => $value) {
-            $field  = $this->computeFieldName($field);
+            $field  = $this->computeHydrateFieldName($field);
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
             $setter = 'set' . ucfirst($field);
 
@@ -301,7 +301,7 @@ class DoctrineObject extends AbstractHydrator
         }
 
         foreach ($data as $field => $value) {
-            $field = $this->computeFieldName($field);
+            $field = $this->computeHydrateFieldName($field);
             // Ignore unknown fields
             if (!$refl->hasProperty($field)) {
                 continue;
@@ -521,10 +521,25 @@ class DoctrineObject extends AbstractHydrator
      *
      * @return string
      */
-    protected function computeFieldName($field)
+    protected function computeHydrateFieldName($field)
     {
         if ($this->hasNamingStrategy()) {
-            return $this->getNamingStrategy()->hydrate($field);
+            $field = $this->getNamingStrategy()->hydrate($field);
+        }
+        return $field;
+    }
+
+    /**
+     * Applies the naming strategy if there is one set
+     *
+     * @param string $field
+     *
+     * @return string
+     */
+    protected function computeExtractFieldName($field)
+    {
+        if ($this->hasNamingStrategy()) {
+            $field = $this->getNamingStrategy()->extract($field);
         }
         return $field;
     }
