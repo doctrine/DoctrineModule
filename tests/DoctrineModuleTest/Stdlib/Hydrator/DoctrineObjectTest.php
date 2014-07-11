@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
 use DoctrineModule\Stdlib\Hydrator\Filter;
+use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
+use Zend\Stdlib\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
 
 class DoctrineObjectTest extends BaseTestCase
 {
@@ -98,6 +100,62 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getIdentifierFieldNames')
             ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
+    public function configureObjectManagerForNamingStrategyEntity()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('camelCase')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->equalTo('camelCase'))
+            ->will($this->returnValue('string'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('camelCase')));
 
         $this
             ->metadata
@@ -1983,5 +2041,41 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertEquals(2, $data['id']);
         $this->assertEquals(array('id'), array_keys($data), 'Only the "id" field should have been extracted.');
+    }
+
+    public function testExtractByReferenceUsesNamingStrategy()
+    {
+        $this->configureObjectManagerForNamingStrategyEntity();
+        $name = 'Foo';
+        $this->hydratorByReference->setNamingStrategy(new UnderscoreNamingStrategy());
+        $data = $this->hydratorByReference->extract(new NamingStrategyEntity($name));
+        $this->assertEquals($name, $data['camel_case']);
+    }
+
+    public function testExtractByValueUsesNamingStrategy()
+    {
+        $this->configureObjectManagerForNamingStrategyEntity();
+        $name = 'Bar';
+        $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
+        $data = $this->hydratorByValue->extract(new NamingStrategyEntity($name));
+        $this->assertEquals($name, $data['camel_case']);
+    }
+
+    public function testHydrateByReferenceUsesNamingStrategy()
+    {
+        $this->configureObjectManagerForNamingStrategyEntity();
+        $name = 'Baz';
+        $this->hydratorByReference->setNamingStrategy(new UnderscoreNamingStrategy());
+        $entity = $this->hydratorByReference->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
+        $this->assertEquals($name, $entity->getCamelCase());
+    }
+
+    public function testHydrateByValueUsesNamingStrategy()
+    {
+        $this->configureObjectManagerForNamingStrategyEntity();
+        $name = 'Qux';
+        $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
+        $entity = $this->hydratorByValue->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
+        $this->assertEquals($name, $entity->getCamelCase());
     }
 }
