@@ -52,4 +52,16 @@ class AuthenticationServiceFactory extends AbstractFactory
     {
         throw new \BadMethodCallException('Not implemented');
     }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @param type $array
+     * @return \DoctrineModule\Service\Authentication\AuthenticationServiceFactory
+     */
+    public static function __set_state($array)
+    {
+        $name = $array['name'];
+        return new AuthenticationServiceFactory($name);
+    }
 }
