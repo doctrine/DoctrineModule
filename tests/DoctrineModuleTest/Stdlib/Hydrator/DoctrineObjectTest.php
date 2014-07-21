@@ -736,6 +736,76 @@ class DoctrineObjectTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForSimpleFilterProvider()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleFilterProvider');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleFilterProvider'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'password')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('password')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ('id' === $arg) {
+                            return 'integer';
+                        }
+
+                        if ('password' === $arg) {
+                            return 'string';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
     public function testObjectIsPassedForContextToStrategies()
     {
         $entity = new Asset\ContextEntity();
@@ -2077,5 +2147,18 @@ class DoctrineObjectTest extends BaseTestCase
         $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
         $entity = $this->hydratorByValue->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
         $this->assertEquals($name, $entity->getCamelCase());
+    }
+
+    public function testExtractWithFilterProvider()
+    {
+        $entity = new Asset\SimpleFilterProvider();
+        $entity->setId(1);
+        $entity->setPassword('secret');
+
+        $this->configureObjectManagerForSimpleFilterProvider();
+
+        $data = $this->hydratorByValue->extract($entity);
+        $this->assertEquals(1, $data['id']);
+        $this->assertEquals(array('id'), array_keys($data), 'Only the "id" field should have been extracted.');
     }
 }
