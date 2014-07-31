@@ -182,7 +182,11 @@ class DoctrineObject extends AbstractHydrator
                 continue;
             }
             $getter = 'get' . ucfirst($fieldName);
-            $isser  = 'is' . ucfirst($fieldName);
+            if (substr($fieldName, 0, 2) == 'is' && ctype_upper(substr($fieldName, 2, 1))) {
+                $isser = $fieldName;
+            } else {
+                $isser  = 'is' . ucfirst($fieldName);
+            }
 
             $dataFieldName = $this->computeExtractFieldName($fieldName);
             if (in_array($getter, $methods)) {
