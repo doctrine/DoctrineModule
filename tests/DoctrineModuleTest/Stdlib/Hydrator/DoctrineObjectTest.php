@@ -2001,12 +2001,13 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = new Asset\SimpleIsEntity();
         $entity->setId(2);
         $entity->setDone(true);
+        $entity->setIsActive(true);
 
         $this->configureObjectManagerForSimpleIsEntity();
 
         $data = $this->hydratorByValue->extract($entity);
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity', $entity);
-        $this->assertEquals(array('id' => 2, 'done' => true), $data);
+        $this->assertEquals(array('id' => 2, 'done' => true, 'isActive' => true), $data);
     }
 
     public function testExtractWithPropertyNameFilterByValue()

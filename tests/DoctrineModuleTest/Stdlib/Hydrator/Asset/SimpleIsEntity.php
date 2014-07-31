@@ -14,6 +14,11 @@ class SimpleIsEntity
      */
     protected $done;
 
+    /**
+     * @var bool
+     */
+    protected $isActive;
+
     public function setId($id)
     {
         $this->id = $id;
@@ -32,5 +37,15 @@ class SimpleIsEntity
     public function isDone()
     {
         return $this->done;
+    }
+
+    public function setIsActive($isActive)
+    {
+        $this->isActive = (bool) $isActive;
+    }
+
+    public function isActive()
+    {
+        return $this->isActive;
     }
 }
