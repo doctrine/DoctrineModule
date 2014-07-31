@@ -192,19 +192,21 @@ class DoctrineObjectTest extends BaseTestCase
             ->metadata
             ->expects($this->any())
             ->method('getFieldNames')
-            ->will($this->returnValue(array('id', 'done')));
+            ->will($this->returnValue(array('id', 'done', 'isActive')));
 
         $this
             ->metadata
             ->expects($this->any())
             ->method('getTypeOfField')
-            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('done')))
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('done'), $this->equalTo('isActive')))
             ->will(
                 $this->returnCallback(
                     function ($arg) {
                         if ('id' === $arg) {
                             return 'integer';
                         } elseif ('done' === $arg) {
+                            return 'boolean';
+                        } elseif ('isActive' === $arg) {
                             return 'boolean';
                         }
 
