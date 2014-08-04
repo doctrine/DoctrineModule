@@ -189,6 +189,11 @@ class DoctrineObject extends AbstractHydrator
                 $data[$dataFieldName] = $this->extractValue($fieldName, $object->$getter(), $object);
             } elseif (in_array($isser, $methods)) {
                 $data[$dataFieldName] = $this->extractValue($fieldName, $object->$isser(), $object);
+            } elseif (substr($fieldName, 0, 2) === 'is'
+                && ctype_upper(substr($fieldName, 2, 1))
+                && in_array($fieldName, $methods)) {
+
+                $data[$dataFieldName] = $this->extractValue($fieldName, $object->$fieldName(), $object);
             }
 
             // Unknown fields are ignored
