@@ -2,7 +2,7 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator\Asset;
 
-class SimpleIsEntity
+class SimpleEntityWithIsBoolean
 {
     /**
      * @var int
@@ -12,7 +12,7 @@ class SimpleIsEntity
     /**
      * @var bool
      */
-    protected $done;
+    protected $isActive;
 
     public function setId($id)
     {
@@ -24,13 +24,13 @@ class SimpleIsEntity
         return $this->id;
     }
 
-    public function setDone($done)
+    public function setIsActive($isActive)
     {
-        $this->done = (bool) $done;
+        $this->isActive = (bool) $isActive;
     }
 
-    public function isDone()
+    public function isActive()
     {
-        return $this->done;
+        return $this->isActive;
     }
 }
