@@ -86,7 +86,7 @@ class ObjectExistsTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findBy')
-            ->will($this->returnValue([]));
+            ->will($this->returnValue(array()));
 
         $validator = new ObjectExists(
             array(
