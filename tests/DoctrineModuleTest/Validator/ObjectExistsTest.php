@@ -17,8 +17,9 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace DoctrineModuleTest\Validator\Adapter;
+namespace DoctrineModuleTest\Validator;
 
+use DoctrineModuleTest\Validator\Asset\Entity;
 use stdClass;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use DoctrineModule\Validator\ObjectExists;
@@ -40,9 +41,9 @@ class ObjectExistsTest extends BaseTestCase
 
         $repository
             ->expects($this->exactly(2))
-            ->method('findOneBy')
+            ->method('findBy')
             ->with(array('matchKey' => 'matchValue'))
-            ->will($this->returnValue(new stdClass()));
+            ->will($this->returnValue(array(new stdClass())));
 
         $validator = new ObjectExists(array('object_repository' => $repository, 'fields' => 'matchKey'));
 
@@ -55,9 +56,9 @@ class ObjectExistsTest extends BaseTestCase
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
             ->expects($this->exactly(2))
-            ->method('findOneBy')
+            ->method('findBy')
             ->with(array('firstMatchKey' => 'firstMatchValue', 'secondMatchKey' => 'secondMatchValue'))
-            ->will($this->returnValue(new stdClass()));
+            ->will($this->returnValue(array(new stdClass())));
 
         $validator = new ObjectExists(
             array(
@@ -84,8 +85,8 @@ class ObjectExistsTest extends BaseTestCase
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
             ->expects($this->once())
-            ->method('findOneBy')
-            ->will($this->returnValue(null));
+            ->method('findBy')
+            ->will($this->returnValue([]));
 
         $validator = new ObjectExists(
             array(
@@ -183,5 +184,95 @@ class ObjectExistsTest extends BaseTestCase
         );
 
         $validator->isValid(array('field1' => 'field1Value'));
+    }
+
+    public function testCanValidateSingleFieldExclude()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $repository
+            ->expects($this->exactly(2))
+            ->method('findBy')
+            ->with(array('matchKey' => 'matchValue'))
+            ->will($this->returnValue(array(new Entity())));
+
+        $validator = new ObjectExists(array(
+            'object_repository' => $repository,
+            'fields' => 'matchKey',
+            'exclude' => array(
+                'matchKey' => 'matchValue2'
+            )
+        ));
+
+        $this->assertTrue($validator->isValid('matchValue'));
+        $this->assertTrue($validator->isValid(array('matchKey' => 'matchValue')));
+    }
+
+    public function testCanValidateMultipleFieldExclude()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $repository
+            ->expects($this->exactly(2))
+            ->method('findBy')
+            ->with(array('matchKey' => 'matchValue'))
+            ->will($this->returnValue(array(new Entity())));
+
+        $validator = new ObjectExists(array(
+            'object_repository' => $repository,
+            'fields' => 'matchKey',
+            'exclude' => array(
+                'matchKey' => 'matchValue2',
+                'matchKey2' => 'matchValue'
+            )
+        ));
+
+        $this->assertTrue($validator->isValid('matchValue'));
+        $this->assertTrue($validator->isValid(array('matchKey' => 'matchValue')));
+    }
+
+    public function testCanValidateFalseSingleFieldExclude()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $repository
+            ->expects($this->exactly(2))
+            ->method('findBy')
+            ->with(array('matchKey' => 'matchValue'))
+            ->will($this->returnValue(array(new Entity())));
+
+        $validator = new ObjectExists(array(
+            'object_repository' => $repository,
+            'fields' => 'matchKey',
+            'exclude' => array(
+                'matchKey' => 'matchValue'
+            )
+        ));
+
+        $this->assertFalse($validator->isValid('matchValue'));
+        $this->assertFalse($validator->isValid(array('matchKey' => 'matchValue')));
+    }
+
+    public function testCanValidateFalseMultipleFieldExclude()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $repository
+            ->expects($this->exactly(2))
+            ->method('findBy')
+            ->with(array('matchKey' => 'matchValue'))
+            ->will($this->returnValue(array(new Entity())));
+
+        $validator = new ObjectExists(array(
+            'object_repository' => $repository,
+            'fields' => 'matchKey',
+            'exclude' => array(
+                'matchKey' => 'matchValue',
+                'matchKey2' => 'matchValue'
+            )
+        ));
+
+        $this->assertFalse($validator->isValid('matchValue'));
+        $this->assertFalse($validator->isValid(array('matchKey' => 'matchValue')));
     }
 }

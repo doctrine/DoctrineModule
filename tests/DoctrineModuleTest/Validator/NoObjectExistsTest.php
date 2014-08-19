@@ -19,6 +19,7 @@
 
 namespace DoctrineModuleTest\Validator\Adapter;
 
+use DoctrineModuleTest\Validator\Asset\Entity;
 use stdClass;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use DoctrineModule\Validator\NoObjectExists;
@@ -58,5 +59,45 @@ class NoObjectExistsTest extends BaseTestCase
         $validator = new NoObjectExists(array('object_repository' => $repository, 'fields' => 'matchKey'));
 
         $this->assertFalse($validator->isValid('matchValue'));
+    }
+
+    public function testCanValidateWithExcludeSameAsValue()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $repository
+            ->expects($this->never())
+            ->method('findOneBy')
+            ->will($this->returnValue(new Entity()));
+
+        $validator = new NoObjectExists(array(
+            'object_repository' => $repository,
+            'fields'            => 'matchKey',
+            'exclude'           => array(
+                'matchKey' => 'matchValue'
+            )
+        ));
+
+        $this->assertTrue($validator->isValid('matchValue'));
+    }
+
+    public function testCanValidateWithExcludeNotSameAsValue()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $repository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->will($this->returnValue(null));
+
+        $validator = new NoObjectExists(array(
+            'object_repository' => $repository,
+            'fields'            => 'matchKey',
+            'exclude'           => array(
+                'matchKey' => 'matchValue2'
+            )
+        ));
+
+        $this->assertTrue($validator->isValid('matchValue'));
     }
 }
