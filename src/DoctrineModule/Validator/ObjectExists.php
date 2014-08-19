@@ -76,7 +76,7 @@ class ObjectExists extends AbstractValidator
             $this->exclude = $exclude;
         } else {
             throw new Exception\InvalidArgumentException(
-                'Exclude parameter must be an array of values with assigned keys!'
+                'Exclude parameter must be an array of values with assigned keys'
             );
         }
         return $this;
