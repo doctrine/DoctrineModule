@@ -208,7 +208,7 @@ class ObjectExists extends AbstractValidator
         $matches = $this->objectRepository->findBy($value);
 
         if (count($matches) > 0) {
-            return $this->checkExclude($matches);
+            return $this->isExcluded($matches);
         }
 
         $this->error(self::ERROR_NO_OBJECT_FOUND, $value);
@@ -216,7 +216,7 @@ class ObjectExists extends AbstractValidator
         return false;
     }
 
-    protected function checkExclude(array $matches)
+    protected function isExcluded(array $matches)
     {
         $filteredMatches = $matches;
 

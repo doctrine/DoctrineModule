@@ -48,7 +48,7 @@ class NoObjectExists extends ObjectExists
     {
         $value = $this->cleanSearchValue($value);
 
-        if ($this->checkExclude($value)) {
+        if ($this->isExcluded($value)) {
             return true;
         }
 
@@ -63,7 +63,7 @@ class NoObjectExists extends ObjectExists
         return true;
     }
 
-    protected function checkExclude(array $value)
+    protected function isExcluded(array $value)
     {
         $fieldValue = reset($value);
         $fieldKey = key($value);
