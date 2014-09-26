@@ -58,7 +58,7 @@ $paginator->setCurrentPageNumber(1)
 If you want to further filter the results, you can optionally pass an existing Criteria object:
 
 ```php
-use Doctrine\Common\Collecttions\Criteria as DoctrineCriteria;
+use Doctrine\Common\Collections\Criteria as DoctrineCriteria;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
 use Zend\Paginator\Paginator;
 
@@ -77,4 +77,4 @@ $paginator->setCurrentPageNumber(1)
 // Pass it to the view, and use it like a "standard" Zend paginator
 ```
 	
-For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html).
+For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.3/en/modules/zend.paginator.introduction.html).
