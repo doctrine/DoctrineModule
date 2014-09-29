@@ -27,6 +27,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Traversable;
 use Zend\Stdlib\Guard\GuardUtils;
+use Doctrine\ORM\QueryBuilder;
 
 class Proxy implements ObjectManagerAwareInterface
 {
@@ -424,6 +425,10 @@ class Proxy implements ObjectManagerAwareInterface
                 }
             }
             $objects = $r->invokeArgs($repository, $args);
+            
+            if($objects instanceof QueryBuilder){
+                $objects = $objects->getQuery()->getResult();
+            }
         }
 
         GuardUtils::guardForArrayOrTraversable(
