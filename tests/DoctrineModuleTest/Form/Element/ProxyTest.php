@@ -81,6 +81,33 @@ class ProxyTest extends PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage No method name was set
      */
+    public function testExceptionThrownForMissingValueOptionAttributeMethod()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $metadata    = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+    
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+        ->method('getClassMetadata')
+        ->with($this->equalTo($objectClass))
+        ->will($this->returnValue($metadata));
+    
+        $this->proxy->setOptions(
+            array(
+                'object_manager' => $objectManager,
+                'target_class'   => $objectClass,
+                'find_method'    => array('getName'),
+                'attributes'    => array(array('data-key'=>'no_name'))
+            )
+        );
+    
+        $this->proxy->getValueOptions();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage No method name was set
+     */
     public function testExceptionThrownForMissingFindMethodName()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
