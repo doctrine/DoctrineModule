@@ -56,6 +56,11 @@ class Proxy implements ObjectManagerAwareInterface
     protected $property;
 
     /**
+     * @var array
+     */
+    protected $attributes = array();
+
+    /**
      * @var callable $labelGenerator A callable used to create a label based on an item in the collection an Entity
      */
     protected $labelGenerator;
@@ -153,6 +158,22 @@ class Proxy implements ObjectManagerAwareInterface
     public function getEmptyItemLabel()
     {
         return $this->emptyItemLabel;
+    }
+
+    /**
+     * @return array $attributes
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param array $attributes
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
     }
 
     /**
@@ -455,6 +476,7 @@ class Proxy implements ObjectManagerAwareInterface
         $identifier = $metadata->getIdentifierFieldNames();
         $objects    = $this->getObjects();
         $options    = array();
+        $attributes=array();
 
         if ($this->displayEmptyItem) {
             $options[''] = $this->getEmptyItemLabel();
@@ -502,7 +524,18 @@ class Proxy implements ObjectManagerAwareInterface
                 $value = current($metadata->getIdentifierValues($object));
             }
 
-            $options[] = array('label' => $label, 'value' => $value);
+                foreach($this->getAttributes() as $attribute){
+                    $attributeValue=current($attribute);
+                    if (!is_callable(array($object, $attributeValue))) {
+                        throw new RuntimeException(
+                            sprintf('Method "%s::%s" is not callable', $this->targetClass, $attributeValue)
+                        );
+                    }
+                    $attributes[key($attribute)] =(string) $object->{$attributeValue}();
+                }
+
+                $options[] = array('label' => $label, 'value' => $value, 'attributes'=>$attributes);
+           
         }
 
         $this->valueOptions = $options;
