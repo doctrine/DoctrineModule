@@ -528,8 +528,8 @@ class Proxy implements ObjectManagerAwareInterface
                 $value = current($metadata->getIdentifierValues($object));
             }
 
-                foreach($this->getOptionAttributes() as $optionAttribute){
-                    $methodName=current($optionAttribute);
+            foreach($this->getOptionAttributes() as $optionAttribute) {
+                $methodName=current($optionAttribute);
                     if (!is_callable(array($object, $methodName))) {
 
                         throw new RuntimeException(
@@ -537,7 +537,7 @@ class Proxy implements ObjectManagerAwareInterface
                         );
                     }
                     $optionAttributes[key($optionAttribute)] =(string) $object->{$methodName}();
-                }
+            }
 
                 $options[] = array('label' => $label, 'value' => $value, 'attributes'=>$optionAttributes);
            
