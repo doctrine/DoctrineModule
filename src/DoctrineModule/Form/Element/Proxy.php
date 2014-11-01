@@ -528,14 +528,14 @@ class Proxy implements ObjectManagerAwareInterface
                 $value = current($metadata->getIdentifierValues($object));
             }
 
-            foreach($this->getOptionAttributes() as $optionAttribute) {
+            foreach ($this->getOptionAttributes() as $optionAttribute) {
                 $methodName=current($optionAttribute);
-                    if (!is_callable(array($object, $methodName))) {
+                if (!is_callable(array($object, $methodName))) {
 
                         throw new RuntimeException(
                             sprintf('Method "%s::%s" is not callable', $this->targetClass, $methodName)
                         );
-                    }
+                }
                     $optionAttributes[key($optionAttribute)] =(string) $object->{$methodName}();
             }
 
