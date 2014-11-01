@@ -324,7 +324,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             )
         );
     
-       $this->proxy->getValueOptions();
+        $this->proxy->getValueOptions();
     }
 
     public function testUsingOptionAttributes()
@@ -335,7 +335,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $currentValueOption = current($this->proxy->getValueOptions());
         $this->assertArrayHasKey('attributes', $currentValueOption);
         $this->assertArrayHasKey('data-key', $currentValueOption['attributes']);
-        $this->assertEquals('object one firstname',$currentValueOption['attributes']['data-key']);
+        $this->assertEquals('object one firstname', $currentValueOption['attributes']['data-key']);
     }
 
     public function testCanWorkWithEmptyTables()
@@ -521,7 +521,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     }
 
     protected function prepareProxyWithOptionAttributes()
-{
+    {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $objectOne   = new FormObject;
         $objectTwo   = new FormObject;
