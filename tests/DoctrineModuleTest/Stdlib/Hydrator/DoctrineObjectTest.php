@@ -41,8 +41,9 @@ class DoctrineObjectTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->metadata         = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $this->objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->metadata = $this->getMock('DoctrineModuleTest\Stdlib\Hydrator\Asset\ClassMetadataPropertyNamesAware');
+
+        $this->objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $this->objectManager->expects($this->any())
                             ->method('getClassMetadata')
@@ -68,6 +69,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->metadata
             ->expects($this->any())
             ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'field')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getMappedPropertyNames')
             ->will($this->returnValue(array('id', 'field')));
 
         $this
@@ -141,6 +148,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('getMappedPropertyNames')
+            ->will($this->returnValue(array('camelCase')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->equalTo('camelCase'))
             ->will($this->returnValue('string'));
@@ -192,6 +205,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->metadata
             ->expects($this->any())
             ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'done')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getMappedPropertyNames')
             ->will($this->returnValue(array('id', 'done')));
 
         $this
@@ -265,6 +284,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('getMappedPropertyNames')
+            ->will($this->returnValue(array('id', 'isActive')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('isActive')))
             ->will(
@@ -333,6 +358,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('getMappedPropertyNames')
+            ->will($this->returnValue(array('id', 'field')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('field')))
             ->will($this->returnValue('string'));
@@ -379,6 +410,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->metadata
             ->expects($this->any())
             ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'date')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getMappedPropertyNames')
             ->will($this->returnValue(array('id', 'date')));
 
         $this
@@ -443,6 +480,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getAssociationNames')
             ->will($this->returnValue(array('toOne')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getMappedPropertyNames')
+            ->will($this->returnValue(array('id', 'toOne')));
 
         $this
             ->metadata
@@ -537,6 +580,12 @@ class DoctrineObjectTest extends BaseTestCase
         $this
             ->metadata
             ->expects($this->any())
+            ->method('getMappedPropertyNames')
+            ->will($this->returnValue(array('id', 'toOne')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
             ->method('getTypeOfField')
             ->with(
                 $this->logicalOr(
@@ -622,6 +671,75 @@ class DoctrineObjectTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForSimpleEntityWithEmbeddable()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithEmbeddedObject');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array('toOne')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'embedded')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getMappedPropertyNames')
+            ->will($this->returnValue(array('id', 'embedded', 'toOne')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('date')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'embedded') {
+                            return 'embedded';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
     public function configureObjectManagerForOneToManyEntity()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity');
@@ -637,6 +755,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getAssociationNames')
             ->will($this->returnValue(array('entities')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getMappedPropertyNames')
+            ->will($this->returnValue(array('id', 'entities')));
 
         $this
             ->metadata
@@ -728,6 +852,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getAssociationNames')
             ->will($this->returnValue(array('entities')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getMappedPropertyNames')
+            ->will($this->returnValue(array('id', 'entities')));
 
         $this
             ->metadata
@@ -932,6 +1062,31 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
         $this->assertEquals('bar', $entity->getField(false));
+    }
+
+    public function testExtractEmbeddedByValue()
+    {
+        $embedded = new Asset\EmbeddableObject();
+        $embedded->setFoo(3);
+        $embedded->setBar('bar');
+
+        $toOne = new Asset\SimpleEntity();
+        $toOne->setId(2);
+        $toOne->setField('foo', false);
+
+        $entity = new Asset\SimpleEntityWithEmbeddedObject();
+        $entity->setId(2);
+        $entity->setEmbedded($embedded);
+        $entity->setToOne($toOne);
+
+        $this->configureObjectManagerForSimpleEntityWithEmbeddable();
+
+        $data = $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(2, $data['id']);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $data['toOne']);
+        $this->assertSame($toOne, $data['toOne']);
+        $this->assertSame($embedded, $data['embedded']);
     }
 
     public function testExtractOneToOneAssociationByValue()

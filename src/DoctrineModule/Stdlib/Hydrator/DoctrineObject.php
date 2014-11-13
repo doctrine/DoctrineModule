@@ -30,6 +30,7 @@ use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Filter\FilterProviderInterface;
+use Doctrine\Common\Persistence\Mapping\PropertyNamesAware;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
@@ -161,6 +162,20 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * Retrieve the field names from metadata
+     *
+     * @return array
+     */
+    protected function getFieldnames()
+    {
+        if ($this->metadata instanceof PropertyNamesAware) {
+            return $this->metadata->getMappedPropertyNames();
+        }
+
+        return array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+    }
+
+    /**
      * Extract values from an object using a by-value logic (this means that it uses the entity
      * API, in this case, getters)
      *
@@ -170,7 +185,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByValue($object)
     {
-        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+        $fieldNames = $this->getFieldnames();
         $methods    = get_class_methods($object);
         $filter     = $object instanceof FilterProviderInterface
             ? $object->getFilter()
@@ -211,7 +226,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByReference($object)
     {
-        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+        $fieldNames = $this->getFieldnames();
         $refl       = $this->metadata->getReflectionClass();
         $filter     = $object instanceof FilterProviderInterface
             ? $object->getFilter()
