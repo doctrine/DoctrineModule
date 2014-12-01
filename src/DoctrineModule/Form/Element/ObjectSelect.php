@@ -44,7 +44,7 @@ class ObjectSelect extends SelectElement
 
     /**
      * @param  array|\Traversable $options
-     * @return ObjectSelect
+     * @return self
      */
     public function setOptions($options)
     {

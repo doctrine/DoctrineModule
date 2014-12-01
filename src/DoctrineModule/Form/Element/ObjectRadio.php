@@ -43,7 +43,7 @@ class ObjectRadio extends RadioElement
 
     /**
      * @param  array|\Traversable $options
-     * @return ObjectSelect
+     * @return self
      */
     public function setOptions($options)
     {
