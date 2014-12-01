@@ -52,6 +52,17 @@ class ObjectRadio extends RadioElement
     }
 
     /**
+     * @param string $key
+     * @param mixed $value
+     * @return self
+     */
+    public function setOption($key, $value)
+    {
+        $this->getProxy()->setOptions(array($key => $value));
+        return parent::setOption($key, $value);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function setValue($value)
