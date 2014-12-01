@@ -110,4 +110,14 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $this->element->getValueOptions());
         $this->assertEquals($options, $this->element->getValueOptions());
     }
+
+    public function testOptionsCanBeSetSingle()
+    {
+        $proxy = $this->getMock('DoctrineModule\Form\Element\Proxy');
+        $proxy->expects($this->once())->method('setOptions')->with(array('is_method' => true));
+
+        $this->setProxyViaReflection($proxy);
+
+        $this->element->setOption('is_method', true);
+    }
 }
