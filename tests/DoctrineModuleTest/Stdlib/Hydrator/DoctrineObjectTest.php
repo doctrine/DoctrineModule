@@ -934,6 +934,34 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals('bar', $entity->getField(false));
     }
 
+    /**
+     * Test for https://github.com/doctrine/DoctrineModule/issues/456
+     */
+    public function testReuseExistingEntityIfDataArrayContainsIdentifierWithZeroIdentifier()
+    {
+        // When using hydration by reference, it won't use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntity();
+
+        $this->configureObjectManagerForSimpleEntity();
+        $data = array('id' => 0);
+
+        $entityInDatabaseWithIdOfOne = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfOne->setId(0);
+        $entityInDatabaseWithIdOfOne->setField('bar', false);
+
+        $this
+            ->objectManager
+            ->expects($this->once())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 0))
+            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('bar', $entity->getField(false));
+    }
+
     public function testExtractOneToOneAssociationByValue()
     {
         // When using extraction by value, it will use the public API of the entity to retrieve values (getters)
