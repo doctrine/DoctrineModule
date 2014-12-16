@@ -40,7 +40,7 @@ class CollectionAdapterTest extends PHPUnit_Framework_TestCase
     /**
      * {@inheritDoc}.
      */
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
         $this->adapter = new CollectionAdapter(new ArrayCollection(range(1, 101)));
