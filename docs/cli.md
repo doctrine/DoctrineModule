@@ -21,22 +21,21 @@ and attaching them to the provided CLI application as following:
 ```php
 namespace My;
 
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\ModuleManagerInterface;
 
-class Module implements BootstrapListenerInterface;
+class Module
 {
-    public function onBootstrap(EventInterface $e)
+    public function init(ModuleManagerInterface $manager)
     {
-        $application = $e->getTarget();
-        $events = $application->getEventManager()->getSharedManager();
+        $events = $manager->getEventManager()->getSharedManager();
 
         // Attach to helper set event and load the entity manager helper.
         $events->attach('doctrine', 'loadCli.post', function(EventInterface $e) {
             /* @var $cli \Symfony\Component\Console\Application */
             $cli = $e->getTarget();
 
-            $cli->addCommand(new \My\Own\Cli\Command());
+            $cli->add(new \My\Own\Cli\Command());
         });
     }
 }
