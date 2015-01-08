@@ -61,7 +61,7 @@ class Proxy implements ObjectManagerAwareInterface
     protected $labelGenerator;
 
     /**
-     * @var
+     * @var bool|null
      */
     protected $isMethod;
 
