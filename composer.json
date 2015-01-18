@@ -9,6 +9,12 @@
         "module",
         "zf2"
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/fabiocarneiro/common"
+        }
+    ],
     "authors":     [
         {
             "name": "Kyle Spraggs",
@@ -33,7 +39,7 @@
     "minimum-stability": "dev",
     "require": {
         "php":                                ">=5.3.23",
-        "doctrine/common":                    ">=2.4,<2.6-dev",
+        "doctrine/common":                    "dev-new-interface-for-classmetadata-properties",
         "symfony/console":                    "~2.3",
         "zendframework/zend-authentication":  "~2.3",
         "zendframework/zend-cache":           "~2.3",

@@ -30,6 +30,7 @@ use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Filter\FilterProviderInterface;
+use Doctrine\Common\Persistence\Mapping\PropertyNamesAware;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
@@ -161,6 +162,20 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * Retrieve the mapped property names from metadata
+     *
+     * @return array
+     */
+    protected function getMappedPropertyNames()
+    {
+        if ($this->metadata instanceof PropertyNamesAware) {
+            return $this->metadata->getMappedPropertyNames();
+        }
+
+        return array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+    }
+
+    /**
      * Extract values from an object using a by-value logic (this means that it uses the entity
      * API, in this case, getters)
      *
@@ -170,30 +185,30 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByValue($object)
     {
-        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+        $propertyNames = $this->getMappedPropertyNames();
         $methods    = get_class_methods($object);
         $filter     = $object instanceof FilterProviderInterface
             ? $object->getFilter()
             : $this->filterComposite;
 
         $data = array();
-        foreach ($fieldNames as $fieldName) {
-            if ($filter && !$filter->filter($fieldName)) {
+        foreach ($propertyNames as $propertyName) {
+            if ($filter && !$filter->filter($propertyName)) {
                 continue;
             }
-            $getter = 'get' . ucfirst($fieldName);
-            $isser  = 'is' . ucfirst($fieldName);
+            $getter = 'get' . ucfirst($propertyName);
+            $isser  = 'is' . ucfirst($propertyName);
 
-            $dataFieldName = $this->computeExtractFieldName($fieldName);
+            $dataFieldName = $this->computeExtractFieldName($propertyName);
             if (in_array($getter, $methods)) {
-                $data[$dataFieldName] = $this->extractValue($fieldName, $object->$getter(), $object);
+                $data[$dataFieldName] = $this->extractValue($propertyName, $object->$getter(), $object);
             } elseif (in_array($isser, $methods)) {
-                $data[$dataFieldName] = $this->extractValue($fieldName, $object->$isser(), $object);
-            } elseif (substr($fieldName, 0, 2) === 'is'
-                && ctype_upper(substr($fieldName, 2, 1))
-                && in_array($fieldName, $methods)) {
+                $data[$dataFieldName] = $this->extractValue($propertyName, $object->$isser(), $object);
+            } elseif (substr($propertyName, 0, 2) === 'is'
+                && ctype_upper(substr($propertyName, 2, 1))
+                && in_array($propertyName, $methods)) {
 
-                $data[$dataFieldName] = $this->extractValue($fieldName, $object->$fieldName(), $object);
+                $data[$dataFieldName] = $this->extractValue($propertyName, $object->$propertyName(), $object);
             }
 
             // Unknown fields are ignored
@@ -211,22 +226,22 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function extractByReference($object)
     {
-        $fieldNames = array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
+        $propertyNames = $this->getMappedPropertyNames();
         $refl       = $this->metadata->getReflectionClass();
         $filter     = $object instanceof FilterProviderInterface
             ? $object->getFilter()
             : $this->filterComposite;
 
         $data = array();
-        foreach ($fieldNames as $fieldName) {
-            if ($filter && !$filter->filter($fieldName)) {
+        foreach ($propertyNames as $propertyName) {
+            if ($filter && !$filter->filter($propertyName)) {
                 continue;
             }
-            $reflProperty = $refl->getProperty($fieldName);
+            $reflProperty = $refl->getProperty($propertyName);
             $reflProperty->setAccessible(true);
 
-            $dataFieldName = $this->computeExtractFieldName($fieldName);
-            $data[$dataFieldName] = $this->extractValue($fieldName, $reflProperty->getValue($object), $object);
+            $dataFieldName = $this->computeExtractFieldName($propertyName);
+            $data[$dataFieldName] = $this->extractValue($propertyName, $reflProperty->getValue($object), $object);
         }
 
         return $data;
