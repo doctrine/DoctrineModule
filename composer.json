@@ -32,7 +32,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php":                                ">=5.3.23",
+        "php":                                ">=5.4",
         "doctrine/common":                    ">=2.4,<2.6-dev",
         "symfony/console":                    "~2.3",
         "zendframework/zend-authentication":  "~2.3",
