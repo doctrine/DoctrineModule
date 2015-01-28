@@ -123,7 +123,7 @@ class Appointment
 
     public function getId()
     {
-	return $this->id;
+        return $this->id;
     }
 
     public function setTime(DateTime $time)
@@ -195,7 +195,7 @@ class User
 
     public function getId()
     {
-	return $this->id;
+        return $this->id;
     }
 
     public function setUsername($username)
