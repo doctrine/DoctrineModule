@@ -22,6 +22,7 @@ namespace DoctrineModule\Stdlib\Hydrator;
 use DateTime;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\DBAL\Types\Type;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use InvalidArgumentException;
 use RuntimeException;
@@ -440,7 +441,9 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
+     * Handle various type conversions that should be supported natively by Doctrine (like DateTime).
+     * Custom types can implement Doctrine\DoctrineModule\Stdlib\Hydrator\TypeConversionInterface
+     * to ensure the incoming hydration value is converted to the proper type.
      *
      * @param  mixed  $value
      * @param  string $typeOfField
@@ -448,6 +451,14 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function handleTypeConversions($value, $typeOfField)
     {
+        if (Type::hasType($typeOfField)) {
+            $type = Type::getType($typeOfField);
+
+            if ($type instanceof TypeConversionInterface) {
+                return $type->convertToHydratorValue($value);
+            }
+        }
+
         switch($typeOfField) {
             case 'datetimetz':
             case 'datetime':

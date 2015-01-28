@@ -787,6 +787,13 @@ echo $data['foo']; // prints 'bar'
 
 It now only prints "bar", which shows clearly that the getter has not been called.
 
+### Custom type conversion
+
+The hydrator understands all the standard database types built into Doctrine and will convert accordingly, but if you are
+using custom types with the DBAL, the hydrator will need to know how to convert from an incoming data value to
+the type your field setter method expects (or property when using 'by reference'). To achieve this conversion your
+custom type class can implement `DoctrineModule\Stdlib\Hydrator\TypeConversionInterface`. Once implemented, `$hydrator->hydrate()`
+will detect your custom type and return a properly casted value.
 
 ### A complete example using Zend\Form
 
