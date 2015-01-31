@@ -398,4 +398,60 @@ class UniqueObjectTest extends BaseTestCase
 
         $this->assertTrue($validator->isValid('matchValue', $context));
     }
+    
+    public function testErrorMessageIsStringInsteadArray()
+    {
+        $match = new stdClass();
+
+        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $classMetadata
+            ->expects($this->once())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+        $classMetadata
+            ->expects($this->once())
+            ->method('getIdentifierValues')
+            ->with($match)
+            ->will($this->returnValue(array('id' => 'identifier')));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->any())
+                      ->method('getClassMetadata')
+                      ->with('stdClass')
+                      ->will($this->returnValue($classMetadata));
+
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository
+            ->expects($this->any())
+            ->method('getClassName')
+            ->will($this->returnValue('stdClass'));
+        $repository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(array('matchKey' => 'matchValue'))
+            ->will($this->returnValue($match));
+
+        $validator = $this->getMock(
+            'DoctrineModule\Validator\UniqueObject',
+            array('error'),
+            array(array(
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+            'use_context'        => true,
+            )
+        )
+        );
+        $validator->expects($this->once())->method('error')
+            ->with(
+                UniqueObject::ERROR_OBJECT_NOT_UNIQUE,
+                'matchValue'
+            );
+        $this->assertFalse(
+            $validator->isValid(
+                'matchValue',
+                array('matchKey' => 'matchValue', 'id' => 'another identifier')
+            )
+        );
+    }
 }
