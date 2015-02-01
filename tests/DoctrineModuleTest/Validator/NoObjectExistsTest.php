@@ -67,19 +67,20 @@ class NoObjectExistsTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->will($this->returnValue(new stdClass()));
+        $validator = new NoObjectExists(array('object_repository' => $repository, 'fields' => 'matchKey'));
         
-        $validator = $this->getMock(
-            'DoctrineModule\Validator\NoObjectExists',
-            array('error'),
-            array(array(
-                'object_repository' => $repository,
-                'fields'            => 'matchKey'
-            )
-        )
-        );
-        $validator->expects($this->once())
-                ->method('error')
-                ->with(NoObjectExists::ERROR_OBJECT_FOUND, 'matchValue');
         $this->assertFalse($validator->isValid('matchValue'));
+
+        $messageTemplates = $validator->getMessageTemplates();
+        
+        $expectedMessage = str_replace(
+            '%value%',
+            'matchValue',
+            $messageTemplates[NoObjectExists::ERROR_OBJECT_FOUND]
+        );
+        $messages = $validator->getMessages();
+        $receivedMessage = $messages[NoObjectExists::ERROR_OBJECT_FOUND];
+
+        $this->assertTrue($expectedMessage == $receivedMessage);
     }
 }

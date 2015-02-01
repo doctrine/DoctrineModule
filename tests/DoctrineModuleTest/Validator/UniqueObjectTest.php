@@ -431,27 +431,30 @@ class UniqueObjectTest extends BaseTestCase
             ->with(array('matchKey' => 'matchValue'))
             ->will($this->returnValue($match));
 
-        $validator = $this->getMock(
-            'DoctrineModule\Validator\UniqueObject',
-            array('error'),
-            array(array(
-            'object_repository' => $repository,
-            'object_manager'    => $objectManager,
-            'fields'            => 'matchKey',
-            'use_context'        => true,
+        $validator = new UniqueObject(
+            array(
+                'object_repository' => $repository,
+                'object_manager'    => $objectManager,
+                'fields'            => 'matchKey',
+                'use_context'       => true
             )
-        )
         );
-        $validator->expects($this->once())->method('error')
-            ->with(
-                UniqueObject::ERROR_OBJECT_NOT_UNIQUE,
-                'matchValue'
-            );
         $this->assertFalse(
             $validator->isValid(
                 'matchValue',
                 array('matchKey' => 'matchValue', 'id' => 'another identifier')
             )
         );
+        $messageTemplates = $validator->getMessageTemplates();
+        
+        $expectedMessage = str_replace(
+            '%value%',
+            'matchValue',
+            $messageTemplates[UniqueObject::ERROR_OBJECT_NOT_UNIQUE]
+        );
+        $messages = $validator->getMessages();
+        $receivedMessage = $messages[UniqueObject::ERROR_OBJECT_NOT_UNIQUE];
+        $this->assertTrue($expectedMessage == $receivedMessage);
+
     }
 }
