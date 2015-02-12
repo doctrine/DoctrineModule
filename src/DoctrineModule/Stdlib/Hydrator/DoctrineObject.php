@@ -181,6 +181,11 @@ class DoctrineObject extends AbstractHydrator
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
+            
+            if ($pos = strpos($fieldName, '.')) {
+                $fieldName = substr($fieldName, 0, $pos);
+            }
+            
             $getter = 'get' . ucfirst($fieldName);
             $isser  = 'is' . ucfirst($fieldName);
 
@@ -222,6 +227,11 @@ class DoctrineObject extends AbstractHydrator
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
+            
+            if ($pos = strpos($fieldName, '.')) {
+                $fieldName = substr($fieldName, 0, $pos);
+            }
+            
             $reflProperty = $refl->getProperty($fieldName);
             $reflProperty->setAccessible(true);
 
