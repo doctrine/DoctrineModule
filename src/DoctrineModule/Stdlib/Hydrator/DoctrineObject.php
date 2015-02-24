@@ -386,8 +386,9 @@ class DoctrineObject extends AbstractHydrator
                 $value,
                 array_flip($metadata->getIdentifier())
             );
-            $object = $this->find($identifiers, $target) ?: new $target;
-            return $this->hydrate($value, $object);
+            $object   = $this->find($identifiers, $target) ?: new $target;
+            $hydrator = new $this($this->objectManager, $this->byValue);
+            return $hydrator->hydrate($value, $object);
         }
 
         return $this->find($value, $target);
@@ -415,10 +416,23 @@ class DoctrineObject extends AbstractHydrator
         }
 
         $collection = array();
+        $metadata   = $this->objectManager->getClassMetadata($target);
+        $identifier = $metadata->getIdentifier();
+        $idkeys     = array_flip($identifier);
+        $hydrator   = null;
+
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
-            $collection[] = $this->find($value, $target);
+            if (is_array($value) && array_keys($value) != $identifier) {
+                // $value is most likely an array of fieldset data
+                $identifiers  = array_intersect_key($value, $idkeys);
+                $item         = $this->find($identifiers, $target) ?: new $target;
+                $hydrator     = $hydrator ?: new $this($this->objectManager, $this->byValue);
+                $collection[] = $hydrator->hydrate($value, $item);
+            } else {
+                $collection[] = $this->find($value, $target);
+            }
         }
 
         $collection = array_filter(

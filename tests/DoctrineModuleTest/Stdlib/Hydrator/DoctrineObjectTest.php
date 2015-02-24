@@ -703,6 +703,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+
         $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
@@ -793,6 +799,114 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
+    public function configureObjectManagerForOneToManyNewArrayEntity()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyArrayEntity');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array('entities')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('entities'), $this->equalTo('field')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        switch ($arg) {
+                            case 'id':
+                                return 'integer';
+                            case 'entities':
+                                return 'Doctrine\Common\Collections\ArrayCollection';
+                            case 'field':
+                                return 'string';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('entities'), $this->equalTo('field')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        switch ($arg) {
+                            case 'id':
+                            case 'field':
+                                return false;
+                            case 'entities':
+                                return true;
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isSingleValuedAssociation')
+            ->with('entities')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isCollectionValuedAssociation')
+            ->with('entities')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationTargetClass')
+            ->with('entities')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
 
         $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
@@ -1132,6 +1246,53 @@ class DoctrineObjectTest extends BaseTestCase
             'From getter: Modified from setToOne setter',
             $entityInDatabaseWithIdOfOne->getField()
         );
+    }
+
+    public function testHydrateOneToOneAssociationByValueUsingFullArrayForNewRelation()
+    {
+        $entity = new Asset\OneToOneEntityNotNullable;
+        $this->configureObjectManagerForOneToOneEntityNotNullable();
+
+        // Use new entity as relation
+        $data = array('toOne' => array('id' => null, 'field' => 'foo'));
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf(
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable',
+            $entity
+        );
+        $this->assertInstanceOf(
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            $entity->getToOne(false)
+        );
+        // Checks that a new entity was created
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+    }
+
+    public function testHydrateOneToManyAssociationByValueUsingFullArrayForNewRelation()
+    {
+        $entity = new Asset\OneToManyEntity;
+        $this->configureObjectManagerForOneToManyNewArrayEntity();
+
+        // Use new entity as relation
+        $data = array('entities' => array(array('id' => null, 'field' => 'foo')));
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf(
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity',
+            $entity
+        );
+        $children = $entity->getEntities();
+        $this->assertEquals(1, count($children));
+        $child = $children->first();
+        $this->assertInstanceOf(
+            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+            $child
+        );
+        // Checks that a new entity was created
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $child);
     }
 
     public function testHydrateOneToOneAssociationByReferenceUsingIdentifierArrayForRelation()
