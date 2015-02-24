@@ -61,6 +61,28 @@ class ObjectExists extends AbstractValidator
     protected $fields;
 
     /**
+     * @var array
+     */
+    protected $exclude = array();
+
+    /**
+     * @param $exclude
+     * @return $this
+     * @throws \Zend\Validator\Exception\InvalidArgumentException
+     */
+    public function setExclude($exclude)
+    {
+        if (is_array($exclude)) {
+            $this->exclude = $exclude;
+        } else {
+            throw new Exception\InvalidArgumentException(
+                'Exclude parameter must be an array of values with assigned keys'
+            );
+        }
+        return $this;
+    }
+
+    /**
      * Constructor
      *
      * @param array $options required keys are `object_repository`, which must be an instance of
@@ -101,6 +123,10 @@ class ObjectExists extends AbstractValidator
 
         $this->fields = $options['fields'];
         $this->validateFields();
+
+        if (array_key_exists('exclude', $options)) {
+            $this->setExclude($options['exclude']);
+        }
 
         parent::__construct($options);
     }
@@ -179,14 +205,33 @@ class ObjectExists extends AbstractValidator
     public function isValid($value)
     {
         $value = $this->cleanSearchValue($value);
-        $match = $this->objectRepository->findOneBy($value);
+        $matches = $this->objectRepository->findBy($value);
 
-        if (is_object($match)) {
-            return true;
+        if (count($matches) > 0) {
+            return $this->isExcluded($matches);
         }
 
         $this->error(self::ERROR_NO_OBJECT_FOUND, $value);
 
         return false;
+    }
+
+    protected function isExcluded(array $matches)
+    {
+        $filteredMatches = $matches;
+
+        if (count($this->exclude) > 0) {
+            foreach ($matches as $key => $match) {
+                foreach ($this->exclude as $field => $value) {
+                    $getter = 'get' . ucfirst($field);
+                    if (method_exists($match, $getter) && $match->{$getter}() === $value) {
+                        unset($filteredMatches[$key]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return count($filteredMatches) > 0;
     }
 }

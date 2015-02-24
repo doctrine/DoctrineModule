@@ -47,6 +47,11 @@ class NoObjectExists extends ObjectExists
     public function isValid($value)
     {
         $value = $this->cleanSearchValue($value);
+
+        if ($this->isExcluded($value)) {
+            return true;
+        }
+
         $match = $this->objectRepository->findOneBy($value);
 
         if (is_object($match)) {
@@ -56,5 +61,19 @@ class NoObjectExists extends ObjectExists
         }
 
         return true;
+    }
+
+    protected function isExcluded(array $value)
+    {
+        $fieldValue = reset($value);
+        $fieldKey = key($value);
+
+        foreach ($this->exclude as $key => $exclude) {
+            if ($fieldKey === $key && $fieldValue === $exclude) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
