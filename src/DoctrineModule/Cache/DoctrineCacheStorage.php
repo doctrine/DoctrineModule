@@ -52,7 +52,7 @@ class DoctrineCacheStorage extends AbstractAdapter
      */
     protected function internalGetItem(& $normalizedKey, & $success = null, & $casToken = null)
     {
-        $key = $this->getOptions()->getNamespace() . $normalizedKey;
+        $key     = $this->getOptions()->getNamespace() . $normalizedKey;
         $fetched = $this->cache->fetch($key);
         $success = ($fetched === false ? false : true);
 

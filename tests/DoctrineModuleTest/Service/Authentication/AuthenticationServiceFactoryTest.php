@@ -30,7 +30,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
     public function testWillInstantiateFromFQCN()
     {
 
-        $name = 'testFactory';
+        $name    = 'testFactory';
         $factory = new AuthenticationServiceFactory($name);
 
         $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');

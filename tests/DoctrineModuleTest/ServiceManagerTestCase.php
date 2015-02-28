@@ -58,7 +58,7 @@ class ServiceManagerTestCase
      */
     public function getServiceManager(array $configuration = null)
     {
-        $configuration = $configuration ?: static::getConfiguration();
+        $configuration  = $configuration ?: static::getConfiguration();
         $serviceManager = new ServiceManager(
             new ServiceManagerConfig(
                 isset($configuration['service_manager']) ? $configuration['service_manager'] : array()

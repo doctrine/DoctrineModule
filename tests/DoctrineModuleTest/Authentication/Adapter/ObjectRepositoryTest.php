@@ -112,8 +112,8 @@ class ObjectRepositoryTest extends BaseTestCase
         $entity->setUsername('a username');
         $entity->setPassword('a password');
 
-        $objectRepository =  $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $method = $objectRepository
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $method           = $objectRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(array('username' => 'a username')))
@@ -155,12 +155,12 @@ class ObjectRepositoryTest extends BaseTestCase
 
     public function testAuthenticationWithPublicProperties()
     {
-        $entity = new PublicPropertiesIdentityObject();
+        $entity           = new PublicPropertiesIdentityObject();
         $entity->username = 'a username';
         $entity->password = 'a password';
 
-        $objectRepository =  $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $method = $objectRepository
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $method           = $objectRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(array('username' => 'a username')))
@@ -216,7 +216,7 @@ class ObjectRepositoryTest extends BaseTestCase
 
     public function testCanValidateWithSpecialCrypt()
     {
-        $hash = '$2y$07$usesomesillystringforsalt$';
+        $hash   = '$2y$07$usesomesillystringforsalt$';
         $entity = new IdentityObject();
         $entity->setUsername('username');
         // Crypt password using Blowfish

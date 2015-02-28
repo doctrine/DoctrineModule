@@ -156,7 +156,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
     public function testDatatypesCapability()
     {
         $capabilities = $this->storage->getCapabilities();
-        $datatypes = $capabilities->getSupportedDatatypes();
+        $datatypes    = $capabilities->getSupportedDatatypes();
         $this->assertInternalType('array', $datatypes);
 
         foreach ($datatypes as $sourceType => $targetType) {
@@ -173,7 +173,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
     public function testSupportedMetadataCapability()
     {
         $capabilities = $this->storage->getCapabilities();
-        $metadata = $capabilities->getSupportedMetadata();
+        $metadata     = $capabilities->getSupportedMetadata();
         $this->assertInternalType('array', $metadata);
 
         foreach ($metadata as $property) {
@@ -299,7 +299,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testGetMetadata()
     {
-        $capabilities = $this->storage->getCapabilities();
+        $capabilities       = $this->storage->getCapabilities();
         $supportedMetadatas = $capabilities->getSupportedMetadata();
 
         $this->assertTrue($this->storage->setItem('key', 'value'));
@@ -326,7 +326,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
 
     public function testGetMetadatas()
     {
-        $capabilities = $this->storage->getCapabilities();
+        $capabilities       = $this->storage->getCapabilities();
         $supportedMetadatas = $capabilities->getSupportedMetadata();
 
         $items = array(
@@ -499,8 +499,9 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
             'object'   => new \stdClass(),
             'resource' => fopen(__FILE__, 'r'),
         );
-        $types['object']->one = 'one';
-        $types['object']->two = new \stdClass();
+
+        $types['object']->one        = 'one';
+        $types['object']->two        = new \stdClass();
         $types['object']->two->three = 'three';
 
         foreach ($capabilities->getSupportedDatatypes() as $sourceType => $targetType) {
