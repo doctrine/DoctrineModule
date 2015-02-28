@@ -31,8 +31,8 @@ class EventManagerFactoryTest extends BaseTestCase
 {
     public function testWillInstantiateFromFQCN()
     {
-        $name = 'eventManagerFactory';
-        $factory = new EventManagerFactory($name);
+        $name           = 'eventManagerFactory';
+        $factory        = new EventManagerFactory($name);
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
@@ -59,9 +59,9 @@ class EventManagerFactoryTest extends BaseTestCase
 
     public function testWillAttachEventListenersFromConfiguredInstances()
     {
-        $name = 'eventManagerFactory';
-        $factory = new EventManagerFactory($name);
-        $subscriber = new DummyEventSubscriber();
+        $name           = 'eventManagerFactory';
+        $factory        = new EventManagerFactory($name);
+        $subscriber     = new DummyEventSubscriber();
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
@@ -90,9 +90,9 @@ class EventManagerFactoryTest extends BaseTestCase
 
     public function testWillAttachEventListenersFromServiceManagerAlias()
     {
-        $name = 'eventManagerFactory';
-        $factory = new EventManagerFactory($name);
-        $subscriber = new DummyEventSubscriber();
+        $name           = 'eventManagerFactory';
+        $factory        = new EventManagerFactory($name);
+        $subscriber     = new DummyEventSubscriber();
         $serviceManager = new ServiceManager();
         $serviceManager->setService('dummy-subscriber', $subscriber);
         $serviceManager->setService(
@@ -122,8 +122,8 @@ class EventManagerFactoryTest extends BaseTestCase
 
     public function testWillRefuseNonExistingSubscriber()
     {
-        $name = 'eventManagerFactory';
-        $factory = new EventManagerFactory($name);
+        $name           = 'eventManagerFactory';
+        $factory        = new EventManagerFactory($name);
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',

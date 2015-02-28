@@ -41,8 +41,8 @@ class DoctrineObjectTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->metadata         = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $this->objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->metadata      = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $this->objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $this->objectManager->expects($this->any())
                             ->method('getClassMetadata')
@@ -107,7 +107,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -163,7 +163,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -231,7 +231,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -299,7 +299,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -418,7 +418,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -508,7 +508,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getIdentifier')
             ->will($this->returnValue(array("id")));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -612,7 +612,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getIdentifier')
             ->will($this->returnValue(array("id")));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -817,7 +817,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals(array('id' => 3, 'field' => 'bar'), $hydrator->extract($entity));
 
         $hydrator->addStrategy('id', new ContextStrategy());
-        $entity   = $hydrator->hydrate(array('id' => 3, 'field' => 'bar'), $entity);
+        $entity = $hydrator->hydrate(array('id' => 3, 'field' => 'bar'), $entity);
         $this->assertEquals(array('id' => '3barbar', 'field' => 'bar'), $hydrator->extract($entity));
     }
 
@@ -1929,6 +1929,7 @@ class DoctrineObjectTest extends BaseTestCase
                 ''
             )
         );
+
         $entityInDatabaseWithEmptyId = new Asset\SimpleEntity();
         $entityInDatabaseWithEmptyId->setId('');
         $entityInDatabaseWithEmptyId->setField('baz', false);
@@ -1945,7 +1946,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
 
         $entities = $entity->getEntities(false);
-        $entity = $entities[0];
+        $entity   = $entities[0];
 
         $this->assertEquals(1, count($entities));
 
@@ -1959,7 +1960,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = new Asset\SimpleEntityWithDateTime();
         $this->configureObjectManagerForSimpleEntityWithDateTime();
 
-        $now = time();
+        $now  = time();
         $data = array('date' => $now);
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);

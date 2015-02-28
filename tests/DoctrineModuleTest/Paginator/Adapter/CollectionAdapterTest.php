@@ -49,14 +49,14 @@ class CollectionAdapterTest extends PHPUnit_Framework_TestCase
     public function testGetsItemsAtOffsetZero()
     {
         $expected = range(1, 10);
-        $actual = $this->adapter->getItems(0, 10);
+        $actual   = $this->adapter->getItems(0, 10);
         $this->assertEquals($expected, $actual);
     }
 
     public function testGetsItemsAtOffsetTen()
     {
         $expected = range(11, 20);
-        $actual = $this->adapter->getItems(10, 10);
+        $actual   = $this->adapter->getItems(10, 10);
         $this->assertEquals($expected, $actual);
     }
 
@@ -68,7 +68,7 @@ class CollectionAdapterTest extends PHPUnit_Framework_TestCase
     public function testEmptySet()
     {
         $adapter = new CollectionAdapter(new ArrayCollection());
-        $actual = $adapter->getItems(0, 10);
+        $actual  = $adapter->getItems(0, 10);
         $this->assertEquals(array(), $actual);
     }
 }

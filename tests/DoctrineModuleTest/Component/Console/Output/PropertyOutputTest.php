@@ -47,7 +47,7 @@ class PropertyOutputTest extends TestCase
      */
     public function testWriteConcat()
     {
-        $message = 'message';
+        $message  = 'message';
         $message2 = 'message2';
         
         $output = new PropertyOutput();
