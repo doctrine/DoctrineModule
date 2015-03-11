@@ -18,7 +18,7 @@ before_script:
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/clover.xml
   - '[[ $TRAVIS_PHP_VERSION = hhvm ]] || php build/coverage-checker.php build/clover.xml 70'
-  - ./vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/
+  - sh -c "if [ '$TRAVIS_PHP_VERSION' != '5.3' ]; then ./vendor/bin/phpcs --standard=vendor/doctrine/coding-standard/Doctrine ./src/ ./tests/; fi"
 
 after_script:
   - |
@@ -26,4 +26,3 @@ after_script:
       wget https://scrutinizer-ci.com/ocular.phar
       php ocular.phar code-coverage:upload --format=php-clover ./build/clover.xml
     }
-  - sh -c "if [ '$TRAVIS_PHP_VERSION' != '5.3' ]; then ./vendor/bin/phpcs --standard=vendor/doctrine/coding-standard/Doctrine ./src/ ./tests/; fi"
