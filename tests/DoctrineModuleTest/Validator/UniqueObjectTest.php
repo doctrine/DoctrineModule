@@ -353,10 +353,10 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testCanFetchIdentifierFromObjectContext()
     {
-        $context = new stdClass();
+        $context     = new stdClass();
         $context->id = 'identifier';
 
-        $match   = new stdClass();
+        $match = new stdClass();
 
         $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $classMetadata

@@ -32,7 +32,7 @@ class NoObjectExists extends ObjectExists
     /**
      * Error constants
      */
-    const ERROR_OBJECT_FOUND    = 'objectFound';
+    const ERROR_OBJECT_FOUND = 'objectFound';
 
     /**
      * @var array Message templates
