@@ -72,7 +72,10 @@ class ZendStorageCache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = false)
     {
-        // @todo check if lifetime can be set
+        if ($lifeTime) {
+            $this->storage->getOptions()->setTtl($lifeTime);
+        }
+
         return $this->storage->setItem($id, $data);
     }
 
