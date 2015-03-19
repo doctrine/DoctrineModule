@@ -21,10 +21,10 @@ namespace DoctrineModule\Cache;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\Cache\Storage\FlushableInterface;
-use Zend\Cache\Storage\TotalSpaceCapableInterface;
 use Zend\Cache\Storage\AvailableSpaceCapableInterface;
+use Zend\Cache\Storage\FlushableInterface;
+use Zend\Cache\Storage\StorageInterface;
+use Zend\Cache\Storage\TotalSpaceCapableInterface;
 
 /**
  * Bridge class that allows usage of a Zend Cache Storage as a Doctrine Cache
@@ -74,6 +74,8 @@ class ZendStorageCache extends CacheProvider
     {
         if ($lifeTime) {
             $this->storage->getOptions()->setTtl($lifeTime);
+        } else {
+            $this->storage->getOptions()->setTtl(0);
         }
 
         return $this->storage->setItem($id, $data);
@@ -111,7 +113,7 @@ class ZendStorageCache extends CacheProvider
         /* @var $storage AvailableSpaceCapableInterface */
         $storage = $this->storage;
 
-        return array(
+        return [
             Cache::STATS_HITS              => $this->storage->getMetadata(Cache::STATS_HITS),
             Cache::STATS_MISSES            => $this->storage->getMetadata(Cache::STATS_MISSES),
             Cache::STATS_UPTIME            => $this->storage->getMetadata(Cache::STATS_UPTIME),
@@ -121,6 +123,6 @@ class ZendStorageCache extends CacheProvider
             Cache::STATS_MEMORY_AVAILIABLE => $storage instanceof AvailableSpaceCapableInterface
                 ? $storage->getAvailableSpace()
                 : null,
-        );
+        ];
     }
 }
