@@ -6,13 +6,13 @@
 # 0.8.1
 
  * [#376](https://github.com/doctrine/DoctrineModule/pull/376) Bumping PHP and ZF2 dependencies, branch alias for master
- * [#378](https://github.com/doctrine/DoctrineModule/pull/378) I think this is a small PSR rule violation.
- * [#381](https://github.com/doctrine/DoctrineModule/pull/381) Update validator.md
- * [#388](https://github.com/doctrine/DoctrineModule/pull/388) Added exception for missing required parameter for find_method option as
+ * [#378](https://github.com/doctrine/DoctrineModule/pull/378) PSR fixing.
+ * [#381](https://github.com/doctrine/DoctrineModule/pull/381) Validator documentatin update
+ * [#388](https://github.com/doctrine/DoctrineModule/pull/388) Added exception for missing required parameter for `find_method` option as
  * [#390](https://github.com/doctrine/DoctrineModule/pull/390) Clarified how to pass sort information.
  * [#395](https://github.com/doctrine/DoctrineModule/pull/395) Issue with objects being cast to array in validators
  * [#397](https://github.com/doctrine/DoctrineModule/pull/397) Enhancement: use exit code from run()
- * [#401](https://github.com/doctrine/DoctrineModule/pull/401)Reading Inconsistency
+ * [#401](https://github.com/doctrine/DoctrineModule/pull/401) Reading Inconsistency
  * [#391](https://github.com/doctrine/DoctrineModule/pull/391) UniqueObject Validator * allowing composite identifiers from context or not
  * [#400](https://github.com/doctrine/DoctrineModule/pull/400) let zf2 console return exit status
  * [#404](https://github.com/doctrine/DoctrineModule/pull/404) Fix form elements
