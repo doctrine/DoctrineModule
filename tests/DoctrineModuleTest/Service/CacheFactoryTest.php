@@ -56,4 +56,31 @@ class CacheFactoryTest extends BaseTestCase
         $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $service);
         $this->assertSame('bar', $service->getNamespace());
     }
+
+    public function testCreatePredisCache()
+    {
+        $factory        = new CacheFactory('predis');
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'Configuration',
+            [
+                'doctrine' => [
+                    'cache' => [
+                        'predis' => [
+                            'class'     => 'Doctrine\Common\Cache\PredisCache',
+                            'instance'  => 'my_predis_alias',
+                            'namespace' => 'DoctrineModule',
+                        ],
+                    ],
+                ],
+            ]
+        )->setService(
+            'my_predis_alias',
+            $this->getMock('Predis\Client')
+        );
+
+        $cache = $factory->createService($serviceManager);
+
+        $this->assertInstanceOf('Doctrine\Common\Cache\PredisCache', $cache);
+    }
 }
