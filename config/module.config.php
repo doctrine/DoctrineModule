@@ -80,7 +80,7 @@ return array(
         'authenticationservice' => array(
             'odm_default' => true,
             'orm_default' => true,
-        )
+        ),
     ),
 
     // Factory mappings - used to define which factory to use to instantiate a particular doctrine
@@ -96,7 +96,7 @@ return array(
 
     'service_manager' => array(
         'invokables' => array(
-            'DoctrineModule\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session'
+            'DoctrineModule\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session',
         ),
         'factories' => array(
             'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
@@ -108,8 +108,8 @@ return array(
 
     'controllers' => array(
         'factories' => array(
-            'DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory'
-        )
+            'DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory',
+        ),
     ),
 
     'route_manager' => array(
@@ -123,8 +123,8 @@ return array(
             'routes' => array(
                 'doctrine_cli' => array(
                     'type' => 'symfony_cli',
-                )
-            )
-        )
+                ),
+            ),
+        ),
     ),
 );
