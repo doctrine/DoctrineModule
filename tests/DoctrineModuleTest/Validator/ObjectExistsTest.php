@@ -184,4 +184,29 @@ class ObjectExistsTest extends BaseTestCase
 
         $validator->isValid(array('field1' => 'field1Value'));
     }
+    
+    public function testErrorMessageIsStringInsteadArray()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $validator = new ObjectExists(
+            array(
+                'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+                'fields'            => 'field'
+            )
+        );
+        
+        $this->assertFalse($validator->isValid('value'));
+
+        $messageTemplates = $validator->getMessageTemplates();
+        
+        $expectedMessage = str_replace(
+            '%value%',
+            'value',
+            $messageTemplates[ObjectExists::ERROR_NO_OBJECT_FOUND]
+        );
+        $messages = $validator->getMessages();
+        $receivedMessage = $messages[ObjectExists::ERROR_NO_OBJECT_FOUND];
+
+        $this->assertTrue($expectedMessage == $receivedMessage);
+    }
 }
