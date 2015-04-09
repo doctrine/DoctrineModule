@@ -89,7 +89,7 @@ class ObjectRepository implements StorageInterface
     /**
      * Will return the key of the identity. If only the key is needed, this avoids an
      * unnecessary db call
-     * 
+     *
      * @return mixed
      */
     public function readKeyOnly()

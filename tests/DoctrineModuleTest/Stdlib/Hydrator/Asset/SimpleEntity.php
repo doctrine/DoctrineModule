@@ -2,7 +2,6 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator\Asset;
 
-
 class SimpleEntity
 {
     /**

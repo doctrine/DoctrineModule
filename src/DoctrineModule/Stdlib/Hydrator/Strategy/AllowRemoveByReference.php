@@ -42,8 +42,8 @@ class AllowRemoveByReference extends AbstractCollectionStrategy
         $collection      = $this->getCollectionFromObjectByReference();
         $collectionArray = $collection->toArray();
 
-        $toAdd      = array_udiff($value, $collectionArray, array($this, 'compareObjects'));
-        $toRemove   = array_udiff($collectionArray, $value, array($this, 'compareObjects'));
+        $toAdd    = array_udiff($value, $collectionArray, array($this, 'compareObjects'));
+        $toRemove = array_udiff($collectionArray, $value, array($this, 'compareObjects'));
 
         foreach ($toAdd as $element) {
             $collection->add($element);

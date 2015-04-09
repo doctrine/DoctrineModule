@@ -135,7 +135,7 @@ class ObjectRepository extends AbstractAdapter
             ->findOneBy(array($options->getIdentityProperty() => $this->identity));
 
         if (!$identity) {
-            $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
+            $this->authenticationResultInfo['code']       = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
             $this->authenticationResultInfo['messages'][] = 'A record with the supplied identity could not be found.';
 
             return $this->createAuthenticationResult();
@@ -157,7 +157,7 @@ class ObjectRepository extends AbstractAdapter
     protected function validateIdentity($identity)
     {
         $credentialProperty = $this->options->getCredentialProperty();
-        $getter = 'get' . ucfirst($credentialProperty);
+        $getter             = 'get' . ucfirst($credentialProperty);
         $documentCredential = null;
 
         if (method_exists($identity, $getter)) {
@@ -177,14 +177,14 @@ class ObjectRepository extends AbstractAdapter
         }
 
         $credentialValue = $this->credential;
-        $callable = $this->options->getCredentialCallable();
+        $callable        = $this->options->getCredentialCallable();
 
         if ($callable) {
             $credentialValue = call_user_func($callable, $identity, $credentialValue);
         }
 
         if ($credentialValue !== true && $credentialValue !== $documentCredential) {
-            $this->authenticationResultInfo['code'] = AuthenticationResult::FAILURE_CREDENTIAL_INVALID;
+            $this->authenticationResultInfo['code']       = AuthenticationResult::FAILURE_CREDENTIAL_INVALID;
             $this->authenticationResultInfo['messages'][] = 'Supplied credential is invalid.';
 
             return $this->createAuthenticationResult();

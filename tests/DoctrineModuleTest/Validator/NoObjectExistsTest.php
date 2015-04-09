@@ -78,7 +78,7 @@ class NoObjectExistsTest extends BaseTestCase
             'matchValue',
             $messageTemplates[NoObjectExists::ERROR_OBJECT_FOUND]
         );
-        $messages = $validator->getMessages();
+        $messages        = $validator->getMessages();
         $receivedMessage = $messages[NoObjectExists::ERROR_OBJECT_FOUND];
 
         $this->assertTrue($expectedMessage == $receivedMessage);

@@ -188,7 +188,7 @@ class ObjectExistsTest extends BaseTestCase
     public function testErrorMessageIsStringInsteadArray()
     {
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $validator = new ObjectExists(
+        $validator  = new ObjectExists(
             array(
                 'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
                 'fields'            => 'field'
@@ -204,7 +204,7 @@ class ObjectExistsTest extends BaseTestCase
             'value',
             $messageTemplates[ObjectExists::ERROR_NO_OBJECT_FOUND]
         );
-        $messages = $validator->getMessages();
+        $messages        = $validator->getMessages();
         $receivedMessage = $messages[ObjectExists::ERROR_NO_OBJECT_FOUND];
 
         $this->assertTrue($expectedMessage == $receivedMessage);

@@ -65,8 +65,8 @@ class AllowRemoveByValue extends AbstractCollectionStrategy
             $collection = $collection->toArray();
         }
 
-        $toAdd      = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
-        $toRemove   = new ArrayCollection(array_udiff($collection, $value, array($this, 'compareObjects')));
+        $toAdd    = new ArrayCollection(array_udiff($value, $collection, array($this, 'compareObjects')));
+        $toRemove = new ArrayCollection(array_udiff($collection, $value, array($this, 'compareObjects')));
 
         $this->object->$adder($toAdd);
         $this->object->$remover($toRemove);

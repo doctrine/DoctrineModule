@@ -192,7 +192,6 @@ class DoctrineObject extends AbstractHydrator
             } elseif (substr($fieldName, 0, 2) === 'is'
                 && ctype_upper(substr($fieldName, 2, 1))
                 && in_array($fieldName, $methods)) {
-
                 $data[$dataFieldName] = $this->extractValue($fieldName, $object->$fieldName(), $object);
             }
 
@@ -225,7 +224,7 @@ class DoctrineObject extends AbstractHydrator
             $reflProperty = $refl->getProperty($fieldName);
             $reflProperty->setAccessible(true);
 
-            $dataFieldName = $this->computeExtractFieldName($fieldName);
+            $dataFieldName        = $this->computeExtractFieldName($fieldName);
             $data[$dataFieldName] = $this->extractValue($fieldName, $reflProperty->getValue($object), $object);
         }
 
@@ -298,9 +297,9 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function hydrateByReference(array $data, $object)
     {
-        $tryObject   = $this->tryConvertArrayToObject($data, $object);
-        $metadata = $this->metadata;
-        $refl     = $metadata->getReflectionClass();
+        $tryObject = $this->tryConvertArrayToObject($data, $object);
+        $metadata  = $this->metadata;
+        $refl      = $metadata->getReflectionClass();
 
         if (is_object($tryObject)) {
             $object = $tryObject;
@@ -386,7 +385,7 @@ class DoctrineObject extends AbstractHydrator
                 $value,
                 array_flip($metadata->getIdentifier())
             );
-            $object = $this->find($identifiers, $target) ?: new $target;
+            $object      = $this->find($identifiers, $target) ?: new $target;
             return $this->hydrate($value, $object);
         }
 

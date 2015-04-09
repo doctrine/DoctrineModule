@@ -27,7 +27,7 @@ class StorageFactoryTest extends BaseTestCase
 {
     public function testWillInstantiateFromFQCN()
     {
-        $name = 'testFactory';
+        $name    = 'testFactory';
         $factory = new StorageFactory($name);
 
         $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
