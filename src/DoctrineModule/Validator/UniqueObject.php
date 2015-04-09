@@ -105,7 +105,7 @@ class UniqueObject extends ObjectExists
         }
 
         $cleanedValue = $this->cleanSearchValue($value);
-        $match = $this->objectRepository->findOneBy($cleanedValue);
+        $match        = $this->objectRepository->findOneBy($cleanedValue);
 
         if (!is_object($match)) {
             return true;
@@ -161,7 +161,6 @@ class UniqueObject extends ObjectExists
 
         $result = array();
         foreach ($this->getIdentifiers() as $identifierField) {
-
             if (!isset($context[$identifierField])) {
                 throw new Exception\RuntimeException(\sprintf('Expected context to contain %s', $identifierField));
             }

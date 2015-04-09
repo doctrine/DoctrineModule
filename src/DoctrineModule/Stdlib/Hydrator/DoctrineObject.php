@@ -192,7 +192,6 @@ class DoctrineObject extends AbstractHydrator
             } elseif (substr($fieldName, 0, 2) === 'is'
                 && ctype_upper(substr($fieldName, 2, 1))
                 && in_array($fieldName, $methods)) {
-
                 $data[$dataFieldName] = $this->extractValue($fieldName, $object->$fieldName(), $object);
             }
 
