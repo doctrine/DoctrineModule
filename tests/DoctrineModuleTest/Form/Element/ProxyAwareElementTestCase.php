@@ -47,7 +47,8 @@ class ProxyAwareElementTestCase extends TestCase
             ->setFirstname('object two firstname')
             ->setSurname('object two surname');
 
-        $this->values = $result = new ArrayCollection(array($objectOne, $objectTwo));
+        $result       = new ArrayCollection(array($objectOne, $objectTwo));
+        $this->values = $result;
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata
