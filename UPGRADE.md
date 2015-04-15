@@ -3,6 +3,29 @@
  * Minimum PHP version has been bumped to `5.3.23` [#376](https://github.com/doctrine/DoctrineModule/pull/376)
  * Minimum `zendframework/zendframework` version has been bumped to `2.3` [#376](https://github.com/doctrine/DoctrineModule/pull/376)
 
+# 0.8.1
+
+ * [#376](https://github.com/doctrine/DoctrineModule/pull/376) Bumping PHP and ZF2 dependencies, branch alias for master
+ * [#378](https://github.com/doctrine/DoctrineModule/pull/378) PSR fixing.
+ * [#381](https://github.com/doctrine/DoctrineModule/pull/381) Validator documentatin update
+ * [#388](https://github.com/doctrine/DoctrineModule/pull/388) Added exception for missing required parameter for `find_method` option as
+ * [#390](https://github.com/doctrine/DoctrineModule/pull/390) Clarified how to pass sort information.
+ * [#395](https://github.com/doctrine/DoctrineModule/pull/395) Issue with objects being cast to array in validators
+ * [#397](https://github.com/doctrine/DoctrineModule/pull/397) Enhancement: use exit code from run()
+ * [#401](https://github.com/doctrine/DoctrineModule/pull/401) Reading Inconsistency
+ * [#391](https://github.com/doctrine/DoctrineModule/pull/391) UniqueObject Validator * allowing composite identifiers from context or not
+ * [#400](https://github.com/doctrine/DoctrineModule/pull/400) let zf2 console return exit status
+ * [#404](https://github.com/doctrine/DoctrineModule/pull/404) Fix form elements
+ * [#406](https://github.com/doctrine/DoctrineModule/pull/406) Fix context unique
+ * [#421](https://github.com/doctrine/DoctrineModule/pull/421) Make DoctrineObject use AbstractHydrator s namingStrategy
+ * [#426](https://github.com/doctrine/DoctrineModule/pull/426) update year in license
+ * [#436](https://github.com/doctrine/DoctrineModule/pull/436) Fixing typo and updating paginator link to ZF 2.3
+ * [#450](https://github.com/doctrine/DoctrineModule/pull/450) minor cs fix
+ * [#458](https://github.com/doctrine/DoctrineModule/pull/458) Update doctrine*module.php
+ * [#462](https://github.com/doctrine/DoctrineModule/pull/462) Adding custom Doctrine*Cli Commands
+ * [#465](https://github.com/doctrine/DoctrineModule/pull/465) Re*enable scrutinizer*ci code coverage
+ * [#453](https://github.com/doctrine/DoctrineModule/pull/453) phpdoc fixes
+
 # 0.8.0
 
  * Dependency to zendframework has been bumped from `2.*` to `~2.2`
