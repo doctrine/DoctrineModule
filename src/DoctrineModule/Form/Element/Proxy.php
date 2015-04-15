@@ -19,11 +19,14 @@
 
 namespace DoctrineModule\Form\Element;
 
-use RuntimeException;
+use DoctrineModule\Exception\InvalidArgumentException;
+use DoctrineModule\Exception\RuntimeException;
 use ReflectionMethod;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use Zend\Stdlib\Hydrator\Filter\OptionalParametersFilter;
 
 class Proxy implements ObjectManagerAwareInterface
 {
@@ -179,16 +182,14 @@ class Proxy implements ObjectManagerAwareInterface
      *
      * @param callable $callable A callable used to create a label based off of an Entity
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return void
      */
     public function setLabelGenerator($callable)
     {
         if (! is_callable($callable)) {
-            throw new \InvalidArgumentException(
-                'Property "label_generator" needs to be a callable function or a \Closure'
-            );
+            throw InvalidArgumentException::invalidLabelGenerator(__METHOD__, __LINE__);
         }
 
         $this->labelGenerator = $callable;
@@ -257,40 +258,51 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @param  $value
      * @return array|mixed|object
-     * @throws \RuntimeException
+     * @throws RuntimeException  If no object manager is set.
+     * @throws RuntimeException  If no target class has been set.
      */
     public function getValue($value)
     {
-        if (!($om = $this->getObjectManager())) {
-            throw new RuntimeException('No object manager was set');
+        $objectManager = $this->getObjectManager();
+
+        if (!$objectManager) {
+            throw RuntimeException::objectManagerNotSet(__METHOD__, __LINE__);
         }
 
-        if (!($targetClass = $this->getTargetClass())) {
-            throw new RuntimeException('No target class was set');
+        if (!$this->getTargetClass()) {
+            throw RuntimeException::targetClassNotSet(__METHOD__, __LINE__);
         }
 
-        $metadata = $om->getClassMetadata($targetClass);
-        if (is_object($value)) {
-            if ($value instanceof Collection) {
-                $data = array();
-                foreach ($value as $object) {
-                    $values = $metadata->getIdentifierValues($object);
-                    $data[] = array_shift($values);
-                }
+        $metadata = $objectManager->getClassMetadata($this->getTargetClass());
 
-                $value = $data;
-            } else {
-                $metadata   = $om->getClassMetadata(get_class($value));
-                $identifier = $metadata->getIdentifierFieldNames();
-
-                // TODO: handle composite (multiple) identifiers
-                if (count($identifier) > 1) {
-                    //$value = $key;
-                } else {
-                    $value = current($metadata->getIdentifierValues($value));
-                }
-            }
+        if (!is_object($value)) {
+            return $value;
         }
+
+        if ($value instanceof Collection) {
+            return array_map(
+                function ($object) use ($metadata) {
+                    $identifier = $metadata->getIdentifierValues($object);
+
+                    if (count($identifier) > 1) {
+                        throw RuntimeException::multipleIdentifiers(__METHOD__, __LINE__);
+                    }
+
+                    return reset($identifier);
+                },
+                $value->toArray()
+            );
+        }
+
+        $metadata   = $objectManager->getClassMetadata(get_class($value));
+        $identifier = $metadata->getIdentifierFieldNames();
+
+        // TODO: handle composite (multiple) identifiers
+        if (count($identifier) > 1) {
+            throw RuntimeException::multipleIdentifiers(__METHOD__, __LINE__);
+        }
+
+        $value = current($metadata->getIdentifierValues($value));
 
         return $value;
     }
@@ -298,7 +310,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Load objects
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return void
      */
@@ -309,37 +321,33 @@ class Proxy implements ObjectManagerAwareInterface
         }
 
         $findMethod = (array) $this->getFindMethod();
+
         if (!$findMethod) {
+            // No find method was specified so fetchAll objects and finish
             $this->objects = $this->objectManager->getRepository($this->targetClass)->findAll();
-        } else {
-            if (!isset($findMethod['name'])) {
-                throw new RuntimeException('No method name was set');
-            }
-            $findMethodName   = $findMethod['name'];
-            $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : null;
 
-            $repository = $this->objectManager->getRepository($this->targetClass);
-            if (!method_exists($repository, $findMethodName)) {
-                throw new RuntimeException(
-                    sprintf(
-                        'Method "%s" could not be found in repository "%s"',
-                        $findMethodName,
-                        get_class($repository)
-                    )
-                );
-            }
-
-            $r    = new ReflectionMethod($repository, $findMethodName);
-            $args = array();
-            foreach ($r->getParameters() as $param) {
-                if (array_key_exists(strtolower($param->getName()), $findMethodParams)) {
-                    $args[] = $findMethodParams[strtolower($param->getName())];
-                } else {
-                    $args[] = $param->getDefaultValue();
-                }
-            }
-            $this->objects = $r->invokeArgs($repository, $args);
+            return null;
         }
+
+        if (!isset($findMethod['name'])) {
+            throw RuntimeException::findMethodNameNotSet(__METHOD__, __LINE__);
+        }
+
+        $findMethodName   = $findMethod['name'];
+        $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : null;
+
+        $repository = $this->objectManager->getRepository($this->targetClass);
+
+        if (!method_exists($repository, $findMethodName)) {
+            throw RuntimeException::invalidFindMethodName(
+                $findMethodName,
+                get_class($repository),
+                __METHOD__,
+                __LINE__
+            );
+        }
+
+        $this->objects = $this->callMethodWithParameters($repository, $findMethodName, $findMethodParams);
     }
 
     /**
@@ -350,68 +358,120 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected function loadValueOptions()
     {
-        if (!($om = $this->objectManager)) {
-            throw new RuntimeException('No object manager was set');
+        if (!$this->objectManager) {
+            throw RuntimeException::objectManagerNotSet(__METHOD__, __LINE__);
         }
 
-        if (!($targetClass = $this->targetClass)) {
-            throw new RuntimeException('No target class was set');
+        if (!$this->targetClass) {
+            throw RuntimeException::targetClassNotSet(__METHOD__, __LINE__);
         }
 
-        $metadata   = $om->getClassMetadata($targetClass);
+        $metadata   = $this->objectManager->getClassMetadata($this->targetClass);
         $identifier = $metadata->getIdentifierFieldNames();
         $objects    = $this->getObjects();
         $options    = array();
 
         if (empty($objects)) {
-            $options[''] = '';
-        } else {
-            foreach ($objects as $key => $object) {
-                if (null !== ($generatedLabel = $this->generateLabel($object))) {
-                    $label = $generatedLabel;
-                } elseif ($property = $this->property) {
-                    if ($this->isMethod == false && !$metadata->hasField($property)) {
-                        throw new RuntimeException(
-                            sprintf(
-                                'Property "%s" could not be found in object "%s"',
-                                $property,
-                                $targetClass
-                            )
-                        );
-                    }
+            $this->valueOptions = array('' => '');
 
-                    $getter = 'get' . ucfirst($property);
-                    if (!is_callable(array($object, $getter))) {
-                        throw new RuntimeException(
-                            sprintf('Method "%s::%s" is not callable', $this->targetClass, $getter)
-                        );
-                    }
+            return;
+        }
 
-                    $label = $object->{$getter}();
-                } else {
-                    if (!is_callable(array($object, '__toString'))) {
-                        throw new RuntimeException(
-                            sprintf(
-                                '%s must have a "__toString()" method defined if you have not set a property'
-                                . ' or method to use.',
-                                $targetClass
-                            )
-                        );
-                    }
+        $multipleIdentifiers = count($identifier) > 1;
 
-                    $label = (string) $object;
-                }
+        foreach ($objects as $key => $object) {
+            $identifier = $metadata->getIdentifierValues($object);
 
-                if (count($identifier) > 1) {
-                    $value = $key;
-                } else {
-                    $value = current($metadata->getIdentifierValues($object));
-                }
+            $value = $multipleIdentifiers ? $key : reset($identifier);
 
-                $options[] = array('label' => $label, 'value' => $value);
-            }
+            $options[] = array(
+                'label' => $this->getLabel($object, $metadata),
+                'value' => $value
+            );
         }
 
         $this->valueOptions = $options;
+    }
+
+    /**
+     * Call method $methodName on $object matching the parameters in $methodParams
+     * to the function arguments by name.
+     *
+     * @param  object $object
+     * @param  string $methodName
+     * @param  array  $methodParams
+     * @return void
+     */
+    private function callMethodWithParameters($object, $methodName, array $methodParams)
+    {
+        $reflectionMethod = new ReflectionMethod($object, $methodName);
+        $args = array();
+
+        foreach ($reflectionMethod->getParameters() as $param) {
+            if (array_key_exists(strtolower($param->getName()), $methodParams)) {
+                $args[] = $methodParams[strtolower($param->getName())];
+                continue;
+            }
+
+            $args[] = $param->getDefaultValue();
+        }
+
+        return $reflectionMethod->invokeArgs($object, $args);
+    }
+
+    /**
+     * Return the label for the given object.
+     *
+     * @param  object           $object
+     * @param  ClassMetadata    $metadata
+     * @return string
+     * @throws RuntimeException If requested label property doesn't exist.
+     * @throws RuntimeException If requested label property getter method isn't callable.
+     * @throws RuntimeException If the __toString method isn't implemented.
+     */
+    protected function getLabel($object, ClassMetadata $metadata)
+    {
+        $generatedLabel = $this->generateLabel($object);
+
+        if (null !== $generatedLabel) {
+            return $generatedLabel;
+        }
+
+        $property = $this->property;
+
+        if ($property) {
+            if (false == $this->isMethod && !$metadata->hasField($property)) {
+                throw RuntimeException::invalidPropertyName(
+                    $property,
+                    $this->targetClass,
+                    __METHOD__,
+                    __LINE__
+                );
+            }
+
+            $getter = 'get' . ucfirst($property);
+
+            $optionalParametersFilter = new OptionalParametersFilter();
+
+            if (!$optionalParametersFilter->filter(get_class($object) . '::' . $getter)) {
+                throw RuntimeException::methodNotCallable(
+                    $this->targetClass . '::' . $getter,
+                    __METHOD__,
+                    __LINE__
+                );
+            }
+
+            return $object->{$getter}();
+        }
+
+        if (!is_callable(array($object, '__toString'))) {
+            throw RuntimeException::noMethodOrToString(
+                $this->targetClass,
+                __METHOD__,
+                __LINE__
+            );
+        }
+
+        return (string) $object;
     }
 }
