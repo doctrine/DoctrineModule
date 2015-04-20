@@ -56,6 +56,11 @@ class Proxy implements ObjectManagerAwareInterface
     protected $property;
 
     /**
+     * @var array
+     */
+    protected $option_attributes = array();
+
+    /**
      * @var callable $labelGenerator A callable used to create a label based on an item in the collection an Entity
      */
     protected $labelGenerator;
@@ -113,6 +118,10 @@ class Proxy implements ObjectManagerAwareInterface
         if (isset($options['empty_item_label'])) {
             $this->setEmptyItemLabel($options['empty_item_label']);
         }
+
+        if (isset($options['option_attributes'])) {
+            $this->setOptionAttributes($options['option_attributes']);
+        }
     }
 
     public function getValueOptions()
@@ -153,6 +162,22 @@ class Proxy implements ObjectManagerAwareInterface
     public function getEmptyItemLabel()
     {
         return $this->emptyItemLabel;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptionAttributes()
+    {
+        return $this->option_attributes;
+    }
+
+    /**
+     * @param array $option_attributes
+     */
+    public function setOptionAttributes(array $option_attributes)
+    {
+        $this->option_attributes = $option_attributes;
     }
 
     /**
@@ -455,6 +480,7 @@ class Proxy implements ObjectManagerAwareInterface
         $identifier = $metadata->getIdentifierFieldNames();
         $objects    = $this->getObjects();
         $options    = array();
+        $optionAttributes=array();
 
         if ($this->displayEmptyItem) {
             $options[''] = $this->getEmptyItemLabel();
@@ -502,7 +528,19 @@ class Proxy implements ObjectManagerAwareInterface
                 $value = current($metadata->getIdentifierValues($object));
             }
 
-            $options[] = array('label' => $label, 'value' => $value);
+            foreach ($this->getOptionAttributes() as $optionAttribute) {
+                $methodName=current($optionAttribute);
+                if (!is_callable(array($object, $methodName))) {
+
+                        throw new RuntimeException(
+                            sprintf('Method "%s::%s" is not callable', $this->targetClass, $methodName)
+                        );
+                }
+                    $optionAttributes[key($optionAttribute)] =(string) $object->{$methodName}();
+            }
+
+                $options[] = array('label' => $label, 'value' => $value, 'attributes'=>$optionAttributes);
+           
         }
 
         $this->valueOptions = $options;
