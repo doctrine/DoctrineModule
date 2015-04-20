@@ -47,7 +47,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $optionAttributes=array();
+    protected $optionAttributes =array();
 
     /**
      * {@inheritDoc}.
@@ -329,7 +329,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
     public function testUsingOptionAttributes()
     {
-        $this->optionAttributes=array(array('data-key'=>'getFirstname'));
+        $this->optionAttributes =array(array('data-key'=>'getFirstname'));
         $this->prepareProxyWithOptionAttributes();
 
         $currentValueOption = current($this->proxy->getValueOptions());

@@ -476,11 +476,11 @@ class Proxy implements ObjectManagerAwareInterface
             throw new RuntimeException('No target class was set');
         }
 
-        $metadata   = $om->getClassMetadata($targetClass);
-        $identifier = $metadata->getIdentifierFieldNames();
-        $objects    = $this->getObjects();
-        $options    = array();
-        $optionAttributes=array();
+        $metadata         = $om->getClassMetadata($targetClass);
+        $identifier       = $metadata->getIdentifierFieldNames();
+        $objects          = $this->getObjects();
+        $options          = array();
+        $optionAttributes =array();
 
         if ($this->displayEmptyItem) {
             $options[''] = $this->getEmptyItemLabel();
@@ -529,9 +529,8 @@ class Proxy implements ObjectManagerAwareInterface
             }
 
             foreach ($this->getOptionAttributes() as $optionAttribute) {
-                $methodName=current($optionAttribute);
+                $methodName =current($optionAttribute);
                 if (!is_callable(array($object, $methodName))) {
-
                         throw new RuntimeException(
                             sprintf('Method "%s::%s" is not callable', $this->targetClass, $methodName)
                         );
