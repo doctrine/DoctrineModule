@@ -187,7 +187,7 @@ $this->add(
 
 The above example will generate HTML options with a data-key attribute:
 
-```php
+```html
 <select name="test">
 <option value="myValue" data-key="value">myLabel</option>
 <option value="myValue2" data-key="value2">myLabel2</option>
