@@ -15,7 +15,7 @@ use and a `property` of the class to use as the Label.
 
 #### Example 1 : simple example
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 namespace Module\Form;
 
 use Zend\Form\Form;
@@ -51,7 +51,7 @@ class MyForm extends Form implements ObjectManagerAwareInterface
         return $this->objectManager;
     }    
 }
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 
 When the Form gets rendered the `findAll` method of the `ObjectRepository` will
 be executed by default.
@@ -62,7 +62,7 @@ In times you want to change the display of the label you will need to use the
 `label_generator` option. This option allows you to modify the label as much as
 you like. In this simple example i will concatenate two properties with a dash.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 $this->add(
     array(
         'type' => 'DoctrineModule\Form\Element\ObjectSelect',
@@ -76,14 +76,14 @@ $this->add(
         ),
     )
 );
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 
 The callable function will always receive the target entity as a parameter so
 you will be able to use all functionalities your entities provide. Another
 example would be to completely switch out the labels in case your website has
 specific options to provide more accessible labels.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 $this->add(
     array(
         'type' => 'DoctrineModule\Form\Element\ObjectSelect',
@@ -101,7 +101,7 @@ $this->add(
         ),
     )
 );
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 
 ### Example 3 : extended version
 
@@ -111,7 +111,7 @@ the `findBy` method and passes in the specified parameters, but when using
 custom repositories you can do even more advanced queries! Also you can specify
 a method as a property by setting `is_method` to true.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 $this->add(
     array(
         'type' => 'DoctrineModule\Form\Element\ObjectSelect',
@@ -136,7 +136,7 @@ $this->add(
         ),
     )
 );
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 
 ### Example 4 : including an empty option
 
@@ -144,7 +144,7 @@ If you want to include an empty option at the top, set the `display_empty_item`
 setting to true. You can also specify the `empty_item_label` setting, the
 default is an empty string.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 $this->add(
     array(
         'type' => 'DoctrineModule\Form\Element\ObjectSelect',
@@ -158,7 +158,7 @@ $this->add(
         ),
     )
 );
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 
 ### Example 5 : including custom valueOption attributes
 
@@ -168,7 +168,7 @@ keys represent a valid HTML attribute (data-, aria-, onEvent, etc.) and the
 value is a valid method to be called on the entity object which in turn returns
 the string to use as the value for the  attribute.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 $this->add(
     array(
         'type' => 'DoctrineModule\Form\Element\ObjectSelect',
@@ -183,13 +183,13 @@ $this->add(
         ),
     )
 );
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 
 The above example will generate HTML options with a data-key attribute:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 <select name="test">
 <option value="myValue" data-key="value">myLabel</option>
 <option value="myValue2" data-key="value2">myLabel2</option>
 </select>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
