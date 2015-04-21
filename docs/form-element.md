@@ -51,7 +51,7 @@ class MyForm extends Form implements ObjectManagerAwareInterface
         return $this->objectManager;
     }    
 }
-```php
+```
 
 When the Form gets rendered the `findAll` method of the `ObjectRepository` will
 be executed by default.
@@ -76,7 +76,7 @@ $this->add(
         ),
     )
 );
-```php
+```
 
 The callable function will always receive the target entity as a parameter so
 you will be able to use all functionalities your entities provide. Another
@@ -101,7 +101,7 @@ $this->add(
         ),
     )
 );
-```php
+```
 
 ### Example 3 : extended version
 
@@ -136,7 +136,7 @@ $this->add(
         ),
     )
 );
-```php
+```
 
 ### Example 4 : including an empty option
 
@@ -158,7 +158,7 @@ $this->add(
         ),
     )
 );
-```php
+```
 
 ### Example 5 : including custom valueOption attributes
 
@@ -183,7 +183,7 @@ $this->add(
         ),
     )
 );
-```php
+```
 
 The above example will generate HTML options with a data-key attribute:
 
@@ -192,4 +192,4 @@ The above example will generate HTML options with a data-key attribute:
 <option value="myValue" data-key="value">myLabel</option>
 <option value="myValue2" data-key="value2">myLabel2</option>
 </select>
-```php
+```
