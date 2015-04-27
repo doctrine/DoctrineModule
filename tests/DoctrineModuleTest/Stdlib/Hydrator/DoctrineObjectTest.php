@@ -449,8 +449,8 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getTypeOfField')
             ->with($this->logicalOr(
-                $this->equalTo('id'), 
-                $this->equalTo('embedded.foo'), 
+                $this->equalTo('id'),
+                $this->equalTo('embedded.foo'),
                 $this->equalTo('embedded.bar')
             ))
             ->will(
