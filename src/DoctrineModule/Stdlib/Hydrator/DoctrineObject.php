@@ -181,7 +181,7 @@ class DoctrineObject extends AbstractHydrator
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
-            
+
             if ($pos = strpos($fieldName, '.')) {
                 $fieldName = substr($fieldName, 0, $pos);
             }
@@ -227,7 +227,7 @@ class DoctrineObject extends AbstractHydrator
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
-            
+
             if ($pos = strpos($fieldName, '.')) {
                 $fieldName = substr($fieldName, 0, $pos);
             }
