@@ -428,6 +428,75 @@ class DoctrineObjectTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForSimpleEntityWithEmbeddable()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithEmbeddable');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'embedded.foo', 'embedded.bar')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr(
+                $this->equalTo('id'),
+                $this->equalTo('embedded.foo'),
+                $this->equalTo('embedded.bar')
+            ))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'embedded.foo') {
+                            return 'string';
+                        } elseif ($arg === 'embedded.bar') {
+                            return 'string';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
     public function configureObjectManagerForOneToOneEntity()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity');
@@ -2159,5 +2228,51 @@ class DoctrineObjectTest extends BaseTestCase
         $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
         $entity = $this->hydratorByValue->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
         $this->assertEquals($name, $entity->getCamelCase());
+    }
+
+    public function testExtractWithEmbeddedablesByValue()
+    {
+        $this->configureObjectManagerForSimpleEntityWithEmbeddable();
+
+        $embeddable = new Asset\Embeddable();
+        $embeddable->setFoo('foo');
+        $embeddable->setBar('bar');
+
+        $entity = new Asset\SimpleEntityWithEmbeddable();
+        $entity->setId(2);
+        $entity->setEmbedded($embeddable);
+
+        $result = $this->hydratorByValue->extract($entity);
+
+        $this->assertCount(2, $result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('embedded', $result);
+        $this->assertEquals(2, $result['id']);
+        $this->assertInstanceOf(__NAMESPACE__ . '\Asset\Embeddable', $result['embedded']);
+        $this->assertEquals('foo', $result['embedded']->getFoo());
+        $this->assertEquals('bar', $result['embedded']->getBar());
+    }
+
+    public function testExtractWithEmbeddedablesByReference()
+    {
+        $this->configureObjectManagerForSimpleEntityWithEmbeddable();
+
+        $embeddable = new Asset\Embeddable();
+        $embeddable->setFoo('foo');
+        $embeddable->setBar('bar');
+
+        $entity = new Asset\SimpleEntityWithEmbeddable();
+        $entity->setId(2);
+        $entity->setEmbedded($embeddable);
+
+        $result = $this->hydratorByReference->extract($entity);
+
+        $this->assertCount(2, $result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('embedded', $result);
+        $this->assertEquals(2, $result['id']);
+        $this->assertInstanceOf(__NAMESPACE__ . '\Asset\Embeddable', $result['embedded']);
+        $this->assertEquals('foo', $result['embedded']->getFoo());
+        $this->assertEquals('bar', $result['embedded']->getBar());
     }
 }
