@@ -43,11 +43,11 @@ return array(
                 'instance'  => 'my_memcached_alias',
                 'namespace' => 'DoctrineModule',
             ),
-            'predis' => [
+            'predis' => array(
                 'class'     => 'Doctrine\Common\Cache\PredisCache',
                 'instance'  => 'my_predis_alias',
                 'namespace' => 'DoctrineModule',
-            ],
+            ),
             'redis' => array(
                 'class'     => 'Doctrine\Common\Cache\RedisCache',
                 'instance'  => 'my_redis_alias',
