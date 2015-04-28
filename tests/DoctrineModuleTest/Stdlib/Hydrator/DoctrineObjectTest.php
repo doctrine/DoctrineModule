@@ -487,7 +487,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
