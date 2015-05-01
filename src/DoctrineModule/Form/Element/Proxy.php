@@ -85,6 +85,11 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected $emptyItemLabel = '';
 
+    /**
+     * @var string
+     */
+    protected $optgroupIdentifier;
+
     public function setOptions($options)
     {
         if (isset($options['object_manager'])) {
@@ -121,6 +126,10 @@ class Proxy implements ObjectManagerAwareInterface
 
         if (isset($options['option_attributes'])) {
             $this->setOptionAttributes($options['option_attributes']);
+        }
+
+        if (isset($options['optgroup_identifier'])) {
+            $this->setOptgroupIdentifier($options['optgroup_identifier']);
         }
     }
 
@@ -299,6 +308,22 @@ class Proxy implements ObjectManagerAwareInterface
     public function getLabelGenerator()
     {
         return $this->labelGenerator;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptgroupIdentifier()
+    {
+        return $this->optgroupIdentifier;
+    }
+
+    /**
+     * @param string $optgroupIdentifier
+     */
+    public function setOptgroupIdentifier($optgroupIdentifier)
+    {
+        $this->optgroupIdentifier = $optgroupIdentifier;
     }
 
     /**
