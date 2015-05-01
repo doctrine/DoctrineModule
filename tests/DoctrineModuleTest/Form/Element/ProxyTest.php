@@ -308,13 +308,13 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $metadata    = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-    
+
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->once())
         ->method('getClassMetadata')
         ->with($this->equalTo($objectClass))
         ->will($this->returnValue($metadata));
-    
+
         $this->proxy->setOptions(
             array(
                 'object_manager' => $objectManager,
@@ -323,7 +323,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                 'option_attributes'    => array(array('data-key'=>'missing_method'))
             )
         );
-    
+
         $this->proxy->getValueOptions();
     }
 
@@ -409,6 +409,89 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                             return array('id' => 1);
                         } elseif ($input == $objectTwo) {
                             return array('id' => 2);
+                        }
+
+                        return array();
+                    }
+                )
+            );
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository->expects($this->any())
+            ->method('findAll')
+            ->will($this->returnValue($result));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->any())
+            ->method('getClassMetadata')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($metadata));
+
+        $objectManager
+            ->expects($this->any())
+            ->method('getRepository')
+            ->with($this->equalTo($objectClass))
+            ->will($this->returnValue($objectRepository));
+
+        $this->proxy->setOptions(
+            array(
+                'object_manager' => $objectManager,
+                'target_class'   => $objectClass,
+            )
+        );
+
+        $this->metadata = $metadata;
+    }
+
+    protected function prepareProxyWithOptgroupPreset()
+    {
+        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $objectOne   = new FormObject;
+        $objectTwo   = new FormObject;
+        $objectThree = new FormObject;
+
+        $objectOne->setId(1)
+            ->setUsername('object one username')
+            ->setPassword('object one password')
+            ->setEmail('object one email')
+            ->setFirstname('object one firstname')
+            ->setSurname('object one surname')
+            ->setOptgroup('Group One');
+
+        $objectTwo->setId(2)
+            ->setUsername('object two username')
+            ->setPassword('object two password')
+            ->setEmail('object two email')
+            ->setFirstname('object two firstname')
+            ->setSurname('object two surname')
+            ->setOptgroup('Group One');
+
+        $objectThree->setId(3)
+            ->setUsername('object three username')
+            ->setPassword('object three password')
+            ->setEmail('object three email')
+            ->setFirstname('object three firstname')
+            ->setSurname('object three surname')
+            ->setOptgroup('Group Two');
+
+        $result = new ArrayCollection(array($objectOne, $objectTwo, $objectThree));
+
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata
+            ->expects($this->any())
+            ->method('getIdentifierValues')
+            ->will(
+                $this->returnCallback(
+                    function () use ($objectOne, $objectTwo, $objectThree) {
+                        $input = func_get_args();
+                        $input = array_shift($input);
+
+                        if ($input == $objectOne) {
+                            return array('id' => 1);
+                        } elseif ($input == $objectTwo) {
+                            return array('id' => 2);
+                        } elseif ($input == $objectThree) {
+                            return array('id' => 3);
                         }
 
                         return array();
