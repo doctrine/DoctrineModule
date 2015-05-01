@@ -193,3 +193,51 @@ The above example will generate HTML options with a data-key attribute:
 <option value="myValue2" data-key="value2">myLabel2</option>
 </select>
 ```
+
+### Example 6: Implementing <optgroup> support
+
+Once lists become larger there's a big user-experience bonus when lists are groupt using the html <optgroup> attribute.
+DoctrineModule provides this functionality with the `optgroup_identifier`.
+
+The assumption DoctrineModule does however is that your data structure has the optgroup-grouping in mind. See the 
+following example:
+
+**Add the Select list like this:**
+
+```php
+$this->add(
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager'      => $this->getObjectManager(),
+            'target_class'        => 'Module\Entity\SomeEntity',
+            'property'            => 'property',
+            'optgroup_identifier' => 'category'
+        ),
+    )
+);
+```
+
+**With your data structure like this:**
+
+```
+id  | property   | category
+1   | Football   | sports
+2   | Basketball | sports
+3   | Spaghetti  | food
+```
+
+**Will create a HTML Select list like this:**
+
+```html
+<select name="name">
+    <optgroup label="sports">
+        <option value="1">Football</option>
+        <option value="2">Basketball</option>
+    </optgroup>
+    <optgroup label="food">
+        <option value="3">Spaghetti</option>
+    </optgroup>
+</select>
+```
