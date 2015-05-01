@@ -373,6 +373,108 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->getValueOptions();
     }
 
+    /**
+     * A \RuntimeException should be thrown when the optgroup_identifier option does not reflect an existing method
+     * within the target object
+     */
+    public function testExceptionThrownWhenOptgroupIdentifiesNotCallable()
+    {
+        $this->prepareProxyWithOptgroupPreset();
+
+        $this->proxy->setOptions(
+            array(
+                'optgroup_identifier' => 'NonExistantFunctionName'
+            )
+        );
+
+        $this->setExpectedException('RuntimeException');
+
+        $this->proxy->getValueOptions();
+    }
+
+    /**
+     * Tests that the returned value_options have a proper format given the default data provided for the test as of
+     * writing. The output should have the following result:
+     *
+     * <code>
+     * $valueOptions = array(
+     *      "Group One" => array(
+     *          "label"   => "Group One",
+     *          "options" => array(
+     *              0 => array(
+     *                  "label" => "object one username",
+     *                  "value" => 1
+     *              ),
+     *              1 => array(
+     *                  "label" => "object two username",
+     *                  "value" => 2
+     *              )
+     *          )
+     *      ),
+     *      "Group Two" => array(
+     *          "label"   => "Group Two",
+     *          "options" => array(
+     *              0 => array(
+     *                  "label" => "object three username",
+     *                  "value" => 3
+     *              )
+     *          )
+     *      )
+     * )
+     * </code>
+     */
+    public function testValueOptionsGeneratedProperlyWithOptgroups()
+    {
+        $this->prepareProxyWithOptgroupPreset();
+
+        $this->proxy->setOptions(
+            array(
+                'optgroup_identifier' => 'optgroup'
+            )
+        );
+
+        $valueOptions = $this->proxy->getValueOptions();
+
+        $this->assertInternalType('array', $valueOptions);
+
+        $this->assertCount(2, $valueOptions);
+
+        $this->assertArrayHasKey('Group One', $valueOptions);
+        $this->assertArrayHasKey('Group Two', $valueOptions);
+
+        $groupOne = $valueOptions['Group One'];
+        $groupTwo = $valueOptions['Group Two'];
+
+        $this->assertArrayHasKey('label', $groupOne);
+        $this->assertArrayHasKey('label', $groupTwo);
+
+        $this->assertArrayHasKey('options', $groupOne);
+        $this->assertArrayHasKey('options', $groupTwo);
+
+        $groupOneOptions = $groupOne['options'];
+        $groupTwoOptions = $groupTwo['options'];
+
+        $this->assertInternalType('array', $groupOneOptions);
+        $this->assertInternalType('array', $groupTwoOptions);
+
+        $this->assertCount(2, $groupOneOptions);
+        $this->assertCount(1, $groupTwoOptions);
+
+        $this->assertEquals(
+            $groupOneOptions[0],
+            array('label' => 'object one username', 'value' => 1, 'attributes' => array())
+        );
+        $this->assertEquals(
+            $groupOneOptions[1],
+            array('label' => 'object two username', 'value' => 2, 'attributes' => array())
+        );
+
+        $this->assertEquals(
+            $groupTwoOptions[0],
+            array('label' => 'object three username', 'value' => 3, 'attributes' => array())
+        );
+    }
+
     protected function prepareProxy()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
