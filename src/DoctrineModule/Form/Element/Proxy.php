@@ -574,10 +574,30 @@ class Proxy implements ObjectManagerAwareInterface
                         sprintf('Method "%s::%s" is not callable', $this->targetClass, $methodName)
                     );
                 }
+
                 $optionAttributes[key($optionAttribute)] = (string)$object->{$methodName}();
             }
 
-            $options[] = array('label' => $label, 'value' => $value, 'attributes' => $optionAttributes);
+            if (null !== ($optgroupIdentifier = $this->getOptgroupIdentifier())) {
+                $optgroupGetter = 'get' . ucfirst($optgroupIdentifier);
+
+                if (!is_callable(array($object, $optgroupGetter))) {
+                    throw new RuntimeException(
+                        sprintf('Method "%s::%s" is not callable', $this->targetClass, $optgroupGetter)
+                    );
+                }
+
+                $optgroup = $object->{$optgroupGetter}();
+
+                $options[$optgroup]['label']     = $optgroup;
+                $options[$optgroup]['options'][] = array(
+                    'label'      => $label,
+                    'value'      => $value,
+                    'attributes' => $optionAttributes
+                );
+            } else {
+                $options[] = array('label' => $label, 'value' => $value, 'attributes' => $optionAttributes);
+            }
         }
 
         $this->valueOptions = $options;
