@@ -90,6 +90,11 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected $optgroupIdentifier;
 
+    /**
+     * @var string
+     */
+    protected $optgroupDefault;
+
     public function setOptions($options)
     {
         if (isset($options['object_manager'])) {
@@ -130,6 +135,10 @@ class Proxy implements ObjectManagerAwareInterface
 
         if (isset($options['optgroup_identifier'])) {
             $this->setOptgroupIdentifier($options['optgroup_identifier']);
+        }
+
+        if (isset($options['optgroup_default'])) {
+            $this->setOptgroupDefault($options['optgroup_default']);
         }
     }
 
@@ -324,6 +333,22 @@ class Proxy implements ObjectManagerAwareInterface
     public function setOptgroupIdentifier($optgroupIdentifier)
     {
         $this->optgroupIdentifier = $optgroupIdentifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptgroupDefault()
+    {
+        return $this->optgroupDefault;
+    }
+
+    /**
+     * @param string $optgroupDefault
+     */
+    public function setOptgroupDefault($optgroupDefault)
+    {
+        $this->optgroupDefault = $optgroupDefault;
     }
 
     /**
@@ -578,8 +603,8 @@ class Proxy implements ObjectManagerAwareInterface
                 $optionAttributes[key($optionAttribute)] = (string)$object->{$methodName}();
             }
 
-            if (null !== ($optgroupIdentifier = $this->getOptgroupIdentifier())) {
-                $optgroupGetter = 'get' . ucfirst($optgroupIdentifier);
+            if (false === is_null($this->getOptgroupIdentifier())) {
+                $optgroupGetter = 'get' . ucfirst($this->getOptgroupIdentifier());
 
                 if (!is_callable(array($object, $optgroupGetter))) {
                     throw new RuntimeException(
@@ -588,6 +613,21 @@ class Proxy implements ObjectManagerAwareInterface
                 }
 
                 $optgroup = $object->{$optgroupGetter}();
+
+                if (is_null($optgroup) || trim($optgroup) === '') {
+                    $optgroupDefault = $this->getOptgroupDefault();
+
+                    if (false === is_null($optgroupDefault)) {
+                        $options[$optgroupDefault]['label']     = $optgroupDefault;
+                        $options[$optgroupDefault]['options'][] = array(
+                            'label'      => $label,
+                            'value'      => $value,
+                            'attributes' => $optionAttributes
+                        );
+                    } else {
+                        $options[] = array('label' => $label, 'value' => $value, 'attributes' => $optionAttributes);
+                    }
+                }
 
                 $options[$optgroup]['label']     = $optgroup;
                 $options[$optgroup]['options'][] = array(
