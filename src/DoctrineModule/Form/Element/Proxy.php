@@ -90,6 +90,11 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected $optgroupIdentifier;
 
+    /**
+     * @var string
+     */
+    protected $optgroupDefault;
+
     public function setOptions($options)
     {
         if (isset($options['object_manager'])) {
@@ -130,6 +135,10 @@ class Proxy implements ObjectManagerAwareInterface
 
         if (isset($options['optgroup_identifier'])) {
             $this->setOptgroupIdentifier($options['optgroup_identifier']);
+        }
+
+        if (isset($options['optgroup_default'])) {
+            $this->setOptgroupDefault($options['optgroup_default']);
         }
     }
 
@@ -324,6 +333,22 @@ class Proxy implements ObjectManagerAwareInterface
     public function setOptgroupIdentifier($optgroupIdentifier)
     {
         $this->optgroupIdentifier = $optgroupIdentifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptgroupDefault()
+    {
+        return $this->optgroupDefault;
+    }
+
+    /**
+     * @param string $optgroupDefault
+     */
+    public function setOptgroupDefault($optgroupDefault)
+    {
+        $this->optgroupDefault = $optgroupDefault;
     }
 
     /**
@@ -578,26 +603,52 @@ class Proxy implements ObjectManagerAwareInterface
                 $optionAttributes[key($optionAttribute)] = (string)$object->{$methodName}();
             }
 
-            if (null !== ($optgroupIdentifier = $this->getOptgroupIdentifier())) {
-                $optgroupGetter = 'get' . ucfirst($optgroupIdentifier);
+            // If no optgroup_identifier has been configured, apply default handling and continue
+            if (is_null($this->getOptgroupIdentifier())) {
+                $options[] = array('label' => $label, 'value' => $value, 'attributes' => $optionAttributes);
 
-                if (!is_callable(array($object, $optgroupGetter))) {
-                    throw new RuntimeException(
-                        sprintf('Method "%s::%s" is not callable', $this->targetClass, $optgroupGetter)
-                    );
-                }
+                continue;
+            }
 
-                $optgroup = $object->{$optgroupGetter}();
+            // optgroup_identifier found, handle grouping
+            $optgroupGetter = 'get' . ucfirst($this->getOptgroupIdentifier());
 
+            if (!is_callable(array($object, $optgroupGetter))) {
+                throw new RuntimeException(
+                    sprintf('Method "%s::%s" is not callable', $this->targetClass, $optgroupGetter)
+                );
+            }
+
+            $optgroup = $object->{$optgroupGetter}();
+
+            // optgroup_identifier contains a valid group-name. Handle default grouping.
+            if (false === is_null($optgroup) && trim($optgroup) !== '') {
                 $options[$optgroup]['label']     = $optgroup;
                 $options[$optgroup]['options'][] = array(
                     'label'      => $label,
                     'value'      => $value,
                     'attributes' => $optionAttributes
                 );
-            } else {
-                $options[] = array('label' => $label, 'value' => $value, 'attributes' => $optionAttributes);
+
+                continue;
             }
+
+            $optgroupDefault = $this->getOptgroupDefault();
+
+            // No optgroup_default has been provided. Line up without a group
+            if (is_null($optgroupDefault)) {
+                $options[] = array('label' => $label, 'value' => $value, 'attributes' => $optionAttributes);
+
+                continue;
+            }
+
+            // Line up entry with optgroup_default
+            $options[$optgroupDefault]['label']     = $optgroupDefault;
+            $options[$optgroupDefault]['options'][] = array(
+                'label'      => $label,
+                'value'      => $value,
+                'attributes' => $optionAttributes
+            );
         }
 
         $this->valueOptions = $options;
