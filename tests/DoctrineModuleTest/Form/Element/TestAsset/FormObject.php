@@ -58,6 +58,11 @@ class FormObject
      */
     protected $password;
 
+    /**
+     * @var string|null
+     */
+    protected $optgroup;
+
     public function __toString()
     {
         return $this->username;
@@ -71,6 +76,7 @@ class FormObject
     public function setId($id)
     {
         $this->id = (int) $id;
+
         return $this;
     }
 
@@ -82,6 +88,7 @@ class FormObject
     public function setEmail($email)
     {
         $this->email = (string) $email;
+
         return $this;
     }
 
@@ -101,6 +108,7 @@ class FormObject
     public function setPassword($password)
     {
         $this->password = (string) $password;
+
         return $this;
     }
 
@@ -120,6 +128,7 @@ class FormObject
     public function setUsername($username)
     {
         $this->username = (string) $username;
+
         return $this;
     }
 
@@ -139,6 +148,7 @@ class FormObject
     public function setFirstname($firstname)
     {
         $this->firstname = (string) $firstname;
+
         return $this;
     }
 
@@ -158,6 +168,7 @@ class FormObject
     public function setSurname($surname)
     {
         $this->surname = (string) $surname;
+
         return $this;
     }
 
@@ -174,6 +185,22 @@ class FormObject
      */
     public function getName()
     {
-        return isset($this->firstname) && isset($this->surname)? $this->firstname . " " . $this->surname : null;
+        return isset($this->firstname) && isset($this->surname) ? $this->firstname . " " . $this->surname : null;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getOptgroup()
+    {
+        return $this->optgroup;
+    }
+
+    /**
+     * @param null|string $optgroup
+     */
+    public function setOptgroup($optgroup)
+    {
+        $this->optgroup = $optgroup;
     }
 }
