@@ -86,12 +86,12 @@ class Proxy implements ObjectManagerAwareInterface
     protected $emptyItemLabel = '';
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $optgroupIdentifier;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $optgroupDefault;
 
@@ -320,7 +320,7 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getOptgroupIdentifier()
     {
@@ -332,11 +332,11 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setOptgroupIdentifier($optgroupIdentifier)
     {
-        $this->optgroupIdentifier = $optgroupIdentifier;
+        $this->optgroupIdentifier = (string) $optgroupIdentifier;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getOptgroupDefault()
     {
@@ -348,7 +348,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setOptgroupDefault($optgroupDefault)
     {
-        $this->optgroupDefault = $optgroupDefault;
+        $this->optgroupDefault = (string) $optgroupDefault;
     }
 
     /**
@@ -360,7 +360,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setIsMethod($method)
     {
-        $this->isMethod = (bool)$method;
+        $this->isMethod = (bool) $method;
 
         return $this;
     }
@@ -582,7 +582,7 @@ class Proxy implements ObjectManagerAwareInterface
                     );
                 }
 
-                $label = (string)$object;
+                $label = (string) $object;
             }
 
             if (count($identifier) > 1) {
@@ -600,7 +600,7 @@ class Proxy implements ObjectManagerAwareInterface
                     );
                 }
 
-                $optionAttributes[key($optionAttribute)] = (string)$object->{$methodName}();
+                $optionAttributes[key($optionAttribute)] = (string) $object->{$methodName}();
             }
 
             // If no optgroup_identifier has been configured, apply default handling and continue
