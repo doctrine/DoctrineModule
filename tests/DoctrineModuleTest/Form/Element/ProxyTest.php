@@ -45,11 +45,6 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     protected $proxy;
 
     /**
-     * @var array
-     */
-    protected $optionAttributes =array();
-
-    /**
      * {@inheritDoc}.
      */
     protected function setUp()
@@ -300,42 +295,31 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->setOptions(array('label_generator' => 'I throw an InvalidArgumentException'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No method name was set
-     */
-    public function testExceptionThrownForMissingOptionAttributesMethod()
-    {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata    = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectManager->expects($this->once())
-        ->method('getClassMetadata')
-        ->with($this->equalTo($objectClass))
-        ->will($this->returnValue($metadata));
-
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-                'find_method'    => array('getName'),
-                'option_attributes'    => array(array('data-key'=>'missing_method'))
-            )
-        );
-
-        $this->proxy->getValueOptions();
-    }
-
     public function testUsingOptionAttributes()
     {
-        $this->optionAttributes =array(array('data-key'=>'getFirstname'));
-        $this->prepareProxyWithOptionAttributes();
+        $this->prepareProxy();
 
-        $currentValueOption = current($this->proxy->getValueOptions());
-        $this->assertArrayHasKey('attributes', $currentValueOption);
-        $this->assertArrayHasKey('data-key', $currentValueOption['attributes']);
-        $this->assertEquals('object one firstname', $currentValueOption['attributes']['data-key']);
+        $this->proxy->setOptions([
+            'option_attributes' => [
+                'class' => 'foo',
+                'lang'  => 'en'
+            ]
+        ]);
+
+        $options = $this->proxy->getValueOptions();
+
+        $expectedAttributes = [
+            'class' => 'foo',
+            'lang'  => 'en'
+        ];
+
+        $this->assertCount(2, $options);
+
+        $this->assertArrayHasKey('attributes', $options[0]);
+        $this->assertArrayHasKey('attributes', $options[1]);
+
+        $this->assertEquals($expectedAttributes, $options[0]['attributes']);
+        $this->assertEquals($expectedAttributes, $options[1]['attributes']);
     }
 
     public function testCanWorkWithEmptyTables()
@@ -826,77 +810,6 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                         'criteria' => array('email' => 'object one email'),
                     ),
                 ),
-            )
-        );
-
-        $this->metadata = $metadata;
-    }
-
-    protected function prepareProxyWithOptionAttributes()
-    {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $objectOne   = new FormObject;
-        $objectTwo   = new FormObject;
-
-        $objectOne->setId(1)
-            ->setUsername('object one username')
-            ->setPassword('object one password')
-            ->setEmail('object one email')
-            ->setFirstname('object one firstname')
-            ->setSurname('object one surname');
-
-        $objectTwo->setId(2)
-            ->setUsername('object two username')
-            ->setPassword('object two password')
-            ->setEmail('object two email')
-            ->setFirstname('object two firstname')
-            ->setSurname('object two surname');
-
-        $result = new ArrayCollection(array($objectOne, $objectTwo));
-
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $metadata
-            ->expects($this->any())
-            ->method('getIdentifierValues')
-            ->will(
-                $this->returnCallback(
-                    function () use ($objectOne, $objectTwo) {
-                        $input = func_get_args();
-                        $input = array_shift($input);
-
-                        if ($input == $objectOne) {
-                            return array('id' => 1);
-                        } elseif ($input == $objectTwo) {
-                            return array('id' => 2);
-                        }
-
-                        return array();
-                    }
-                )
-            );
-
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $objectRepository->expects($this->any())
-            ->method('findAll')
-            ->will($this->returnValue($result));
-
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectManager->expects($this->any())
-            ->method('getClassMetadata')
-            ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
-
-        $objectManager
-            ->expects($this->any())
-            ->method('getRepository')
-            ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
-
-        $this->proxy->setOptions(
-            array(
-                'object_manager' =>    $objectManager,
-                'target_class'   =>    $objectClass,
-                'option_attributes' => $this->optionAttributes
             )
         );
 
