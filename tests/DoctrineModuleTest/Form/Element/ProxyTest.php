@@ -295,7 +295,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->setOptions(array('label_generator' => 'I throw an InvalidArgumentException'));
     }
 
-    public function testUsingOptionAttributes()
+    public function testUsingOptionAttributesOfTypeString()
     {
         $this->prepareProxy();
 
@@ -322,13 +322,15 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedAttributes, $options[1]['attributes']);
     }
 
-    public function testDataAttributesAddedProperly()
+    public function testUsingOptionAttributesOfTypeCallableReturningString()
     {
         $this->prepareProxy();
 
         $this->proxy->setOptions([
-            'data_attributes' => [
-                'data-id' => 'id'
+            'option_attributes' => [
+                'data-id' => function($object) {
+                    return $object->getId();
+                },
             ]
         ]);
 
@@ -343,13 +345,13 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(['data-id' => 2], $options[1]['attributes']);
     }
 
-    public function testExceptionThrownWhenDataAttributesGetterNotCallable()
+    public function testRuntimeExceptionOnWrongOptionAttributesValue()
     {
         $this->prepareProxy();
 
         $this->proxy->setOptions([
-            'data_attributes' => [
-                'data-id' => 'nonExistantMethodName'
+            'option_attributes' => [
+                'data-id' => new \stdClass(['id' => 1])
             ]
         ]);
 

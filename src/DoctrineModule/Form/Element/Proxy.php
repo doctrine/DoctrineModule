@@ -95,11 +95,6 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected $optgroupDefault;
 
-    /**
-     * @var array
-     */
-    protected $dataAttributes = array();
-
     public function setOptions($options)
     {
         if (isset($options['object_manager'])) {
@@ -136,10 +131,6 @@ class Proxy implements ObjectManagerAwareInterface
 
         if (isset($options['option_attributes'])) {
             $this->setOptionAttributes($options['option_attributes']);
-        }
-
-        if (isset($options['data_attributes'])) {
-            $this->setDataAttributes($options['data_attributes']);
         }
 
         if (isset($options['optgroup_identifier'])) {
@@ -358,22 +349,6 @@ class Proxy implements ObjectManagerAwareInterface
     public function setOptgroupDefault($optgroupDefault)
     {
         $this->optgroupDefault = (string) $optgroupDefault;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDataAttributes()
-    {
-        return $this->dataAttributes;
-    }
-
-    /**
-     * @param array $dataAttributes
-     */
-    public function setDataAttributes($dataAttributes)
-    {
-        $this->dataAttributes = $dataAttributes;
     }
 
     /**
@@ -618,19 +593,26 @@ class Proxy implements ObjectManagerAwareInterface
             }
 
             foreach ($this->getOptionAttributes() as $optionKey => $optionValue) {
-                $optionAttributes[$optionKey] = (string) $optionValue;
-            }
+                if (is_string($optionValue)) {
+                    $optionAttributes[$optionKey] = $optionValue;
 
-            foreach ($this->getDataAttributes() as $dataKey => $property) {
-                $dataGetter = 'get' . ucfirst($property);
-
-                if (!is_callable([$object, $dataGetter])) {
-                    throw new RuntimeException(
-                        sprintf('Method "%s::%s" is not callable', $this->targetClass, $dataGetter)
-                    );
+                    continue;
                 }
 
-                $optionAttributes[$dataKey] = (string) $object->{$dataGetter}();
+                if (is_callable($optionValue)) {
+                    $callableValue                = call_user_func($optionValue, $object);
+                    $optionAttributes[$optionKey] = (string) $callableValue;
+
+                    continue;
+                }
+
+                throw new RuntimeException(
+                    sprintf(
+                        'Parameter "option_attributes" expects an array of key => value where value is of type'
+                            . '"string" or "callable". Value of type "%s" found.',
+                        gettype($optionValue)
+                    )
+                );
             }
 
             // If no optgroup_identifier has been configured, apply default handling and continue
