@@ -322,6 +322,42 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedAttributes, $options[1]['attributes']);
     }
 
+    public function testDataAttributesAddedProperly()
+    {
+        $this->prepareProxy();
+
+        $this->proxy->setOptions([
+            'data_attributes' => [
+                'data-id' => 'id'
+            ]
+        ]);
+
+        $options = $this->proxy->getValueOptions();
+
+        $this->assertCount(2, $options);
+
+        $this->assertArrayHasKey('attributes', $options[0]);
+        $this->assertArrayHasKey('attributes', $options[1]);
+
+        $this->assertEquals(['data-id' => 1], $options[0]['attributes']);
+        $this->assertEquals(['data-id' => 2], $options[1]['attributes']);
+    }
+
+    public function testExceptionThrownWhenDataAttributesGetterNotCallable()
+    {
+        $this->prepareProxy();
+
+        $this->proxy->setOptions([
+            'data_attributes' => [
+                'data-id' => 'nonExistantMethodName'
+            ]
+        ]);
+
+        $this->setExpectedException('RuntimeException');
+
+        $this->proxy->getValueOptions();
+    }
+
     public function testCanWorkWithEmptyTables()
     {
         $this->prepareEmptyProxy();
