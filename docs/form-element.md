@@ -241,3 +241,102 @@ id  | property   | category
     </optgroup>
 </select>
 ```
+
+### Example 7: <optgroup> formatting on empty optgroups 
+
+In case you define an `optgroup_identifier` and the data inside this column is empty or `null` you have two options of
+rendering these cases. From a UX point of view you should group all "loose" entries inside a group that you call 
+"others" or the likes of that. But you're also able to render them without any grouping at all. Here's both examples:
+
+#### 7.1: Rendering without a default group
+
+To render without a default group you have to change nothing. This is the default behavior
+
+**Add the Select list like this:**
+
+```php
+$this->add(
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager'      => $this->getObjectManager(),
+            'target_class'        => 'Module\Entity\SomeEntity',
+            'property'            => 'property',
+            'optgroup_identifier' => 'category'
+        ),
+    )
+);
+```
+
+**With your data structure like this:**
+
+```
+id  | property   | category
+1   | Football   | sports
+2   | Basketball | 
+3   | Spaghetti  | food
+```
+
+**Will create a HTML Select list like this:**
+
+```html
+<select name="name">
+    <optgroup label="sports">
+        <option value="1">Football</option>
+    </optgroup>
+    <optgroup label="food">
+        <option value="3">Spaghetti</option>
+    </optgroup>
+    <option value="2">Basketball</option>
+</select>
+```
+
+Notice how the value for "Basketball" has not been wrapped with an `<optgroup>` element.
+
+#### 7.2: Rendering with a default group
+
+To group all loose values into a unified group, simply add the `optgroup_default` parameter to the options.
+
+**Add the Select list like this:**
+
+```php
+$this->add(
+    array(
+        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+        'name' => 'name',
+        'options' => array(
+            'object_manager'      => $this->getObjectManager(),
+            'target_class'        => 'Module\Entity\SomeEntity',
+            'property'            => 'property',
+            'optgroup_identifier' => 'category',
+            'optgroup_default'    => 'Others'
+        ),
+    )
+);
+```
+
+**With your data structure like this:**
+
+```
+id  | property   | category
+1   | Football   | sports
+2   | Basketball | 
+3   | Spaghetti  | food
+```
+
+**Will create a HTML Select list like this:**
+
+```html
+<select name="name">
+    <optgroup label="sports">
+        <option value="1">Football</option>
+    </optgroup>
+    <optgroup label="others">
+        <option value="2">Basketball</option>
+    </optgroup>
+    <optgroup label="food">
+        <option value="3">Spaghetti</option>
+    </optgroup>
+</select>
+```

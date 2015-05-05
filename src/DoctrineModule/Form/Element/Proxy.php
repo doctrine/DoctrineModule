@@ -467,7 +467,8 @@ class Proxy implements ObjectManagerAwareInterface
             return;
         }
 
-        $findMethod = (array)$this->getFindMethod();
+        $findMethod = (array) $this->getFindMethod();
+
         if (!$findMethod) {
             $findMethodName = 'findAll';
             $repository     = $this->objectManager->getRepository($this->targetClass);
