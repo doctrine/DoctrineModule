@@ -353,7 +353,7 @@ class DoctrineObject extends AbstractHydrator
         }
 
         foreach ($identifierNames as $identifierName) {
-            if (!isset($data[$identifierName]) || empty($data[$identifierName])) {
+            if (!isset($data[$identifierName])) {
                 return $object;
             }
 
