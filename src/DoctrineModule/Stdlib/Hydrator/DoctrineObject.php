@@ -415,9 +415,26 @@ class DoctrineObject extends AbstractHydrator
 
         $collection = array();
 
+
+        $metadata = $this->objectManager->getClassMetadata($target);
+
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
-            $collection[] = $this->find($value, $target);
+            $identifiers = array();
+
+            if (!is_array($value)) {
+                $identifiers = $value;
+            } else {
+                // If nested objects
+                $identifierNames = $metadata->getIdentifierFieldNames();
+                foreach ($identifierNames as $name) {
+                    if (isset($value[$name])) {
+                        $identifiers[$name] = $value[$name];
+                    }
+                }
+            }
+
+            $collection[] = $this->find($identifiers, $target);
         }
 
         $collection = array_filter(
