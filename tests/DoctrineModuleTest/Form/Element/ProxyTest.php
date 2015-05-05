@@ -328,7 +328,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->proxy->setOptions([
             'option_attributes' => [
-                'data-id' => function($object) {
+                'data-id' => function ($object) {
                     return $object->getId();
                 },
             ]
