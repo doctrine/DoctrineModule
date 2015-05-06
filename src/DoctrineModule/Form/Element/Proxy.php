@@ -609,7 +609,7 @@ class Proxy implements ObjectManagerAwareInterface
                 throw new RuntimeException(
                     sprintf(
                         'Parameter "option_attributes" expects an array of key => value where value is of type'
-                            . '"string" or "callable". Value of type "%s" found.',
+                        . '"string" or "callable". Value of type "%s" found.',
                         gettype($optionValue)
                     )
                 );
