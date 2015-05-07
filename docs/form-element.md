@@ -160,25 +160,28 @@ $this->add(
 );
 ```
 
-### Example 5 : including custom valueOption attributes
+### Example 5 : Add html attributes to the <option> elements
 
-To set custom HTML attributes on each `valueOption` you can use the
-`option_attributes` setting to specify an array of key/value pairs whereby the
-keys represent a valid HTML attribute (data-, aria-, onEvent, etc.) and the
-value is a valid method to be called on the entity object which in turn returns
-the string to use as the value for the  attribute.
+To set custom HTML attributes on each `valueOption` you can use the `option_attributes` setting to specify an array of 
+key/value pairs whereby the keys represent a valid HTML attribute (data-*, aria-*, onEvent, etc.). 
+
+The value needs to be of type `string` or `callable` (in which case a `string` - or something able to be casted to 
+string - needs to be returned). Check the following example:
 
 ```php
 $this->add(
     array(
         'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'name',
+        'name' => 'test',
         'options' => array(
             'object_manager'     => $this->getObjectManager(),
             'target_class'       => 'Module\Entity\SomeEntity',
             'property'           => 'property',
             'option_attributes' => array(
-                array('data-type'=>'getDataType')
+                'class'   => 'styledOption',
+                'data-id' => function (\Module\Entity\SomeEntity $entity) {
+                    return $entity->getId();
+                }
             ),
         ),
     )
@@ -189,10 +192,14 @@ The above example will generate HTML options with a data-key attribute:
 
 ```html
 <select name="test">
-<option value="myValue" data-key="value">myLabel</option>
-<option value="myValue2" data-key="value2">myLabel2</option>
+    <option value="1" class="styledOption" data-id="1">property one</option>
+    <option value="2" class="styledOption" data-id="2">property two</option>
 </select>
 ```
+
+It is noteworthy that, when working with an option_attribute value of type `callable`, you do **not** need to define
+the fully qualified classname into the function. The object passed into the function will always be identical to 
+the type you define on the key `target_class`.
 
 ### Example 6: Implementing <optgroup> support
 

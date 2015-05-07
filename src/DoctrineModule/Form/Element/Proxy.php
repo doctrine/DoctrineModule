@@ -592,16 +592,27 @@ class Proxy implements ObjectManagerAwareInterface
                 $value = current($metadata->getIdentifierValues($object));
             }
 
-            foreach ($this->getOptionAttributes() as $optionAttribute) {
-                $methodName = current($optionAttribute);
+            foreach ($this->getOptionAttributes() as $optionKey => $optionValue) {
+                if (is_string($optionValue)) {
+                    $optionAttributes[$optionKey] = $optionValue;
 
-                if (!is_callable(array($object, $methodName))) {
-                    throw new RuntimeException(
-                        sprintf('Method "%s::%s" is not callable', $this->targetClass, $methodName)
-                    );
+                    continue;
                 }
 
-                $optionAttributes[key($optionAttribute)] = (string) $object->{$methodName}();
+                if (is_callable($optionValue)) {
+                    $callableValue                = call_user_func($optionValue, $object);
+                    $optionAttributes[$optionKey] = (string) $callableValue;
+
+                    continue;
+                }
+
+                throw new RuntimeException(
+                    sprintf(
+                        'Parameter "option_attributes" expects an array of key => value where value is of type'
+                        . '"string" or "callable". Value of type "%s" found.',
+                        gettype($optionValue)
+                    )
+                );
             }
 
             // If no optgroup_identifier has been configured, apply default handling and continue

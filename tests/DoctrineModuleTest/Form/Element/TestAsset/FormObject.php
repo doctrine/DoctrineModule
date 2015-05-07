@@ -81,6 +81,14 @@ class FormObject
     }
 
     /**
+     * @return int|null
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @param string $email
      *
      * @return self
