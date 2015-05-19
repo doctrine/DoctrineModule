@@ -72,6 +72,14 @@ class Selectable implements AdapterInterface
     public function count()
     {
         $criteria = clone $this->criteria;
+        
+        // If selectable is an entity repository, we can perform a more optimized query
+        if ($this->selectable instanceof \Doctrine\ORM\EntityRepository) {
+            return (int) $this->selectable->getEntityManager()->createQueryBuilder()
+                ->select('COUNT(e) AS nb')
+                ->from($this->selectable->getEntityName(), 'e')
+                ->addCriteria($oCriteria)->getQuery()->getSingleScalarResult();
+        }
 
         $criteria->setFirstResult(null);
         $criteria->setMaxResults(null);
