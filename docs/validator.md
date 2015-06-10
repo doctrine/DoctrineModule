@@ -6,6 +6,7 @@ All three validators accept the following options :
 
 * `object_repository` : an instance of an object repository.
 * `fields` : an array that contains all the fields that are used to check if the entity exists (or does not).
+* `repository_method` (optional) : a string that points to a valid method in the provided object repository. If this value is not provided the default method `findOneBy` will be used.
 
 The `DoctrineModule\Validator\UniqueObject` also needs the following option:
 
@@ -24,7 +25,8 @@ You can directly instantiate a validator the following way:
 ```php
 $validator = new \DoctrineModule\Validator\ObjectExists(array(
     'object_repository' => $objectManager->getRepository('Application\Entity\User'),
-    'fields' => array('email')
+    'fields' => array('email'),
+    'repository_method' => 'findOneByCustomMethod' // Optional
 ));
 
 var_dump($validator->isValid('test@example.com')); // dumps 'true' if an entity matches
@@ -70,7 +72,8 @@ class User extends Form
 
        	$noObjectExistsValidator = new NoObjectExistsValidator(array(
             'object_repository' => $entityManager->getRepository('Application\Entity\User'),
-            'fields'            => 'email'
+            'fields'            => 'email',
+            'repository_method' => 'findOneByCustomMethod' // Optional
        	));
 
        	$emailInput->getValidatorChain()
