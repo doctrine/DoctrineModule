@@ -59,6 +59,13 @@ class ObjectExists extends AbstractValidator
      * @var array
      */
     protected $fields;
+    
+    /**
+     * Repository method to use, defaults to findOneBy
+     *
+     * @var array
+     */
+    protected $repositoryMethod = 'findOneBy';
 
     /**
      * Constructor
@@ -89,6 +96,17 @@ class ObjectExists extends AbstractValidator
         }
 
         $this->objectRepository = $options['object_repository'];
+
+        if (isset($options['repository_method'])) {
+            if(!is_string($options['repository_method']) || !method_exists($this->objectRepository, $options['repository_method']))
+            throw new Exception\InvalidArgumentException(
+                'Invalid "repository_method" provided. The value must be a valid method in repository %s, %s given',
+                get_class($this->objectRepository);
+                is_string($options['repository_method']) ? $options['repository_method'] : gettype($options['repository_method'])
+            );
+        }
+
+        $this->repositoryMethod = $options['repository_method'];
 
         if (!isset($options['fields'])) {
             throw new Exception\InvalidArgumentException(
@@ -175,7 +193,8 @@ class ObjectExists extends AbstractValidator
     public function isValid($value)
     {
         $value = $this->cleanSearchValue($value);
-        $match = $this->objectRepository->findOneBy($value);
+        $method = $this->repositoryMethod;
+        $match = $this->objectRepository->$method($value);
 
         if (is_object($match)) {
             return true;
