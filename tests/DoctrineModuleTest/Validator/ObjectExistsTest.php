@@ -74,6 +74,52 @@ class ObjectExistsTest extends BaseTestCase
         )));
         $this->assertTrue($validator->isValid(array('firstMatchValue', 'secondMatchValue')));
     }
+    
+    public function testCanValidateWithSingleFieldAndCustomMethod()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository
+            ->expects($this->exactly(2))
+            ->method('findOneByCustomMethod')
+            ->with(array('matchKey' => 'matchValue'))
+            ->will($this->returnValue(new stdClass()));
+
+        $validator = new ObjectExists(array(
+            'object_repository' => $repository,
+            'fields'            => 'matchKey',
+            'repository_method' => 'findOneByCustomMethod'
+        ));
+        $this->assertTrue($validator->isValid('matchValue'));
+        $this->assertTrue($validator->isValid(array('matchKey' => 'matchValue')));
+    }
+
+    public function testCanValidateWithMultipleFieldsAndCustomMethod()
+    {
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository
+            ->expects($this->exactly(2))
+            ->method('findOneByCustomMethod')
+            ->with(array(
+                'firstMatchKey' => 'firstMatchValue',
+                'secondMatchKey' => 'secondMatchValue',
+            ))
+            ->will($this->returnValue(new stdClass()));
+
+        $validator = new ObjectExists(array(
+            'object_repository' => $repository,
+            'fields'            => array(
+                'firstMatchKey',
+                'secondMatchKey',
+            ),
+            'repository_method' => 'findOneByCustomMethod'
+        ));
+        $this->assertTrue($validator->isValid(array(
+            'firstMatchKey' => 'firstMatchValue',
+            'secondMatchKey' => 'secondMatchValue',
+        )));
+        $this->assertTrue($validator->isValid(array('firstMatchValue', 'secondMatchValue')));
+    }
+
 
     public function testCanValidateFalseOnNoResult()
     {
@@ -121,6 +167,26 @@ class ObjectExistsTest extends BaseTestCase
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
         new ObjectExists(array(
             'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+        ));
+    }
+    
+    public function testWillRefuseNonStringMethod()
+    {
+        $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
+        new ObjectExists(array(
+            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'fields'            => 'field',
+            'repository_method' => array()
+        ));
+    }
+    
+    public function testWillRefuseNonExistingMethod()
+    {
+        $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
+        new ObjectExists(array(
+            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'fields'            => 'field',
+            'repository_method' => 'findOneByNonExistingMethod'
         ));
     }
 
