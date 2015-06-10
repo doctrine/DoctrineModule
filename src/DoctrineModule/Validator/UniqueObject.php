@@ -95,7 +95,8 @@ class UniqueObject extends ObjectExists
     public function isValid($value, $context = null)
     {
         $value = $this->cleanSearchValue($value);
-        $match = $this->objectRepository->findOneBy($value);
+        $method = $this->repositoryMethod;
+        $match = $this->objectRepository->$method($value);
 
         if (!is_object($match)) {
             return true;
