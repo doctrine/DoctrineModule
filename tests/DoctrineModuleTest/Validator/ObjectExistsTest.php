@@ -80,14 +80,14 @@ class ObjectExistsTest extends BaseTestCase
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
             ->expects($this->exactly(2))
-            ->method('findOneByCustomMethod')
+            ->method('findOneBy')
             ->with(array('matchKey' => 'matchValue'))
             ->will($this->returnValue(new stdClass()));
 
         $validator = new ObjectExists(array(
             'object_repository' => $repository,
             'fields'            => 'matchKey',
-            'repository_method' => 'findOneByCustomMethod'
+            'repository_method' => 'findOneBy'
         ));
         $this->assertTrue($validator->isValid('matchValue'));
         $this->assertTrue($validator->isValid(array('matchKey' => 'matchValue')));
@@ -98,7 +98,7 @@ class ObjectExistsTest extends BaseTestCase
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
             ->expects($this->exactly(2))
-            ->method('findOneByCustomMethod')
+            ->method('findOneBy')
             ->with(array(
                 'firstMatchKey' => 'firstMatchValue',
                 'secondMatchKey' => 'secondMatchValue',
@@ -111,7 +111,7 @@ class ObjectExistsTest extends BaseTestCase
                 'firstMatchKey',
                 'secondMatchKey',
             ),
-            'repository_method' => 'findOneByCustomMethod'
+            'repository_method' => 'findOneBy'
         ));
         $this->assertTrue($validator->isValid(array(
             'firstMatchKey' => 'firstMatchValue',
