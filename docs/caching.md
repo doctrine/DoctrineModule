@@ -19,6 +19,6 @@ You may use `Doctrine\Common\Cache` within your zendframework projects as follow
 ```php
 $doctrineCache = new \Doctrine\Common\Cache\ArrayCache(); // any doctrine cache is OK here
 $adapterOptions = new \Zend\Cache\Storage\Adapter\AdapterOptions();
-$zendCacheStorage = new \DoctrineModule\Cache\DoctrineCacheStorageTest($adapterOptions, $zendCache);
+$zendCacheStorage = new \DoctrineModule\Cache\DoctrineCacheStorage($adapterOptions, $doctrineCache);
 // now use $zendCacheStorage as a normal Zend\Cache\Storage\StorageInterface instance.
 ```
