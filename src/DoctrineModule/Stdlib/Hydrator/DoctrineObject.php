@@ -447,7 +447,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function handleTypeConversions($value, $typeOfField)
     {
-        switch($typeOfField) {
+        switch ($typeOfField) {
             case 'datetimetz':
             case 'datetime':
             case 'time':
