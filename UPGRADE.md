@@ -1,3 +1,23 @@
+# 0.9.0
+
+ * Fixed intend in hydrator.md [#471](https://github.com/doctrine/DoctrineModule/pull/471)
+ * Allow symfony 3.0 [#477](https://github.com/doctrine/DoctrineModule/pull/477)
+ * Removed Travis build for 5.3 and added builds for 5.6 and 7.0 [#491](https://github.com/doctrine/DoctrineModule/pull/491)
+ * Fixed documentation for Example 4 [#486](https://github.com/doctrine/DoctrineModule/pull/486)
+ * Update year of license [#488](https://github.com/doctrine/DoctrineModule/pull/488)
+ * Standardize array configuration [#489](https://github.com/doctrine/DoctrineModule/pull/489)
+ * Fix #467 bypass value to validate message [#479](https://github.com/doctrine/DoctrineModule/pull/479)
+ * Adding doctrine/coding-standard to builds [#478](https://github.com/doctrine/DoctrineModule/pull/478)
+ * update hydrator s documentation url to current [#493](https://github.com/doctrine/DoctrineModule/pull/493)
+ * Added PredisCache support [#492](https://github.com/doctrine/DoctrineModule/pull/492)
+ * adding functionality to support custom attributes on value-options [#446](https://github.com/doctrine/DoctrineModule/pull/446)
+ * FormElement s options can be set individual [#452](https://github.com/doctrine/DoctrineModule/pull/452)
+ * Update module.config.php [#498](https://github.com/doctrine/DoctrineModule/pull/498)
+ * Implemented Optgroup functionality within Proxy element [#502](https://github.com/doctrine/DoctrineModule/pull/502)
+ * Removed check to allow zero-identifiers. [#459](https://github.com/doctrine/DoctrineModule/pull/459)
+ * Refactored tests for option_attributes [#505](https://github.com/doctrine/DoctrineModule/pull/505)
+ * Bump phpunit minimum version [#512](https://github.com/doctrine/DoctrineModule/pull/512)
+
 # 0.8.1
 
  * Minimum PHP version has been bumped to `5.3.23` [#376](https://github.com/doctrine/DoctrineModule/pull/376)
