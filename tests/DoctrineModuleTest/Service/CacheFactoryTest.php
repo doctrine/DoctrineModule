@@ -67,8 +67,8 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'predis' => [
-                            'class'     => 'Doctrine\Common\Cache\PredisCache',
-                            'instance'  => 'my_predis_alias',
+                            'class' => 'Doctrine\Common\Cache\PredisCache',
+                            'instance' => 'my_predis_alias',
                             'namespace' => 'DoctrineModule',
                         ],
                     ],
