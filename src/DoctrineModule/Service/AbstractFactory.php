@@ -70,7 +70,8 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @return string
      */
-    public function getMappingType() {
+    public function getMappingType()
+    {
         return $this->mappingType;
     }
 
@@ -91,7 +92,7 @@ abstract class AbstractFactory implements FactoryInterface
 
         $options = $sl->get('Configuration');
         $options = $options['doctrine'];
-        if ($mappingType = $this->getMappingType()){
+        if ($mappingType = $this->getMappingType()) {
             $options = $options[$mappingType];
         }
         $options = isset($options[$key][$name]) ? $options[$key][$name] : null;
