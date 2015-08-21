@@ -302,7 +302,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->setOptions([
             'option_attributes' => [
                 'class' => 'foo',
-                'lang'  => 'en'
+                'lang' => 'en'
             ]
         ]);
 
@@ -310,7 +310,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $expectedAttributes = [
             'class' => 'foo',
-            'lang'  => 'en'
+            'lang' => 'en'
         ];
 
         $this->assertCount(2, $options);
@@ -437,26 +437,26 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $expectedOutput = [
             'Group One' => [
-                'label'   => 'Group One',
+                'label' => 'Group One',
                 'options' => [
                     0 => [
-                        'label'      => 'object one username',
-                        'value'      => 1,
+                        'label' => 'object one username',
+                        'value' => 1,
                         'attributes' => []
                     ],
                     1 => [
-                        'label'      => 'object two username',
-                        'value'      => 2,
+                        'label' => 'object two username',
+                        'value' => 2,
                         'attributes' => []
                     ]
                 ]
             ],
             'Group Two' => [
-                'label'   => 'Group Two',
+                'label' => 'Group Two',
                 'options' => [
                     0 => [
-                        'label'      => 'object three username',
-                        'value'      => 3,
+                        'label' => 'object three username',
+                        'value' => 3,
                         'attributes' => []
                     ]
                 ]
@@ -490,7 +490,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $expectedOutput = [
             'Others' => [
-                'label'   => 'Others',
+                'label' => 'Others',
                 'options' => [
                     0 => [
                         'label' => 'object one username',
