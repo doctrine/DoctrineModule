@@ -22,11 +22,10 @@ namespace DoctrineModule\Stdlib\Hydrator;
 use DateTime;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
-use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
+use Doctrine\Common\Util\Inflector;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
-use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\Filter\FilterProviderInterface;
@@ -181,8 +180,8 @@ class DoctrineObject extends AbstractHydrator
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
-            $getter = 'get' . ucfirst($fieldName);
-            $isser  = 'is' . ucfirst($fieldName);
+            $getter = 'get' . Inflector::classify($fieldName);
+            $isser = 'is' . Inflector::classify($fieldName);
 
             $dataFieldName = $this->computeExtractFieldName($fieldName);
             if (in_array($getter, $methods)) {
@@ -252,7 +251,7 @@ class DoctrineObject extends AbstractHydrator
         foreach ($data as $field => $value) {
             $field  = $this->computeHydrateFieldName($field);
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
-            $setter = 'set' . ucfirst($field);
+            $setter = 'set' . Inflector::classify($field);
 
             if ($metadata->hasAssociation($field)) {
                 $target = $metadata->getAssociationTargetClass($field);
