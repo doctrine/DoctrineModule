@@ -143,7 +143,7 @@ $authService->getStorage()->write($identity);
 The storage automatically extracts ONLY the identifier values and only store this in session (this avoid to store in session a serialized entity, which is a bad practice). Later, when you want to retrieve the logged user :
 
 ```php
-$authenticationService = $this->serviceLocator()->get('Zend\Authentication\AuthenticationService');
+$authenticationService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
 $loggedUser = $authenticationService->getIdentity();
 ```
 
