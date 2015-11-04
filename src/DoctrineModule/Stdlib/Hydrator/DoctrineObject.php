@@ -409,6 +409,9 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function toMany($object, $collectionName, $target, $values)
     {
+        $class = $this->objectManager->getMetadataFactory()->getMetadataFor(ltrim($target, '\\'));
+        $identifier = $class->identifier;
+
         if (!is_array($values) && !$values instanceof Traversable) {
             $values = (array) $values;
         }
@@ -417,7 +420,30 @@ class DoctrineObject extends AbstractHydrator
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
-            $collection[] = $this->find($value, $target);
+            $find = array();
+            foreach ($identifier as $i => $field) {
+                switch (gettype($value)) {
+                    case 'object':
+                        $getter = 'get' . ucfirst($field);
+                        if (method_exists($value, $getter)) {
+                            $find[$field] = $value->$getter;
+                        } else if (property_exists($value, $field)) {
+                            $find[$field] = $value->$field;
+                        }
+                        break;
+                    case 'array':
+                        if (array_key_exists($field, $value) && $value[$field] != null) {
+                            $find[$field] = $value[$field];
+                        }
+                        break;
+                }
+            }
+
+            if (!empty($find) && $found = $this->find($find, $target)){
+                $collection[] = $this->hydrate($value,$found);
+            } else {
+                $collection[] = $this->hydrate($value, new $target);
+            }
         }
 
         $collection = array_filter(
