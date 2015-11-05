@@ -432,6 +432,7 @@ class DoctrineObject extends AbstractHydrator
                 continue;
             }
 
+            $find = array();
             if (is_array($identifier)) {
                 foreach ($identifier as $field) {
                     switch (gettype($value)) {
