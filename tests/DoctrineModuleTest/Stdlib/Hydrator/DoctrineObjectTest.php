@@ -1961,6 +1961,79 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
     }
 
+
+    public function testHydrateOneToManyAssociationByValueWithTraversableCausingDataModifications()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $data = array(
+            'entities' => new ArrayCollection(
+                array(
+                    array('id' => 2, 'field' => 'Modified By Hydrate'),
+                    array('id' => 3, 'field' => 'Modified By Hydrate')
+                )
+            )
+        );
+
+        $entityInDatabaseWithIdOfTwo = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfTwo->setId(2);
+        $entityInDatabaseWithIdOfTwo->setField('foo', false);
+
+        $entityInDatabaseWithIdOfThree = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfThree->setId(3);
+        $entityInDatabaseWithIdOfThree->setField('bar', false);
+
+        $entity = new Asset\OneToManyEntityWithEntities(
+            new ArrayCollection(array(
+                $entityInDatabaseWithIdOfTwo,
+                $entityInDatabaseWithIdOfThree
+            ))
+        );
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $this
+            ->objectManager
+            ->expects($this->exactly(2))
+            ->method('find')
+            ->with(
+                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                $this->logicalOr($this->equalTo(array('id' => 2)), $this->equalTo(array('id' => 3)))
+            )
+            ->will(
+                $this->returnCallback(
+                    function ($target, $arg) use ($entityInDatabaseWithIdOfTwo, $entityInDatabaseWithIdOfThree) {
+                        if ($arg['id'] === 2) {
+                            return $entityInDatabaseWithIdOfTwo;
+                        } elseif ($arg['id'] === 3) {
+                            return $entityInDatabaseWithIdOfThree;
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntityWithEntities', $entity);
+
+        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
+        $entities = $entity->getEntities(false);
+
+        foreach ($entities as $en) {
+            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            var_dump($en);
+            $this->assertInternalType('integer', $en->getId());
+            $this->assertInternalType('string', $en->getField());
+            $this->assertContains('Modified By Hydrate', $en->getField(false));
+        }
+
+        $this->assertEquals(2, $entities[0]->getId());
+        $this->assertSame($entityInDatabaseWithIdOfTwo, $entities[0]);
+
+        $this->assertEquals(3, $entities[1]->getId());
+        $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
+    }
+
     public function testHydrateOneToManyAssociationByReferenceWithArrayCausingDataModifications()
     {
         // When using hydration by value, it will use the public API of the entity to set values (setters)
