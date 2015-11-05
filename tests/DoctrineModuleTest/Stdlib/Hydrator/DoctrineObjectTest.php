@@ -2021,7 +2021,6 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
-            var_dump($en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertInternalType('string', $en->getField());
             $this->assertContains('Modified By Hydrate', $en->getField(false));
