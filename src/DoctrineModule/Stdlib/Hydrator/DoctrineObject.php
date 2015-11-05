@@ -413,7 +413,7 @@ class DoctrineObject extends AbstractHydrator
         $metadata   = $this->objectManager->getClassMetadata(ltrim($target, '\\'));
         $identifier = $metadata->getIdentifier();
 
-        if (!is_array($values) && !$values instanceof Traversable) {
+        if (!is_array($values) && $values instanceof Traversable) {
             $values = (array) $values;
         }
 
