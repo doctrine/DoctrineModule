@@ -648,7 +648,7 @@ class DoctrineObjectTest extends BaseTestCase
                     $this->equalTo('entities'),
                     $this->equalTo('field')
                 )
-            );
+            )
             ->will(
                 $this->returnCallback(
                     function ($arg) {
