@@ -2042,10 +2042,10 @@ class DoctrineObjectTest extends BaseTestCase
     public function testHydrateOneToManyAssociationByValueWithStdClass()
     {
         // When using hydration by value, it will use the public API of the entity to set values (setters)
-        $stdClass1 = new \StdClass();
+        $stdClass1     = new \StdClass();
         $stdClass1->id = 2;
 
-        $stdClass2 = new \StdClass();
+        $stdClass2     = new \StdClass();
         $stdClass2->id = 3;
 
         $data = array('entities' => array($stdClass1, $stdClass2));
