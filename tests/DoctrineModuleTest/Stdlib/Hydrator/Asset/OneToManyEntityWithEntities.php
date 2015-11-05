@@ -7,9 +7,6 @@ use Doctrine\Common\Collections\Collection;
 
 class OneToManyEntityWithEntities extends OneToManyEntity
 {
-
-
-
     public function __construct(ArrayCollection $entities = null)
     {
         $this->entities = $entities;
@@ -19,5 +16,4 @@ class OneToManyEntityWithEntities extends OneToManyEntity
     {
         return $this->entities;
     }
-
 }

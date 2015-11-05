@@ -410,7 +410,7 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function toMany($object, $collectionName, $target, $values)
     {
-        $metadata = $this->objectManager->getClassMetadata(ltrim($target, '\\'));
+        $metadata   = $this->objectManager->getClassMetadata(ltrim($target, '\\'));
         $identifier = $metadata->getIdentifier();
 
         if (!is_array($values) && !$values instanceof Traversable) {
@@ -426,7 +426,7 @@ class DoctrineObject extends AbstractHydrator
                 // assumes modifications have already taken place in object
                 $collection[] = $value;
                 continue;
-            } else if (empty($value)) {
+            } elseif (empty($value)) {
                 // assumes no id and retrieves new $target
                 $collection[] = $this->find($value, $target);
                 continue;
@@ -439,7 +439,7 @@ class DoctrineObject extends AbstractHydrator
                             $getter = 'get' . ucfirst($field);
                             if (method_exists($value, $getter)) {
                                 $find[$field] = $value->$getter();
-                            } else if (property_exists($value, $field)) {
+                            } elseif (property_exists($value, $field)) {
                                 $find[$field] = $value->$field;
                             }
                             break;
@@ -456,7 +456,7 @@ class DoctrineObject extends AbstractHydrator
                 }
             }
 
-            if (!empty($find) && $found = $this->find($find, $target)){
+            if (!empty($find) && $found = $this->find($find, $target)) {
                 $collection[] = (is_array($value)) ? $this->hydrate($value, $found) : $found;
             } else {
                 $collection[] = (is_array($value)) ? $this->hydrate($value, new $target) : new $target;

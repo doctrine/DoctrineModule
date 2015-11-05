@@ -642,11 +642,13 @@ class DoctrineObjectTest extends BaseTestCase
             ->metadata
             ->expects($this->any())
             ->method('getTypeOfField')
-            ->with($this->logicalOr(
-                $this->equalTo('id'),
-                $this->equalTo('entities'),
-                $this->equalTo('field'))
-            )
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('id'),
+                    $this->equalTo('entities'),
+                    $this->equalTo('field')
+                )
+            );
             ->will(
                 $this->returnCallback(
                     function ($arg) {
