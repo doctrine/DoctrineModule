@@ -19,7 +19,6 @@
 
 namespace DoctrineModule\Service;
 
-use DoctrineModule\Version;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 use Zend\ServiceManager\FactoryInterface;
@@ -76,7 +75,6 @@ class CliFactory implements FactoryInterface
     {
         $cli = new Application;
         $cli->setName('DoctrineModule Command Line Interface');
-        $cli->setVersion(Version::VERSION);
         $cli->setHelperSet(new HelperSet);
         $cli->setCatchExceptions(true);
         $cli->setAutoExit(false);
