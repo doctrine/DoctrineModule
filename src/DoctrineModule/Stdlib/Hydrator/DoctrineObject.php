@@ -180,8 +180,9 @@ class DoctrineObject extends AbstractHydrator
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
             }
+
             $getter = 'get' . Inflector::classify($fieldName);
-            $isser = 'is' . Inflector::classify($fieldName);
+            $isser  = 'is' . Inflector::classify($fieldName);
 
             $dataFieldName = $this->computeExtractFieldName($fieldName);
             if (in_array($getter, $methods)) {
