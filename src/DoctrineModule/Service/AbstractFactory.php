@@ -33,6 +33,13 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 abstract class AbstractFactory implements FactoryInterface
 {
     /**
+     * Would normally be set to orm | odm
+     *
+     * @var string
+     */
+    protected $mappingType;
+
+    /**
      * @var string
      */
     protected $name;
@@ -59,6 +66,16 @@ abstract class AbstractFactory implements FactoryInterface
     }
 
     /**
+     * Would normally be set to orm | odm
+     *
+     * @return string
+     */
+    public function getMappingType()
+    {
+        return $this->mappingType;
+    }
+
+    /**
      * Gets options from configuration based on name.
      *
      * @param  ServiceLocatorInterface      $sl
@@ -75,6 +92,9 @@ abstract class AbstractFactory implements FactoryInterface
 
         $options = $sl->get('Configuration');
         $options = $options['doctrine'];
+        if ($mappingType = $this->getMappingType()) {
+            $options = $options[$mappingType];
+        }
         $options = isset($options[$key][$name]) ? $options[$key][$name] : null;
 
         if (null === $options) {
