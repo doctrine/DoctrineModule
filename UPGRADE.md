@@ -1,3 +1,12 @@
+# 0.10.0
+
+ * Fixed php_codesniffer dependency [#521](https://github.com/doctrine/DoctrineModule/pull/521)
+ * Fixed wrong Predis Mock [#534](https://github.com/doctrine/DoctrineModule/pull/534)
+ * Update hydrator.md [#537](https://github.com/doctrine/DoctrineModule/pull/537)
+ * Fix for issue #230 and  fixes for #234 [#520](https://github.com/doctrine/DoctrineModule/pull/520)
+ * Feature/snake case [#539](https://github.com/doctrine/DoctrineModule/pull/539)
+ * Adds additional processing for DoctrineObject::toMany [#535](https://github.com/doctrine/DoctrineModule/pull/535)
+
 # 0.9.0
 
  * Fixed intend in hydrator.md [#471](https://github.com/doctrine/DoctrineModule/pull/471)
