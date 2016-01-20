@@ -62,10 +62,12 @@ class CacheFactory extends AbstractFactory
             case 'Doctrine\Common\Cache\FilesystemCache':
                 $cache = new $class($options->getDirectory());
                 break;
+
             case 'DoctrineModule\Cache\ZendStorageCache':
             case 'Doctrine\Common\Cache\PredisCache':
                 $cache = new $class($instance);
                 break;
+
             default:
                 $cache = new $class;
         }

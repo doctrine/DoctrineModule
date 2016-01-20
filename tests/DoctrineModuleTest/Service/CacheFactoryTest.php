@@ -59,6 +59,7 @@ class CacheFactoryTest extends BaseTestCase
 
     /**
      * @covers \DoctrineModule\Service\CacheFactory::createService
+     * @group 547
      */
     public function testCreateZendCache()
     {
@@ -85,7 +86,8 @@ class CacheFactoryTest extends BaseTestCase
                     ]
                 ]
             ]
-        )->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
+        );
+        $serviceManager->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
 
         $cache = $factory->createService($serviceManager);
 
