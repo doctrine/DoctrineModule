@@ -1,3 +1,8 @@
+# 1.0.0
+
+ * Remove deprecated api call from test [#523](https://github.com/doctrine/DoctrineModule/pull/523)
+ * Allow for the use of Zend\Cache\Service\StorageCacheAbstractServiceFactory [#547](https://github.com/doctrine/DoctrineModule/pull/547)
+
 # 0.10.0
 
  * Fixed php_codesniffer dependency [#521](https://github.com/doctrine/DoctrineModule/pull/521)
