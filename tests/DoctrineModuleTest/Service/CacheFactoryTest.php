@@ -57,6 +57,43 @@ class CacheFactoryTest extends BaseTestCase
         $this->assertSame('bar', $service->getNamespace());
     }
 
+    /**
+     * @covers \DoctrineModule\Service\CacheFactory::createService
+     * @group 547
+     */
+    public function testCreateZendCache()
+    {
+        $factory        = new CacheFactory('phpunit');
+        $serviceManager = new ServiceManager();
+        $serviceManager->setAlias('Config', 'Configuration');
+        $serviceManager->setService(
+            'Configuration',
+            [
+                'doctrine' => [
+                    'cache' => [
+                        'phpunit' => [
+                            'class' => 'DoctrineModule\Cache\ZendStorageCache',
+                            'instance' => 'my-zend-cache',
+                            'namespace' => 'DoctrineModule',
+                        ],
+                    ],
+                ],
+                'caches' => [
+                    'my-zend-cache' => [
+                        'adapter' => [
+                            'name' => 'blackhole'
+                        ]
+                    ]
+                ]
+            ]
+        );
+        $serviceManager->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
+
+        $cache = $factory->createService($serviceManager);
+
+        $this->assertInstanceOf('DoctrineModule\Cache\ZendStorageCache', $cache);
+    }
+
     public function testCreatePredisCache()
     {
         $factory        = new CacheFactory('predis');
