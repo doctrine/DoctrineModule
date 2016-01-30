@@ -35,18 +35,19 @@
         "doctrine/common":                    ">=2.4,<2.6-dev",
         "doctrine/cache":                     "~1.5",
         "symfony/console":                    "~2.3|~3.0",
-        "zendframework/zend-authentication":  "~2.3",
-        "zendframework/zend-cache":           "~2.3",
-        "zendframework/zend-paginator":       "~2.3",
-        "zendframework/zend-stdlib":          "~2.3",
-        "zendframework/zend-mvc":             "~2.3",
-        "zendframework/zend-servicemanager":  "~2.3",
-        "zendframework/zend-validator":       "~2.3"
+        "zendframework/zend-authentication":  "^2.5",
+        "zendframework/zend-cache":           "~2.5",
+        "zendframework/zend-paginator":       "~2.5",
+        "zendframework/zend-stdlib":          "~2.5",
+        "zendframework/zend-hydrator":        "~1.0",
+        "zendframework/zend-mvc":             "~2.5",
+        "zendframework/zend-servicemanager":  "~2.5",
+        "zendframework/zend-validator":       "~2.5"
     },
     "require-dev": {
         "phpunit/phpunit":             "~4.0",
         "doctrine/coding-standard":    "dev-master",
-        "zendframework/zendframework": "~2.3"
+        "zendframework/zendframework": "~2.5"
     },
     "suggest": {
         "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
