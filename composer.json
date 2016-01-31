@@ -52,7 +52,7 @@
         "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "DoctrineModule\\": "src/"
         }
     },
