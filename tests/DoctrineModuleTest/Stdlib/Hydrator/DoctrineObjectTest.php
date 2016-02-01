@@ -10,7 +10,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
 use DoctrineModule\Stdlib\Hydrator\Filter;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
-use Zend\Stdlib\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
+use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
 
 class DoctrineObjectTest extends BaseTestCase
 {

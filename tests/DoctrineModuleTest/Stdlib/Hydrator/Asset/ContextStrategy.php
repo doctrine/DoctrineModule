@@ -2,7 +2,7 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator\Asset;
 
-use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
+use Zend\Hydrator\Strategy\StrategyInterface;
 
 class ContextStrategy implements StrategyInterface
 {
