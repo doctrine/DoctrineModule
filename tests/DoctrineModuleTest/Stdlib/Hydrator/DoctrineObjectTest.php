@@ -2560,4 +2560,52 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimplePrivateEntity', $entity);
     }
+
+    public function testDefaultStrategy()
+    {
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $entity = new Asset\OneToManyEntity();
+
+        $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(
+            'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue',
+            $this->hydratorByValue->getDefaultByValueStrategy()
+        );
+
+        $this->hydratorByReference->extract($entity);
+
+        $this->assertEquals(
+            'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference',
+            $this->hydratorByReference->getDefaultByReferenceStrategy()
+        );
+    }
+
+    /**
+     * @depends testDefaultStrategy
+     */
+    public function testOverrideDefaultStrategy()
+    {
+        $this->configureObjectManagerForOneToManyEntity();
+
+        $this->hydratorByValue->setDefaultByValueStrategy(__NAMESPACE__ . '\Asset\DifferentAllowRemoveByValue');
+        $this->hydratorByReference->setDefaultByValueStrategy(__NAMESPACE__ . '\Asset\DifferentAllowRemoveByReference');
+
+        $entity = new Asset\OneToManyEntity();
+
+        $this->hydratorByValue->extract($entity);
+
+        $this->assertEquals(
+            __NAMESPACE__ . '\Asset\DifferentAllowRemoveByValue',
+            $this->hydratorByValue->getDefaultByValueStrategy()
+        );
+
+        $this->hydratorByReference->extract($entity);
+
+        $this->assertEquals(
+            __NAMESPACE__ . '\Asset\DifferentAllowRemoveByReference',
+            $this->hydratorByReference->getDefaultByValueStrategy()
+        );
+    }
 }
