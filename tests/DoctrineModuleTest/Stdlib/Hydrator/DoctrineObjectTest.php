@@ -2567,18 +2567,28 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = new Asset\OneToManyEntity();
 
-        $this->hydratorByValue->extract($entity);
+        $this->hydratorByValue->hydrate(array(), $entity);
 
         $this->assertEquals(
             'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue',
             $this->hydratorByValue->getDefaultByValueStrategy()
         );
 
-        $this->hydratorByReference->extract($entity);
+        $this->assertInstanceOf(
+            'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue',
+            $this->hydratorByValue->getStrategy('entities')
+        );
+
+        $this->hydratorByReference->hydrate(array(), $entity);
 
         $this->assertEquals(
             'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference',
             $this->hydratorByReference->getDefaultByReferenceStrategy()
+        );
+
+        $this->assertInstanceOf(
+            'DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference',
+            $this->hydratorByReference->getStrategy('entities')
         );
     }
 
@@ -2590,22 +2600,32 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForOneToManyEntity();
 
         $this->hydratorByValue->setDefaultByValueStrategy(__NAMESPACE__ . '\Asset\DifferentAllowRemoveByValue');
-        $this->hydratorByReference->setDefaultByValueStrategy(__NAMESPACE__ . '\Asset\DifferentAllowRemoveByReference');
+        $this->hydratorByReference->setDefaultByReferenceStrategy(__NAMESPACE__ . '\Asset\DifferentAllowRemoveByReference');
 
         $entity = new Asset\OneToManyEntity();
 
-        $this->hydratorByValue->extract($entity);
+        $this->hydratorByValue->hydrate(array(), $entity);
 
         $this->assertEquals(
             __NAMESPACE__ . '\Asset\DifferentAllowRemoveByValue',
             $this->hydratorByValue->getDefaultByValueStrategy()
         );
 
-        $this->hydratorByReference->extract($entity);
+        $this->assertInstanceOf(
+            __NAMESPACE__ . '\Asset\DifferentAllowRemoveByValue',
+            $this->hydratorByValue->getStrategy('entities')
+        );
+
+        $this->hydratorByReference->hydrate(array(), $entity);
 
         $this->assertEquals(
             __NAMESPACE__ . '\Asset\DifferentAllowRemoveByReference',
-            $this->hydratorByReference->getDefaultByValueStrategy()
+            $this->hydratorByReference->getDefaultByReferenceStrategy()
+        );
+
+        $this->assertInstanceOf(
+            __NAMESPACE__ . '\Asset\DifferentAllowRemoveByReference',
+            $this->hydratorByReference->getStrategy('entities')
         );
     }
 }
