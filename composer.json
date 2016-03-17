@@ -31,7 +31,7 @@
         }
     ],
     "require": {
-        "php":                                ">=5.5",
+        "php":                                "^5.5 || ^7.0",
         "doctrine/common":                    "~2.6",
         "doctrine/cache":                     "~1.5",
         "symfony/console":                    "~2.3|~3.0",
