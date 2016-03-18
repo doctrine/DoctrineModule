@@ -31,8 +31,8 @@
         }
     ],
     "require": {
-        "php":                                ">=5.4",
-        "doctrine/common":                    ">=2.4,<2.6-dev",
+        "php":                                "^5.5 || ^7.0",
+        "doctrine/common":                    "~2.6",
         "doctrine/cache":                     "~1.5",
         "symfony/console":                    "~2.3|~3.0",
         "zendframework/zend-authentication":  "~2.3",
