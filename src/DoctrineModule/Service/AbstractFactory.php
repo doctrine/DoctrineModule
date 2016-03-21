@@ -19,9 +19,9 @@
 
 namespace DoctrineModule\Service;
 
+use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Base ServiceManager factory to be extended
@@ -78,19 +78,19 @@ abstract class AbstractFactory implements FactoryInterface
     /**
      * Gets options from configuration based on name.
      *
-     * @param  ServiceLocatorInterface      $sl
-     * @param  string                       $key
-     * @param  null|string                  $name
+     * @param  ContainerInterface $container
+     * @param  string             $key
+     * @param  null|string        $name
      * @return \Zend\Stdlib\AbstractOptions
      * @throws \RuntimeException
      */
-    public function getOptions(ServiceLocatorInterface $sl, $key, $name = null)
+    public function getOptions(ContainerInterface $container, $key, $name = null)
     {
         if ($name === null) {
             $name = $this->getName();
         }
 
-        $options = $sl->get('Configuration');
+        $options = $container->get('Configuration');
         $options = $options['doctrine'];
         if ($mappingType = $this->getMappingType()) {
             $options = $options[$mappingType];

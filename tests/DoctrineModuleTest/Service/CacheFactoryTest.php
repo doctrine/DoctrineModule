@@ -65,7 +65,7 @@ class CacheFactoryTest extends BaseTestCase
     {
         $factory        = new CacheFactory('phpunit');
         $serviceManager = new ServiceManager();
-        $serviceManager->setAlias('Config', 'Configuration');
+        $serviceManager->setAlias('config', 'Configuration');
         $serviceManager->setService(
             'Configuration',
             [
@@ -111,7 +111,8 @@ class CacheFactoryTest extends BaseTestCase
                     ],
                 ],
             ]
-        )->setService(
+        );
+        $serviceManager->setService(
             'my_predis_alias',
             $this->getMock('Predis\ClientInterface')
         );
