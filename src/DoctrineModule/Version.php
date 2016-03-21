@@ -29,5 +29,5 @@ namespace DoctrineModule;
  */
 class Version
 {
-    const VERSION = '0.10.0';
+    const VERSION = '0.10.1';
 }
