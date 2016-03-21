@@ -1,3 +1,9 @@
+# 1.0.1
+
+ * Drop compatibility with PHP 5.4 [#553](https://github.com/doctrine/DoctrineModule/pull/553)
+ * Improve TravisCi build to work with PHP 7 [#553](https://github.com/doctrine/DoctrineModule/pull/553)
+ * Update doctrine/common ~2.6 [#551](https://github.com/doctrine/DoctrineModule/pull/551)
+
 # 1.0.0
 
  * Remove deprecated api call from test [#523](https://github.com/doctrine/DoctrineModule/pull/523)
