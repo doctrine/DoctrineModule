@@ -2518,4 +2518,71 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = $this->hydratorByValue->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
         $this->assertEquals($name, $entity->getCamelCase());
     }
+
+    public function configureObjectManagerForSimplePrivateEntity()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimplePrivateEntity');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimplePrivateEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('private', 'protected')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('private'), $this->equalTo('protected')))
+            ->will($this->returnValue('integer'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('private')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
+    public function testCannotHydratePrivateByValue()
+    {
+        $entity = new Asset\SimplePrivateEntity();
+        $this->configureObjectManagerForSimplePrivateEntity();
+        $data = array('private' => 123, 'protected' => 456);
+
+        $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimplePrivateEntity', $entity);
+    }
 }
