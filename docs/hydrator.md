@@ -720,7 +720,7 @@ through the public API of your entities (that is to say, with getters and setter
 behaviour to work by reference (that is to say that the hydrator will access the properties through Reflection API,
 and hence bypass any logic you may include in your setters/getters).
 
-To change the behaviour, just give the third parameter of the constructor to false:
+To change the behaviour, just give the second parameter of the constructor to false:
 
 ```php
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
