@@ -20,6 +20,7 @@
 namespace DoctrineModuleTest\Service\Authentication;
 
 use DoctrineModule\Service\Authentication\AdapterFactory;
+use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
@@ -39,7 +40,7 @@ class AdapterFactoryTest extends BaseTestCase
                     'authentication' => [
                         $name => [
                             'objectManager'      => $objectManager,
-                            'identityClass'      => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                            'identityClass'      => IdentityObject::class,
                             'identityProperty'   => 'username',
                             'credentialProperty' => 'password',
                         ],
