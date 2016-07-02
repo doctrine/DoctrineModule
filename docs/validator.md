@@ -46,12 +46,12 @@ use Zend\ServiceManager\ServiceManager;
 
 class User extends Form
 {
-	public function __construct(ServiceManager $serviceManager)
-	{
-		parent::__construct('my-form');
+    public function __construct(ServiceManager $serviceManager)
+    {
+        parent::__construct('my-form');
 
-		// Add an element
-		$this->add([
+        // Add an element
+        $this->add([
             'type'    => 'Zend\Form\Element\Email',
             'name'    => 'email',
             'options' => [
@@ -60,24 +60,24 @@ class User extends Form
             'attributes' => [
                 'required' => 'required',
             ],
-       	]);
+        ]);
 
-       	// add other elements (submit, CSRF…)
+        // add other elements (submit, CSRF…)
 
-       	// Fetch any valid object manager from the Service manager (here, an entity manager)
-       	$entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
+        // Fetch any valid object manager from the Service manager (here, an entity manager)
+        $entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 
-       	// Now get the input filter of the form, and add the validator to the email input
-       	$emailInput = $this->getInputFilter()->get('email');
+        // Now get the input filter of the form, and add the validator to the email input
+        $emailInput = $this->getInputFilter()->get('email');
 
-       	$noObjectExistsValidator = new NoObjectExistsValidator([
+        $noObjectExistsValidator = new NoObjectExistsValidator([
             'object_repository' => $entityManager->getRepository('Application\Entity\User'),
             'fields'            => 'email',
-       	]);
+        ]);
 
-       	$emailInput->getValidatorChain()
+        $emailInput->getValidatorChain()
                       ->attach($noObjectExistsValidator);
-	}
+    }
 }
 ```
 
@@ -92,16 +92,16 @@ use Zend\ServiceManager\ServiceManager;
 
 class UserFieldset extends Fieldset implements InputFilterProviderInterface
 {
-	protected $serviceManager;
+    protected $serviceManager;
 
-	public function __construct(ServiceManager $serviceManager)
-	{
-		$this->serviceManager = $serviceManager;
+    public function __construct(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
 
-		parent::__construct('my-fieldset');
+        parent::__construct('my-fieldset');
 
-		// Add an element
-		$this->add([
+        // Add an element
+        $this->add([
             'type'    => 'Zend\Form\Element\Email',
             'name'    => 'email',
             'options' => [
@@ -110,27 +110,27 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
             'attributes' => [
                 'required' => 'required',
             ],
-       	]);
-	}
+        ]);
+    }
 
-	public function getInputFilterSpecification()
-	{
-		$entityManager = $this->serviceManager->get('Doctrine\ORM\EntityManager');
+    public function getInputFilterSpecification()
+    {
+        $entityManager = $this->serviceManager->get('Doctrine\ORM\EntityManager');
 
-		return [
-			'email' => [
-				'validators' => [
-					[
-						'name' => 'DoctrineModule\Validator\NoObjectExists',
-						'options' => [
-							'object_repository' => $entityManager->getRepository('Application\Entity\User'),
-							'fields' => 'email',
-						],
-					],
-				],
-			],
-		];
-	}
+        return [
+            'email' => [
+                'validators' => [
+                    [
+                        'name' => 'DoctrineModule\Validator\NoObjectExists',
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository('Application\Entity\User'),
+                            'fields' => 'email',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
 }
 ```
 
@@ -140,21 +140,21 @@ You can change the default message of the validators the following way :
 
 // For NoObjectExists validator (using array notation) :
 'validators' => [
-	[
-		'name' => 'DoctrineModule\Validator\NoObjectExists',
-		'options' => [
-			'object_repository' => $this->getEntityManager()->getRepository('Application\Entity\User'),
-			'fields' => 'email',
-			'messages' => [
-				'objectFound' => 'Sorry guy, a user with this email already exists !',
-			],
-		],
-	],
+    [
+        'name' => 'DoctrineModule\Validator\NoObjectExists',
+        'options' => [
+            'object_repository' => $this->getEntityManager()->getRepository('Application\Entity\User'),
+            'fields' => 'email',
+            'messages' => [
+                'objectFound' => 'Sorry guy, a user with this email already exists !',
+            ],
+        ],
+    ],
 ]
 
 // For ObjectExists validator (using object notation) :
 $objectExistsValidator = new \DoctrineModule\Validator\ObjectExists([
-	'object_repository' => $entityManager->getRepository('Application\Entity\User'),
+    'object_repository' => $entityManager->getRepository('Application\Entity\User'),
     'fields'            => 'email',
 ]);
 

@@ -58,17 +58,17 @@ class City
 
     public function getId()
     {
-    	return $this->id;
+        return $this->id;
     }
 
     public function setName($name)
     {
-    	$this->name = $name;
+        $this->name = $name;
     }
 
     public function getName()
     {
-    	return $this->name;
+        return $this->name;
     }
 }
 ```
@@ -81,7 +81,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($entityManager);
 $city = new City();
 $data = [
-	'name' => 'Paris',
+    'name' => 'Paris',
 ];
 
 $city = $hydrator->hydrate($data, $city);
@@ -128,12 +128,12 @@ class Appointment
 
     public function setTime(DateTime $time)
     {
-    	$this->time = $time;
+        $this->time = $time;
     }
 
     public function getTime()
     {
-    	return $this->time;
+        return $this->time;
     }
 }
 ```
@@ -146,7 +146,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($entityManager);
 $appointment = new Appointment();
 $data = [
-	'time' => '1357057334',
+    'time' => '1357057334',
 ];
 
 $appointment = $hydrator->hydrate($data, $appointment);
@@ -200,22 +200,22 @@ class User
 
     public function setUsername($username)
     {
-    	$this->username = $username;
+        $this->username = $username;
     }
 
     public function getUsername()
     {
-    	return $this->username;
+        return $this->username;
     }
 
     public function setPassword($password)
     {
-    	$this->password = $password;
+        $this->password = $password;
     }
 
     public function getPassword()
     {
-    	return $this->password;
+        return $this->password;
     }
 }
 ```
@@ -257,22 +257,22 @@ class BlogPost
 
     public function setUser(User $user)
     {
-    	$this->user = $user;
+        $this->user = $user;
     }
 
     public function getUser()
     {
-    	return $this->user;
+        return $this->user;
     }
 
     public function setTitle($title)
     {
-    	$this->title = $title;
+        $this->title = $title;
     }
 
     public function getTitle()
     {
-    	return $this->title;
+        return $this->title;
     }
 }
 ```
@@ -291,10 +291,10 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($entityManager);
 $blogPost = new BlogPost();
 $data = [
-	'title' => 'The best blog post in the world !',
-	'user'  => [
-		'id' => 2, // Written by user 2
-	],
+    'title' => 'The best blog post in the world !',
+    'user'  => [
+        'id' => 2, // Written by user 2
+    ],
 ];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
@@ -307,10 +307,10 @@ echo $blogPost->getUser()->getId(); // prints 2
 
 ```php
 $data = [
-	'title' => 'The best blog post in the world !',
-	'user'  => [
-		'id' => 2, // Written by user 2
-	],
+    'title' => 'The best blog post in the world !',
+    'user'  => [
+        'id' => 2, // Written by user 2
+    ],
 ];
 ```
 
@@ -318,8 +318,8 @@ to:
 
 ```php
 $data = [
-	'title' => 'The best blog post in the world !',
-	'user'  => 2,
+    'title' => 'The best blog post in the world !',
+    'user'  => 2,
 ];
 ```
 
@@ -338,8 +338,8 @@ $user->setUsername('bakura');
 $user->setPassword('p@$$w0rd');
 
 $data = [
-	'title' => 'The best blog post in the world !',
-	'user'  => $user,
+    'title' => 'The best blog post in the world !',
+    'user'  => $user,
 ];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
@@ -444,35 +444,35 @@ class BlogPost
     /**
      * Never forget to initialize all your collections !
      */
-	public function __construct()
-	{
-		$this->tags = new ArrayCollection();
-	}
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId()
     {
-   		return $this->id;
+        return $this->id;
     }
 
-	public function addTags(Collection $tags)
-	{
-		foreach ($tags as $tag) {
-			$tag->setBlogPost($this);
-			$this->tags->add($tag);
-		}
-	}
+    public function addTags(Collection $tags)
+    {
+        foreach ($tags as $tag) {
+            $tag->setBlogPost($this);
+            $this->tags->add($tag);
+        }
+    }
 
-	public function removeTags(Collection $tags)
-	{
-		foreach ($tags as $tag) {
-			$tag->setBlogPost(null);
-			$this->tags->removeElement($tag);
-		}
-	}
+    public function removeTags(Collection $tags)
+    {
+        foreach ($tags as $tag) {
+            $tag->setBlogPost(null);
+            $this->tags->removeElement($tag);
+        }
+    }
 
     public function getTags()
     {
-    	return $this->tags;
+        return $this->tags;
     }
 }
 ```
@@ -490,7 +490,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Tag
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -500,39 +500,39 @@ class Tag
     /**
      * @ORM\ManyToOne(targetEntity="Application\Entity\BlogPost", inversedBy="tags")
      */
-	protected $blogPost;
+    protected $blogPost;
 
-	/**
-	 * @ORM\Column(type="string")
-	 */
-	protected $name;
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $name;
 
     public function getId()
     {
-   		return $this->id;
+        return $this->id;
     }
 
-	/**
-	 * Allow null to remove association
-	 */
-	public function setBlogPost(BlogPost $blogPost = null)
-	{
-		$this->blogPost = $blogPost;
-	}
+    /**
+     * Allow null to remove association
+     */
+    public function setBlogPost(BlogPost $blogPost = null)
+    {
+        $this->blogPost = $blogPost;
+    }
 
     public function getBlogPost()
     {
-    	return $this->blogPost;
+        return $this->blogPost;
     }
 
     public function setName($name)
     {
-    	$this->name = $name;
+        $this->name = $name;
     }
 
     public function getName()
     {
-    	return $this->name;
+        return $this->name;
     }
 }
 ```
@@ -545,7 +545,7 @@ by the new one:
 ```php
 public function setTags(Collection $tags)
 {
-	$this->tags = $tags;
+    $this->tags = $tags;
 }
 ```
 
@@ -564,11 +564,11 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($entityManager);
 $blogPost = new BlogPost();
 $data = [
-	'title' => 'The best blog post in the world !',
-	'tags'  => [
-		['id' => 3], // add tag whose id is 3
-		['id' => 8], // also add tag whose id is 8
-	],
+    'title' => 'The best blog post in the world !',
+    'tags'  => [
+        ['id' => 3], // add tag whose id is 3
+        ['id' => 8], // also add tag whose id is 8
+    ],
 ];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
@@ -581,11 +581,11 @@ echo count($blogPost->getTags()); // prints 2
 
 ```php
 $data = [
-	'title' => 'The best blog post in the world !',
-	'tags'  => [
-		['id' => 3], // add tag whose id is 3
-		['id' => 8], // also add tag whose id is 8
-	],
+    'title' => 'The best blog post in the world !',
+    'tags'  => [
+        ['id' => 3], // add tag whose id is 3
+        ['id' => 8], // also add tag whose id is 8
+    ],
 ];
 ```
 
@@ -593,8 +593,8 @@ can be written:
 
 ```php
 $data = [
-	'title' => 'The best blog post in the world !',
-	'tags'  => [3, 8],
+    'title' => 'The best blog post in the world !',
+    'tags'  => [3, 8],
 ];
 ```
 
@@ -619,8 +619,8 @@ $tag2->setName('STL');
 $tags[] = $tag2;
 
 $data = [
-	'title' => 'The best blog post in the world !',
-	'tags'  => $tags, // Note that you can mix integers and entities without any problem
+    'title' => 'The best blog post in the world !',
+    'tags'  => $tags, // Note that you can mix integers and entities without any problem
 ];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
@@ -643,14 +643,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BlogPost
 {
-	/** .. */
+    /** .. */
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\Tag", mappedBy="blogPost", cascade={"persist"})
      */
-	protected $tags;
+    protected $tags;
 
-	/** … */
+    /** … */
 }
 ```
 
@@ -744,14 +744,14 @@ class SimpleEntity
     /**
      * @ORM\Column(type="string")
      */
-	protected $foo;
+    protected $foo;
 
-	public function getFoo()
-	{
-		die();
-	}
+    public function getFoo()
+    {
+        die();
+    }
 
-  	/** ... */
+    /** ... */
 }
 ```
 
@@ -811,7 +811,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BlogPost
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -821,53 +821,53 @@ class BlogPost
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\Tag", mappedBy="blogPost", cascade={"persist"})
      */
-	protected $tags;
+    protected $tags;
 
 
-	/**
-	 * Never forget to initialize all your collections !
-	 */
-	public function __construct()
-	{
-		$this->tags = new ArrayCollection();
-	}
-
-	/**
-	 * @return integer
-	 */
-    public function getId()
+    /**
+     * Never forget to initialize all your collections !
+     */
+    public function __construct()
     {
-   		return $this->id;
+        $this->tags = new ArrayCollection();
     }
 
-	/**
-	 * @param Collection $tags
-	 */
-	public function addTags(Collection $tags)
-	{
-		foreach ($tags as $tag) {
-			$tag->setBlogPost($this);
-			$this->tags->add($tag);
-		}
-	}
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	/**
-	 * @param Collection $tags
-	 */
-	public function removeTags(Collection $tags)
-	{
-		foreach ($tags as $tag) {
-			$tag->setBlogPost(null);
-			$this->tags->removeElement($tag);
-		}
-	}
+    /**
+     * @param Collection $tags
+     */
+    public function addTags(Collection $tags)
+    {
+        foreach ($tags as $tag) {
+            $tag->setBlogPost($this);
+            $this->tags->add($tag);
+        }
+    }
 
-	/**
-	 * @return Collection
-	 */
+    /**
+     * @param Collection $tags
+     */
+    public function removeTags(Collection $tags)
+    {
+        foreach ($tags as $tag) {
+            $tag->setBlogPost(null);
+            $this->tags->removeElement($tag);
+        }
+    }
+
+    /**
+     * @return Collection
+     */
     public function getTags()
     {
-    	return $this->tags;
+        return $this->tags;
     }
 }
 ```
@@ -885,7 +885,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Tag
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -895,40 +895,38 @@ class Tag
     /**
      * @ORM\ManyToOne(targetEntity="Application\Entity\BlogPost", inversedBy="tags")
      */
-	protected $blogPost;
+    protected $blogPost;
 
-	/**
-	 * @ORM\Column(type="string")
-	 */
-	protected $name;
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $name;
 
-
-	/**
-	 * Get the id
-
-	 * @return int
-	 */
+    /**
+     * Get the id
+     * @return int
+     */
     public function getId()
     {
-   		return $this->id;
+        return $this->id;
     }
 
-	/**
-	 * Allow null to remove association
-	 *
-	 * @param BlogPost $blogPost
-	 */
-	public function setBlogPost(BlogPost $blogPost = null)
-	{
-		$this->blogPost = $blogPost;
-	}
+    /**
+     * Allow null to remove association
+     *
+     * @param BlogPost $blogPost
+     */
+    public function setBlogPost(BlogPost $blogPost = null)
+    {
+        $this->blogPost = $blogPost;
+    }
 
-	/**
-	 * @return BlogPost
-	 */
+    /**
+     * @return BlogPost
+     */
     public function getBlogPost()
     {
-    	return $this->blogPost;
+        return $this->blogPost;
     }
 
     /**
@@ -936,7 +934,7 @@ class Tag
      */
     public function setName($name)
     {
-    	$this->name = $name;
+        $this->name = $name;
     }
 
     /**
@@ -944,7 +942,7 @@ class Tag
      */
     public function getName()
     {
-    	return $this->name;
+        return $this->name;
     }
 }
 ```
@@ -979,10 +977,10 @@ class TagFieldset extends Fieldset implements InputFilterProviderInterface
         $this->setHydrator(new DoctrineHydrator($objectManager))
              ->setObject(new Tag());
 
-		$this->add([
-			'type' => 'Zend\Form\Element\Hidden',
-			'name' => 'id',
-		]);
+        $this->add([
+            'type' => 'Zend\Form\Element\Hidden',
+            'name' => 'id',
+        ]);
 
         $this->add([
             'type'    => 'Zend\Form\Element\Text',
@@ -997,7 +995,7 @@ class TagFieldset extends Fieldset implements InputFilterProviderInterface
     {
         return [
             'id' => [
-            	'required' => false,
+                'required' => false,
             ],
             'name' => [
                 'required' => true,
@@ -1028,17 +1026,17 @@ class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
         $this->setHydrator(new DoctrineHydrator($objectManager))
              ->setObject(new BlogPost());
 
-		$this->add([
-			'type' => 'Zend\Form\Element\Text',
-			'name' => 'title',
-		]);
+        $this->add([
+            'type' => 'Zend\Form\Element\Text',
+            'name' => 'title',
+        ]);
 
-		$tagFieldset = new TagFieldset($objectManager);
+        $tagFieldset = new TagFieldset($objectManager);
         $this->add([
             'type'    => 'Zend\Form\Element\Collection',
             'name'    => 'tags',
             'options' => [
-            	'count'           => 2,
+                'count'           => 2,
                 'target_element' => $tagFieldset,
             ],
         ]);
@@ -1048,7 +1046,7 @@ class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
     {
         return [
             'title' => [
-            	'required' => true,
+                'required' => true,
             ],
         ];
     }
@@ -1080,7 +1078,7 @@ class CreateBlogPostForm extends Form
     {
         parent::__construct('create-blog-post-form');
 
-		// The form will hydrate an object of type "BlogPost"
+        // The form will hydrate an object of type "BlogPost"
         $this->setHydrator(new DoctrineHydrator($objectManager));
 
         // Add the user fieldset, and set it as the base fieldset
@@ -1110,7 +1108,7 @@ class UpdateBlogPostForm extends Form
     {
         parent::__construct('update-blog-post-form');
 
-		// The form will hydrate an object of type "BlogPost"
+        // The form will hydrate an object of type "BlogPost"
         $this->setHydrator(new DoctrineHydrator($objectManager));
 
         // Add the user fieldset, and set it as the base fieldset
@@ -1143,23 +1141,23 @@ public function createAction()
     // Get your ObjectManager from the ServiceManager
     $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
 
-	// Create the form and inject the ObjectManager
-	$form = new CreateBlogPostForm($objectManager);
+    // Create the form and inject the ObjectManager
+    $form = new CreateBlogPostForm($objectManager);
 
-	// Create a new, empty entity and bind it to the form
-	$blogPost = new BlogPost();
-	$form->bind($blogPost);
+    // Create a new, empty entity and bind it to the form
+    $blogPost = new BlogPost();
+    $form->bind($blogPost);
 
-	if ($this->request->isPost()) {
-		$form->setData($this->request->getPost());
+    if ($this->request->isPost()) {
+        $form->setData($this->request->getPost());
 
-		if ($form->isValid()) {
-			$objectManager->persist($blogPost);
-			$objectManager->flush();
-		}
-	}
+        if ($form->isValid()) {
+            $objectManager->persist($blogPost);
+            $objectManager->flush();
+        }
+    }
 
-	return ['form' => $form];
+    return ['form' => $form];
 }
 ```
 
@@ -1172,23 +1170,23 @@ public function editAction()
     // Get your ObjectManager from the ServiceManager
     $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
 
-	// Create the form and inject the ObjectManager
-	$form = new UpdateBlogPostForm($objectManager);
+    // Create the form and inject the ObjectManager
+    $form = new UpdateBlogPostForm($objectManager);
 
-	// Create a new, empty entity and bind it to the form
-	$blogPost = $this->userService->get($this->params('blogPost_id'));
-	$form->bind($blogPost);
+    // Create a new, empty entity and bind it to the form
+    $blogPost = $this->userService->get($this->params('blogPost_id'));
+    $form->bind($blogPost);
 
-	if ($this->request->isPost()) {
-		$form->setData($this->request->getPost());
+    if ($this->request->isPost()) {
+        $form->setData($this->request->getPost());
 
-		if ($form->isValid()) {
-		    // Save the changes
-		    $objectManager->flush();
-		}
-	}
+        if ($form->isValid()) {
+            // Save the changes
+            $objectManager->flush();
+        }
+    }
 
-	return ['form' => $form];
+    return ['form' => $form];
 }
 ```
 
@@ -1218,7 +1216,7 @@ namespace Application\Entity;
  */
 class User
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -1228,7 +1226,7 @@ class User
     /**
      * @ORM\Column(type="string", length=48)
      */
-	protected $name;
+    protected $name;
 
     /**
      * @ORM\OneToOne(targetEntity="City")
@@ -1259,14 +1257,14 @@ use Zend\InputFilter\InputFilterProviderInterface;
 
 class UserFieldset extends Fieldset implements InputFilterProviderInterface
 {
-	public function __construct(ObjectManager $objectManager)
-	{
-		parent::__construct('user');
+    public function __construct(ObjectManager $objectManager)
+    {
+        parent::__construct('user');
 
-		$this->setHydrator(new DoctrineHydrator($objectManager))
-			 ->setObject(new User());
+        $this->setHydrator(new DoctrineHydrator($objectManager))
+             ->setObject(new User());
 
-		$this->add([
+        $this->add([
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'name',
             'options' => [
@@ -1275,22 +1273,22 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
             'attributes' => [
                 'required' => 'required',
             ],
-       	]);
+        ]);
 
-       	$cityFieldset = new CityFieldset($objectManager);
-       	$cityFieldset->setLabel('Your city');
-       	$cityFieldset->setName('city');
-       	$this->add($cityFieldset);
-	}
+        $cityFieldset = new CityFieldset($objectManager);
+        $cityFieldset->setLabel('Your city');
+        $cityFieldset->setName('city');
+        $this->add($cityFieldset);
+    }
 
-	public function getInputFilterSpecification()
-	{
-		return [
-			'name' => [
-				'required' => true,
-			],
-		];
-	}
+    public function getInputFilterSpecification()
+    {
+        return [
+            'name' => [
+                'required' => true,
+            ],
+        ];
+    }
 }
 
 ```
@@ -1308,14 +1306,14 @@ use Zend\InputFilter\InputFilterProviderInterface;
 
 class CityFieldset extends Fieldset implements InputFilterProviderInterface
 {
-	public function __construct(ObjectManager $objectManager)
-	{
-		parent::__construct('city');
+    public function __construct(ObjectManager $objectManager)
+    {
+        parent::__construct('city');
 
-		$this->setHydrator(new DoctrineHydrator($objectManager))
-			 ->setObject(new City());
+        $this->setHydrator(new DoctrineHydrator($objectManager))
+             ->setObject(new City());
 
-		$this->add([
+        $this->add([
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'name',
             'options' => [
@@ -1324,9 +1322,9 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
             'attributes' => [
                 'required' => 'required',
             ],
-       	]);
+        ]);
 
-       	$this->add([
+        $this->add([
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'postCode',
             'options' => [
@@ -1335,20 +1333,20 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
             'attributes' => [
                 'required' => 'required',
             ],
-       	]);
-	}
+        ]);
+    }
 
-	public function getInputFilterSpecification()
-	{
-		return [
-			'name' => [
-				'required' => true,
-			],
-			'postCode' => [
-				'required' => true,
-			],
-		];
-	}
+    public function getInputFilterSpecification()
+    {
+        return [
+            'name' => [
+                'required' => true,
+            ],
+            'postCode' => [
+                'required' => true,
+            ],
+        ];
+    }
 }
 
 ```
@@ -1366,28 +1364,28 @@ use Zend\Form\Form;
 
 class EditNameForm extends Form
 {
-	public function __construct(ObjectManager $objectManager)
-	{
-		parent::__construct('edit-name-form');
+    public function __construct(ObjectManager $objectManager)
+    {
+        parent::__construct('edit-name-form');
 
-		$this->setHydrator(new DoctrineHydrator($objectManager));
+        $this->setHydrator(new DoctrineHydrator($objectManager));
 
-		// Add the user fieldset, and set it as the base fieldset
-		$userFieldset = new UserFieldset($objectManager);
-		$userFieldset->setName('user');
-		$userFieldset->setUseAsBaseFieldset(true);
-		$this->add($userFieldset);
+        // Add the user fieldset, and set it as the base fieldset
+        $userFieldset = new UserFieldset($objectManager);
+        $userFieldset->setName('user');
+        $userFieldset->setUseAsBaseFieldset(true);
+        $this->add($userFieldset);
 
-		// … add CSRF and submit elements …
+        // … add CSRF and submit elements …
 
-		// Set the validation group so that we don't care about city
-		$this->setValidationGroup([
-			'csrf', // assume we added a CSRF element
-			'user' => [
-				'name',
-			],
-		]);
-	}
+        // Set the validation group so that we don't care about city
+        $this->setValidationGroup([
+            'csrf', // assume we added a CSRF element
+            'user' => [
+                'name',
+            ],
+        ]);
+    }
 }
 ```
 
@@ -1403,24 +1401,24 @@ public function editNameAction()
     // Get your ObjectManager from the ServiceManager
     $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
 
-	// Create the form and inject the ObjectManager
-	$form = new EditNameForm($objectManager);
+    // Create the form and inject the ObjectManager
+    $form = new EditNameForm($objectManager);
 
-	// Get the logged user (for more informations about userIdentity(), please read the Authentication doc)
-	$loggedUser = $this->userIdentity();
+    // Get the logged user (for more informations about userIdentity(), please read the Authentication doc)
+    $loggedUser = $this->userIdentity();
 
-	// We bind the logged user to the form, so that the name is pre-filled with previous data
-	$form->bind($loggedUser);
+    // We bind the logged user to the form, so that the name is pre-filled with previous data
+    $form->bind($loggedUser);
 
-	$request = $this->request;
-	if ($request->isPost()) {
-		// Set data from post
-		$form->setData($request->getPost());
+    $request = $this->request;
+    if ($request->isPost()) {
+        // Set data from post
+        $form->setData($request->getPost());
 
-		if ($form->isValid()) {
-			// You can now safely save $loggedUser
-		}
-	}
+        if ($form->isValid()) {
+            // You can now safely save $loggedUser
+        }
+    }
 }
 ```
 
@@ -1453,27 +1451,27 @@ use Zend\Form\Form;
 
 class EditNameForm extends Form
 {
-	public function __construct(ObjectManager $objectManager)
-	{
-		parent::__construct('edit-name-form');
+    public function __construct(ObjectManager $objectManager)
+    {
+        parent::__construct('edit-name-form');
 
-		$this->setHydrator(new DoctrineHydrator($objectManager));
+        $this->setHydrator(new DoctrineHydrator($objectManager));
 
-		// Add the user fieldset, and set it as the base fieldset
-		$userFieldset = new UserFieldset($objectManager);
-		$userFieldset->setName('user');
-		$userFieldset->setUseAsBaseFieldset(true);
+        // Add the user fieldset, and set it as the base fieldset
+        $userFieldset = new UserFieldset($objectManager);
+        $userFieldset->setName('user');
+        $userFieldset->setUseAsBaseFieldset(true);
 
-		// We don't want City relationship, so remove it !!
-		$userFieldset->remove('city');
+        // We don't want City relationship, so remove it !!
+        $userFieldset->remove('city');
 
-		$this->add($userFieldset);
+        $this->add($userFieldset);
 
-		// … add CSRF and submit elements …
+        // … add CSRF and submit elements …
 
-		// We don't even need the validation group as the City fieldset does not
-		// exist anymore
-	}
+        // We don't even need the validation group as the City fieldset does not
+        // exist anymore
+    }
 }
 ```
 

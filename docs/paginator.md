@@ -24,7 +24,7 @@ $adapter = new CollectionAdapter($doctrineCollection);
 // Create the paginator itself
 $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
-		  ->setItemCountPerPage(5);
+          ->setItemCountPerPage(5);
 
 // Pass it to the view, and use it like a "standard" Zend paginator
 ```
@@ -50,7 +50,7 @@ $adapter = new SelectableAdapter($objectRepository); // An object repository imp
 // Create the paginator itself
 $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
-		  ->setItemCountPerPage(5);
+          ->setItemCountPerPage(5);
 
 // Pass it to the view, and use it like a "standard" Zend paginator
 ```
@@ -72,7 +72,7 @@ $adapter = new SelectableAdapter($objectRepository, $criteria); // An object rep
 // Create the paginator itself
 $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
-		  ->setItemCountPerPage(5);
+          ->setItemCountPerPage(5);
 
 // Pass it to the view, and use it like a "standard" Zend paginator
 ```
