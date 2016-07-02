@@ -191,7 +191,7 @@ class Authentication extends AbstractOptions
      */
     public function setIdentityProperty($identityProperty)
     {
-        if (!is_string($identityProperty) || $identityProperty === '') {
+        if (! is_string($identityProperty) || $identityProperty === '') {
             throw new Exception\InvalidArgumentException(
                 sprintf('Provided $identityProperty is invalid, %s given', gettype($identityProperty))
             );
@@ -217,7 +217,7 @@ class Authentication extends AbstractOptions
      */
     public function setCredentialProperty($credentialProperty)
     {
-        if (!is_string($credentialProperty) || $credentialProperty === '') {
+        if (! is_string($credentialProperty) || $credentialProperty === '') {
             throw new Exception\InvalidArgumentException(
                 sprintf('Provided $credentialProperty is invalid, %s given', gettype($credentialProperty))
             );
@@ -243,7 +243,7 @@ class Authentication extends AbstractOptions
      */
     public function setCredentialCallable($credentialCallable)
     {
-        if (!is_callable($credentialCallable)) {
+        if (! is_callable($credentialCallable)) {
             throw new Exception\InvalidArgumentException(
                 sprintf(
                     '"%s" is not a callable',

@@ -61,7 +61,7 @@ class SymfonyCli implements RouteInterface
      */
     public function match(Request $request)
     {
-        if (!$request instanceof ConsoleRequest) {
+        if (! $request instanceof ConsoleRequest) {
             return null;
         }
 

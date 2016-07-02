@@ -47,7 +47,7 @@ class AllowRemoveByValue extends AbstractCollectionStrategy
         $adder   = 'add' . ucfirst($this->collectionName);
         $remover = 'remove' . ucfirst($this->collectionName);
 
-        if (!method_exists($this->object, $adder) || !method_exists($this->object, $remover)) {
+        if (! method_exists($this->object, $adder) || ! method_exists($this->object, $remover)) {
             throw new LogicException(
                 sprintf(
                     'AllowRemove strategy for DoctrineModule hydrator requires both %s and %s to be defined in %s

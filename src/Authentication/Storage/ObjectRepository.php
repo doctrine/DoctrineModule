@@ -45,7 +45,7 @@ class ObjectRepository implements StorageInterface
      */
     public function setOptions($options)
     {
-        if (!$options instanceof AuthenticationOptions) {
+        if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
         }
 

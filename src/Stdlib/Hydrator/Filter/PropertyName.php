@@ -60,7 +60,7 @@ class PropertyName implements FilterInterface
     public function filter($property)
     {
         return in_array($property, $this->properties)
-            ? !$this->exclude
+            ? ! $this->exclude
             : $this->exclude;
     }
 }

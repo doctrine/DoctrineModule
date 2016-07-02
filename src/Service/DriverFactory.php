@@ -76,11 +76,11 @@ class DriverFactory extends AbstractFactory
     {
         $class = $options->getClass();
 
-        if (!$class) {
+        if (! $class) {
             throw new InvalidArgumentException('Drivers must specify a class');
         }
 
-        if (!class_exists($class)) {
+        if (! class_exists($class)) {
             throw new InvalidArgumentException(sprintf('Driver with type "%s" could not be found', $class));
         }
 
@@ -127,7 +127,7 @@ class DriverFactory extends AbstractFactory
             /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain */
             $drivers = $options->getDrivers();
 
-            if (!is_array($drivers)) {
+            if (! is_array($drivers)) {
                 $drivers = [$drivers];
             }
 

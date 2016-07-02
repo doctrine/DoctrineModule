@@ -48,7 +48,7 @@ class CacheFactory extends AbstractFactory
         $options = $this->getOptions($container, 'cache');
         $class   = $options->getClass();
 
-        if (!$class) {
+        if (! $class) {
             throw new RuntimeException('Cache must have a class name to instantiate');
         }
 

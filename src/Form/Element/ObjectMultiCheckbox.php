@@ -70,7 +70,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
             $value = ArrayUtils::iteratorToArray($value);
         } elseif ($value == null) {
             return parent::setValue([]);
-        } elseif (!is_array($value)) {
+        } elseif (! is_array($value)) {
             $value = (array)$value;
         }
 

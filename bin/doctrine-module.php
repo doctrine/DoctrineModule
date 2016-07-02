@@ -24,7 +24,7 @@ chdir(__DIR__);
 
 $previousDir = '.';
 
-while (!file_exists('config/application.config.php')) {
+while (! file_exists('config/application.config.php')) {
     $dir = dirname(getcwd());
 
     if ($previousDir === $dir) {

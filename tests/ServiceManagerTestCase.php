@@ -56,7 +56,7 @@ class ServiceManagerTestCase
         $serviceManagerConfig->configureServiceManager($serviceManager);
 
         $serviceManager->setService('ApplicationConfig', $configuration);
-        if (!$serviceManager->has('ServiceListener')) {
+        if (! $serviceManager->has('ServiceListener')) {
             $serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
         }
 

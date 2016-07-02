@@ -46,7 +46,7 @@ class DisallowRemoveByValue extends AbstractCollectionStrategy
         // AllowRemove strategy need "adder"
         $adder = 'add' . ucfirst($this->collectionName);
 
-        if (!method_exists($this->object, $adder)) {
+        if (! method_exists($this->object, $adder)) {
             throw new LogicException(
                 sprintf(
                     'DisallowRemove strategy for DoctrineModule hydrator requires %s to

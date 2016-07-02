@@ -89,7 +89,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
     {
         $matches = [];
 
-        if (!preg_match(
+        if (! preg_match(
             '/^doctrine\.((?<mappingType>orm|odm)\.|)(?<serviceType>[a-z0-9_]+)\.(?<serviceName>[a-z0-9_]+)$/',
             $name,
             $matches
