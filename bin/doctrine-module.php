@@ -29,8 +29,8 @@ while (! file_exists('config/application.config.php')) {
 
     if ($previousDir === $dir) {
         throw new RuntimeException(
-            'Unable to locate "config/application.config.php": ' .
-            'is DoctrineModule in a subdir of your application skeleton?'
+            'Unable to locate "config/application.config.php":'
+            . ' is DoctrineModule in a subdir of your application skeleton?'
         );
     }
 
