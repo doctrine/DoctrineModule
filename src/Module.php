@@ -40,6 +40,8 @@ use Zend\ModuleManager\ModuleManagerInterface;
  */
 class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
 {
+    const VERSION = '2.0.0dev';
+
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
