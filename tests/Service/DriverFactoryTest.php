@@ -33,15 +33,15 @@ class DriverFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'driver' => array(
-                        'testDriver' => array(
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'testDriver' => [
                             'class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock',
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $factory = new DriverFactory('testDriver');
@@ -54,22 +54,22 @@ class DriverFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'driver' => array(
-                        'testDriver' => array(
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'testDriver' => [
                             'class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock',
-                        ),
-                        'testChainDriver' => array(
+                        ],
+                        'testChainDriver' => [
                             'class' => 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain',
-                            'drivers' => array(
+                            'drivers' => [
                                 'Foo\Bar' => 'testDriver',
                                 'Foo\Baz' => null,
-                            ),
-                        ),
-                    ),
-                ),
-            )
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $factory = new DriverFactory('testChainDriver');

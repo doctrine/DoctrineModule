@@ -38,9 +38,9 @@ class RequestInput extends ArgvInput
      */
     public function __construct(Request $request, InputDefinition $definition = null)
     {
-        $parameters = array(
+        $parameters = [
             null,
-        );
+        ];
 
         foreach ($request->getParams() as $key => $param) {
             if (is_numeric($key)) {

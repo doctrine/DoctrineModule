@@ -55,10 +55,10 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->application    = $this->getMock('Zend\Mvc\Application', array(), array(), '', false);
+        $this->application    = $this->getMock('Zend\Mvc\Application', [], [], '', false);
         $this->event          = $this->getMock('Zend\Mvc\MvcEvent');
         $this->serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager');
-        $this->cli            = $this->getMock('Symfony\Component\Console\Application', array('run'));
+        $this->cli            = $this->getMock('Symfony\Component\Console\Application', ['run']);
 
         $this
             ->serviceManager

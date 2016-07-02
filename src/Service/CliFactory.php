@@ -48,7 +48,7 @@ class CliFactory implements FactoryInterface
     /**
      * @var array
      */
-    protected $commands = array();
+    protected $commands = [];
 
     /**
      * @param  ContainerInterface $container
@@ -60,7 +60,7 @@ class CliFactory implements FactoryInterface
             /* @var $events \Zend\EventManager\EventManagerInterface */
             $events = $container->get('EventManager');
 
-            $events->addIdentifiers(array(__CLASS__, 'doctrine'));
+            $events->addIdentifiers([__CLASS__, 'doctrine']);
 
             $this->events = $events;
         }
@@ -82,7 +82,7 @@ class CliFactory implements FactoryInterface
         $cli->setAutoExit(false);
 
         // Load commands using event
-        $this->getEventManager($container)->trigger('loadCli.post', $cli, array('ServiceManager' => $container));
+        $this->getEventManager($container)->trigger('loadCli.post', $cli, ['ServiceManager' => $container]);
 
         return $cli;
     }

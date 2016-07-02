@@ -37,7 +37,7 @@ class EventManager extends AbstractOptions
      *
      * @var array
      */
-    protected $subscribers = array();
+    protected $subscribers = [];
 
     /**
      * @param  array $subscribers

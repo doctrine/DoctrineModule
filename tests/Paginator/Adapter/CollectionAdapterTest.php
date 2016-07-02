@@ -69,6 +69,6 @@ class CollectionAdapterTest extends PHPUnit_Framework_TestCase
     {
         $adapter = new CollectionAdapter(new ArrayCollection());
         $actual  = $adapter->getItems(0, 10);
-        $this->assertEquals(array(), $actual);
+        $this->assertEquals([], $actual);
     }
 }

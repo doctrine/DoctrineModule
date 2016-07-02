@@ -30,7 +30,7 @@ class ServiceManagerTestCase
     /**
      * @var array
      */
-    protected static $configuration = array();
+    protected static $configuration = [];
 
     /**
      * @return array
@@ -51,7 +51,7 @@ class ServiceManagerTestCase
         $configuration        = $configuration ?: $this->getConfiguration();
         $serviceManager       = new ServiceManager();
         $serviceManagerConfig = new ServiceManagerConfig(
-            isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
+            isset($configuration['service_manager']) ? $configuration['service_manager'] : []
         );
         $serviceManagerConfig->configureServiceManager($serviceManager);
 

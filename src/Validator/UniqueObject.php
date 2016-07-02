@@ -39,9 +39,9 @@ class UniqueObject extends ObjectExists
     /**
      * @var array Message templates
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'",
-    );
+    ];
 
     /**
      * @var ObjectManager
@@ -159,7 +159,7 @@ class UniqueObject extends ObjectExists
                         ->getIdentifierValues($context);
         }
 
-        $result = array();
+        $result = [];
         foreach ($this->getIdentifiers() as $identifierField) {
             if (!isset($context[$identifierField])) {
                 throw new Exception\RuntimeException(\sprintf('Expected context to contain %s', $identifierField));

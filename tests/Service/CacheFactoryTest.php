@@ -39,15 +39,15 @@ class CacheFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                 'doctrine' => array(
-                     'cache' => array(
-                         'foo' => array(
+            [
+                 'doctrine' => [
+                     'cache' => [
+                         'foo' => [
                              'namespace' => 'bar',
-                         ),
-                     ),
-                 ),
-            )
+                         ],
+                     ],
+                 ],
+            ]
         );
 
         /* @var $service \Doctrine\Common\Cache\ArrayCache */
@@ -72,8 +72,8 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'phpunit' => [
-                            'class' => 'DoctrineModule\Cache\ZendStorageCache',
-                            'instance' => 'my-zend-cache',
+                            'class'     => 'DoctrineModule\Cache\ZendStorageCache',
+                            'instance'  => 'my-zend-cache',
                             'namespace' => 'DoctrineModule',
                         ],
                     ],
@@ -81,10 +81,10 @@ class CacheFactoryTest extends BaseTestCase
                 'caches' => [
                     'my-zend-cache' => [
                         'adapter' => [
-                            'name' => 'blackhole'
-                        ]
-                    ]
-                ]
+                            'name' => 'blackhole',
+                        ],
+                    ],
+                ],
             ]
         );
         $serviceManager->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
@@ -104,8 +104,8 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'predis' => [
-                            'class' => 'Doctrine\Common\Cache\PredisCache',
-                            'instance' => 'my_predis_alias',
+                            'class'     => 'Doctrine\Common\Cache\PredisCache',
+                            'instance'  => 'my_predis_alias',
                             'namespace' => 'DoctrineModule',
                         ],
                     ],

@@ -82,31 +82,31 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      */
     public function getServicesThatShouldBeDefined()
     {
-        return array(
-            array('doctrine.cache.array', true),
-            array('doctrine.cache.apc', true),
-            array('doctrine.cache.filesystem', true),
-            array('doctrine.cache.memcache', true),
-            array('doctrine.cache.memcached', true),
-            array('doctrine.cache.redis', true),
-            array('doctrine.cache.wincache', true),
-            array('doctrine.cache.xcache', true),
-            array('doctrine.cache.zenddata', true),
-            array('doctrine.authenticationadapter.orm_default', true),
-            array('doctrine.authenticationstorage.orm_default', true),
-            array('doctrine.authenticationservice.orm_default', true),
-            array('doctrine.authenticationadapter.odm_default', true),
-            array('doctrine.authenticationstorage.odm_default', true),
-            array('doctrine.authenticationservice.odm_default', true),
-            array('foo', false),
-            array('foo.bar', false),
-            array('foo.bar.baz', false),
-            array('doctrine', false),
-            array('doctrine.foo', false),
-            array('doctrine.foo.bar', false),
-            array('doctrine.cache.bar', false),
-            //array('doctrine.cache.zendcachestorage'),
-        );
+        return [
+            ['doctrine.cache.array', true],
+            ['doctrine.cache.apc', true],
+            ['doctrine.cache.filesystem', true],
+            ['doctrine.cache.memcache', true],
+            ['doctrine.cache.memcached', true],
+            ['doctrine.cache.redis', true],
+            ['doctrine.cache.wincache', true],
+            ['doctrine.cache.xcache', true],
+            ['doctrine.cache.zenddata', true],
+            ['doctrine.authenticationadapter.orm_default', true],
+            ['doctrine.authenticationstorage.orm_default', true],
+            ['doctrine.authenticationservice.orm_default', true],
+            ['doctrine.authenticationadapter.odm_default', true],
+            ['doctrine.authenticationstorage.odm_default', true],
+            ['doctrine.authenticationservice.odm_default', true],
+            ['foo', false],
+            ['foo.bar', false],
+            ['foo.bar.baz', false],
+            ['doctrine', false],
+            ['doctrine.foo', false],
+            ['doctrine.foo.bar', false],
+            ['doctrine.cache.bar', false],
+            //['doctrine.cache.zendcachestorage'],
+        ];
     }
 
     /**
@@ -114,9 +114,9 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      */
     public function getServicesThatCanBeFetched()
     {
-        return array(
-            array('doctrine.cache.array', 'Doctrine\Common\Cache\ArrayCache'),
-        );
+        return [
+            ['doctrine.cache.array', 'Doctrine\Common\Cache\ArrayCache'],
+        ];
     }
 
     /**
@@ -124,14 +124,14 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      */
     public function getServicesThatCannotBeFetched()
     {
-        return array(
-            array('foo'),
-            array('foo.bar'),
-            array('foo.bar.baz'),
-            array('doctrine'),
-            array('doctrine.foo'),
-            array('doctrine.foo.bar'),
-            array('doctrine.cache.bar'),
-        );
+        return [
+            ['foo'],
+            ['foo.bar'],
+            ['foo.bar.baz'],
+            ['doctrine'],
+            ['doctrine.foo'],
+            ['doctrine.foo.bar'],
+            ['doctrine.cache.bar'],
+        ];
     }
 }

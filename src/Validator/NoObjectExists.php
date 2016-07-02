@@ -37,9 +37,9 @@ class NoObjectExists extends ObjectExists
     /**
      * @var array Message templates
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::ERROR_OBJECT_FOUND    => "An object matching '%value%' was found",
-    );
+    ];
 
     /**
      * {@inheritDoc}

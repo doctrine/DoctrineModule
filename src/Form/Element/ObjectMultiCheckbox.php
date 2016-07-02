@@ -57,7 +57,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
      */
     public function setOption($key, $value)
     {
-        $this->getProxy()->setOptions(array($key => $value));
+        $this->getProxy()->setOptions([$key => $value]);
         return parent::setOption($key, $value);
     }
 
@@ -69,12 +69,12 @@ class ObjectMultiCheckbox extends MultiCheckbox
         if ($value instanceof \Traversable) {
             $value = ArrayUtils::iteratorToArray($value);
         } elseif ($value == null) {
-            return parent::setValue(array());
+            return parent::setValue([]);
         } elseif (!is_array($value)) {
             $value = (array)$value;
         }
 
-        return parent::setValue(array_map(array($this->getProxy(), 'getValue'), $value));
+        return parent::setValue(array_map([$this->getProxy(), 'getValue'], $value));
     }
 
     /**

@@ -128,7 +128,7 @@ class DriverFactory extends AbstractFactory
             $drivers = $options->getDrivers();
 
             if (!is_array($drivers)) {
-                $drivers = array($drivers);
+                $drivers = [$drivers];
             }
 
             foreach ($drivers as $namespace => $driverName) {

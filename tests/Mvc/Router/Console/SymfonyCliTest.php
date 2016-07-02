@@ -50,7 +50,7 @@ class SymfonyCliTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             'Zend\Mvc\Router\Console\RouteMatch',
-            $this->route->match(new Request(array('scriptname.php', 'list')))
+            $this->route->match(new Request(['scriptname.php', 'list']))
         );
     }
 
@@ -58,12 +58,12 @@ class SymfonyCliTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             'Zend\Mvc\Router\Console\RouteMatch',
-            $this->route->match(new Request(array('scriptname.php', 'list', '--help')))
+            $this->route->match(new Request(['scriptname.php', 'list', '--help']))
         );
     }
 
     public function testNotMatching()
     {
-        $this->assertNull($this->route->match(new Request(array('scriptname.php', 'unknowncommand'))));
+        $this->assertNull($this->route->match(new Request(['scriptname.php', 'unknowncommand'])));
     }
 }

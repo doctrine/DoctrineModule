@@ -175,7 +175,7 @@ class DoctrineObject extends AbstractHydrator
             ? $object->getFilter()
             : $this->filterComposite;
 
-        $data = array();
+        $data = [];
         foreach ($fieldNames as $fieldName) {
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
@@ -216,7 +216,7 @@ class DoctrineObject extends AbstractHydrator
             ? $object->getFilter()
             : $this->filterComposite;
 
-        $data = array();
+        $data = [];
         foreach ($fieldNames as $fieldName) {
             if ($filter && !$filter->filter($fieldName)) {
                 continue;
@@ -347,7 +347,7 @@ class DoctrineObject extends AbstractHydrator
     {
         $metadata         = $this->metadata;
         $identifierNames  = $metadata->getIdentifierFieldNames($object);
-        $identifierValues = array();
+        $identifierValues = [];
 
         if (empty($identifierNames)) {
             return $object;
@@ -417,7 +417,7 @@ class DoctrineObject extends AbstractHydrator
             $values = (array)$values;
         }
 
-        $collection = array();
+        $collection = [];
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
@@ -432,7 +432,7 @@ class DoctrineObject extends AbstractHydrator
                 continue;
             }
 
-            $find = array();
+            $find = [];
             if (is_array($identifier)) {
                 foreach ($identifier as $field) {
                     switch (gettype($value)) {

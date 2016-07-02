@@ -28,17 +28,15 @@ class MyForm extends Form implements ObjectManagerAwareInterface
     
     public function init()
     {
-        $this->add(
-            array(
-                'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-                'name' => 'name',
-                'options' => array(
-                    'object_manager' => $this->getObjectManager(),
-                    'target_class'   => 'Module\Entity\SomeEntity',
-                    'property'       => 'property',
-                ),
-            )
-        );
+        $this->add([
+            'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+            'name' => 'name',
+            'options' => [
+                'object_manager' => $this->getObjectManager(),
+                'target_class'   => 'Module\Entity\SomeEntity',
+                'property'       => 'property',
+            ],
+        ]);
     }
     
     public function setObjectManager(ObjectManager $objectManager)
@@ -63,19 +61,17 @@ In times you want to change the display of the label you will need to use the
 you like. In this simple example i will concatenate two properties with a dash.
 
 ```php
-$this->add(
-    array(
-        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'name',
-        'options' => array(
-            'object_manager'  => $this->getObjectManager(),
-            'target_class'    => 'Module\Entity\SomeEntity',
-            'label_generator' => function($targetEntity) {
-                return $targetEntity->getId() . ' - ' . $targetEntity->getTitle();
-            },
-        ),
-    )
-);
+$this->add([
+    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'name' => 'name',
+    'options' => [
+        'object_manager'  => $this->getObjectManager(),
+        'target_class'    => 'Module\Entity\SomeEntity',
+        'label_generator' => function($targetEntity) {
+            return $targetEntity->getId() . ' - ' . $targetEntity->getTitle();
+        },
+    ],
+]);
 ```
 
 The callable function will always receive the target entity as a parameter so
@@ -84,23 +80,21 @@ example would be to completely switch out the labels in case your website has
 specific options to provide more accessible labels.
 
 ```php
-$this->add(
-    array(
-        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'name',
-        'options' => array(
-            'object_manager'  => $this->getObjectManager(),
-            'target_class'    => 'Module\Entity\SomeEntity',
-            'label_generator' => function($targetEntity) use ($someSession) {
-                if ('accessible' === $someSession->getCurrentMode()) {
-                    return $targetEntity->getAccessibleLabel();
-                } else {
-                    return $targetEntity->getLabel();
-                }
-            },
-        ),
-    )
-);
+$this->add([
+    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'name' => 'name',
+    'options' => [
+        'object_manager'  => $this->getObjectManager(),
+        'target_class'    => 'Module\Entity\SomeEntity',
+        'label_generator' => function($targetEntity) use ($someSession) {
+            if ('accessible' === $someSession->getCurrentMode()) {
+                return $targetEntity->getAccessibleLabel();
+            } else {
+                return $targetEntity->getLabel();
+            }
+        },
+    ],
+]);
 ```
 
 ### Example 3 : extended version
@@ -112,30 +106,28 @@ custom repositories you can do even more advanced queries! Also you can specify
 a method as a property by setting `is_method` to true.
 
 ```php
-$this->add(
-    array(
-        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'name',
-        'options' => array(
-            'object_manager' => $this->getObjectManager(),
-            'target_class'   => 'Module\Entity\User',
-            'property'       => 'ComposedOfSeveralProperties',
-            'is_method'      => true,
-            'find_method'    => array(
-                'name'   => 'findBy',
-                'params' => array(
-                    'criteria' => array('active' => 1),
-                    
-                    // Use key 'orderBy' if using ORM
-                    'orderBy'  => array('lastname' => 'ASC'),
-                    
-                    // Use key 'sort' if using ODM
-                    'sort'  => array('lastname' => 'ASC')
-                ),
-            ),
-        ),
-    )
-);
+$this->add([
+    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'name' => 'name',
+    'options' => [
+        'object_manager' => $this->getObjectManager(),
+        'target_class'   => 'Module\Entity\User',
+        'property'       => 'ComposedOfSeveralProperties',
+        'is_method'      => true,
+        'find_method'    => [
+            'name'   => 'findBy',
+            'params' => [
+                'criteria' => ['active' => 1],
+                
+                // Use key 'orderBy' if using ORM
+                'orderBy'  => ['lastname' => 'ASC'],
+                
+                // Use key 'sort' if using ODM
+                'sort'     => ['lastname' => 'ASC'],
+            ],
+        ],
+    ],
+]);
 ```
 
 ### Example 4 : including an empty option
@@ -145,19 +137,17 @@ setting to true. You can also specify the `empty_item_label` setting, the
 default is an empty string.
 
 ```php
-$this->add(
-    array(
-        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'name',
-        'options' => array(
-            'object_manager'     => $this->getObjectManager(),
-            'target_class'       => 'Module\Entity\SomeEntity',
-            'property'           => 'property',
-            'display_empty_item' => true,
-            'empty_item_label'   => '---',
-        ),
-    )
-);
+$this->add([
+    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'name' => 'name',
+    'options' => [
+        'object_manager'     => $this->getObjectManager(),
+        'target_class'       => 'Module\Entity\SomeEntity',
+        'property'           => 'property',
+        'display_empty_item' => true,
+        'empty_item_label'   => '---',
+    ],
+]);
 ```
 
 ### Example 5 : Add html attributes to the <option> elements
@@ -169,23 +159,21 @@ The value needs to be of type `string` or `callable` (in which case a `string` -
 string - needs to be returned). Check the following example:
 
 ```php
-$this->add(
-    array(
-        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'test',
-        'options' => array(
-            'object_manager'     => $this->getObjectManager(),
-            'target_class'       => 'Module\Entity\SomeEntity',
-            'property'           => 'property',
-            'option_attributes' => array(
-                'class'   => 'styledOption',
-                'data-id' => function (\Module\Entity\SomeEntity $entity) {
-                    return $entity->getId();
-                }
-            ),
-        ),
-    )
-);
+$this->add([
+    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'name' => 'test',
+    'options' => [
+        'object_manager'    => $this->getObjectManager(),
+        'target_class'      => 'Module\Entity\SomeEntity',
+        'property'          => 'property',
+        'option_attributes' => [
+            'class'   => 'styledOption',
+            'data-id' => function (\Module\Entity\SomeEntity $entity) {
+                return $entity->getId();
+            },
+        ],
+    ],
+]);
 ```
 
 The above example will generate HTML options with a data-key attribute:
@@ -212,18 +200,16 @@ following example:
 **Add the Select list like this:**
 
 ```php
-$this->add(
-    array(
-        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'name',
-        'options' => array(
-            'object_manager'      => $this->getObjectManager(),
-            'target_class'        => 'Module\Entity\SomeEntity',
-            'property'            => 'property',
-            'optgroup_identifier' => 'category'
-        ),
-    )
-);
+$this->add([
+    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'name' => 'name',
+    'options' => [
+        'object_manager'      => $this->getObjectManager(),
+        'target_class'        => 'Module\Entity\SomeEntity',
+        'property'            => 'property',
+        'optgroup_identifier' => 'category',
+    ],
+]);
 ```
 
 **With your data structure like this:**
@@ -262,18 +248,16 @@ To render without a default group you have to change nothing. This is the defaul
 **Add the Select list like this:**
 
 ```php
-$this->add(
-    array(
-        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'name',
-        'options' => array(
-            'object_manager'      => $this->getObjectManager(),
-            'target_class'        => 'Module\Entity\SomeEntity',
-            'property'            => 'property',
-            'optgroup_identifier' => 'category'
-        ),
-    )
-);
+$this->add([
+    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'name' => 'name',
+    'options' => [
+        'object_manager'      => $this->getObjectManager(),
+        'target_class'        => 'Module\Entity\SomeEntity',
+        'property'            => 'property',
+        'optgroup_identifier' => 'category',
+    ],
+]);
 ```
 
 **With your data structure like this:**
@@ -308,19 +292,17 @@ To group all loose values into a unified group, simply add the `optgroup_default
 **Add the Select list like this:**
 
 ```php
-$this->add(
-    array(
-        'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-        'name' => 'name',
-        'options' => array(
-            'object_manager'      => $this->getObjectManager(),
-            'target_class'        => 'Module\Entity\SomeEntity',
-            'property'            => 'property',
-            'optgroup_identifier' => 'category',
-            'optgroup_default'    => 'Others'
-        ),
-    )
-);
+$this->add([
+    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'name' => 'name',
+    'options' => [
+        'object_manager'      => $this->getObjectManager(),
+        'target_class'        => 'Module\Entity\SomeEntity',
+        'property'            => 'property',
+        'optgroup_identifier' => 'category',
+        'optgroup_default'    => 'Others',
+    ],
+]);
 ```
 
 **With your data structure like this:**

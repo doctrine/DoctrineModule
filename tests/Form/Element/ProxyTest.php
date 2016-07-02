@@ -59,7 +59,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
      */
     public function testExceptionThrownForMissingObjectManager()
     {
-        $this->proxy->setOptions(array('target_class' => 'DoctrineModuleTest\Form\Element\TestAsset\FormObject'));
+        $this->proxy->setOptions(['target_class' => 'DoctrineModuleTest\Form\Element\TestAsset\FormObject']);
         $this->proxy->getValueOptions();
     }
 
@@ -69,11 +69,9 @@ class ProxyTest extends PHPUnit_Framework_TestCase
      */
     public function testExceptionThrownForMissingTargetClass()
     {
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+        ]);
         $this->proxy->getValueOptions();
     }
 
@@ -92,13 +90,11 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($metadata));
 
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-                'find_method'    => array('no_name')
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+            'find_method'    => ['no_name'],
+        ]);
 
         $this->proxy->getValueOptions();
     }
@@ -121,13 +117,11 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-                'find_method'    => array('name' => 'NotExistent'),
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+            'find_method'    => ['name' => 'NotExistent'],
+        ]);
 
         $this->setExpectedException(
             'RuntimeException',
@@ -155,16 +149,14 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-                'find_method'    => array(
-                    'name' => 'findBy',
-                    'params' => array()
-                )
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+            'find_method'    => [
+                'name'   => 'findBy',
+                'params' => [],
+            ],
+        ]);
 
         $this->setExpectedException(
             'RuntimeException',
@@ -190,7 +182,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(array('property' => 'password'));
+        $this->proxy->setOptions(['property' => 'password']);
 
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
@@ -208,7 +200,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(array('property' => 'email'));
+        $this->proxy->setOptions(['property' => 'email']);
 
         $this
             ->metadata
@@ -228,12 +220,10 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(
-            array(
-                'property'  => 'name',
-                'is_method' => true,
-            )
-        );
+        $this->proxy->setOptions([
+            'property'  => 'name',
+            'is_method' => true,
+        ]);
 
         $this->metadata->expects($this->never())
             ->method('hasField');
@@ -249,12 +239,10 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(
-            array(
-                'display_empty_item' => true,
-                'empty_item_label'   => '---',
-            )
-        );
+        $this->proxy->setOptions([
+            'display_empty_item' => true,
+            'empty_item_label'   => '---',
+        ]);
 
         $result = $this->proxy->getValueOptions();
         $this->assertArrayHasKey('', $result);
@@ -265,13 +253,11 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(
-            array(
-                'label_generator' => function ($targetEntity) {
-                    return $targetEntity->getEmail();
-                }
-            )
-        );
+        $this->proxy->setOptions([
+            'label_generator' => function ($targetEntity) {
+                return $targetEntity->getEmail();
+            },
+        ]);
 
         $this->metadata->expects($this->never())
             ->method('hasField');
@@ -292,7 +278,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             'Property "label_generator" needs to be a callable function or a \Closure'
         );
 
-        $this->proxy->setOptions(array('label_generator' => 'I throw an InvalidArgumentException'));
+        $this->proxy->setOptions(['label_generator' => 'I throw an InvalidArgumentException']);
     }
 
     public function testUsingOptionAttributesOfTypeString()
@@ -302,15 +288,15 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->setOptions([
             'option_attributes' => [
                 'class' => 'foo',
-                'lang' => 'en'
-            ]
+                'lang' => 'en',
+            ],
         ]);
 
         $options = $this->proxy->getValueOptions();
 
         $expectedAttributes = [
             'class' => 'foo',
-            'lang' => 'en'
+            'lang' => 'en',
         ];
 
         $this->assertCount(2, $options);
@@ -331,7 +317,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                 'data-id' => function ($object) {
                     return $object->getId();
                 },
-            ]
+            ],
         ]);
 
         $options = $this->proxy->getValueOptions();
@@ -351,8 +337,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
 
         $this->proxy->setOptions([
             'option_attributes' => [
-                'data-id' => new \stdClass(['id' => 1])
-            ]
+                'data-id' => new \stdClass(['id' => 1]),
+            ],
         ]);
 
         $this->setExpectedException('RuntimeException');
@@ -365,15 +351,15 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->prepareEmptyProxy();
 
         $result = $this->proxy->getValueOptions();
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testCanWorkWithEmptyDataReturnedAsArray()
     {
-        $this->prepareEmptyProxy(array());
+        $this->prepareEmptyProxy([]);
 
         $result = $this->proxy->getValueOptions();
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testExceptionThrownForNonTraversableResults()
@@ -403,11 +389,9 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxyWithOptgroupPreset();
 
-        $this->proxy->setOptions(
-            array(
-                'optgroup_identifier' => 'NonExistantFunctionName'
-            )
-        );
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'NonExistantFunctionName',
+        ]);
 
         $this->setExpectedException('RuntimeException');
 
@@ -427,40 +411,38 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxyWithOptgroupPreset();
 
-        $this->proxy->setOptions(
-            array(
-                'optgroup_identifier' => 'optgroup'
-            )
-        );
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'optgroup',
+        ]);
 
         $valueOptions = $this->proxy->getValueOptions();
 
         $expectedOutput = [
             'Group One' => [
-                'label' => 'Group One',
+                'label'   => 'Group One',
                 'options' => [
                     0 => [
-                        'label' => 'object one username',
-                        'value' => 1,
-                        'attributes' => []
+                        'label'      => 'object one username',
+                        'value'      => 1,
+                        'attributes' => [],
                     ],
                     1 => [
-                        'label' => 'object two username',
-                        'value' => 2,
-                        'attributes' => []
-                    ]
-                ]
+                        'label'      => 'object two username',
+                        'value'      => 2,
+                        'attributes' => [],
+                    ],
+                ],
             ],
             'Group Two' => [
-                'label' => 'Group Two',
+                'label'   => 'Group Two',
                 'options' => [
                     0 => [
-                        'label' => 'object three username',
-                        'value' => 3,
-                        'attributes' => []
-                    ]
-                ]
-            ]
+                        'label'      => 'object three username',
+                        'value'      => 3,
+                        'attributes' => [],
+                    ],
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOutput, $valueOptions);
@@ -479,31 +461,29 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(
-            array(
-                'optgroup_identifier' => 'optgroup',
-                'optgroup_default'    => 'Others'
-            )
-        );
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'optgroup',
+            'optgroup_default'    => 'Others',
+        ]);
 
         $valueOptions = $this->proxy->getValueOptions();
 
         $expectedOutput = [
             'Others' => [
-                'label' => 'Others',
+                'label'   => 'Others',
                 'options' => [
                     0 => [
-                        'label' => 'object one username',
-                        'value' => 1,
-                        'attributes' => []
+                        'label'      => 'object one username',
+                        'value'      => 1,
+                        'attributes' => [],
                     ],
                     1 => [
-                        'label' => 'object two username',
-                        'value' => 2,
-                        'attributes' => []
-                    ]
-                ]
-            ]
+                        'label'      => 'object two username',
+                        'value'      => 2,
+                        'attributes' => [],
+                    ],
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOutput, $valueOptions);
@@ -523,30 +503,28 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxyWithOptgroupPresetThatHasPartiallyEmptyOptgroupValues();
 
-        $this->proxy->setOptions(
-            array(
-                'optgroup_identifier' => 'optgroup'
-            )
-        );
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'optgroup',
+        ]);
 
         $valueOptions = $this->proxy->getValueOptions();
 
         $expectedOutput = [
             'Group One' => [
-                'label' => 'Group One',
+                'label'   => 'Group One',
                 'options' => [
                     0 => [
-                        'label' => 'object one username',
-                        'value' => 1,
-                        'attributes' => []
-                    ]
-                ]
+                        'label'      => 'object one username',
+                        'value'      => 1,
+                        'attributes' => [],
+                    ],
+                ],
             ],
             0 => [
-                'label' => 'object two username',
-                'value' => 2,
-                'attributes' => []
-            ]
+                'label'      => 'object two username',
+                'value'      => 2,
+                'attributes' => [],
+            ],
         ];
 
         $this->assertEquals($expectedOutput, $valueOptions);
@@ -572,7 +550,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->setFirstname('object two firstname')
             ->setSurname('object two surname');
 
-        $result = new ArrayCollection(array($objectOne, $objectTwo));
+        $result = new ArrayCollection([$objectOne, $objectTwo]);
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata
@@ -585,12 +563,12 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                         $input = array_shift($input);
 
                         if ($input == $objectOne) {
-                            return array('id' => 1);
+                            return ['id' => 1];
                         } elseif ($input == $objectTwo) {
-                            return array('id' => 2);
+                            return ['id' => 2];
                         }
 
-                        return array();
+                        return [];
                     }
                 )
             );
@@ -612,12 +590,10 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+        ]);
 
         $this->metadata = $metadata;
     }
@@ -653,7 +629,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->setSurname('object three surname')
             ->setOptgroup('Group Two');
 
-        $result = new ArrayCollection(array($objectOne, $objectTwo, $objectThree));
+        $result = new ArrayCollection([$objectOne, $objectTwo, $objectThree]);
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata
@@ -666,14 +642,14 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                         $input = array_shift($input);
 
                         if ($input == $objectOne) {
-                            return array('id' => 1);
+                            return ['id' => 1];
                         } elseif ($input == $objectTwo) {
-                            return array('id' => 2);
+                            return ['id' => 2];
                         } elseif ($input == $objectThree) {
-                            return array('id' => 3);
+                            return ['id' => 3];
                         }
 
-                        return array();
+                        return [];
                     }
                 )
             );
@@ -695,12 +671,10 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+        ]);
 
         $this->metadata = $metadata;
     }
@@ -726,7 +700,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->setFirstname('object two firstname')
             ->setSurname('object two surname');
 
-        $result = new ArrayCollection(array($objectOne, $objectTwo));
+        $result = new ArrayCollection([$objectOne, $objectTwo]);
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata
@@ -739,12 +713,12 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                         $input = array_shift($input);
 
                         if ($input == $objectOne) {
-                            return array('id' => 1);
+                            return ['id' => 1];
                         } elseif ($input == $objectTwo) {
-                            return array('id' => 2);
+                            return ['id' => 2];
                         }
 
-                        return array();
+                        return [];
                     }
                 )
             );
@@ -766,12 +740,10 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+        ]);
 
         $this->metadata = $metadata;
     }
@@ -797,7 +769,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->setFirstname('object two firstname')
             ->setSurname('object two surname');
 
-        $result = new ArrayCollection(array($objectOne, $objectTwo));
+        $result = new ArrayCollection([$objectOne, $objectTwo]);
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata
@@ -809,12 +781,12 @@ class ProxyTest extends PHPUnit_Framework_TestCase
                         $input = func_get_args();
                         $input = array_shift($input);
                         if ($input == $objectOne) {
-                            return array('id' => 1);
+                            return ['id' => 1];
                         } elseif ($input == $objectTwo) {
-                            return array('id' => 2);
+                            return ['id' => 2];
                         }
 
-                        return array();
+                        return [];
                     }
                 )
             );
@@ -838,18 +810,16 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass,
-                'find_method' => array(
-                    'name' => 'findBy',
-                    'params' => array(
-                        'criteria' => array('email' => 'object one email'),
-                    ),
-                ),
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+            'find_method'    => [
+                'name'   => 'findBy',
+                'params' => [
+                    'criteria' => ['email' => 'object one email'],
+                ],
+            ],
+        ]);
 
         $this->metadata = $metadata;
     }
@@ -882,12 +852,10 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        $this->proxy->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass
-            )
-        );
+        $this->proxy->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+        ]);
 
         $this->metadata = $metadata;
     }

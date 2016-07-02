@@ -38,18 +38,16 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue(null));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey',
-            )
-        );
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+        ]);
         $this->assertTrue($validator->isValid('matchValue'));
     }
 
@@ -61,12 +59,12 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(array('id')));
+            ->will($this->returnValue(['id']));
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(array('id' => 'identifier')));
+            ->will($this->returnValue(['id' => 'identifier']));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->any())
@@ -82,17 +80,15 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey'
-            )
-        );
-        $this->assertTrue($validator->isValid(array('matchKey' => 'matchValue', 'id' => 'identifier')));
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+        ]);
+        $this->assertTrue($validator->isValid(['matchKey' => 'matchValue', 'id' => 'identifier']));
     }
 
     public function testCannotValidateIfThereIsAnotherObjectWithTheSameValueInTheRepository()
@@ -103,12 +99,12 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(array('id')));
+            ->will($this->returnValue(['id']));
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(array('id' => 'identifier')));
+            ->will($this->returnValue(['id' => 'identifier']));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->any())
@@ -124,17 +120,15 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey'
-            )
-        );
-        $this->assertFalse($validator->isValid(array('matchKey' => 'matchValue', 'id' => 'another identifier')));
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+        ]);
+        $this->assertFalse($validator->isValid(['matchKey' => 'matchValue', 'id' => 'another identifier']));
     }
 
     public function testCanFetchIdentifierFromContext()
@@ -145,12 +139,12 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(array('id')));
+            ->will($this->returnValue(['id']));
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(array('id' => 'identifier')));
+            ->will($this->returnValue(['id' => 'identifier']));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->any())
@@ -166,18 +160,16 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey',
-                'use_context'       => true
-            )
-        );
-        $this->assertTrue($validator->isValid('matchValue', array('id' => 'identifier')));
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+            'use_context'       => true,
+        ]);
+        $this->assertTrue($validator->isValid('matchValue', ['id' => 'identifier']));
     }
 
     /**
@@ -192,19 +184,17 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey',
-                'use_context'       => true
-            )
-        );
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+            'use_context'       => true,
+        ]);
         $validator->isValid('matchValue');
     }
 
@@ -220,7 +210,7 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(array('id')));
+            ->will($this->returnValue(['id']));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->any())
@@ -236,16 +226,14 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey'
-            )
-        );
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+        ]);
         $validator->isValid('matchValue');
     }
 
@@ -261,7 +249,7 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(array('id')));
+            ->will($this->returnValue(['id']));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->any())
@@ -277,18 +265,16 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey',
-                'use_context'       => true
-            )
-        );
-        $validator->isValid('matchValue', array());
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+            'use_context'       => true,
+        ]);
+        $validator->isValid('matchValue', []);
     }
 
     /**
@@ -300,12 +286,10 @@ class UniqueObjectTest extends BaseTestCase
     {
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
-        new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'fields'            => 'matchKey'
-            )
-        );
+        new UniqueObject([
+            'object_repository' => $repository,
+            'fields'            => 'matchKey',
+        ]);
     }
 
     /**
@@ -319,13 +303,11 @@ class UniqueObjectTest extends BaseTestCase
 
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
-        new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey'
-            )
-        );
+        new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+        ]);
     }
 
     public function testCanValidateWithNotAvailableObjectInRepositoryByDateTimeObject()
@@ -335,18 +317,16 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('date' => $date))
+            ->with(['date' => $date])
             ->will($this->returnValue(null));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'date',
-            )
-        );
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'date',
+        ]);
 
         $this->assertTrue($validator->isValid($date));
     }
@@ -363,12 +343,12 @@ class UniqueObjectTest extends BaseTestCase
             ->expects($this->at(0))
             ->method('getIdentifierValues')
             ->with($context)
-            ->will($this->returnValue(array('id' => 'identifier')));
+            ->will($this->returnValue(['id' => 'identifier']));
         $classMetadata
             ->expects($this->at(1))
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(array('id' => 'identifier')));
+            ->will($this->returnValue(['id' => 'identifier']));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->any())
@@ -384,17 +364,15 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey',
-                'use_context'       => true
-            )
-        );
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+            'use_context'       => true,
+        ]);
 
         $this->assertTrue($validator->isValid('matchValue', $context));
     }
@@ -407,12 +385,12 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(array('id')));
+            ->will($this->returnValue(['id']));
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(array('id' => 'identifier')));
+            ->will($this->returnValue(['id' => 'identifier']));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->any())
@@ -428,21 +406,19 @@ class UniqueObjectTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
-        $validator = new UniqueObject(
-            array(
-                'object_repository' => $repository,
-                'object_manager'    => $objectManager,
-                'fields'            => 'matchKey',
-                'use_context'       => true
-            )
-        );
+        $validator = new UniqueObject([
+            'object_repository' => $repository,
+            'object_manager'    => $objectManager,
+            'fields'            => 'matchKey',
+            'use_context'       => true,
+        ]);
         $this->assertFalse(
             $validator->isValid(
                 'matchValue',
-                array('matchKey' => 'matchValue', 'id' => 'another identifier')
+                ['matchKey' => 'matchValue', 'id' => 'another identifier']
             )
         );
         $messageTemplates = $validator->getMessageTemplates();
@@ -455,6 +431,5 @@ class UniqueObjectTest extends BaseTestCase
         $messages        = $validator->getMessages();
         $receivedMessage = $messages[UniqueObject::ERROR_OBJECT_NOT_UNIQUE];
         $this->assertTrue($expectedMessage == $receivedMessage);
-
     }
 }

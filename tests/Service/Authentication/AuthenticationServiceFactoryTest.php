@@ -38,18 +38,18 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'authentication' => array(
-                        $name => array(
-                            'objectManager' => $objectManager,
-                            'identityClass' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
-                            'identityProperty' => 'username',
-                            'credentialProperty' => 'password'
-                        ),
-                    ),
-                ),
-            )
+            [
+                'doctrine' => [
+                    'authentication' => [
+                        $name => [
+                            'objectManager'      => $objectManager,
+                            'identityClass'      => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                            'identityProperty'   => 'username',
+                            'credentialProperty' => 'password',
+                        ],
+                    ],
+                ],
+            ]
         );
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',

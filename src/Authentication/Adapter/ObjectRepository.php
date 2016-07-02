@@ -52,7 +52,7 @@ class ObjectRepository extends AbstractAdapter
      *
      * @param array|AuthenticationOptions $options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         $this->setOptions($options);
     }
@@ -87,7 +87,7 @@ class ObjectRepository extends AbstractAdapter
         $options  = $this->options;
         $identity = $options
             ->getObjectRepository()
-            ->findOneBy(array($options->getIdentityProperty() => $this->identity));
+            ->findOneBy([$options->getIdentityProperty() => $this->identity]);
 
         if (!$identity) {
             $this->authenticationResultInfo['code']       = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
@@ -174,11 +174,11 @@ class ObjectRepository extends AbstractAdapter
             );
         }
 
-        $this->authenticationResultInfo = array(
+        $this->authenticationResultInfo = [
             'code' => AuthenticationResult::FAILURE,
             'identity' => $this->identity,
-            'messages' => array()
-        );
+            'messages' => [],
+        ];
     }
 
     /**

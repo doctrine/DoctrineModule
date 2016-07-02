@@ -44,7 +44,7 @@ class Driver extends AbstractOptions
      *
      * @var array
      */
-    protected $paths = array();
+    protected $paths = [];
 
     /**
      * Set the cache key for the annotation cache. Cache key
@@ -71,7 +71,7 @@ class Driver extends AbstractOptions
      *
      * @var array
      */
-    protected $drivers = array();
+    protected $drivers = [];
 
     /**
      * @param string $cache

@@ -41,13 +41,13 @@ class ObjectExistsTest extends BaseTestCase
         $repository
             ->expects($this->exactly(2))
             ->method('findOneBy')
-            ->with(array('matchKey' => 'matchValue'))
+            ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue(new stdClass()));
 
-        $validator = new ObjectExists(array('object_repository' => $repository, 'fields' => 'matchKey'));
+        $validator = new ObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
 
         $this->assertTrue($validator->isValid('matchValue'));
-        $this->assertTrue($validator->isValid(array('matchKey' => 'matchValue')));
+        $this->assertTrue($validator->isValid(['matchKey' => 'matchValue']));
     }
 
     public function testCanValidateWithMultipleFields()
@@ -56,27 +56,23 @@ class ObjectExistsTest extends BaseTestCase
         $repository
             ->expects($this->exactly(2))
             ->method('findOneBy')
-            ->with(array('firstMatchKey' => 'firstMatchValue', 'secondMatchKey' => 'secondMatchValue'))
+            ->with(['firstMatchKey' => 'firstMatchValue', 'secondMatchKey' => 'secondMatchValue'])
             ->will($this->returnValue(new stdClass()));
 
-        $validator = new ObjectExists(
-            array(
-                'object_repository' => $repository,
-                'fields'            => array(
-                    'firstMatchKey',
-                    'secondMatchKey',
-                ),
-            )
-        );
+        $validator = new ObjectExists([
+            'object_repository' => $repository,
+            'fields'            => [
+                'firstMatchKey',
+                'secondMatchKey',
+            ],
+        ]);
         $this->assertTrue(
-            $validator->isValid(
-                array(
-                    'firstMatchKey'  => 'firstMatchValue',
-                    'secondMatchKey' => 'secondMatchValue',
-                )
-            )
+            $validator->isValid([
+                'firstMatchKey'  => 'firstMatchValue',
+                'secondMatchKey' => 'secondMatchValue',
+            ])
         );
-        $this->assertTrue($validator->isValid(array('firstMatchValue', 'secondMatchValue')));
+        $this->assertTrue($validator->isValid(['firstMatchValue', 'secondMatchValue']));
     }
 
     public function testCanValidateFalseOnNoResult()
@@ -87,12 +83,10 @@ class ObjectExistsTest extends BaseTestCase
             ->method('findOneBy')
             ->will($this->returnValue(null));
 
-        $validator = new ObjectExists(
-            array(
-                'object_repository' => $repository,
-                'fields'            => 'field',
-            )
-        );
+        $validator = new ObjectExists([
+            'object_repository' => $repository,
+            'fields'            => 'field',
+        ]);
         $this->assertFalse($validator->isValid('value'));
     }
 
@@ -100,57 +94,49 @@ class ObjectExistsTest extends BaseTestCase
     {
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
 
-        new ObjectExists(array('fields' => 'field'));
+        new ObjectExists(['fields' => 'field']);
     }
 
     public function testWillRefuseNonObjectRepository()
     {
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
 
-        new ObjectExists(array('object_repository' => 'invalid', 'fields' => 'field'));
+        new ObjectExists(['object_repository' => 'invalid', 'fields' => 'field']);
     }
 
     public function testWillRefuseInvalidRepository()
     {
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
 
-        new ObjectExists(array('object_repository' => new stdClass(), 'fields' => 'field'));
+        new ObjectExists(['object_repository' => new stdClass(), 'fields' => 'field']);
     }
 
     public function testWillRefuseMissingFields()
     {
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
 
-        new ObjectExists(
-            array(
-                'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-            )
-        );
+        new ObjectExists([
+            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+        ]);
     }
 
     public function testWillRefuseEmptyFields()
     {
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
 
-        new ObjectExists(
-            array(
-                'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-                'fields'            => array(),
-            )
-        );
+        new ObjectExists([
+            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'fields'            => [],
+        ]);
     }
 
     public function testWillRefuseNonStringFields()
     {
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
-        new ObjectExists(
-            array(
-                'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-                'fields'            => array(
-                    123
-                ),
-            )
-        );
+        new ObjectExists([
+            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'fields'            => [123],
+        ]);
     }
 
     public function testWillNotValidateOnFieldsCountMismatch()
@@ -159,13 +145,11 @@ class ObjectExistsTest extends BaseTestCase
             'Zend\Validator\Exception\RuntimeException',
             'Provided values count is 1, while expected number of fields to be matched is 2'
         );
-        $validator = new ObjectExists(
-            array(
-                'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-                'fields'            => array('field1', 'field2')
-            )
-        );
-        $validator->isValid(array('field1Value'));
+        $validator = new ObjectExists([
+            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'fields'            => ['field1', 'field2'],
+        ]);
+        $validator->isValid(['field1Value']);
     }
 
     public function testWillNotValidateOnFieldKeysMismatch()
@@ -175,25 +159,21 @@ class ObjectExistsTest extends BaseTestCase
             'Field "field2" was not provided, but was expected since the configured field lists needs it for validation'
         );
 
-        $validator = new ObjectExists(
-            array(
-                'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-                'fields'            => array('field1', 'field2')
-            )
-        );
+        $validator = new ObjectExists([
+            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'fields'            => ['field1', 'field2'],
+        ]);
 
-        $validator->isValid(array('field1' => 'field1Value'));
+        $validator->isValid(['field1' => 'field1Value']);
     }
     
     public function testErrorMessageIsStringInsteadArray()
     {
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $validator  = new ObjectExists(
-            array(
-                'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
-                'fields'            => 'field'
-            )
-        );
+        $validator  = new ObjectExists([
+            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'fields'            => 'field',
+        ]);
         
         $this->assertFalse($validator->isValid('value'));
 

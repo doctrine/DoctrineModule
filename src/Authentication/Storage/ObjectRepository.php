@@ -58,7 +58,7 @@ class ObjectRepository implements StorageInterface
      *
      * @param array | \DoctrineModule\Options\Authentication $options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         $this->setOptions($options);
     }

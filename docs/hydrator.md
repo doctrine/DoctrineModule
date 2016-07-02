@@ -80,9 +80,9 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 $hydrator = new DoctrineHydrator($entityManager);
 $city = new City();
-$data = array(
-	'name' => 'Paris'
-);
+$data = [
+	'name' => 'Paris',
+];
 
 $city = $hydrator->hydrate($data, $city);
 
@@ -145,9 +145,9 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 $hydrator = new DoctrineHydrator($entityManager);
 $appointment = new Appointment();
-$data = array(
-	'time' => '1357057334'
-);
+$data = [
+	'time' => '1357057334',
+];
 
 $appointment = $hydrator->hydrate($data, $appointment);
 
@@ -290,12 +290,12 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 $hydrator = new DoctrineHydrator($entityManager);
 $blogPost = new BlogPost();
-$data = array(
+$data = [
 	'title' => 'The best blog post in the world !',
-	'user'  => array(
-		'id' => 2 // Written by user 2
-	)
-);
+	'user'  => [
+		'id' => 2, // Written by user 2
+	],
+];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
@@ -306,21 +306,21 @@ echo $blogPost->getUser()->getId(); // prints 2
 **NOTE** : when using association whose primary key is not compound, you can rewrite the following more succinctly:
 
 ```php
-$data = array(
+$data = [
 	'title' => 'The best blog post in the world !',
-	'user'  => array(
-		'id' => 2 // Written by user 2
-	)
-);
+	'user'  => [
+		'id' => 2, // Written by user 2
+	],
+];
 ```
 
 to:
 
 ```php
-$data = array(
+$data = [
 	'title' => 'The best blog post in the world !',
-	'user'  => 2
-);
+	'user'  => 2,
+];
 ```
 
 
@@ -337,10 +337,10 @@ $user = new User();
 $user->setUsername('bakura');
 $user->setPassword('p@$$w0rd');
 
-$data = array(
+$data = [
 	'title' => 'The best blog post in the world !',
-	'user'  => $user
-);
+	'user'  => $user,
+];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
@@ -386,14 +386,14 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($entityManager, 'Application\Entity\BlogPost');
 $blogPost = new BlogPost();
 
-$data = array(
+$data = [
     'title' => 'Art thou mad?',
-    'user' => array(
+    'user' => [
         'id' => '',
         'username' => 'willshakes',
-        'password' => '2BorN0t2B'
-    )
-);
+        'password' => '2BorN0t2B',
+    ],
+];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
@@ -563,13 +563,13 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 $hydrator = new DoctrineHydrator($entityManager);
 $blogPost = new BlogPost();
-$data = array(
+$data = [
 	'title' => 'The best blog post in the world !',
-	'tags'  => array(
-		array('id' => 3), // add tag whose id is 3
-		array('id' => 8)  // also add tag whose id is 8
-	)
-);
+	'tags'  => [
+		['id' => 3], // add tag whose id is 3
+		['id' => 8], // also add tag whose id is 8
+	],
+];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
@@ -580,22 +580,22 @@ echo count($blogPost->getTags()); // prints 2
 **NOTE** : once again, this:
 
 ```php
-$data = array(
+$data = [
 	'title' => 'The best blog post in the world !',
-	'tags'  => array(
-		array('id' => 3), // add tag whose id is 3
-		array('id' => 8)  // also add tag whose id is 8
-	)
-);
+	'tags'  => [
+		['id' => 3], // add tag whose id is 3
+		['id' => 8], // also add tag whose id is 8
+	],
+];
 ```
 
 can be written:
 
 ```php
-$data = array(
+$data = [
 	'title' => 'The best blog post in the world !',
-	'tags'  => array(3, 8)
-);
+	'tags'  => [3, 8],
+];
 ```
 
 ##### Non-existing entity in the association
@@ -608,7 +608,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($entityManager);
 $blogPost = new BlogPost();
 
-$tags = array();
+$tags = [];
 
 $tag1 = new Tag();
 $tag1->setName('PHP');
@@ -618,10 +618,10 @@ $tag2 = new Tag();
 $tag2->setName('STL');
 $tags[] = $tag2;
 
-$data = array(
+$data = [
 	'title' => 'The best blog post in the world !',
-	'tags'  => $tags // Note that you can mix integers and entities without any problem
-);
+	'tags'  => $tags, // Note that you can mix integers and entities without any problem
+];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
@@ -659,9 +659,9 @@ class BlogPost
 When a null value is passed to a OneToOne or ManyToOne field, for example;
 
 ```php
-$data = array(
-    'city' => null
-);
+$data = [
+    'city' => null,
+];
 ```
 
 The hydrator will check whether the setCity() method on the Entity allows null values and acts accordingly, the following describes the process that happens when a null value is received:
@@ -979,31 +979,30 @@ class TagFieldset extends Fieldset implements InputFilterProviderInterface
         $this->setHydrator(new DoctrineHydrator($objectManager))
              ->setObject(new Tag());
 
-		$this->add(array(
+		$this->add([
 			'type' => 'Zend\Form\Element\Hidden',
-			'name' => 'id'
-		));
+			'name' => 'id',
+		]);
 
-        $this->add(array(
+        $this->add([
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'name',
-            'options' => array(
-                'label' => 'Tag'
-            )
-        ));
+            'options' => [
+                'label' => 'Tag',
+            ],
+        ]);
     }
 
     public function getInputFilterSpecification()
     {
-        return array(
-            'id' => array(
-            	'required' => false
-            ),
-
-            'name' => array(
-                'required' => true
-            )
-        );
+        return [
+            'id' => [
+            	'required' => false,
+            ],
+            'name' => [
+                'required' => true,
+            ],
+        ];
     }
 }
 ```
@@ -1029,29 +1028,29 @@ class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
         $this->setHydrator(new DoctrineHydrator($objectManager))
              ->setObject(new BlogPost());
 
-		$this->add(array(
+		$this->add([
 			'type' => 'Zend\Form\Element\Text',
-			'name' => 'title'
-		));
+			'name' => 'title',
+		]);
 
 		$tagFieldset = new TagFieldset($objectManager);
-        $this->add(array(
+        $this->add([
             'type'    => 'Zend\Form\Element\Collection',
             'name'    => 'tags',
-            'options' => array(
+            'options' => [
             	'count'           => 2,
-                'target_element' => $tagFieldset
-            )
-        ));
+                'target_element' => $tagFieldset,
+            ],
+        ]);
     }
 
     public function getInputFilterSpecification()
     {
-        return array(
-            'title' => array(
-            	'required' => true
-            ),
-        );
+        return [
+            'title' => [
+            	'required' => true,
+            ],
+        ];
     }
 }
 ```
@@ -1160,7 +1159,7 @@ public function createAction()
 		}
 	}
 
-	return array('form' => $form);
+	return ['form' => $form];
 }
 ```
 
@@ -1189,7 +1188,7 @@ public function editAction()
 		}
 	}
 
-	return array('form' => $form);
+	return ['form' => $form];
 }
 ```
 
@@ -1267,16 +1266,16 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 		$this->setHydrator(new DoctrineHydrator($objectManager))
 			 ->setObject(new User());
 
-		$this->add(array(
+		$this->add([
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'name',
-            'options' => array(
-                'label' => 'Your name'
-            ),
-            'attributes' => array(
-                'required'  => 'required'
-            )
-       	));
+            'options' => [
+                'label' => 'Your name',
+            ],
+            'attributes' => [
+                'required' => 'required',
+            ],
+       	]);
 
        	$cityFieldset = new CityFieldset($objectManager);
        	$cityFieldset->setLabel('Your city');
@@ -1286,11 +1285,11 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 
 	public function getInputFilterSpecification()
 	{
-		return array(
-			'name' => array(
-				'required' => true
-			)
-		);
+		return [
+			'name' => [
+				'required' => true,
+			],
+		];
 	}
 }
 
@@ -1316,40 +1315,39 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
 		$this->setHydrator(new DoctrineHydrator($objectManager))
 			 ->setObject(new City());
 
-		$this->add(array(
+		$this->add([
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'name',
-            'options' => array(
-                'label' => 'Name of your city'
-            ),
-            'attributes' => array(
-                'required'  => 'required'
-            )
-       	));
+            'options' => [
+                'label' => 'Name of your city',
+            ],
+            'attributes' => [
+                'required' => 'required',
+            ],
+       	]);
 
-       	$this->add(array(
+       	$this->add([
             'type'    => 'Zend\Form\Element\Text',
             'name'    => 'postCode',
-            'options' => array(
-                'label' => 'Postcode of your city'
-            ),
-            'attributes' => array(
-                'required'  => 'required'
-            )
-       	));
+            'options' => [
+                'label' => 'Postcode of your city',
+            ],
+            'attributes' => [
+                'required' => 'required',
+            ],
+       	]);
 	}
 
 	public function getInputFilterSpecification()
 	{
-		return array(
-			'name' => array(
-				'required' => true
-			),
-
-			'postCode' => array(
-				'required' => true
-			)
-		);
+		return [
+			'name' => [
+				'required' => true,
+			],
+			'postCode' => [
+				'required' => true,
+			],
+		];
 	}
 }
 
@@ -1383,12 +1381,12 @@ class EditNameForm extends Form
 		// … add CSRF and submit elements …
 
 		// Set the validation group so that we don't care about city
-		$this->setValidationGroup(array(
+		$this->setValidationGroup([
 			'csrf', // assume we added a CSRF element
-			'user' => array(
-				'name'
-			)
-		));
+			'user' => [
+				'name',
+			],
+		]);
 	}
 }
 ```

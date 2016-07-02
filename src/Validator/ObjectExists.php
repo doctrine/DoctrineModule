@@ -42,9 +42,9 @@ class ObjectExists extends AbstractValidator
     /**
      * @var array Message templates
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found",
-    );
+    ];
 
     /**
      * ObjectRepository from which to search for entities
@@ -138,10 +138,10 @@ class ObjectExists extends AbstractValidator
      */
     protected function cleanSearchValue($value)
     {
-        $value = is_object($value) ? array($value) : (array) $value;
+        $value = is_object($value) ? [$value] : (array) $value;
 
         if (ArrayUtils::isHashTable($value)) {
-            $matchedFieldsValues = array();
+            $matchedFieldsValues = [];
 
             foreach ($this->fields as $field) {
                 if (!array_key_exists($field, $value)) {
