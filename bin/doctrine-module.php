@@ -38,10 +38,7 @@ while (! file_exists('config/application.config.php')) {
     chdir($dir);
 }
 
-
-if (is_readable('init_autoloader.php')) {
-    include_once 'init_autoloader.php';
-} elseif (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     include_once __DIR__ . '/../vendor/autoload.php';
 } elseif (file_exists(__DIR__ . '/../../../autoload.php')) {
     include_once __DIR__ . '/../../../autoload.php';
