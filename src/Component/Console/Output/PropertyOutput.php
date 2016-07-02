@@ -36,12 +36,12 @@ class PropertyOutput extends Output
 
     /**
      * @param int $verbosity
-     * @param null $decorated
+     * @param bool $decorated
      * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
      */
     public function __construct(
         $verbosity = self::VERBOSITY_NORMAL,
-        $decorated = null,
+        $decorated = false,
         OutputFormatterInterface $formatter = null
     ) {
         if (null === $decorated) {
