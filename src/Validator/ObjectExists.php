@@ -77,7 +77,7 @@ class ObjectExists extends AbstractValidator
                 if (is_object($options['object_repository'])) {
                     $provided = get_class($options['object_repository']);
                 } else {
-                    $provided = getType($options['object_repository']);
+                    $provided = gettype($options['object_repository']);
                 }
             }
 

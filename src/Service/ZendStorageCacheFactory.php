@@ -58,7 +58,7 @@ class ZendStorageCacheFactory extends CacheFactory
                 sprintf(
                     'Retrieved storage "%s" is not a Zend\Cache\Storage\StorageInterface instance, %s found',
                     $instance,
-                    is_object($cache) ? get_class($cache) : getType($cache)
+                    is_object($cache) ? get_class($cache) : gettype($cache)
                 )
             );
         }

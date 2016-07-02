@@ -262,7 +262,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->metadata->expects($this->never())
             ->method('hasField');
 
-        $result = $this->proxy->getvalueOptions();
+        $result = $this->proxy->getValueOptions();
         $this->assertEquals($result[0]['label'], 'object one email');
         $this->assertEquals($result[1]['label'], 'object two email');
         $this->assertEquals($result[0]['value'], 1);

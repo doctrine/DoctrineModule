@@ -74,7 +74,7 @@ class UniqueObject extends ObjectExists
                 if (is_object($options['object_manager'])) {
                     $provided = get_class($options['object_manager']);
                 } else {
-                    $provided = getType($options['object_manager']);
+                    $provided = gettype($options['object_manager']);
                 }
             }
 
