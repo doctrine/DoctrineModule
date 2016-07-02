@@ -21,7 +21,7 @@ namespace DoctrineModule\Service;
 
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**

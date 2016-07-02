@@ -21,7 +21,7 @@ namespace DoctrineModule\Service;
 
 use Interop\Container\ContainerInterface;
 use RuntimeException;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Base ServiceManager factory to be extended
