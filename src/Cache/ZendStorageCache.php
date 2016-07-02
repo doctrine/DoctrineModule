@@ -109,13 +109,13 @@ class ZendStorageCache extends CacheProvider
         $storage = $this->storage;
 
         return [
-            Cache::STATS_HITS              => $this->storage->getMetadata(Cache::STATS_HITS),
-            Cache::STATS_MISSES            => $this->storage->getMetadata(Cache::STATS_MISSES),
-            Cache::STATS_UPTIME            => $this->storage->getMetadata(Cache::STATS_UPTIME),
-            Cache::STATS_MEMORY_USAGE      => $storage instanceof TotalSpaceCapableInterface
+            Cache::STATS_HITS             => $this->storage->getMetadata(Cache::STATS_HITS),
+            Cache::STATS_MISSES           => $this->storage->getMetadata(Cache::STATS_MISSES),
+            Cache::STATS_UPTIME           => $this->storage->getMetadata(Cache::STATS_UPTIME),
+            Cache::STATS_MEMORY_USAGE     => $storage instanceof TotalSpaceCapableInterface
                 ? $storage->getTotalSpace()
                 : null,
-            Cache::STATS_MEMORY_AVAILIABLE => $storage instanceof AvailableSpaceCapableInterface
+            Cache::STATS_MEMORY_AVAILABLE => $storage instanceof AvailableSpaceCapableInterface
                 ? $storage->getAvailableSpace()
                 : null,
         ];
