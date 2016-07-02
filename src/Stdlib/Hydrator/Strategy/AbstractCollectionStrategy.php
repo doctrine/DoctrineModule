@@ -47,7 +47,6 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      */
     protected $object;
 
-
     /**
      * Set the name of the collection
      *
@@ -169,7 +168,6 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
 
         return $reflProperty->getValue($object);
     }
-
 
     /**
      * This method is used internally by array_udiff to check if two objects are equal, according to their

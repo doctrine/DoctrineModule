@@ -20,7 +20,8 @@
 namespace DoctrineModuleTest\ServiceFactory;
 
 use DoctrineModuleTest\ServiceManagerTestCase;
-use PHPUnit_Framework_TestCase;
+use Zend\ServiceManager\Exception;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Test that verifies that services are defined correctly
@@ -29,10 +30,10 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
+class ModuleDefinedServicesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var ServiceLocatorInterface
      */
     protected $serviceManager;
 
@@ -49,6 +50,9 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      * Verifies that the module defines the correct services
      *
      * @dataProvider getServicesThatShouldBeDefined
+     *
+     * @param string $serviceName
+     * @param bool $defined
      */
     public function testModuleDefinedServices($serviceName, $defined)
     {
@@ -59,6 +63,9 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      * Verifies that the module defines the correct services
      *
      * @dataProvider getServicesThatCanBeFetched
+     *
+     * @param string $serviceName
+     * @param string $expectedClass
      */
     public function testModuleFetchedService($serviceName, $expectedClass)
     {
@@ -69,10 +76,12 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      * Verifies that the module defines the correct services
      *
      * @dataProvider getServicesThatCannotBeFetched
+     *
+     * @param string $serviceName
      */
     public function testModuleInvalidService($serviceName)
     {
-        $this->expectException('Zend\ServiceManager\Exception\ServiceNotFoundException');
+        $this->expectException(Exception\ServiceNotFoundException::class);
 
         $this->serviceManager->get($serviceName);
     }

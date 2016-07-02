@@ -19,9 +19,10 @@
 
 namespace DoctrineModuleTest\Authentication\Storage;
 
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectRepository;
 use DoctrineModule\Authentication\Storage\ObjectRepository as ObjectRepositoryStorage;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
-use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\Authentication\Storage\NonPersistent as NonPersistentStorage;
 
 /**
@@ -31,7 +32,7 @@ use Zend\Authentication\Storage\NonPersistent as NonPersistentStorage;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ObjectRepositoryTest extends BaseTestCase
+class ObjectRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCanRetrieveEntityFromObjectRepositoryStorage()
     {
@@ -40,13 +41,13 @@ class ObjectRepositoryTest extends BaseTestCase
         $entity->setUsername('a username');
         $entity->setPassword('a password');
 
-        $objectRepository =  $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository =  $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->exactly(1))
                          ->method('find')
                          ->with($this->equalTo('a username'))
                          ->will($this->returnValue($entity));
 
-        $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata->expects($this->exactly(1))
                  ->method('getIdentifierValues')
                  ->with($this->equalTo($entity))

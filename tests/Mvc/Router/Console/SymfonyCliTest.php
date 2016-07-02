@@ -19,7 +19,6 @@
 namespace DoctrineModuleTest\Mvc\Router\Console;
 
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
-use PHPUnit_Framework_TestCase;
 use Symfony\Component\Console\Application;
 use Zend\Console\Request;
 use Zend\Mvc\Console\Router\RouteMatch;
@@ -32,10 +31,10 @@ use Zend\Mvc\Console\Router\RouteMatch;
  *
  * @covers \DoctrineModule\Mvc\Router\Console\SymfonyCli
  */
-class SymfonyCliTest extends PHPUnit_Framework_TestCase
+class SymfonyCliTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \DoctrineModule\Mvc\Router\Console\SymfonyCli
+     * @var SymfonyCli
      */
     protected $route;
 

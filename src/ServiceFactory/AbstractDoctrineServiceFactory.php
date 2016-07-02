@@ -19,10 +19,10 @@
 
 namespace DoctrineModule\ServiceFactory;
 
+use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\AbstractFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Abstract service factory capable of instantiating services whose names match the
@@ -54,7 +54,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         }
 
         $factoryClass = $mappings['factoryClass'];
-        /* @var $factory \DoctrineModule\Service\AbstractFactory */
+        /** @var $factory AbstractFactory */
         $factory = new $factoryClass($mappings['serviceName']);
 
         return $factory->createService($container);

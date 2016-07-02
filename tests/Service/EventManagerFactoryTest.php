@@ -19,15 +19,14 @@
 
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Common\EventManager;
 use DoctrineModule\Service\EventManagerFactory;
-use DoctrineModuleTest\Service\TestAsset\DummyEventSubscriber;
-use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**
  * Base test case to be used when a service manager instance is required
  */
-class EventManagerFactoryTest extends BaseTestCase
+class EventManagerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testWillInstantiateFromFQCN()
     {
@@ -41,7 +40,7 @@ class EventManagerFactoryTest extends BaseTestCase
                     'eventmanager' => [
                         $name => [
                             'subscribers' => [
-                                __NAMESPACE__ . '\TestAsset\DummyEventSubscriber',
+                                TestAsset\DummyEventSubscriber::class,
                             ],
                         ],
                     ],
@@ -49,9 +48,9 @@ class EventManagerFactoryTest extends BaseTestCase
             ]
         );
 
-        /* $var $eventManager \Doctrine\Common\EventManager */
+        /** @var $eventManager EventManager */
         $eventManager = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
+        $this->assertInstanceOf(EventManager::class, $eventManager);
 
         $listeners = $eventManager->getListeners('dummy');
         $this->assertCount(1, $listeners);
@@ -61,7 +60,7 @@ class EventManagerFactoryTest extends BaseTestCase
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
-        $subscriber     = new DummyEventSubscriber();
+        $subscriber     = new TestAsset\DummyEventSubscriber();
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
@@ -78,9 +77,9 @@ class EventManagerFactoryTest extends BaseTestCase
             ]
         );
 
-        /* $var $eventManager \Doctrine\Common\EventManager */
+        /** @var $eventManager EventManager */
         $eventManager = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
+        $this->assertInstanceOf(EventManager::class, $eventManager);
 
         $listeners = $eventManager->getListeners();
         $this->assertArrayHasKey('dummy', $listeners);
@@ -92,7 +91,7 @@ class EventManagerFactoryTest extends BaseTestCase
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
-        $subscriber     = new DummyEventSubscriber();
+        $subscriber     = new TestAsset\DummyEventSubscriber();
         $serviceManager = new ServiceManager();
         $serviceManager->setService('dummy-subscriber', $subscriber);
         $serviceManager->setService(
@@ -110,9 +109,9 @@ class EventManagerFactoryTest extends BaseTestCase
             ]
         );
 
-        /* $var $eventManager \Doctrine\Common\EventManager */
+        /** @var $eventManager EventManager */
         $eventManager = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
+        $this->assertInstanceOf(EventManager::class, $eventManager);
 
         $listeners = $eventManager->getListeners();
         $this->assertArrayHasKey('dummy', $listeners);
@@ -140,7 +139,7 @@ class EventManagerFactoryTest extends BaseTestCase
             ]
         );
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $factory->createService($serviceManager);
     }
 }

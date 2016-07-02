@@ -21,6 +21,7 @@ namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Form\Element\ObjectMultiCheckbox;
+use DoctrineModule\Form\Element\Proxy;
 
 /**
  * Tests for the ObjectMultiCheckbox element
@@ -28,7 +29,7 @@ use DoctrineModule\Form\Element\ObjectMultiCheckbox;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
- * @covers  DoctrineModule\Form\Element\ObjectMultiCheckbox
+ * @covers  \DoctrineModule\Form\Element\ObjectMultiCheckbox
  */
 class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
 {
@@ -43,7 +44,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
     protected $element;
 
     /**
-     * {@inheritDoc}.
+     * {@inheritDoc}
      */
     protected function setUp()
     {
@@ -85,13 +86,13 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
 
         $options = [];
 
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->exactly(2))
-            ->method('getValueOptions')
-            ->will($this->returnValue($options));
+              ->method('getValueOptions')
+              ->will($this->returnValue($options));
 
         $element->expects($this->never())
-            ->method('setValueOptions');
+                ->method('setValueOptions');
 
         $this->setProxyViaReflection($proxy, $element);
         $element->getInputSpecification();
@@ -102,10 +103,10 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
     {
         $options = ['foo' => 'bar'];
 
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())
-            ->method('getValueOptions')
-            ->will($this->returnValue($options));
+              ->method('getValueOptions')
+              ->will($this->returnValue($options));
 
         $this->setProxyViaReflection($proxy);
 
@@ -115,7 +116,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
 
     public function testOptionsCanBeSetSingle()
     {
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())->method('setOptions')->with(['is_method' => true]);
 
         $this->setProxyViaReflection($proxy);

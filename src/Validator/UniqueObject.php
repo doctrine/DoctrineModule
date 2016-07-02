@@ -170,7 +170,6 @@ class UniqueObject extends ObjectExists
         return $result;
     }
 
-
     /**
      * @return array the names of the identifiers
      */

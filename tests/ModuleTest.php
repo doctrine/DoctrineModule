@@ -20,49 +20,46 @@
 namespace DoctrineModuleTest;
 
 use DoctrineModule\Module;
-use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zend\Console\Adapter\AdapterInterface;
+use Zend\Mvc\Application as ZendApplication;
+use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @covers \DoctrineModule\Module
  */
-class ModuleTest extends PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\Application
+     * @var \PHPUnit_Framework_MockObject_MockObject|ZendApplication
      */
     private $application;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\MvcEvent
+     * @var \PHPUnit_Framework_MockObject_MockObject|MvcEvent
      */
     private $event;
 
-
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|ServiceManager
      */
     private $serviceManager;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Application
+     * @var \PHPUnit_Framework_MockObject_MockObject|Application
      */
     private $cli;
 
     public function setUp()
     {
-        $this->application    = $this->getMockBuilder('Zend\Mvc\Application')
-                                     ->disableOriginalConstructor()
-                                     ->getMock();
-        $this->event          = $this->createMock('Zend\Mvc\MvcEvent');
-        $this->serviceManager = $this->createMock('Zend\ServiceManager\ServiceManager');
-        $this->cli            = $this->getMockBuilder('Symfony\Component\Console\Application')
-                                     ->setMethods(['run'])
-                                     ->getMock();
+        $this->application    = $this->getMockBuilder(ZendApplication::class)->disableOriginalConstructor()->getMock();
+        $this->event          = $this->createMock(MvcEvent::class);
+        $this->serviceManager = $this->createMock(ServiceManager::class);
+        $this->cli            = $this->getMockBuilder(Application::class)->setMethods(['run'])->getMock();
 
         $this
             ->serviceManager
@@ -114,15 +111,11 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->cli
             ->expects($this->once())
             ->method('run')
-            ->with(
-                $this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
-                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface')
-            )
+            ->with($this->isInstanceOf(InputInterface::class), $this->isInstanceOf(OutputInterface::class))
             ->will($this->returnCallback(function (InputInterface $input, OutputInterface $output) {
                 $output->write($input->getFirstArgument() . ' - TEST');
                 $output->write(' - More output');
             }));
-
 
         $module = new Module();
 
@@ -130,7 +123,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             'list - TEST - More output',
-            $module->getConsoleUsage($this->createMock('Zend\Console\Adapter\AdapterInterface'))
+            $module->getConsoleUsage($this->createMock(AdapterInterface::class))
         );
     }
 }

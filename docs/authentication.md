@@ -58,7 +58,7 @@ return [
                 'identity_class'      => 'Application\Entity\User',
                 'identity_property'   => 'email',
                 'credential_property' => 'password',
-                'credential_callable' => function(User $user, $passwordGiven) {
+                'credential_callable' => function (User $user, $passwordGiven) {
                     return my_awesome_check_test($user->getPassword(), $passwordGiven);
                 },
             ],
@@ -82,7 +82,7 @@ class Module
     {
         return [
             'factories' => [
-                'Zend\Authentication\AuthenticationService' => function($serviceManager) {
+                'Zend\Authentication\AuthenticationService' => function ($serviceManager) {
                     // If you are using DoctrineORMModule:
                     return $serviceManager->get('doctrine.authenticationservice.orm_default');
 

@@ -19,8 +19,10 @@
 
 namespace DoctrineModule\Service;
 
+use DoctrineModule\Controller\CliController;
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 use Interop\Container\ContainerInterface;
+use Symfony\Component\Console\Application;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -31,13 +33,13 @@ class SymfonyCliRouteFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /* @var $application \Symfony\Component\Console\Application */
+        /** @var $application Application */
         $application = $container->get('doctrine.cli');
 
         return new SymfonyCli(
             $application,
             [
-                'controller' => 'DoctrineModule\Controller\Cli',
+                'controller' => CliController::class,
                 'action'     => 'cli',
             ]
         );

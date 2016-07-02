@@ -3,16 +3,15 @@
 namespace DoctrineModuleTest\Stdlib\Hydrator;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Filter;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
-use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
-use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
-use PHPUnit_Framework_TestCase as BaseTestCase;
-use ReflectionClass;
 use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
 
-class DoctrineObjectTest extends BaseTestCase
+class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var DoctrineObjectHydrator
@@ -25,12 +24,12 @@ class DoctrineObjectTest extends BaseTestCase
     protected $hydratorByReference;
 
     /**
-     * @var \Doctrine\Common\Persistence\Mapping\ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadata;
 
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
 
@@ -41,8 +40,8 @@ class DoctrineObjectTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->metadata      = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $this->objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->metadata      = $this->createMock(ClassMetadata::class);
+        $this->objectManager = $this->createMock(ObjectManager::class);
 
         $this->objectManager->expects($this->any())
                             ->method('getClassMetadata')
@@ -51,13 +50,13 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForSimpleEntity()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
+        $refl = new \ReflectionClass(Asset\SimpleEntity::class);
 
         $this
             ->metadata
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+            ->will($this->returnValue(Asset\SimpleEntity::class));
         $this
             ->metadata
             ->expects($this->any())
@@ -119,13 +118,13 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForNamingStrategyEntity()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity');
+        $refl = new \ReflectionClass(Asset\NamingStrategyEntity::class);
 
         $this
             ->metadata
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity'));
+            ->will($this->returnValue(Asset\NamingStrategyEntity::class));
         $this
             ->metadata
             ->expects($this->any())
@@ -175,13 +174,13 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForSimpleIsEntity()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity');
+        $refl = new \ReflectionClass(Asset\SimpleIsEntity::class);
 
         $this
             ->metadata
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity'));
+            ->will($this->returnValue(Asset\SimpleIsEntity::class));
         $this
             ->metadata
             ->expects($this->any())
@@ -243,13 +242,13 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForSimpleEntityWithIsBoolean()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithIsBoolean');
+        $refl = new \ReflectionClass(Asset\SimpleEntityWithIsBoolean::class);
 
         $this
             ->metadata
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithIsBoolean'));
+            ->will($this->returnValue(Asset\SimpleEntityWithIsBoolean::class));
         $this
             ->metadata
             ->expects($this->any())
@@ -311,13 +310,13 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForSimpleEntityWithStringId()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
+        $refl = new \ReflectionClass(Asset\SimpleEntity::class);
 
         $this
             ->metadata
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+            ->will($this->returnValue(Asset\SimpleEntity::class));
         $this
             ->metadata
             ->expects($this->any())
@@ -367,7 +366,7 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForSimpleEntityWithDateTime()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithDateTime');
+        $refl = new \ReflectionClass(Asset\SimpleEntityWithDateTime::class);
 
         $this
             ->metadata
@@ -430,7 +429,7 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForOneToOneEntity()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity');
+        $refl = new \ReflectionClass(Asset\OneToOneEntity::class);
 
         $this
             ->metadata
@@ -455,7 +454,7 @@ class DoctrineObjectTest extends BaseTestCase
                         if ($arg === 'id') {
                             return 'integer';
                         } elseif ($arg === 'toOne') {
-                            return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                            return Asset\SimpleEntity::class;
                         }
 
                         throw new \InvalidArgumentException();
@@ -494,7 +493,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getAssociationTargetClass')
             ->with('toOne')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+            ->will($this->returnValue(Asset\SimpleEntity::class));
 
         $this
             ->metadata
@@ -520,7 +519,7 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForOneToOneEntityNotNullable()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable');
+        $refl = new \ReflectionClass(Asset\OneToOneEntityNotNullable::class);
 
         $this
             ->metadata
@@ -551,7 +550,7 @@ class DoctrineObjectTest extends BaseTestCase
                         if ($arg === 'id') {
                             return 'integer';
                         } elseif ($arg === 'toOne') {
-                            return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity';
+                            return Asset\SimpleEntity::class;
                         } elseif ($arg === 'field') {
                             return 'string';
                         }
@@ -598,7 +597,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getAssociationTargetClass')
             ->with('toOne')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+            ->will($this->returnValue(Asset\SimpleEntity::class));
 
         $this
             ->metadata
@@ -624,7 +623,7 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForOneToManyEntity()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity');
+        $refl = new \ReflectionClass(Asset\OneToManyEntity::class);
 
         $this
             ->metadata
@@ -657,7 +656,7 @@ class DoctrineObjectTest extends BaseTestCase
                         } elseif ($arg === 'field') {
                             return 'string';
                         } elseif ($arg === 'entities') {
-                            return 'Doctrine\Common\Collections\ArrayCollection';
+                            return ArrayCollection::class;
                         }
 
                         throw new \InvalidArgumentException();
@@ -705,7 +704,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getAssociationTargetClass')
             ->with('entities')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+            ->will($this->returnValue(Asset\SimpleEntity::class));
 
         $this
             ->metadata
@@ -731,7 +730,7 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function configureObjectManagerForOneToManyArrayEntity()
     {
-        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyArrayEntity');
+        $refl = new \ReflectionClass(Asset\OneToManyArrayEntity::class);
 
         $this
             ->metadata
@@ -764,7 +763,7 @@ class DoctrineObjectTest extends BaseTestCase
                         } elseif ($arg === 'field') {
                             return 'string';
                         } elseif ($arg === 'entities') {
-                            return 'Doctrine\Common\Collections\ArrayCollection';
+                            return ArrayCollection::class;
                         }
 
                         throw new \InvalidArgumentException();
@@ -812,7 +811,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('getAssociationTargetClass')
             ->with('entities')
-            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'));
+            ->will($this->returnValue(Asset\SimpleEntity::class));
 
         $this
             ->metadata
@@ -839,7 +838,7 @@ class DoctrineObjectTest extends BaseTestCase
     {
         $entity = new Asset\ContextEntity();
         $entity->setId(2);
-        $entity->setField('foo', false);
+        $entity->setField('foo');
 
         $this->configureObjectManagerForSimpleEntity();
 
@@ -847,7 +846,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entity   = $hydrator->hydrate(['id' => 3, 'field' => 'bar'], $entity);
         $this->assertEquals(['id' => 3, 'field' => 'bar'], $hydrator->extract($entity));
 
-        $hydrator->addStrategy('id', new ContextStrategy());
+        $hydrator->addStrategy('id', new Asset\ContextStrategy());
         $entity = $hydrator->hydrate(['id' => 3, 'field' => 'bar'], $entity);
         $this->assertEquals(['id' => '3barbar', 'field' => 'bar'], $hydrator->extract($entity));
     }
@@ -887,7 +886,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals('From setter: foo', $entity->getField(false));
     }
 
@@ -905,7 +904,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals('From setter: foo', $entity->getField(false));
     }
 
@@ -918,7 +917,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals('foo', $entity->getField(false));
     }
 
@@ -936,7 +935,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals('foo', $entity->getField(false));
     }
 
@@ -956,12 +955,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->objectManager
             ->expects($this->once())
             ->method('find')
-            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', ['id' => 1])
+            ->with(Asset\SimpleEntity::class, ['id' => 1])
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals('bar', $entity->getField(false));
     }
 
@@ -984,12 +983,12 @@ class DoctrineObjectTest extends BaseTestCase
             ->objectManager
             ->expects($this->once())
             ->method('find')
-            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', ['id' => 0])
+            ->with(Asset\SimpleEntity::class, ['id' => 0])
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals('bar', $entity->getField(false));
     }
 
@@ -1009,7 +1008,7 @@ class DoctrineObjectTest extends BaseTestCase
         $data = $this->hydratorByValue->extract($entity);
 
         $this->assertEquals(2, $data['id']);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $data['toOne']);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $data['toOne']);
         $this->assertEquals('Modified from getToOne getter', $data['toOne']->getField(false));
         $this->assertSame($toOne, $data['toOne']);
     }
@@ -1030,7 +1029,7 @@ class DoctrineObjectTest extends BaseTestCase
         $data = $this->hydratorByReference->extract($entity);
 
         $this->assertEquals(2, $data['id']);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $data['toOne']);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $data['toOne']);
         $this->assertEquals('foo', $data['toOne']->getField(false));
         $this->assertSame($toOne, $data['toOne']);
     }
@@ -1049,8 +1048,8 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertInstanceOf(Asset\OneToOneEntity::class, $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity->getToOne(false));
         $this->assertEquals('Modified from setToOne setter', $entity->getToOne(false)->getField(false));
     }
 
@@ -1068,8 +1067,8 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertInstanceOf(Asset\OneToOneEntity::class, $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity->getToOne(false));
         $this->assertEquals('foo', $entity->getToOne(false)->getField(false));
     }
 
@@ -1090,13 +1089,13 @@ class DoctrineObjectTest extends BaseTestCase
             ->objectManager
             ->expects($this->once())
             ->method('find')
-            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', 1)
+            ->with(Asset\SimpleEntity::class, 1)
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertInstanceOf(Asset\OneToOneEntity::class, $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity->getToOne(false));
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
     }
 
@@ -1117,13 +1116,13 @@ class DoctrineObjectTest extends BaseTestCase
             ->objectManager
             ->expects($this->once())
             ->method('find')
-            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', 1)
+            ->with(Asset\SimpleEntity::class, 1)
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertInstanceOf(Asset\OneToOneEntity::class, $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity->getToOne(false));
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
     }
 
@@ -1144,13 +1143,13 @@ class DoctrineObjectTest extends BaseTestCase
             ->objectManager
             ->expects($this->once())
             ->method('find')
-            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', ['id' => 1])
+            ->with(Asset\SimpleEntity::class, ['id' => 1])
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertInstanceOf(Asset\OneToOneEntity::class, $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity->getToOne(false));
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
     }
 
@@ -1171,21 +1170,15 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->once())
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 ['id' => 1]
             )
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf(
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntityNotNullable',
-            $entity
-        );
-        $this->assertInstanceOf(
-            'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
-            $entity->getToOne(false)
-        );
+        $this->assertInstanceOf(Asset\OneToOneEntityNotNullable::class, $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity->getToOne(false));
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
         $this->assertEquals(
             'From getter: Modified from setToOne setter',
@@ -1210,13 +1203,13 @@ class DoctrineObjectTest extends BaseTestCase
             ->objectManager
             ->expects($this->once())
             ->method('find')
-            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', ['id' => 1])
+            ->with(Asset\SimpleEntity::class, ['id' => 1])
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity', $entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity->getToOne(false));
+        $this->assertInstanceOf(Asset\OneToOneEntity::class, $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity->getToOne(false));
         $this->assertSame($entityInDatabaseWithIdOfOne, $entity->getToOne(false));
     }
 
@@ -1272,7 +1265,7 @@ class DoctrineObjectTest extends BaseTestCase
         $data = $this->hydratorByValue->extract($entity);
 
         $this->assertEquals(4, $data['id']);
-        $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $data['entities']);
+        $this->assertInstanceOf(Collection::class, $data['entities']);
 
         $this->assertEquals($toMany1->getId(), $data['entities'][0]->getId());
         $this->assertSame($toMany1, $data['entities'][0]);
@@ -1335,7 +1328,7 @@ class DoctrineObjectTest extends BaseTestCase
         $data = $this->hydratorByReference->extract($entity);
 
         $this->assertEquals(4, $data['id']);
-        $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $data['entities']);
+        $this->assertInstanceOf(Collection::class, $data['entities']);
 
         $this->assertEquals($toMany1->getId(), $data['entities'][0]->getId());
         $this->assertSame($toMany1, $data['entities'][0]);
@@ -1368,7 +1361,7 @@ class DoctrineObjectTest extends BaseTestCase
         $data = $this->hydratorByReference->extract($entity);
 
         $this->assertEquals(4, $data['id']);
-        $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $data['entities']);
+        $this->assertInstanceOf(Collection::class, $data['entities']);
 
         $this->assertEquals($toMany1->getId(), $data['entities'][0]->getId());
         $this->assertSame($toMany1, $data['entities'][0]);
@@ -1394,12 +1387,12 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntity::class, $entity);
 
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertContains('Modified from addEntities adder', $en->getField(false));
         }
@@ -1432,12 +1425,12 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyArrayEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyArrayEntity::class, $entity);
 
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertContains('Modified from addEntities adder', $en->getField(false));
         }
@@ -1467,12 +1460,12 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntity::class, $entity);
 
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
@@ -1505,12 +1498,12 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyArrayEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyArrayEntity::class, $entity);
 
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
@@ -1543,7 +1536,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -1562,13 +1555,13 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntity::class, $entity);
 
-        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
+        /** @var $entity Asset\OneToManyEntity */
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertContains('Modified from addEntities adder', $en->getField(false));
         }
@@ -1606,7 +1599,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -1625,13 +1618,13 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntity::class, $entity);
 
-        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
+        /** @var $entity Asset\OneToManyEntity */
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertContains('Modified from addEntities adder', $en->getField(false));
         }
@@ -1645,7 +1638,6 @@ class DoctrineObjectTest extends BaseTestCase
 
     public function testHydrateOneToManyAssociationByReferenceUsingIdentifiersArrayForRelations()
     {
-
         // When using hydration by value, it will use the public API of the entity to set values (setters)
         $entity = new Asset\OneToManyEntity();
         $this->configureObjectManagerForOneToManyEntity();
@@ -1670,7 +1662,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -1689,12 +1681,12 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntity::class, $entity);
 
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
@@ -1727,7 +1719,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -1746,12 +1738,12 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntity::class, $entity);
 
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
@@ -1798,7 +1790,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals(3, count($entities));
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
         }
 
@@ -1847,7 +1839,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals(3, count($entities));
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
 
             // Only the third element is new so the adder has not been called on it
@@ -1897,7 +1889,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -1916,13 +1908,13 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntityWithEntities', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntityWithEntities::class, $entity);
 
-        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
+        /** @var $entity Asset\OneToManyEntity */
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertInternalType('string', $en->getField());
             $this->assertContains('Modified By Hydrate', $en->getField(false));
@@ -1934,7 +1926,6 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals(3, $entities[1]->getId());
         $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
     }
-
 
     public function testHydrateOneToManyAssociationByValueWithTraversableCausingDataModifications()
     {
@@ -1969,7 +1960,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -1988,13 +1979,13 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntityWithEntities', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntityWithEntities::class, $entity);
 
-        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
+        /** @var $entity Asset\OneToManyEntity */
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertInternalType('string', $en->getField());
             $this->assertContains('Modified By Hydrate', $en->getField(false));
@@ -2039,7 +2030,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -2058,13 +2049,13 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntityWithEntities', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntityWithEntities::class, $entity);
 
-        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
+        /** @var $entity Asset\OneToManyEntity */
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
         }
 
@@ -2101,10 +2092,10 @@ class DoctrineObjectTest extends BaseTestCase
         );
 
         $reflSteps = [
-            new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntityWithEntities'),
-            new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'),
-            new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity'),
-            new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntityWithEntities'),
+            new \ReflectionClass(Asset\OneToManyEntityWithEntities::class),
+            new \ReflectionClass(Asset\SimpleEntity::class),
+            new \ReflectionClass(Asset\SimpleEntity::class),
+            new \ReflectionClass(Asset\OneToManyEntityWithEntities::class),
         ];
         $this
             ->metadata
@@ -2124,7 +2115,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -2143,13 +2134,13 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntityWithEntities', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntityWithEntities::class, $entity);
 
-        /* @var $entity \DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity */
+        /** @var $entity Asset\OneToManyEntity */
         $entities = $entity->getEntities(false);
 
         foreach ($entities as $en) {
-            $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
+            $this->assertInstanceOf(Asset\SimpleEntity::class, $en);
             $this->assertInternalType('integer', $en->getId());
             $this->assertInternalType('string', $en->getField());
             $this->assertContains('Modified By Hydrate', $en->getField(false));
@@ -2160,8 +2151,6 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertEquals(3, $entities[1]->getId());
         $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
-
-
     }
 
     public function testAssertCollectionsAreNotSwappedDuringHydration()
@@ -2215,7 +2204,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->any())
             ->method('find')
             ->with(
-                'DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity',
+                Asset\SimpleEntity::class,
                 $this->logicalOr($this->equalTo(['id' =>2]), $this->equalTo(['id' => 3]))
             )
             ->will(
@@ -2252,19 +2241,19 @@ class DoctrineObjectTest extends BaseTestCase
             ->objectManager
             ->expects($this->any())
             ->method('find')
-            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', '')
+            ->with(Asset\SimpleEntity::class, '')
             ->will($this->returnValue($entityInDatabaseWithEmptyId));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
+        $this->assertInstanceOf(Asset\OneToManyEntity::class, $entity);
 
         $entities = $entity->getEntities(false);
         $entity   = $entities[0];
 
         $this->assertEquals(1, count($entities));
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertSame($entityInDatabaseWithEmptyId, $entity);
     }
 
@@ -2304,7 +2293,6 @@ class DoctrineObjectTest extends BaseTestCase
 
         $data = ['toOne' => null];
 
-
         $object = $this->hydratorByValue->hydrate($data, $entity);
         $this->assertNull($object->getToOne(false));
     }
@@ -2320,7 +2308,7 @@ class DoctrineObjectTest extends BaseTestCase
         $data = ['toOne' => null];
 
         $object = $this->hydratorByValue->hydrate($data, $entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $object->getToOne(false));
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $object->getToOne(false));
     }
 
     public function testUsesStrategyOnSimpleFieldsWhenHydratingByValue()
@@ -2333,7 +2321,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->hydratorByValue->addStrategy('field', new Asset\SimpleStrategy());
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals('From setter: modified while hydrating', $entity->getField(false));
     }
 
@@ -2347,7 +2335,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->hydratorByReference->addStrategy('field', new Asset\SimpleStrategy());
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals('modified while hydrating', $entity->getField(false));
     }
 
@@ -2361,7 +2349,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->hydratorByValue->addStrategy('field', new Asset\SimpleStrategy());
         $data = $this->hydratorByValue->extract($entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals(['id' => 2, 'field' => 'modified while extracting'], $data);
     }
 
@@ -2375,7 +2363,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->hydratorByReference->addStrategy('field', new Asset\SimpleStrategy());
         $data = $this->hydratorByReference->extract($entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntity::class, $entity);
         $this->assertEquals(['id' => 2, 'field' => 'modified while extracting'], $data);
     }
 
@@ -2388,7 +2376,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForSimpleIsEntity();
 
         $data = $this->hydratorByValue->extract($entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleIsEntity', $entity);
+        $this->assertInstanceOf(Asset\SimpleIsEntity::class, $entity);
         $this->assertEquals(['id' => 2, 'done' => true], $data);
     }
 
@@ -2401,7 +2389,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForSimpleEntityWithIsBoolean();
 
         $data = $this->hydratorByValue->extract($entity);
-        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithIsBoolean', $entity);
+        $this->assertInstanceOf(Asset\SimpleEntityWithIsBoolean::class, $entity);
         $this->assertEquals(['id' => 2, 'isActive' => true], $data);
     }
 
@@ -2444,7 +2432,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForNamingStrategyEntity();
         $name = 'Foo';
         $this->hydratorByReference->setNamingStrategy(new UnderscoreNamingStrategy());
-        $data = $this->hydratorByReference->extract(new NamingStrategyEntity($name));
+        $data = $this->hydratorByReference->extract(new Asset\NamingStrategyEntity($name));
         $this->assertEquals($name, $data['camel_case']);
     }
 
@@ -2453,7 +2441,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForNamingStrategyEntity();
         $name = 'Bar';
         $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
-        $data = $this->hydratorByValue->extract(new NamingStrategyEntity($name));
+        $data = $this->hydratorByValue->extract(new Asset\NamingStrategyEntity($name));
         $this->assertEquals($name, $data['camel_case']);
     }
 
@@ -2462,7 +2450,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForNamingStrategyEntity();
         $name = 'Baz';
         $this->hydratorByReference->setNamingStrategy(new UnderscoreNamingStrategy());
-        $entity = $this->hydratorByReference->hydrate(['camel_case' => $name], new NamingStrategyEntity());
+        $entity = $this->hydratorByReference->hydrate(['camel_case' => $name], new Asset\NamingStrategyEntity());
         $this->assertEquals($name, $entity->getCamelCase());
     }
 
@@ -2471,7 +2459,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->configureObjectManagerForNamingStrategyEntity();
         $name = 'Qux';
         $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
-        $entity = $this->hydratorByValue->hydrate(['camel_case' => $name], new NamingStrategyEntity());
+        $entity = $this->hydratorByValue->hydrate(['camel_case' => $name], new Asset\NamingStrategyEntity());
         $this->assertEquals($name, $entity->getCamelCase());
     }
 }

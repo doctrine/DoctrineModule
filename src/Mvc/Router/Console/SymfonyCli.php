@@ -33,7 +33,7 @@ use Zend\Stdlib\RequestInterface as Request;
 class SymfonyCli implements RouteInterface
 {
     /**
-     * @var \Symfony\Component\Console\Application
+     * @var Application
      */
     protected $cliApplication;
 
@@ -47,8 +47,8 @@ class SymfonyCli implements RouteInterface
     /**
      * Constructor
      *
-     * @param \Symfony\Component\Console\Application $cliApplication
-     * @param array                                  $defaults
+     * @param Application $cliApplication
+     * @param array       $defaults
      */
     public function __construct(Application $cliApplication, array $defaults = [])
     {

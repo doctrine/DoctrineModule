@@ -67,7 +67,7 @@ $this->add([
     'options' => [
         'object_manager'  => $this->getObjectManager(),
         'target_class'    => 'Module\Entity\SomeEntity',
-        'label_generator' => function($targetEntity) {
+        'label_generator' => function ($targetEntity) {
             return $targetEntity->getId() . ' - ' . $targetEntity->getTitle();
         },
     ],
@@ -86,7 +86,7 @@ $this->add([
     'options' => [
         'object_manager'  => $this->getObjectManager(),
         'target_class'    => 'Module\Entity\SomeEntity',
-        'label_generator' => function($targetEntity) use ($someSession) {
+        'label_generator' => function ($targetEntity) use ($someSession) {
             if ('accessible' === $someSession->getCurrentMode()) {
                 return $targetEntity->getAccessibleLabel();
             } else {

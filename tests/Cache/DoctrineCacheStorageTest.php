@@ -21,8 +21,8 @@ namespace DoctrineModuleTest\Cache;
 
 use Doctrine\Common\Cache\ArrayCache;
 use DoctrineModule\Cache\DoctrineCacheStorage;
-use PHPUnit_Framework_TestCase;
 use Zend\Cache\Storage\Adapter\AdapterOptions;
+use Zend\Cache\Storage\Capabilities;
 use Zend\Stdlib\ErrorHandler;
 
 /**
@@ -35,7 +35,7 @@ use Zend\Stdlib\ErrorHandler;
  *
  * @covers \DoctrineModule\Cache\DoctrineCacheStorage
  */
-class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
+class DoctrineCacheStorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var AdapterOptions
@@ -148,7 +148,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
     public function testGetCapabilities()
     {
         $capabilities = $this->storage->getCapabilities();
-        $this->assertInstanceOf('Zend\Cache\Storage\Capabilities', $capabilities);
+        $this->assertInstanceOf(Capabilities::class, $capabilities);
     }
 
     public function testDatatypesCapability()
@@ -720,7 +720,8 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
     {
         $ttl = rand();
 
-        $provider = $this->createMock('Doctrine\Common\Cache\ArrayCache');
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ArrayCache $provider */
+        $provider = $this->createMock(ArrayCache::class);
         $provider->expects($this->exactly(4))
                  ->method('save')
                  ->with($this->anything(), $this->anything(), $ttl);

@@ -20,11 +20,12 @@
 namespace DoctrineModuleTest\Form\Element;
 
 use DoctrineModule\Form\Element\ObjectRadio;
+use DoctrineModule\Form\Element\Proxy;
 
 /**
  * Tests for the ObjectRadio element
  *
- * @covers  DoctrineModule\Form\Element\ObjectRadio
+ * @covers \DoctrineModule\Form\Element\ObjectRadio
  */
 class ObjectRadioTest extends ProxyAwareElementTestCase
 {
@@ -34,7 +35,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
     protected $element;
 
     /**
-     * {@inheritDoc}.
+     * {@inheritDoc}
      */
     protected function setUp()
     {
@@ -50,7 +51,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
 
         $options = [];
 
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->exactly(2))
             ->method('getValueOptions')
             ->will($this->returnValue($options));
@@ -67,7 +68,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
     {
         $options = ['foo' => 'bar'];
 
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())
             ->method('getValueOptions')
             ->will($this->returnValue($options));
@@ -80,7 +81,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
 
     public function testOptionsCanBeSetSingle()
     {
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())->method('setOptions')->with(['is_method' => true]);
 
         $this->setProxyViaReflection($proxy);

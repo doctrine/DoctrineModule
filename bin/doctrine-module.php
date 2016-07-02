@@ -48,6 +48,6 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 
 $application = Application::init(include 'config/application.config.php');
 
-/* @var $cli \Symfony\Component\Console\Application */
+/** @var $cli \Symfony\Component\Console\Application */
 $cli = $application->getServiceManager()->get('doctrine.cli');
 exit($cli->run());

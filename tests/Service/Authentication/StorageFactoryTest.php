@@ -19,24 +19,27 @@
 
 namespace DoctrineModuleTest\Service\Authentication;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Service\Authentication\StorageFactory;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use Zend\Authentication\Storage\Session;
+use Zend\Authentication\Storage\StorageInterface;
 use Zend\ServiceManager\ServiceManager;
 
-class StorageFactoryTest extends BaseTestCase
+class StorageFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testWillInstantiateFromFQCN()
     {
         $name    = 'testFactory';
         $factory = new StorageFactory($name);
 
-        $objectManager =  $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager =  $this->createMock(ObjectManager::class);
 
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',
-            'Zend\Authentication\Storage\Session'
+            Session::class
         );
         $serviceManager->setService(
             'Configuration',
@@ -55,14 +58,15 @@ class StorageFactoryTest extends BaseTestCase
         );
 
         $adapter = $factory->createService($serviceManager);
-        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
+        $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 
     public function testCanInstantiateStorageFromServiceLocator()
     {
         $factory        = new StorageFactory('testFactory');
-        $serviceManager = $this->createMock('Zend\ServiceManager\ServiceManager');
-        $storage        = $this->createMock('Zend\Authentication\Storage\StorageInterface');
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ServiceManager $serviceManager */
+        $serviceManager = $this->createMock(ServiceManager::class);
+        $storage        = $this->createMock(StorageInterface::class);
         $config         = [
             'doctrine' => [
                 'authentication' => [
@@ -82,9 +86,6 @@ class StorageFactoryTest extends BaseTestCase
             ->with('some_storage')
             ->will($this->returnValue($storage));
 
-        $this->assertInstanceOf(
-            'DoctrineModule\Authentication\Storage\ObjectRepository',
-            $factory->createService($serviceManager)
-        );
+        $this->assertInstanceOf(ObjectRepository::class, $factory->createService($serviceManager));
     }
 }

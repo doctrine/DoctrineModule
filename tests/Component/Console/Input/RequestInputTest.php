@@ -19,7 +19,6 @@
 namespace DoctrineModuleTest\Component\Console\Input;
 
 use DoctrineModule\Component\Console\Input\RequestInput;
-use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Console\Request;
 
 /**
@@ -28,7 +27,7 @@ use Zend\Console\Request;
  * @license MIT
  * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class RequestInputTest extends TestCase
+class RequestInputTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers \DoctrineModule\Component\Console\Input\RequestInput

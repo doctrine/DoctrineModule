@@ -18,6 +18,7 @@
 
 namespace DoctrineModuleTest\Controller;
 
+use DoctrineModule\Controller\CliController;
 use DoctrineModuleTest\Controller\Mock\FailingCommand;
 use Zend\Console\Request;
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
@@ -53,7 +54,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
 
         $this->assertResponseStatusCode(0);
         $this->assertModuleName('doctrinemodule');
-        $this->assertControllerName('doctrinemodule\controller\cli');
+        $this->assertControllerName(CliController::class);
         $this->assertControllerClass('clicontroller');
         $this->assertActionName('cli');
         $this->assertMatchedRouteName('doctrine_cli');

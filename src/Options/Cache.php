@@ -19,6 +19,7 @@
 
 namespace DoctrineModule\Options;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Zend\Stdlib\AbstractOptions;
 
 /**
@@ -35,7 +36,7 @@ class Cache extends AbstractOptions
      *
      * @var string
      */
-    protected $class = 'Doctrine\Common\Cache\ArrayCache';
+    protected $class = ArrayCache::class;
 
     /**
      * Namespace to prefix all cache ids with.

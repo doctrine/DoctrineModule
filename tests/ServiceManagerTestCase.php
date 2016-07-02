@@ -19,6 +19,7 @@
 
 namespace DoctrineModuleTest;
 
+use Zend\Mvc\Service\ServiceListenerFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 
@@ -57,10 +58,10 @@ class ServiceManagerTestCase
 
         $serviceManager->setService('ApplicationConfig', $configuration);
         if (! $serviceManager->has('ServiceListener')) {
-            $serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
+            $serviceManager->setFactory('ServiceListener', ServiceListenerFactory::class);
         }
 
-        /* @var $moduleManager \Zend\ModuleManager\ModuleManagerInterface */
+        /** @var $moduleManager \Zend\ModuleManager\ModuleManagerInterface */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
 

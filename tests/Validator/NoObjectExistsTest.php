@@ -19,9 +19,8 @@
 
 namespace DoctrineModuleTest\Validator\Adapter;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use DoctrineModule\Validator\NoObjectExists;
-use PHPUnit_Framework_TestCase as BaseTestCase;
-use stdClass;
 
 /**
  * Tests for the NoObjectExists tests
@@ -30,11 +29,11 @@ use stdClass;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class NoObjectExistsTest extends BaseTestCase
+class NoObjectExistsTest extends \PHPUnit_Framework_TestCase
 {
     public function testCanValidateWithNoAvailableObjectInRepository()
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
 
         $repository
             ->expects($this->once())
@@ -48,12 +47,12 @@ class NoObjectExistsTest extends BaseTestCase
 
     public function testCannotValidateWithAvailableObjectInRepository()
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
 
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->will($this->returnValue(new stdClass()));
+            ->will($this->returnValue(new \stdClass()));
 
         $validator = new NoObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
 
@@ -62,11 +61,11 @@ class NoObjectExistsTest extends BaseTestCase
 
     public function testErrorMessageIsStringInsteadArray()
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->will($this->returnValue(new stdClass()));
+            ->will($this->returnValue(new \stdClass()));
         $validator = new NoObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
 
         $this->assertFalse($validator->isValid('matchValue'));

@@ -35,7 +35,6 @@ use Zend\Cache\Storage\TotalSpaceCapableInterface;
  */
 class ZendStorageCache extends CacheProvider
 {
-
     /**
      * @var StorageInterface
      */
@@ -90,7 +89,6 @@ class ZendStorageCache extends CacheProvider
     protected function doFlush()
     {
         if ($this->storage instanceof FlushableInterface) {
-            /* @var $storage FlushableInterface */
             $storage = $this->storage;
 
             return $storage->flush();
@@ -104,8 +102,7 @@ class ZendStorageCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        /* @var $storage TotalSpaceCapableInterface */
-        /* @var $storage AvailableSpaceCapableInterface */
+        /** @var $storage AvailableSpaceCapableInterface|TotalSpaceCapableInterface */
         $storage = $this->storage;
 
         return [

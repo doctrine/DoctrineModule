@@ -23,6 +23,7 @@ use DoctrineModule\Module;
 use Interop\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
+use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -36,12 +37,12 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class CliFactory implements FactoryInterface
 {
     /**
-     * @var \Zend\EventManager\EventManagerInterface
+     * @var EventManagerInterface
      */
     protected $events;
 
     /**
-     * @var \Symfony\Component\Console\Helper\HelperSet
+     * @var HelperSet
      */
     protected $helperSet;
 
@@ -52,12 +53,12 @@ class CliFactory implements FactoryInterface
 
     /**
      * @param  ContainerInterface $container
-     * @return \Zend\EventManager\EventManagerInterface
+     * @return EventManagerInterface
      */
     public function getEventManager(ContainerInterface $container)
     {
         if (null === $this->events) {
-            /* @var $events \Zend\EventManager\EventManagerInterface */
+            /** @var $events EventManagerInterface */
             $events = $container->get('EventManager');
 
             $events->addIdentifiers([__CLASS__, 'doctrine']);

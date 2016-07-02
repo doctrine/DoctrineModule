@@ -80,7 +80,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
      */
     public function getConsoleUsage(Console $console)
     {
-        /* @var $cli \Symfony\Component\Console\Application */
+        /** @var $cli \Symfony\Component\Console\Application */
         $cli    = $this->serviceManager->get('doctrine.cli');
         $output = new PropertyOutput();
 

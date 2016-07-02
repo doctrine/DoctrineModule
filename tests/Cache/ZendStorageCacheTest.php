@@ -21,7 +21,6 @@ namespace DoctrineModuleTest\Cache;
 
 use Doctrine\Common\Cache\Cache;
 use DoctrineModule\Cache\ZendStorageCache;
-use PHPUnit_Framework_TestCase;
 use Zend\Cache\Storage\Adapter\Memory;
 
 /**
@@ -31,7 +30,7 @@ use Zend\Cache\Storage\Adapter\Memory;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ZendStorageCacheTest extends PHPUnit_Framework_TestCase
+class ZendStorageCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @return ZendStorageCache

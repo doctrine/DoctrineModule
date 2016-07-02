@@ -22,6 +22,7 @@ namespace DoctrineModule\Service;
 use DoctrineModule\Controller\CliController;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
+use Symfony\Component\Console\Application;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -50,7 +51,7 @@ class CliControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /* @var $application \Symfony\Component\Console\Application */
+        /** @var $application Application */
         $application = $container->get('doctrine.cli');
 
         return new CliController($application);
@@ -59,7 +60,7 @@ class CliControllerFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      *
-     * @return \DoctrineModule\Controller\CliController
+     * @return CliController
      */
     public function createService(ServiceLocatorInterface $container)
     {

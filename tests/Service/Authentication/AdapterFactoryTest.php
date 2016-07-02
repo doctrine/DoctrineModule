@@ -19,19 +19,19 @@
 
 namespace DoctrineModuleTest\Service\Authentication;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
-use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
-class AdapterFactoryTest extends BaseTestCase
+class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testWillInstantiateFromFQCN()
     {
-
         $name           = 'testFactory';
         $factory        = new AdapterFactory($name);
-        $objectManager  = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager  = $this->createMock(ObjectManager::class);
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
@@ -50,6 +50,6 @@ class AdapterFactoryTest extends BaseTestCase
         );
 
         $adapter = $factory->createService($serviceManager);
-        $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepository', $adapter);
+        $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 }

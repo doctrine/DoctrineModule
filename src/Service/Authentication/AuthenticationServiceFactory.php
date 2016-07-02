@@ -46,8 +46,8 @@ class AuthenticationServiceFactory extends AbstractFactory
 
     /**
      *
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $container
-     * @return \Zend\Authentication\AuthenticationService
+     * @param ServiceLocatorInterface $container
+     * @return AuthenticationService
      */
     public function createService(ServiceLocatorInterface $container)
     {

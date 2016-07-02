@@ -17,7 +17,6 @@ class OneToManyEntity
      */
     protected $entities;
 
-
     public function __construct()
     {
         $this->entities = new ArrayCollection();

@@ -21,7 +21,6 @@ namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use LogicException;
 
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in
@@ -47,7 +46,7 @@ class DisallowRemoveByValue extends AbstractCollectionStrategy
         $adder = 'add' . ucfirst($this->collectionName);
 
         if (! method_exists($this->object, $adder)) {
-            throw new LogicException(
+            throw new \LogicException(
                 sprintf(
                     'DisallowRemove strategy for DoctrineModule hydrator requires %s to
                      be defined in %s entity domain code, but it seems to be missing',

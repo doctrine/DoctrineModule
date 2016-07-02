@@ -21,8 +21,8 @@ namespace DoctrineModuleTest\Paginator\Adapter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Tests for the Selectable pagination adapter
@@ -31,14 +31,15 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
-class SelectableAdapterTest extends PHPUnit_Framework_TestCase
+class SelectableAdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
     public function testGetItemsAtOffsetZeroWithEmptyCriteria()
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Selectable $selectable */
+        $selectable = $this->createMock(Selectable::class);
         $adapter    = new SelectableAdapter($selectable);
 
         $me = $this;
@@ -69,7 +70,8 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testGetItemsAtOffsetZeroWithNonEmptyCriteria()
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Selectable $selectable */
+        $selectable = $this->createMock(Selectable::class);
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
         $adapter    = new SelectableAdapter($selectable, $criteria);
 
@@ -103,7 +105,8 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testGetItemsAtOffsetTenWithEmptyCriteria()
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Selectable $selectable */
+        $selectable = $this->createMock(Selectable::class);
         $adapter    = new SelectableAdapter($selectable);
 
         $me = $this;
@@ -133,7 +136,8 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testGetItemsAtOffsetTenWithNonEmptyCriteria()
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Selectable $selectable */
+        $selectable = $this->createMock(Selectable::class);
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
         $adapter    = new SelectableAdapter($selectable, $criteria);
 
@@ -167,7 +171,8 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testReturnsCorrectCount()
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Selectable $selectable */
+        $selectable = $this->createMock(Selectable::class);
         $expression = Criteria::expr()->eq('foo', 'bar');
         $criteria   = new Criteria($expression, ['baz' => Criteria::DESC], 10, 20);
         $adapter    = new SelectableAdapter($selectable, $criteria);

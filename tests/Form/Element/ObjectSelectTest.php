@@ -19,8 +19,8 @@
 
 namespace DoctrineModuleTest\Form\Element;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Form\Element\ObjectSelect;
+use DoctrineModule\Form\Element\Proxy;
 
 /**
  * Tests for the ObjectSelect element
@@ -28,22 +28,17 @@ use DoctrineModule\Form\Element\ObjectSelect;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
- * @covers  DoctrineModule\Form\Element\ObjectSelect
+ * @covers  \DoctrineModule\Form\Element\ObjectSelect
  */
 class ObjectSelectTest extends ProxyAwareElementTestCase
 {
-    /**
-     * @var ArrayCollection
-     */
-    protected $values;
-
     /**
      * @var ObjectSelect
      */
     protected $element;
 
     /**
-     * {@inheritDoc}.
+     * {@inheritDoc}
      */
     protected function setUp()
     {
@@ -103,7 +98,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
 
         $options = [];
 
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->exactly(2))
               ->method('getValueOptions')
               ->will($this->returnValue($options));
@@ -120,7 +115,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
     {
         $options = ['foo' => 'bar'];
 
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())
               ->method('getValueOptions')
               ->will($this->returnValue($options));
@@ -133,7 +128,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
 
     public function testOptionsCanBeSetSingle()
     {
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())->method('setOptions')->with(['is_method' => true]);
 
         $this->setProxyViaReflection($proxy);

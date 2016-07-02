@@ -14,7 +14,6 @@ class OneToOneEntityNotNullable
      */
     protected $toOne;
 
-
     public function setId($id)
     {
         $this->id = $id;

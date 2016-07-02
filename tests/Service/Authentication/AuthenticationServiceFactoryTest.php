@@ -19,22 +19,23 @@
 
 namespace DoctrineModuleTest\Service\Authentication;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use DoctrineModule\Service\Authentication\AuthenticationServiceFactory;
 use DoctrineModule\Service\Authentication\StorageFactory;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Storage\Session;
 use Zend\ServiceManager\ServiceManager;
 
-class AuthenticationServiceFactoryTest extends BaseTestCase
+class AuthenticationServiceFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testWillInstantiateFromFQCN()
     {
-
         $name    = 'testFactory';
         $factory = new AuthenticationServiceFactory($name);
 
-        $objectManager =  $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager =  $this->createMock(ObjectManager::class);
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -54,12 +55,12 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         );
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',
-            'Zend\Authentication\Storage\Session'
+            Session::class
         );
         $serviceManager->setFactory('doctrine.authenticationadapter.' . $name, new AdapterFactory($name));
         $serviceManager->setFactory('doctrine.authenticationstorage.' . $name, new StorageFactory($name));
 
         $authenticationService = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Zend\Authentication\AuthenticationService', $authenticationService);
+        $this->assertInstanceOf(AuthenticationService::class, $authenticationService);
     }
 }

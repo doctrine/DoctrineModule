@@ -39,7 +39,7 @@ class Selectable implements AdapterInterface
     protected $selectable;
 
     /**
-     * @var \Doctrine\Common\Collections\Criteria
+     * @var Criteria
      */
     protected $criteria;
 
@@ -47,8 +47,8 @@ class Selectable implements AdapterInterface
      * Create a paginator around a Selectable object. You can also provide an optional Criteria object with
      * some predefined filters
      *
-     * @param \Doctrine\Common\Collections\Selectable    $selectable
-     * @param \Doctrine\Common\Collections\Criteria|null $criteria
+     * @param DoctrineSelectable $selectable
+     * @param Criteria|null      $criteria
      */
     public function __construct(DoctrineSelectable $selectable, Criteria $criteria = null)
     {

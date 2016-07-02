@@ -32,12 +32,12 @@ use Zend\Mvc\Controller\AbstractActionController;
 class CliController extends AbstractActionController
 {
     /**
-     * @var \Symfony\Component\Console\Application
+     * @var Application
      */
     protected $cliApplication;
 
     /**
-     * @param \Symfony\Component\Console\Application $cliApplication
+     * @param Application $cliApplication
      */
     public function __construct(Application $cliApplication)
     {

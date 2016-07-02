@@ -19,7 +19,6 @@
 namespace DoctrineModuleTest\Component\Console\Output;
 
 use DoctrineModule\Component\Console\Output\PropertyOutput;
-use PHPUnit_Framework_TestCase as TestCase;
 
 /**
  * Tests for {@see \DoctrineModule\Component\Console\Output\PropertyOutput}
@@ -27,9 +26,8 @@ use PHPUnit_Framework_TestCase as TestCase;
  * @license MIT
  * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-class PropertyOutputTest extends TestCase
+class PropertyOutputTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
      */

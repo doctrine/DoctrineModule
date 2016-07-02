@@ -17,53 +17,58 @@
  * <http://www.doctrine-project.org>.
  */
 
+namespace DoctrineModule;
+
+use Doctrine\Common\Cache;
+use Zend\Authentication\Storage\Session;
+
 return [
     'doctrine' => [
         'cache' => [
             'apc' => [
-                'class'     => 'Doctrine\Common\Cache\ApcCache',
-                'namespace' => 'DoctrineModule',
+                'class'     => Cache\ApcCache::class,
+                'namespace' => __NAMESPACE__,
             ],
             'array' => [
-                'class'     => 'Doctrine\Common\Cache\ArrayCache',
-                'namespace' => 'DoctrineModule',
+                'class'     => Cache\ArrayCache::class,
+                'namespace' => __NAMESPACE__,
             ],
             'filesystem' => [
-                'class'     => 'Doctrine\Common\Cache\FilesystemCache',
+                'class'     => Cache\FilesystemCache::class,
                 'directory' => 'data/DoctrineModule/cache',
-                'namespace' => 'DoctrineModule',
+                'namespace' => __NAMESPACE__,
             ],
             'memcache' => [
-                'class'     => 'Doctrine\Common\Cache\MemcacheCache',
+                'class'     => Cache\MemcacheCache::class,
                 'instance'  => 'my_memcache_alias',
-                'namespace' => 'DoctrineModule',
+                'namespace' => __NAMESPACE__,
             ],
             'memcached' => [
-                'class'     => 'Doctrine\Common\Cache\MemcachedCache',
+                'class'     => Cache\MemcachedCache::class,
                 'instance'  => 'my_memcached_alias',
-                'namespace' => 'DoctrineModule',
+                'namespace' => __NAMESPACE__,
             ],
             'predis' => [
-                'class'     => 'Doctrine\Common\Cache\PredisCache',
+                'class'     => Cache\PredisCache::class,
                 'instance'  => 'my_predis_alias',
-                'namespace' => 'DoctrineModule',
+                'namespace' => __NAMESPACE__,
             ],
             'redis' => [
-                'class'     => 'Doctrine\Common\Cache\RedisCache',
+                'class'     => Cache\RedisCache::class,
                 'instance'  => 'my_redis_alias',
-                'namespace' => 'DoctrineModule',
+                'namespace' => __NAMESPACE__,
             ],
             'wincache' => [
-                'class'     => 'Doctrine\Common\Cache\WinCacheCache',
-                'namespace' => 'DoctrineModule',
+                'class'     => Cache\WinCacheCache::class,
+                'namespace' => __NAMESPACE__,
             ],
             'xcache' => [
-                'class'     => 'Doctrine\Common\Cache\XcacheCache',
-                'namespace' => 'DoctrineModule',
+                'class'     => Cache\XcacheCache::class,
+                'namespace' => __NAMESPACE__,
             ],
             'zenddata' => [
-                'class'     => 'Doctrine\Common\Cache\ZendDataCache',
-                'namespace' => 'DoctrineModule',
+                'class'     => Cache\ZendDataCache::class,
+                'namespace' => __NAMESPACE__,
             ],
         ],
 
@@ -91,35 +96,35 @@ return [
     // Factory mappings - used to define which factory to use to instantiate a particular doctrine
     // service type
     'doctrine_factories' => [
-        'cache'                 => 'DoctrineModule\Service\CacheFactory',
-        'eventmanager'          => 'DoctrineModule\Service\EventManagerFactory',
-        'driver'                => 'DoctrineModule\Service\DriverFactory',
-        'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
-        'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
-        'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
+        'cache'                 => Service\CacheFactory::class,
+        'eventmanager'          => Service\EventManagerFactory::class,
+        'driver'                => Service\DriverFactory::class,
+        'authenticationadapter' => Service\Authentication\AdapterFactory::class,
+        'authenticationstorage' => Service\Authentication\StorageFactory::class,
+        'authenticationservice' => Service\Authentication\AuthenticationServiceFactory::class,
     ],
 
     'service_manager' => [
         'invokables' => [
-            'DoctrineModule\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session',
+            'DoctrineModule\Authentication\Storage\Session' => Session::class,
         ],
         'factories' => [
-            'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
+            'doctrine.cli' => Service\CliFactory::class,
         ],
         'abstract_factories' => [
-            'DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory',
+            'DoctrineModule' => ServiceFactory\AbstractDoctrineServiceFactory::class,
         ],
     ],
 
     'controllers' => [
         'factories' => [
-            'DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory',
+            Controller\CliController::class => Service\CliControllerFactory::class,
         ],
     ],
 
     'route_manager' => [
         'factories' => [
-            'symfony_cli' => 'DoctrineModule\Service\SymfonyCliRouteFactory',
+            'symfony_cli' => Service\SymfonyCliRouteFactory::class,
         ],
     ],
 

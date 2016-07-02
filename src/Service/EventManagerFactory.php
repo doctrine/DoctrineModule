@@ -21,8 +21,8 @@ namespace DoctrineModule\Service;
 
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
+use DoctrineModule\Options\EventManager as EventManagerOptions;
 use Interop\Container\ContainerInterface;
-use InvalidArgumentException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -35,7 +35,7 @@ class EventManagerFactory extends AbstractFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /** @var $options \DoctrineModule\Options\EventManager */
+        /** @var $options EventManagerOptions */
         $options      = $this->getOptions($container, 'eventmanager');
         $eventManager = new EventManager();
 
@@ -57,7 +57,7 @@ class EventManagerFactory extends AbstractFactory
 
             $subscriberType = is_object($subscriberName) ? get_class($subscriberName) : $subscriberName;
 
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     'Invalid event subscriber "%s" given, must be a service name, '
                     . 'class name or an instance implementing Doctrine\Common\EventSubscriber',
@@ -84,6 +84,6 @@ class EventManagerFactory extends AbstractFactory
      */
     public function getOptionsClass()
     {
-        return 'DoctrineModule\Options\EventManager';
+        return EventManagerOptions::class;
     }
 }

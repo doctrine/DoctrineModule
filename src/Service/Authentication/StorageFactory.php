@@ -19,6 +19,7 @@
 namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepository;
+use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -38,7 +39,7 @@ class StorageFactory extends AbstractFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /* @var $options \DoctrineModule\Options\Authentication */
+        /** @var $options Authentication */
         $options = $this->getOptions($container, 'authentication');
 
         if (is_string($objectManager = $options->getObjectManager())) {
@@ -55,7 +56,7 @@ class StorageFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return \DoctrineModule\Authentication\Storage\ObjectRepository
+     * @return ObjectRepository
      */
     public function createService(ServiceLocatorInterface $container)
     {
@@ -67,6 +68,6 @@ class StorageFactory extends AbstractFactory
      */
     public function getOptionsClass()
     {
-        return 'DoctrineModule\Options\Authentication';
+        return Authentication::class;
     }
 }

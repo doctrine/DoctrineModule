@@ -19,8 +19,12 @@
 
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\PredisCache;
+use DoctrineModule\Cache\ZendStorageCache;
 use DoctrineModule\Service\CacheFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use Predis\ClientInterface;
+use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -28,7 +32,7 @@ use Zend\ServiceManager\ServiceManager;
  *
  * @author Marco Pivetta <ocramius@gmail.com>
  */
-class CacheFactoryTest extends BaseTestCase
+class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers \DoctrineModule\Service\CacheFactory::createService
@@ -50,10 +54,10 @@ class CacheFactoryTest extends BaseTestCase
             ]
         );
 
-        /* @var $service \Doctrine\Common\Cache\ArrayCache */
+        /** @var $service ArrayCache */
         $service = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $service);
+        $this->assertInstanceOf(ArrayCache::class, $service);
         $this->assertSame('bar', $service->getNamespace());
     }
 
@@ -72,7 +76,7 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'phpunit' => [
-                            'class'     => 'DoctrineModule\Cache\ZendStorageCache',
+                            'class'     => ZendStorageCache::class,
                             'instance'  => 'my-zend-cache',
                             'namespace' => 'DoctrineModule',
                         ],
@@ -87,11 +91,11 @@ class CacheFactoryTest extends BaseTestCase
                 ],
             ]
         );
-        $serviceManager->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
+        $serviceManager->addAbstractFactory(StorageCacheAbstractServiceFactory::class);
 
         $cache = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('DoctrineModule\Cache\ZendStorageCache', $cache);
+        $this->assertInstanceOf(ZendStorageCache::class, $cache);
     }
 
     public function testCreatePredisCache()
@@ -104,7 +108,7 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'predis' => [
-                            'class'     => 'Doctrine\Common\Cache\PredisCache',
+                            'class'     => PredisCache::class,
                             'instance'  => 'my_predis_alias',
                             'namespace' => 'DoctrineModule',
                         ],
@@ -114,10 +118,10 @@ class CacheFactoryTest extends BaseTestCase
         );
         $serviceManager->setService(
             'my_predis_alias',
-            $this->getMockBuilder('Predis\ClientInterface')->getMock()
+            $this->getMockBuilder(ClientInterface::class)->getMock()
         );
         $cache = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('Doctrine\Common\Cache\PredisCache', $cache);
+        $this->assertInstanceOf(PredisCache::class, $cache);
     }
 }

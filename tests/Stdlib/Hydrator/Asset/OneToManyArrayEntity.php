@@ -17,7 +17,6 @@ class OneToManyArrayEntity
      */
     protected $entities;
 
-
     public function __construct()
     {
         $this->entities = new ArrayCollection();
@@ -53,6 +52,7 @@ class OneToManyArrayEntity
     }
 
     /**
+     * @param bool $modifyValue
      * @return array
      */
     public function getEntities($modifyValue = true)

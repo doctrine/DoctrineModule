@@ -19,13 +19,10 @@
 
 namespace DoctrineModule\Stdlib\Hydrator;
 
-use DateTime;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Util\Inflector;
-use InvalidArgumentException;
-use RuntimeException;
-use Traversable;
+use DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy;
 use Zend\Hydrator\AbstractHydrator;
 use Zend\Hydrator\Filter\FilterProviderInterface;
 use Zend\Stdlib\ArrayUtils;
@@ -57,7 +54,6 @@ class DoctrineObject extends AbstractHydrator
      * @var bool
      */
     protected $byValue = true;
-
 
     /**
      * Constructor
@@ -144,7 +140,7 @@ class DoctrineObject extends AbstractHydrator
                 $strategy = $this->getStrategy($association);
 
                 if (! $strategy instanceof Strategy\AbstractCollectionStrategy) {
-                    throw new InvalidArgumentException(
+                    throw new \InvalidArgumentException(
                         sprintf(
                             'Strategies used for collections valued associations must inherit from '
                             . 'Strategy\AbstractCollectionStrategy, %s given',
@@ -164,7 +160,7 @@ class DoctrineObject extends AbstractHydrator
      * API, in this case, getters)
      *
      * @param  object $object
-     * @throws RuntimeException
+     * @throws \RuntimeException
      * @return array
      */
     protected function extractByValue($object)
@@ -237,7 +233,7 @@ class DoctrineObject extends AbstractHydrator
      *
      * @param  array  $data
      * @param  object $object
-     * @throws RuntimeException
+     * @throws \RuntimeException
      * @return object
      */
     protected function hydrateByValue(array $data, $object)
@@ -413,7 +409,7 @@ class DoctrineObject extends AbstractHydrator
         $metadata   = $this->objectManager->getClassMetadata(ltrim($target, '\\'));
         $identifier = $metadata->getIdentifier();
 
-        if (! is_array($values) && ! $values instanceof Traversable) {
+        if (! is_array($values) && ! $values instanceof \Traversable) {
             $values = (array)$values;
         }
 
@@ -472,7 +468,7 @@ class DoctrineObject extends AbstractHydrator
 
         // Set the object so that the strategy can extract the Collection from it
 
-        /** @var \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy $collectionStrategy */
+        /** @var AbstractCollectionStrategy $collectionStrategy */
         $collectionStrategy = $this->getStrategy($collectionName);
         $collectionStrategy->setObject($object);
 
@@ -486,7 +482,7 @@ class DoctrineObject extends AbstractHydrator
      *
      * @param  mixed  $value
      * @param  string $typeOfField
-     * @return DateTime
+     * @return \DateTime
      */
     protected function handleTypeConversions($value, $typeOfField)
     {
@@ -500,11 +496,11 @@ class DoctrineObject extends AbstractHydrator
                 }
 
                 if (is_int($value)) {
-                    $dateTime = new DateTime();
+                    $dateTime = new \DateTime();
                     $dateTime->setTimestamp($value);
                     $value = $dateTime;
                 } elseif (is_string($value)) {
-                    $value = new DateTime($value);
+                    $value = new \DateTime($value);
                 }
 
                 break;
@@ -546,7 +542,7 @@ class DoctrineObject extends AbstractHydrator
             return true;
         }
 
-        if ($identifier instanceof Traversable || is_array($identifier)) {
+        if ($identifier instanceof \Traversable || is_array($identifier)) {
             $nonNullIdentifiers = array_filter(
                 ArrayUtils::iteratorToArray($identifier),
                 function ($value) {

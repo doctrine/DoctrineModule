@@ -20,18 +20,32 @@
 namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
-use PHPUnit_Framework_TestCase as TestCase;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 
-class ProxyAwareElementTestCase extends TestCase
+class ProxyAwareElementTestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ArrayCollection
+     */
+    protected $values;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ClassMetadata
+     */
+    protected $metadata;
+
+    /**
+     * @var \Zend\Form\Element
+     */
     protected $element;
 
     protected function prepareProxy()
     {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $objectOne   = new FormObject();
-        $objectTwo   = new FormObject();
+        $objectClass = TestAsset\FormObject::class;
+        $objectOne   = new TestAsset\FormObject();
+        $objectTwo   = new TestAsset\FormObject();
 
         $objectOne->setId(1)
             ->setUsername('object one username')
@@ -50,7 +64,7 @@ class ProxyAwareElementTestCase extends TestCase
         $result       = new ArrayCollection([$objectOne, $objectTwo]);
         $this->values = $result;
 
-        $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -71,12 +85,12 @@ class ProxyAwareElementTestCase extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
