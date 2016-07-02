@@ -86,7 +86,7 @@ class Driver extends AbstractOptions
      */
     public function getCache()
     {
-        return "doctrine.cache.{$this->cache}";
+        return 'doctrine.cache.' . $this->cache;
     }
 
     /**
