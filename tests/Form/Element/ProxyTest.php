@@ -53,34 +53,31 @@ class ProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy = new Proxy;
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No object manager was set
-     */
     public function testExceptionThrownForMissingObjectManager()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No object manager was set');
+
         $this->proxy->setOptions(['target_class' => 'DoctrineModuleTest\Form\Element\TestAsset\FormObject']);
         $this->proxy->getValueOptions();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No target class was set
-     */
     public function testExceptionThrownForMissingTargetClass()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No target class was set');
+
         $this->proxy->setOptions([
             'object_manager' => $this->createMock('Doctrine\Common\Persistence\ObjectManager'),
         ]);
         $this->proxy->getValueOptions();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No method name was set
-     */
     public function testExceptionThrownForMissingFindMethodName()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No method name was set');
+
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $metadata    = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
@@ -123,8 +120,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             'find_method'    => ['name' => 'NotExistent'],
         ]);
 
-        $this->setExpectedException(
-            'RuntimeException',
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage(
             'Method "NotExistent" could not be found in repository "' . get_class($objectRepository) . '"'
         );
 
@@ -158,10 +155,10 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->setExpectedException(
-            'RuntimeException',
-            'Required parameter "criteria" with no default value for method "findBy" in repository "'
-            . \get_class($objectRepository) . '" was not provided'
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage(
+            'Required parameter "criteria" with no default value for method "findBy" in repository'
+            . ' "' . get_class($objectRepository) . '" was not provided'
         );
 
         $this->proxy->getValueOptions();
@@ -273,10 +270,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareProxy();
 
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            'Property "label_generator" needs to be a callable function or a \Closure'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Property "label_generator" needs to be a callable function or a \Closure');
 
         $this->proxy->setOptions(['label_generator' => 'I throw an InvalidArgumentException']);
     }
@@ -341,7 +336,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->setExpectedException('RuntimeException');
+        $this->expectException('RuntimeException');
 
         $this->proxy->getValueOptions();
     }
@@ -366,10 +361,8 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareEmptyProxy(new \stdClass());
 
-        $this->setExpectedException(
-            'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException',
-            'return value must be an array or Traversable'
-        );
+        $this->expectException('DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException');
+        $this->expectExceptionMessage('return value must be an array or Traversable');
 
         $this->proxy->getValueOptions();
     }
@@ -393,7 +386,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
             'optgroup_identifier' => 'NonExistantFunctionName',
         ]);
 
-        $this->setExpectedException('RuntimeException');
+        $this->expectException('RuntimeException');
 
         $this->proxy->getValueOptions();
     }

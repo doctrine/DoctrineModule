@@ -72,7 +72,7 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      */
     public function testModuleInvalidService($serviceName)
     {
-        $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
+        $this->expectException('Zend\ServiceManager\Exception\ServiceNotFoundException');
 
         $this->serviceManager->get($serviceName);
     }

@@ -140,7 +140,7 @@ class EventManagerFactoryTest extends BaseTestCase
             ]
         );
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $factory->createService($serviceManager);
     }
 }
