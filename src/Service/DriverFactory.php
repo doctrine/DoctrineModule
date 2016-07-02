@@ -30,7 +30,6 @@ use DoctrineModule\Options\Driver;
 use DoctrineModule\Options\Driver as DriverOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * MappingDriver ServiceManager factory
@@ -51,14 +50,6 @@ class DriverFactory extends AbstractFactory
         $options = $this->getOptions($container, 'driver');
 
         return $this->createDriver($container, $options);
-    }
-    /**
-     * {@inheritDoc}
-     * @return MappingDriver
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, MappingDriver::class);
     }
 
     /**

@@ -29,7 +29,6 @@ use Doctrine\Common\Cache\RedisCache;
 use DoctrineModule\Cache\ZendStorageCache;
 use DoctrineModule\Options\Cache as CacheOptions;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Cache ServiceManager factory
@@ -92,17 +91,6 @@ class CacheFactory extends AbstractFactory
         }
 
         return $cache;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws \RuntimeException
-     * @return Cache
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, Cache::class);
     }
 
     /**

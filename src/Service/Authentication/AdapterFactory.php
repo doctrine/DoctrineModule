@@ -22,7 +22,6 @@ use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory to create authentication adapter object.
@@ -47,16 +46,6 @@ class AdapterFactory extends AbstractFactory
         }
 
         return new ObjectRepository($options);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return ObjectRepository
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, ObjectRepository::class);
     }
 
     /**

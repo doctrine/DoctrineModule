@@ -24,7 +24,6 @@ use DoctrineModule\Cache\ZendStorageCache;
 use DoctrineModule\Options\Cache as CacheOptions;
 use Interop\Container\ContainerInterface;
 use Zend\Cache\Storage\StorageInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * ZendStorageCache ServiceManager factory
@@ -65,16 +64,5 @@ class ZendStorageCacheFactory extends CacheFactory
         }
 
         return new ZendStorageCache($cache);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws \RuntimeException
-     * @return ZendStorageCache
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, ZendStorageCache::class);
     }
 }

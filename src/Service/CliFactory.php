@@ -25,7 +25,6 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * CLI Application ServiceManager factory responsible for instantiating a Symfony CLI application
@@ -86,14 +85,5 @@ class CliFactory implements FactoryInterface
         $this->getEventManager($container)->trigger('loadCli.post', $cli, ['ServiceManager' => $container]);
 
         return $cli;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @return Application
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, Application::class);
     }
 }

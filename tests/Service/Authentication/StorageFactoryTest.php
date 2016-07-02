@@ -57,7 +57,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $adapter = $factory->createService($serviceManager);
+        $adapter = $factory($serviceManager, ObjectRepository::class);
         $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 
@@ -86,6 +86,6 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             ->with('some_storage')
             ->will($this->returnValue($storage));
 
-        $this->assertInstanceOf(ObjectRepository::class, $factory->createService($serviceManager));
+        $this->assertInstanceOf(ObjectRepository::class, $factory($serviceManager, ObjectRepository::class));
     }
 }

@@ -26,7 +26,6 @@ use Symfony\Component\Console\Application;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory responsible of instantiating an {@see \DoctrineModule\Controller\CliController}
@@ -55,15 +54,5 @@ class CliControllerFactory implements FactoryInterface
         $application = $container->get('doctrine.cli');
 
         return new CliController($application);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return CliController
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container->getServiceLocator(), CliController::class);
     }
 }

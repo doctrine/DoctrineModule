@@ -24,7 +24,6 @@ use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 use Interop\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory responsible of instantiating {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}
@@ -43,13 +42,5 @@ class SymfonyCliRouteFactory implements FactoryInterface
                 'action'     => 'cli',
             ]
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator->getServiceLocator(), SymfonyCli::class);
     }
 }

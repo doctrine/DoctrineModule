@@ -57,7 +57,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         /** @var $factory AbstractFactory */
         $factory = new $factoryClass($mappings['serviceName']);
 
-        return $factory->createService($container);
+        return $factory($container, $requestedName, $options);
     }
 
     /**

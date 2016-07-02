@@ -49,7 +49,7 @@ class EventManagerFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $eventManager EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        $eventManager = $factory($serviceManager, EventManager::class);
         $this->assertInstanceOf(EventManager::class, $eventManager);
 
         $listeners = $eventManager->getListeners('dummy');
@@ -78,7 +78,7 @@ class EventManagerFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $eventManager EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        $eventManager = $factory($serviceManager, EventManager::class);
         $this->assertInstanceOf(EventManager::class, $eventManager);
 
         $listeners = $eventManager->getListeners();
@@ -110,7 +110,7 @@ class EventManagerFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $eventManager EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        $eventManager = $factory($serviceManager, EventManager::class);
         $this->assertInstanceOf(EventManager::class, $eventManager);
 
         $listeners = $eventManager->getListeners();
@@ -140,6 +140,6 @@ class EventManagerFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->expectException(\InvalidArgumentException::class);
-        $factory->createService($serviceManager);
+        $factory($serviceManager, EventManager::class);
     }
 }

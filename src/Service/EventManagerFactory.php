@@ -23,7 +23,6 @@ use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
 use DoctrineModule\Options\EventManager as EventManagerOptions;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory responsible for creating EventManager instances
@@ -67,14 +66,6 @@ class EventManagerFactory extends AbstractFactory
         }
 
         return $eventManager;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, EventManager::class);
     }
 
     /**

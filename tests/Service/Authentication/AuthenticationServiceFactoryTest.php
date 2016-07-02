@@ -60,7 +60,7 @@ class AuthenticationServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $serviceManager->setFactory('doctrine.authenticationadapter.' . $name, new AdapterFactory($name));
         $serviceManager->setFactory('doctrine.authenticationstorage.' . $name, new StorageFactory($name));
 
-        $authenticationService = $factory->createService($serviceManager);
+        $authenticationService = $factory($serviceManager, AuthenticationService::class);
         $this->assertInstanceOf(AuthenticationService::class, $authenticationService);
     }
 }

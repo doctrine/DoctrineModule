@@ -49,7 +49,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $adapter = $factory->createService($serviceManager);
+        $adapter = $factory($serviceManager, ObjectRepository::class);
         $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 }

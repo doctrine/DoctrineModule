@@ -35,7 +35,7 @@ use Zend\ServiceManager\ServiceManager;
 class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \DoctrineModule\Service\CacheFactory::createService
+     * @covers \DoctrineModule\Service\CacheFactory::__invoke
      */
     public function testWillSetNamespace()
     {
@@ -55,14 +55,14 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $service ArrayCache */
-        $service = $factory->createService($serviceManager);
+        $service = $factory($serviceManager, ArrayCache::class);
 
         $this->assertInstanceOf(ArrayCache::class, $service);
         $this->assertSame('bar', $service->getNamespace());
     }
 
     /**
-     * @covers \DoctrineModule\Service\CacheFactory::createService
+     * @covers \DoctrineModule\Service\CacheFactory::__invoke
      * @group 547
      */
     public function testCreateZendCache()
@@ -93,7 +93,7 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
         );
         $serviceManager->addAbstractFactory(StorageCacheAbstractServiceFactory::class);
 
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory($serviceManager, ZendStorageCache::class);
 
         $this->assertInstanceOf(ZendStorageCache::class, $cache);
     }
@@ -120,7 +120,7 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
             'my_predis_alias',
             $this->getMockBuilder(ClientInterface::class)->getMock()
         );
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory($serviceManager, PredisCache::class);
 
         $this->assertInstanceOf(PredisCache::class, $cache);
     }
