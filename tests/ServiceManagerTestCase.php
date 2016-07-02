@@ -33,21 +33,11 @@ class ServiceManagerTestCase
     protected static $configuration = array();
 
     /**
-     * @static
-     * @param array $configuration
-     */
-    public static function setConfiguration(array $configuration)
-    {
-        static::$configuration = $configuration;
-    }
-
-    /**
-     * @static
      * @return array
      */
-    public static function getConfiguration()
+    protected function getConfiguration()
     {
-        return static::$configuration;
+        return include __DIR__ . '/TestConfiguration.php';
     }
 
     /**
@@ -58,7 +48,7 @@ class ServiceManagerTestCase
      */
     public function getServiceManager(array $configuration = null)
     {
-        $configuration        = $configuration ?: static::getConfiguration();
+        $configuration        = $configuration ?: $this->getConfiguration();
         $serviceManager       = new ServiceManager();
         $serviceManagerConfig = new ServiceManagerConfig(
             isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
