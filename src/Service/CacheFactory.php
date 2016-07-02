@@ -20,11 +20,11 @@
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\Cache\CacheProvider;
-use Interop\Container\ContainerInterface;
-use RuntimeException;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use Doctrine\Common\Cache\RedisCache;
+use Interop\Container\ContainerInterface;
+use RuntimeException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**

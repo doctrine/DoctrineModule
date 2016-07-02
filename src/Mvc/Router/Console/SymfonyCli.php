@@ -19,10 +19,10 @@
 namespace DoctrineModule\Mvc\Router\Console;
 
 use Symfony\Component\Console\Application;
-use Zend\Mvc\Router\Console\RouteInterface;
-use Zend\Stdlib\RequestInterface as Request;
-use Zend\Mvc\Router\Console\RouteMatch;
 use Zend\Console\Request as ConsoleRequest;
+use Zend\Mvc\Router\Console\RouteInterface;
+use Zend\Mvc\Router\Console\RouteMatch;
+use Zend\Stdlib\RequestInterface as Request;
 
 /**
  * Route matching commands in Symfony CLI

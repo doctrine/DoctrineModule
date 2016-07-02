@@ -19,8 +19,8 @@
 
 namespace DoctrineModuleTest;
 
-use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Base test case to be used when a service manager instance is required

@@ -18,10 +18,10 @@
 
 namespace DoctrineModuleTest\Mvc\Router\Console;
 
+use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Console\Application;
 use Zend\Console\Request;
-use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 
 /**
  * Tests for {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}

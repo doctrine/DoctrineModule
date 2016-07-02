@@ -19,9 +19,7 @@
 
 namespace DoctrineModule\Form\Element;
 
-use DoctrineModule\Form\Element\Proxy;
 use Zend\Form\Element\Radio as RadioElement;
-use Zend\Form\Form;
 
 class ObjectRadio extends RadioElement
 {

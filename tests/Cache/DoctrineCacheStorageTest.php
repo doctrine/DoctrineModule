@@ -19,12 +19,10 @@
 
 namespace DoctrineModuleTest\Cache;
 
-use DoctrineModule\Cache\DoctrineCacheStorage;
 use Doctrine\Common\Cache\ArrayCache;
-
-use Zend\Cache\Storage\Adapter\AdapterOptions;
-
+use DoctrineModule\Cache\DoctrineCacheStorage;
 use PHPUnit_Framework_TestCase;
+use Zend\Cache\Storage\Adapter\AdapterOptions;
 use Zend\Stdlib\ErrorHandler;
 
 /**

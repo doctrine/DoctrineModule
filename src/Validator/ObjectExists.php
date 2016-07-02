@@ -19,10 +19,10 @@
 
 namespace DoctrineModule\Validator;
 
-use Zend\Validator\AbstractValidator;
-use Zend\Validator\Exception;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\Stdlib\ArrayUtils;
+use Zend\Validator\AbstractValidator;
+use Zend\Validator\Exception;
 
 /**
  * Class that validates if objects exist in a given repository with a given list of matched fields

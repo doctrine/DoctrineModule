@@ -19,11 +19,11 @@
 
 namespace DoctrineModule\Service;
 
+use DoctrineModule\Cache\ZendStorageCache;
 use Interop\Container\ContainerInterface;
 use RuntimeException;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Cache\Storage\StorageInterface;
-use DoctrineModule\Cache\ZendStorageCache;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * ZendStorageCache ServiceManager factory

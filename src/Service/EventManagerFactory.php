@@ -19,10 +19,10 @@
 
 namespace DoctrineModule\Service;
 
-use Interop\Container\ContainerInterface;
-use InvalidArgumentException;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
+use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**

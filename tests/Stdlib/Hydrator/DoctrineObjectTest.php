@@ -2,14 +2,14 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator;
 
-use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
-use PHPUnit_Framework_TestCase as BaseTestCase;
-use ReflectionClass;
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
-use DoctrineModule\Stdlib\Hydrator\Strategy;
 use DoctrineModule\Stdlib\Hydrator\Filter;
+use DoctrineModule\Stdlib\Hydrator\Strategy;
+use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
+use PHPUnit_Framework_TestCase as BaseTestCase;
+use ReflectionClass;
 use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
 
 class DoctrineObjectTest extends BaseTestCase

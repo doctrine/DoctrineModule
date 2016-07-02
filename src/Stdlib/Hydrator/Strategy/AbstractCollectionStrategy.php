@@ -19,9 +19,9 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
-use InvalidArgumentException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use InvalidArgumentException;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
 /**

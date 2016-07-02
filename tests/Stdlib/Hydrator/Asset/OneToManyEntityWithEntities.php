@@ -3,7 +3,6 @@
 namespace DoctrineModuleTest\Stdlib\Hydrator\Asset;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 class OneToManyEntityWithEntities extends OneToManyEntity
 {

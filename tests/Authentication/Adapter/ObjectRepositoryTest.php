@@ -19,10 +19,10 @@
 
 namespace DoctrineModuleTest\Authentication\Adapter;
 
-use PHPUnit_Framework_TestCase as BaseTestCase;
 use DoctrineModule\Authentication\Adapter\ObjectRepository as ObjectRepositoryAdapter;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject;
+use PHPUnit_Framework_TestCase as BaseTestCase;
 
 /**
  * Tests for the ObjectRepository based authentication adapter

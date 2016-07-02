@@ -19,9 +19,7 @@
 
 namespace DoctrineModule\Form\Element;
 
-use DoctrineModule\Form\Element\Proxy;
 use Zend\Form\Element\Select as SelectElement;
-use Zend\Form\Form;
 use Zend\Stdlib\ArrayUtils;
 
 class ObjectSelect extends SelectElement

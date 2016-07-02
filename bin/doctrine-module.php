@@ -17,7 +17,6 @@
  * <http://www.doctrine-project.org>.
  */
 
-use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Application;
 
 ini_set('display_errors', true);

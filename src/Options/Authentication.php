@@ -23,8 +23,6 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\Authentication\Adapter\Exception;
-use Zend\Authentication\Storage\Session as SessionStorage;
-use Zend\Authentication\Storage\StorageInterface;
 use Zend\Stdlib\AbstractOptions;
 
 /**

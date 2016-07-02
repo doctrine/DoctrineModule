@@ -18,9 +18,9 @@
 
 namespace DoctrineModuleTest\Controller;
 
+use DoctrineModuleTest\Controller\Mock\FailingCommand;
 use Zend\Console\Request;
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
-use DoctrineModuleTest\Controller\Mock\FailingCommand;
 
 /**
  * Tests for {@see \DoctrineModule\Controller\CliController}

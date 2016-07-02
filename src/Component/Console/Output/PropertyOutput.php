@@ -18,8 +18,8 @@
 
 namespace DoctrineModule\Component\Console\Output;
 
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Symfony\Component\Console\Output\Output;
 
 /**
  * Output writing in class member variable

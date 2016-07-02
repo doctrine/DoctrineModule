@@ -19,8 +19,8 @@
 
 namespace DoctrineModuleTest\Service\Authentication;
 
-use DoctrineModule\Service\Authentication\AuthenticationServiceFactory;
 use DoctrineModule\Service\Authentication\AdapterFactory;
+use DoctrineModule\Service\Authentication\AuthenticationServiceFactory;
 use DoctrineModule\Service\Authentication\StorageFactory;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;

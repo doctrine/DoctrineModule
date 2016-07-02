@@ -19,10 +19,10 @@
 
 namespace DoctrineModuleTest\Cache;
 
-use DoctrineModule\Cache\ZendStorageCache;
 use Doctrine\Common\Cache\Cache;
-use Zend\Cache\Storage\Adapter\Memory;
+use DoctrineModule\Cache\ZendStorageCache;
 use PHPUnit_Framework_TestCase;
+use Zend\Cache\Storage\Adapter\Memory;
 
 /**
  * Tests for the cache bridge

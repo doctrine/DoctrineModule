@@ -18,10 +18,10 @@
 
 namespace DoctrineModule\Controller;
 
+use DoctrineModule\Component\Console\Input\RequestInput;
 use Symfony\Component\Console\Application;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ConsoleModel;
-use DoctrineModule\Component\Console\Input\RequestInput;
 
 /**
  * Index controller

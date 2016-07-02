@@ -19,13 +19,11 @@
  
 namespace DoctrineModuleTest;
 
-use PHPUnit_Framework_TestCase;
-use PHPUnit_Framework_Assert;
-use PHPUnit_Framework_MockObject_MockObject;
 use DoctrineModule\Module;
-use DoctrineModuleTest\ServiceManagerTestCase;
-use Symfony\Component\Console\Output\OutputInterface;
+use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author Martin Keckeis <martin.keckeis1@gmail.com>

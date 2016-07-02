@@ -19,14 +19,14 @@
 
 namespace DoctrineModule\Service;
 
-use Interop\Container\ContainerInterface;
-use InvalidArgumentException;
 use Doctrine\Common\Annotations;
+use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
+use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
 use DoctrineModule\Options\Driver as DriverOptions;
+use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**

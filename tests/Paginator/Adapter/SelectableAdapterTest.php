@@ -19,9 +19,9 @@
 
 namespace DoctrineModuleTest\Paginator\Adapter;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
-use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit_Framework_TestCase;
 
 /**
