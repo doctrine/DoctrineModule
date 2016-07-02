@@ -43,7 +43,7 @@ class Cache extends AbstractOptions
      * @var string
      */
     protected $namespace = '';
-    
+
     /**
      * Directory for file-based caching
      *
@@ -115,7 +115,7 @@ class Cache extends AbstractOptions
     {
         return $this->namespace;
     }
-    
+
     /**
      * @param  string $directory
      * @return self
@@ -126,7 +126,7 @@ class Cache extends AbstractOptions
 
         return $this;
     }
-    
+
     /**
      * @return string
      */

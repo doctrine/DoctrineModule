@@ -166,7 +166,7 @@ class ObjectExistsTest extends BaseTestCase
 
         $validator->isValid(['field1' => 'field1Value']);
     }
-    
+
     public function testErrorMessageIsStringInsteadArray()
     {
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
@@ -174,11 +174,11 @@ class ObjectExistsTest extends BaseTestCase
             'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
             'fields'            => 'field',
         ]);
-        
+
         $this->assertFalse($validator->isValid('value'));
 
         $messageTemplates = $validator->getMessageTemplates();
-        
+
         $expectedMessage = str_replace(
             '%value%',
             'value',

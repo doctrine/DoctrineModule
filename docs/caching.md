@@ -1,6 +1,6 @@
 # Caching
 
-DoctrineModule provides bridging between 
+DoctrineModule provides bridging between
 [`Zend\Cache`](https://github.com/zendframework/zf2/tree/master/library/Zend/Cache)
 and [`Doctrine\Common\Cache`](https://github.com/doctrine/common/tree/master/lib/Doctrine/Common/Cache).
 This may be useful in case you want to share configured cache instances across doctrine, symfony

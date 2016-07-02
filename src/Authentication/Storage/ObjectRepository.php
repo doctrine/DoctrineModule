@@ -52,7 +52,7 @@ class ObjectRepository implements StorageInterface
         $this->options = $options;
         return $this;
     }
-    
+
     /**
      * Constructor
      *
@@ -96,7 +96,7 @@ class ObjectRepository implements StorageInterface
     {
         return $identity = $this->options->getStorage()->read();
     }
-    
+
     /**
      * @param  object $identity
      * @return void

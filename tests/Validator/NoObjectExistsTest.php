@@ -59,7 +59,7 @@ class NoObjectExistsTest extends BaseTestCase
 
         $this->assertFalse($validator->isValid('matchValue'));
     }
-    
+
     public function testErrorMessageIsStringInsteadArray()
     {
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
@@ -68,11 +68,11 @@ class NoObjectExistsTest extends BaseTestCase
             ->method('findOneBy')
             ->will($this->returnValue(new stdClass()));
         $validator = new NoObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
-        
+
         $this->assertFalse($validator->isValid('matchValue'));
 
         $messageTemplates = $validator->getMessageTemplates();
-        
+
         $expectedMessage = str_replace(
             '%value%',
             'matchValue',

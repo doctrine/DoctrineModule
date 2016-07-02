@@ -25,7 +25,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 class MyForm extends Form implements ObjectManagerAwareInterface
 {
     protected $objectManager;
-    
+
     public function init()
     {
         $this->add([
@@ -38,16 +38,16 @@ class MyForm extends Form implements ObjectManagerAwareInterface
             ],
         ]);
     }
-    
+
     public function setObjectManager(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }
-    
+
     public function getObjectManager()
     {
         return $this->objectManager;
-    }    
+    }
 }
 ```
 
@@ -118,10 +118,10 @@ $this->add([
             'name'   => 'findBy',
             'params' => [
                 'criteria' => ['active' => 1],
-                
+
                 // Use key 'orderBy' if using ORM
                 'orderBy'  => ['lastname' => 'ASC'],
-                
+
                 // Use key 'sort' if using ODM
                 'sort'     => ['lastname' => 'ASC'],
             ],
@@ -152,10 +152,10 @@ $this->add([
 
 ### Example 5 : Add html attributes to the <option> elements
 
-To set custom HTML attributes on each `valueOption` you can use the `option_attributes` setting to specify an array of 
-key/value pairs whereby the keys represent a valid HTML attribute (data-*, aria-*, onEvent, etc.). 
+To set custom HTML attributes on each `valueOption` you can use the `option_attributes` setting to specify an array of
+key/value pairs whereby the keys represent a valid HTML attribute (data-*, aria-*, onEvent, etc.).
 
-The value needs to be of type `string` or `callable` (in which case a `string` - or something able to be casted to 
+The value needs to be of type `string` or `callable` (in which case a `string` - or something able to be casted to
 string - needs to be returned). Check the following example:
 
 ```php
@@ -186,7 +186,7 @@ The above example will generate HTML options with a data-key attribute:
 ```
 
 It is noteworthy that, when working with an option_attribute value of type `callable`, you do **not** need to define
-the fully qualified classname into the function. The object passed into the function will always be identical to 
+the fully qualified classname into the function. The object passed into the function will always be identical to
 the type you define on the key `target_class`.
 
 ### Example 6: Implementing <optgroup> support
@@ -194,7 +194,7 @@ the type you define on the key `target_class`.
 Once lists become larger there's a big user-experience bonus when lists are groupt using the html <optgroup> attribute.
 DoctrineModule provides this functionality with the `optgroup_identifier`.
 
-The assumption DoctrineModule does however is that your data structure has the optgroup-grouping in mind. See the 
+The assumption DoctrineModule does however is that your data structure has the optgroup-grouping in mind. See the
 following example:
 
 **Add the Select list like this:**
@@ -235,10 +235,10 @@ id  | property   | category
 </select>
 ```
 
-### Example 7: <optgroup> formatting on empty optgroups 
+### Example 7: <optgroup> formatting on empty optgroups
 
 In case you define an `optgroup_identifier` and the data inside this column is empty or `null` you have two options of
-rendering these cases. From a UX point of view you should group all "loose" entries inside a group that you call 
+rendering these cases. From a UX point of view you should group all "loose" entries inside a group that you call
 "others" or the likes of that. But you're also able to render them without any grouping at all. Here's both examples:
 
 #### 7.1: Rendering without a default group
@@ -265,7 +265,7 @@ $this->add([
 ```
 id  | property   | category
 1   | Football   | sports
-2   | Basketball | 
+2   | Basketball |
 3   | Spaghetti  | food
 ```
 
@@ -310,7 +310,7 @@ $this->add([
 ```
 id  | property   | category
 1   | Football   | sports
-2   | Basketball | 
+2   | Basketball |
 3   | Spaghetti  | food
 ```
 

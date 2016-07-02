@@ -421,7 +421,6 @@ class DoctrineObject extends AbstractHydrator
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
-
             if ($value instanceof $target) {
                 // assumes modifications have already taken place in object
                 $collection[] = $value;

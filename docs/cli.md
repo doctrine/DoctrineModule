@@ -1,5 +1,5 @@
 # Doctrine CLI
-The Doctrine CLI has been pre-configured for you and works as is without any special configuration 
+The Doctrine CLI has been pre-configured for you and works as is without any special configuration
 required for MongoODM ODM and ORM. It will use your application's configuration for
 entities or documents.
 
@@ -13,7 +13,7 @@ Each command provides a description of itself if called with a `--help` argument
 
 ## Adding commands to the CLI
 
-You may add your own CLI commands by just creating new 
+You may add your own CLI commands by just creating new
 [Symfony commands](http://symfony.com/doc/current/cookbook/console/console_command.html)
 and attaching them to the provided CLI application as following:
 

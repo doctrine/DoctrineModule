@@ -41,7 +41,7 @@ class PropertyOutputTest extends TestCase
         $output->write($message);
         $this->assertEquals($message, $output->getMessage());
     }
-    
+
     /**
      * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
      */
@@ -49,11 +49,11 @@ class PropertyOutputTest extends TestCase
     {
         $message  = 'message';
         $message2 = 'message2';
-        
+
         $output = new PropertyOutput();
         $output->write($message, PHP_EOL);
         $output->write($message2, PHP_EOL);
-        
+
         $expected = $message . PHP_EOL . $message2 . PHP_EOL;
         $this->assertEquals($expected, $output->getMessage());
     }

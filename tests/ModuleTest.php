@@ -16,7 +16,7 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
- 
+
 namespace DoctrineModuleTest;
 
 use DoctrineModule\Module;
@@ -86,9 +86,9 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         $module = new Module();
-        
+
         $config = $module->getConfig();
-        
+
         $this->assertInternalType('array', $config);
         $this->assertArrayHasKey('doctrine', $config);
         $this->assertArrayHasKey('doctrine_factories', $config);
@@ -96,10 +96,10 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('controllers', $config);
         $this->assertArrayHasKey('route_manager', $config);
         $this->assertArrayHasKey('console', $config);
-        
+
         $this->assertSame($config, unserialize(serialize($config)));
     }
-    
+
     /**
      * Should display the help message in plain message
      * @covers \DoctrineModule\Module::getConsoleUsage

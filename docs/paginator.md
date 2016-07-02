@@ -76,5 +76,5 @@ $paginator->setCurrentPageNumber(1)
 
 // Pass it to the view, and use it like a "standard" Zend paginator
 ```
-	
+
 For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.3/en/modules/zend.paginator.introduction.html).

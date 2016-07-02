@@ -376,7 +376,7 @@ class UniqueObjectTest extends BaseTestCase
 
         $this->assertTrue($validator->isValid('matchValue', $context));
     }
-    
+
     public function testErrorMessageIsStringInsteadArray()
     {
         $match = new stdClass();
@@ -422,7 +422,7 @@ class UniqueObjectTest extends BaseTestCase
             )
         );
         $messageTemplates = $validator->getMessageTemplates();
-        
+
         $expectedMessage = str_replace(
             '%value%',
             'matchValue',

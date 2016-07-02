@@ -51,7 +51,7 @@ class ObjectRepositoryTest extends BaseTestCase
                  ->method('getIdentifierValues')
                  ->with($this->equalTo($entity))
                  ->will($this->returnValue($entity->getUsername()));
-        
+
         $storage = new ObjectRepositoryStorage([
             'objectRepository' => $objectRepository,
             'classMetadata'    => $metadata,
@@ -63,7 +63,7 @@ class ObjectRepositoryTest extends BaseTestCase
 
         $result = $storage->read();
         $this->assertEquals($entity, $result);
-        
+
         $key = $storage->readKeyOnly();
         $this->assertEquals('a username', $key);
     }
