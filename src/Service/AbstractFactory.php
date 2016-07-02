@@ -45,11 +45,6 @@ abstract class AbstractFactory implements FactoryInterface
     protected $name;
 
     /**
-     * @var \Zend\Stdlib\AbstractOptions
-     */
-    protected $options;
-
-    /**
      * @param string $name
      */
     public function __construct($name)
