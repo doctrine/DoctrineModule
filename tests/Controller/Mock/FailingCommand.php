@@ -18,8 +18,8 @@ class FailingCommand extends Command
     {
         if ($input->getOption('exception')) {
             throw new \RuntimeException();
-        } else {
-            return 1;
         }
+
+        return 1;
     }
 }

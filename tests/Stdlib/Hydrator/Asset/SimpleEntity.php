@@ -39,8 +39,8 @@ class SimpleEntity
         // Modify the value to illustrate the difference between by value and by reference
         if ($modifyValue) {
             return "From getter: $this->field";
-        } else {
-            return $this->field;
         }
+
+        return $this->field;
     }
 }

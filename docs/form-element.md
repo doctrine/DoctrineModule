@@ -89,9 +89,9 @@ $this->add([
         'label_generator' => function ($targetEntity) use ($someSession) {
             if ('accessible' === $someSession->getCurrentMode()) {
                 return $targetEntity->getAccessibleLabel();
-            } else {
-                return $targetEntity->getLabel();
             }
+
+            return $targetEntity->getLabel();
         },
     ],
 ]);
