@@ -39,9 +39,8 @@ class CacheFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return \Doctrine\Common\Cache\Cache
-     *
      * @throws RuntimeException
+     * @return \Doctrine\Common\Cache\Cache
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -94,9 +93,8 @@ class CacheFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return \Doctrine\Common\Cache\Cache
-     *
      * @throws RuntimeException
+     * @return \Doctrine\Common\Cache\Cache
      */
     public function createService(ServiceLocatorInterface $container)
     {

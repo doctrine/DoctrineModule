@@ -69,9 +69,8 @@ class FormObject
     }
 
     /**
-     * @param int $id
-     *
-     * @return self
+     * @param  int $id
+     * @return $this
      */
     public function setId($id)
     {
@@ -89,9 +88,8 @@ class FormObject
     }
 
     /**
-     * @param string $email
-     *
-     * @return self
+     * @param  string $email
+     * @return $this
      */
     public function setEmail($email)
     {
@@ -109,9 +107,8 @@ class FormObject
     }
 
     /**
-     * @param string $password
-     *
-     * @return self
+     * @param  string $password
+     * @return $this
      */
     public function setPassword($password)
     {
@@ -129,9 +126,8 @@ class FormObject
     }
 
     /**
-     * @param string $username
-     *
-     * @return self
+     * @param  string $username
+     * @return $this
      */
     public function setUsername($username)
     {
@@ -149,9 +145,8 @@ class FormObject
     }
 
     /**
-     * @param string $firstname
-     *
-     * @return self
+     * @param  string $firstname
+     * @return $this
      */
     public function setFirstname($firstname)
     {
@@ -169,9 +164,8 @@ class FormObject
     }
 
     /**
-     * @param string $surname
-     *
-     * @return self
+     * @param  string $surname
+     * @return $this
      */
     public function setSurname($surname)
     {

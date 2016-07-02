@@ -53,7 +53,7 @@ class Proxy implements ObjectManagerAwareInterface
     protected $findMethod = [];
 
     /**
-     * @var
+     * @var string
      */
     protected $property;
 
@@ -166,8 +166,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set the label for the empty option
      *
-     * @param string $emptyItemLabel
-     *
+     * @param  string $emptyItemLabel
      * @return Proxy
      */
     public function setEmptyItemLabel($emptyItemLabel)
@@ -204,8 +203,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set a flag, whether to include the empty option at the beginning or not
      *
-     * @param boolean $displayEmptyItem
-     *
+     * @param  bool $displayEmptyItem
      * @return Proxy
      */
     public function setDisplayEmptyItem($displayEmptyItem)
@@ -216,7 +214,7 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getDisplayEmptyItem()
     {
@@ -227,7 +225,6 @@ class Proxy implements ObjectManagerAwareInterface
      * Set the object manager
      *
      * @param  ObjectManager $objectManager
-     *
      * @return Proxy
      */
     public function setObjectManager(ObjectManager $objectManager)
@@ -251,7 +248,6 @@ class Proxy implements ObjectManagerAwareInterface
      * Set the FQCN of the target object
      *
      * @param  string $targetClass
-     *
      * @return Proxy
      */
     public function setTargetClass($targetClass)
@@ -275,7 +271,6 @@ class Proxy implements ObjectManagerAwareInterface
      * Set the property to use as the label in the options
      *
      * @param  string $property
-     *
      * @return Proxy
      */
     public function setProperty($property)
@@ -296,10 +291,8 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set the label generator callable that is responsible for generating labels for the items in the collection
      *
-     * @param callable $callable A callable used to create a label based off of an Entity
-     *
+     * @param  callable $callable A callable used to create a label based off of an Entity
      * @throws InvalidArgumentException
-     *
      * @return void
      */
     public function setLabelGenerator($callable)
@@ -356,8 +349,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set if the property is a method to use as the label in the options
      *
-     * @param  boolean $method
-     *
+     * @param  bool $method
      * @return Proxy
      */
     public function setIsMethod($method)
@@ -377,8 +369,7 @@ class Proxy implements ObjectManagerAwareInterface
 
     /** Set the findMethod property to specify the method to use on repository
      *
-     * @param array $findMethod
-     *
+     * @param  array $findMethod
      * @return Proxy
      */
     public function setFindMethod($findMethod)
@@ -399,8 +390,7 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
-     * @param $targetEntity
-     *
+     * @param  $targetEntity
      * @return string|null
      */
     protected function generateLabel($targetEntity)
@@ -414,7 +404,6 @@ class Proxy implements ObjectManagerAwareInterface
 
     /**
      * @param  $value
-     *
      * @return array|mixed|object
      * @throws RuntimeException
      */

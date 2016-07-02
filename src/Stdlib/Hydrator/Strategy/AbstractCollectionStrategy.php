@@ -96,9 +96,7 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      * Set the object
      *
      * @param  object $object
-     *
      * @throws \InvalidArgumentException
-     *
      * @return AbstractCollectionStrategy
      */
     public function setObject($object)
@@ -135,7 +133,6 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      * Return the collection by value (using the public API)
      *
      * @throws \InvalidArgumentException
-     *
      * @return Collection
      */
     protected function getCollectionFromObjectByValue()
@@ -178,9 +175,8 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      * This method is used internally by array_udiff to check if two objects are equal, according to their
      * SPL hash. This is needed because the native array_diff only compare strings
      *
-     * @param object $a
-     * @param object $b
-     *
+     * @param  object $a
+     * @param  object $b
      * @return int
      */
     protected function compareObjects($a, $b)

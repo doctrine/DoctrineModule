@@ -517,9 +517,8 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Find an object by a given target class and identifier
      *
-     * @param  mixed   $identifiers
-     * @param  string  $targetClass
-     *
+     * @param  mixed  $identifiers
+     * @param  string $targetClass
      * @return object|null
      */
     protected function find($identifiers, $targetClass)
@@ -539,7 +538,6 @@ class DoctrineObject extends AbstractHydrator
      * Verifies if a provided identifier is to be considered null
      *
      * @param  mixed $identifier
-     *
      * @return bool
      */
     private function isNullIdentifier($identifier)
@@ -565,8 +563,7 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Applies the naming strategy if there is one set
      *
-     * @param string $field
-     *
+     * @param  string $field
      * @return string
      */
     protected function computeHydrateFieldName($field)
@@ -580,8 +577,7 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Applies the naming strategy if there is one set
      *
-     * @param string $field
-     *
+     * @param  string $field
      * @return string
      */
     protected function computeExtractFieldName($field)

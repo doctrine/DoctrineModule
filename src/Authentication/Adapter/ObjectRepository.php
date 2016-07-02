@@ -59,6 +59,7 @@ class ObjectRepository extends AbstractAdapter
 
     /**
      * @param  array|AuthenticationOptions $options
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -78,7 +79,7 @@ class ObjectRepository extends AbstractAdapter
         return $this->options;
     }
 
-    /*
+    /**
      * {@inheritDoc}
      */
     public function authenticate()
@@ -105,7 +106,7 @@ class ObjectRepository extends AbstractAdapter
      * This method attempts to validate that the record in the resultset is indeed a
      * record that matched the identity provided to this adapter.
      *
-     * @param  object                              $identity
+     * @param  object $identity
      * @throws Exception\UnexpectedValueException
      * @return AuthenticationResult
      */

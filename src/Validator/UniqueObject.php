@@ -49,18 +49,18 @@ class UniqueObject extends ObjectExists
     protected $objectManager;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $useContext;
 
-    /***
+    /**
      * Constructor
      *
-     * @param array $options required keys are `object_repository`, which must be an instance of
-     *                       Doctrine\Common\Persistence\ObjectRepository, `object_manager`, which
-     *                       must be an instance of Doctrine\Common\Persistence\ObjectManager,
-     *                       and `fields`, with either a string or an array of strings representing
-     *                       the fields to be matched by the validator.
+     * @param  array $options required keys are `object_repository`, which must be an instance of
+     *                        Doctrine\Common\Persistence\ObjectRepository, `object_manager`, which
+     *                        must be an instance of Doctrine\Common\Persistence\ObjectManager,
+     *                        and `fields`, with either a string or an array of strings representing
+     *                        the fields to be matched by the validator.
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(array $options)
@@ -88,7 +88,7 @@ class UniqueObject extends ObjectExists
         }
 
         $this->objectManager = $options['object_manager'];
-        $this->useContext    = isset($options['use_context']) ? (boolean) $options['use_context'] : false;
+        $this->useContext    = isset($options['use_context']) ? (bool) $options['use_context'] : false;
     }
 
     /**
@@ -96,7 +96,7 @@ class UniqueObject extends ObjectExists
      *
      * @param  mixed $value
      * @param  array $context
-     * @return boolean
+     * @return bool
      */
     public function isValid($value, $context = null)
     {
@@ -125,7 +125,7 @@ class UniqueObject extends ObjectExists
     /**
      * Gets the identifiers from the matched object.
      *
-     * @param object $match
+     * @param  object $match
      * @return array
      * @throws Exception\RuntimeException
      */

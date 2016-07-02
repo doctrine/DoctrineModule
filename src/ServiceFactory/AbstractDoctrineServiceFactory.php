@@ -62,6 +62,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
 
     /**
      * {@inheritDoc}
+     *
      * @deprecated
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $container, $name, $requestedName)
@@ -71,6 +72,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
 
     /**
      * {@inheritDoc}
+     *
      * @deprecated
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
@@ -79,9 +81,8 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
     }
 
     /**
-     * @param ContainerInterface $serviceLocator
-     * @param string             $name
-     *
+     * @param  ContainerInterface $serviceLocator
+     * @param  string             $name
      * @return array|bool
      */
     private function getFactoryMapping(ContainerInterface $serviceLocator, $name)

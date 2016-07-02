@@ -37,9 +37,8 @@ class ZendStorageCacheFactory extends CacheFactory
     /**
      * {@inheritDoc}
      *
-     * @return \Doctrine\Common\Cache\Cache
-     *
      * @throws RuntimeException
+     * @return \Doctrine\Common\Cache\Cache
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -69,8 +68,9 @@ class ZendStorageCacheFactory extends CacheFactory
 
     /**
      * {@inheritDoc}
-     * @return ZendStorageCache
+     *
      * @throws RuntimeException
+     * @return ZendStorageCache
      */
     public function createService(ServiceLocatorInterface $container)
     {

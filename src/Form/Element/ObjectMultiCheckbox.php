@@ -42,7 +42,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
 
     /**
      * @param  array|\Traversable $options
-     * @return self
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -51,9 +51,9 @@ class ObjectMultiCheckbox extends MultiCheckbox
     }
 
     /**
-     * @param string $key
-     * @param mixed $value
-     * @return self
+     * @param  string $key
+     * @param  mixed $value
+     * @return $this
      */
     public function setOption($key, $value)
     {

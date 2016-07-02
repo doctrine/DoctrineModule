@@ -67,7 +67,7 @@ class Authentication extends AbstractOptions
     /**
      * A valid object implementing ObjectManager interface
      *
-     * @var string | ObjectManager
+     * @var string|ObjectManager
      */
     protected $objectManager;
 
@@ -127,7 +127,7 @@ class Authentication extends AbstractOptions
     protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
     /**
-     * @param  string | ObjectManager $objectManager
+     * @param  string|ObjectManager $objectManager
      * @return Authentication
      */
     public function setObjectManager($objectManager)
@@ -167,7 +167,7 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     * @param string $identityClass
+     * @param  string $identityClass
      * @return Authentication
      */
     public function setIdentityClass($identityClass)
