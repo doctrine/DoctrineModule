@@ -20,7 +20,6 @@
 namespace DoctrineModule\Service;
 
 use Interop\Container\ContainerInterface;
-use RuntimeException;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
@@ -93,7 +92,7 @@ abstract class AbstractFactory implements FactoryInterface
         $options = isset($options[$key][$name]) ? $options[$key][$name] : null;
 
         if (null === $options) {
-            throw new RuntimeException(
+            throw new \RuntimeException(
                 sprintf(
                     'Options with name "%s" could not be found in "doctrine.%s".',
                     $name,
