@@ -19,6 +19,7 @@
 
 namespace DoctrineModule\Service;
 
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Doctrine\Common\Annotations;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
@@ -26,7 +27,6 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
 use DoctrineModule\Options\Driver as DriverOptions;
-use DoctrineModule\Service\AbstractFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -42,12 +42,20 @@ class DriverFactory extends AbstractFactory
      * {@inheritDoc}
      * @return MappingDriver
      */
-    public function createService(ServiceLocatorInterface $sl)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         /* @var $options DriverOptions */
-        $options = $this->getOptions($sl, 'driver');
+        $options = $this->getOptions($container, 'driver');
 
-        return $this->createDriver($sl, $options);
+        return $this->createDriver($container, $options);
+    }
+    /**
+     * {@inheritDoc}
+     * @return MappingDriver
+     */
+    public function createService(ServiceLocatorInterface $container)
+    {
+        return $this($container, MappingDriver::class);
     }
 
     /**
@@ -59,12 +67,12 @@ class DriverFactory extends AbstractFactory
     }
 
     /**
-     * @param  ServiceLocatorInterface  $sl
-     * @param  DriverOptions            $options
+     * @param  ContainerInterface $container
+     * @param  DriverOptions      $options
      * @throws InvalidArgumentException
      * @return MappingDriver
      */
-    protected function createDriver(ServiceLocatorInterface $sl, DriverOptions $options)
+    protected function createDriver(ContainerInterface $container, DriverOptions $options)
     {
         $class = $options->getClass();
 
@@ -86,7 +94,7 @@ class DriverFactory extends AbstractFactory
             $reader = new Annotations\AnnotationReader;
             $reader = new Annotations\CachedReader(
                 new Annotations\IndexedReader($reader),
-                $sl->get($options->getCache())
+                $container->get($options->getCache())
             );
             /* @var $driver MappingDriver */
             $driver = new $class($reader, $paths);
@@ -127,8 +135,8 @@ class DriverFactory extends AbstractFactory
                 if (null === $driverName) {
                     continue;
                 }
-                $options = $this->getOptions($sl, 'driver', $driverName);
-                $driver->addDriver($this->createDriver($sl, $options), $namespace);
+                $options = $this->getOptions($container, 'driver', $driverName);
+                $driver->addDriver($this->createDriver($container, $options), $namespace);
             }
         }
 

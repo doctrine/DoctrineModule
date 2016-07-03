@@ -58,12 +58,12 @@ class ServiceManagerTestCase
      */
     public function getServiceManager(array $configuration = null)
     {
-        $configuration  = $configuration ?: static::getConfiguration();
-        $serviceManager = new ServiceManager(
-            new ServiceManagerConfig(
-                isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
-            )
+        $configuration        = $configuration ?: static::getConfiguration();
+        $serviceManager       = new ServiceManager();
+        $serviceManagerConfig = new ServiceManagerConfig(
+            isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
         );
+        $serviceManagerConfig->configureServiceManager($serviceManager);
 
         $serviceManager->setService('ApplicationConfig', $configuration);
         if (!$serviceManager->has('ServiceListener')) {
