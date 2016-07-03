@@ -94,7 +94,7 @@ class ModuleDefinedServicesTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['doctrine.cache.array', true],
-            ['doctrine.cache.apc', true],
+            ['doctrine.cache.apcu', true],
             ['doctrine.cache.filesystem', true],
             ['doctrine.cache.memcache', true],
             ['doctrine.cache.memcached', true],

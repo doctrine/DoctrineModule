@@ -25,8 +25,8 @@ use Zend\Authentication\Storage\Session;
 return [
     'doctrine' => [
         'cache' => [
-            'apc' => [
-                'class'     => Cache\ApcCache::class,
+            'apcu' => [
+                'class'     => Cache\ApcuCache::class,
                 'namespace' => __NAMESPACE__,
             ],
             'array' => [
