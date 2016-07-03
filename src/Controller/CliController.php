@@ -57,5 +57,7 @@ class CliController extends AbstractActionController
 
             return $model;
         }
+
+        return null;
     }
 }
