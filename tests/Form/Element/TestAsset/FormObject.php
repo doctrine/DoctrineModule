@@ -187,7 +187,7 @@ class FormObject
      */
     public function getName()
     {
-        return isset($this->firstname) && isset($this->surname) ? $this->firstname . " " . $this->surname : null;
+        return $this->firstname && $this->surname ? $this->firstname . ' ' . $this->surname : null;
     }
 
     /**

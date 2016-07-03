@@ -51,43 +51,25 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
     public function testSetValueWithCollection()
     {
         $this->element->setAttribute('multiple', true);
+        $this->element->setValue($this->values);
 
-        $this->element->setValue(
-            $this->values
-        );
-
-        $this->assertEquals(
-            [1, 2],
-            $this->element->getValue()
-        );
+        $this->assertEquals([1, 2], $this->element->getValue());
     }
 
     public function testSetValueWithArray()
     {
         $this->element->setAttribute('multiple', true);
+        $this->element->setValue($this->values->toArray());
 
-        $this->element->setValue(
-            $this->values->toArray()
-        );
-
-        $this->assertEquals(
-            [1, 2],
-            $this->element->getValue()
-        );
+        $this->assertEquals([1, 2], $this->element->getValue());
     }
 
     public function testSetValueSingleValue()
     {
         $value = $this->values->toArray();
+        $this->element->setValue($value[0]);
 
-        $this->element->setValue(
-            $value[0]
-        );
-
-        $this->assertEquals(
-            1,
-            $this->element->getValue()
-        );
+        $this->assertEquals(1, $this->element->getValue());
     }
 
     public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized()

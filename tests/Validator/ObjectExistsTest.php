@@ -61,17 +61,12 @@ class ObjectExistsTest extends \PHPUnit_Framework_TestCase
 
         $validator = new ObjectExists([
             'object_repository' => $repository,
-            'fields'            => [
-                'firstMatchKey',
-                'secondMatchKey',
-            ],
+            'fields'            => ['firstMatchKey', 'secondMatchKey'],
         ]);
-        $this->assertTrue(
-            $validator->isValid([
-                'firstMatchKey'  => 'firstMatchValue',
-                'secondMatchKey' => 'secondMatchValue',
-            ])
-        );
+        $this->assertTrue($validator->isValid([
+            'firstMatchKey'  => 'firstMatchValue',
+            'secondMatchKey' => 'secondMatchValue',
+        ]));
         $this->assertTrue($validator->isValid(['firstMatchValue', 'secondMatchValue']));
     }
 

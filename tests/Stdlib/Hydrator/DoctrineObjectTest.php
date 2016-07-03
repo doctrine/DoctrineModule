@@ -1169,10 +1169,7 @@ class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
             ->objectManager
             ->expects($this->once())
             ->method('find')
-            ->with(
-                Asset\SimpleEntity::class,
-                ['id' => 1]
-            )
+            ->with(Asset\SimpleEntity::class, ['id' => 1])
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
@@ -1579,12 +1576,7 @@ class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
         $entity = new Asset\OneToManyEntity();
         $this->configureObjectManagerForOneToManyEntity();
 
-        $data = [
-            'entities' => [
-                ['id' => 2],
-                ['id' => 3],
-            ],
-        ];
+        $data = ['entities' => [['id' => 2], ['id' => 3]]];
 
         $entityInDatabaseWithIdOfTwo = new Asset\SimpleEntity();
         $entityInDatabaseWithIdOfTwo->setId(2);
@@ -1642,12 +1634,7 @@ class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
         $entity = new Asset\OneToManyEntity();
         $this->configureObjectManagerForOneToManyEntity();
 
-        $data = [
-            'entities' => [
-                ['id' => 2],
-                ['id' => 3],
-            ],
-        ];
+        $data = ['entities' => [['id' => 2], ['id' => 3]]];
 
         $entityInDatabaseWithIdOfTwo = new Asset\SimpleEntity();
         $entityInDatabaseWithIdOfTwo->setId(2);
@@ -1931,12 +1918,10 @@ class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
     {
         // When using hydration by value, it will use the public API of the entity to set values (setters)
         $data = [
-            'entities' => new ArrayCollection(
-                [
-                    ['id' => 2, 'field' => 'Modified By Hydrate'],
-                    ['id' => 3, 'field' => 'Modified By Hydrate'],
-                ]
-            ),
+            'entities' => new ArrayCollection([
+                ['id' => 2, 'field' => 'Modified By Hydrate'],
+                ['id' => 3, 'field' => 'Modified By Hydrate'],
+            ]),
         ];
 
         $entityInDatabaseWithIdOfTwo = new Asset\SimpleEntity();

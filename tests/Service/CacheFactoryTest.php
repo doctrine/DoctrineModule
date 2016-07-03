@@ -44,13 +44,13 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
         $serviceManager->setService(
             'Configuration',
             [
-                 'doctrine' => [
-                     'cache' => [
-                         'foo' => [
-                             'namespace' => 'bar',
-                         ],
-                     ],
-                 ],
+                'doctrine' => [
+                    'cache' => [
+                        'foo' => [
+                            'namespace' => 'bar',
+                        ],
+                    ],
+                ],
             ]
         );
 

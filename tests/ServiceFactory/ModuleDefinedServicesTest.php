@@ -19,6 +19,7 @@
 
 namespace DoctrineModuleTest\ServiceFactory;
 
+use Doctrine\Common\Cache\ArrayCache;
 use DoctrineModuleTest\ServiceManagerTestCase;
 use Zend\ServiceManager\Exception;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -114,7 +115,7 @@ class ModuleDefinedServicesTest extends \PHPUnit_Framework_TestCase
             ['doctrine.foo', false],
             ['doctrine.foo.bar', false],
             ['doctrine.cache.bar', false],
-            //['doctrine.cache.zendcachestorage'],
+            // ['doctrine.cache.zendcachestorage'],
         ];
     }
 
@@ -124,7 +125,7 @@ class ModuleDefinedServicesTest extends \PHPUnit_Framework_TestCase
     public function getServicesThatCanBeFetched()
     {
         return [
-            ['doctrine.cache.array', 'Doctrine\Common\Cache\ArrayCache'],
+            ['doctrine.cache.array', ArrayCache::class],
         ];
     }
 

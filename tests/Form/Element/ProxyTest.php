@@ -42,7 +42,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     protected $metadata;
 
     /**
-     * @var \DoctrineModule\Form\Element\Proxy
+     * @var Proxy
      */
     protected $proxy;
 
@@ -285,7 +285,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
         $this->proxy->setOptions([
             'option_attributes' => [
                 'class' => 'foo',
-                'lang' => 'en',
+                'lang'  => 'en',
             ],
         ]);
 
@@ -293,7 +293,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 
         $expectedAttributes = [
             'class' => 'foo',
-            'lang' => 'en',
+            'lang'  => 'en',
         ];
 
         $this->assertCount(2, $options);

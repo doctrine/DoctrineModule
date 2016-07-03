@@ -52,7 +52,7 @@ class OneToManyArrayEntity
     }
 
     /**
-     * @param bool $modifyValue
+     * @param  bool $modifyValue
      * @return array
      */
     public function getEntities($modifyValue = true)

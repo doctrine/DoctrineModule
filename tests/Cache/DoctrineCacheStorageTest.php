@@ -551,12 +551,10 @@ class DoctrineCacheStorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->storage->setItem('key1', 'value1'));
 
-        $failedKeys = $this->storage->addItems(
-            [
-                'key1' => 'XYZ',
-                'key2' => 'value2',
-            ]
-        );
+        $failedKeys = $this->storage->addItems([
+            'key1' => 'XYZ',
+            'key2' => 'value2',
+        ]);
 
         $this->assertSame(['key1'], $failedKeys);
         $this->assertSame('value1', $this->storage->getItem('key1'));
@@ -588,12 +586,10 @@ class DoctrineCacheStorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->storage->setItem('key1', 'value1'));
 
-        $failedKeys = $this->storage->replaceItems(
-            [
-                'key1' => 'XYZ',
-                'key2' => 'value2',
-            ]
-        );
+        $failedKeys = $this->storage->replaceItems([
+            'key1' => 'XYZ',
+            'key2' => 'value2',
+        ]);
 
         $this->assertSame(['key2'], $failedKeys);
         $this->assertSame('XYZ', $this->storage->getItem('key1'));
