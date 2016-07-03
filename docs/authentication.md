@@ -6,7 +6,7 @@ Authentication through Doctrine is fully supported by DoctrineModule through an 
 
 In order to authenticate a user (or anything else) against Doctrine, the following workflow will be use :
 
-1. Create an authentication adapter that contains options about the entity that is authenticated (credential property, identity property…).
+1. Create an authentication adapter that contains options about the entity that is authenticated (credential property, identity property...).
 2. Create a storage adapter. If the authentication succeeds, the identifier of the entity will be automatically stored in session.
 3. Create a `Zend\Authentication\AuthenticationService`instance that contains both the authentication adapter and the storage adapter.
 
@@ -37,13 +37,13 @@ Here are some explanations about the keys:
 
 * the `object_manager` key can either be a concrete instance of a `Doctrine\Common\Persistence\ObjectManager` or a single string that will fetched from the Service Manager in order to get a concrete instance. If you are using DoctrineORMModule, you can simply write 'Doctrine\ORM\EntityManager' (as the EntityManager implements the class `Doctrine\Common\Persistence\ObjectManager`).
 * the `identity_class` contains the FQCN of the entity that will be used during the authentication process.
-* the `identity_property` contains the name of the property that will be used as the identity property (most often, this is email, username…). Please note that we are talking here of the PROPERTY, not the table column name (although it can be the same in most of the cases).
-* the `credential_property` contains the name of the property that will be used as the credential property (most often, this is password…).
+* the `identity_property` contains the name of the property that will be used as the identity property (most often, this is email, username...). Please note that we are talking here of the PROPERTY, not the table column name (although it can be the same in most of the cases).
+* the `credential_property` contains the name of the property that will be used as the credential property (most often, this is password...).
 
 The authentication accept some more options that can be used :
 
 * the `object_repository` can be used instead of the `object_manager` key. Most of the time you won't deal with the one, as specifying the `identity_class` name will automatically fetch the `object_repository` for you.
-* the `credential_callable` is a very useful option that allow you to perform some custom logic when checking if the credential is correct. For instance, if your password are encrypted using Bcrypt algorithm, you will need to perform specific logic. This option can be any callable function (closure, class method…). This function will be given the complete entity fetched from the database, and the credential that was given by the user during the authentication process.
+* the `credential_callable` is a very useful option that allow you to perform some custom logic when checking if the credential is correct. For instance, if your password are encrypted using Bcrypt algorithm, you will need to perform specific logic. This option can be any callable function (closure, class method...). This function will be given the complete entity fetched from the database, and the credential that was given by the user during the authentication process.
 
 Here is an example code that adds the `credential_callable` function to our previous example :
 
@@ -95,7 +95,7 @@ class Module
 }
 ```
 
-Please note that I am using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 view helper.
+Please note that I am using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``...). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 view helper.
 
 #### Using the AuthenticationService
 

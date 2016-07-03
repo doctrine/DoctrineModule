@@ -19,8 +19,9 @@ use and a `property` of the class to use as the Label.
 namespace Module\Form;
 
 use Zend\Form\Form;
-use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Form\Element\ObjectSelect;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
 class MyForm extends Form implements ObjectManagerAwareInterface
 {
@@ -29,7 +30,7 @@ class MyForm extends Form implements ObjectManagerAwareInterface
     public function init()
     {
         $this->add([
-            'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+            'type' => ObjectSelect::class,
             'name' => 'name',
             'options' => [
                 'object_manager' => $this->getObjectManager(),
@@ -62,7 +63,7 @@ you like. In this simple example i will concatenate two properties with a dash.
 
 ```php
 $this->add([
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'type' => ObjectSelect::class,
     'name' => 'name',
     'options' => [
         'object_manager'  => $this->getObjectManager(),
@@ -81,7 +82,7 @@ specific options to provide more accessible labels.
 
 ```php
 $this->add([
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'type' => ObjectSelect::class,
     'name' => 'name',
     'options' => [
         'object_manager'  => $this->getObjectManager(),
@@ -107,7 +108,7 @@ a method as a property by setting `is_method` to true.
 
 ```php
 $this->add([
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'type' => ObjectSelect::class,
     'name' => 'name',
     'options' => [
         'object_manager' => $this->getObjectManager(),
@@ -138,7 +139,7 @@ default is an empty string.
 
 ```php
 $this->add([
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'type' => ObjectSelect::class,
     'name' => 'name',
     'options' => [
         'object_manager'     => $this->getObjectManager(),
@@ -160,7 +161,7 @@ string - needs to be returned). Check the following example:
 
 ```php
 $this->add([
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'type' => ObjectSelect::class,
     'name' => 'test',
     'options' => [
         'object_manager'    => $this->getObjectManager(),
@@ -201,7 +202,7 @@ following example:
 
 ```php
 $this->add([
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'type' => ObjectSelect::class,
     'name' => 'name',
     'options' => [
         'object_manager'      => $this->getObjectManager(),
@@ -249,7 +250,7 @@ To render without a default group you have to change nothing. This is the defaul
 
 ```php
 $this->add([
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'type' => ObjectSelect::class,
     'name' => 'name',
     'options' => [
         'object_manager'      => $this->getObjectManager(),
@@ -293,7 +294,7 @@ To group all loose values into a unified group, simply add the `optgroup_default
 
 ```php
 $this->add([
-    'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+    'type' => ObjectSelect::class,
     'name' => 'name',
     'options' => [
         'object_manager'      => $this->getObjectManager(),

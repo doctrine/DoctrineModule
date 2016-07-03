@@ -26,7 +26,7 @@ You can directly instantiate a validator the following way:
 ```php
 $validator = new \DoctrineModule\Validator\ObjectExists([
     'object_repository' => $objectManager->getRepository('Application\Entity\User'),
-    'fields' => ['email'],
+    'fields'            => ['email'],
 ]);
 
 var_dump($validator->isValid('test@example.com')); // dumps 'true' if an entity matches
@@ -62,7 +62,7 @@ class User extends Form
             ],
         ]);
 
-        // add other elements (submit, CSRF…)
+        // add other elements (submit, CSRF...)
 
         // Fetch any valid object manager from the Service manager (here, an entity manager)
         $entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
@@ -76,7 +76,7 @@ class User extends Form
         ]);
 
         $emailInput->getValidatorChain()
-                      ->attach($noObjectExistsValidator);
+                   ->attach($noObjectExistsValidator);
     }
 }
 ```
@@ -86,6 +86,8 @@ Of course, if you are using fieldsets, you can directly add the validator using 
 ```php
 namespace Application\Form;
 
+use DoctrineModule\Validator\NoObjectExists;
+use Zend\Form\Element\Email;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -102,7 +104,7 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 
         // Add an element
         $this->add([
-            'type'    => 'Zend\Form\Element\Email',
+            'type'    => Email::class,
             'name'    => 'email',
             'options' => [
                 'label' => 'Email',
@@ -121,10 +123,10 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
             'email' => [
                 'validators' => [
                     [
-                        'name' => 'DoctrineModule\Validator\NoObjectExists',
+                        'name' => NoObjectExists::class,
                         'options' => [
                             'object_repository' => $entityManager->getRepository('Application\Entity\User'),
-                            'fields' => 'email',
+                            'fields'            => 'email',
                         ],
                     ],
                 ],
@@ -141,7 +143,7 @@ You can change the default message of the validators the following way :
 // For NoObjectExists validator (using array notation) :
 'validators' => [
     [
-        'name' => 'DoctrineModule\Validator\NoObjectExists',
+        'name' => \DoctrineModule\Validator\NoObjectExists::class,
         'options' => [
             'object_repository' => $this->getEntityManager()->getRepository('Application\Entity\User'),
             'fields' => 'email',
@@ -172,4 +174,3 @@ Second, you have to pass a value for every identifier your entity has got.
 * If you set the `use_context` option to `true` you have to pass the `fields`-values as first argument and an array containing the `identifier`-values as second argument into `isValid()`. When using `Zend\Form` without fieldsets, this behaviour would be needed.
 
 __Important:__ Whatever you choose, please ensure that the `identifier`-values are named by the field-names, not by the database-column.
-

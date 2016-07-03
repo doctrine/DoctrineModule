@@ -362,14 +362,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BlogPost
 {
-    /** .. */
+    /** ... */
 
     /**
      * @ORM\ManyToOne(targetEntity="Application\Entity\User", cascade={"persist"})
      */
     protected $user;
 
-    /** … */
+    /** ... */
 }
 ```
 
@@ -388,8 +388,8 @@ $blogPost = new BlogPost();
 
 $data = [
     'title' => 'Art thou mad?',
-    'user' => [
-        'id' => '',
+    'user'  => [
+        'id'       => '',
         'username' => 'willshakes',
         'password' => '2BorN0t2B',
     ],
@@ -643,14 +643,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BlogPost
 {
-    /** .. */
+    /** ... */
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\Tag", mappedBy="blogPost", cascade={"persist"})
      */
     protected $tags;
 
-    /** … */
+    /** ... */
 }
 ```
 
@@ -833,7 +833,7 @@ class BlogPost
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -904,6 +904,7 @@ class Tag
 
     /**
      * Get the id
+     *
      * @return int
      */
     public function getId()
@@ -1086,7 +1087,7 @@ class CreateBlogPostForm extends Form
         $blogPostFieldset->setUseAsBaseFieldset(true);
         $this->add($blogPostFieldset);
 
-        // … add CSRF and submit elements …
+        // ... add CSRF and submit elements ...
 
         // Optionally set your validation group here
     }
@@ -1116,7 +1117,7 @@ class UpdateBlogPostForm extends Form
         $blogPostFieldset->setUseAsBaseFieldset(true);
         $this->add($blogPostFieldset);
 
-        // … add CSRF and submit elements …
+        // ... add CSRF and submit elements ...
 
         // Optionally set your validation group here
     }
@@ -1233,7 +1234,7 @@ class User
      */
     protected $city;
 
-    // … getter and setters are defined …
+    // ... getter and setters are defined ...
 }
 ```
 
@@ -1376,7 +1377,7 @@ class EditNameForm extends Form
         $userFieldset->setUseAsBaseFieldset(true);
         $this->add($userFieldset);
 
-        // … add CSRF and submit elements …
+        // ... add CSRF and submit elements ...
 
         // Set the validation group so that we don't care about city
         $this->setValidationGroup([
@@ -1467,7 +1468,7 @@ class EditNameForm extends Form
 
         $this->add($userFieldset);
 
-        // … add CSRF and submit elements …
+        // ... add CSRF and submit elements ...
 
         // We don't even need the validation group as the City fieldset does not
         // exist anymore
