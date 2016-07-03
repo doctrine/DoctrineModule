@@ -83,8 +83,8 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         $serviceName = $matches['serviceName'];
 
         if ($mappingType == '') {
-            if (! isset($config['doctrine_factories'][$serviceType]) ||
-                 ! isset($config['doctrine'][$serviceType][$serviceName])
+            if (! isset($config['doctrine_factories'][$serviceType])
+                || ! isset($config['doctrine'][$serviceType][$serviceName])
             ) {
                 return false;
             }
@@ -95,9 +95,9 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
                 'factoryClass' => $config['doctrine_factories'][$serviceType],
             ];
         } else {
-            if (! isset($config['doctrine_factories'][$mappingType]) ||
-                 ! isset($config['doctrine_factories'][$mappingType][$serviceType]) ||
-                 ! isset($config['doctrine'][$mappingType][$serviceType][$serviceName])
+            if (! isset($config['doctrine_factories'][$mappingType])
+                || ! isset($config['doctrine_factories'][$mappingType][$serviceType])
+                || ! isset($config['doctrine'][$mappingType][$serviceType][$serviceName])
             ) {
                 return false;
             }
