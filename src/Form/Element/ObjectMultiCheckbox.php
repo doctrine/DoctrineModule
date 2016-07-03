@@ -71,7 +71,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
         } elseif ($value == null) {
             return parent::setValue([]);
         } elseif (! is_array($value)) {
-            $value = (array)$value;
+            $value = (array) $value;
         }
 
         return parent::setValue(array_map([$this->getProxy(), 'getValue'], $value));

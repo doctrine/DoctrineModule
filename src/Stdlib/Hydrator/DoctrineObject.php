@@ -410,7 +410,7 @@ class DoctrineObject extends AbstractHydrator
         $identifier = $metadata->getIdentifier();
 
         if (! is_array($values) && ! $values instanceof \Traversable) {
-            $values = (array)$values;
+            $values = (array) $values;
         }
 
         $collection = [];

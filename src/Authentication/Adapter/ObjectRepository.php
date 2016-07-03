@@ -176,7 +176,7 @@ class ObjectRepository extends AbstractAdapter
         }
 
         $this->authenticationResultInfo = [
-            'code' => AuthenticationResult::FAILURE,
+            'code'     => AuthenticationResult::FAILURE,
             'identity' => $this->identity,
             'messages' => [],
         ];
