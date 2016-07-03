@@ -1,3 +1,9 @@
+# 1.1.0
+ * fixed require-dev dependancies [#557](https://github.com/doctrine/DoctrineModule/pull/557)
+ * Update hydrator.md [#561](https://github.com/doctrine/DoctrineModule/pull/561)
+ * [git] Add .gitattributes to remove unneeded files [#559](https://github.com/doctrine/DoctrineModule/pull/559)
+ * refactored factories for SM v3 [#558](https://github.com/doctrine/DoctrineModule/pull/558)
+
 # 1.0.1
 
  * Drop compatibility with PHP 5.4 [#553](https://github.com/doctrine/DoctrineModule/pull/553)
