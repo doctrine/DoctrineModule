@@ -29,11 +29,6 @@ use Zend\ServiceManager\ServiceManager;
 class ServiceManagerTestCase
 {
     /**
-     * @var array
-     */
-    protected static $configuration = [];
-
-    /**
      * @return array
      */
     protected function getConfiguration()
