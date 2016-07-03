@@ -74,10 +74,10 @@ class CliFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $cli = new Application;
+        $cli = new Application();
         $cli->setName('DoctrineModule Command Line Interface');
         $cli->setVersion(Module::VERSION);
-        $cli->setHelperSet(new HelperSet);
+        $cli->setHelperSet(new HelperSet());
         $cli->setCatchExceptions(true);
         $cli->setAutoExit(false);
 

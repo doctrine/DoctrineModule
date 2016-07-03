@@ -72,7 +72,7 @@ class CacheFactory extends AbstractFactory
                 break;
 
             default:
-                $cache = new $class;
+                $cache = new $class();
         }
 
         if ($cache instanceof MemcacheCache) {

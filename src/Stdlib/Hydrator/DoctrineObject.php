@@ -382,7 +382,7 @@ class DoctrineObject extends AbstractHydrator
                 $value,
                 array_flip($metadata->getIdentifier())
             );
-            $object      = $this->find($identifiers, $target) ?: new $target;
+            $object      = $this->find($identifiers, $target) ?: new $target();
             return $this->hydrate($value, $object);
         }
 
@@ -453,9 +453,9 @@ class DoctrineObject extends AbstractHydrator
             }
 
             if (! empty($find) && $found = $this->find($find, $target)) {
-                $collection[] = (is_array($value)) ? $this->hydrate($value, $found) : $found;
+                $collection[] = is_array($value) ? $this->hydrate($value, $found) : $found;
             } else {
-                $collection[] = (is_array($value)) ? $this->hydrate($value, new $target) : new $target;
+                $collection[] = is_array($value) ? $this->hydrate($value, new $target()) : new $target();
             }
         }
 

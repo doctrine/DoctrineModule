@@ -52,7 +52,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->proxy = new Proxy;
+        $this->proxy = new Proxy();
     }
 
     public function testExceptionThrownForMissingObjectManager()

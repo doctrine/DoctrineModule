@@ -83,7 +83,7 @@ class DriverFactory extends AbstractFactory
 
         // Special options for AnnotationDrivers.
         if (AnnotationDriver::class === $class || is_subclass_of($class, AnnotationDriver::class)) {
-            $reader = new Annotations\AnnotationReader;
+            $reader = new Annotations\AnnotationReader();
             $reader = new Annotations\CachedReader(
                 new Annotations\IndexedReader($reader),
                 $container->get($options->getCache())

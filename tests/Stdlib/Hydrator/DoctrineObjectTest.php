@@ -1155,7 +1155,7 @@ class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testHydrateOneToOneAssociationByValueUsingFullArrayForRelation()
     {
-        $entity = new Asset\OneToOneEntityNotNullable;
+        $entity = new Asset\OneToOneEntityNotNullable();
         $this->configureObjectManagerForOneToOneEntityNotNullable();
 
         // Use entity of id 1 as relation
