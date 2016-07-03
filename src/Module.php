@@ -30,7 +30,7 @@ use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
 
 /**
- * Base module for integration of Doctrine projects with ZF2 applications
+ * Base module for integration of Doctrine projects with ZF3 applications
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/
