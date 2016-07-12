@@ -31,7 +31,7 @@ class StorageFactoryTest extends BaseTestCase
         $name    = 'testFactory';
         $factory = new StorageFactory($name);
 
-        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager =  $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(
@@ -61,8 +61,8 @@ class StorageFactoryTest extends BaseTestCase
     public function testCanInstantiateStorageFromServiceLocator()
     {
         $factory        = new StorageFactory('testFactory');
-        $serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager');
-        $storage        = $this->getMock('Zend\Authentication\Storage\StorageInterface');
+        $serviceManager = $this->createMock('Zend\ServiceManager\ServiceManager');
+        $storage        = $this->createMock('Zend\Authentication\Storage\StorageInterface');
         $config         = [
             'doctrine' => [
                 'authentication' => [

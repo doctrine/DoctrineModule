@@ -50,7 +50,7 @@ class ProxyAwareElementTestCase extends TestCase
         $result       = new ArrayCollection([$objectOne, $objectTwo]);
         $this->values = $result;
 
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -71,12 +71,12 @@ class ProxyAwareElementTestCase extends TestCase
                 )
             );
 
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))

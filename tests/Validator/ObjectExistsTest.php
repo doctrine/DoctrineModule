@@ -36,7 +36,7 @@ class ObjectExistsTest extends BaseTestCase
 {
     public function testCanValidateWithSingleField()
     {
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
 
         $repository
             ->expects($this->exactly(2))
@@ -52,7 +52,7 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testCanValidateWithMultipleFields()
     {
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
             ->expects($this->exactly(2))
             ->method('findOneBy')
@@ -77,7 +77,7 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testCanValidateFalseOnNoResult()
     {
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
             ->expects($this->once())
             ->method('findOneBy')
@@ -116,7 +116,7 @@ class ObjectExistsTest extends BaseTestCase
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists([
-            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
         ]);
     }
 
@@ -125,7 +125,7 @@ class ObjectExistsTest extends BaseTestCase
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists([
-            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
             'fields'            => [],
         ]);
     }
@@ -134,7 +134,7 @@ class ObjectExistsTest extends BaseTestCase
     {
         $this->setExpectedException('Zend\Validator\Exception\InvalidArgumentException');
         new ObjectExists([
-            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
             'fields'            => [123],
         ]);
     }
@@ -146,7 +146,7 @@ class ObjectExistsTest extends BaseTestCase
             'Provided values count is 1, while expected number of fields to be matched is 2'
         );
         $validator = new ObjectExists([
-            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
             'fields'            => ['field1', 'field2'],
         ]);
         $validator->isValid(['field1Value']);
@@ -160,7 +160,7 @@ class ObjectExistsTest extends BaseTestCase
         );
 
         $validator = new ObjectExists([
-            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
             'fields'            => ['field1', 'field2'],
         ]);
 
@@ -169,9 +169,8 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testErrorMessageIsStringInsteadArray()
     {
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $validator  = new ObjectExists([
-            'object_repository' => $this->getMock('Doctrine\Common\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
             'fields'            => 'field',
         ]);
 

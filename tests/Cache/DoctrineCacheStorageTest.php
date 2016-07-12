@@ -720,7 +720,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
     {
         $ttl = rand();
 
-        $provider = $this->getMock('Doctrine\Common\Cache\ArrayCache');
+        $provider = $this->createMock('Doctrine\Common\Cache\ArrayCache');
         $provider->expects($this->exactly(4))
                  ->method('save')
                  ->with($this->anything(), $this->anything(), $ttl);

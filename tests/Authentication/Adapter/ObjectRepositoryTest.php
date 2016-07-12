@@ -61,7 +61,7 @@ class ObjectRepositoryTest extends BaseTestCase
         );
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
-            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'object_manager' => $this->createMock('Doctrine\Common\Persistence\ObjectManager'),
             'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
         ]);
         $adapter->setCredential('a credential');
@@ -76,7 +76,7 @@ class ObjectRepositoryTest extends BaseTestCase
         );
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
-            'object_manager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'object_manager' => $this->createMock('Doctrine\Common\Persistence\ObjectManager'),
             'identity_class' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
         ]);
 
@@ -92,7 +92,7 @@ class ObjectRepositoryTest extends BaseTestCase
         );
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
-            'object_manager'      => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'object_manager'      => $this->createMock('Doctrine\Common\Persistence\ObjectManager'),
             'identity_class'      => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
             'credential_callable' => [],
         ]);
@@ -106,14 +106,14 @@ class ObjectRepositoryTest extends BaseTestCase
         $entity->setUsername('a username');
         $entity->setPassword('a password');
 
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $method           = $objectRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
             ->will($this->returnValue($entity));
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->exactly(2))
                       ->method('getRepository')
                       ->with($this->equalTo('DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject'))
@@ -151,7 +151,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $entity->username = 'a username';
         $entity->password = 'a password';
 
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $method           = $objectRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
@@ -183,7 +183,7 @@ class ObjectRepositoryTest extends BaseTestCase
     {
         $this->setExpectedException('Zend\Authentication\Adapter\Exception\UnexpectedValueException');
 
-        $objectRepository =  $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository =  $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository
             ->expects($this->once())
             ->method('findOneBy')
@@ -210,7 +210,7 @@ class ObjectRepositoryTest extends BaseTestCase
         // Crypt password using Blowfish
         $entity->setPassword(crypt('password', $hash));
 
-        $objectRepository =  $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository =  $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
@@ -245,7 +245,7 @@ class ObjectRepositoryTest extends BaseTestCase
     {
         $this->setExpectedException('Zend\Authentication\Adapter\Exception\UnexpectedValueException');
 
-        $objectRepository =  $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository =  $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository
             ->expects($this->once())
             ->method('findOneBy')
@@ -267,7 +267,7 @@ class ObjectRepositoryTest extends BaseTestCase
 
     public function testWillNotCastAuthCredentialValue()
     {
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $adapter          = new ObjectRepositoryAdapter();
         $entity           = new IdentityObject();
 

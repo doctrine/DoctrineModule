@@ -34,7 +34,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         $name    = 'testFactory';
         $factory = new AuthenticationServiceFactory($name);
 
-        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager =  $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService(

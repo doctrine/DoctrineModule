@@ -55,10 +55,14 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->application    = $this->getMock('Zend\Mvc\Application', [], [], '', false);
-        $this->event          = $this->getMock('Zend\Mvc\MvcEvent');
-        $this->serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager');
-        $this->cli            = $this->getMock('Symfony\Component\Console\Application', ['run']);
+        $this->application    = $this->getMockBuilder('Zend\Mvc\Application')
+                                     ->disableOriginalConstructor()
+                                     ->getMock();
+        $this->event          = $this->createMock('Zend\Mvc\MvcEvent');
+        $this->serviceManager = $this->createMock('Zend\ServiceManager\ServiceManager');
+        $this->cli            = $this->getMockBuilder('Symfony\Component\Console\Application')
+                                     ->setMethods(['run'])
+                                     ->getMock();
 
         $this
             ->serviceManager
@@ -126,7 +130,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             'list - TEST - More output',
-            $module->getConsoleUsage($this->getMock('Zend\Console\Adapter\AdapterInterface'))
+            $module->getConsoleUsage($this->createMock('Zend\Console\Adapter\AdapterInterface'))
         );
     }
 }

@@ -114,7 +114,7 @@ class CacheFactoryTest extends BaseTestCase
         );
         $serviceManager->setService(
             'my_predis_alias',
-            $this->getMock('Predis\ClientInterface')
+            $this->getMockBuilder('Predis\ClientInterface')->getMock()
         );
         $cache = $factory->createService($serviceManager);
 
