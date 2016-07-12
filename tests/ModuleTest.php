@@ -19,11 +19,14 @@
 
 namespace DoctrineModuleTest;
 
+use Doctrine\Common\Annotations\AnnotationException;
+use Doctrine\Common\Annotations\DocParser;
 use DoctrineModule\Module;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zend\Console\Adapter\AdapterInterface;
+use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\Application as ZendApplication;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceManager;
@@ -125,5 +128,43 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             'list - TEST - More output',
             $module->getConsoleUsage($this->createMock(AdapterInterface::class))
         );
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * run in separate process to make sure
+     * \Doctrine\Common\Annotations\AnnotationRegistry has no any loaders added in other tests
+     */
+    public function testAutoLoadingAnnotations()
+    {
+        /** @var ModuleManager|\PHPUnit_Framework_MockObject_MockObject $moduleManager */
+        $moduleManager = $this->createMock(ModuleManager::class);
+        $module = new Module();
+        $module->init($moduleManager);
+
+        $docParser = new DocParser();
+        $result = $docParser->parse('/** @\DoctrineModuleTest\TestAsset\CustomAnnotation */');
+
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(TestAsset\CustomAnnotation::class, $result[0]);
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * run in separate process to make sure
+     * \Doctrine\Common\Annotations\AnnotationRegistry has no any loaders added in other tests
+     */
+    public function testAnnotationClassIsNotLoaded()
+    {
+        $this->expectException(AnnotationException::class);
+        $this->expectExceptionMessage(
+            '[Semantical Error] The annotation "@\DoctrineModuleTest\TestAsset\CustomAnnotation" in  does not exist,'
+            . ' or could not be auto-loaded.'
+        );
+
+        $docParser = new DocParser();
+        $docParser->parse('/** @\DoctrineModuleTest\TestAsset\CustomAnnotation */');
     }
 }
