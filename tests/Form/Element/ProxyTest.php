@@ -46,12 +46,10 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
      */
     protected $proxy;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp()
     {
         parent::setUp();
+
         $this->proxy = new Proxy();
     }
 

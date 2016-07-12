@@ -38,11 +38,10 @@ class ModuleDefinedServicesTest extends \PHPUnit_Framework_TestCase
      */
     protected $serviceManager;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setUp()
+    protected function setUp()
     {
+        parent::setUp();
+
         $serviceManagerUtil   = new ServiceManagerTestCase();
         $this->serviceManager = $serviceManagerUtil->getServiceManager();
     }

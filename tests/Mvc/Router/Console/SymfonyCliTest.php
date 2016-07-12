@@ -38,11 +38,10 @@ class SymfonyCliTest extends \PHPUnit_Framework_TestCase
      */
     protected $route;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setUp()
+    protected function setUp()
     {
+        parent::setUp();
+
         $this->route = new SymfonyCli(new Application());
     }
 

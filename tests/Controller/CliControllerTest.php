@@ -33,16 +33,14 @@ use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
  */
 class CliControllerTest extends AbstractConsoleControllerTestCase
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function setUp()
+    protected function setUp()
     {
-        $this->setApplicationConfig(include __DIR__ . '/../TestConfiguration.php');
         parent::setUp();
 
+        $this->setApplicationConfig(include __DIR__ . '/../TestConfiguration.php');
+
         $this->getApplicationServiceLocator()->get('doctrine.cli')
-            ->add(new FailingCommand());
+             ->add(new FailingCommand());
     }
 
     /**

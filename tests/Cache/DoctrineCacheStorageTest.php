@@ -56,8 +56,10 @@ class DoctrineCacheStorageTest extends \PHPUnit_Framework_TestCase
      */
     protected $phpDatatypes = ['NULL', 'boolean', 'integer', 'double', 'string', 'array', 'object', 'resource'];
 
-    public function setUp()
+    protected function setUp()
     {
+        parent::setUp();
+
         $this->options = new AdapterOptions();
         // @todo fix constructor as it is messy
         $this->storage = new DoctrineCacheStorage($this->options, new ArrayCache());
@@ -74,13 +76,15 @@ class DoctrineCacheStorageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         // be sure the error handler has been stopped
         if (ErrorHandler::started()) {
             ErrorHandler::stop();
             $this->fail('ErrorHandler not stopped');
         }
+
+        parent::tearDown();
     }
 
     public function testOptionNamesValid()

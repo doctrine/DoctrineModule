@@ -43,12 +43,10 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
      */
     protected $element;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp()
     {
         parent::setUp();
+
         $this->element = new ObjectMultiCheckbox();
 
         $this->prepareProxy();

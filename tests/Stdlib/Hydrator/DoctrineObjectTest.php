@@ -33,10 +33,7 @@ class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    /**
-     * setUp
-     */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

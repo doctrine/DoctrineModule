@@ -57,8 +57,10 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      */
     private $cli;
 
-    public function setUp()
+    protected function setUp()
     {
+        parent::setUp();
+
         $this->application    = $this->getMockBuilder(ZendApplication::class)->disableOriginalConstructor()->getMock();
         $this->event          = $this->createMock(MvcEvent::class);
         $this->serviceManager = $this->createMock(ServiceManager::class);
