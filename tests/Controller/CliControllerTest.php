@@ -37,7 +37,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
      */
     public function setUp()
     {
-        $this->setApplicationConfig(include __DIR__ . '/../../TestConfiguration.php.dist');
+        $this->setApplicationConfig(include __DIR__ . '/../TestConfiguration.php.dist');
         parent::setUp();
 
         $this->getApplicationServiceLocator()->get('doctrine.cli')

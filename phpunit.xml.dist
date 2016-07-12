@@ -5,7 +5,7 @@
 >
     <testsuites>
         <testsuite name="DoctrineModule Test Suite">
-            <directory>./tests/DoctrineModuleTest</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>

@@ -20,15 +20,14 @@
 namespace DoctrineModule;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Zend\ModuleManager\Feature\InitProviderInterface;
+use DoctrineModule\Component\Console\Output\PropertyOutput;
+use Symfony\Component\Console\Input\StringInput;
+use Zend\Console\Adapter\AdapterInterface as Console;
+use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
-use Zend\EventManager\EventInterface;
-use Zend\Console\Adapter\AdapterInterface as Console;
-
-use Symfony\Component\Console\Input\StringInput;
-use DoctrineModule\Component\Console\Output\PropertyOutput;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
@@ -71,7 +70,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
      */
     public function getConfig()
     {
-        return include __DIR__ . '/../../config/module.config.php';
+        return include __DIR__ . '/../config/module.config.php';
     }
 
     /**
