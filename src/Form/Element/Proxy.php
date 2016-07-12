@@ -26,10 +26,12 @@ use InvalidArgumentException;
 use ReflectionMethod;
 use RuntimeException;
 use Traversable;
-use Zend\Stdlib\Guard\GuardUtils;
+use Zend\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 
 class Proxy implements ObjectManagerAwareInterface
 {
+    use ArrayOrTraversableGuardTrait;
+
     /**
      * @var array|Traversable
      */
@@ -514,7 +516,7 @@ class Proxy implements ObjectManagerAwareInterface
             $objects = $r->invokeArgs($repository, $args);
         }
 
-        GuardUtils::guardForArrayOrTraversable(
+        $this->guardForArrayOrTraversable(
             $objects,
             sprintf('%s::%s() return value', get_class($repository), $findMethodName),
             'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException'
