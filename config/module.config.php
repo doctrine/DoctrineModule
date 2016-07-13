@@ -21,6 +21,7 @@ namespace DoctrineModule;
 
 use Doctrine\Common\Cache;
 use Zend\Authentication\Storage\Session;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'doctrine' => [
@@ -105,11 +106,12 @@ return [
     ],
 
     'service_manager' => [
-        'invokables' => [
+        'aliases' => [
             'DoctrineModule\Authentication\Storage\Session' => Session::class,
         ],
         'factories' => [
             'doctrine.cli' => Service\CliFactory::class,
+            Session::class => InvokableFactory::class,
         ],
         'abstract_factories' => [
             'DoctrineModule' => ServiceFactory\AbstractDoctrineServiceFactory::class,
