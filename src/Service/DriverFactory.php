@@ -26,7 +26,6 @@ use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\FileLocator;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use DoctrineModule\Options\Driver;
 use DoctrineModule\Options\Driver as DriverOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
@@ -57,7 +56,7 @@ class DriverFactory extends AbstractFactory
      */
     public function getOptionsClass()
     {
-        return Driver::class;
+        return DriverOptions::class;
     }
 
     /**
