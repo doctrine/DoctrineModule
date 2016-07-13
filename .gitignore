@@ -4,3 +4,4 @@ vendor/
 nbproject/
 phpcs.xml
 phpunit.xml
+clover.xml
