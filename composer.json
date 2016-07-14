@@ -71,7 +71,8 @@
     ],
     "extra": {
         "zf": {
-            "component": "DoctrineModule"
+            "component": "DoctrineModule",
+            "config-provider": "DoctrineModule\\ConfigProvider"
         }
     },
     "scripts": {

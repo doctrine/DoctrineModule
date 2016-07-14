@@ -72,7 +72,16 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
      */
     public function getConfig()
     {
-        return include __DIR__ . '/../config/module.config.php';
+        $provider = new ConfigProvider();
+
+        return [
+            'console'            => $provider->getConsoleConfig(),
+            'controllers'        => $provider->getControllerConfig(),
+            'doctrine'           => $provider->getDoctrineConfig(),
+            'doctrine_factories' => $provider->getDoctrineFactoryConfig(),
+            'service_manager'    => $provider->getDependencyConfig(),
+            'route_manager'      => $provider->getRouteManagerConfig(),
+        ];
     }
 
     /**
