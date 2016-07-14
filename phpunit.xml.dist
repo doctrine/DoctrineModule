@@ -1,11 +1,12 @@
+<?xml version="1.0"?>
 <phpunit
-    bootstrap="./tests/Bootstrap.php"
+    bootstrap="./vendor/autoload.php"
     colors="true"
     backupGlobals="false"
 >
     <testsuites>
         <testsuite name="DoctrineModule Test Suite">
-            <directory>./tests/DoctrineModuleTest</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
