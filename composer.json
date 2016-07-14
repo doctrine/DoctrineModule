@@ -69,6 +69,11 @@
     "bin": [
         "bin/doctrine-module"
     ],
+    "extra": {
+        "zf": {
+            "component": "DoctrineModule"
+        }
+    },
     "scripts": {
         "check": [
             "@cs",
