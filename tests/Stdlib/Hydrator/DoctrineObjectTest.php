@@ -722,7 +722,6 @@ class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
             $this->objectManager,
             false
         );
-
     }
 
     public function configureObjectManagerForOneToManyArrayEntity()
