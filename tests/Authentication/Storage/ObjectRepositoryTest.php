@@ -41,7 +41,7 @@ class ObjectRepositoryTest extends \PHPUnit_Framework_TestCase
         $entity->setUsername('a username');
         $entity->setPassword('a password');
 
-        $objectRepository =  $this->createMock(ObjectRepository::class);
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->exactly(1))
                          ->method('find')
                          ->with($this->equalTo('a username'))

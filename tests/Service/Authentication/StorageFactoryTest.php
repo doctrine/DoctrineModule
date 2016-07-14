@@ -34,7 +34,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         $name    = 'testFactory';
         $factory = new StorageFactory($name);
 
-        $objectManager =  $this->createMock(ObjectManager::class);
+        $objectManager  = $this->createMock(ObjectManager::class);
 
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(

@@ -35,7 +35,7 @@ class AuthenticationServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $name    = 'testFactory';
         $factory = new AuthenticationServiceFactory($name);
 
-        $objectManager =  $this->createMock(ObjectManager::class);
+        $objectManager  = $this->createMock(ObjectManager::class);
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService(

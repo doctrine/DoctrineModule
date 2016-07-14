@@ -178,7 +178,7 @@ class ObjectRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(Exception\UnexpectedValueException::class);
 
-        $objectRepository =  $this->createMock(ObjectRepository::class);
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository
             ->expects($this->once())
             ->method('findOneBy')
@@ -205,7 +205,7 @@ class ObjectRepositoryTest extends \PHPUnit_Framework_TestCase
         // Crypt password using Blowfish
         $entity->setPassword(crypt('password', $hash));
 
-        $objectRepository =  $this->createMock(ObjectRepository::class);
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
@@ -240,7 +240,7 @@ class ObjectRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(Exception\UnexpectedValueException::class);
 
-        $objectRepository =  $this->createMock(ObjectRepository::class);
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository
             ->expects($this->once())
             ->method('findOneBy')

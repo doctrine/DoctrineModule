@@ -2186,7 +2186,7 @@ class DoctrineObjectTest extends \PHPUnit_Framework_TestCase
             ->method('find')
             ->with(
                 Asset\SimpleEntity::class,
-                $this->logicalOr($this->equalTo(['id' =>2]), $this->equalTo(['id' => 3]))
+                $this->logicalOr($this->equalTo(['id' => 2]), $this->equalTo(['id' => 3]))
             )
             ->will(
                 $this->returnCallback(
