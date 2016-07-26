@@ -19,7 +19,7 @@
 
 namespace DoctrineModuleTest\ServiceFactory;
 
-use DoctrineModuleTest\ServiceManagerTestCase;
+use DoctrineModuleTest\ServiceManagerFactory;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -41,8 +41,7 @@ class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $serviceManagerUtil   = new ServiceManagerTestCase();
-        $this->serviceManager = $serviceManagerUtil->getServiceManager();
+        $this->serviceManager = ServiceManagerFactory::getServiceManager();
     }
 
     /**

@@ -10,7 +10,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
 use DoctrineModule\Stdlib\Hydrator\Filter;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
-use Zend\Stdlib\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
+use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
 
 class DoctrineObjectTest extends BaseTestCase
 {
@@ -726,7 +726,6 @@ class DoctrineObjectTest extends BaseTestCase
             $this->objectManager,
             false
         );
-
     }
 
     public function configureObjectManagerForOneToManyArrayEntity()
@@ -2192,8 +2191,6 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertEquals(3, $entities[1]->getId());
         $this->assertSame($entityInDatabaseWithIdOfThree, $entities[1]);
-
-
     }
 
     public function testAssertCollectionsAreNotSwappedDuringHydration()

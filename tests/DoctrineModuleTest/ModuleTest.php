@@ -23,7 +23,7 @@ use PHPUnit_Framework_TestCase;
 use PHPUnit_Framework_Assert;
 use PHPUnit_Framework_MockObject_MockObject;
 use DoctrineModule\Module;
-use DoctrineModuleTest\ServiceManagerTestCase;
+use DoctrineModuleTest\ServiceManagerFactory;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 

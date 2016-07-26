@@ -18,6 +18,7 @@
 
 namespace DoctrineModuleTest\Controller;
 
+use DoctrineModuleTest\ServiceManagerFactory;
 use Zend\Console\Request;
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 use DoctrineModuleTest\Controller\Mock\FailingCommand;
@@ -37,7 +38,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
      */
     public function setUp()
     {
-        $this->setApplicationConfig(include __DIR__ . '/../../TestConfiguration.php.dist');
+        $this->setApplicationConfig(ServiceManagerFactory::getConfiguration());
         parent::setUp();
 
         $this->getApplicationServiceLocator()->get('doctrine.cli')

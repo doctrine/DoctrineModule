@@ -22,7 +22,7 @@ namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 use InvalidArgumentException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
+use Zend\Hydrator\Strategy\StrategyInterface;
 
 /**
  * @license MIT

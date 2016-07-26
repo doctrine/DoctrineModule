@@ -455,6 +455,5 @@ class UniqueObjectTest extends BaseTestCase
         $messages        = $validator->getMessages();
         $receivedMessage = $messages[UniqueObject::ERROR_OBJECT_NOT_UNIQUE];
         $this->assertTrue($expectedMessage == $receivedMessage);
-
     }
 }

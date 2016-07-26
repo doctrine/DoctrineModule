@@ -1,9 +1,5 @@
-.idea
-vendor
-composer.lock
-composer.phar
+.idea/
+vendor/
 phpunit.xml
-phpmd.xml
-phpdox.xml
-.project
-nbproject
+.project/
+nbproject/
