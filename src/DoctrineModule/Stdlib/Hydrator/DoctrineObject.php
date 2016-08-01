@@ -27,8 +27,8 @@ use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
-use Zend\Stdlib\Hydrator\AbstractHydrator;
-use Zend\Stdlib\Hydrator\Filter\FilterProviderInterface;
+use Zend\Hydrator\AbstractHydrator;
+use Zend\Hydrator\Filter\FilterProviderInterface;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
@@ -421,7 +421,6 @@ class DoctrineObject extends AbstractHydrator
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
-
             if ($value instanceof $target) {
                 // assumes modifications have already taken place in object
                 $collection[] = $value;

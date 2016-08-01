@@ -19,35 +19,26 @@
 
 namespace DoctrineModuleTest;
 
-use Zend\ServiceManager\ServiceManager;
+use Zend\Mvc\Application;
 use Zend\Mvc\Service\ServiceManagerConfig;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Base test case to be used when a service manager instance is required
  */
-class ServiceManagerTestCase
+class ServiceManagerFactory
 {
     /**
-     * @var array
-     */
-    protected static $configuration = array();
-
-    /**
-     * @static
-     * @param array $configuration
-     */
-    public static function setConfiguration(array $configuration)
-    {
-        static::$configuration = $configuration;
-    }
-
-    /**
-     * @static
      * @return array
      */
     public static function getConfiguration()
     {
-        return static::$configuration;
+        $r = new \ReflectionClass(Application::class);
+        $requiredParams = $r->getConstructor()->getNumberOfRequiredParameters();
+
+        $configFile = $requiredParams == 1 ? 'TestConfigurationV3.php' : 'TestConfigurationV2.php';
+
+        return include __DIR__ . '/../' . $configFile;
     }
 
     /**
@@ -56,7 +47,7 @@ class ServiceManagerTestCase
      * @param  array|null     $configuration
      * @return ServiceManager
      */
-    public function getServiceManager(array $configuration = null)
+    public static function getServiceManager(array $configuration = null)
     {
         $configuration        = $configuration ?: static::getConfiguration();
         $serviceManager       = new ServiceManager();

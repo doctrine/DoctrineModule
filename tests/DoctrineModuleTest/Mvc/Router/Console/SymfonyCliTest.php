@@ -21,7 +21,10 @@ namespace DoctrineModuleTest\Mvc\Router\Console;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Console\Application;
 use Zend\Console\Request;
-use DoctrineModule\Mvc\Router\Console\SymfonyCli;
+use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
+use Zend\Router\RouteMatch;
+use DoctrineModule\Mvc\Router\Console\SymfonyCliV2;
+use DoctrineModule\Mvc\Router\Console\SymfonyCliV3;
 
 /**
  * Tests for {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}
@@ -43,13 +46,15 @@ class SymfonyCliTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->route = new SymfonyCli(new Application());
+        $symfonyCli = class_exists(V2RouteMatch::class) ? SymfonyCliV2::class : SymfonyCliV3::class;
+
+        $this->route = new $symfonyCli(new Application());
     }
 
     public function testMatching()
     {
         $this->assertInstanceOf(
-            'Zend\Mvc\Router\Console\RouteMatch',
+            $this->getRouteMatchClass(),
             $this->route->match(new Request(array('scriptname.php', 'list')))
         );
     }
@@ -57,7 +62,7 @@ class SymfonyCliTest extends PHPUnit_Framework_TestCase
     public function testMatchingWithParams()
     {
         $this->assertInstanceOf(
-            'Zend\Mvc\Router\Console\RouteMatch',
+            $this->getRouteMatchClass(),
             $this->route->match(new Request(array('scriptname.php', 'list', '--help')))
         );
     }
@@ -65,5 +70,10 @@ class SymfonyCliTest extends PHPUnit_Framework_TestCase
     public function testNotMatching()
     {
         $this->assertNull($this->route->match(new Request(array('scriptname.php', 'unknowncommand'))));
+    }
+
+    protected function getRouteMatchClass()
+    {
+        return class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
     }
 }

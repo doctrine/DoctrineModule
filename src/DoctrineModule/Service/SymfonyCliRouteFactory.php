@@ -20,7 +20,10 @@
 namespace DoctrineModule\Service;
 
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
+use DoctrineModule\Mvc\Router\Console\SymfonyCliV2;
+use DoctrineModule\Mvc\Router\Console\SymfonyCliV3;
 use Interop\Container\ContainerInterface;
+use Zend\Mvc\Router\Console\RouteMatch as V2RouteMatch;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -34,7 +37,9 @@ class SymfonyCliRouteFactory implements FactoryInterface
         /* @var $application \Symfony\Component\Console\Application */
         $application = $container->get('doctrine.cli');
 
-        return new SymfonyCli(
+        $symfonyCli = class_exists(V2RouteMatch::class) ? SymfonyCliV2::class : SymfonyCliV3::class;
+
+        return new $symfonyCli(
             $application,
             array(
                 'controller' => 'DoctrineModule\Controller\Cli',

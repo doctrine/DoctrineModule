@@ -19,8 +19,9 @@
 namespace DoctrineModule\Controller;
 
 use Symfony\Component\Console\Application;
+use Zend\Mvc\Console\View\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ConsoleModel;
+use Zend\View\Model\ConsoleModel as V2ViewModel;
 use DoctrineModule\Component\Console\Input\RequestInput;
 
 /**
@@ -52,7 +53,7 @@ class CliController extends AbstractActionController
         $exitCode = $this->cliApplication->run(new RequestInput($this->getRequest()));
 
         if (is_numeric($exitCode)) {
-            $model = new ConsoleModel();
+            $model = class_exists(ViewModel::class) ? new ViewModel() : new V2ViewModel();
             $model->setErrorLevel($exitCode);
 
             return $model;
