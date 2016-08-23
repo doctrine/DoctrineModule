@@ -30,6 +30,11 @@
             "homepage": "http://www.michaelgallego.fr"
         }
     ],
+    "extra": {
+        "zf": {
+            "module": "DoctrineModule"
+        }
+    },
     "require": {
         "php":                               "^5.6 || ^7.0",
         "doctrine/common":                   "^2.6.1",
