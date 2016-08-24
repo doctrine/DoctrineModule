@@ -19,6 +19,7 @@
 
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Application;
+use Zend\Stdlib\ArrayUtils;
 
 ini_set('display_errors', true);
 chdir(__DIR__);
@@ -50,7 +51,13 @@ if (is_readable('init_autoloader.php')) {
     throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
 }
 
-$application = Application::init(include 'config/application.config.php');
+// Retrieve configuration
+$appConfig = require 'config/application.config.php';
+if (file_exists('config/development.config.php')) {
+    $appConfig = ArrayUtils::merge($appConfig, require 'config/development.config.php');
+}
+
+$application = Application::init($appConfig);
 
 /* @var $cli \Symfony\Component\Console\Application */
 $cli = $application->getServiceManager()->get('doctrine.cli');
