@@ -19,6 +19,7 @@
 
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Application;
+use Zend\Stdlib\ArrayUtils;
 
 ini_set('display_errors', true);
 chdir(__DIR__);
