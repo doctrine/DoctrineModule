@@ -1,3 +1,12 @@
+# 1.2.0
+* ZF3 compatibility [#567](https://github.com/pull/567)
+* Expose to `zend*component*installer` as module `DoctrineModule` [#570](https://github.com/pull/570)
+* ZF3 Composer dependencies * hotfix [#571](https://github.com/pull/571)
+* Command line tools improvements [#572](https://github.com/pull/572)
+* Add missing Doctrine APCu Cache [#569](https://github.com/pull/569)
+* Changed isset for array_key_exists in context check [#568](https://github.com/pull/568)
+* Hydrator ignores private/protected getter/setter [#560](https://github.com/pull/560)
+
 # 1.1.0
  * fixed require-dev dependancies [#557](https://github.com/doctrine/DoctrineModule/pull/557)
  * Update hydrator.md [#561](https://github.com/doctrine/DoctrineModule/pull/561)
