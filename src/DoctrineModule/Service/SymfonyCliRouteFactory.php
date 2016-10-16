@@ -41,10 +41,10 @@ class SymfonyCliRouteFactory implements FactoryInterface
 
         return new $symfonyCli(
             $application,
-            array(
+            [
                 'controller' => 'DoctrineModule\Controller\Cli',
                 'action'     => 'cli',
-            )
+            ]
         );
     }
 

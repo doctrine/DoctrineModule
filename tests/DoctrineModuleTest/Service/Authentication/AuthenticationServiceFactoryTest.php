@@ -33,23 +33,23 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         $name    = 'testFactory';
         $factory = new AuthenticationServiceFactory($name);
 
-        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'authentication' => array(
-                        $name => array(
+            [
+                'doctrine' => [
+                    'authentication' => [
+                        $name => [
                             'objectManager' => $objectManager,
                             'identityClass' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
                             'identityProperty' => 'username',
-                            'credentialProperty' => 'password'
-                        ),
-                    ),
-                ),
-            )
+                            'credentialProperty' => 'password',
+                        ],
+                    ],
+                ],
+            ]
         );
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',

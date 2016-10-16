@@ -169,7 +169,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
     {
         $selectable = $this->getMock('Doctrine\Common\Collections\Selectable');
         $expression = Criteria::expr()->eq('foo', 'bar');
-        $criteria   = new Criteria($expression, array('baz' => Criteria::DESC), 10, 20);
+        $criteria   = new Criteria($expression, ['baz' => Criteria::DESC], 10, 20);
         $adapter    = new SelectableAdapter($selectable, $criteria);
 
         $selectable->expects($this->once())
@@ -178,7 +178,7 @@ class SelectableAdapterTest extends PHPUnit_Framework_TestCase
                 $this->callback(
                     function (Criteria $criteria) use ($expression) {
                         return $criteria->getWhereExpression() == $expression
-                            && (array('baz' => Criteria::DESC) === $criteria->getOrderings())
+                            && (['baz' => Criteria::DESC] === $criteria->getOrderings())
                             && null === $criteria->getFirstResult()
                             && null === $criteria->getMaxResults();
                     }

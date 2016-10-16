@@ -39,15 +39,15 @@ class CacheFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                 'doctrine' => array(
-                     'cache' => array(
-                         'foo' => array(
+            [
+                 'doctrine' => [
+                     'cache' => [
+                         'foo' => [
                              'namespace' => 'bar',
-                         ),
-                     ),
-                 ),
-            )
+                         ],
+                     ],
+                 ],
+            ]
         );
 
         /* @var $service \Doctrine\Common\Cache\ArrayCache */
@@ -81,10 +81,10 @@ class CacheFactoryTest extends BaseTestCase
                 'caches' => [
                     'my-zend-cache' => [
                         'adapter' => [
-                            'name' => 'blackhole'
-                        ]
-                    ]
-                ]
+                            'name' => 'blackhole',
+                        ],
+                    ],
+                ],
             ]
         );
         $serviceManager->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');

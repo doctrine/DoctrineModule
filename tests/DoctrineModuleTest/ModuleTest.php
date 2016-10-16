@@ -16,7 +16,7 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
- 
+
 namespace DoctrineModuleTest;
 
 use PHPUnit_Framework_TestCase;
@@ -57,10 +57,10 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->application    = $this->getMock('Zend\Mvc\Application', array(), array(), '', false);
+        $this->application    = $this->getMock('Zend\Mvc\Application', [], [], '', false);
         $this->event          = $this->getMock('Zend\Mvc\MvcEvent');
         $this->serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager');
-        $this->cli            = $this->getMock('Symfony\Component\Console\Application', array('run'));
+        $this->cli            = $this->getMock('Symfony\Component\Console\Application', ['run']);
 
         $this
             ->serviceManager
@@ -88,9 +88,9 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         $module = new Module();
-        
+
         $config = $module->getConfig();
-        
+
         $this->assertInternalType('array', $config);
         $this->assertArrayHasKey('doctrine', $config);
         $this->assertArrayHasKey('doctrine_factories', $config);
@@ -98,10 +98,10 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('controllers', $config);
         $this->assertArrayHasKey('route_manager', $config);
         $this->assertArrayHasKey('console', $config);
-        
+
         $this->assertSame($config, unserialize(serialize($config)));
     }
-    
+
     /**
      * Should display the help message in plain message
      * @covers \DoctrineModule\Module::getConsoleUsage

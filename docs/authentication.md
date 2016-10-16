@@ -19,18 +19,18 @@ The first task is to configure the Authentication by adding the ``authentication
 ```php
 // in your module.config.php:
 
-return array(
-    'doctrine' => array(
-        'authentication' => array(
-            'orm_default' => array(
+return [
+    'doctrine' => [
+        'authentication' => [
+            'orm_default' => [
                 'object_manager' => 'Doctrine\ORM\EntityManager',
                 'identity_class' => 'Application\Entity\User',
                 'identity_property' => 'email',
                 'credential_property' => 'password',
-            ),
-        ),
-    ),
-);
+            ],
+        ],
+    ],
+];
 ```
 
 Here are some explanations about the keys:
@@ -50,21 +50,21 @@ Here is an example code that adds the `credential_callable` function to our prev
 ```php
 // in your module.config.php:
 
-return array(
-    'doctrine' => array(
-        'authentication' => array(
-            'orm_default' => array(
+return [
+    'doctrine' => [
+        'authentication' => [
+            'orm_default' => [
                 'object_manager' => 'Doctrine\ORM\EntityManager',
                 'identity_class' => 'Application\Entity\User',
                 'identity_property' => 'email',
                 'credential_property' => 'password',
-                'credential_callable' => function(User $user, $passwordGiven) {
+                'credential_callable' => function (User $user, $passwordGiven) {
                     return my_awesome_check_test($user->getPassword(), $passwordGiven);
                 },
-            ),
-        ),
-    ),
-);
+            ],
+        ],
+    ],
+];
 ```
 
 #### Creating the AuthenticationService
@@ -80,17 +80,17 @@ class Module
 {
     public function getServiceConfig()
     {
-        return array(
-            'factories' => array(
-                'Zend\Authentication\AuthenticationService' => function($serviceManager) {
+        return [
+            'factories' => [
+                'Zend\Authentication\AuthenticationService' => function ($serviceManager) {
                     // If you are using DoctrineORMModule:
                     return $serviceManager->get('doctrine.authenticationservice.orm_default');
 
                     // If you are using DoctrineODMModule:
                     return $serviceManager->get('doctrine.authenticationservice.odm_default');
-                }
-            )
-        );
+                },
+            ],
+        ];
     }
 }
 ```
@@ -120,9 +120,9 @@ public function loginAction()
         return $this->redirect()->toRoute('home');
     }
 
-    return new ViewModel(array(
+    return new ViewModel([
         'error' => 'Your authentication credentials are not valid',
-    ));
+    ]);
 }
 ```
 

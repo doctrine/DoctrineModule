@@ -108,7 +108,7 @@ class ZendStorageCache extends CacheProvider
         /* @var $storage AvailableSpaceCapableInterface */
         $storage = $this->storage;
 
-        return array(
+        return [
             Cache::STATS_HITS              => $this->storage->getMetadata(Cache::STATS_HITS),
             Cache::STATS_MISSES            => $this->storage->getMetadata(Cache::STATS_MISSES),
             Cache::STATS_UPTIME            => $this->storage->getMetadata(Cache::STATS_UPTIME),
@@ -118,6 +118,6 @@ class ZendStorageCache extends CacheProvider
             Cache::STATS_MEMORY_AVAILIABLE => $storage instanceof AvailableSpaceCapableInterface
                 ? $storage->getAvailableSpace()
                 : null,
-        );
+        ];
     }
 }

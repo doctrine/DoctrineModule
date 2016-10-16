@@ -50,7 +50,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
      */
     public function testIndexActionCanBeAccessed()
     {
-        $this->dispatch(new Request(array('scriptname.php', 'list')));
+        $this->dispatch(new Request(['scriptname.php', 'list']));
 
         $this->assertResponseStatusCode(0);
         $this->assertModuleName('doctrinemodule');
@@ -62,14 +62,14 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
 
     public function testNonZeroExitCode()
     {
-        $this->dispatch(new Request(array('scriptname.php', 'fail')));
+        $this->dispatch(new Request(['scriptname.php', 'fail']));
 
         $this->assertNotResponseStatusCode(0);
     }
 
     public function testException()
     {
-        $this->dispatch(new Request(array('scriptname.php', '-q', 'fail', '--exception')));
+        $this->dispatch(new Request(['scriptname.php', '-q', 'fail', '--exception']));
 
         $this->assertNotResponseStatusCode(0);
     }

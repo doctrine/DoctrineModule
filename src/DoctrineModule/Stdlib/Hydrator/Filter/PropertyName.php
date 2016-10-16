@@ -36,7 +36,7 @@ class PropertyName implements FilterInterface
      *
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * Either an exclude or an include.
@@ -54,13 +54,13 @@ class PropertyName implements FilterInterface
         $this->exclude    = $exclude;
         $this->properties = is_array($properties)
             ? $properties
-            : array($properties);
+            : [$properties];
     }
 
     public function filter($property)
     {
         return in_array($property, $this->properties)
-            ? !$this->exclude
+            ? ! $this->exclude
             : $this->exclude;
     }
 }

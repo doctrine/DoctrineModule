@@ -82,7 +82,7 @@ class DoctrineCacheStorage extends AbstractAdapter
     protected function internalRemoveItem(& $normalizedKey)
     {
         $key = $this->getOptions()->getNamespace() . $normalizedKey;
-        if (!$this->cache->contains($key)) {
+        if (! $this->cache->contains($key)) {
             return false;
         }
 
