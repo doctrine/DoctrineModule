@@ -86,9 +86,9 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
      */
     private function getFactoryMapping(ContainerInterface $serviceLocator, $name)
     {
-        $matches = array();
+        $matches = [];
 
-        if (!preg_match(
+        if (! preg_match(
             '/^doctrine\.((?<mappingType>orm|odm)\.|)(?<serviceType>[a-z0-9_]+)\.(?<serviceName>[a-z0-9_]+)$/',
             $name,
             $matches
@@ -108,11 +108,11 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
                 return false;
             }
 
-            return array(
+            return [
                 'serviceType'  => $serviceType,
                 'serviceName'  => $serviceName,
                 'factoryClass' => $config['doctrine_factories'][$serviceType],
-            );
+            ];
         } else {
             if (! isset($config['doctrine_factories'][$mappingType]) ||
                  ! isset($config['doctrine_factories'][$mappingType][$serviceType]) ||
@@ -120,11 +120,11 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
             ) {
                 return false;
             }
-            return array(
+            return [
                 'serviceType'  => $serviceType,
                 'serviceName'  => $serviceName,
                 'factoryClass' => $config['doctrine_factories'][$mappingType][$serviceType],
-            );
+            ];
         }
     }
 }

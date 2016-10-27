@@ -50,7 +50,7 @@ abstract class SymfonyCli
      * @param \Symfony\Component\Console\Application $cliApplication
      * @param array                                  $defaults
      */
-    public function __construct(Application $cliApplication, array $defaults = array())
+    public function __construct(Application $cliApplication, array $defaults = [])
     {
         $this->cliApplication = $cliApplication;
         $this->defaults       = $defaults;
@@ -61,7 +61,7 @@ abstract class SymfonyCli
      */
     public function match(Request $request)
     {
-        if (!$request instanceof ConsoleRequest) {
+        if (! $request instanceof ConsoleRequest) {
             return null;
         }
 
@@ -81,7 +81,7 @@ abstract class SymfonyCli
      *
      * @throws \BadMethodCallException this method is disabled
      */
-    public function assemble(array $params = array(), array $options = array())
+    public function assemble(array $params = [], array $options = [])
     {
         throw new \BadMethodCallException('Unsupported');
     }
@@ -91,7 +91,7 @@ abstract class SymfonyCli
      */
     public function getAssembledParams()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class SymfonyCli
      *
      * @throws \BadMethodCallException this method is disabled
      */
-    public static function factory($options = array())
+    public static function factory($options = [])
     {
         throw new \BadMethodCallException('Unsupported');
     }

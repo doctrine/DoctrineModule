@@ -133,7 +133,7 @@ class DoctrineObject extends AbstractHydrator
         foreach ($associations as $association) {
             if ($this->metadata->isCollectionValuedAssociation($association)) {
                 // Add a strategy if the association has none set by user
-                if (!$this->hasStrategy($association)) {
+                if (! $this->hasStrategy($association)) {
                     if ($this->byValue) {
                         $this->addStrategy($association, new Strategy\AllowRemoveByValue());
                     } else {
@@ -143,7 +143,7 @@ class DoctrineObject extends AbstractHydrator
 
                 $strategy = $this->getStrategy($association);
 
-                if (!$strategy instanceof Strategy\AbstractCollectionStrategy) {
+                if (! $strategy instanceof Strategy\AbstractCollectionStrategy) {
                     throw new InvalidArgumentException(
                         sprintf(
                             'Strategies used for collections valued associations must inherit from '
@@ -175,9 +175,9 @@ class DoctrineObject extends AbstractHydrator
             ? $object->getFilter()
             : $this->filterComposite;
 
-        $data = array();
+        $data = [];
         foreach ($fieldNames as $fieldName) {
-            if ($filter && !$filter->filter($fieldName)) {
+            if ($filter && ! $filter->filter($fieldName)) {
                 continue;
             }
 
@@ -216,9 +216,9 @@ class DoctrineObject extends AbstractHydrator
             ? $object->getFilter()
             : $this->filterComposite;
 
-        $data = array();
+        $data = [];
         foreach ($fieldNames as $fieldName) {
-            if ($filter && !$filter->filter($fieldName)) {
+            if ($filter && ! $filter->filter($fieldName)) {
                 continue;
             }
             $reflProperty = $refl->getProperty($fieldName);
@@ -265,7 +265,7 @@ class DoctrineObject extends AbstractHydrator
                     $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
 
                     if (null === $value
-                        && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
+                        && ! current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
                     ) {
                         continue;
                     }
@@ -309,7 +309,7 @@ class DoctrineObject extends AbstractHydrator
             $field = $this->computeHydrateFieldName($field);
 
             // Ignore unknown fields
-            if (!$refl->hasProperty($field)) {
+            if (! $refl->hasProperty($field)) {
                 continue;
             }
 
@@ -347,14 +347,14 @@ class DoctrineObject extends AbstractHydrator
     {
         $metadata         = $this->metadata;
         $identifierNames  = $metadata->getIdentifierFieldNames($object);
-        $identifierValues = array();
+        $identifierValues = [];
 
         if (empty($identifierNames)) {
             return $object;
         }
 
         foreach ($identifierNames as $identifierName) {
-            if (!isset($data[$identifierName])) {
+            if (! isset($data[$identifierName])) {
                 return $object;
             }
 
@@ -413,11 +413,11 @@ class DoctrineObject extends AbstractHydrator
         $metadata   = $this->objectManager->getClassMetadata(ltrim($target, '\\'));
         $identifier = $metadata->getIdentifier();
 
-        if (!is_array($values) && !$values instanceof Traversable) {
+        if (! is_array($values) && ! $values instanceof Traversable) {
             $values = (array)$values;
         }
 
-        $collection = array();
+        $collection = [];
 
         // If the collection contains identifiers, fetch the objects from database
         foreach ($values as $value) {
@@ -431,7 +431,7 @@ class DoctrineObject extends AbstractHydrator
                 continue;
             }
 
-            $find = array();
+            $find = [];
             if (is_array($identifier)) {
                 foreach ($identifier as $field) {
                     switch (gettype($value)) {
@@ -456,7 +456,7 @@ class DoctrineObject extends AbstractHydrator
                 }
             }
 
-            if (!empty($find) && $found = $this->find($find, $target)) {
+            if (! empty($find) && $found = $this->find($find, $target)) {
                 $collection[] = (is_array($value)) ? $this->hydrate($value, $found) : $found;
             } else {
                 $collection[] = (is_array($value)) ? $this->hydrate($value, new $target) : new $target;

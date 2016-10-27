@@ -47,7 +47,7 @@ class ProxyAwareElementTestCase extends TestCase
             ->setFirstname('object two firstname')
             ->setSurname('object two surname');
 
-        $result       = new ArrayCollection(array($objectOne, $objectTwo));
+        $result       = new ArrayCollection([$objectOne, $objectTwo]);
         $this->values = $result;
 
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
@@ -61,12 +61,12 @@ class ProxyAwareElementTestCase extends TestCase
                         $input = array_shift($input);
 
                         if ($input == $objectOne) {
-                            return array('id' => 1);
+                            return ['id' => 1];
                         } elseif ($input == $objectTwo) {
-                            return array('id' => 2);
+                            return ['id' => 2];
                         }
 
-                        return array();
+                        return [];
                     }
                 )
             );
@@ -88,12 +88,10 @@ class ProxyAwareElementTestCase extends TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        $this->element->getProxy()->setOptions(
-            array(
-                'object_manager' => $objectManager,
-                'target_class'   => $objectClass
-            )
-        );
+        $this->element->getProxy()->setOptions([
+            'object_manager' => $objectManager,
+            'target_class'   => $objectClass,
+        ]);
 
         $this->metadata = $metadata;
     }

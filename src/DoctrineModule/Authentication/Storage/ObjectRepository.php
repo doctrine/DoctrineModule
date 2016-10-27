@@ -45,20 +45,20 @@ class ObjectRepository implements StorageInterface
      */
     public function setOptions($options)
     {
-        if (!$options instanceof AuthenticationOptions) {
+        if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
         }
 
         $this->options = $options;
         return $this;
     }
-    
+
     /**
      * Constructor
      *
      * @param array | \DoctrineModule\Options\Authentication $options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         $this->setOptions($options);
     }
@@ -96,7 +96,7 @@ class ObjectRepository implements StorageInterface
     {
         return $identity = $this->options->getStorage()->read();
     }
-    
+
     /**
      * @param  object $identity
      * @return void

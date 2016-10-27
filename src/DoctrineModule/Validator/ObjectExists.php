@@ -42,9 +42,9 @@ class ObjectExists extends AbstractValidator
     /**
      * @var array Message templates
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found",
-    );
+    ];
 
     /**
      * ObjectRepository from which to search for entities
@@ -70,8 +70,8 @@ class ObjectExists extends AbstractValidator
      */
     public function __construct(array $options)
     {
-        if (!isset($options['object_repository']) || !$options['object_repository'] instanceof ObjectRepository) {
-            if (!array_key_exists('object_repository', $options)) {
+        if (! isset($options['object_repository']) || ! $options['object_repository'] instanceof ObjectRepository) {
+            if (! array_key_exists('object_repository', $options)) {
                 $provided = 'nothing';
             } else {
                 if (is_object($options['object_repository'])) {
@@ -92,7 +92,7 @@ class ObjectExists extends AbstractValidator
 
         $this->objectRepository = $options['object_repository'];
 
-        if (!isset($options['fields'])) {
+        if (! isset($options['fields'])) {
             throw new Exception\InvalidArgumentException(
                 'Key `fields` must be provided and be a field or a list of fields to be used when searching for'
                 . ' existing instances'
@@ -120,7 +120,7 @@ class ObjectExists extends AbstractValidator
         }
 
         foreach ($fields as $key => $field) {
-            if (!is_string($field)) {
+            if (! is_string($field)) {
                 throw new Exception\InvalidArgumentException(
                     sprintf('Provided fields must be strings, %s provided for key %s', gettype($field), $key)
                 );
@@ -138,13 +138,13 @@ class ObjectExists extends AbstractValidator
      */
     protected function cleanSearchValue($value)
     {
-        $value = is_object($value) ? array($value) : (array) $value;
+        $value = is_object($value) ? [$value] : (array) $value;
 
         if (ArrayUtils::isHashTable($value)) {
-            $matchedFieldsValues = array();
+            $matchedFieldsValues = [];
 
             foreach ($this->fields as $field) {
-                if (!array_key_exists($field, $value)) {
+                if (! array_key_exists($field, $value)) {
                     throw new Exception\RuntimeException(
                         sprintf(
                             'Field "%s" was not provided, but was expected since the configured field lists needs'

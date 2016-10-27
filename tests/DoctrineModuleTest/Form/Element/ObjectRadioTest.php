@@ -44,9 +44,9 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
 
     public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized()
     {
-        $element = $this->getMock(get_class($this->element), array('setValueOptions'));
+        $element = $this->getMock(get_class($this->element), ['setValueOptions']);
 
-        $options = array();
+        $options = [];
 
         $proxy = $this->getMock('DoctrineModule\Form\Element\Proxy');
         $proxy->expects($this->exactly(2))
@@ -63,7 +63,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
 
     public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty()
     {
-        $options = array('foo' => 'bar');
+        $options = ['foo' => 'bar'];
 
         $proxy = $this->getMock('DoctrineModule\Form\Element\Proxy');
         $proxy->expects($this->once())
@@ -79,7 +79,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
     public function testOptionsCanBeSetSingle()
     {
         $proxy = $this->getMock('DoctrineModule\Form\Element\Proxy');
-        $proxy->expects($this->once())->method('setOptions')->with(array('is_method' => true));
+        $proxy->expects($this->once())->method('setOptions')->with(['is_method' => true]);
 
         $this->setProxyViaReflection($proxy);
 

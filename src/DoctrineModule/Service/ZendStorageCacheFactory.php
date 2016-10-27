@@ -47,14 +47,14 @@ class ZendStorageCacheFactory extends CacheFactory
         $options  = $this->getOptions($container, 'cache');
         $instance = $options->getInstance();
 
-        if (!$instance) {
+        if (! $instance) {
             // @todo move this validation to the options class
             throw new RuntimeException('ZendStorageCache must have a referenced cache instance');
         }
 
         $cache = $container->get($instance);
 
-        if (!$cache instanceof StorageInterface) {
+        if (! $cache instanceof StorageInterface) {
             throw new RuntimeException(
                 sprintf(
                     'Retrieved storage "%s" is not a Zend\Cache\Storage\StorageInterface instance, %s found',

@@ -103,7 +103,7 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      */
     public function setObject($object)
     {
-        if (!is_object($object)) {
+        if (! is_object($object)) {
             throw new InvalidArgumentException(
                 sprintf('The parameter given to setObject method of %s class is not an object', get_called_class())
             );
@@ -143,7 +143,7 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
         $object = $this->getObject();
         $getter = 'get' . ucfirst($this->getCollectionName());
 
-        if (!method_exists($object, $getter)) {
+        if (! method_exists($object, $getter)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'The getter %s to access collection %s in object %s does not exist',

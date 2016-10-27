@@ -30,7 +30,7 @@ class StorageFactoryTest extends BaseTestCase
         $name    = 'testFactory';
         $factory = new StorageFactory($name);
 
-        $objectManager =  $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(
@@ -39,18 +39,18 @@ class StorageFactoryTest extends BaseTestCase
         );
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'authentication' => array(
-                        $name => array(
+            [
+                'doctrine' => [
+                    'authentication' => [
+                        $name => [
                             'objectManager' => $objectManager,
                             'identityClass' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
                             'identityProperty' => 'username',
-                            'credentialProperty' => 'password'
-                        ),
-                    ),
-                ),
-            )
+                            'credentialProperty' => 'password',
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $adapter = $factory->createService($serviceManager);
@@ -62,13 +62,13 @@ class StorageFactoryTest extends BaseTestCase
         $factory        = new StorageFactory('testFactory');
         $serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager');
         $storage        = $this->getMock('Zend\Authentication\Storage\StorageInterface');
-        $config         = array(
-            'doctrine' => array(
-                'authentication' => array(
-                    'testFactory' => array('storage' => 'some_storage')
-                ),
-            )
-        );
+        $config         = [
+            'doctrine' => [
+                'authentication' => [
+                    'testFactory' => ['storage' => 'some_storage'],
+                ],
+            ],
+        ];
 
         $serviceManager
             ->expects($this->at(0))

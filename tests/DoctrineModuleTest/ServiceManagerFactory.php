@@ -52,12 +52,12 @@ class ServiceManagerFactory
         $configuration        = $configuration ?: static::getConfiguration();
         $serviceManager       = new ServiceManager();
         $serviceManagerConfig = new ServiceManagerConfig(
-            isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
+            isset($configuration['service_manager']) ? $configuration['service_manager'] : []
         );
         $serviceManagerConfig->configureServiceManager($serviceManager);
 
         $serviceManager->setService('ApplicationConfig', $configuration);
-        if (!$serviceManager->has('ServiceListener')) {
+        if (! $serviceManager->has('ServiceListener')) {
             $serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
         }
 

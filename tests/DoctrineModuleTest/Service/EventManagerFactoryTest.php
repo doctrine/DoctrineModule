@@ -36,17 +36,17 @@ class EventManagerFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'eventmanager' => array(
-                        $name => array(
-                            'subscribers' => array(
-                                __NAMESPACE__ . '\TestAsset\DummyEventSubscriber'
-                            ),
-                        ),
-                    ),
-                ),
-            )
+            [
+                'doctrine' => [
+                    'eventmanager' => [
+                        $name => [
+                            'subscribers' => [
+                                __NAMESPACE__ . '\TestAsset\DummyEventSubscriber',
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         );
 
         /* $var $eventManager \Doctrine\Common\EventManager */
@@ -65,17 +65,17 @@ class EventManagerFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'eventmanager' => array(
-                        $name => array(
-                            'subscribers' => array(
+            [
+                'doctrine' => [
+                    'eventmanager' => [
+                        $name => [
+                            'subscribers' => [
                                 $subscriber,
-                            ),
-                        ),
-                    ),
-                ),
-            )
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         );
 
         /* $var $eventManager \Doctrine\Common\EventManager */
@@ -97,17 +97,17 @@ class EventManagerFactoryTest extends BaseTestCase
         $serviceManager->setService('dummy-subscriber', $subscriber);
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'eventmanager' => array(
-                        $name => array(
-                            'subscribers' => array(
-                                'dummy-subscriber'
-                            ),
-                        ),
-                    ),
-                ),
-            )
+            [
+                'doctrine' => [
+                    'eventmanager' => [
+                        $name => [
+                            'subscribers' => [
+                                'dummy-subscriber',
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         );
 
         /* $var $eventManager \Doctrine\Common\EventManager */
@@ -127,17 +127,17 @@ class EventManagerFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'eventmanager' => array(
-                        $name => array(
-                            'subscribers' => array(
-                                'non-existing-subscriber'
-                            ),
-                        ),
-                    ),
-                ),
-            )
+            [
+                'doctrine' => [
+                    'eventmanager' => [
+                        $name => [
+                            'subscribers' => [
+                                'non-existing-subscriber',
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $this->setExpectedException('InvalidArgumentException');

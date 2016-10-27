@@ -35,12 +35,12 @@ class RequestInputTest extends TestCase
      */
     public function testParamsCorrectlySetted()
     {
-        $params = array(
+        $params = [
             'scriptname.php',
             'list',
             '--help',
-            '--foo=bar'
-        );
+            '--foo=bar',
+        ];
 
         $request = new Request($params);
 

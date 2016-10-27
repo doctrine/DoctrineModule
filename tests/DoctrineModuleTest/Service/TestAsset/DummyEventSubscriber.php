@@ -38,8 +38,8 @@ class DummyEventSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(
-            'dummy'
-        );
+        return [
+            'dummy',
+        ];
     }
 }

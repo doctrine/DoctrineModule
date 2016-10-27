@@ -34,18 +34,18 @@ class AdapterFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Configuration',
-            array(
-                'doctrine' => array(
-                    'authentication' => array(
-                        $name => array(
+            [
+                'doctrine' => [
+                    'authentication' => [
+                        $name => [
                             'objectManager' => $objectManager,
                             'identityClass' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
                             'identityProperty' => 'username',
-                            'credentialProperty' => 'password'
-                        ),
-                    ),
-                ),
-            )
+                            'credentialProperty' => 'password',
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $adapter = $factory->createService($serviceManager);

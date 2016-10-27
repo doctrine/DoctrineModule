@@ -39,9 +39,9 @@ class UniqueObject extends ObjectExists
     /**
      * @var array Message templates
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'",
-    );
+    ];
 
     /**
      * @var ObjectManager
@@ -67,8 +67,8 @@ class UniqueObject extends ObjectExists
     {
         parent::__construct($options);
 
-        if (!isset($options['object_manager']) || !$options['object_manager'] instanceof ObjectManager) {
-            if (!array_key_exists('object_manager', $options)) {
+        if (! isset($options['object_manager']) || ! $options['object_manager'] instanceof ObjectManager) {
+            if (! array_key_exists('object_manager', $options)) {
                 $provided = 'nothing';
             } else {
                 if (is_object($options['object_manager'])) {
@@ -100,14 +100,14 @@ class UniqueObject extends ObjectExists
      */
     public function isValid($value, $context = null)
     {
-        if (!$this->useContext) {
+        if (! $this->useContext) {
             $context = (array) $value;
         }
 
         $cleanedValue = $this->cleanSearchValue($value);
         $match        = $this->objectRepository->findOneBy($cleanedValue);
 
-        if (!is_object($match)) {
+        if (! is_object($match)) {
             return true;
         }
 
@@ -159,9 +159,9 @@ class UniqueObject extends ObjectExists
                         ->getIdentifierValues($context);
         }
 
-        $result = array();
+        $result = [];
         foreach ($this->getIdentifiers() as $identifierField) {
-            if (!array_key_exists($identifierField, $context)) {
+            if (! isset($context[$identifierField])) {
                 throw new Exception\RuntimeException(\sprintf('Expected context to contain %s', $identifierField));
             }
 
