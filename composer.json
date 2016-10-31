@@ -33,6 +33,10 @@
     "extra": {
         "zf": {
             "module": "DoctrineModule"
+        },
+        "branch-alias": {
+            "dev-master": "1.2-dev",
+            "dev-develop": "2.0-dev"
         }
     },
     "require": {
