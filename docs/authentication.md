@@ -4,7 +4,7 @@ Authentication through Doctrine is fully supported by DoctrineModule through an 
 
 ### Simple example
 
-In order to authenticate a user (or anything else) against Doctrine, the following workflow will be use :
+In order to authenticate a user (or anything else) against Doctrine, the following workflow is used:
 
 1. Set configuration that contains options about the entity that is authenticated (credential property, identity property…). It is not necessary to create a separate authentication adapter, this will be automatically created by the DoctrineModule based on the defined configuration.
 2. Create a storage adapter. If the authentication succeeds, the identifier of the entity will be automatically stored in session.
@@ -138,15 +138,15 @@ class ApplicationControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $as = $container->get('doctrine.authenticationservice.orm_default');
-        return new $requestedName($as);
+        $authenticationService = $container->get('doctrine.authenticationservice.orm_default');
+        return new $requestedName($authenticationService);
     }
 }
 ```
 
 #### Using the AuthenticationService
 
-Now that we have defined how to create a `Zend\Authentication\AuthenticationService` object, we can use it in our code. For more information about Zend authentication mechanisms, please read [the ZF 2 Authentication's documentation](http://framework.zend.com/manual/2.4/en/modules/zend.authentication.intro.html).
+Now that we have defined how to create a `Zend\Authentication\AuthenticationService` object we can use it in our code. For more information about Zend authentication mechanisms please read [the ZF 2 Authentication's documentation](http://framework.zend.com/manual/2.4/en/modules/zend.authentication.intro.html).
 
 Here is an example of how we could use it from a controller action (we stripped any Form things for simplicity):
 
