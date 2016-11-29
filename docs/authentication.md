@@ -4,9 +4,9 @@ Authentication through Doctrine is fully supported by DoctrineModule through an 
 
 ### Simple example
 
-In order to authenticate a user (or anything else) against Doctrine, the following workflow will be use :
+In order to authenticate a user (or anything else) against Doctrine, the following workflow is used:
 
-1. Create an authentication adapter that contains options about the entity that is authenticated (credential property, identity property…).
+1. Set configuration that contains options about the entity that is authenticated (credential property, identity property…). It is not necessary to create a separate authentication adapter, this will be automatically created by the DoctrineModule based on the defined configuration.
 2. Create a storage adapter. If the authentication succeeds, the identifier of the entity will be automatically stored in session.
 3. Create a `Zend\Authentication\AuthenticationService`instance that contains both the authentication adapter and the storage adapter.
 
@@ -67,6 +67,34 @@ return [
 ];
 ```
 
+Here is another example that uses a controller method as the *credential_callable* callback. Note that the controller method must be declared *public static*.
+
+```php
+// in your module.config.php:
+
+return [
+    'doctrine' => [
+        'authentication' => [
+            'orm_default' => [
+                'object_manager' => 'Doctrine\ORM\EntityManager',
+                'identity_class' => 'Application\Entity\User',
+                'identity_property' => 'email',
+                'credential_property' => 'password',
+                'credential_callable' => 'Application\Controller\UserController::verifyCredential'
+            ],
+        ],
+    ],
+];
+
+// in UserController.php
+
+public static function verifyCredential(User $user, $inputPassword) 
+{
+    return password_verify($inputPassword, $user->getPassword());
+}
+```
+
+
 #### Creating the AuthenticationService
 
 Now that we have configured the authentication, we still need to tell Zend Framework how to construct a correct ``Zend\Authentication\AuthenticationService`` instance. For this, add the following code in your Module.php class:
@@ -95,11 +123,30 @@ class Module
 }
 ```
 
-Please note that I am using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 view helper.
+Please note that I am using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 [Identity view helper](https://framework.zend.com/manual/2.4/en/modules/zend.view.helpers.identity.html).
+
+In ZF3, you can inject the ``Zend\Authentication\AuthenticationService`` into your controller factories as in the example below:
+
+```php
+<?php
+namespace Application\Factory\Controller;
+
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
+
+class ApplicationControllerFactory implements FactoryInterface
+{
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $authenticationService = $container->get('doctrine.authenticationservice.orm_default');
+        return new $requestedName($authenticationService);
+    }
+}
+```
 
 #### Using the AuthenticationService
 
-Now that we have defined how to create a `Zend\Authentication\AuthenticationService` object, we can use it in our code. For more information about Zend authentication mechanisms, please read [the ZF 2 Authentication's documentation](http://framework.zend.com/manual/2.0/en/modules/zend.authentication.intro.html).
+Now that we have defined how to create a `Zend\Authentication\AuthenticationService` object we can use it in our code. For more information about Zend authentication mechanisms please read [the ZF 2 Authentication's documentation](http://framework.zend.com/manual/2.4/en/modules/zend.authentication.intro.html).
 
 Here is an example of how we could use it from a controller action (we stripped any Form things for simplicity):
 
