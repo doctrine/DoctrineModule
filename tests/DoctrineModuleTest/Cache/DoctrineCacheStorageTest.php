@@ -193,7 +193,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('numeric', $capabilities->getTtlPrecision());
         $this->assertGreaterThan(0, $capabilities->getTtlPrecision());
 
-        $this->assertInternalType('bool', $capabilities->getExpiredRead());
+        $this->assertInternalType('bool', $capabilities->getStaticTtl());
     }
 
     public function testKeyCapabilities()
