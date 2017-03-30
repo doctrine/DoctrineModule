@@ -58,9 +58,8 @@ class DoctrineObject extends AbstractHydrator
      */
     protected $byValue = true;
 
-
     /**
-     * Constructor
+     * Constructor.
      *
      * @param ObjectManager $objectManager The ObjectManager to use
      * @param bool          $byValue       If set to true, hydrator will always use entity's public API
@@ -74,9 +73,10 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Extract values from an object
+     * Extract values from an object.
      *
      * @param  object $object
+     *
      * @return array
      */
     public function extract($object)
@@ -95,6 +95,7 @@ class DoctrineObject extends AbstractHydrator
      *
      * @param  array  $data
      * @param  object $object
+     *
      * @return object
      */
     public function hydrate(array $data, $object)
@@ -109,9 +110,10 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Prepare the hydrator by adding strategies to every collection valued associations
+     * Prepare the hydrator by adding strategies to every collection valued associations.
      *
      * @param  object $object
+     *
      * @return void
      */
     protected function prepare($object)
@@ -121,9 +123,10 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Prepare strategies before the hydrator is used
+     * Prepare strategies before the hydrator is used.
      *
      * @throws \InvalidArgumentException
+     *
      * @return void
      */
     protected function prepareStrategies()
@@ -161,10 +164,12 @@ class DoctrineObject extends AbstractHydrator
 
     /**
      * Extract values from an object using a by-value logic (this means that it uses the entity
-     * API, in this case, getters)
+     * API, in this case, getters).
      *
      * @param  object $object
+     *
      * @throws RuntimeException
+     *
      * @return array
      */
     protected function extractByValue($object)
@@ -203,9 +208,10 @@ class DoctrineObject extends AbstractHydrator
 
     /**
      * Extract values from an object using a by-reference logic (this means that values are
-     * directly fetched without using the public API of the entity, in this case, getters)
+     * directly fetched without using the public API of the entity, in this case, getters).
      *
      * @param  object $object
+     *
      * @return array
      */
     protected function extractByReference($object)
@@ -233,11 +239,13 @@ class DoctrineObject extends AbstractHydrator
 
     /**
      * Hydrate the object using a by-value logic (this means that it uses the entity API, in this
-     * case, setters)
+     * case, setters).
      *
      * @param  array  $data
      * @param  object $object
+     *
      * @throws RuntimeException
+     *
      * @return object
      */
     protected function hydrateByValue(array $data, $object)
@@ -289,10 +297,11 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Hydrate the object using a by-reference logic (this means that values are modified directly without
      * using the public API, in this case setters, and hence override any logic that could be done in those
-     * setters)
+     * setters).
      *
      * @param  array  $data
      * @param  object $object
+     *
      * @return object
      */
     protected function hydrateByReference(array $data, $object)
@@ -337,10 +346,11 @@ class DoctrineObject extends AbstractHydrator
     /**
      * This function tries, given an array of data, to convert it to an object if the given array contains
      * an identifier for the object. This is useful in a context of updating existing entities, without ugly
-     * tricks like setting manually the existing id directly into the entity
+     * tricks like setting manually the existing id directly into the entity.
      *
      * @param  array  $data   The data that may contain identifiers keys
      * @param  object $object
+     *
      * @return object
      */
     protected function tryConvertArrayToObject($data, $object)
@@ -365,7 +375,7 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Handle ToOne associations
+     * Handle ToOne associations.
      *
      * When $value is an array but is not the $target's identifiers, $value is
      * most likely an array of fieldset data. The identifiers will be determined
@@ -374,6 +384,7 @@ class DoctrineObject extends AbstractHydrator
      *
      * @param  string $target
      * @param  mixed  $value
+     *
      * @return object
      */
     protected function toOne($target, $value)
@@ -397,7 +408,7 @@ class DoctrineObject extends AbstractHydrator
      * Handle ToMany associations. In proper Doctrine design, Collections should not be swapped, so
      * collections are always handled by reference. Internally, every collection is handled using specials
      * strategies that inherit from AbstractCollectionStrategy class, and that add or remove elements but without
-     * changing the collection of the object
+     * changing the collection of the object.
      *
      * @param  object $object
      * @param  mixed  $collectionName
@@ -482,10 +493,11 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
+     * Handle various type conversions that should be supported natively by Doctrine (like DateTime).
      *
      * @param  mixed  $value
      * @param  string $typeOfField
+     *
      * @return DateTime
      */
     protected function handleTypeConversions($value, $typeOfField)
@@ -515,7 +527,7 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Find an object by a given target class and identifier
+     * Find an object by a given target class and identifier.
      *
      * @param  mixed   $identifiers
      * @param  string  $targetClass
@@ -536,7 +548,7 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Verifies if a provided identifier is to be considered null
+     * Verifies if a provided identifier is to be considered null.
      *
      * @param  mixed $identifier
      *
@@ -563,7 +575,7 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Applies the naming strategy if there is one set
+     * Applies the naming strategy if there is one set.
      *
      * @param string $field
      *
@@ -578,7 +590,7 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Applies the naming strategy if there is one set
+     * Applies the naming strategy if there is one set.
      *
      * @param string $field
      *
