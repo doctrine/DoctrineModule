@@ -32,6 +32,15 @@ class ObjectSelect extends SelectElement
     protected $proxy;
 
     /**
+     * @param Proxy
+     */
+    public function setProxy(Proxy $proxy)
+    {
+	$this->proxy = $proxy;
+        return $this;
+    }
+
+    /**
      * @return Proxy
      */
     public function getProxy()
