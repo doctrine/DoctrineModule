@@ -452,6 +452,11 @@ class Proxy implements ObjectManagerAwareInterface
                 }
             }
         }
+        
+        //When an entity does not hold directly the identifier, this function has to be recursive!
+        if(is_object($value)){
+            $value = $this->getValue();
+        }
 
         return $value;
     }
