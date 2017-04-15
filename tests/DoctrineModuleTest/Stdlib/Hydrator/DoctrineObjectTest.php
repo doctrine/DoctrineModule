@@ -2560,4 +2560,31 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimplePrivateEntity', $entity);
     }
+    
+    public function testAssertManyToManyWithInitialEntitiesNullHydration()
+    {
+        // initialize entity with contained entities initialized with null instead of ArrayCollection()
+        $entity = new Asset\OneToManyEntityEntitiesNull();
+        $this->configureObjectManagerForOneToManyEntity();
+        
+        $toMany1 = new Asset\SimpleEntity();
+        $toMany1->setId(2);
+        $toMany1->setField('foo', false);
+
+        $toMany2 = new Asset\SimpleEntity();
+        $toMany2->setId(3);
+        $toMany2->setField('bar', false);
+
+        $data = array(
+            'entities' => array(
+                $toMany1, $toMany2
+            )
+        );
+
+        // hydrate empty entity with data values
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+        $result = $entity->getEntities(false)->toArray();
+
+        $this->assertSame($data["entities"], $result);
+    }
 }
