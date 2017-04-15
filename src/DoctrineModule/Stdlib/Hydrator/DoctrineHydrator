@@ -1,0 +1,83 @@
+namespace DoctrineModule\Stdlib\Hydrator;
+
+use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+
+class DoctrineHydrator extends DoctrineObject
+{
+    /**
+     * Flag defining whether array keys are underscore-separated (true) or camel case (false)
+     * @var bool
+     */
+    protected $underscoreSeparatedKeys = true;
+
+    public function __construct(ObjectManager $objectManager, $targetClass, $byValue = true, $underscoreSeparatedKeys = true)
+    {
+        parent::__construct($objectManager, $targetClass, $byValue);
+        $this->setUnderscoreSeparatedKeys($underscoreSeparatedKeys);
+    }
+
+    public function extract($object)
+    {
+        $data = parent::extract($object);
+        $newData = array();
+
+        $transform = function ($letters) {
+            $letter = array_shift($letters);
+
+            return '_' . strtolower($letter);
+        };
+
+        if ($this->getUnderscoreSeparatedKeys()) {
+            foreach ($data as $key => $value) {
+                $key = preg_replace_callback('/([A-Z])/', $transform, $key);
+                $newData[$key] = $value;
+            }
+
+            return $newData;
+        }
+
+        return $data;
+    }
+
+    public function hydrate(array $data, $object)
+    {
+        $transform = function ($letters) {
+            $letter = substr(array_shift($letters), 1, 1);
+
+            return ucfirst($letter);
+        };
+
+        if ($this->getUnderscoreSeparatedKeys()) {
+            $newData = array();
+            foreach ($data as $key => $value) {
+                $key = preg_replace_callback('/(_[a-z])/i', $transform, $key);
+                $newData[$key] = $value;
+            }
+
+            return parent::hydrate($newData, $object);
+        }
+
+        return parent::hydrate($data, $object);
+    }
+
+    /**
+     * @param  bool      $underscoreSeparatedKeys
+     * @return ClassMethods
+     */
+    public function setUnderscoreSeparatedKeys($underscoreSeparatedKeys)
+    {
+        $this->underscoreSeparatedKeys = $underscoreSeparatedKeys;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUnderscoreSeparatedKeys()
+    {
+        return $this->underscoreSeparatedKeys;
+    }
+
+}
