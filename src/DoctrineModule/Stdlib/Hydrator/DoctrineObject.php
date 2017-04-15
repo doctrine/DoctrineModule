@@ -361,7 +361,7 @@ class DoctrineObject extends AbstractHydrator
             $identifierValues[$identifierName] = $data[$identifierName];
         }
 
-        return $this->find($identifierValues, $metadata->getName());
+        return $this->find($identifierValues, $metadata->getName()) ?: $object;
     }
 
     /**
