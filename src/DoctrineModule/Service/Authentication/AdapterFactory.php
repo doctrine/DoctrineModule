@@ -65,4 +65,16 @@ class AdapterFactory extends AbstractFactory
     {
         return 'DoctrineModule\Options\Authentication';
     }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @param type $array
+     * @return \DoctrineModule\Service\Authentication\AdapterFactory
+     */
+    public static function __set_state($array)
+    {
+        $name = $array['name'];
+        return new AdapterFactory($name);
+    }
 }
