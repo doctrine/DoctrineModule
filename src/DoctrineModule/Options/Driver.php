@@ -47,14 +47,13 @@ class Driver extends AbstractOptions
     protected $paths = [];
 
     /**
-     * Set the cache key for the annotation cache. Cache key
-     * is assembled as "doctrine.cache.{key}" and pulled from
+     * Set the cache key for the annotation cache. Pulled from
      * service locator. This option is only valid for the
      * AnnotationDriver.
      *
      * @var string
      */
-    protected $cache = 'array';
+    protected $cache = 'doctrine.cache.array';
 
     /**
      * Set the file extension to use. This option is only
