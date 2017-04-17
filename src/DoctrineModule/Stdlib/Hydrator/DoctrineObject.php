@@ -542,7 +542,7 @@ class DoctrineObject extends AbstractHydrator
      *
      * @return bool
      */
-    private function isNullIdentifier($identifier)
+    protected function isNullIdentifier($identifier)
     {
         if (null === $identifier) {
             return true;
