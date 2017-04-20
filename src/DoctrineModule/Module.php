@@ -20,9 +20,6 @@
 namespace DoctrineModule;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Zend\ModuleManager\Feature\InitProviderInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
 use Zend\EventManager\EventInterface;
 use Zend\Console\Adapter\AdapterInterface as Console;
@@ -39,7 +36,7 @@ use DoctrineModule\Component\Console\Output\PropertyOutput;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
+class Module
 {
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
