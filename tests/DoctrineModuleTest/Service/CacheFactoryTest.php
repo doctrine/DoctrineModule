@@ -120,4 +120,32 @@ class CacheFactoryTest extends BaseTestCase
 
         $this->assertInstanceOf('Doctrine\Common\Cache\PredisCache', $cache);
     }
+
+    public function testUseServiceFactory()
+    {
+        $factory        = new CacheFactory('chain');
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'Configuration',
+            [
+                'doctrine' => [
+                    'cache' => [
+                        'chain' => [
+                            'class' => 'Doctrine\Common\Cache\ChainCache',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $mock = $this->getMock('Doctrine\Common\Cache\ChainCache');
+
+        $serviceManager->setFactory('Doctrine\Common\Cache\ChainCache', function () use ($mock) {
+            return $mock;
+        });
+
+        $cache = $factory->createService($serviceManager);
+
+        $this->assertSame($mock, $cache);
+    }
 }

@@ -59,18 +59,22 @@ class CacheFactory extends AbstractFactory
             $instance = $container->get($instance);
         }
 
-        switch ($class) {
-            case 'Doctrine\Common\Cache\FilesystemCache':
-                $cache = new $class($options->getDirectory());
-                break;
+        if ($container->has($class)) {
+            $cache = $container->get($class);
+        } else {
+            switch ($class) {
+                case 'Doctrine\Common\Cache\FilesystemCache':
+                    $cache = new $class($options->getDirectory());
+                    break;
 
-            case 'DoctrineModule\Cache\ZendStorageCache':
-            case 'Doctrine\Common\Cache\PredisCache':
-                $cache = new $class($instance);
-                break;
+                case 'DoctrineModule\Cache\ZendStorageCache':
+                case 'Doctrine\Common\Cache\PredisCache':
+                    $cache = new $class($instance);
+                    break;
 
-            default:
-                $cache = new $class;
+                default:
+                    $cache = new $class;
+            }
         }
 
         if ($cache instanceof MemcacheCache) {
