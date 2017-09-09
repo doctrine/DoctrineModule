@@ -19,6 +19,7 @@
 
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Common\Cache\ChainCache;
 use DoctrineModule\Service\CacheFactory;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
@@ -131,16 +132,16 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'chain' => [
-                            'class' => Doctrine\Common\Cache\ChainCache::class,
+                            'class' => ChainCache::class,
                         ],
                     ],
                 ],
             ]
         );
 
-        $mock = $this->getMock(Doctrine\Common\Cache\ChainCache::class);
+        $mock = $this->getMock(ChainCache::class);
 
-        $serviceManager->setFactory(Doctrine\Common\Cache\ChainCache::class, function () use ($mock) {
+        $serviceManager->setFactory(ChainCache::class, function () use ($mock) {
             return $mock;
         });
 

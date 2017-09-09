@@ -22,9 +22,8 @@ namespace DoctrineModule\Service;
 use Doctrine\Common\Cache\CacheProvider;
 use Interop\Container\ContainerInterface;
 use RuntimeException;
-use Doctrine\Common\Cache\MemcacheCache;
-use Doctrine\Common\Cache\MemcachedCache;
-use Doctrine\Common\Cache\RedisCache;
+use Doctrine\Common\Cache;
+use DoctrineModule\Cache\ZendStorageCache;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -63,12 +62,12 @@ class CacheFactory extends AbstractFactory
             $cache = $container->get($class);
         } else {
             switch ($class) {
-                case \Doctrine\Common\Cache\FilesystemCache::class:
+                case Cache\FilesystemCache::class:
                     $cache = new $class($options->getDirectory());
                     break;
 
-                case \DoctrineModule\Cache\ZendStorageCache::class:
-                case \Doctrine\Common\Cache\PredisCache::class:
+                case ZendStorageCache::class:
+                case Cache\PredisCache::class:
                     $cache = new $class($instance);
                     break;
 
@@ -78,13 +77,13 @@ class CacheFactory extends AbstractFactory
             }
         }
 
-        if ($cache instanceof MemcacheCache) {
+        if ($cache instanceof Cache\MemcacheCache) {
             /* @var $cache MemcacheCache */
             $cache->setMemcache($instance);
-        } elseif ($cache instanceof MemcachedCache) {
+        } elseif ($cache instanceof Cache\MemcachedCache) {
             /* @var $cache MemcachedCache */
             $cache->setMemcached($instance);
-        } elseif ($cache instanceof RedisCache) {
+        } elseif ($cache instanceof Cache\RedisCache) {
             /* @var $cache RedisCache */
             $cache->setRedis($instance);
         }
