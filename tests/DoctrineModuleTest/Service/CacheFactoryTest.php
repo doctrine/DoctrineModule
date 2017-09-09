@@ -131,16 +131,16 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'chain' => [
-                            'class' => 'Doctrine\Common\Cache\ChainCache',
+                            'class' => Doctrine\Common\Cache\ChainCache::class,
                         ],
                     ],
                 ],
             ]
         );
 
-        $mock = $this->getMock('Doctrine\Common\Cache\ChainCache');
+        $mock = $this->getMock(Doctrine\Common\Cache\ChainCache::class);
 
-        $serviceManager->setFactory('Doctrine\Common\Cache\ChainCache', function () use ($mock) {
+        $serviceManager->setFactory(Doctrine\Common\Cache\ChainCache::class, function () use ($mock) {
             return $mock;
         });
 
