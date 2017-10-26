@@ -177,7 +177,7 @@ Instead of ZF2, you can do like this in ZF3:
 
 ```php
 
-public function __construct($authenticationService)
+public function __construct(AuthenticationService $authenticationService)
 {
     $this->authenticationService = $authenticationService;
 }
@@ -186,13 +186,10 @@ public function loginAction()
 {
     $data = $this->getRequest()->getPost();
 
-    // If you used another name for the authentication service, change it here
-    $authService = $this->authenticationService;
-
-    $adapter = $authService->getAdapter();
+    $adapter = $this->authenticationService->getAdapter();
     $adapter->setIdentity($data['login']);
     $adapter->setCredential($data['password']);
-    $authResult = $authService->authenticate();
+    $authResult = $this->authenticationService->authenticate();
 
     if ($authResult->isValid()) {
         return $this->redirect()->toRoute('home');
@@ -222,8 +219,8 @@ $authService->getStorage()->write($identity);
 The storage automatically extracts ONLY the identifier values and only store this in session (this avoid to store in session a serialized entity, which is a bad practice). Later, when you want to retrieve the logged user :
 
 ```php
-$authenticationService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
-$loggedUser = $authenticationService->getIdentity();
+$authenticationService = $services->get('Zend\Authentication\AuthenticationService');
+$authenticatedUser = $authenticationService->getIdentity();
 ```
 
 The authentication storage will automatically handle the conversion from saved data to managed entity and the opposite. It will avoid serializing entities since that is a strongly discouraged practice.
