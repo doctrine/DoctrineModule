@@ -173,6 +173,38 @@ public function loginAction()
 }
 ```
 
+Instead of ZF2, you can do like this in ZF3:
+
+```php
+
+public function __construct($authenticationService)
+{
+    $this->authenticationService = $authenticationService;
+}
+
+public function loginAction()
+{
+    $data = $this->getRequest()->getPost();
+
+    // If you used another name for the authentication service, change it here
+    $authService = $this->authenticationService;
+
+    $adapter = $authService->getAdapter();
+    $adapter->setIdentity($data['login']);
+    $adapter->setCredential($data['password']);
+    $authResult = $authService->authenticate();
+
+    if ($authResult->isValid()) {
+        return $this->redirect()->toRoute('home');
+    }
+
+    return new ViewModel([
+        'error' => 'Your authentication credentials are not valid',
+    ]);
+}
+
+```
+
 Of course, doing this in the controller is not the best practice, and you'd better move that kind of logic to a service layer. But this is how it works.
 
 Note that when the authentication is valid, we first get the identity :
