@@ -79,6 +79,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
             'controllers' => $provider->getControllerConfig(),
             'route_manager' => $provider->getRouteManagerConfig(),
             'console' => $provider->getConsoleConfig(),
+            'validators' => $provider->getValidatorConfig(),
         ];
     }
 

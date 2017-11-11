@@ -40,6 +40,7 @@ class ConfigProvider
             'controllers' => $this->getControllerConfig(),
             'route_manager' => $this->getRouteManagerConfig(),
             'console' => $this->getConsoleConfig(),
+            'validators' => $this->getValidatorConfig(),
         ];
     }
 
@@ -205,6 +206,25 @@ class ConfigProvider
             'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
             'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
             'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getValidatorConfig()
+    {
+        return [
+            'aliases'   => [
+                'DoctrineNoObjectExists' => Validator\NoObjectExists::class,
+                'DoctrineObjectExists'   => Validator\ObjectExists::class,
+                'DoctrineUniqueObject'   => Validator\UniqueObject::class,
+            ],
+            'factories' => [
+                Validator\NoObjectExists::class => Validator\Service\NoObjectExistsFactory::class,
+                Validator\ObjectExists::class   => Validator\Service\ObjectExistsFactory::class,
+                Validator\UniqueObject::class   => Validator\Service\UniqueObjectFactory::class,
+            ],
         ];
     }
 }
