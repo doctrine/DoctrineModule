@@ -15,16 +15,6 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 5.6
-      env:
-        - DEPS=lowest
-    - php: 5.6
-      env:
-        - DEPS=locked
-        - TEST_COVERAGE=true
-    - php: 5.6
-      env:
-        - DEPS=latest
     - php: 7
       env:
         - DEPS=lowest
