@@ -21,7 +21,7 @@ namespace DoctrineModuleTest\Service;
 
 use Doctrine\Common\Cache\ChainCache;
 use DoctrineModule\Service\CacheFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**

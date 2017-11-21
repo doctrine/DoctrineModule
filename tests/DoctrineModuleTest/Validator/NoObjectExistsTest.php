@@ -20,7 +20,7 @@
 namespace DoctrineModuleTest\Validator\Adapter;
 
 use stdClass;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Validator\NoObjectExists;
 
 /**

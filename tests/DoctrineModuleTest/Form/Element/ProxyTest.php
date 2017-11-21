@@ -22,7 +22,7 @@ namespace DoctrineModuleTest\Form\Element;
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Collection pagination adapter
@@ -32,7 +32,7 @@ use PHPUnit_Framework_TestCase;
  * @author  Kyle Spraggs <theman@spiffyjr.me>
  * @covers  DoctrineModule\Form\Element\Proxy
  */
-class ProxyTest extends PHPUnit_Framework_TestCase
+class ProxyTest extends TestCase
 {
     /**
      * @var \Doctrine\Common\Persistence\Mapping\ClassMetadata

@@ -21,7 +21,7 @@ namespace DoctrineModuleTest\Paginator\Adapter;
 
 use DoctrineModule\Paginator\Adapter\Collection as CollectionAdapter;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Collection pagination adapter
@@ -30,7 +30,7 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class CollectionAdapterTest extends PHPUnit_Framework_TestCase
+class CollectionAdapterTest extends TestCase
 {
     /**
      * @var CollectionAdapter

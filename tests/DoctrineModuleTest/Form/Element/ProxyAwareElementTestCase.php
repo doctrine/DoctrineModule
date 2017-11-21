@@ -21,7 +21,7 @@ namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ProxyAwareElementTestCase extends TestCase
 {

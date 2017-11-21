@@ -19,7 +19,7 @@
 
 namespace DoctrineModuleTest\Authentication\Storage;
 
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Authentication\Storage\ObjectRepository as ObjectRepositoryStorage;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use Zend\Authentication\Storage\NonPersistent as NonPersistentStorage;

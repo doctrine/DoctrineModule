@@ -21,10 +21,8 @@ namespace DoctrineModuleTest\Cache;
 
 use DoctrineModule\Cache\DoctrineCacheStorage;
 use Doctrine\Common\Cache\ArrayCache;
-
 use Zend\Cache\Storage\Adapter\AdapterOptions;
-
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Stdlib\ErrorHandler;
 
 /**
@@ -37,7 +35,7 @@ use Zend\Stdlib\ErrorHandler;
  *
  * @covers \DoctrineModule\Cache\DoctrineCacheStorage
  */
-class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
+class DoctrineCacheStorageTest extends TestCase
 {
     /**
      * @var AdapterOptions
