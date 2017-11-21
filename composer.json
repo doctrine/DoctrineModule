@@ -45,7 +45,7 @@
         "php":                               "^7.1",
         "doctrine/common":                   "^2.6.1",
         "doctrine/cache":                    "^1.6",
-        "symfony/console":                   "^2.3 || ^3.0",
+        "symfony/console":                   "^2.3 || ^3.0 || ^4.0",
         "zendframework/zend-authentication": "^2.5.3",
         "zendframework/zend-cache":          "^2.7.1",
         "zendframework/zend-form":           "^2.9",
