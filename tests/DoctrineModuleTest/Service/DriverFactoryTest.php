@@ -32,7 +32,7 @@ class DriverFactoryTest extends BaseTestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'driver' => [
@@ -53,7 +53,7 @@ class DriverFactoryTest extends BaseTestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'driver' => [

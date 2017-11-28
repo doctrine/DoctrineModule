@@ -37,7 +37,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'authentication' => [

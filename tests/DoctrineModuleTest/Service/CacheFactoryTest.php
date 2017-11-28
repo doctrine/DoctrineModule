@@ -39,7 +39,7 @@ class CacheFactoryTest extends BaseTestCase
         $factory        = new CacheFactory('foo');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                  'doctrine' => [
                      'cache' => [
@@ -66,9 +66,8 @@ class CacheFactoryTest extends BaseTestCase
     {
         $factory        = new CacheFactory('phpunit');
         $serviceManager = new ServiceManager();
-        $serviceManager->setAlias('config', 'Configuration');
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'cache' => [
@@ -100,7 +99,7 @@ class CacheFactoryTest extends BaseTestCase
         $factory        = new CacheFactory('predis');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'cache' => [
@@ -127,7 +126,7 @@ class CacheFactoryTest extends BaseTestCase
         $factory        = new CacheFactory('chain');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'cache' => [

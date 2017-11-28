@@ -90,7 +90,7 @@ abstract class AbstractFactory implements FactoryInterface
             $name = $this->getName();
         }
 
-        $options = $container->get('Configuration');
+        $options = $container->get('config');
         $options = $options['doctrine'];
         if ($mappingType = $this->getMappingType()) {
             $options = $options[$mappingType];
