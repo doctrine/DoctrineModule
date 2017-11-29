@@ -35,7 +35,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $factory        = new EventManagerFactory($name);
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'eventmanager' => [
@@ -64,7 +64,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $subscriber     = new DummyEventSubscriber();
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'eventmanager' => [
@@ -96,7 +96,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService('dummy-subscriber', $subscriber);
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'eventmanager' => [
@@ -126,7 +126,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $factory        = new EventManagerFactory($name);
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'eventmanager' => [

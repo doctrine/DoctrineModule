@@ -33,7 +33,7 @@ class AdapterFactoryTest extends BaseTestCase
         $objectManager  = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'authentication' => [

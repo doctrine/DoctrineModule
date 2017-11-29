@@ -38,7 +38,7 @@ class StorageFactoryTest extends BaseTestCase
             'Zend\Authentication\Storage\Session'
         );
         $serviceManager->setService(
-            'Configuration',
+            'config',
             [
                 'doctrine' => [
                     'authentication' => [
@@ -73,7 +73,7 @@ class StorageFactoryTest extends BaseTestCase
         $serviceManager
             ->expects($this->at(0))
             ->method('get')
-            ->with('Configuration')
+            ->with('config')
             ->will($this->returnValue($config));
         $serviceManager
             ->expects($this->at(1))
