@@ -70,8 +70,7 @@
         "zendframework/zend-version":       "^2.5.1"
     },
     "suggest": {
-        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
-        "zendframework/zend-mvc-console": "^1.1.10 if you are using ZF3"
+        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
     },
     "autoload": {
         "psr-0": {
