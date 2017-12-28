@@ -4,7 +4,7 @@ namespace DoctrineModuleTest\Service;
 
 use Doctrine\Common\Cache\ChainCache;
 use DoctrineModule\Service\CacheFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -97,7 +97,7 @@ class CacheFactoryTest extends BaseTestCase
         );
         $serviceManager->setService(
             'my_predis_alias',
-            $this->getMock('Predis\ClientInterface')
+            $this->createMock('Predis\ClientInterface')
         );
         $cache = $factory->createService($serviceManager);
 
@@ -121,7 +121,7 @@ class CacheFactoryTest extends BaseTestCase
             ]
         );
 
-        $mock = $this->getMock(ChainCache::class);
+        $mock = $this->createMock(ChainCache::class);
 
         $serviceManager->setFactory(ChainCache::class, function () use ($mock) {
             return $mock;

@@ -3,7 +3,7 @@
 namespace DoctrineModuleTest\Stdlib\Hydrator;
 
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use ReflectionClass;
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
@@ -41,8 +41,8 @@ class DoctrineObjectTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->metadata      = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $this->objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->metadata      = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $this->objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 
         $this->objectManager->expects($this->any())
                             ->method('getClassMetadata')

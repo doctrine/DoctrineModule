@@ -3,7 +3,7 @@
 namespace DoctrineModuleTest\Service\Authentication;
 
 use DoctrineModule\Service\Authentication\StorageFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class StorageFactoryTest extends BaseTestCase
@@ -13,7 +13,7 @@ class StorageFactoryTest extends BaseTestCase
         $name    = 'testFactory';
         $factory = new StorageFactory($name);
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(
@@ -43,8 +43,8 @@ class StorageFactoryTest extends BaseTestCase
     public function testCanInstantiateStorageFromServiceLocator()
     {
         $factory        = new StorageFactory('testFactory');
-        $serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager');
-        $storage        = $this->getMock('Zend\Authentication\Storage\StorageInterface');
+        $serviceManager = $this->createMock('Zend\ServiceManager\ServiceManager');
+        $storage        = $this->createMock('Zend\Authentication\Storage\StorageInterface');
         $config         = [
             'doctrine' => [
                 'authentication' => [
