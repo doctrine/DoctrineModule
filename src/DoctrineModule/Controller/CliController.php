@@ -19,6 +19,7 @@
 namespace DoctrineModule\Controller;
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Output\OutputInterface;
 use Zend\Mvc\Console\View\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ConsoleModel as V2ViewModel;
@@ -38,6 +39,11 @@ class CliController extends AbstractActionController
     protected $cliApplication;
 
     /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
+    protected $output;
+
+    /**
      * @param \Symfony\Component\Console\Application $cliApplication
      */
     public function __construct(Application $cliApplication)
@@ -45,12 +51,17 @@ class CliController extends AbstractActionController
         $this->cliApplication = $cliApplication;
     }
 
+    public function setOutput(OutputInterface $output)
+    {
+        $this->output = $output;
+    }
+
     /**
      * Index action - runs the console application
      */
     public function cliAction()
     {
-        $exitCode = $this->cliApplication->run(new RequestInput($this->getRequest()));
+        $exitCode = $this->cliApplication->run(new RequestInput($this->getRequest()), $this->output);
 
         if (is_numeric($exitCode)) {
             $model = class_exists(ViewModel::class) ? new ViewModel() : new V2ViewModel();
