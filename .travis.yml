@@ -5,12 +5,10 @@ language: php
 cache:
   directories:
     - $HOME/.composer/cache
-    - vendor
 
 env:
   global:
     - COMPOSER_ARGS="--no-interaction"
-    - LATEST_DEPS="zendframework/zend-mvc-console"
 
 matrix:
   fast_finish: true
@@ -25,11 +23,11 @@ matrix:
     - php: 7.2
       env:
         - DEPS=lowest
-        - CS_CHECK=true
     - php: 7.2
       env:
         - DEPS=latest
-    - php: 7.1
+        - TEST_COVERAGE=true
+    - php: 7.2
       env:
         - DEPS=dev
 
@@ -38,7 +36,6 @@ before_install:
 
 install:
   - if [[ $DEPS == 'dev' ]]; then travis_retry composer config minimum-stability dev ; fi
-  - if [[ $DEPS == 'latest' || $DEPS == 'dev' ]]; then travis_retry composer require --dev --no-update $COMPOSER_ARGS $LATEST_DEPS ; fi
   - if [[ $DEPS == 'latest' || $DEPS == 'dev' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
   - travis_retry composer install $COMPOSER_ARGS
