@@ -18,7 +18,7 @@
 
 namespace DoctrineModuleTest\Component\Console\Input;
 
-use PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Console\Request;
 use DoctrineModule\Component\Console\Input\RequestInput;
 

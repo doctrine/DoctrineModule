@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Validator\Service;
 
-use PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use DoctrineModule\Validator\NoObjectExists;

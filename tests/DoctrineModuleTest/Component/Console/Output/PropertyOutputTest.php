@@ -18,7 +18,7 @@
 
 namespace DoctrineModuleTest\Component\Console\Output;
 
-use PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use DoctrineModule\Component\Console\Output\PropertyOutput;
 
 /**
