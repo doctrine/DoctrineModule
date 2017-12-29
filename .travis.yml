@@ -30,6 +30,11 @@ matrix:
     - php: 7.2
       env:
         - DEPS=dev
+    - php: nightly
+      env:
+        - DEPS=latest
+  allow_failures:
+    - php: nightly
 
 before_install:
   - travis_retry composer self-update
