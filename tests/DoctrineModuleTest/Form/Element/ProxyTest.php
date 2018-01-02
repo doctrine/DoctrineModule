@@ -36,8 +36,6 @@ class ProxyTest extends TestCase
         $this->proxy = new Proxy;
     }
 
-    /**
-     */
     public function testExceptionThrownForMissingObjectManager()
     {
         $this->expectException(\RuntimeException::class);
@@ -47,8 +45,6 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    /**
-     */
     public function testExceptionThrownForMissingTargetClass()
     {
         $this->expectException(\RuntimeException::class);
@@ -60,8 +56,6 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    /**
-     */
     public function testExceptionThrownForMissingFindMethodName()
     {
         $this->expectException(\RuntimeException::class);

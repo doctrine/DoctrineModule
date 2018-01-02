@@ -155,8 +155,6 @@ class UniqueObjectTest extends BaseTestCase
         $this->assertTrue($validator->isValid('matchValue', ['id' => 'identifier']));
     }
 
-    /**
-     */
     public function testThrowsAnExceptionOnUsedButMissingContext()
     {
         $this->expectException(\Zend\Validator\Exception\RuntimeException::class);
@@ -182,8 +180,6 @@ class UniqueObjectTest extends BaseTestCase
         $validator->isValid('matchValue');
     }
 
-    /**
-     */
     public function testThrowsAnExceptionOnMissingIdentifier()
     {
         $this->expectException(\Zend\Validator\Exception\RuntimeException::class);
@@ -222,8 +218,6 @@ class UniqueObjectTest extends BaseTestCase
         $validator->isValid('matchValue');
     }
 
-    /**
-     */
     public function testThrowsAnExceptionOnMissingIdentifierInContext()
     {
         $this->expectException(\Zend\Validator\Exception\RuntimeException::class);
@@ -263,8 +257,6 @@ class UniqueObjectTest extends BaseTestCase
         $validator->isValid('matchValue', []);
     }
 
-    /**
-     */
     public function testThrowsAnExceptionOnMissingObjectManager()
     {
         $this->expectException(\Zend\Validator\Exception\InvalidArgumentException::class);
@@ -278,8 +270,6 @@ class UniqueObjectTest extends BaseTestCase
         ]);
     }
 
-    /**
-     */
     public function testThrowsAnExceptionOnWrongObjectManager()
     {
         $this->expectException(\Zend\Validator\Exception\InvalidArgumentException::class);
