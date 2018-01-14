@@ -21,7 +21,11 @@ matrix:
     - php: 7.1
       env:
         - DEPS=locked
+<<<<<<< HEAD
         - CS_CHECK=true
+=======
+        - TEST_COVERAGE=true
+>>>>>>> Update to PHPUnit 6.4 and PHP 7.1
     - php: 7.1
       env:
         - DEPS=latest
@@ -32,7 +36,14 @@ matrix:
       env:
         - DEPS=locked
         - CS_CHECK=true
+<<<<<<< HEAD
     - php: 7.1
+=======
+    - php: 7.2
+      env:
+        - DEPS=latest
+    - php: nightly
+>>>>>>> Update to PHPUnit 6.4 and PHP 7.1
       env:
         - DEPS=lowest
     - php: 7.1

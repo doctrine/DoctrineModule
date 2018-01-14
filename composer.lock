@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "35d0a6d8eee09a5c8f2bea20ed4833ec",
+=======
+    "content-hash": "b8838b4ffb92d8c869d9700b632f82f9",
+>>>>>>> Update to PHPUnit 6.4 and PHP 7.1
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -2694,6 +2698,7 @@
             "time": "2015-06-21T13:59:46+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "squizlabs/php_codesniffer",
             "version": "2.7.0",
             "source": {
@@ -2774,6 +2779,10 @@
         {
             "name": "symfony/yaml",
             "version": "v3.1.2",
+=======
+            "name": "theseer/tokenizer",
+            "version": "1.1.0",
+>>>>>>> Update to PHPUnit 6.4 and PHP 7.1
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
