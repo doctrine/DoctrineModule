@@ -3,7 +3,7 @@
 namespace DoctrineModuleTest;
 
 use DoctrineModule\ConfigProvider;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests used to ensure ConfigProvider operates as expected
@@ -12,7 +12,7 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  James Titcumb <james@asgrim.com>
  */
-class ConfigProviderTest extends PHPUnit_Framework_TestCase
+class ConfigProviderTest extends TestCase
 {
     public function testInvokeHasCorrectKeys()
     {

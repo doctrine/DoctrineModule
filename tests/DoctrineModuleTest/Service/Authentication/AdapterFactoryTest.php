@@ -3,7 +3,7 @@
 namespace DoctrineModuleTest\Service\Authentication;
 
 use DoctrineModule\Service\Authentication\AdapterFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class AdapterFactoryTest extends BaseTestCase

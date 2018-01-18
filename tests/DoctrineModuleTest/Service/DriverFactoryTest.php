@@ -3,7 +3,7 @@
 namespace DoctrineModuleTest\Service;
 
 use DoctrineModule\Service\DriverFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**

@@ -3,7 +3,7 @@
 namespace DoctrineModuleTest\ServiceFactory;
 
 use DoctrineModuleTest\ServiceManagerFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test that verifies that services are defined correctly
@@ -12,7 +12,7 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ModuleDefinedServicesTest extends PHPUnit_Framework_TestCase
+class ModuleDefinedServicesTest extends TestCase
 {
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface

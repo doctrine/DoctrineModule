@@ -2,7 +2,7 @@
 
 namespace DoctrineModuleTest\Service;
 
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Service\EventManagerFactory;
 use Zend\ServiceManager\ServiceManager;
 use DoctrineModuleTest\Service\TestAsset\DummyEventSubscriber;

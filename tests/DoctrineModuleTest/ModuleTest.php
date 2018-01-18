@@ -2,9 +2,9 @@
 
 namespace DoctrineModuleTest;
 
-use PHPUnit_Framework_TestCase;
-use PHPUnit_Framework_Assert;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\MockObject\MockObject;
 use DoctrineModule\Module;
 use DoctrineModuleTest\ServiceManagerFactory;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,27 +14,27 @@ use Symfony\Component\Console\Input\InputInterface;
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @covers \DoctrineModule\Module
  */
-class ModuleTest extends PHPUnit_Framework_TestCase
+class ModuleTest extends TestCase
 {
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\Application
+     * @var MockObject|\Zend\Mvc\Application
      */
     private $application;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\MvcEvent
+     * @var MockObject|\Zend\Mvc\MvcEvent
      */
     private $event;
 
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager
+     * @var MockObject|\Zend\ServiceManager\ServiceManager
      */
     private $serviceManager;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Application
+     * @var MockObject|\Symfony\Component\Console\Application
      */
     private $cli;
 

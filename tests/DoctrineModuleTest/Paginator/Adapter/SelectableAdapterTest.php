@@ -5,7 +5,7 @@ namespace DoctrineModuleTest\Paginator\Adapter;
 use Doctrine\Common\Collections\Criteria;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Selectable pagination adapter
@@ -14,7 +14,7 @@ use PHPUnit_Framework_TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
-class SelectableAdapterTest extends PHPUnit_Framework_TestCase
+class SelectableAdapterTest extends TestCase
 {
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
