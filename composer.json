@@ -58,7 +58,7 @@
         "zendframework/zend-mvc-console":    "^1.1.11"
     },
     "require-dev": {
-        "phpunit/phpunit":                  "^6.5",
+        "phpunit/phpunit":                  "^7.0",
         "predis/predis":                    "^1.1",
         "squizlabs/php_codesniffer":        "^2.7",
         "zendframework/zend-i18n":          "^2.7",
