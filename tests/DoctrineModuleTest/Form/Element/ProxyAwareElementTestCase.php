@@ -82,8 +82,8 @@ class ProxyAwareElementTestCase extends TestCase
     /**
      * Proxy should stay read only, use with care
      *
-     * @param $proxy
-     * @param $element
+     * @param \PHPUnit\Framework\MockObject\MockObject $proxy
+     * @param \PHPUnit\Framework\MockObject\MockObject $element
      */
     protected function setProxyViaReflection($proxy, $element = null)
     {
