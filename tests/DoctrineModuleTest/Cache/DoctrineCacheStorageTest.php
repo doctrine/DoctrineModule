@@ -7,7 +7,7 @@ use Doctrine\Common\Cache\ArrayCache;
 
 use Zend\Cache\Storage\Adapter\AdapterOptions;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Stdlib\ErrorHandler;
 
 /**
@@ -20,7 +20,7 @@ use Zend\Stdlib\ErrorHandler;
  *
  * @covers \DoctrineModule\Cache\DoctrineCacheStorage
  */
-class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
+class DoctrineCacheStorageTest extends TestCase
 {
     /**
      * @var AdapterOptions
@@ -701,7 +701,7 @@ class DoctrineCacheStorageTest extends PHPUnit_Framework_TestCase
     {
         $ttl = rand();
 
-        $provider = $this->getMock('Doctrine\Common\Cache\ArrayCache');
+        $provider = $this->createMock('Doctrine\Common\Cache\ArrayCache');
         $provider->expects($this->exactly(4))
                  ->method('save')
                  ->with($this->anything(), $this->anything(), $ttl);

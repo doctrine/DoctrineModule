@@ -428,7 +428,7 @@ class Proxy implements ObjectManagerAwareInterface
                 $identifier = $metadata->getIdentifierFieldNames();
 
                 // TODO: handle composite (multiple) identifiers
-                if (count($identifier) > 1) {
+                if (null !== $identifier && count($identifier) > 1) {
                     //$value = $key;
                 } else {
                     $value = current($metadata->getIdentifierValues($value));
@@ -571,7 +571,7 @@ class Proxy implements ObjectManagerAwareInterface
                 $label = (string) $object;
             }
 
-            if (count($identifier) > 1) {
+            if (null !== $identifier && count($identifier) > 1) {
                 $value = $key;
             } else {
                 $value = current($metadata->getIdentifierValues($object));

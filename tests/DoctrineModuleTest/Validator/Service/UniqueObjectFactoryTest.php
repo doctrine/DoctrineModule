@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Validator\Service;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use DoctrineModule\Validator\UniqueObject;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;

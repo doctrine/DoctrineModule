@@ -3,7 +3,7 @@
 namespace DoctrineModuleTest\Service\Authentication;
 
 use DoctrineModule\Service\Authentication\AdapterFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class AdapterFactoryTest extends BaseTestCase
@@ -13,7 +13,7 @@ class AdapterFactoryTest extends BaseTestCase
 
         $name           = 'testFactory';
         $factory        = new AdapterFactory($name);
-        $objectManager  = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager  = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'config',

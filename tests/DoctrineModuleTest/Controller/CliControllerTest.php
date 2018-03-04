@@ -19,6 +19,7 @@
 namespace DoctrineModuleTest\Controller;
 
 use DoctrineModuleTest\ServiceManagerFactory;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Zend\Console\Request;
 use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 use DoctrineModuleTest\Controller\Mock\FailingCommand;
@@ -40,6 +41,10 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
     {
         $this->setApplicationConfig(ServiceManagerFactory::getConfiguration());
         parent::setUp();
+
+        $this->output = new BufferedOutput();
+        $controller = $this->getApplicationServiceLocator()->get('ControllerManager')->get('DoctrineModule\Controller\Cli');
+        $controller->setOutput($this->output);
 
         $this->getApplicationServiceLocator()->get('doctrine.cli')
             ->add(new FailingCommand());

@@ -5,7 +5,7 @@ namespace DoctrineModuleTest\Service\Authentication;
 use DoctrineModule\Service\Authentication\AuthenticationServiceFactory;
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use DoctrineModule\Service\Authentication\StorageFactory;
-use PHPUnit_Framework_TestCase as BaseTestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class AuthenticationServiceFactoryTest extends BaseTestCase
@@ -16,7 +16,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         $name    = 'testFactory';
         $factory = new AuthenticationServiceFactory($name);
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService(

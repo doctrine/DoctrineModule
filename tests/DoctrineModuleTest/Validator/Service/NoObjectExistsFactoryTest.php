@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Validator\Service;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use DoctrineModule\Validator\NoObjectExists;
@@ -37,7 +37,7 @@ class NoObjectExistsFactoryTest extends TestCase
      */
     public function testCallable()
     {
-        $this->assertTrue(is_callable($this->object));
+        $this->assertInternalType('callable', $this->object);
     }
 
     /**
@@ -142,10 +142,11 @@ class NoObjectExistsFactoryTest extends TestCase
 
     /**
      * @covers ::getRepository
-     * @expectedException DoctrineModule\Validator\Service\Exception\ServiceCreationException
      */
     public function testInvokeWithoutTargetClass()
     {
+        $this->expectException(\DoctrineModule\Validator\Service\Exception\ServiceCreationException::class);
+
         $container = $this->prophesize(ContainerInterface::class);
         $this->object->__invoke(
             $container->reveal(),
