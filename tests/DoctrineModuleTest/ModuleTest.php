@@ -3,10 +3,7 @@
 namespace DoctrineModuleTest;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\MockObject\MockObject;
 use DoctrineModule\Module;
-use DoctrineModuleTest\ServiceManagerFactory;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 

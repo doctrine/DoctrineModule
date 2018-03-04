@@ -4,9 +4,7 @@ namespace DoctrineModuleTest\Cache;
 
 use DoctrineModule\Cache\DoctrineCacheStorage;
 use Doctrine\Common\Cache\ArrayCache;
-
 use Zend\Cache\Storage\Adapter\AdapterOptions;
-
 use PHPUnit\Framework\TestCase;
 use Zend\Stdlib\ErrorHandler;
 
