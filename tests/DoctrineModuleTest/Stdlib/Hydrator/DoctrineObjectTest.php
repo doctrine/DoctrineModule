@@ -1808,7 +1808,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entities = $entity->getEntities(false);
 
         // DisallowStrategy should not remove existing entities in Collection even if it's not in the new collection
-        $this->assertEquals(3, count($entities));
+        $this->assertCount(3, $entities);
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
@@ -1859,7 +1859,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entities = $entity->getEntities(false);
 
         // DisallowStrategy should not remove existing entities in Collection even if it's not in the new collection
-        $this->assertEquals(3, count($entities));
+        $this->assertCount(3, $entities);
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $en);
@@ -2281,7 +2281,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entities = $entity->getEntities(false);
         $entity   = $entities[0];
 
-        $this->assertEquals(1, count($entities));
+        $this->assertCount(1, $entities);
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
         $this->assertSame($entityInDatabaseWithEmptyId, $entity);
