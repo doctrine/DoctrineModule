@@ -44,7 +44,7 @@ class ZendStorageCacheTest extends TestCase
 
         // Fetch/save test with objects (Is cache driver serializes/unserializes objects correctly ?)
         $cache->save('test_object_key', new \ArrayObject());
-        $this->assertTrue($cache->fetch('test_object_key') instanceof \ArrayObject);
+        $this->assertInstanceOf('ArrayObject', $cache->fetch('test_object_key'));
     }
 
     public function testDeleteAll()
