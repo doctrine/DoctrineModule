@@ -2,16 +2,10 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator;
 
-use Datetime;
-use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
-use PHPUnit\Framework\TestCase as BaseTestCase;
+use DateTime;
 use ReflectionClass;
-use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
-use DoctrineModule\Stdlib\Hydrator\Strategy;
-use DoctrineModule\Stdlib\Hydrator\Filter;
-use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
-use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
 
 class DoctrineObjectTypeConversionsTest extends BaseTestCase
 {
@@ -50,6 +44,9 @@ class DoctrineObjectTypeConversionsTest extends BaseTestCase
                             ->will($this->returnValue($this->metadata));
     }
 
+    /**
+     * @param string $genericFieldType
+     */
     public function configureObjectManagerForSimpleEntityWithGenericField($genericFieldType)
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithGenericField');
@@ -78,6 +75,10 @@ class DoctrineObjectTypeConversionsTest extends BaseTestCase
             ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('genericField')))
             ->will(
                 $this->returnCallback(
+
+                    /**
+                     * @param string $arg
+                     */
                     function ($arg) use ($genericFieldType) {
                         if ('id' === $arg) {
                             return 'integer';
