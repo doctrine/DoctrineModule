@@ -55,7 +55,8 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      */
     protected function getObjectManager(ContainerInterface $container, array $options)
     {
-        $objectManager = isset($options['object_manager']) ? $options['object_manager'] : self::DEFAULT_OBJECTMANAGER_KEY;
+        $objectManager = ($options['object_manager']) ?? self::DEFAULT_OBJECTMANAGER_KEY;
+
         if (is_string($objectManager)) {
             $objectManager = $container->get($objectManager);
         }
