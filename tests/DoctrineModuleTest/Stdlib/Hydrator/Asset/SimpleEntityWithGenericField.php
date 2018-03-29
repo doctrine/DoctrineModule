@@ -2,7 +2,7 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator\Asset;
 
-class SimpleEntityWithFloat
+class SimpleEntityWithGenericField
 {
     /**
      * @var int
@@ -12,7 +12,7 @@ class SimpleEntityWithFloat
     /**
      * @var float
      */
-    protected $floatField;
+    protected $genericField;
 
     public function setId($id)
     {
@@ -24,15 +24,15 @@ class SimpleEntityWithFloat
         return $this->id;
     }
 
-    public function setFloatField($value)
+    public function setGenericField($value)
     {
-        $this->floatField = $value;
+        $this->genericField = $value;
 
         return $this;
     }
 
-    public function getFloatField()
+    public function getGenericField()
     {
-        return $this->floatField;
+        return $this->genericField;
     }
 }
