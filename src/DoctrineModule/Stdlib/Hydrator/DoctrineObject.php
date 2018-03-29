@@ -467,7 +467,7 @@ class DoctrineObject extends AbstractHydrator
     /**
      * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
      * See Documentation of Doctrine Mapping Types for defaults
-     * 
+     *
      * @link http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#doctrine-mapping-types
      * @param  mixed  $value
      * @param  string $typeOfField
@@ -497,13 +497,17 @@ class DoctrineObject extends AbstractHydrator
             case 'datetime':
             case 'time':
             case 'date':
-                if ('' === $value) {
+                if ($value === '') {
                     return null;
+                }
+
+                if ($value instanceof Datetime) {
+                    return $value;
                 }
 
                 if (is_int($value)) {
                     $dateTime = new DateTime();
-                    $dateTime->setTimestamp($value);
+                    $dateTime->setTimestamp((int)$value);
                     $value = $dateTime;
                 } elseif (is_string($value)) {
                     $value = new DateTime($value);

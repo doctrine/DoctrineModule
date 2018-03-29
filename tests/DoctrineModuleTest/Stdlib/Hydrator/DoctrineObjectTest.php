@@ -2,6 +2,7 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator;
 
+use Datetime;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use ReflectionClass;
@@ -2285,6 +2286,87 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
         $this->assertSame($entityInDatabaseWithEmptyId, $entity);
+    }
+
+    public function testHandleTypeConversionsDatetime()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $this->configureObjectManagerForSimpleEntityWithDateTime();
+
+        $entity = new Asset\SimpleEntityWithDateTime();
+        $now = new DateTime();
+        $now->setTimestamp(1522353676);
+        $data = ['date' => 1522353676];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DateTime', $entity->getDate());
+        $this->assertEquals($now, $entity->getDate());
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DateTime', $entity->getDate());
+        $this->assertEquals($now, $entity->getDate());
+
+        $entity = new Asset\SimpleEntityWithDateTime();
+        $now = new DateTime();
+        $data = ['date' => $now->format('Y-m-d\TH:i:s')];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DateTime', $entity->getDate());
+        $this->assertEquals($now->format('Y-m-d\TH:i:s'), $entity->getDate()->format('Y-m-d\TH:i:s'));
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DateTime', $entity->getDate());
+        $this->assertEquals($now->format('Y-m-d\TH:i:s'), $entity->getDate()->format('Y-m-d\TH:i:s'));
+    }
+
+    public function testHandleTypeConversionsInteger()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $this->configureObjectManagerForSimpleEntity();
+
+        $entity = new Asset\SimpleEntity();
+        $value = 123465;
+        $data = ['id' => '123465'];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertTrue(is_integer($entity->getId()));
+        $this->assertEquals($value, $entity->getId());
+
+        $entity = new Asset\SimpleEntity();
+        $value = 123465;
+        $data = ['id' => '123465'];
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertTrue(is_integer($entity->getId()));
+        $this->assertEquals($value, $entity->getId());
+    }
+
+    public function testHandleTypeConversionsBoolean()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $this->configureObjectManagerForSimpleEntityWithIsBoolean();
+
+        $entity = new Asset\SimpleEntityWithIsBoolean();
+        $data = ['isActive' => true];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertTrue(is_bool($entity->getIsActive()));
+        $this->assertEquals(true, $entity->getIsActive());
+
+        $entity = new Asset\SimpleEntityWithIsBoolean();
+        $data = ['isActive' => true];
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertTrue(is_bool($entity->getIsActive()));
+        $this->assertEquals(true, $entity->getIsActive());
     }
 
     public function testHandleDateTimeConversionUsingByValue()
