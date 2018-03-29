@@ -2,14 +2,15 @@
 
 namespace DoctrineModule\Form\Element;
 
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\ObjectManager;
-use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use InvalidArgumentException;
+use Traversable;
 use ReflectionMethod;
 use RuntimeException;
-use Traversable;
+use InvalidArgumentException;
 use Zend\Stdlib\Guard\ArrayOrTraversableGuardTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Util\Inflector;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
 class Proxy implements ObjectManagerAwareInterface
 {
@@ -548,7 +549,7 @@ class Proxy implements ObjectManagerAwareInterface
                     );
                 }
 
-                $getter = 'get' . ucfirst($property);
+                $getter = 'get' . Inflector::classify($property);
 
                 if (! is_callable([$object, $getter])) {
                     throw new RuntimeException(
@@ -608,7 +609,7 @@ class Proxy implements ObjectManagerAwareInterface
             }
 
             // optgroup_identifier found, handle grouping
-            $optgroupGetter = 'get' . ucfirst($this->getOptgroupIdentifier());
+            $optgroupGetter = 'get' . Inflector::classify($this->getOptgroupIdentifier());
 
             if (! is_callable([$object, $optgroupGetter])) {
                 throw new RuntimeException(

@@ -6,6 +6,7 @@ use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Zend\Authentication\Adapter\AbstractAdapter;
 use Zend\Authentication\Adapter\Exception;
 use Zend\Authentication\Result as AuthenticationResult;
+use Doctrine\Common\Util\Inflector;
 
 /**
  * Authentication adapter that uses a Doctrine object for verification.
@@ -95,7 +96,7 @@ class ObjectRepository extends AbstractAdapter
     protected function validateIdentity($identity)
     {
         $credentialProperty = $this->options->getCredentialProperty();
-        $getter             = 'get' . ucfirst($credentialProperty);
+        $getter             = 'get' . Inflector::classify($credentialProperty);
         $documentCredential = null;
 
         if (method_exists($identity, $getter)) {

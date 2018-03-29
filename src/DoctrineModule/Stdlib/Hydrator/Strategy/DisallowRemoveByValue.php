@@ -2,9 +2,10 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
-use Doctrine\Common\Collections\Collection;
 use LogicException;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Util\Inflector;
 
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in
@@ -27,7 +28,7 @@ class DisallowRemoveByValue extends AbstractCollectionStrategy
     public function hydrate($value)
     {
         // AllowRemove strategy need "adder"
-        $adder = 'add' . ucfirst($this->collectionName);
+        $adder = 'add' . Inflector::classify($this->collectionName);
 
         if (! method_exists($this->object, $adder)) {
             throw new LogicException(
