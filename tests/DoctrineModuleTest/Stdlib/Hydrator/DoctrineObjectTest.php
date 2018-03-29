@@ -310,6 +310,74 @@ class DoctrineObjectTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForSimpleEntityWithFloat()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithFloat');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithFloat'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue([]));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(['id', 'floatField']));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('floatField')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ('id' === $arg) {
+                            return 'integer';
+                        } elseif ('floatField' === $arg) {
+                            return 'float';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(['id']));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
     public function configureObjectManagerForSimpleEntityWithStringId()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity');
@@ -2308,9 +2376,25 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DateTime', $entity->getDate());
         $this->assertEquals($now, $entity->getDate());
 
+
         $entity = new Asset\SimpleEntityWithDateTime();
         $now = new DateTime();
         $data = ['date' => $now->format('Y-m-d\TH:i:s\.u')];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DateTime', $entity->getDate());
+        $this->assertEquals($now, $entity->getDate());
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DateTime', $entity->getDate());
+        $this->assertEquals($now, $entity->getDate());
+
+
+        $entity = new Asset\SimpleEntityWithDateTime();
+        $now = new DateTime();
+        $data = ['date' => clone $now];
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
@@ -2347,6 +2431,30 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals($value, $entity->getId());
     }
 
+    public function testHandleTypeConversionsFloat()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $this->configureObjectManagerForSimpleEntityWithFloat();
+
+        $entity = new Asset\SimpleEntityWithFloat();
+        $value = 123.465;
+        $data = ['floatField' => '123.465'];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertTrue(is_float($entity->getFloatField()));
+        $this->assertEquals($value, $entity->getFloatField());
+
+        $entity = new Asset\SimpleEntityWithFloat();
+        $value = 123.465;
+        $data = ['floatField' => '123.465'];
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertTrue(is_float($entity->getFloatField()));
+        $this->assertEquals($value, $entity->getFloatField());
+    }
+
     public function testHandleTypeConversionsBoolean()
     {
         // When using hydration by value, it will use the public API of the entity to set values (setters)
@@ -2362,6 +2470,23 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = new Asset\SimpleEntityWithIsBoolean();
         $data = ['isActive' => true];
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertTrue(is_bool($entity->getIsActive()));
+        $this->assertEquals(true, $entity->getIsActive());
+
+
+        $entity = new Asset\SimpleEntityWithIsBoolean();
+        $data = ['isActive' => 1];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertTrue(is_bool($entity->getIsActive()));
+        $this->assertEquals(true, $entity->getIsActive());
+
+        $entity = new Asset\SimpleEntityWithIsBoolean();
+        $data = ['isActive' => 1];
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 

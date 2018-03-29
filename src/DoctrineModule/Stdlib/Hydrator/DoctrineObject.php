@@ -507,14 +507,17 @@ class DoctrineObject extends AbstractHydrator
 
                 if (is_int($value)) {
                     $dateTime = new DateTime();
-                    $dateTime->setTimestamp((int)$value);
-                    $value = $dateTime;
-                } elseif (is_string($value)) {
-                    $value = new DateTime($value);
+                    $dateTime->setTimestamp($value);
+                    return $dateTime;
+                }
+
+                if (is_string($value)) {
+                    return new DateTime($value);
                 }
 
                 break;
             default:
+                break;
         }
 
         return $value;
