@@ -2310,17 +2310,17 @@ class DoctrineObjectTest extends BaseTestCase
 
         $entity = new Asset\SimpleEntityWithDateTime();
         $now = new DateTime();
-        $data = ['date' => $now->format('Y-m-d\TH:i:s')];
+        $data = ['date' => $now->format('Y-m-d\TH:i:s\.u')];
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
         $this->assertInstanceOf('DateTime', $entity->getDate());
-        $this->assertEquals($now->format('Y-m-d\TH:i:s'), $entity->getDate()->format('Y-m-d\TH:i:s'));
+        $this->assertEquals($now, $entity->getDate());
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
         $this->assertInstanceOf('DateTime', $entity->getDate());
-        $this->assertEquals($now->format('Y-m-d\TH:i:s'), $entity->getDate()->format('Y-m-d\TH:i:s'));
+        $this->assertEquals($now, $entity->getDate());
     }
 
     public function testHandleTypeConversionsInteger()
