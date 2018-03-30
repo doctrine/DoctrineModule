@@ -41,6 +41,16 @@ class DoctrineObject extends AbstractHydrator
      */
     protected $byValue = true;
 
+    /**
+     * @var string
+     */
+    protected $defaultByValueStrategy = __NAMESPACE__ . '\Strategy\AllowRemoveByValue';
+
+    /**
+     * @var string
+     */
+    protected $defaultByReferenceStrategy = __NAMESPACE__ . '\Strategy\AllowRemoveByReference';
+
 
     /**
      * Constructor
@@ -54,6 +64,42 @@ class DoctrineObject extends AbstractHydrator
 
         $this->objectManager = $objectManager;
         $this->byValue       = (bool) $byValue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultByValueStrategy()
+    {
+        return $this->defaultByValueStrategy;
+    }
+
+    /**
+     * @param string $defaultByValueStrategy
+     * @return DoctrineObject
+     */
+    public function setDefaultByValueStrategy($defaultByValueStrategy)
+    {
+        $this->defaultByValueStrategy = $defaultByValueStrategy;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultByReferenceStrategy()
+    {
+        return $this->defaultByReferenceStrategy;
+    }
+
+    /**
+     * @param string $defaultByReferenceStrategy
+     * @return DoctrineObject
+     */
+    public function setDefaultByReferenceStrategy($defaultByReferenceStrategy)
+    {
+        $this->defaultByReferenceStrategy = $defaultByReferenceStrategy;
+        return $this;
     }
 
     /**
@@ -118,10 +164,12 @@ class DoctrineObject extends AbstractHydrator
                 // Add a strategy if the association has none set by user
                 if (! $this->hasStrategy($association)) {
                     if ($this->byValue) {
-                        $this->addStrategy($association, new Strategy\AllowRemoveByValue());
+                        $strategyClassName = $this->getDefaultByValueStrategy();
                     } else {
-                        $this->addStrategy($association, new Strategy\AllowRemoveByReference());
+                        $strategyClassName = $this->getDefaultByReferenceStrategy();
                     }
+
+                    $this->addStrategy($association, new $strategyClassName());
                 }
 
                 $strategy = $this->getStrategy($association);
