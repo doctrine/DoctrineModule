@@ -466,7 +466,9 @@ class DoctrineObject extends AbstractHydrator
 
     /**
      * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
+     * See Documentation of Doctrine Mapping Types for defaults
      *
+     * @link http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#doctrine-mapping-types
      * @param  mixed  $value
      * @param  string $typeOfField
      * @return DateTime
@@ -474,24 +476,47 @@ class DoctrineObject extends AbstractHydrator
     protected function handleTypeConversions($value, $typeOfField)
     {
         switch ($typeOfField) {
+            case 'boolean':
+                $value = (bool)$value;
+                break;
+            case 'string':
+            case 'text':
+            case 'bigint':
+            case 'decimal':
+                $value = (string)$value;
+                break;
+            case 'integer':
+            case 'smallint':
+                $value = (int)$value;
+                break;
+            case 'float':
+                $value = (double)$value;
+                break;
             case 'datetimetz':
             case 'datetime':
             case 'time':
             case 'date':
-                if ('' === $value) {
+                if ($value === '') {
                     return null;
+                }
+
+                if ($value instanceof Datetime) {
+                    return $value;
                 }
 
                 if (is_int($value)) {
                     $dateTime = new DateTime();
                     $dateTime->setTimestamp($value);
-                    $value = $dateTime;
-                } elseif (is_string($value)) {
-                    $value = new DateTime($value);
+                    return $dateTime;
+                }
+
+                if (is_string($value)) {
+                    return new DateTime($value);
                 }
 
                 break;
             default:
+                break;
         }
 
         return $value;

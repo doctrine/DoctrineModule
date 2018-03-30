@@ -33,4 +33,9 @@ class SimpleEntityWithIsBoolean
     {
         return $this->isActive;
     }
+
+    public function getIsActive()
+    {
+        return $this->isActive();
+    }
 }
