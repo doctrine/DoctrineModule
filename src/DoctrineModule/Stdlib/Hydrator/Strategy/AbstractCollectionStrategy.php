@@ -3,9 +3,10 @@
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
 use InvalidArgumentException;
+use Zend\Hydrator\Strategy\StrategyInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Zend\Hydrator\Strategy\StrategyInterface;
+use Doctrine\Common\Util\Inflector;
 
 /**
  * @license MIT
@@ -124,7 +125,7 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
     protected function getCollectionFromObjectByValue()
     {
         $object = $this->getObject();
-        $getter = 'get' . ucfirst($this->getCollectionName());
+        $getter = 'get' . Inflector::classify($this->getCollectionName());
 
         if (! method_exists($object, $getter)) {
             throw new InvalidArgumentException(

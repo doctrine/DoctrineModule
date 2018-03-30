@@ -419,7 +419,8 @@ class DoctrineObject extends AbstractHydrator
                 foreach ($identifier as $field) {
                     switch (gettype($value)) {
                         case 'object':
-                            $getter = 'get' . ucfirst($field);
+                            $getter = 'get' . Inflector::classify($field);
+
                             if (is_callable([$value, $getter])) {
                                 $find[$field] = $value->$getter();
                             } elseif (property_exists($value, $field)) {
