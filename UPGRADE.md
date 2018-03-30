@@ -1,3 +1,35 @@
+# 2.1.0
+This is the first major release since 1.2.0 and brings this library up to date
+with current practices and a slew of updates and fixes.
+* updated PHP CodeSniffer to version 2.7
+* added phpcs.xml with defined CS rules
+* fixed code to pass all CS checks
+* short array syntax in docs
+* composer scripts to run unit and cs checks
+* updated travis configuration to use composer scripts [#575](https://github.com/doctrine/DoctrineModule/pull/575)
+* Updated DoctrineModule authentication doc with some ZF3-related information and examples [#582](https://github.com/doctrine/DoctrineModule/pull/582)
+* expiredRead is now staticTtl in cache test [#594](https://github.com/doctrine/DoctrineModule/pull/594)
+* Added ConfigProvider in line with ZF components [#590](https://github.com/doctrine/DoctrineModule/pull/590)
+* corrected errors in sample code [#606](https://github.com/doctrine/DoctrineModule/pull/606)
+* Migrate all module.config.php into ConfigProvider in line with ZF adaption
+* Added more tests for keys and serialziation for ConfigProvider
+* Authentication guide update for ZF3 [#599](https://github.com/doctrine/DoctrineModule/pull/599)
+* Use service manager factory for cache when possible
+* Use class name constants where possible; break even on the last case in a switch [#605](https://github.com/doctrine/DoctrineModule/pull/605)
+* Add APCu cache to configuration [#589](https://github.com/doctrine/DoctrineModule/pull/589)
+* Added factories for (No)ObjectExists and UniqueObject validators [#604](https://github.com/doctrine/DoctrineModule/pull/604)
+* Drop PHP 5.x support
+* Bump minimum PHP version to 7.1
+* Drop HHVM from Travis build [#611](https://github.com/doctrine/DoctrineModule/pull/611)
+* Allow symfony 4 [#612](https://github.com/doctrine/DoctrineModule/pull/612)
+* Removed Version.php [#616](https://github.com/doctrine/DoctrineModule/pull/616)
+
+* License headers [#617](https://github.com/doctrine/DoctrineModule/pull/617)
+* Upgrade to PHPUnit ^7.0 [#615](https://github.com/doctrine/DoctrineModule/pull/615/commits)
+* Extend DoctrineModule\Stdlib\Hydrator\DoctrineObject::handleTypeConversions() to handle all basic conversions according to documentation instead of just DateTime object related values [#626](https://github.com/doctrine/DoctrineModule/pull/626/commits)
+* Use Inflector instead of ucfirst [#625](https://github.com/doctrine/DoctrineModule/pull/625/commits)
+* Hydration strategies can be replaced after the hydrator is created [#627](https://github.com/doctrine/DoctrineModule/pull/627/commits)
+
 # 1.2.0
 * ZF3 compatibility [#567](https://github.com/pull/567)
 * Expose to `zend*component*installer` as module `DoctrineModule` [#570](https://github.com/pull/570)
