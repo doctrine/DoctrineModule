@@ -282,6 +282,7 @@ class DoctrineObject extends AbstractHydrator
 
         foreach ($data as $field => $value) {
             $field  = $this->computeHydrateFieldName($field);
+            $field = lcfirst(Inflector::classify($field));
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
             $setter = 'set' . Inflector::classify($field);
 
