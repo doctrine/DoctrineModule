@@ -428,6 +428,69 @@ class DoctrineObjectTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForSimpleEntityWithMultiWordDateTime()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithMultiWordDateTime');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue([]));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(['id', 'multiWordDate']));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('multiWordDate'), $this->equalTo('multi-word-date')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'multiWordDate') {
+                            return 'datetime';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(['id']));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
     public function configureObjectManagerForOneToOneEntity()
     {
         $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity');
@@ -890,6 +953,31 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals('From setter: foo', $entity->getField(false));
     }
 
+    public function testCanHydrateSimpleEntityWithMultiWordFieldByValue()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntityWithMultiWordDateTime();
+        $this->configureObjectManagerForSimpleEntityWithMultiWordDateTime();
+        $data = ['multiWordDate' => '2018-03-31'];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithMultiWordDateTime', $entity);
+        $this->assertEquals('2018-03-31', $entity->getMultiWordDate()->format('Y-m-d'));
+    }
+
+    public function testCanHydrateSimpleEntityWithMultiWordFieldByValueSeparatedByHyphens()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntityWithMultiWordDateTime();
+        $this->configureObjectManagerForSimpleEntityWithMultiWordDateTime();
+        $data = ['multi-word-date' => '2018-03-31'];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithMultiWordDateTime', $entity);
+        $this->assertEquals('2018-03-31', $entity->getMultiWordDate()->format('Y-m-d'));
+    }
     /**
      * When using hydration by value, it will use the public API of the entity to set values (setters)
      *
