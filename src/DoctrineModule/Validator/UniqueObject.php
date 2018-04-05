@@ -144,7 +144,7 @@ class UniqueObject extends ObjectExists
 
         $result = [];
         foreach ($this->getIdentifiers() as $identifierField) {
-            if (! isset($context[$identifierField])) {
+            if (! array_key_exists($identifierField, $context)) {
                 throw new Exception\RuntimeException(\sprintf('Expected context to contain %s', $identifierField));
             }
 
