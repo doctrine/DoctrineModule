@@ -48,7 +48,7 @@
         "symfony/console":                   "^3.3 || ^4.0",
         "zendframework/zend-authentication": "^2.5.3",
         "zendframework/zend-cache":          "^2.7.1",
-        "zendframework/zend-form":           "^2.10",
+        "zendframework/zend-form":           "^2.11",
         "zendframework/zend-hydrator":       "^2.3",
         "zendframework/zend-mvc":            "^3.1",
         "zendframework/zend-paginator":      "^2.8",
