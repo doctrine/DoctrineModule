@@ -32,7 +32,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      * @return \Doctrine\Common\Persistence\ObjectRepository
      * @throws ServiceCreationException
      */
-    protected function getRepository(ContainerInterface $container, array $options)
+    protected function getRepository(ContainerInterface $container, array $options = null)
     {
         if (empty($options['target_class'])) {
             throw new ServiceCreationException(sprintf(
@@ -53,7 +53,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      * @param array $options
      * @return \Doctrine\Common\Persistence\ObjectManager
      */
-    protected function getObjectManager(ContainerInterface $container, array $options)
+    protected function getObjectManager(ContainerInterface $container, array $options = null)
     {
         $objectManager = ($options['object_manager']) ?? self::DEFAULT_OBJECTMANAGER_KEY;
 
