@@ -2628,4 +2628,37 @@ class DoctrineObjectTest extends BaseTestCase
             $this->hydratorByReference->getStrategy('entities')
         );
     }
+
+    public function testNullEntityThrowsUsefulException()
+    {
+        $this->configureObjectManagerForSimpleEntity();
+
+        try {
+            $this->hydratorByValue->extract(null);
+        }
+        catch(\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+
+        try {
+            $this->hydratorByValue->hydrate([], null);
+        }
+        catch(\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+
+        try {
+            $this->hydratorByReference->extract(null);
+        }
+        catch(\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+
+        try {
+            $this->hydratorByReference->hydrate([], null);
+        }
+        catch(\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+    }
 }

@@ -145,6 +145,14 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function prepare($object)
     {
+        if(!is_object($object)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Object to be prepared must be an object, %s given',
+                    gettype($object)
+                )
+            );
+        }
         $this->metadata = $this->objectManager->getClassMetadata(get_class($object));
         $this->prepareStrategies();
     }
