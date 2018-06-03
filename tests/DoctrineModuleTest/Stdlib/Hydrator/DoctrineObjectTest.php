@@ -11,6 +11,7 @@ use DoctrineModule\Stdlib\Hydrator\Strategy;
 use DoctrineModule\Stdlib\Hydrator\Filter;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
 use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
+use Zend\Hydrator\Strategy\StrategyInterface;
 
 class DoctrineObjectTest extends BaseTestCase
 {
@@ -2627,5 +2628,30 @@ class DoctrineObjectTest extends BaseTestCase
             __NAMESPACE__ . '\Asset\DifferentAllowRemoveByReference',
             $this->hydratorByReference->getStrategy('entities')
         );
+    }
+
+    /**
+     */
+    public function testStrategyWithArray() {
+        $entity = new Asset\SimpleEntity();
+
+        $data = ['field' => ['complex', 'value']];
+        $this->configureObjectManagerForSimpleEntity();
+        $this->hydratorByValue->addStrategy('field', new class implements StrategyInterface {
+            public function extract($value) : array
+            {
+                return explode(',', $value);
+            }
+
+            public function hydrate($value) : string
+            {
+                return implode(',', $value);
+            }
+
+        });
+
+        $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertEquals('complex,value', $entity->getField());
     }
 }
