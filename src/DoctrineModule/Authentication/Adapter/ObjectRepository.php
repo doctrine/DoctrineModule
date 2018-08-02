@@ -6,7 +6,7 @@ use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Zend\Authentication\Adapter\AbstractAdapter;
 use Zend\Authentication\Adapter\Exception;
 use Zend\Authentication\Result as AuthenticationResult;
-use Doctrine\Common\Util\Inflector;
+use Doctrine\Common\Inflector\Inflector;
 
 /**
  * Authentication adapter that uses a Doctrine object for verification.

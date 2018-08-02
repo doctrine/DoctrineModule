@@ -5,7 +5,7 @@ namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 use LogicException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Util\Inflector;
+use Doctrine\Common\Inflector\Inflector;
 
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in

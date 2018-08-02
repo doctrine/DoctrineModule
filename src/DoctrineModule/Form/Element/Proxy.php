@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use Zend\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Util\Inflector;
+use Doctrine\Common\Inflector\Inflector;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
 class Proxy implements ObjectManagerAwareInterface
