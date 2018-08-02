@@ -288,7 +288,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setLabelGenerator($callable)
     {
-        if (!is_callable($callable)) {
+        if (! is_callable($callable)) {
             throw new InvalidArgumentException(
                 'Property "label_generator" needs to be a callable function or a \Closure'
             );
@@ -318,7 +318,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setOptgroupIdentifier($optgroupIdentifier)
     {
-        $this->optgroupIdentifier = (string)$optgroupIdentifier;
+        $this->optgroupIdentifier = (string) $optgroupIdentifier;
     }
 
     /**
@@ -334,7 +334,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setOptgroupDefault($optgroupDefault)
     {
-        $this->optgroupDefault = (string)$optgroupDefault;
+        $this->optgroupDefault = (string) $optgroupDefault;
     }
 
     /**
@@ -346,7 +346,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setIsMethod($method)
     {
-        $this->isMethod = (bool)$method;
+        $this->isMethod = (bool) $method;
 
         return $this;
     }
@@ -404,11 +404,11 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function getValue($value)
     {
-        if (!($om = $this->getObjectManager())) {
+        if (! ($om = $this->getObjectManager())) {
             throw new RuntimeException('No object manager was set');
         }
 
-        if (!($targetClass = $this->getTargetClass())) {
+        if (! ($targetClass = $this->getTargetClass())) {
             throw new RuntimeException('No target class was set');
         }
 
@@ -425,7 +425,7 @@ class Proxy implements ObjectManagerAwareInterface
 
                 $value = $data;
             } else {
-                $metadata = $om->getClassMetadata(get_class($value));
+                $metadata   = $om->getClassMetadata(get_class($value));
                 $identifier = $metadata->getIdentifierFieldNames();
 
                 // TODO: handle composite (multiple) identifiers
@@ -449,25 +449,25 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected function loadObjects()
     {
-        if (!empty($this->objects)) {
+        if (! empty($this->objects)) {
             return;
         }
 
-        $findMethod = (array)$this->getFindMethod();
+        $findMethod = (array) $this->getFindMethod();
 
-        if (!$findMethod) {
+        if (! $findMethod) {
             $findMethodName = 'findAll';
-            $repository = $this->objectManager->getRepository($this->targetClass);
-            $objects = $repository->findAll();
+            $repository     = $this->objectManager->getRepository($this->targetClass);
+            $objects        = $repository->findAll();
         } else {
-            if (!isset($findMethod['name'])) {
+            if (! isset($findMethod['name'])) {
                 throw new RuntimeException('No method name was set');
             }
-            $findMethodName = $findMethod['name'];
+            $findMethodName   = $findMethod['name'];
             $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : [];
-            $repository = $this->objectManager->getRepository($this->targetClass);
+            $repository       = $this->objectManager->getRepository($this->targetClass);
 
-            if (!method_exists($repository, $findMethodName)) {
+            if (! method_exists($repository, $findMethodName)) {
                 throw new RuntimeException(
                     sprintf(
                         'Method "%s" could not be found in repository "%s"',
@@ -477,7 +477,7 @@ class Proxy implements ObjectManagerAwareInterface
                 );
             }
 
-            $r = new ReflectionMethod($repository, $findMethodName);
+            $r    = new ReflectionMethod($repository, $findMethodName);
             $args = [];
 
             foreach ($r->getParameters() as $param) {
@@ -485,7 +485,7 @@ class Proxy implements ObjectManagerAwareInterface
                     $args[] = $findMethodParams[strtolower($param->getName())];
                 } elseif ($param->isDefaultValueAvailable()) {
                     $args[] = $param->getDefaultValue();
-                } elseif (!$param->isOptional()) {
+                } elseif (! $param->isOptional()) {
                     throw new RuntimeException(
                         sprintf(
                             'Required parameter "%s" with no default value for method "%s" in repository "%s"'
@@ -517,18 +517,18 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected function loadValueOptions()
     {
-        if (!($om = $this->objectManager)) {
+        if (! ($om = $this->objectManager)) {
             throw new RuntimeException('No object manager was set');
         }
 
-        if (!($targetClass = $this->targetClass)) {
+        if (! ($targetClass = $this->targetClass)) {
             throw new RuntimeException('No target class was set');
         }
 
-        $metadata = $om->getClassMetadata($targetClass);
-        $identifier = $metadata->getIdentifierFieldNames();
-        $objects = $this->getObjects();
-        $options = [];
+        $metadata         = $om->getClassMetadata($targetClass);
+        $identifier       = $metadata->getIdentifierFieldNames();
+        $objects          = $this->getObjects();
+        $options          = [];
         $optionAttributes = [];
 
         if ($this->displayEmptyItem) {
@@ -539,7 +539,7 @@ class Proxy implements ObjectManagerAwareInterface
             if (null !== ($generatedLabel = $this->generateLabel($object))) {
                 $label = $generatedLabel;
             } elseif ($property = $this->property) {
-                if ($this->isMethod == false && !$metadata->hasField($property)) {
+                if ($this->isMethod == false && ! $metadata->hasField($property)) {
                     throw new RuntimeException(
                         sprintf(
                             'Property "%s" could not be found in object "%s"',
@@ -551,7 +551,7 @@ class Proxy implements ObjectManagerAwareInterface
 
                 $getter = 'get' . Inflector::classify($property);
 
-                if (!is_callable([$object, $getter])) {
+                if (! is_callable([$object, $getter])) {
                     throw new RuntimeException(
                         sprintf('Method "%s::%s" is not callable', $this->targetClass, $getter)
                     );
@@ -559,7 +559,7 @@ class Proxy implements ObjectManagerAwareInterface
 
                 $label = $object->{$getter}();
             } else {
-                if (!is_callable([$object, '__toString'])) {
+                if (! is_callable([$object, '__toString'])) {
                     throw new RuntimeException(
                         sprintf(
                             '%s must have a "__toString()" method defined if you have not set a property'
@@ -569,7 +569,7 @@ class Proxy implements ObjectManagerAwareInterface
                     );
                 }
 
-                $label = (string)$object;
+                $label = (string) $object;
             }
 
             if (null !== $identifier && count($identifier) > 1) {
@@ -586,8 +586,8 @@ class Proxy implements ObjectManagerAwareInterface
                 }
 
                 if (is_callable($optionValue)) {
-                    $callableValue = call_user_func($optionValue, $object);
-                    $optionAttributes[$optionKey] = (string)$callableValue;
+                    $callableValue                = call_user_func($optionValue, $object);
+                    $optionAttributes[$optionKey] = (string) $callableValue;
 
                     continue;
                 }
@@ -611,7 +611,7 @@ class Proxy implements ObjectManagerAwareInterface
             // optgroup_identifier found, handle grouping
             $optgroupGetter = 'get' . Inflector::classify($this->getOptgroupIdentifier());
 
-            if (!is_callable([$object, $optgroupGetter])) {
+            if (! is_callable([$object, $optgroupGetter])) {
                 throw new RuntimeException(
                     sprintf('Method "%s::%s" is not callable', $this->targetClass, $optgroupGetter)
                 );
@@ -621,10 +621,10 @@ class Proxy implements ObjectManagerAwareInterface
 
             // optgroup_identifier contains a valid group-name. Handle default grouping.
             if (false === is_null($optgroup) && trim($optgroup) !== '') {
-                $options[$optgroup]['label'] = $optgroup;
+                $options[$optgroup]['label']     = $optgroup;
                 $options[$optgroup]['options'][] = [
-                    'label' => $label,
-                    'value' => $value,
+                    'label'      => $label,
+                    'value'      => $value,
                     'attributes' => $optionAttributes,
                 ];
 
@@ -641,10 +641,10 @@ class Proxy implements ObjectManagerAwareInterface
             }
 
             // Line up entry with optgroup_default
-            $options[$optgroupDefault]['label'] = $optgroupDefault;
+            $options[$optgroupDefault]['label']     = $optgroupDefault;
             $options[$optgroupDefault]['options'][] = [
-                'label' => $label,
-                'value' => $value,
+                'label'      => $label,
+                'value'      => $value,
                 'attributes' => $optionAttributes,
             ];
         }
