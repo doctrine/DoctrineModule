@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Filter;
 
-use Zend\Hydrator\Filter\FilterInterface;
+use Zend\Doctrine\Hydrator\Filter\PropertyName as ZendPropertyName;
 
 /**
  * Provides a filter to restrict returned fields by whitelisting or
@@ -12,38 +12,6 @@ use Zend\Hydrator\Filter\FilterInterface;
  * @link    http://www.doctrine-project.org/
  * @author  Liam O'Boyle <liam@ontheroad.net.nz>
  */
-class PropertyName implements FilterInterface
+class PropertyName extends ZendPropertyName
 {
-    /**
-     * The propteries to exclude.
-     *
-     * @var array
-     */
-    protected $properties = [];
-
-    /**
-     * Either an exclude or an include.
-     *
-     * @var bool
-     */
-    protected $exclude = null;
-
-    /**
-     * @param [ string | array ] $properties The properties to exclude or include.
-     * @param bool               $exclude    If the method should be excluded
-     */
-    public function __construct($properties, $exclude = true)
-    {
-        $this->exclude    = $exclude;
-        $this->properties = is_array($properties)
-            ? $properties
-            : [$properties];
-    }
-
-    public function filter($property)
-    {
-        return in_array($property, $this->properties)
-            ? ! $this->exclude
-            : $this->exclude;
-    }
 }
