@@ -12,6 +12,11 @@ use Traversable;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Hydrator\AbstractHydrator;
 use Zend\Hydrator\Filter\FilterProviderInterface;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Types\Type as ORMType;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\Types\Type as ODMType;
+
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
@@ -514,16 +519,41 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
-     * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
+     * Handle various type conversions
      * See Documentation of Doctrine Mapping Types for defaults
      *
      * @link http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#doctrine-mapping-types
      * @param  mixed  $value
      * @param  string $typeOfField
-     * @return DateTime
+     * @return mixed
      */
     protected function handleTypeConversions($value, $typeOfField)
     {
+        if (! $typeOfField) {
+            return $value;
+        }
+
+        // ORM Types
+        if (class_exists('Doctrine\ORM\EntityManager')
+            && $this->objectManager instanceof EntityManager) {
+
+            $type = ORMType::getType($typeOfField);
+            $platform = $this->objectManager->getConnection()->getDatabasePlatform();
+
+            return $type->convertToPHPValue($value, $platform);
+        }
+
+        // MongoDB ODM Types
+        if (class_exists('Doctrine\ODM\MongoDB\DocumentManager')
+            && $this->objectManager instanceof DocumentManager) {
+
+            $type = ODMType::getType($typeOfField);
+            $platform = $this->objectManager->getConnection()->getDatabasePlatform();
+
+            return $type->convertToPHPValue($value, $platform);
+        }
+
+        // Generic handling of types (not flexible with custom types)
         switch ($typeOfField) {
             case 'boolean':
                 $value = (bool)$value;
@@ -548,21 +578,17 @@ class DoctrineObject extends AbstractHydrator
                 if ($value === '') {
                     return null;
                 }
-
                 if ($value instanceof Datetime) {
                     return $value;
                 }
-
                 if (is_int($value)) {
                     $dateTime = new DateTime();
                     $dateTime->setTimestamp($value);
                     return $dateTime;
                 }
-
                 if (is_string($value)) {
                     return new DateTime($value);
                 }
-
                 break;
             default:
                 break;
