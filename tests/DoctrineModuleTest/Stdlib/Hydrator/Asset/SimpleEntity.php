@@ -24,23 +24,13 @@ class SimpleEntity
         return $this->id;
     }
 
-    public function setField($field, $modifyValue = true)
+    public function setField($field)
     {
-        // Modify the value to illustrate the difference between by value and by reference
-        if ($modifyValue) {
-            $this->field = "From setter: $field";
-        } else {
-            $this->field = $field;
-        }
+        $this->field = $field;
     }
 
-    public function getField($modifyValue = true)
+    public function getField()
     {
-        // Modify the value to illustrate the difference between by value and by reference
-        if ($modifyValue) {
-            return "From getter: $this->field";
-        } else {
-            return $this->field;
-        }
+        return $this->field;
     }
 }

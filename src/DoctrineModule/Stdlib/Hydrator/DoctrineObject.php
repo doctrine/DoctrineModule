@@ -263,6 +263,19 @@ class DoctrineObject extends AbstractHydrator
     }
 
     /**
+     * Converts a value for hydration
+     * Apply strategies first, then the type conversions
+     *
+     * @inheritdoc
+     */
+    public function hydrateValue($name, $value, $data = null)
+    {
+        $value = parent::hydrateValue($name, $value, $data);
+
+        return $this->handleTypeConversions($value, $this->metadata->getTypeOfField($name));
+    }
+
+    /**
      * Hydrate the object using a by-value logic (this means that it uses the entity API, in this
      * case, setters)
      *
@@ -282,7 +295,6 @@ class DoctrineObject extends AbstractHydrator
 
         foreach ($data as $field => $value) {
             $field  = $this->computeHydrateFieldName($field);
-            $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
             $setter = 'set' . Inflector::classify($field);
 
             if ($metadata->hasAssociation($field)) {
@@ -344,7 +356,6 @@ class DoctrineObject extends AbstractHydrator
                 continue;
             }
 
-            $value        = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
             $reflProperty = $refl->getProperty($field);
             $reflProperty->setAccessible(true);
 

@@ -10,7 +10,7 @@ class OneToOneEntityNotNullable
     protected $id;
 
     /**
-     * @var SimpleEntity
+     * @var ByValueDifferentiatorEntity
      */
     protected $toOne;
 
@@ -25,7 +25,7 @@ class OneToOneEntityNotNullable
         return $this->id;
     }
 
-    public function setToOne(SimpleEntity $entity, $modifyValue = true)
+    public function setToOne(ByValueDifferentiatorEntity $entity, $modifyValue = true)
     {
         // Modify the value to illustrate the difference between by value and by reference
         if ($modifyValue) {
