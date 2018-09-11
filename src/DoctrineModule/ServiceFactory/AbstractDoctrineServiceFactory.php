@@ -79,7 +79,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
             return false;
         }
 
-        $config      = $serviceLocator->get('Config');
+        $config      = $serviceLocator->get('config');
         $mappingType = $matches['mappingType'];
         $serviceType = $matches['serviceType'];
         $serviceName = $matches['serviceName'];
