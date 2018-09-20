@@ -273,13 +273,13 @@ class BlogPost
 }
 ```
 
-There are two use cases that can arise when using OneToOne association: the toOne entity (in the case, the user) may
-already exist (which will often be the case with a User and BlogPost example), or it can be created too. The
+There are two use cases that can arise when using OneToOne association: the toOne entity (in this case, the User) may
+already exist (which will often be the case with a User and BlogPost example), or it can be created. The
 DoctrineHydrator natively supports both cases.
 
 ##### Existing entity in the association
 
-When the association's entity already exists, what you need to do is simply giving the identifier of the association:
+When the association's entity already exists, all you need to do is simply give the identifier of the association:
 
 ```php
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -287,7 +287,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($entityManager);
 $blogPost = new BlogPost();
 $data = [
-    'title' => 'The best blog post in the world !',
+    'title' => 'The best blog post in the world!',
     'user'  => [
         'id' => 2, // Written by user 2
     ],
@@ -295,7 +295,7 @@ $data = [
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
-echo $blogPost->getTitle(); // prints "The best blog post in the world !"
+echo $blogPost->getTitle(); // prints "The best blog post in the world!"
 echo $blogPost->getUser()->getId(); // prints 2
 ```
 
@@ -303,7 +303,7 @@ echo $blogPost->getUser()->getId(); // prints 2
 
 ```php
 $data = [
-    'title' => 'The best blog post in the world !',
+    'title' => 'The best blog post in the world!',
     'user'  => [
         'id' => 2, // Written by user 2
     ],
@@ -314,7 +314,7 @@ to:
 
 ```php
 $data = [
-    'title' => 'The best blog post in the world !',
+    'title' => 'The best blog post in the world!',
     'user'  => 2,
 ];
 ```
@@ -322,7 +322,7 @@ $data = [
 
 ##### Non-existing entity in the association
 
-If the association's entity does not exist, you just need to give the given object:
+If the association's entity does not exist, you just need to give the object:
 
 ```php
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -334,13 +334,13 @@ $user->setUsername('bakura');
 $user->setPassword('p@$$w0rd');
 
 $data = [
-    'title' => 'The best blog post in the world !',
+    'title' => 'The best blog post in the world!',
     'user'  => $user,
 ];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
-echo $blogPost->getTitle(); // prints "The best blog post in the world !"
+echo $blogPost->getTitle(); // prints "The best blog post in the world!"
 echo $blogPost->getUser()->getId(); // prints 2
 ```
 
@@ -402,8 +402,8 @@ echo $blogPost->getUser()->getPassword(); // prints 2BorN0t2B
 DoctrineModule hydrator also handles OneToMany relationships (when use `Zend\Form\Element\Collection` element). Please
 refer to the official [Zend Framework 2 documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html) to learn more about Collection.
 
-> Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetch the
-objects through the Doctrine `find` function. However, this may cause problems if one of the value of the collection
+> Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetches the
+objects through the Doctrine `find` function. However, this may cause problems if one of the values of the collection
 is the empty string '' (as the ``find`` will most likely fail). In order to solve this problem, empty string identifiers
 are simply ignored during the hydration phase. Therefore, if your database contains an empty string value as primary
 key, the hydrator could not work correctly (the simplest way to avoid that is simply to not have an empty string primary
@@ -436,7 +436,7 @@ class BlogPost
     protected $tags;
 
     /**
-     * Never forget to initialize all your collections !
+     * Never forget to initialize your collections!
      */
     public function __construct()
     {
@@ -530,7 +530,7 @@ class Tag
 }
 ```
 
-Please note interesting things in BlogPost entity. We have defined two functions: addTags and removeTags. Those
+Please note some interesting things in BlogPost entity. We have defined two functions: addTags and removeTags. Those
 functions must be always defined and are called automatically by Doctrine hydrator when dealing with collections.
 You may think this is overkill, and ask why you cannot just define a `setTags` function to replace the old collection
 by the new one:
@@ -543,13 +543,13 @@ public function setTags(Collection $tags)
 ```
 
 But this is very bad, because Doctrine collections should not be swapped, mostly because collections are managed by
-an ObjectManager, thus it must not be replaced by a new instance.
+an ObjectManager, thus they must not be replaced by a new instance.
 
-Once again, two cases may arise: the tags already exist or they does not.
+Once again, two cases may arise: the tags already exist or they do not.
 
 ##### Existing entity in the association
 
-When the association's entity already exists, what you need to do is simply giving the identifiers of the entities:
+When the association's entity already exists, what you need to do is simply give the identifiers of the entities:
 
 ```php
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -557,7 +557,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 $hydrator = new DoctrineHydrator($entityManager);
 $blogPost = new BlogPost();
 $data = [
-    'title' => 'The best blog post in the world !',
+    'title' => 'The best blog post in the world!',
     'tags'  => [
         ['id' => 3], // add tag whose id is 3
         ['id' => 8], // also add tag whose id is 8
@@ -566,7 +566,7 @@ $data = [
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
-echo $blogPost->getTitle(); // prints "The best blog post in the world !"
+echo $blogPost->getTitle(); // prints "The best blog post in the world!"
 echo count($blogPost->getTags()); // prints 2
 ```
 
@@ -574,7 +574,7 @@ echo count($blogPost->getTags()); // prints 2
 
 ```php
 $data = [
-    'title' => 'The best blog post in the world !',
+    'title' => 'The best blog post in the world!',
     'tags'  => [
         ['id' => 3], // add tag whose id is 3
         ['id' => 8], // also add tag whose id is 8
@@ -586,14 +586,14 @@ can be written:
 
 ```php
 $data = [
-    'title' => 'The best blog post in the world !',
+    'title' => 'The best blog post in the world!',
     'tags'  => [3, 8],
 ];
 ```
 
 ##### Non-existing entity in the association
 
-If the association's entity does not exist, you just need to give the given object:
+If the association's entity does not exist, you just need to give the object:
 
 ```php
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -612,13 +612,13 @@ $tag2->setName('STL');
 $tags[] = $tag2;
 
 $data = [
-    'title' => 'The best blog post in the world !',
+    'title' => 'The best blog post in the world!',
     'tags'  => $tags, // Note that you can mix integers and entities without any problem
 ];
 
 $blogPost = $hydrator->hydrate($data, $blogPost);
 
-echo $blogPost->getTitle(); // prints "The best blog post in the world !"
+echo $blogPost->getTitle(); // prints "The best blog post in the world!"
 echo count($blogPost->getTags()); // prints 2
 ```
 
@@ -656,7 +656,7 @@ $data = [
 ];
 ```
 
-The hydrator will check whether the setCity() method on the Entity allows null values and acts accordingly, the following describes the process that happens when a null value is received:
+The hydrator will check whether the setCity() method on the Entity allows null values and act accordingly. The following describes the process that happens when a null value is received:
 
 1. If the setCity() method DOES NOT allow null values i.e. `function setCity(City $city)`, the null is silently ignored and will not be hydrated.
 2. If the setCity() method DOES allow null values i.e. `function setCity(City $city = null)`, the null value will be hydrated.
@@ -667,7 +667,7 @@ By default, every collections association has a special strategy attached to it 
 and extracting phase. All those strategies extend from the class
 `DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy`.
 
-DoctrineModule provides two strategies out of the box:
+DoctrineModule provides four strategies out of the box:
 
 1. `DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue`: this is the default strategy, it removes old elements that are not in the new collection.
 2. `DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference`: this is the default strategy (if set to byReference), it removes old elements that are not in the new collection.
@@ -678,15 +678,15 @@ As a consequence, when using `AllowRemove*`, you need to define both adder (eg. 
 On the other hand, when using the `DisallowRemove*` strategy, you must always define at least the adder, but the remover
 is optional (because elements are never removed).
 
-The following table illustrate the difference between the two strategies
+The following table illustrates the difference between the two strategies
 
 | Strategy | Initial collection | Submitted collection | Result |
 | -------- | ------------------ | -------------------- | ------ |
 | AllowRemove* | A, B  | B, C | B, C
 | DisallowRemove* | A, B  | B, C | A, B, C
 
-The difference between ByValue and ByReference is that when using strategies that end by ByReference, it won't use
-the public API of your entity (adder and remover) - you don't even need to define them -. It will directly add and
+The difference between ByValue and ByReference is that when using strategies that end with ByReference, it won't use
+the public API of your entity (adder and remover) - you don't even need to define them - it will directly add and
 remove elements directly from the collection.
 
 
@@ -781,7 +781,7 @@ It now only prints "bar", which shows clearly that the getter has not been calle
 
 ### A complete example using Zend\Form
 
-Now that we understand how the hydrator works, let's see how it integrates into the Zend Framework 2's Form component.
+Now that we understand how the hydrator works, let's see how it integrates into the Zend Framework's Form component.
 We are going to use a simple example with, once again, a BlogPost and a Tag entities. We will see how we can create the
 blog post, and being able to edit it.
 
@@ -814,7 +814,7 @@ class BlogPost
     protected $tags;
 
     /**
-     * Never forget to initialize all your collections !
+     * Never forget to initialize your collections!
      */
     public function __construct()
     {
@@ -937,13 +937,13 @@ class Tag
 
 #### The fieldsets
 
-We now need to create two fieldsets that will map those entities. With Zend Framework 2, it's a good practice to create
+We now need to create two fieldsets that will map those entities. With Zend Framework, it's a good practice to create
 one fieldset per entity in order to reuse them across many forms.
 
 Here is the fieldset for the Tag. Notice that in this example, I added a hidden input whose name is "id". This is
-needed for editing. Most of the time, when you create the Blog Post for the first time, the tags does not exist.
-Therefore, the id will be empty. However, when you edit the blog post, all the tags already exists in database (they
-have been persisted and have an id), and hence the hidden "id" input will have a value. This allow you to modify a tag
+needed for editing. Most of the time, when you create the Blog Post for the first time, the tags do not exist.
+Therefore, the id will be empty. However, when you edit the blog post, all the tags already exist in database (they
+have been persisted and have an id), and hence the hidden "id" input will have a value. This allows you to modify a tag
 name by modifying an existing Tag entity without creating a new tag (and removing the old one).
 
 ```php
@@ -1039,13 +1039,13 @@ class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
 }
 ```
 
-Plain and easy. The blog post is just a simple fieldset with an element type of type ``Zend\Form\Element\Collection``
+Plain and easy. The blog post is just a simple fieldset with an element type of ``Zend\Form\Element\Collection``
 that represents the ManyToOne association.
 
 #### The form
 
 Now that we have created our fieldset, we will create two forms: one form for creation and one form for updating.
-The form task is to make the glue between the fieldsets. In this simple example, both forms are exactly the same,
+The form's purpose is to be the glue between the fieldsets. In this simple example, both forms are exactly the same,
 but in a real application, you may want to change this behaviour by changing the validation group (for instance, you
 may want to disallow the user to modify the title of the blog post when updating).
 
@@ -1067,7 +1067,7 @@ class CreateBlogPostForm extends Form
         // The form will hydrate an object of type "BlogPost"
         $this->setHydrator(new DoctrineHydrator($objectManager));
 
-        // Add the user fieldset, and set it as the base fieldset
+        // Add the BlogPost fieldset, and set it as the base fieldset
         $blogPostFieldset = new BlogPostFieldset($objectManager);
         $blogPostFieldset->setUseAsBaseFieldset(true);
         $this->add($blogPostFieldset);
@@ -1097,7 +1097,7 @@ class UpdateBlogPostForm extends Form
         // The form will hydrate an object of type "BlogPost"
         $this->setHydrator(new DoctrineHydrator($objectManager));
 
-        // Add the user fieldset, and set it as the base fieldset
+        // Add the BlogPost fieldset, and set it as the base fieldset
         $blogPostFieldset = new BlogPostFieldset($objectManager);
         $blogPostFieldset->setUseAsBaseFieldset(true);
         $this->add($blogPostFieldset);
@@ -1157,7 +1157,8 @@ public function editAction()
     // Create the form and inject the ObjectManager
     $form = new UpdateBlogPostForm($objectManager);
 
-    // Create a new, empty entity and bind it to the form
+    // Fetch the existing BlogPost from storage and bind it to the form.
+    // This will pre-fill form field values
     $blogPost = $this->userService->get($this->params('blogPost_id'));
     $form->bind($blogPost);
 
@@ -1178,9 +1179,9 @@ public function editAction()
 
 Although using the hydrator is like magical as it abstracts most of the tedious task, you have to be aware that it can
 leads to performance issues in some situations. Please carefully read the following paragraphs in order to know how
-to solve (and avoid !) them.
+to solve (and avoid!) them.
 
-#### Unwanting side-effect
+#### Unwanted side-effects
 
 You have to be very careful when you are using DoctrineModule hydrator with complex entities that contain a lot of
 associations, as a lot of unnecessary calls to database can be made if you are not perfectly aware of what happen
@@ -1219,7 +1220,7 @@ class User
 }
 ```
 
-This simple entity contains an id, a string property, and a OneToOne relationship. If you are using Zend Framework 2
+This simple entity contains an id, a string property, and a OneToOne relationship. If you are using Zend Framework
 forms the correct way, you will likely have a fieldset for every entity, so that you have a perfect mapping between
 entities and fieldsets. Here are fieldsets for User and and City entities.
 
@@ -1402,14 +1403,14 @@ public function editNameAction()
 }
 ```
 
-This looks good, isn't it ? However, if we check the queries that are made (for instance using the awesome
-[ZendDeveloperTools module](https://github.com/zendframework/ZendDeveloperTools)), we will see that a request is
+This looks good, doesn't it? However, if we check the queries that are made (for instance using the awesome
+[ZendDeveloperTools module](https://github.com/zendframework/zend-developer-tools), we will see that a request is
 made to fetch data for the City relationship of the user, and we hence have a completely useless database call,
 as this information is not rendered by the form.
 
-You could ask, why ? Yes, we set the validation group, BUT the problem happens during the extracting phase. Here is
+You could ask, "why?" Yes, we set the validation group, BUT the problem happens during the extracting phase. Here is
 how it works : when an object is bound to the form, this latter iterates through all its fields, and tries to extract
-the data from the object that is bound. In our example, here is how it work :
+the data from the object that is bound. In our example, here is how it works:
 
 1. It first arrives to the UserFieldset. The input are "name" (which is string field), and a "city" which is another fieldset (in our User entity, this is a OneToOne relationship to another entity). The hydrator will extract both the name and the city (which will be a Doctrine 2 Proxy object).
 2. Because the UserFieldset contains a reference to another Fieldset (in our case, a CityFieldset), it will, in turn, tries to extract the values of the City to populate the values of the CityFieldset. And here is the problem : City is a Proxy, and hence because the hydrator tries to extract its values (the name and postcode field), Doctrine will automatically fetch the object from the database in order to please the hydrator.
@@ -1442,7 +1443,7 @@ class EditNameForm extends Form
         $userFieldset->setName('user');
         $userFieldset->setUseAsBaseFieldset(true);
 
-        // We don't want City relationship, so remove it !!
+        // We don't want City relationship, so remove it!!
         $userFieldset->remove('city');
 
         $this->add($userFieldset);
@@ -1455,6 +1456,6 @@ class EditNameForm extends Form
 }
 ```
 
-And boom ! As the UserFieldset does not contain the CityFieldset relation anymore, it won't be extracted !
+And boom! As the UserFieldset does not contain the CityFieldset relation anymore, it won't be extracted!
 
 As a rule of thumb, try to remove any unnecessary fieldset relationship, and always look at which database calls are made.
