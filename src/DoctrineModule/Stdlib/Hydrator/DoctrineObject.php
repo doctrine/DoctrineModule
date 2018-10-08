@@ -272,6 +272,10 @@ class DoctrineObject extends AbstractHydrator
     {
         $value = parent::hydrateValue($name, $value, $data);
 
+        if (is_null($value) && method_exists($this->metadata, 'isNullable') && $this->metadata->isNullable($name)) {
+            return null;
+        }
+
         return $this->handleTypeConversions($value, $this->metadata->getTypeOfField($name));
     }
 
@@ -535,6 +539,10 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function handleTypeConversions($value, $typeOfField)
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         switch ($typeOfField) {
             case 'boolean':
                 $value = (bool)$value;

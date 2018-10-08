@@ -621,4 +621,26 @@ class DoctrineObjectTypeConversionsTest extends BaseTestCase
         $this->assertTrue(is_string($entity->getGenericField()));
         $this->assertEquals('12345', $entity->getGenericField());
     }
+
+    public function testHandleTypeConversionsNullable()
+    {
+        // When using hydration by value, it will use the public API of the entity to set values (setters)
+        $this->configureObjectManagerForSimpleEntityWithGenericField(null);
+
+        $entity = new Asset\SimpleEntityWithGenericField();
+        $data = ['genericField' => null];
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertTrue(is_null($entity->getGenericField()));
+        $this->assertEquals(null, $entity->getGenericField());
+
+        $entity = new Asset\SimpleEntityWithGenericField();
+        $data = ['genericField' => null];
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertTrue(is_null($entity->getGenericField()));
+        $this->assertEquals(null, $entity->getGenericField());
+    }
 }
