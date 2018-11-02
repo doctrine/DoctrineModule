@@ -272,6 +272,10 @@ class DoctrineObject extends AbstractHydrator
     {
         $value = parent::hydrateValue($name, $value, $data);
 
+        if (is_null($value) && $this->isNullable($name)) {
+            return null;
+        }
+
         return $this->handleTypeConversions($value, $this->metadata->getTypeOfField($name));
     }
 
@@ -535,6 +539,10 @@ class DoctrineObject extends AbstractHydrator
      */
     protected function handleTypeConversions($value, $typeOfField)
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         switch ($typeOfField) {
             case 'boolean':
                 $value = (bool)$value;
@@ -625,6 +633,26 @@ class DoctrineObject extends AbstractHydrator
             );
 
             return empty($nonNullIdentifiers);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check the field is nullable
+     *
+     * @param $name
+     * @return bool
+     */
+    private function isNullable($name)
+    {
+        //TODO: need update after updating isNullable method of Doctrine\ORM\Mapping\ClassMetadata
+        if ($this->metadata->hasField($name)) {
+            return method_exists($this->metadata, 'isNullable') && $this->metadata->isNullable($name);
+        } else if ($this->metadata->hasAssociation($name) && method_exists($this->metadata, 'getAssociationMapping')) {
+            $mapping = $this->metadata->getAssociationMapping($name);
+
+            return false !== $mapping && isset($mapping['nullable']) && $mapping['nullable'];
         }
 
         return false;

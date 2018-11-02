@@ -1241,7 +1241,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $data = ['toOne' => null];
 
-        $this->metadata->expects($this->once())
+        $this->metadata->expects($this->atLeastOnce())
                        ->method('hasAssociation');
 
         $object = $this->hydratorByValue->hydrate($data, $entity);
@@ -1255,7 +1255,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->configureObjectManagerForOneToOneEntity();
         $this->objectManager->expects($this->never())->method('find');
-        $this->metadata->expects($this->once())->method('hasAssociation');
+        $this->metadata->expects($this->atLeastOnce())->method('hasAssociation');
 
         $data = ['toOne' => null];
 
