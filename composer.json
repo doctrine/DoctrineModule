@@ -32,6 +32,7 @@
     ],
     "extra": {
         "zf": {
+            "config-provider": "DoctrineModule\\ConfigProvider",
             "module": "DoctrineModule"
         },
         "branch-alias": {

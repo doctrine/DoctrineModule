@@ -119,6 +119,96 @@ class DoctrineObjectTypeConversionsTest extends BaseTestCase
         );
     }
 
+    public function configureObjectManagerForOneToOneEntity()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneEntity');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(['id']));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(['toOne']));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('toOne')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return 'integer';
+                        } elseif ($arg === 'toOne') {
+                            return 'DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('toOne')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ($arg === 'id') {
+                            return false;
+                        } elseif ($arg === 'toOne') {
+                            return true;
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('isSingleValuedAssociation')
+            ->with('toOne')
+            ->will($this->returnValue(true));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationTargetClass')
+            ->with('toOne')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue(["id"]));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
     public function testHandleTypeConversionsDatetime()
     {
         // When using hydration by value, it will use the public API of the entity to set values (setters)
@@ -632,15 +722,25 @@ class DoctrineObjectTypeConversionsTest extends BaseTestCase
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
 
-        $this->assertTrue(is_null($entity->getGenericField()));
-        $this->assertEquals(null, $entity->getGenericField());
+        $this->assertNull($entity->getGenericField());
 
         $entity = new Asset\SimpleEntityWithGenericField();
         $data = ['genericField' => null];
 
         $entity = $this->hydratorByReference->hydrate($data, $entity);
 
-        $this->assertTrue(is_null($entity->getGenericField()));
-        $this->assertEquals(null, $entity->getGenericField());
+        $this->assertNull($entity->getGenericField());
+    }
+
+    public function testHandleTypeConversionsNullableForAssociatedFields()
+    {
+        $this->configureObjectManagerForOneToOneEntity();
+
+        $entity = new Asset\OneToOneEntity();
+        $data = ['toOne' => null];
+
+        $entity = $this->hydratorByReference->hydrate($data, $entity);
+
+        $this->assertNull($entity->getToOne(false));
     }
 }

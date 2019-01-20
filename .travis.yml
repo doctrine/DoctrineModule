@@ -30,6 +30,9 @@ matrix:
     - php: 7.2
       env:
         - DEPS=dev
+    - php: 7.3
+      env:
+        - DEPS=latest
     - php: nightly
       env:
         - DEPS=latest
