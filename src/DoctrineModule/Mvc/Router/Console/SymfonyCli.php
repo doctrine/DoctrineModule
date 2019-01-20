@@ -19,8 +19,8 @@
 namespace DoctrineModule\Mvc\Router\Console;
 
 use Symfony\Component\Console\Application;
+use Zend\Mvc\Console\Router\RouteInterface;
 use Zend\Stdlib\RequestInterface as Request;
-use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
 use Zend\Router\RouteMatch;
 use Zend\Console\Request as ConsoleRequest;
 
@@ -30,7 +30,7 @@ use Zend\Console\Request as ConsoleRequest;
  * @license MIT
  * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
-abstract class SymfonyCli
+class SymfonyCli implements RouteInterface
 {
     /**
      * @var \Symfony\Component\Console\Application
@@ -71,7 +71,7 @@ abstract class SymfonyCli
             return null;
         }
 
-        return $this->createRouteMatch($this->defaults);
+        return new RouteMatch($this->defaults);
     }
 
     /**
@@ -104,11 +104,5 @@ abstract class SymfonyCli
     public static function factory($options = [])
     {
         throw new \BadMethodCallException('Unsupported');
-    }
-
-    protected function createRouteMatch(array $params = [])
-    {
-        $class = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
-        return new $class($params);
     }
 }

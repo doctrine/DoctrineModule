@@ -2,7 +2,6 @@
 
 namespace DoctrineModuleTest;
 
-use Zend\Mvc\Application;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 
@@ -16,12 +15,7 @@ class ServiceManagerFactory
      */
     public static function getConfiguration()
     {
-        $r = new \ReflectionClass(Application::class);
-        $requiredParams = $r->getConstructor()->getNumberOfRequiredParameters();
-
-        $configFile = $requiredParams == 1 ? 'TestConfigurationV3.php' : 'TestConfigurationV2.php';
-
-        return include __DIR__ . '/../' . $configFile;
+        return include __DIR__ . '/../TestConfiguration.php';
     }
 
     /**
@@ -34,9 +28,7 @@ class ServiceManagerFactory
     {
         $configuration        = $configuration ?: static::getConfiguration();
         $serviceManager       = new ServiceManager();
-        $serviceManagerConfig = new ServiceManagerConfig(
-            isset($configuration['service_manager']) ? $configuration['service_manager'] : []
-        );
+        $serviceManagerConfig = new ServiceManagerConfig($configuration['service_manager'] ?? []);
         $serviceManagerConfig->configureServiceManager($serviceManager);
 
         $serviceManager->setService('ApplicationConfig', $configuration);
