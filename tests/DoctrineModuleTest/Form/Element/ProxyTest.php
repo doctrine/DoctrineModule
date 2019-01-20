@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
- * @covers  DoctrineModule\Form\Element\Proxy
+ * @covers  \DoctrineModule\Form\Element\Proxy
  */
 class ProxyTest extends TestCase
 {

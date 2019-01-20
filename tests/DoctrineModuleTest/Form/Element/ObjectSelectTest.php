@@ -11,7 +11,7 @@ use DoctrineModule\Form\Element\ObjectSelect;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Kyle Spraggs <theman@spiffyjr.me>
- * @covers  DoctrineModule\Form\Element\ObjectSelect
+ * @covers  \DoctrineModule\Form\Element\ObjectSelect
  */
 class ObjectSelectTest extends ProxyAwareElementTestCase
 {

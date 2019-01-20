@@ -37,7 +37,7 @@ class NoObjectExistsFactoryTest extends TestCase
      */
     public function testCallable()
     {
-        $this->assertInternalType('callable', $this->object);
+        $this->assertIsCallable($this->object);
     }
 
     /**

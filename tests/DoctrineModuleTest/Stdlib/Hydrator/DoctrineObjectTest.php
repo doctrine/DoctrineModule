@@ -40,7 +40,7 @@ class DoctrineObjectTest extends BaseTestCase
     /**
      * setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -1318,7 +1318,7 @@ class DoctrineObjectTest extends BaseTestCase
         $data = $this->hydratorByValue->extract($entity);
 
         $this->assertEquals(4, $data['id']);
-        $this->assertInternalType('array', $data['entities']);
+        $this->assertIsArray($data['entities']);
 
         $this->assertEquals($toMany1->getId(), $data['entities'][0]->getId());
         $this->assertSame($toMany1, $data['entities'][0]);
@@ -1415,7 +1415,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
             $this->assertContains('Modified from addEntities adder', $en->getField(false));
         }
 
@@ -1455,7 +1455,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
             $this->assertContains('Modified from addEntities adder', $en->getField(false));
         }
 
@@ -1492,7 +1492,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
             $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
 
@@ -1532,7 +1532,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
             $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
 
@@ -1592,7 +1592,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
             $this->assertContains('Modified from addEntities adder', $en->getField(false));
         }
 
@@ -1655,7 +1655,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
             $this->assertContains('Modified from addEntities adder', $en->getField(false));
         }
 
@@ -1718,7 +1718,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
             $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
 
@@ -1777,7 +1777,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
             $this->assertNotContains('Modified from addEntities adder', $en->getField(false));
         }
 
@@ -1826,7 +1826,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -1877,7 +1877,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
 
             // Only the third element is new so the adder has not been called on it
             if ($en === $toMany3) {
@@ -1952,8 +1952,8 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
-            $this->assertInternalType('string', $en->getField());
+            $this->assertIsInt($en->getId());
+            $this->assertIsString($en->getField());
             $this->assertContains('Modified By Hydrate', $en->getField(false));
         }
 
@@ -2022,8 +2022,8 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
-            $this->assertInternalType('string', $en->getField());
+            $this->assertIsInt($en->getId());
+            $this->assertIsString($en->getField());
             $this->assertContains('Modified By Hydrate', $en->getField(false));
         }
 
@@ -2092,7 +2092,7 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
+            $this->assertIsInt($en->getId());
         }
 
         $this->assertEquals(2, $entities[0]->getId());
@@ -2177,8 +2177,8 @@ class DoctrineObjectTest extends BaseTestCase
 
         foreach ($entities as $en) {
             $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity', $en);
-            $this->assertInternalType('integer', $en->getId());
-            $this->assertInternalType('string', $en->getField());
+            $this->assertIsInt($en->getId());
+            $this->assertIsString($en->getField());
             $this->assertContains('Modified By Hydrate', $en->getField(false));
         }
 

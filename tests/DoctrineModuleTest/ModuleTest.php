@@ -35,7 +35,7 @@ class ModuleTest extends TestCase
      */
     private $cli;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->application    = $this->getMockBuilder('Zend\Mvc\Application')
             ->disableOriginalConstructor()
@@ -74,7 +74,7 @@ class ModuleTest extends TestCase
 
         $config = $module->getConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertArrayHasKey('doctrine', $config);
         $this->assertArrayHasKey('doctrine_factories', $config);
         $this->assertArrayHasKey('service_manager', $config);
