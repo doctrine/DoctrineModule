@@ -16,6 +16,8 @@ use Doctrine\Zend\Hydrator\Strategy\DisallowRemoveByValue as ZendDisallowRemoveB
  * @link    http://www.doctrine-project.org/
  * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
+ *
+ * @deprecated Please use \Doctrine\Zend\Hydrator\Strategy\DisallowRemoveByValue instead.
  */
 class DisallowRemoveByValue extends ZendDisallowRemoveByValue
 {

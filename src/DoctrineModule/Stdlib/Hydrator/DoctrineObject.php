@@ -16,6 +16,8 @@ use DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue;
  * @link    http://www.doctrine-project.org/
  * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
+ *
+ * @deprecated Please use \Doctrine\Zend\Hydrator\DoctrineObject instead.
  */
 class DoctrineObject extends ZendDoctrineObject
 {

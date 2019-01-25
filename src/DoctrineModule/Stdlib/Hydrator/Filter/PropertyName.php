@@ -11,6 +11,8 @@ use Doctrine\Zend\Hydrator\Filter\PropertyName as ZendPropertyName;
  * @license MIT
  * @link    http://www.doctrine-project.org/
  * @author  Liam O'Boyle <liam@ontheroad.net.nz>
+ *
+ * @deprecated Please use \Doctrine\Zend\Hydrator\Filter\PropertyName instead.
  */
 class PropertyName extends ZendPropertyName
 {

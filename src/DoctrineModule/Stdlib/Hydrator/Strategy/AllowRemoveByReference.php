@@ -15,6 +15,8 @@ use Doctrine\Zend\Hydrator\Strategy\AllowRemoveByReference as ZendAllowRemoveByR
  * @link    http://www.doctrine-project.org/
  * @since   0.7.0
  * @author  Michael Gallego <mic.gallego@gmail.com>
+ *
+ * @deprecated Please use \Doctrine\Zend\Hydrator\Strategy\AllowRemoveByReference instead.
  */
 class AllowRemoveByReference extends ZendAllowRemoveByReference
 {
