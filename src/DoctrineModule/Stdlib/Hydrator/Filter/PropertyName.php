@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Filter;
 
-use Zend\Doctrine\Hydrator\Filter\PropertyName as ZendPropertyName;
+use Doctrine\Zend\Hydrator\Filter\PropertyName as ZendPropertyName;
 
 /**
  * Provides a filter to restrict returned fields by whitelisting or

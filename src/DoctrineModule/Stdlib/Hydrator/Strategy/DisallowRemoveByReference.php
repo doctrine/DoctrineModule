@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
-use Zend\Doctrine\Hydrator\Strategy\DisallowRemoveByReference as ZendDisallowRemoveByReference;
+use Doctrine\Zend\Hydrator\Strategy\DisallowRemoveByReference as ZendDisallowRemoveByReference;
 
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in

@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
-use Zend\Doctrine\Hydrator\Strategy\AbstractCollectionStrategy as ZendAbstractCollectionStrategy;
+use Doctrine\Zend\Hydrator\Strategy\AbstractCollectionStrategy as ZendAbstractCollectionStrategy;
 
 /**
  * @license MIT

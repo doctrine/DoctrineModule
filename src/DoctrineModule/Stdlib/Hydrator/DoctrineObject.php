@@ -2,9 +2,9 @@
 
 namespace DoctrineModule\Stdlib\Hydrator;
 
+use Doctrine\Zend\Hydrator\DoctrineObject as ZendDoctrineObject;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByReference;
 use DoctrineModule\Stdlib\Hydrator\Strategy\AllowRemoveByValue;
-use Zend\Doctrine\Hydrator\DoctrineObject as ZendDoctrineObject;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
