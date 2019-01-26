@@ -2,6 +2,8 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator\Asset;
 
+use DateTime;
+
 class OneToOneEntity
 {
     /**
@@ -13,6 +15,11 @@ class OneToOneEntity
      * @var ByValueDifferentiatorEntity
      */
     protected $toOne;
+
+    /**
+     * @var DateTime
+     */
+    protected $createdAt;
 
 
     public function setId($id)
@@ -44,5 +51,15 @@ class OneToOneEntity
         }
 
         return $this->toOne;
+    }
+
+    public function setCreatedAt(DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

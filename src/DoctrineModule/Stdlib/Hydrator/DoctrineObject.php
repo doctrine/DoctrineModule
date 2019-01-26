@@ -328,6 +328,8 @@ class DoctrineObject extends AbstractHydrator
 
                 $object->$setter($this->hydrateValue($field, $value, $data));
             }
+
+            $this->metadata = $metadata;
         }
 
         return $object;
@@ -375,6 +377,8 @@ class DoctrineObject extends AbstractHydrator
             } else {
                 $reflProperty->setValue($object, $this->hydrateValue($field, $value, $data));
             }
+
+            $this->metadata = $metadata;
         }
 
         return $object;
