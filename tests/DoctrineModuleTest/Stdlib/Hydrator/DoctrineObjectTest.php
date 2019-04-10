@@ -2,20 +2,22 @@
 
 namespace DoctrineModuleTest\Stdlib\Hydrator;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
+use DoctrineModule\Stdlib\Hydrator\Filter;
+use DoctrineModule\Stdlib\Hydrator\Strategy;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\ByValueDifferentiatorEntity;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\ContextStrategy;
+use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
+use DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyReferencingIdentifierEntityReferencingBack;
+use DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToOneReferencingIdentifierEntity;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionClass;
-use Doctrine\Common\Collections\ArrayCollection;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
-use DoctrineModule\Stdlib\Hydrator\Strategy;
-use DoctrineModule\Stdlib\Hydrator\Filter;
-use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
 use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
@@ -2783,5 +2785,64 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertSame(13, $entity->getToOne(false)->getId());
         $this->assertSame('value', $entity->getToOne(false)->getField(false));
         $this->assertSame('2019-01-24 12:00:00', $entity->getCreatedAt()->format('Y-m-d H:i:s'));
+    }
+
+    public function testHydrateInToManyCollectionWontOverrideMetadata()
+    {
+        $objectManager = $this->getObjectManagerForNestedToManyHydration();
+        $hydrator = new DoctrineObjectHydrator($objectManager, false);
+        $entity = new Asset\OneToManyReferencingIdentifierEntity();
+
+        $data = [
+            'toMany' => [
+                [
+                    'createdAt' => '2019-04-10 09:00:00',
+                ],
+            ],
+        ];
+
+        $hydrator->hydrate($data, $entity);
+    }
+
+    private function getObjectManagerForNestedToManyHydration()
+    {
+        $oneToOneMetadata = $this->prophesize(ClassMetadata::class);
+        $oneToOneMetadata->getName()->willReturn(Asset\OneToManyReferencingIdentifierEntity::class);
+        $oneToOneMetadata->getFieldNames()->willReturn(['id', 'toMany']);
+        $oneToOneMetadata->getAssociationNames()->willReturn(['toMany']);
+        $oneToOneMetadata->getTypeOfField('id')->willReturn('integer');
+        $oneToOneMetadata->getTypeOfField('toMany')->willReturn(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class);
+        $oneToOneMetadata->hasAssociation('id')->willReturn(false);
+        $oneToOneMetadata->hasAssociation('toMany')->willReturn(true);
+        $oneToOneMetadata->isSingleValuedAssociation('toMany')->willReturn(false);
+        $oneToOneMetadata->isCollectionValuedAssociation('toMany')->willReturn(true);
+        $oneToOneMetadata->getAssociationTargetClass('toMany')->willReturn(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class);
+        $oneToOneMetadata->getReflectionClass()->willReturn(new ReflectionClass(Asset\OneToManyReferencingIdentifierEntity::class));
+        $oneToOneMetadata->getIdentifier()->willReturn(['id']);
+        $oneToOneMetadata->getIdentifierFieldNames(Argument::type(Asset\OneToManyReferencingIdentifierEntity::class))->willReturn(['id']);
+
+        $oneToOneReferencingBackEntity = $this->prophesize(ClassMetadata::class);
+        $oneToOneReferencingBackEntity->getName()->willReturn(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class);
+        $oneToOneReferencingBackEntity->getAssociationNames()->willReturn(['toOneReferencingBack']);
+        $oneToOneReferencingBackEntity->getFieldNames()->willReturn(['toOneReferencingBack', 'secondaryCompositePrimaryKey', 'createdAt']);
+        $oneToOneReferencingBackEntity->getTypeOfField('toOneReferencingBack')->willReturn(Asset\OneToManyReferencingIdentifierEntity::class);
+        $oneToOneReferencingBackEntity->getTypeOfField('createdAt')->willReturn('datetime');
+        $oneToOneReferencingBackEntity->getTypeOfField('secondaryCompositePrimaryKey')->willReturn('integer');
+        $oneToOneReferencingBackEntity->hasAssociation('toOneReferencingBack')->willReturn(true);
+        $oneToOneReferencingBackEntity->hasAssociation('createdAt')->willReturn(false);
+        $oneToOneReferencingBackEntity->hasAssociation('secondaryCompositePrimaryKey')->willReturn(false);
+        $oneToOneReferencingBackEntity->isSingleValuedAssociation('toOneReferencingBack')->willReturn(true);
+        $oneToOneReferencingBackEntity->isCollectionValuedAssociation('toOneReferencingBack')->willReturn(false);
+        $oneToOneReferencingBackEntity->getAssociationTargetClass('toOneReferencingBack')->willReturn(Asset\OneToManyReferencingIdentifierEntity::class);
+        $oneToOneReferencingBackEntity->getIdentifier()->willReturn(['toOneReferencingBack', 'secondaryCompositePrimaryKey']);
+        $oneToOneReferencingBackEntity->getIdentifierFieldNames(Argument::type(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class))->willReturn(['toOneReferencingBack']);
+        $oneToOneReferencingBackEntity->getReflectionClass()->willReturn(new ReflectionClass(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class));
+
+        $objectManager = $this->prophesize(ObjectManager::class);
+        $objectManager->getClassMetadata(Asset\OneToManyReferencingIdentifierEntity::class)->will([$oneToOneMetadata, 'reveal']);
+        $objectManager->getClassMetadata(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class)->will([$oneToOneReferencingBackEntity, 'reveal']);
+        $objectManager->find(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class, ['secondaryCompositePrimaryKey' => 42])->willReturn(false);
+
+        return $objectManager->reveal();
     }
 }
