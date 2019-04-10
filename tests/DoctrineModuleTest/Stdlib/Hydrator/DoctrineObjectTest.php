@@ -2718,7 +2718,7 @@ class DoctrineObjectTest extends BaseTestCase
         $oneToOneMetadata->getAssociationTargetClass('toOne')->willReturn(Asset\ByValueDifferentiatorEntity::class);
         $oneToOneMetadata->getReflectionClass()->willReturn(new ReflectionClass(Asset\OneToOneEntity::class));
         $oneToOneMetadata->getIdentifier()->willReturn(['id']);
-        $oneToOneMetadata->getIdentifierFieldNames(Argument::type(Asset\OneToOneEntity::class))->willReturn(['id']);
+        $oneToOneMetadata->getIdentifierFieldNames()->willReturn(['id']);
 
         $byValueDifferentiatorEntity = $this->prophesize(ClassMetadata::class);
         $byValueDifferentiatorEntity->getName()->willReturn(Asset\ByValueDifferentiatorEntity::class);
@@ -2728,7 +2728,7 @@ class DoctrineObjectTest extends BaseTestCase
         $byValueDifferentiatorEntity->getTypeOfField('field')->willReturn('string');
         $byValueDifferentiatorEntity->hasAssociation(Argument::any())->willReturn(false);
         $byValueDifferentiatorEntity->getIdentifier()->willReturn(['id']);
-        $byValueDifferentiatorEntity->getIdentifierFieldNames(Argument::type(Asset\ByValueDifferentiatorEntity::class))->willReturn(['id']);
+        $byValueDifferentiatorEntity->getIdentifierFieldNames()->willReturn(['id']);
         $byValueDifferentiatorEntity->getReflectionClass()->willReturn(new ReflectionClass(Asset\ByValueDifferentiatorEntity::class));
 
         $objectManager = $this->prophesize(ObjectManager::class);
@@ -2822,7 +2822,7 @@ class DoctrineObjectTest extends BaseTestCase
         $oneToOneMetadata->getAssociationTargetClass('toMany')->willReturn(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class);
         $oneToOneMetadata->getReflectionClass()->willReturn(new ReflectionClass(Asset\OneToManyReferencingIdentifierEntity::class));
         $oneToOneMetadata->getIdentifier()->willReturn(['id']);
-        $oneToOneMetadata->getIdentifierFieldNames(Argument::type(Asset\OneToManyReferencingIdentifierEntity::class))->willReturn(['id']);
+        $oneToOneMetadata->getIdentifierFieldNames()->willReturn(['id']);
 
         $oneToOneReferencingBackEntity = $this->prophesize(ClassMetadata::class);
         $oneToOneReferencingBackEntity->getName()->willReturn(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class);
@@ -2838,13 +2838,13 @@ class DoctrineObjectTest extends BaseTestCase
         $oneToOneReferencingBackEntity->isCollectionValuedAssociation('toOneReferencingBack')->willReturn(false);
         $oneToOneReferencingBackEntity->getAssociationTargetClass('toOneReferencingBack')->willReturn(Asset\OneToManyReferencingIdentifierEntity::class);
         $oneToOneReferencingBackEntity->getIdentifier()->willReturn(['toOneReferencingBack', 'secondaryCompositePrimaryKey']);
-        $oneToOneReferencingBackEntity->getIdentifierFieldNames(Argument::type(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class))->willReturn(['toOneReferencingBack']);
+        $oneToOneReferencingBackEntity->getIdentifierFieldNames()->willReturn(['toOneReferencingBack']);
         $oneToOneReferencingBackEntity->getReflectionClass()->willReturn(new ReflectionClass(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class));
 
         $objectManager = $this->prophesize(ObjectManager::class);
         $objectManager->getClassMetadata(Asset\OneToManyReferencingIdentifierEntity::class)->will([$oneToOneMetadata, 'reveal']);
         $objectManager->getClassMetadata(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class)->will([$oneToOneReferencingBackEntity, 'reveal']);
-        $objectManager->find(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class, ['secondaryCompositePrimaryKey' => 42])->willReturn(false);
+        $objectManager->find(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class, Argument::any())->willReturn(false);
 
         return $objectManager->reveal();
     }
@@ -2887,7 +2887,7 @@ class DoctrineObjectTest extends BaseTestCase
         $oneToOneMetadata->getAssociationTargetClass('toMany')->willReturn(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class);
         $oneToOneMetadata->getReflectionClass()->willReturn(new ReflectionClass(Asset\OneToManyReferencingIdentifierEntity::class));
         $oneToOneMetadata->getIdentifier()->willReturn(['id']);
-        $oneToOneMetadata->getIdentifierFieldNames(Argument::type(Asset\OneToManyReferencingIdentifierEntity::class))->willReturn(['id']);
+        $oneToOneMetadata->getIdentifierFieldNames()->willReturn(['id']);
 
         $oneToOneReferencingBackEntity = $this->prophesize(ClassMetadata::class);
         $oneToOneReferencingBackEntity->getName()->willReturn(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class);
@@ -2903,13 +2903,14 @@ class DoctrineObjectTest extends BaseTestCase
         $oneToOneReferencingBackEntity->isCollectionValuedAssociation('toOneReferencingBack')->willReturn(false);
         $oneToOneReferencingBackEntity->getAssociationTargetClass('toOneReferencingBack')->willReturn(Asset\OneToManyReferencingIdentifierEntity::class);
         $oneToOneReferencingBackEntity->getIdentifier()->willReturn(['toOneReferencingBack', 'secondaryCompositePrimaryKey']);
-        $oneToOneReferencingBackEntity->getIdentifierFieldNames(Argument::type(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class))->willReturn(['toOneReferencingBack']);
+        $oneToOneReferencingBackEntity->getIdentifierFieldNames()->willReturn(['toOneReferencingBack']);
         $oneToOneReferencingBackEntity->getReflectionClass()->willReturn(new ReflectionClass(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class));
 
         $objectManager = $this->prophesize(ObjectManager::class);
         $objectManager->getClassMetadata(Asset\OneToManyReferencingIdentifierEntity::class)->will([$oneToOneMetadata, 'reveal']);
         $objectManager->getClassMetadata(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class)->will([$oneToOneReferencingBackEntity, 'reveal']);
         $objectManager->find(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class, ['secondaryCompositePrimaryKey' => 42])->willReturn(false);
+        $objectManager->find(Asset\OneToManyReferencingIdentifierEntityReferencingBack::class, Argument::any())->willReturn(false);
 
         return $objectManager->reveal();
     }
