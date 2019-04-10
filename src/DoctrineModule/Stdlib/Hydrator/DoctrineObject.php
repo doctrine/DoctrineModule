@@ -3,15 +3,15 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
+use Doctrine\Common\Inflector\Inflector;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Inflector\Inflector;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
-use Zend\Stdlib\ArrayUtils;
 use Zend\Hydrator\AbstractHydrator;
 use Zend\Hydrator\Filter\FilterProviderInterface;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way
@@ -304,11 +304,18 @@ class DoctrineObject extends AbstractHydrator
             if ($metadata->hasAssociation($field)) {
                 $target = $metadata->getAssociationTargetClass($field);
 
+                $additionalIdentifiers = [];
+                if ($referencingBackIdentifier = $this->getReferencingBackIdentifier($object, $target)) {
+                    $additionalIdentifiers = [
+                        $referencingBackIdentifier => $object,
+                    ];
+                }
+
                 if ($metadata->isSingleValuedAssociation($field)) {
                     if (! is_callable([$object, $setter])) {
                         continue;
                     }
-
+                    $value = $this->addAdditionalIdentifiersToValue($metadata, $value, $additionalIdentifiers);
                     $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
 
                     if (null === $value
@@ -319,7 +326,20 @@ class DoctrineObject extends AbstractHydrator
 
                     $object->$setter($value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    $this->toMany($object, $field, $target, $value);
+                    $values = $value;
+                    if (! is_array($values) && ! $values instanceof Traversable) {
+                        $values = (array)$values;
+                    }
+
+                    foreach ($values as $index => $value) {
+                        $values[$index] = $this->addAdditionalIdentifiersToValue(
+                            $metadata,
+                            $value,
+                            $additionalIdentifiers
+                        );
+                    }
+
+                    $this->toMany($object, $field, $target, $values);
                 }
             } else {
                 if (! is_callable([$object, $setter])) {
@@ -368,11 +388,32 @@ class DoctrineObject extends AbstractHydrator
             if ($metadata->hasAssociation($field)) {
                 $target = $metadata->getAssociationTargetClass($field);
 
+                $additionalIdentifiers = [];
+                if ($referencingBackIdentifier = $this->getReferencingBackIdentifier($object, $target)) {
+                    $additionalIdentifiers = [
+                        $referencingBackIdentifier => $object,
+                    ];
+                }
+
                 if ($metadata->isSingleValuedAssociation($field)) {
+                    $value = $this->addAdditionalIdentifiersToValue($metadata, $value, $additionalIdentifiers);
                     $value = $this->toOne($target, $this->hydrateValue($field, $value, $data));
                     $reflProperty->setValue($object, $value);
                 } elseif ($metadata->isCollectionValuedAssociation($field)) {
-                    $this->toMany($object, $field, $target, $value);
+                    $values = $value;
+                    if (! is_array($values) && ! $values instanceof Traversable) {
+                        $values = (array)$values;
+                    }
+
+                    foreach ($values as $index => $collectionValue) {
+                        $values[$index] = $this->addAdditionalIdentifiersToValue(
+                            $metadata,
+                            $collectionValue,
+                            $additionalIdentifiers
+                        );
+                    }
+
+                    $this->toMany($object, $field, $target, $values);
                 }
             } else {
                 $reflProperty->setValue($object, $this->hydrateValue($field, $value, $data));
@@ -396,7 +437,7 @@ class DoctrineObject extends AbstractHydrator
     protected function tryConvertArrayToObject($data, $object)
     {
         $metadata         = $this->metadata;
-        $identifierNames  = $metadata->getIdentifierFieldNames($object);
+        $identifierNames  = $metadata->getIdentifierFieldNames();
         $identifierValues = [];
 
         if (empty($identifierNames)) {
@@ -510,7 +551,8 @@ class DoctrineObject extends AbstractHydrator
             if (! empty($find) && $found = $this->find($find, $target)) {
                 $collection[] = (is_array($value)) ? $this->hydrate($value, $found) : $found;
             } else {
-                $collection[] = (is_array($value)) ? $this->hydrate($value, new $target) : new $target;
+                // restore primary keys as they might be essential for storing the entity as there is no generator available
+                $collection[] = (is_array($value)) ? $this->hydrate($value + $find, new $target) : new $target;
             }
         }
 
@@ -693,5 +735,54 @@ class DoctrineObject extends AbstractHydrator
             $field = $this->getNamingStrategy()->extract($field);
         }
         return $field;
+    }
+
+    private function hasIdentifierReferencingBack(ClassMetadata $targetMetadata, string $field, $object)
+    {
+        if (!$targetMetadata->hasAssociation($field)) {
+            return false;
+        }
+
+        return $targetMetadata->getAssociationTargetClass($field) === get_class($object);
+    }
+
+    private function getReferencingBackIdentifier($object, string $target)
+    {
+        $targetMetadata = $this->objectManager->getClassMetadata(ltrim($target, '\\'));
+        foreach ($targetMetadata->getIdentifierFieldNames() ?? [] as $identifierFieldName) {
+            if (!$this->hasIdentifierReferencingBack($targetMetadata, $identifierFieldName, $object)) {
+                continue;
+            }
+
+            return $identifierFieldName;
+        }
+
+        return '';
+    }
+
+    private function addAdditionalIdentifiersToValue(ClassMetadata $metadata, $value, array $additionalIdentifiers)
+    {
+        if (!$additionalIdentifiers) {
+            return $value;
+        }
+
+        $instanceName = $metadata->getName();
+        if ($value instanceof $instanceName) {
+            $reflection = $metadata->getReflectionClass();
+            foreach ($additionalIdentifiers as $identifier => $additionalIdentifier) {
+                $property = $reflection->getProperty($identifier);
+                $property->setAccessible(true);
+                $property->setValue($value, $additionalIdentifier);
+            }
+
+            return $value;
+        }
+
+        if (is_array($value)) {
+            $value += $additionalIdentifiers;
+            return $value;
+        }
+
+        return $value;
     }
 }
