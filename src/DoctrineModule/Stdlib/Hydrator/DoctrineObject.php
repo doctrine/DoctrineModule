@@ -521,8 +521,11 @@ class DoctrineObject extends AbstractHydrator
             }
         );
 
-        // Set the object so that the strategy can extract the Collection from it
 
+        // Restore metadata as the collection hydration caused the property to be set to the collections metdata instead
+        $this->prepare($object);
+
+        // Set the object so that the strategy can extract the Collection from it
         /** @var \DoctrineModule\Stdlib\Hydrator\Strategy\AbstractCollectionStrategy $collectionStrategy */
         $collectionStrategy = $this->getStrategy($collectionName);
         $collectionStrategy->setObject($object);

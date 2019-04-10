@@ -4,6 +4,7 @@ namespace DoctrineModuleTest\Stdlib\Hydrator;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
@@ -2802,6 +2803,8 @@ class DoctrineObjectTest extends BaseTestCase
         ];
 
         $hydrator->hydrate($data, $entity);
+        $this->assertInstanceOf(Collection::class, $entity->toMany);
+        $this->assertInstanceOf(OneToManyReferencingIdentifierEntityReferencingBack::class, $entity->toMany[0]);
     }
 
     private function getObjectManagerForNestedToManyHydration()
