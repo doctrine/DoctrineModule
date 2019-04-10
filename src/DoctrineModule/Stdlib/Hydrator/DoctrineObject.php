@@ -331,10 +331,10 @@ class DoctrineObject extends AbstractHydrator
                         $values = (array)$values;
                     }
 
-                    foreach ($values as $index => $value) {
+                    foreach ($values as $index => $collectionValue) {
                         $values[$index] = $this->addAdditionalIdentifiersToValue(
                             $metadata,
-                            $value,
+                            $collectionValue,
                             $additionalIdentifiers
                         );
                     }
@@ -772,6 +772,12 @@ class DoctrineObject extends AbstractHydrator
             foreach ($additionalIdentifiers as $identifier => $additionalIdentifier) {
                 $property = $reflection->getProperty($identifier);
                 $property->setAccessible(true);
+                $current = $property->getValue($value);
+
+                // Do not overwrite already provided information
+                if ($current !== null) {
+                    continue;
+                }
                 $property->setValue($value, $additionalIdentifier);
             }
 

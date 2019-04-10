@@ -15,12 +15,39 @@ class OneToManyReferencingIdentifierEntity
     public $id;
 
     /**
-     * @var Collection
+     * @var Collection|OneToManyReferencingIdentifierEntityReferencingBack[]
      */
     public $toMany;
 
     public function __construct()
     {
         $this->toMany = new ArrayCollection();
+    }
+
+    public function addToMany(Collection $entities)
+    {
+        foreach ($entities as $toMany) {
+            if ($this->toMany->contains($toMany)) {
+                return;
+            }
+
+            $this->toMany->add($toMany);
+        }
+    }
+
+    public function removeToMany(Collection $entities)
+    {
+        foreach ($entities as $toMany) {
+            if (!$this->toMany->contains($toMany)) {
+                return;
+            }
+
+            $this->toMany->removeElement($toMany);
+        }
+    }
+
+    public function getToMany(): Collection
+    {
+        return $this->toMany;
     }
 }

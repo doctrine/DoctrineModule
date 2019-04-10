@@ -2849,10 +2849,33 @@ class DoctrineObjectTest extends BaseTestCase
         return $objectManager->reveal();
     }
 
-    public function testNestedHydrationByReferencingHandlesInversedIdentifierInToOneReference()
+    public function testNestedHydrationByReferencingHandlesInversedIdentifierInToOneReferenceByUsingByReference()
     {
         $objectManager = $this->getObjectManagerForNestedHydrationWithReferencingBackIdentifier();
         $hydrator = new DoctrineObjectHydrator($objectManager, false);
+        $entity = new Asset\OneToManyReferencingIdentifierEntity();
+
+        $data = [
+            'toMany' => [
+                [
+                    'secondaryCompositePrimaryKey' => 42,
+                    'createdAt' => '2019-04-10 09:00:00',
+                ],
+            ],
+        ];
+
+        $hydrator->hydrate($data, $entity);
+        $this->assertInstanceOf(Collection::class, $entity->toMany);
+        /** @var OneToManyReferencingIdentifierEntityReferencingBack $referencingBack */
+        $referencingBack = $entity->toMany[0];
+        $this->assertInstanceOf(OneToManyReferencingIdentifierEntityReferencingBack::class, $referencingBack);
+        $this->assertEquals($entity, $referencingBack->toOneReferencingBack);
+    }
+
+    public function testNestedHydrationByReferencingHandlesInversedIdentifierInToOneReferenceByUsingByValue()
+    {
+        $objectManager = $this->getObjectManagerForNestedHydrationWithReferencingBackIdentifier();
+        $hydrator = new DoctrineObjectHydrator($objectManager, true);
         $entity = new Asset\OneToManyReferencingIdentifierEntity();
 
         $data = [
