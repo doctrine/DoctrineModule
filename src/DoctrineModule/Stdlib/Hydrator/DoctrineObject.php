@@ -3,6 +3,7 @@
 namespace DoctrineModule\Stdlib\Hydrator;
 
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Inflector\Inflector;
@@ -565,25 +566,35 @@ class DoctrineObject extends AbstractHydrator
                 $value = (double)$value;
                 break;
             case 'datetimetz':
+            case 'datetimetz_immutable':
             case 'datetime':
+            case 'datetime_immutable':
             case 'time':
+            case 'time_immutable':
             case 'date':
+            case 'date_immutable':
+                if (strpos($typeOfField, '_immutable', 0) !== false) {
+                    $dateTimeClass = DateTimeImmutable::class;
+                } else {
+                    $dateTimeClass = DateTime::class;
+                }
+
                 if ($value === '') {
                     return null;
                 }
 
-                if ($value instanceof Datetime) {
+                if ($value instanceof \DateTimeInterface) {
                     return $value;
                 }
 
                 if (is_int($value)) {
-                    $dateTime = new DateTime();
-                    $dateTime->setTimestamp($value);
+                    $dateTime = new $dateTimeClass();
+                    $dateTime = $dateTime->setTimestamp($value);
                     return $dateTime;
                 }
 
                 if (is_string($value)) {
-                    return new DateTime($value);
+                    return new $dateTimeClass($value);
                 }
 
                 break;
