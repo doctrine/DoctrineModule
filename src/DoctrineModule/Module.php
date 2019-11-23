@@ -35,7 +35,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
     public function init(ModuleManagerInterface $moduleManager)
     {
         AnnotationRegistry::registerLoader(
-            function ($className) {
+            static function ($className) {
                 return class_exists($className);
             }
         );

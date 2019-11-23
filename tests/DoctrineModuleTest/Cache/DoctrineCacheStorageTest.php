@@ -39,7 +39,7 @@ class DoctrineCacheStorageTest extends TestCase
      */
     protected $phpDatatypes = ['NULL', 'boolean', 'integer', 'double', 'string', 'array', 'object', 'resource'];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->options = new AdapterOptions();
         // @todo fix constructor as it is messy
@@ -57,7 +57,7 @@ class DoctrineCacheStorageTest extends TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         // be sure the error handler has been stopped
         if (ErrorHandler::started()) {
@@ -138,7 +138,7 @@ class DoctrineCacheStorageTest extends TestCase
     {
         $capabilities = $this->storage->getCapabilities();
         $datatypes    = $capabilities->getSupportedDatatypes();
-        $this->assertInternalType('array', $datatypes);
+        $this->assertIsArray($datatypes);
 
         foreach ($datatypes as $sourceType => $targetType) {
             $this->assertContains($sourceType, $this->phpDatatypes, 'Unknown source type "' . $sourceType . '"');
@@ -146,7 +146,7 @@ class DoctrineCacheStorageTest extends TestCase
             if (is_string($targetType)) {
                 $this->assertContains($targetType, $this->phpDatatypes, 'Unknown source type "' . $sourceType . '"');
             } else {
-                $this->assertInternalType('bool', $targetType, 'Target type must be a string or boolean');
+                $this->assertIsBool($targetType, 'Target type must be a string or boolean');
             }
         }
     }
@@ -155,10 +155,10 @@ class DoctrineCacheStorageTest extends TestCase
     {
         $capabilities = $this->storage->getCapabilities();
         $metadata     = $capabilities->getSupportedMetadata();
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
 
         foreach ($metadata as $property) {
-            $this->assertInternalType('string', $property);
+            $this->assertIsString($property);
         }
     }
 
@@ -166,27 +166,27 @@ class DoctrineCacheStorageTest extends TestCase
     {
         $capabilities = $this->storage->getCapabilities();
 
-        $this->assertInternalType('integer', $capabilities->getMaxTtl());
+        $this->assertIsInt($capabilities->getMaxTtl());
         $this->assertGreaterThanOrEqual(0, $capabilities->getMaxTtl());
 
-        $this->assertInternalType('bool', $capabilities->getStaticTtl());
+        $this->assertIsBool($capabilities->getStaticTtl());
 
-        $this->assertInternalType('numeric', $capabilities->getTtlPrecision());
+        $this->assertIsNumeric($capabilities->getTtlPrecision());
         $this->assertGreaterThan(0, $capabilities->getTtlPrecision());
 
-        $this->assertInternalType('bool', $capabilities->getStaticTtl());
+        $this->assertIsBool($capabilities->getStaticTtl());
     }
 
     public function testKeyCapabilities()
     {
         $capabilities = $this->storage->getCapabilities();
 
-        $this->assertInternalType('integer', $capabilities->getMaxKeyLength());
+        $this->assertIsInt($capabilities->getMaxKeyLength());
         $this->assertGreaterThanOrEqual(-1, $capabilities->getMaxKeyLength());
 
-        $this->assertInternalType('bool', $capabilities->getNamespaceIsPrefix());
+        $this->assertIsBool($capabilities->getNamespaceIsPrefix());
 
-        $this->assertInternalType('string', $capabilities->getNamespaceSeparator());
+        $this->assertIsString($capabilities->getNamespaceSeparator());
     }
 
     public function testHasItemReturnsTrueOnValidItem()
@@ -286,7 +286,7 @@ class DoctrineCacheStorageTest extends TestCase
         $this->assertTrue($this->storage->setItem('key', 'value'));
         $metadata = $this->storage->getMetadata('key');
 
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
         foreach ($supportedMetadatas as $supportedMetadata) {
             $this->assertArrayHasKey($supportedMetadata, $metadata);
         }
@@ -317,10 +317,10 @@ class DoctrineCacheStorageTest extends TestCase
         $this->assertSame([], $this->storage->setItems($items));
 
         $metadatas = $this->storage->getMetadatas(array_keys($items));
-        $this->assertInternalType('array', $metadatas);
+        $this->assertIsArray($metadatas);
         $this->assertSame(count($items), count($metadatas));
         foreach ($metadatas as $metadata) {
-            $this->assertInternalType('array', $metadata);
+            $this->assertIsArray($metadata);
             foreach ($supportedMetadatas as $supportedMetadata) {
                 $this->assertArrayHasKey($supportedMetadata, $metadata);
             }
@@ -357,14 +357,14 @@ class DoctrineCacheStorageTest extends TestCase
         $this->assertSame([], $this->storage->setItems($items));
 
         $rs = $this->storage->getItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
         $rs = $this->storage->hasItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);
@@ -374,14 +374,14 @@ class DoctrineCacheStorageTest extends TestCase
         unset($items['key1'], $items['key3']);
 
         $rs = $this->storage->getItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
         $rs = $this->storage->hasItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);
@@ -434,14 +434,14 @@ class DoctrineCacheStorageTest extends TestCase
 
         $this->options->setNamespace('defaultns1');
         $rs = $this->storage->getItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
         $rs = $this->storage->hasItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);
@@ -452,14 +452,14 @@ class DoctrineCacheStorageTest extends TestCase
         unset($items['key1'], $items['key3']);
 
         $rs = $this->storage->getItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
         $rs = $this->storage->hasItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);

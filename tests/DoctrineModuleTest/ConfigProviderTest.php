@@ -18,7 +18,7 @@ class ConfigProviderTest extends TestCase
     {
         $config = (new ConfigProvider())->__invoke();
 
-        self::assertInternalType('array', $config);
+        self::assertIsArray($config);
 
         self::assertArrayHasKey('doctrine', $config, 'Expected config to have "doctrine" array key');
         self::assertArrayHasKey('doctrine_factories', $config, 'Expected config to have "doctrine_factories" array key');

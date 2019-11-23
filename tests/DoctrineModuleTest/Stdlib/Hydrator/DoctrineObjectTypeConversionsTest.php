@@ -32,7 +32,7 @@ class DoctrineObjectTypeConversionsTest extends BaseTestCase
     /**
      * setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
