@@ -4,7 +4,7 @@ Hydrators convert an array of data to an object (this is called "hydrating") and
 convert an object back to an array (this is called "extracting"). Hydrators are mainly used in the context of Forms,
 with the binding functionality of Laminas, but can also be used in any hydrating/extracting context (for
 instance, it can be used in RESTful context). If you are not really comfortable with hydrators, please first
-read [Laminas Framework hydrator's documentation](http://framework.zend.com/manual/current/en/modules/zend.stdlib.hydrator.html).
+read [Laminas hydrator's documentation](http://framework.zend.com/manual/current/en/modules/zend.stdlib.hydrator.html).
 
 
 ### Basic usage

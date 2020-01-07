@@ -97,7 +97,7 @@ public static function verifyCredential(User $user, $inputPassword)
 
 #### Creating the AuthenticationService
 
-Now that we have configured the authentication, we still need to tell Laminas Framework how to construct a correct ``Laminas\Authentication\AuthenticationService`` instance. For this, add the following code in your Module.php class:
+Now that we have configured the authentication, we still need to tell Laminas how to construct a correct ``Laminas\Authentication\AuthenticationService`` instance. For this, add the following code in your Module.php class:
 
 ```php
 namespace Application;

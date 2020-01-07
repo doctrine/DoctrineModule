@@ -54,7 +54,7 @@ with current practices and a slew of updates and fixes.
 # 1.0.0
 
  * Remove deprecated api call from test [#523](https://github.com/doctrine/DoctrineModule/pull/523)
- * Allow for the use of Laminas\Cache\Service\StorageCacheAbstractServiceFactory [#547](https://github.com/doctrine/DoctrineModule/pull/547)
+ * Allow for the use of Zend\Cache\Service\StorageCacheAbstractServiceFactory [#547](https://github.com/doctrine/DoctrineModule/pull/547)
 
 # 0.10.1
 
@@ -102,7 +102,7 @@ with current practices and a slew of updates and fixes.
  * It is now possible to define a callable for option `label_generator` in `DoctrineModule\Form\Element\Proxy`
    as of [#219](https://github.com/doctrine/DoctrineModule/pull/219)
  * `DoctrineModule\Authentication\Adapter\ObjectRepository` now inherits logic from
-   `Laminas\Authentication\Adapter\AbstractAdapter` as of [#156](https://github.com/doctrine/DoctrineModule/pull/156).
+   `Zend\Authentication\Adapter\AbstractAdapter` as of [#156](https://github.com/doctrine/DoctrineModule/pull/156).
    Methods `setIdentityValue`, `getIdentityValue`, `setCredentialValue`, `getCredentialValue` are now deprecated.
  * It is now possible to set the cache namespace in the cache configuration as
    of [#164](https://github.com/doctrine/DoctrineModule/pull/164)
@@ -117,9 +117,9 @@ with current practices and a slew of updates and fixes.
    [#137](https://github.com/doctrine/DoctrineModule/pull/137). From now on, you can simply run
    `php ./public/index.php` in a standard zf2 skeleton application and the tools will be available
    in there. The console in `./vendor/bin/doctrine-module` is now deprecated.
- * The module does not implement `Laminas\ModuleManager\Feature\AutoloaderProviderInterface` anymore.
+ * The module does not implement `Zend\ModuleManager\Feature\AutoloaderProviderInterface` anymore.
    Please use [composer](http://getcomposer.org/) autoloading or setup autoloading yourself.
- * Service `doctrine.cache.laminascachestorage` was removed from the pre-configured services as of
+ * Service `doctrine.cache.zendcachestorage` was removed from the pre-configured services as of
    [#226](https://github.com/doctrine/DoctrineModule/pull/226).
  * Instantiating a `DoctrineModule\Stdlib\Hydrator\DoctrineObject` does not require a
    `targetClass` anymore. This means you have to modify the way you create hydrator

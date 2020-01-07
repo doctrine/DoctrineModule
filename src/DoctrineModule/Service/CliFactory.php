@@ -3,10 +3,10 @@
 namespace DoctrineModule\Service;
 
 use Interop\Container\ContainerInterface;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Helper\HelperSet;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * CLI Application ServiceManager factory responsible for instantiating a Symfony CLI application

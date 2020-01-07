@@ -107,7 +107,7 @@ class Authentication extends AbstractOptions
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
-     * @var \Laminas\Authentication\Storage\StorageInterface|string;
+     * @var StorageInterface|string;
      */
     protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
@@ -272,7 +272,7 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     * @return \Laminas\Authentication\Storage\StorageInterface|string
+     * @return StorageInterface|string
      */
     public function getStorage()
     {
@@ -280,7 +280,7 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     * @param \Laminas\Authentication\Storage\StorageInterface|string $storage
+     * @param StorageInterface|string $storage
      */
     public function setStorage($storage)
     {

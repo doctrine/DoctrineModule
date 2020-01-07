@@ -29,8 +29,8 @@ class AuthenticationServiceFactory extends AbstractFactory
 
     /**
      *
-     * @param \Laminas\ServiceManager\ServiceLocatorInterface $container
-     * @return \Laminas\Authentication\AuthenticationService
+     * @param ServiceLocatorInterface $container
+     * @return AuthenticationService
      */
     public function createService(ServiceLocatorInterface $container)
     {

@@ -169,7 +169,7 @@ class ObjectRepository extends AbstractAdapter
      * Creates a Laminas\Authentication\Result object from the information that has been collected
      * during the authenticate() attempt.
      *
-     * @return \Laminas\Authentication\Result
+     * @return AuthenticationResult
      */
     protected function createAuthenticationResult()
     {
