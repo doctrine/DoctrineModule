@@ -937,7 +937,7 @@ class Tag
 
 #### The fieldsets
 
-We now need to create two fieldsets that will map those entities. With Zend Framework, it's a good practice to create
+We now need to create two fieldsets that will map those entities. With Laminas, it's a good practice to create
 one fieldset per entity in order to reuse them across many forms.
 
 Here is the fieldset for the Tag. Notice that in this example, I added a hidden input whose name is "id". This is
@@ -1224,7 +1224,7 @@ This simple entity contains an id, a string property, and a OneToOne relationshi
 forms the correct way, you will likely have a fieldset for every entity, so that you have a perfect mapping between
 entities and fieldsets. Here are fieldsets for User and and City entities.
 
-> If you are not comfortable with Fieldsets and how they should work, please refer to [this part of Zend Framework 2
+> If you are not comfortable with Fieldsets and how they should work, please refer to [this part of Laminas
 documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html).
 
 First the User fieldset :

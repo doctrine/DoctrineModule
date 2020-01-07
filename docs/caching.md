@@ -4,7 +4,7 @@ DoctrineModule provides bridging between
 [`Laminas\Cache`](https://github.com/laminas/laminas-cache)
 and [`Doctrine\Common\Cache`](https://github.com/doctrine/common/tree/master/lib/Doctrine/Common/Cache).
 This may be useful in case you want to share configured cache instances across doctrine, symfony
-and zendframework projects.
+and laminas projects.
 
 You may use `Laminas\Cache` within your doctrine-related projects as following:
 
