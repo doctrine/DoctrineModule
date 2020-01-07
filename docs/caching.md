@@ -10,7 +10,7 @@ You may use `Laminas\Cache` within your doctrine-related projects as following:
 
 ```php
 $laminasCache = new \Laminas\Cache\Storage\Adapter\Memory(); // any storage adapter is OK here
-$doctrineCache = new \DoctrineModule\Cache\ZendStorageCache($laminasCache);
+$doctrineCache = new \DoctrineModule\Cache\LaminasStorageCache($laminasCache);
 // now use $doctrineCache as a normal Doctrine\Common\Cache\Cache instance
 ```
 

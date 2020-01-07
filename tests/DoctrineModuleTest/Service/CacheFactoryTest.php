@@ -55,7 +55,7 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'phpunit' => [
-                            'class' => 'DoctrineModule\Cache\ZendStorageCache',
+                            'class' => 'DoctrineModule\Cache\LaminasStorageCache',
                             'instance' => 'my-zend-cache',
                             'namespace' => 'DoctrineModule',
                         ],
@@ -74,7 +74,7 @@ class CacheFactoryTest extends BaseTestCase
 
         $cache = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('DoctrineModule\Cache\ZendStorageCache', $cache);
+        $this->assertInstanceOf('DoctrineModule\Cache\LaminasStorageCache', $cache);
     }
 
     public function testCreatePredisCache()
