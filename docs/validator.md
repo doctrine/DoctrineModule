@@ -1,7 +1,7 @@
 Validator
 =========
 
-DoctrineModule provides three validators that work out the box: `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` which implements a check if an entity exists or does not exists in the database, respectively, and `DoctrineModule\Validator\UniqueObject` which implements a check if a value is only used in one object.  They behave like any other standard Zend validator.
+DoctrineModule provides three validators that work out the box: `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` which implements a check if an entity exists or does not exists in the database, respectively, and `DoctrineModule\Validator\UniqueObject` which implements a check if a value is only used in one object.  They behave like any other standard Laminas validator.
 
 All three validators accept the following options :
 
@@ -35,9 +35,9 @@ var_dump($validator->isValid(['email' => 'test@example.com'])); // dumps 'true' 
 ```
 
 
-### Use together with Zend Framework 2 forms
+### Use together with Laminas forms
 
-Of course, validators are especially useful when paired with forms.  To add a `NoObjectExists` validator to a Zend Framework form element:
+Of course, validators are especially useful when paired with forms.  To add a `NoObjectExists` validator to a Laminas form element:
 
 ```php
 namespace Application\Form;

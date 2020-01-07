@@ -6,7 +6,7 @@ use Doctrine\Common\Cache\Cache;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 
 /**
- * Bridge class that allows usage of a Doctrine Cache Storage as a Zend Cache Storage
+ * Bridge class that allows usage of a Doctrine Cache Storage as a Laminas Cache Storage
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/

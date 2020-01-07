@@ -2,9 +2,9 @@
 
 Hydrators convert an array of data to an object (this is called "hydrating") and
 convert an object back to an array (this is called "extracting"). Hydrators are mainly used in the context of Forms,
-with the binding functionality of Zend Framework, but can also be used in any hydrating/extracting context (for
+with the binding functionality of Laminas, but can also be used in any hydrating/extracting context (for
 instance, it can be used in RESTful context). If you are not really comfortable with hydrators, please first
-read [Zend Framework hydrator's documentation](http://framework.zend.com/manual/current/en/modules/zend.stdlib.hydrator.html).
+read [Laminas Framework hydrator's documentation](http://framework.zend.com/manual/current/en/modules/zend.stdlib.hydrator.html).
 
 
 ### Basic usage
@@ -400,7 +400,7 @@ echo $blogPost->getUser()->getPassword(); // prints 2BorN0t2B
 #### Example 3 : OneToMany association
 
 DoctrineModule hydrator also handles OneToMany relationships (when use `Laminas\Form\Element\Collection` element). Please
-refer to the official [Zend Framework 2 documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html) to learn more about Collection.
+refer to the official [Laminas documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html) to learn more about Collection.
 
 > Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetches the
 objects through the Doctrine `find` function. However, this may cause problems if one of the values of the collection
@@ -781,7 +781,7 @@ It now only prints "bar", which shows clearly that the getter has not been calle
 
 ### A complete example using Laminas\Form
 
-Now that we understand how the hydrator works, let's see how it integrates into the Zend Framework's Form component.
+Now that we understand how the hydrator works, let's see how it integrates into the Laminas's Form component.
 We are going to use a simple example with, once again, a BlogPost and a Tag entities. We will see how we can create the
 blog post, and being able to edit it.
 
@@ -1220,7 +1220,7 @@ class User
 }
 ```
 
-This simple entity contains an id, a string property, and a OneToOne relationship. If you are using Zend Framework
+This simple entity contains an id, a string property, and a OneToOne relationship. If you are using Laminas
 forms the correct way, you will likely have a fieldset for every entity, so that you have a perfect mapping between
 entities and fieldsets. Here are fieldsets for User and and City entities.
 

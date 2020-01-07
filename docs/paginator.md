@@ -26,10 +26,10 @@ $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
           ->setItemCountPerPage(5);
 
-// Pass it to the view, and use it like a "standard" Zend paginator
+// Pass it to the view, and use it like a "standard" Laminas paginator
 ```
 
-For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html).
+For more information about Laminas Paginator, please read the [Laminas Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html).
 
 ### Selectable adapter
 
@@ -52,7 +52,7 @@ $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
           ->setItemCountPerPage(5);
 
-// Pass it to the view, and use it like a "standard" Zend paginator
+// Pass it to the view, and use it like a "standard" Laminas paginator
 ```
 
 If you want to further filter the results, you can optionally pass an existing Criteria object:
@@ -74,7 +74,7 @@ $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
           ->setItemCountPerPage(5);
 
-// Pass it to the view, and use it like a "standard" Zend paginator
+// Pass it to the view, and use it like a "standard" Laminas paginator
 ```
 
-For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.3/en/modules/zend.paginator.introduction.html).
+For more information about Laminas Paginator, please read the [Laminas Paginator documentation](http://framework.zend.com/manual/2.3/en/modules/zend.paginator.introduction.html).

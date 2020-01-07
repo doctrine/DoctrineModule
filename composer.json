@@ -1,6 +1,6 @@
 {
     "name":        "doctrine/doctrine-module",
-    "description": "Zend Framework Module that provides Doctrine basic functionality required for ORM and ODM modules",
+    "description": "Laminas Module that provides Doctrine basic functionality required for ORM and ODM modules",
     "type":        "library",
     "license":     "MIT",
     "homepage":    "http://www.doctrine-project.org/",
