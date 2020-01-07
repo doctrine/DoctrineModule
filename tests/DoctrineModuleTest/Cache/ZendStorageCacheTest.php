@@ -4,7 +4,7 @@ namespace DoctrineModuleTest\Cache;
 
 use DoctrineModule\Cache\ZendStorageCache;
 use Doctrine\Common\Cache\Cache;
-use Zend\Cache\Storage\Adapter\Memory;
+use Laminas\Cache\Storage\Adapter\Memory;
 use PHPUnit\Framework\TestCase;
 
 /**

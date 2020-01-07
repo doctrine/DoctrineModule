@@ -4,10 +4,10 @@ namespace DoctrineModule\Cache;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\Cache\Storage\FlushableInterface;
-use Zend\Cache\Storage\TotalSpaceCapableInterface;
-use Zend\Cache\Storage\AvailableSpaceCapableInterface;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\TotalSpaceCapableInterface;
+use Laminas\Cache\Storage\AvailableSpaceCapableInterface;
 
 /**
  * Bridge class that allows usage of a Zend Cache Storage as a Doctrine Cache

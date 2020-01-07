@@ -13,7 +13,7 @@ Here is how you can use the DoctrineModule paginator adapter :
 ```php
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Paginator\Adapter\Collection as CollectionAdapter;
-use Zend\Paginator\Paginator;
+use Laminas\Paginator\Paginator;
 
 // Create a Doctrine 2 Collection
 $doctrineCollection = new ArrayCollection(range(1, 101));
@@ -42,7 +42,7 @@ You can use it without any existing Criteria object:
 
 ```php
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
-use Zend\Paginator\Paginator;
+use Laminas\Paginator\Paginator;
 
 // Create the adapter
 $adapter = new SelectableAdapter($objectRepository); // An object repository implements Selectable
@@ -60,7 +60,7 @@ If you want to further filter the results, you can optionally pass an existing C
 ```php
 use Doctrine\Common\Collections\Criteria as DoctrineCriteria;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
-use Zend\Paginator\Paginator;
+use Laminas\Paginator\Paginator;
 
 // Create the criteria
 $expr     = DoctrineCriteria::expr()->eq('foo', 'bar');

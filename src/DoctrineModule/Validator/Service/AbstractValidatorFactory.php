@@ -3,12 +3,12 @@
 
 namespace DoctrineModule\Validator\Service;
 
-use Zend\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\FactoryInterface;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ArrayUtils;
 
 /**
  * Factory for creating NoObjectExists instances

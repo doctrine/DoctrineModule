@@ -3,7 +3,7 @@
 namespace DoctrineModule\Stdlib\Hydrator\Strategy;
 
 use InvalidArgumentException;
-use Zend\Hydrator\Strategy\StrategyInterface;
+use Laminas\Hydrator\Strategy\StrategyInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Inflector\Inflector;

@@ -3,9 +3,9 @@
 namespace DoctrineModule\Authentication\Adapter;
 
 use DoctrineModule\Options\Authentication as AuthenticationOptions;
-use Zend\Authentication\Adapter\AbstractAdapter;
-use Zend\Authentication\Adapter\Exception;
-use Zend\Authentication\Result as AuthenticationResult;
+use Laminas\Authentication\Adapter\AbstractAdapter;
+use Laminas\Authentication\Adapter\Exception;
+use Laminas\Authentication\Result as AuthenticationResult;
 use Doctrine\Common\Inflector\Inflector;
 
 /**
@@ -166,10 +166,10 @@ class ObjectRepository extends AbstractAdapter
     }
 
     /**
-     * Creates a Zend\Authentication\Result object from the information that has been collected
+     * Creates a Laminas\Authentication\Result object from the information that has been collected
      * during the authenticate() attempt.
      *
-     * @return \Zend\Authentication\Result
+     * @return \Laminas\Authentication\Result
      */
     protected function createAuthenticationResult()
     {

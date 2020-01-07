@@ -5,8 +5,8 @@ namespace DoctrineModule\Service;
 use Interop\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * CLI Application ServiceManager factory responsible for instantiating a Symfony CLI application
@@ -18,7 +18,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class CliFactory implements FactoryInterface
 {
     /**
-     * @var \Zend\EventManager\EventManagerInterface
+     * @var \Laminas\EventManager\EventManagerInterface
      */
     protected $events;
 
@@ -34,12 +34,12 @@ class CliFactory implements FactoryInterface
 
     /**
      * @param  ContainerInterface $container
-     * @return \Zend\EventManager\EventManagerInterface
+     * @return \Laminas\EventManager\EventManagerInterface
      */
     public function getEventManager(ContainerInterface $container)
     {
         if (null === $this->events) {
-            /* @var $events \Zend\EventManager\EventManagerInterface */
+            /* @var $events \Laminas\EventManager\EventManagerInterface */
             $events = $container->get('EventManager');
 
             $events->addIdentifiers([__CLASS__, 'doctrine']);

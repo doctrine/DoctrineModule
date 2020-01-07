@@ -6,7 +6,7 @@ use DoctrineModule\Service\Authentication\AuthenticationServiceFactory;
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use DoctrineModule\Service\Authentication\StorageFactory;
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class AuthenticationServiceFactoryTest extends BaseTestCase
 {
@@ -36,12 +36,12 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         );
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',
-            'Zend\Authentication\Storage\Session'
+            'Laminas\Authentication\Storage\Session'
         );
         $serviceManager->setFactory('doctrine.authenticationadapter.' . $name, new AdapterFactory($name));
         $serviceManager->setFactory('doctrine.authenticationstorage.' . $name, new StorageFactory($name));
 
         $authenticationService = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Zend\Authentication\AuthenticationService', $authenticationService);
+        $this->assertInstanceOf('Laminas\Authentication\AuthenticationService', $authenticationService);
     }
 }

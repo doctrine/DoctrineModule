@@ -3,10 +3,10 @@
 namespace DoctrineModule\Mvc\Router\Console;
 
 use Symfony\Component\Console\Application;
-use Zend\Mvc\Console\Router\RouteInterface;
-use Zend\Stdlib\RequestInterface as Request;
-use Zend\Router\RouteMatch;
-use Zend\Console\Request as ConsoleRequest;
+use Laminas\Mvc\Console\Router\RouteInterface;
+use Laminas\Stdlib\RequestInterface as Request;
+use Laminas\Router\RouteMatch;
+use Laminas\Console\Request as ConsoleRequest;
 
 /**
  * Route matching commands in Symfony CLI

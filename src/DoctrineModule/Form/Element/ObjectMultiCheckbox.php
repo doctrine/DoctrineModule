@@ -3,9 +3,9 @@
 namespace DoctrineModule\Form\Element;
 
 use DoctrineModule\Form\Element\Proxy;
-use Zend\Form\Element\MultiCheckbox;
-use Zend\Form\Form;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Form\Element\MultiCheckbox;
+use Laminas\Form\Form;
+use Laminas\Stdlib\ArrayUtils;
 
 class ObjectMultiCheckbox extends MultiCheckbox
 {
