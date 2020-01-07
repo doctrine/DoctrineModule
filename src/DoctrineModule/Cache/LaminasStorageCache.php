@@ -10,7 +10,7 @@ use Laminas\Cache\Storage\TotalSpaceCapableInterface;
 use Laminas\Cache\Storage\AvailableSpaceCapableInterface;
 
 /**
- * Bridge class that allows usage of a Zend Cache Storage as a Doctrine Cache
+ * Bridge class that allows usage of a Laminas Cache Storage as a Doctrine Cache
  *
  * @license MIT
  * @link    http://www.doctrine-project.org/

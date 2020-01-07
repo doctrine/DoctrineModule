@@ -56,13 +56,13 @@ class CacheFactoryTest extends BaseTestCase
                     'cache' => [
                         'phpunit' => [
                             'class' => 'DoctrineModule\Cache\LaminasStorageCache',
-                            'instance' => 'my-zend-cache',
+                            'instance' => 'my-laminas-cache',
                             'namespace' => 'DoctrineModule',
                         ],
                     ],
                 ],
                 'caches' => [
-                    'my-zend-cache' => [
+                    'my-laminas-cache' => [
                         'adapter' => [
                             'name' => 'blackhole',
                         ],
