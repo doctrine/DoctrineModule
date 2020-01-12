@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory responsible for creating EventManager instances

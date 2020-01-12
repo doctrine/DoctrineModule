@@ -7,7 +7,7 @@ use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Doctrine\Common\Cache;
 use DoctrineModule\Cache\ZendStorageCache;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Cache ServiceManager factory

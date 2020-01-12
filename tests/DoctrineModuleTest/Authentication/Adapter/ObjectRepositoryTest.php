@@ -19,7 +19,7 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRejectInvalidIdentityProperty()
     {
         $this->expectException(
-            'Zend\Authentication\Adapter\Exception\InvalidArgumentException'
+            'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
         );
         $this->expectExceptionMessage(
             'Provided $identityProperty is invalid, boolean given'
@@ -31,7 +31,7 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRejectInvalidCredentialProperty()
     {
         $this->expectException(
-            'Zend\Authentication\Adapter\Exception\InvalidArgumentException'
+            'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
         );
         $this->expectExceptionMessage(
             'Provided $credentialProperty is invalid, boolean given'
@@ -42,7 +42,7 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRequireIdentityValue()
     {
         $this->expectException(
-            'Zend\Authentication\Adapter\Exception\RuntimeException'
+            'Laminas\Authentication\Adapter\Exception\RuntimeException'
         );
         $this->expectExceptionMessage(
             'A value for the identity was not provided prior to authentication with ObjectRepository authentication '
@@ -60,7 +60,7 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRequireCredentialValue()
     {
         $this->expectException(
-            'Zend\Authentication\Adapter\Exception\RuntimeException'
+            'Laminas\Authentication\Adapter\Exception\RuntimeException'
         );
         $this->expectExceptionMessage(
             'A credential value was not provided prior to authentication with ObjectRepository authentication adapter'
@@ -78,7 +78,7 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRejectInvalidCredentialCallable()
     {
         $this->expectException(
-            'Zend\Authentication\Adapter\Exception\InvalidArgumentException'
+            'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
         );
         $this->expectExceptionMessage(
             '"array" is not a callable'
@@ -174,7 +174,7 @@ class ObjectRepositoryTest extends BaseTestCase
 
     public function testWillRefuseToAuthenticateWithoutGettersOrPublicMethods()
     {
-        $this->expectException('Zend\Authentication\Adapter\Exception\UnexpectedValueException');
+        $this->expectException('Laminas\Authentication\Adapter\Exception\UnexpectedValueException');
 
         $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository
@@ -236,7 +236,7 @@ class ObjectRepositoryTest extends BaseTestCase
 
     public function testWillRefuseToAuthenticateWhenInvalidInstanceIsFound()
     {
-        $this->expectException('Zend\Authentication\Adapter\Exception\UnexpectedValueException');
+        $this->expectException('Laminas\Authentication\Adapter\Exception\UnexpectedValueException');
 
         $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $objectRepository

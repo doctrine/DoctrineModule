@@ -2,10 +2,10 @@
 
 namespace DoctrineModule\Validator;
 
-use Zend\Validator\AbstractValidator;
-use Zend\Validator\Exception;
+use Laminas\Validator\AbstractValidator;
+use Laminas\Validator\Exception;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ArrayUtils;
 
 /**
  * Class that validates if objects exist in a given repository with a given list of matched fields
@@ -49,7 +49,7 @@ class ObjectExists extends AbstractValidator
      * @param array $options required keys are `object_repository`, which must be an instance of
      *                       Doctrine\Common\Persistence\ObjectRepository, and `fields`, with either
      *                       a string or an array of strings representing the fields to be matched by the validator.
-     * @throws \Zend\Validator\Exception\InvalidArgumentException
+     * @throws \Laminas\Validator\Exception\InvalidArgumentException
      */
     public function __construct(array $options)
     {
@@ -91,7 +91,7 @@ class ObjectExists extends AbstractValidator
     /**
      * Filters and validates the fields passed to the constructor
      *
-     * @throws \Zend\Validator\Exception\InvalidArgumentException
+     * @throws \Laminas\Validator\Exception\InvalidArgumentException
      * @return array
      */
     private function validateFields()
@@ -117,7 +117,7 @@ class ObjectExists extends AbstractValidator
      * @param string|array $value a field value or an array of field values if more fields have been configured to be
      *                      matched
      * @return array
-     * @throws \Zend\Validator\Exception\RuntimeException
+     * @throws \Laminas\Validator\Exception\RuntimeException
      */
     protected function cleanSearchValue($value)
     {

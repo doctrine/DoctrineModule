@@ -4,7 +4,7 @@ namespace DoctrineModuleTest\Service\Authentication;
 
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class AdapterFactoryTest extends BaseTestCase
 {

@@ -59,8 +59,8 @@ add a ``NoObjectExists`` validator to a Zend Framework form element:
     namespace Application\Form;
 
     use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
-    use Zend\Form\Form;
-    use Zend\ServiceManager\ServiceManager;
+    use Laminas\Form\Form;
+    use Laminas\ServiceManager\ServiceManager;
     use Application\Entity;
 
     class User extends Form
@@ -71,7 +71,7 @@ add a ``NoObjectExists`` validator to a Zend Framework form element:
 
             // Add an element
             $this->add([
-                'type'    => 'Zend\Form\Element\Email',
+                'type'    => 'Laminas\Form\Element\Email',
                 'name'    => 'email',
                 'options' => [
                     'label' => 'Email',
@@ -108,9 +108,9 @@ function, as shown here:
 
     namespace Application\Form;
 
-    use Zend\Form\Fieldset;
-    use Zend\InputFilter\InputFilterProviderInterface;
-    use Zend\ServiceManager\ServiceManager;
+    use Laminas\Form\Fieldset;
+    use Laminas\InputFilter\InputFilterProviderInterface;
+    use Laminas\ServiceManager\ServiceManager;
     use Application\Entity;
 
     class UserFieldset extends Fieldset implements InputFilterProviderInterface
@@ -125,7 +125,7 @@ function, as shown here:
 
             // Add an element
             $this->add([
-                'type'    => 'Zend\Form\Element\Email',
+                'type'    => 'Laminas\Form\Element\Email',
                 'name'    => 'email',
                 'options' => [
                     'label' => 'Email',
@@ -192,12 +192,12 @@ have to pass a value for every identifier your entity has.
 
 -  If you leave out the ``use_context`` option or set it to ``false``
    you have to pass an array containing the ``fields``- and
-   ``identifier``-values into ``isValid()``. When using ``Zend\Form``
+   ``identifier``-values into ``isValid()``. When using ``Laminas\Form``
    this behaviour is needed if you're using fieldsets.
 -  If you set the ``use_context`` option to ``true`` you have to pass
    the ``fields``-values as first argument and an array containing the
    ``identifier``-values as second argument into ``isValid()``. When
-   using ``Zend\Form`` without fieldsets, this behaviour would be
+   using ``Laminas\Form`` without fieldsets, this behaviour would be
    needed.
 
 **Important:** Whatever you choose, please ensure that the

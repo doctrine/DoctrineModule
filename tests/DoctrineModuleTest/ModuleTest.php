@@ -15,18 +15,18 @@ class ModuleTest extends TestCase
 {
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\Application
+     * @var PHPUnit_Framework_MockObject_MockObject|\Laminas\Mvc\Application
      */
     private $application;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\MvcEvent
+     * @var PHPUnit_Framework_MockObject_MockObject|\Laminas\Mvc\MvcEvent
      */
     private $event;
 
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager
+     * @var PHPUnit_Framework_MockObject_MockObject|\Laminas\ServiceManager\ServiceManager
      */
     private $serviceManager;
 
@@ -37,12 +37,12 @@ class ModuleTest extends TestCase
 
     protected function setUp()
     {
-        $this->application    = $this->getMockBuilder('Zend\Mvc\Application')
+        $this->application    = $this->getMockBuilder('Laminas\Mvc\Application')
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $this->event          = $this->createMock('Zend\Mvc\MvcEvent');
-        $this->serviceManager = $this->createMock('Zend\ServiceManager\ServiceManager');
+        $this->event          = $this->createMock('Laminas\Mvc\MvcEvent');
+        $this->serviceManager = $this->createMock('Laminas\ServiceManager\ServiceManager');
         $this->cli            = $this->createPartialMock('Symfony\Component\Console\Application', ['run']);
 
         $this
@@ -111,7 +111,7 @@ class ModuleTest extends TestCase
 
         $this->assertSame(
             'list - TEST - More output',
-            $module->getConsoleUsage($this->createMock('Zend\Console\Adapter\AdapterInterface'))
+            $module->getConsoleUsage($this->createMock('Laminas\Console\Adapter\AdapterInterface'))
         );
     }
 }

@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class ModuleDefinedServicesTest extends TestCase
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var \Laminas\ServiceManager\ServiceLocatorInterface
      */
     protected $serviceManager;
 
@@ -54,7 +54,7 @@ class ModuleDefinedServicesTest extends TestCase
      */
     public function testModuleInvalidService($serviceName)
     {
-        $this->expectException('Zend\ServiceManager\Exception\ServiceNotFoundException');
+        $this->expectException('Laminas\ServiceManager\Exception\ServiceNotFoundException');
 
         $this->serviceManager->get($serviceName);
     }
@@ -87,7 +87,7 @@ class ModuleDefinedServicesTest extends TestCase
             ['doctrine.foo', false],
             ['doctrine.foo.bar', false],
             ['doctrine.cache.bar', false],
-            //['doctrine.cache.zendcachestorage'],
+            //['doctrine.cache.laminascachestorage'],
         ];
     }
 

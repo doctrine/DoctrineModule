@@ -22,7 +22,7 @@ Example 1 : simple example
 
     namespace Module\Form;
 
-    use Zend\Form\Form;
+    use Laminas\Form\Form;
     use DoctrineModule\Persistence\ObjectManagerAwareInterface;
     use Doctrine\Common\Persistence\ObjectManager;
 

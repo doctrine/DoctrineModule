@@ -4,7 +4,7 @@ namespace DoctrineModuleTest\Service;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Service\EventManagerFactory;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 use DoctrineModuleTest\Service\TestAsset\DummyEventSubscriber;
 
 /**

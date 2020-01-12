@@ -6,7 +6,7 @@ use Traversable;
 use ReflectionMethod;
 use RuntimeException;
 use InvalidArgumentException;
-use Zend\Stdlib\Guard\ArrayOrTraversableGuardTrait;
+use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Inflector\Inflector;

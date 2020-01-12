@@ -5,10 +5,10 @@ namespace DoctrineModule\Options;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Zend\Authentication\Adapter\Exception;
-use Zend\Authentication\Storage\Session as SessionStorage;
-use Zend\Authentication\Storage\StorageInterface;
-use Zend\Stdlib\AbstractOptions;
+use Laminas\Authentication\Adapter\Exception;
+use Laminas\Authentication\Storage\Session as SessionStorage;
+use Laminas\Authentication\Storage\StorageInterface;
+use Laminas\Stdlib\AbstractOptions;
 
 /**
  * This options class can be consumed by five different classes:
@@ -107,7 +107,7 @@ class Authentication extends AbstractOptions
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
-     * @var \Zend\Authentication\Storage\StorageInterface|string;
+     * @var \Laminas\Authentication\Storage\StorageInterface|string;
      */
     protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
@@ -272,7 +272,7 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     * @return \Zend\Authentication\Storage\StorageInterface|string
+     * @return \Laminas\Authentication\Storage\StorageInterface|string
      */
     public function getStorage()
     {
@@ -280,7 +280,7 @@ class Authentication extends AbstractOptions
     }
 
     /**
-     * @param \Zend\Authentication\Storage\StorageInterface|string $storage
+     * @param \Laminas\Authentication\Storage\StorageInterface|string $storage
      */
     public function setStorage($storage)
     {

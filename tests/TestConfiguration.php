@@ -1,13 +1,13 @@
 <?php
 return [
     'modules' => [
-        'Zend\Cache',
-        'Zend\Form',
-        'Zend\Hydrator',
-        'Zend\Mvc\Console',
-        'Zend\Paginator',
-        'Zend\Router',
-        'Zend\Validator',
+        'Laminas\Cache',
+        'Laminas\Form',
+        'Laminas\Hydrator',
+        'Laminas\Mvc\Console',
+        'Laminas\Paginator',
+        'Laminas\Router',
+        'Laminas\Validator',
         'DoctrineModule',
     ],
     'module_listener_options' => [

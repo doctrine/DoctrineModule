@@ -425,7 +425,7 @@ Example 3 : OneToMany association
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 DoctrineModule hydrator also handles OneToMany relationships (when use
-``Zend\Form\Element\Collection`` element). Please refer to the official
+``Laminas\Form\Element\Collection`` element). Please refer to the official
 `Zend Framework 2
 documentation <http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html>`__
 to learn more about Collection.
@@ -1033,8 +1033,8 @@ without creating a new tag (and removing the old one).
     use Application\Entity\Tag;
     use Doctrine\Common\Persistence\ObjectManager;
     use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-    use Zend\Form\Fieldset;
-    use Zend\InputFilter\InputFilterProviderInterface;
+    use Laminas\Form\Fieldset;
+    use Laminas\InputFilter\InputFilterProviderInterface;
 
     class TagFieldset extends Fieldset implements InputFilterProviderInterface
     {
@@ -1046,12 +1046,12 @@ without creating a new tag (and removing the old one).
                  ->setObject(new Tag());
 
             $this->add([
-                'type' => 'Zend\Form\Element\Hidden',
+                'type' => 'Laminas\Form\Element\Hidden',
                 'name' => 'id',
             ]);
 
             $this->add([
-                'type'    => 'Zend\Form\Element\Text',
+                'type'    => 'Laminas\Form\Element\Text',
                 'name'    => 'name',
                 'options' => [
                     'label' => 'Tag',
@@ -1081,8 +1081,8 @@ And the BlogPost fieldset:
     use Application\Entity\BlogPost;
     use Doctrine\Common\Persistence\ObjectManager;
     use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-    use Zend\Form\Fieldset;
-    use Zend\InputFilter\InputFilterProviderInterface;
+    use Laminas\Form\Fieldset;
+    use Laminas\InputFilter\InputFilterProviderInterface;
 
     class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
     {
@@ -1094,13 +1094,13 @@ And the BlogPost fieldset:
                  ->setObject(new BlogPost());
 
             $this->add([
-                'type' => 'Zend\Form\Element\Text',
+                'type' => 'Laminas\Form\Element\Text',
                 'name' => 'title',
             ]);
 
             $tagFieldset = new TagFieldset($objectManager);
             $this->add([
-                'type'    => 'Zend\Form\Element\Collection',
+                'type'    => 'Laminas\Form\Element\Collection',
                 'name'    => 'tags',
                 'options' => [
                     'count'          => 2,
@@ -1120,7 +1120,7 @@ And the BlogPost fieldset:
     }
 
 Plain and easy. The blog post is just a simple fieldset with an element
-type of ``Zend\Form\Element\Collection`` that represents the ManyToOne
+type of ``Laminas\Form\Element\Collection`` that represents the ManyToOne
 association.
 
 The form
@@ -1142,7 +1142,7 @@ Here is the create form:
 
     use Doctrine\Common\Persistence\ObjectManager;
     use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-    use Zend\Form\Form;
+    use Laminas\Form\Form;
 
     class CreateBlogPostForm extends Form
     {
@@ -1172,7 +1172,7 @@ And the update form:
 
     use Doctrine\Common\Persistence\ObjectManager;
     use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-    use Zend\Form\Form;
+    use Laminas\Form\Form;
 
     class UpdateBlogPostForm extends Form
     {
@@ -1332,8 +1332,8 @@ First the User fieldset :
     use Application\Entity\User;
     use Doctrine\Common\Persistence\ObjectManager;
     use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-    use Zend\Form\Fieldset;
-    use Zend\InputFilter\InputFilterProviderInterface;
+    use Laminas\Form\Fieldset;
+    use Laminas\InputFilter\InputFilterProviderInterface;
 
     class UserFieldset extends Fieldset implements InputFilterProviderInterface
     {
@@ -1345,7 +1345,7 @@ First the User fieldset :
                  ->setObject(new User());
 
             $this->add([
-                'type'    => 'Zend\Form\Element\Text',
+                'type'    => 'Laminas\Form\Element\Text',
                 'name'    => 'name',
                 'options' => [
                     'label' => 'Your name',
@@ -1380,8 +1380,8 @@ And then the City fieldset :
     use Application\Entity\City;
     use Doctrine\Common\Persistence\ObjectManager;
     use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-    use Zend\Form\Fieldset;
-    use Zend\InputFilter\InputFilterProviderInterface;
+    use Laminas\Form\Fieldset;
+    use Laminas\InputFilter\InputFilterProviderInterface;
 
     class CityFieldset extends Fieldset implements InputFilterProviderInterface
     {
@@ -1393,7 +1393,7 @@ And then the City fieldset :
                  ->setObject(new City());
 
             $this->add([
-                'type'    => 'Zend\Form\Element\Text',
+                'type'    => 'Laminas\Form\Element\Text',
                 'name'    => 'name',
                 'options' => [
                     'label' => 'Name of your city',
@@ -1404,7 +1404,7 @@ And then the City fieldset :
             ]);
 
             $this->add([
-                'type'    => 'Zend\Form\Element\Text',
+                'type'    => 'Laminas\Form\Element\Text',
                 'name'    => 'postCode',
                 'options' => [
                     'label' => 'Postcode of your city',
@@ -1439,7 +1439,7 @@ Naively, this form would be like this :
 
     use Doctrine\Common\Persistence\ObjectManager;
     use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-    use Zend\Form\Form;
+    use Laminas\Form\Form;
 
     class EditNameForm extends Form
     {
@@ -1504,8 +1504,8 @@ action will look something like this :
     }
 
 This looks good, doesn't it? However, if we check the queries that are
-made (for instance using the awesome `ZendDeveloperTools
-module <https://github.com/zendframework/zend-developer-tools>`__, we
+made (for instance using the awesome `Laminas\DeveloperTools
+module <https://github.com/laminas/laminas-developer-tools>`__, we
 will see that a request is made to fetch data for the City relationship
 of the user, and we hence have a completely useless database call, as
 this information is not rendered by the form.
@@ -1545,7 +1545,7 @@ in a form, remove them. Here is the fix EditUserForm :
 
     use Doctrine\Common\Persistence\ObjectManager;
     use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-    use Zend\Form\Form;
+    use Laminas\Form\Form;
 
     class EditNameForm extends Form
     {
