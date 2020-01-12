@@ -18,7 +18,7 @@ use and a `property` of the class to use as the Label.
 ```php
 namespace Module\Form;
 
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 

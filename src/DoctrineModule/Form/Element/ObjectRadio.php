@@ -3,8 +3,8 @@
 namespace DoctrineModule\Form\Element;
 
 use DoctrineModule\Form\Element\Proxy;
-use Zend\Form\Element\Radio as RadioElement;
-use Zend\Form\Form;
+use Laminas\Form\Element\Radio as RadioElement;
+use Laminas\Form\Form;
 
 class ObjectRadio extends RadioElement
 {

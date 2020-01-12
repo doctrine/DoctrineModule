@@ -1,7 +1,7 @@
 <?php
 namespace DoctrineModuleTest\Stdlib\Hydrator\Asset;
 
-use Zend\Hydrator\Strategy\StrategyInterface;
+use Laminas\Hydrator\Strategy\StrategyInterface;
 
 class SimpleStrategy implements StrategyInterface
 {

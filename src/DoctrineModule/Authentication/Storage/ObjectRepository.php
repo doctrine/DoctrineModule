@@ -3,7 +3,7 @@
 namespace DoctrineModule\Authentication\Storage;
 
 use DoctrineModule\Options\Authentication as AuthenticationOptions;
-use Zend\Authentication\Storage\StorageInterface;
+use Laminas\Authentication\Storage\StorageInterface;
 
 /**
  * This class implements StorageInterface and allow to save the result of an authentication against an object repository

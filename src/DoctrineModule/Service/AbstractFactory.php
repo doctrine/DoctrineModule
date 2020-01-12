@@ -4,7 +4,7 @@ namespace DoctrineModule\Service;
 
 use Interop\Container\ContainerInterface;
 use RuntimeException;
-use Zend\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\FactoryInterface;
 
 /**
  * Base ServiceManager factory to be extended
@@ -28,7 +28,7 @@ abstract class AbstractFactory implements FactoryInterface
     protected $name;
 
     /**
-     * @var \Zend\Stdlib\AbstractOptions
+     * @var \Laminas\Stdlib\AbstractOptions
      */
     protected $options;
 
@@ -64,7 +64,7 @@ abstract class AbstractFactory implements FactoryInterface
      * @param  ContainerInterface $container
      * @param  string             $key
      * @param  null|string        $name
-     * @return \Zend\Stdlib\AbstractOptions
+     * @return \Laminas\Stdlib\AbstractOptions
      * @throws \RuntimeException
      */
     public function getOptions(ContainerInterface $container, $key, $name = null)

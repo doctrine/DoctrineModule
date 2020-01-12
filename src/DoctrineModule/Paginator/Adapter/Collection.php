@@ -3,7 +3,7 @@
 namespace DoctrineModule\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
-use Zend\Paginator\Adapter\AdapterInterface;
+use Laminas\Paginator\Adapter\AdapterInterface;
 
 /**
  * Base module for Doctrine ORM.

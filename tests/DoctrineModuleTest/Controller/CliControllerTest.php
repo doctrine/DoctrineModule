@@ -4,8 +4,8 @@ namespace DoctrineModuleTest\Controller;
 
 use DoctrineModuleTest\ServiceManagerFactory;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Zend\Console\Request;
-use Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
+use Laminas\Console\Request;
+use Laminas\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase;
 use DoctrineModuleTest\Controller\Mock\FailingCommand;
 
 /**

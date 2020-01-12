@@ -2,9 +2,9 @@
 
 namespace DoctrineModule\Component\Console\Input;
 
+use Laminas\Console\Request;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputDefinition;
-use Zend\Console\Request;
 
 /**
  * RequestInput represents an input provided as an console request.
@@ -17,7 +17,7 @@ class RequestInput extends ArgvInput
     /**
      * Constructor
      *
-     * @param \Zend\Console\Request $request
+     * @param Request $request
      * @param \Symfony\Component\Console\Input\InputDefinition $definition
      */
     public function __construct(Request $request, InputDefinition $definition = null)
