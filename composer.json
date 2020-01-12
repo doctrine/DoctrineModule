@@ -1,15 +1,15 @@
 {
-    "name":        "doctrine/doctrine-module",
+    "name": "doctrine/doctrine-module",
     "description": "Laminas Module that provides Doctrine basic functionality required for ORM and ODM modules",
-    "type":        "library",
-    "license":     "MIT",
-    "homepage":    "http://www.doctrine-project.org/",
-    "keywords":    [
+    "type": "library",
+    "license": "MIT",
+    "homepage": "http://www.doctrine-project.org/",
+    "keywords": [
         "doctrine",
         "module",
         "zf"
     ],
-    "authors":     [
+    "authors": [
         {
             "name": "Kyle Spraggs",
             "email": "theman@spiffyjr.me",
@@ -25,9 +25,14 @@
             "email": "guilhermeblanco@hotmail.com"
         },
         {
-            "name": "Michaël Gallego",
+            "name": "Micha\u00ebl Gallego",
             "email": "mic.gallego@gmail.com",
             "homepage": "http://www.michaelgallego.fr"
+        },
+        {
+            "name": "Tom H Anderson",
+            "email": "tom.h.anderson@gmail.com",
+            "homepage": "https://tomhanderson.com"
         }
     ],
     "extra": {
@@ -43,35 +48,36 @@
         }
     },
     "require": {
-        "php":                               "^7.1",
-        "doctrine/common":                   "^2.8",
-        "doctrine/cache":                    "^1.7",
-        "laminas/laminas-authentication":    "^2.5.3",
-        "laminas/laminas-cache":             "^2.7.1",
-        "laminas/laminas-form":              "^2.11",
-        "laminas/laminas-hydrator":          "^2.3",
-        "laminas/laminas-mvc":               "^3.1",
-        "laminas/laminas-paginator":         "^2.8",
-        "laminas/laminas-servicemanager":    "^3.3",
-        "laminas/laminas-stdlib":            "^3.1",
-        "laminas/laminas-validator":         "^2.10",
-        "symfony/console":                   "^3.3 || ^4.0 || ^5.0"
+        "php": "^7.1",
+        "doctrine/common": "^2.8",
+        "doctrine/cache": "^1.7",
+        "laminas/laminas-authentication": "^2.5.3",
+        "laminas/laminas-cache": "^2.7.1",
+        "laminas/laminas-form": "^2.11",
+        "laminas/laminas-hydrator": "^2.3",
+        "laminas/laminas-mvc": "^3.1",
+        "laminas/laminas-paginator": "^2.8",
+        "laminas/laminas-servicemanager": "^3.3",
+        "laminas/laminas-stdlib": "^3.1",
+        "laminas/laminas-validator": "^2.10",
+        "symfony/console": "^3.3 || ^4.0 || ^5.0",
+        "laminas/laminas-dependency-plugin": "^1.0"
     },
     "require-dev": {
-        "laminas/laminas-i18n":             "^2.7",
-        "laminas/laminas-log":              "^2.9",
-        "laminas/laminas-modulemanager":    "^2.8",
-        "laminas/laminas-mvc-console":      "^1.1.11",
-        "laminas/laminas-serializer":       "^2.8",
-        "laminas/laminas-session":          "^2.8",
-        "laminas/laminas-test":             "^3.1.1",
-        "phpunit/phpunit":                  "^7.5.2",
-        "predis/predis":                    "^1.1",
-        "squizlabs/php_codesniffer":        "^2.7"
+        "laminas/laminas-i18n": "^2.7",
+        "laminas/laminas-log": "^2.9",
+        "laminas/laminas-modulemanager": "^2.8",
+        "laminas/laminas-mvc-console": "^1.1.11",
+        "laminas/laminas-serializer": "^2.8",
+        "laminas/laminas-session": "^2.8",
+        "laminas/laminas-test": "^3.1.1",
+        "phpunit/phpunit": "^7.5.2",
+        "predis/predis": "^1.1",
+        "squizlabs/php_codesniffer": "^2.7"
     },
     "suggest": {
-        "doctrine/data-fixtures":         "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
-        "laminas/laminas-mvc-console":    "^1.1.11 if you want to use the ZF3 console libraries"
+        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
+        "laminas/laminas-mvc-console": "^1.1.11 if you want to use the ZF3 console libraries"
     },
     "autoload": {
         "psr-0": {
