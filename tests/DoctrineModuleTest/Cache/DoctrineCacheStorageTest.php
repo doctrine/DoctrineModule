@@ -4,9 +4,9 @@ namespace DoctrineModuleTest\Cache;
 
 use DoctrineModule\Cache\DoctrineCacheStorage;
 use Doctrine\Common\Cache\ArrayCache;
-use Zend\Cache\Storage\Adapter\AdapterOptions;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use PHPUnit\Framework\TestCase;
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Stdlib\ErrorHandler;
 
 /**
  * Tests for the cache bridge
@@ -28,7 +28,7 @@ class DoctrineCacheStorageTest extends TestCase
     /**
      * The storage adapter
      *
-     * @var \Zend\Cache\Storage\StorageInterface
+     * @var \Laminas\Cache\Storage\StorageInterface
      */
     protected $storage;
 
@@ -46,12 +46,12 @@ class DoctrineCacheStorageTest extends TestCase
         $this->storage = new DoctrineCacheStorage($this->options, new ArrayCache());
 
         $this->assertInstanceOf(
-            'Zend\Cache\Storage\StorageInterface',
+            'Laminas\Cache\Storage\StorageInterface',
             $this->storage,
             'Storage adapter instance is needed for tests'
         );
         $this->assertInstanceOf(
-            'Zend\Cache\Storage\Adapter\AdapterOptions',
+            'Laminas\Cache\Storage\Adapter\AdapterOptions',
             $this->options,
             'Options instance is needed for tests'
         );
@@ -131,7 +131,7 @@ class DoctrineCacheStorageTest extends TestCase
     public function testGetCapabilities()
     {
         $capabilities = $this->storage->getCapabilities();
-        $this->assertInstanceOf('Zend\Cache\Storage\Capabilities', $capabilities);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Capabilities', $capabilities);
     }
 
     public function testDatatypesCapability()

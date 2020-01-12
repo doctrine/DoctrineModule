@@ -4,8 +4,8 @@ namespace DoctrineModule\Controller;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zend\Mvc\Console\View\ViewModel;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Console\View\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Component\Console\Input\RequestInput;
 
 /**

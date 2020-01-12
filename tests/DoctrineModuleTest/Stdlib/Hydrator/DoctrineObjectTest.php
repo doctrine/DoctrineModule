@@ -16,8 +16,8 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
 use DoctrineModule\Stdlib\Hydrator\Filter;
 use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
-use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
-use Zend\Hydrator\Strategy\StrategyInterface;
+use Laminas\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
+use Laminas\Hydrator\Strategy\StrategyInterface;
 
 class DoctrineObjectTest extends BaseTestCase
 {

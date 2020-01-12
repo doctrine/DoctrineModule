@@ -2,7 +2,7 @@
 
 namespace DoctrineModule\Stdlib\Hydrator\Filter;
 
-use Zend\Hydrator\Filter\FilterInterface;
+use Laminas\Hydrator\Filter\FilterInterface;
 
 /**
  * Provides a filter to restrict returned fields by whitelisting or

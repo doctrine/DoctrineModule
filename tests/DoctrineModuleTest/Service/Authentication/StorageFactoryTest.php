@@ -4,7 +4,7 @@ namespace DoctrineModuleTest\Service\Authentication;
 
 use DoctrineModule\Service\Authentication\StorageFactory;
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class StorageFactoryTest extends BaseTestCase
 {
@@ -18,7 +18,7 @@ class StorageFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',
-            'Zend\Authentication\Storage\Session'
+            'Laminas\Authentication\Storage\Session'
         );
         $serviceManager->setService(
             'config',
@@ -43,8 +43,8 @@ class StorageFactoryTest extends BaseTestCase
     public function testCanInstantiateStorageFromServiceLocator()
     {
         $factory        = new StorageFactory('testFactory');
-        $serviceManager = $this->createMock('Zend\ServiceManager\ServiceManager');
-        $storage        = $this->createMock('Zend\Authentication\Storage\StorageInterface');
+        $serviceManager = $this->createMock('Laminas\ServiceManager\ServiceManager');
+        $storage        = $this->createMock('Laminas\Authentication\Storage\StorageInterface');
         $config         = [
             'doctrine' => [
                 'authentication' => [

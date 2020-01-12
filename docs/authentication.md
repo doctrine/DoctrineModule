@@ -1,6 +1,6 @@
 # Authentication
 
-Authentication through Doctrine is fully supported by DoctrineModule through an authentication adapter, and a specific storage implementation that relies on the database. Most of the time, those classes will be used in conjunction with `Zend\Authentication\AuthenticationService` class.
+Authentication through Doctrine is fully supported by DoctrineModule through an authentication adapter, and a specific storage implementation that relies on the database. Most of the time, those classes will be used in conjunction with `Laminas\Authentication\AuthenticationService` class.
 
 ### Simple example
 
@@ -8,7 +8,7 @@ In order to authenticate a user (or anything else) against Doctrine, the followi
 
 1. Set configuration that contains options about the entity that is authenticated (credential property, identity property…). It is not necessary to create a separate authentication adapter, this will be automatically created by the DoctrineModule based on the defined configuration.
 2. Create a storage adapter. If the authentication succeeds, the identifier of the entity will be automatically stored in session.
-3. Create a `Zend\Authentication\AuthenticationService`instance that contains both the authentication adapter and the storage adapter.
+3. Create a `Laminas\Authentication\AuthenticationService`instance that contains both the authentication adapter and the storage adapter.
 
 #### Authentication factory
 
@@ -97,12 +97,12 @@ public static function verifyCredential(User $user, $inputPassword)
 
 #### Creating the AuthenticationService
 
-Now that we have configured the authentication, we still need to tell Zend Framework how to construct a correct ``Zend\Authentication\AuthenticationService`` instance. For this, add the following code in your Module.php class:
+Now that we have configured the authentication, we still need to tell Zend Framework how to construct a correct ``Laminas\Authentication\AuthenticationService`` instance. For this, add the following code in your Module.php class:
 
 ```php
 namespace Application;
 
-use Zend\Authentication\AuthenticationService;
+use Laminas\Authentication\AuthenticationService;
 
 class Module
 {
@@ -110,7 +110,7 @@ class Module
     {
         return [
             'factories' => [
-                'Zend\Authentication\AuthenticationService' => function ($serviceManager) {
+                'Laminas\Authentication\AuthenticationService' => function ($serviceManager) {
                     // If you are using DoctrineORMModule:
                     return $serviceManager->get('doctrine.authenticationservice.orm_default');
 
@@ -123,16 +123,16 @@ class Module
 }
 ```
 
-Please note that I am using here a ``Zend\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Zend\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 [Identity view helper](https://framework.zend.com/manual/2.4/en/modules/zend.view.helpers.identity.html).
+Please note that I am using here a ``Laminas\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Laminas\Authentication\AuthenticationService`` will allow it to be recognised by the ZF2 [Identity view helper](https://framework.zend.com/manual/2.4/en/modules/zend.view.helpers.identity.html).
 
-In ZF3, you can inject the ``Zend\Authentication\AuthenticationService`` into your controller factories as in the example below:
+In ZF3, you can inject the ``Laminas\Authentication\AuthenticationService`` into your controller factories as in the example below:
 
 ```php
 <?php
 namespace Application\Factory\Controller;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ApplicationControllerFactory implements FactoryInterface
 {
@@ -146,7 +146,7 @@ class ApplicationControllerFactory implements FactoryInterface
 
 #### Using the AuthenticationService
 
-Now that we have defined how to create a `Zend\Authentication\AuthenticationService` object we can use it in our code. For more information about Zend authentication mechanisms please read [the ZF 2 Authentication's documentation](http://framework.zend.com/manual/2.4/en/modules/zend.authentication.intro.html).
+Now that we have defined how to create a `Laminas\Authentication\AuthenticationService` object we can use it in our code. For more information about Zend authentication mechanisms please read [the ZF 2 Authentication's documentation](http://framework.zend.com/manual/2.4/en/modules/zend.authentication.intro.html).
 
 Here is an example of how we could use it from a controller action (we stripped any Form things for simplicity):
 
@@ -156,7 +156,7 @@ public function loginAction()
     $data = $this->getRequest()->getPost();
 
     // If you used another name for the authentication service, change it here
-    $authService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
+    $authService = $this->getServiceLocator()->get('Laminas\Authentication\AuthenticationService');
 
     $adapter = $authService->getAdapter();
     $adapter->setIdentityValue($data['login']);
@@ -219,7 +219,7 @@ $authService->getStorage()->write($identity);
 The storage automatically extracts ONLY the identifier values and only store this in session (this avoid to store in session a serialized entity, which is a bad practice). Later, when you want to retrieve the logged user :
 
 ```php
-$authenticationService = $services->get('Zend\Authentication\AuthenticationService');
+$authenticationService = $services->get('Laminas\Authentication\AuthenticationService');
 $authenticatedUser = $authenticationService->getIdentity();
 ```
 

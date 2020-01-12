@@ -3,12 +3,12 @@
 namespace DoctrineModule;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Zend\ModuleManager\Feature\InitProviderInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\ModuleManagerInterface;
-use Zend\EventManager\EventInterface;
-use Zend\Console\Adapter\AdapterInterface as Console;
+use Laminas\ModuleManager\Feature\InitProviderInterface;
+use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
+use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+use Laminas\ModuleManager\ModuleManagerInterface;
+use Laminas\EventManager\EventInterface;
+use Laminas\Console\Adapter\AdapterInterface as Console;
 
 use Symfony\Component\Console\Input\StringInput;
 use DoctrineModule\Component\Console\Output\PropertyOutput;
@@ -25,7 +25,7 @@ use DoctrineModule\Component\Console\Output\PropertyOutput;
 class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var \Laminas\ServiceManager\ServiceLocatorInterface
      */
     private $serviceManager;
 

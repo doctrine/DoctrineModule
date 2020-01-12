@@ -21,8 +21,8 @@ and attaching them to the provided CLI application as following:
 ```php
 namespace My;
 
-use Zend\EventManager\EventInterface;
-use Zend\ModuleManager\ModuleManagerInterface;
+use Laminas\EventManager\EventInterface;
+use Laminas\ModuleManager\ModuleManagerInterface;
 
 class Module
 {

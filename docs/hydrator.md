@@ -399,7 +399,7 @@ echo $blogPost->getUser()->getPassword(); // prints 2BorN0t2B
 
 #### Example 3 : OneToMany association
 
-DoctrineModule hydrator also handles OneToMany relationships (when use `Zend\Form\Element\Collection` element). Please
+DoctrineModule hydrator also handles OneToMany relationships (when use `Laminas\Form\Element\Collection` element). Please
 refer to the official [Zend Framework 2 documentation](http://framework.zend.com/manual/2.0/en/modules/zend.form.collections.html) to learn more about Collection.
 
 > Note: internally, for a given collection, if an array contains identifiers, the hydrator automatically fetches the
@@ -779,7 +779,7 @@ echo $data['foo']; // prints 'bar'
 It now only prints "bar", which shows clearly that the getter has not been called.
 
 
-### A complete example using Zend\Form
+### A complete example using Laminas\Form
 
 Now that we understand how the hydrator works, let's see how it integrates into the Zend Framework's Form component.
 We are going to use a simple example with, once again, a BlogPost and a Tag entities. We will see how we can create the
@@ -952,8 +952,8 @@ namespace Application\Form;
 use Application\Entity\Tag;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Laminas\Form\Fieldset;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
 class TagFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -965,12 +965,12 @@ class TagFieldset extends Fieldset implements InputFilterProviderInterface
              ->setObject(new Tag());
 
         $this->add([
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'name' => 'id',
         ]);
 
         $this->add([
-            'type'    => 'Zend\Form\Element\Text',
+            'type'    => 'Laminas\Form\Element\Text',
             'name'    => 'name',
             'options' => [
                 'label' => 'Tag',
@@ -1000,8 +1000,8 @@ namespace Application\Form;
 use Application\Entity\BlogPost;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Laminas\Form\Fieldset;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
 class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -1013,13 +1013,13 @@ class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
              ->setObject(new BlogPost());
 
         $this->add([
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'name' => 'title',
         ]);
 
         $tagFieldset = new TagFieldset($objectManager);
         $this->add([
-            'type'    => 'Zend\Form\Element\Collection',
+            'type'    => 'Laminas\Form\Element\Collection',
             'name'    => 'tags',
             'options' => [
                 'count'          => 2,
@@ -1039,7 +1039,7 @@ class BlogPostFieldset extends Fieldset implements InputFilterProviderInterface
 }
 ```
 
-Plain and easy. The blog post is just a simple fieldset with an element type of ``Zend\Form\Element\Collection``
+Plain and easy. The blog post is just a simple fieldset with an element type of ``Laminas\Form\Element\Collection``
 that represents the ManyToOne association.
 
 #### The form
@@ -1056,7 +1056,7 @@ namespace Application\Form;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 class CreateBlogPostForm extends Form
 {
@@ -1086,7 +1086,7 @@ namespace Application\Form;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 class UpdateBlogPostForm extends Form
 {
@@ -1235,8 +1235,8 @@ namespace Application\Form;
 use Application\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Laminas\Form\Fieldset;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
 class UserFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -1248,7 +1248,7 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
              ->setObject(new User());
 
         $this->add([
-            'type'    => 'Zend\Form\Element\Text',
+            'type'    => 'Laminas\Form\Element\Text',
             'name'    => 'name',
             'options' => [
                 'label' => 'Your name',
@@ -1283,8 +1283,8 @@ namespace Application\Form;
 use Application\Entity\City;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Laminas\Form\Fieldset;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
 class CityFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -1296,7 +1296,7 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
              ->setObject(new City());
 
         $this->add([
-            'type'    => 'Zend\Form\Element\Text',
+            'type'    => 'Laminas\Form\Element\Text',
             'name'    => 'name',
             'options' => [
                 'label' => 'Name of your city',
@@ -1307,7 +1307,7 @@ class CityFieldset extends Fieldset implements InputFilterProviderInterface
         ]);
 
         $this->add([
-            'type'    => 'Zend\Form\Element\Text',
+            'type'    => 'Laminas\Form\Element\Text',
             'name'    => 'postCode',
             'options' => [
                 'label' => 'Postcode of your city',
@@ -1341,7 +1341,7 @@ namespace Application\Form;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 class EditNameForm extends Form
 {
@@ -1404,7 +1404,7 @@ public function editNameAction()
 ```
 
 This looks good, doesn't it? However, if we check the queries that are made (for instance using the awesome
-[ZendDeveloperTools module](https://github.com/zendframework/zend-developer-tools), we will see that a request is
+[Laminas\DeveloperTools module](https://github.com/laminas/laminas-developer-tools), we will see that a request is
 made to fetch data for the City relationship of the user, and we hence have a completely useless database call,
 as this information is not rendered by the form.
 
@@ -1428,7 +1428,7 @@ namespace Application\Form;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 class EditNameForm extends Form
 {
