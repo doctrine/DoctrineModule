@@ -13,16 +13,10 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 7.1
-      env:
-        - DEPS=lowest
-        - CS_CHECK=true
-    - php: 7.1
-      env:
-        - DEPS=latest
     - php: 7.2
       env:
         - DEPS=lowest
+        - CS_CHECK=true
     - php: 7.2
       env:
         - DEPS=latest
