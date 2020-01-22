@@ -3,8 +3,8 @@
 namespace DoctrineModuleTest\Service;
 
 use DoctrineModule\Service\DriverFactory;
+use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * Base test case to be used when a service manager instance is required

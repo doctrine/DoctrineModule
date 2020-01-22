@@ -6,8 +6,8 @@ use Doctrine\Common\Cache\CacheProvider;
 use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Doctrine\Common\Cache;
-use DoctrineModule\Cache\ZendStorageCache;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use DoctrineModule\Cache\LaminasStorageCache;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Cache ServiceManager factory
@@ -49,7 +49,7 @@ class CacheFactory extends AbstractFactory
                     $cache = new $class($options->getDirectory());
                     break;
 
-                case ZendStorageCache::class:
+                case LaminasStorageCache::class:
                 case Cache\PredisCache::class:
                     $cache = new $class($instance);
                     break;

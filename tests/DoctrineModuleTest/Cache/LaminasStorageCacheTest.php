@@ -2,9 +2,9 @@
 
 namespace DoctrineModuleTest\Cache;
 
-use DoctrineModule\Cache\ZendStorageCache;
+use DoctrineModule\Cache\LaminasStorageCache;
 use Doctrine\Common\Cache\Cache;
-use Zend\Cache\Storage\Adapter\Memory;
+use Laminas\Cache\Storage\Adapter\Memory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,14 +14,14 @@ use PHPUnit\Framework\TestCase;
  * @link    http://www.doctrine-project.org/
  * @author  Marco Pivetta <ocramius@gmail.com>
  */
-class ZendStorageCacheTest extends TestCase
+class LaminasStorageCacheTest extends TestCase
 {
     /**
-     * @return ZendStorageCache
+     * @return LaminasStorageCache
      */
     protected function getCacheDriver()
     {
-        return new ZendStorageCache(new Memory());
+        return new LaminasStorageCache(new Memory());
     }
 
     public function testBasics()

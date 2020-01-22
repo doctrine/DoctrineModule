@@ -9,9 +9,9 @@ use Doctrine\Common\Inflector\Inflector;
 use InvalidArgumentException;
 use RuntimeException;
 use Traversable;
-use Zend\Stdlib\ArrayUtils;
-use Zend\Hydrator\AbstractHydrator;
-use Zend\Hydrator\Filter\FilterProviderInterface;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Hydrator\AbstractHydrator;
+use Laminas\Hydrator\Filter\FilterProviderInterface;
 
 /**
  * This hydrator has been completely refactored for DoctrineModule 0.7.0. It provides an easy and powerful way

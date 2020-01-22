@@ -1,7 +1,7 @@
 <?php
 
-use Zend\Mvc\Application;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Mvc\Application;
+use Laminas\Stdlib\ArrayUtils;
 
 ini_set('display_errors', true);
 chdir(__DIR__);

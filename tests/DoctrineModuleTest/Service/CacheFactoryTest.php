@@ -5,7 +5,7 @@ namespace DoctrineModuleTest\Service;
 use Doctrine\Common\Cache\ChainCache;
 use DoctrineModule\Service\CacheFactory;
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Test for {@see \DoctrineModule\Service\CacheFactory}
@@ -45,7 +45,7 @@ class CacheFactoryTest extends BaseTestCase
      * @covers \DoctrineModule\Service\CacheFactory::createService
      * @group 547
      */
-    public function testCreateZendCache()
+    public function testCreateLaminasCache()
     {
         $factory        = new CacheFactory('phpunit');
         $serviceManager = new ServiceManager();
@@ -55,14 +55,14 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'phpunit' => [
-                            'class' => 'DoctrineModule\Cache\ZendStorageCache',
-                            'instance' => 'my-zend-cache',
+                            'class' => 'DoctrineModule\Cache\LaminasStorageCache',
+                            'instance' => 'my-laminas-cache',
                             'namespace' => 'DoctrineModule',
                         ],
                     ],
                 ],
                 'caches' => [
-                    'my-zend-cache' => [
+                    'my-laminas-cache' => [
                         'adapter' => [
                             'name' => 'blackhole',
                         ],
@@ -70,11 +70,11 @@ class CacheFactoryTest extends BaseTestCase
                 ],
             ]
         );
-        $serviceManager->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
+        $serviceManager->addAbstractFactory('Laminas\Cache\Service\StorageCacheAbstractServiceFactory');
 
         $cache = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('DoctrineModule\Cache\ZendStorageCache', $cache);
+        $this->assertInstanceOf('DoctrineModule\Cache\LaminasStorageCache', $cache);
     }
 
     public function testCreatePredisCache()

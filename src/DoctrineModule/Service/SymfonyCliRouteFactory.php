@@ -4,8 +4,8 @@ namespace DoctrineModule\Service;
 
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory responsible of instantiating {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}

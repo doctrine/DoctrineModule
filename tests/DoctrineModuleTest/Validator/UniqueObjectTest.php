@@ -157,7 +157,7 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testThrowsAnExceptionOnUsedButMissingContext()
     {
-        $this->expectException(\Zend\Validator\Exception\RuntimeException::class);
+        $this->expectException(\Laminas\Validator\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Expected context to be an array but is null');
 
         $match = new stdClass();
@@ -182,7 +182,7 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testThrowsAnExceptionOnMissingIdentifier()
     {
-        $this->expectException(\Zend\Validator\Exception\RuntimeException::class);
+        $this->expectException(\Laminas\Validator\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Expected context to contain id');
 
         $match = new stdClass();
@@ -220,7 +220,7 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testThrowsAnExceptionOnMissingIdentifierInContext()
     {
-        $this->expectException(\Zend\Validator\Exception\RuntimeException::class);
+        $this->expectException(\Laminas\Validator\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Expected context to contain id');
 
         $match = new stdClass();
@@ -259,7 +259,7 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testThrowsAnExceptionOnMissingObjectManager()
     {
-        $this->expectException(\Zend\Validator\Exception\InvalidArgumentException::class);
+        $this->expectException(\Laminas\Validator\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "object_manager" is required and must be an instance of Doctrine\\Common\\Persistence\\ObjectManager, nothing given');
 
         $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
@@ -272,7 +272,7 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testThrowsAnExceptionOnWrongObjectManager()
     {
-        $this->expectException(\Zend\Validator\Exception\InvalidArgumentException::class);
+        $this->expectException(\Laminas\Validator\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "object_manager" is required and must be an instance of Doctrine\\Common\\Persistence\\ObjectManager, stdClass given');
 
         $objectManager = new stdClass();

@@ -1,7 +1,7 @@
 Validator
 =========
 
-DoctrineModule provides three validators that work out the box: `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` which implements a check if an entity exists or does not exists in the database, respectively, and `DoctrineModule\Validator\UniqueObject` which implements a check if a value is only used in one object.  They behave like any other standard Zend validator.
+DoctrineModule provides three validators that work out the box: `DoctrineModule\Validator\ObjectExists` and `DoctrineModule\Validator\NoObjectExists` which implements a check if an entity exists or does not exists in the database, respectively, and `DoctrineModule\Validator\UniqueObject` which implements a check if a value is only used in one object.  They behave like any other standard Laminas validator.
 
 All three validators accept the following options :
 
@@ -35,16 +35,16 @@ var_dump($validator->isValid(['email' => 'test@example.com'])); // dumps 'true' 
 ```
 
 
-### Use together with Zend Framework 2 forms
+### Use together with Laminas forms
 
-Of course, validators are especially useful when paired with forms.  To add a `NoObjectExists` validator to a Zend Framework form element:
+Of course, validators are especially useful when paired with forms.  To add a `NoObjectExists` validator to a Laminas form element:
 
 ```php
 namespace Application\Form;
 
 use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
-use Zend\Form\Form;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Form\Form;
+use Laminas\ServiceManager\ServiceManager;
 use Application\Entity;
 
 class User extends Form
@@ -55,7 +55,7 @@ class User extends Form
 
         // Add an element
         $this->add([
-            'type'    => 'Zend\Form\Element\Email',
+            'type'    => 'Laminas\Form\Element\Email',
             'name'    => 'email',
             'options' => [
                 'label' => 'Email',
@@ -90,9 +90,9 @@ If you are using fieldsets you can directly add the validator using the array no
 ```php
 namespace Application\Form;
 
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Form\Fieldset;
+use Laminas\InputFilter\InputFilterProviderInterface;
+use Laminas\ServiceManager\ServiceManager;
 use Application\Entity;
 
 class UserFieldset extends Fieldset implements InputFilterProviderInterface
@@ -107,7 +107,7 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 
         // Add an element
         $this->add([
-            'type'    => 'Zend\Form\Element\Email',
+            'type'    => 'Laminas\Form\Element\Email',
             'name'    => 'email',
             'options' => [
                 'label' => 'Email',
@@ -170,7 +170,7 @@ $objectExistsValidator = new \DoctrineModule\Validator\ObjectExists([
 
 There are two things you have to think about when using `DoctrineModule\Validator\UniqueObject`;  As mentioned above you have to pass an ObjectManager as `object_manager` option and second you have to pass a value for every identifier your entity has.
 
-* If you leave out the `use_context` option or set it to `false` you have to pass an array containing the `fields`- and `identifier`-values into `isValid()`. When using `Zend\Form` this behaviour is needed if you're using fieldsets.
-* If you set the `use_context` option to `true` you have to pass the `fields`-values as first argument and an array containing the `identifier`-values as second argument into `isValid()`. When using `Zend\Form` without fieldsets, this behaviour would be needed.
+* If you leave out the `use_context` option or set it to `false` you have to pass an array containing the `fields`- and `identifier`-values into `isValid()`. When using `Laminas\Form` this behaviour is needed if you're using fieldsets.
+* If you set the `use_context` option to `true` you have to pass the `fields`-values as first argument and an array containing the `identifier`-values as second argument into `isValid()`. When using `Laminas\Form` without fieldsets, this behaviour would be needed.
 
 __Important:__ Whatever you choose, please ensure that the `identifier`-values are named by the field-names, not by the database-column.

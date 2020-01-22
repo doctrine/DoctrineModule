@@ -13,7 +13,7 @@ Here is how you can use the DoctrineModule paginator adapter :
 ```php
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Paginator\Adapter\Collection as CollectionAdapter;
-use Zend\Paginator\Paginator;
+use Laminas\Paginator\Paginator;
 
 // Create a Doctrine 2 Collection
 $doctrineCollection = new ArrayCollection(range(1, 101));
@@ -26,10 +26,10 @@ $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
           ->setItemCountPerPage(5);
 
-// Pass it to the view, and use it like a "standard" Zend paginator
+// Pass it to the view, and use it like a "standard" Laminas paginator
 ```
 
-For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html).
+For more information about Laminas Paginator, please read the [Laminas Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html).
 
 ### Selectable adapter
 
@@ -42,7 +42,7 @@ You can use it without any existing Criteria object:
 
 ```php
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
-use Zend\Paginator\Paginator;
+use Laminas\Paginator\Paginator;
 
 // Create the adapter
 $adapter = new SelectableAdapter($objectRepository); // An object repository implements Selectable
@@ -52,7 +52,7 @@ $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
           ->setItemCountPerPage(5);
 
-// Pass it to the view, and use it like a "standard" Zend paginator
+// Pass it to the view, and use it like a "standard" Laminas paginator
 ```
 
 If you want to further filter the results, you can optionally pass an existing Criteria object:
@@ -60,7 +60,7 @@ If you want to further filter the results, you can optionally pass an existing C
 ```php
 use Doctrine\Common\Collections\Criteria as DoctrineCriteria;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
-use Zend\Paginator\Paginator;
+use Laminas\Paginator\Paginator;
 
 // Create the criteria
 $expr     = DoctrineCriteria::expr()->eq('foo', 'bar');
@@ -74,7 +74,7 @@ $paginator = new Paginator($adapter);
 $paginator->setCurrentPageNumber(1)
           ->setItemCountPerPage(5);
 
-// Pass it to the view, and use it like a "standard" Zend paginator
+// Pass it to the view, and use it like a "standard" Laminas paginator
 ```
 
-For more information about Zend Paginator, please read the [Zend Paginator documentation](http://framework.zend.com/manual/2.3/en/modules/zend.paginator.introduction.html).
+For more information about Laminas Paginator, please read the [Laminas Paginator documentation](http://framework.zend.com/manual/2.3/en/modules/zend.paginator.introduction.html).

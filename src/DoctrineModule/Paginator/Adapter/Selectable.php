@@ -4,7 +4,7 @@ namespace DoctrineModule\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
 use Doctrine\Common\Collections\Criteria;
-use Zend\Paginator\Adapter\AdapterInterface;
+use Laminas\Paginator\Adapter\AdapterInterface;
 
 /**
  * Provides a wrapper around a Selectable object

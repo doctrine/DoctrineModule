@@ -36,7 +36,7 @@ class ConfigProvider
     {
         return [
             'invokables' => [
-                'DoctrineModule\Authentication\Storage\Session' => 'Zend\Authentication\Storage\Session',
+                'DoctrineModule\Authentication\Storage\Session' => 'Laminas\Authentication\Storage\Session',
             ],
             'factories' => [
                 'doctrine.cli' => 'DoctrineModule\Service\CliFactory',

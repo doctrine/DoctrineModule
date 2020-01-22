@@ -5,8 +5,8 @@ namespace DoctrineModuleTest\Mvc\Router\Console;
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
-use Zend\Console\Request;
-use Zend\Router\RouteMatch;
+use Laminas\Console\Request;
+use Laminas\Router\RouteMatch;
 
 /**
  * Tests for {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}

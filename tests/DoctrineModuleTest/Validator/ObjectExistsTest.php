@@ -75,28 +75,28 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testWillRefuseMissingRepository()
     {
-        $this->expectException('Zend\Validator\Exception\InvalidArgumentException');
+        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists(['fields' => 'field']);
     }
 
     public function testWillRefuseNonObjectRepository()
     {
-        $this->expectException('Zend\Validator\Exception\InvalidArgumentException');
+        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists(['object_repository' => 'invalid', 'fields' => 'field']);
     }
 
     public function testWillRefuseInvalidRepository()
     {
-        $this->expectException('Zend\Validator\Exception\InvalidArgumentException');
+        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists(['object_repository' => new stdClass(), 'fields' => 'field']);
     }
 
     public function testWillRefuseMissingFields()
     {
-        $this->expectException('Zend\Validator\Exception\InvalidArgumentException');
+        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists([
             'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
@@ -105,7 +105,7 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testWillRefuseEmptyFields()
     {
-        $this->expectException('Zend\Validator\Exception\InvalidArgumentException');
+        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists([
             'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
@@ -115,7 +115,7 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testWillRefuseNonStringFields()
     {
-        $this->expectException('Zend\Validator\Exception\InvalidArgumentException');
+        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
         new ObjectExists([
             'object_repository' => $this->createMock('Doctrine\Common\Persistence\ObjectRepository'),
             'fields'            => [123],
@@ -125,7 +125,7 @@ class ObjectExistsTest extends BaseTestCase
     public function testWillNotValidateOnFieldsCountMismatch()
     {
         $this->expectException(
-            'Zend\Validator\Exception\RuntimeException'
+            'Laminas\Validator\Exception\RuntimeException'
         );
         $this->expectExceptionMessage(
             'Provided values count is 1, while expected number of fields to be matched is 2'
@@ -140,7 +140,7 @@ class ObjectExistsTest extends BaseTestCase
     public function testWillNotValidateOnFieldKeysMismatch()
     {
         $this->expectException(
-            'Zend\Validator\Exception\RuntimeException'
+            'Laminas\Validator\Exception\RuntimeException'
         );
         $this->expectExceptionMessage(
             'Field "field2" was not provided, but was expected since the configured field lists needs it for validation'

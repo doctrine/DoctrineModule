@@ -3,7 +3,7 @@
 namespace DoctrineModule\Validator;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Zend\Validator\Exception;
+use Laminas\Validator\Exception;
 
 /**
  * Class that validates if objects exist in a given repository with a given list of matched fields only once.
