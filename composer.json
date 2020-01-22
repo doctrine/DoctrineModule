@@ -76,8 +76,8 @@
         "squizlabs/php_codesniffer": "^2.7"
     },
     "suggest": {
-        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
-        "laminas/laminas-mvc-console": "^1.1.11 if you want to use the ZF3 console libraries"
+        "doctrine/data-fixtures":         "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
+        "laminas/laminas-mvc-console":    "^1.1.11 if you want to use the Laminas console libraries"
     },
     "autoload": {
         "psr-0": {
