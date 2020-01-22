@@ -48,7 +48,7 @@
         }
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "doctrine/common": "^2.8",
         "doctrine/cache": "^1.7",
         "laminas/laminas-authentication": "^2.5.3",
