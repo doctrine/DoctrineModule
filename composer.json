@@ -58,7 +58,7 @@
         "laminas/laminas-mvc": "^3.1",
         "laminas/laminas-paginator": "^2.8",
         "laminas/laminas-servicemanager": "^3.3",
-        "laminas/laminas-stdlib": "^3.1",
+        "laminas/laminas-stdlib": "^3.2.1",
         "laminas/laminas-validator": "^2.10",
         "symfony/console": "^3.3 || ^4.0 || ^5.0",
         "laminas/laminas-dependency-plugin": "^1.0",
