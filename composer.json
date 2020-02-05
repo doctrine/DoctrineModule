@@ -61,7 +61,6 @@
         "laminas/laminas-stdlib": "^3.2.1",
         "laminas/laminas-validator": "^2.10",
         "symfony/console": "^3.3 || ^4.0 || ^5.0",
-        "laminas/laminas-dependency-plugin": "^1.0",
         "doctrine/doctrine-laminas-hydrator": "^2.0"
     },
     "require-dev": {
