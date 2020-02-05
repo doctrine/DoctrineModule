@@ -4,7 +4,7 @@ namespace DoctrineModule\Service;
 
 use Interop\Container\ContainerInterface;
 use RuntimeException;
-use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Base ServiceManager factory to be extended
