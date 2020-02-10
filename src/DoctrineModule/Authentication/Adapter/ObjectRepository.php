@@ -2,11 +2,11 @@
 
 namespace DoctrineModule\Authentication\Adapter;
 
+use Doctrine\Common\Inflector\Inflector;
 use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Laminas\Authentication\Adapter\AbstractAdapter;
 use Laminas\Authentication\Adapter\Exception;
 use Laminas\Authentication\Result as AuthenticationResult;
-use Doctrine\Common\Inflector\Inflector;
 
 /**
  * Authentication adapter that uses a Doctrine object for verification.

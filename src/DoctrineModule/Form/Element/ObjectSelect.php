@@ -3,8 +3,8 @@
 namespace DoctrineModule\Form\Element;
 
 use DoctrineModule\Form\Element\Proxy;
-use Laminas\Form\Element\Select as SelectElement;
 use Laminas\Form\Form;
+use Laminas\Form\Element\Select as SelectElement;
 use Laminas\Stdlib\ArrayUtils;
 
 class ObjectSelect extends SelectElement

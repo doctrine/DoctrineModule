@@ -4,10 +4,10 @@ namespace DoctrineModule\Cache;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
-use Laminas\Cache\Storage\StorageInterface;
-use Laminas\Cache\Storage\FlushableInterface;
-use Laminas\Cache\Storage\TotalSpaceCapableInterface;
 use Laminas\Cache\Storage\AvailableSpaceCapableInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\Cache\Storage\TotalSpaceCapableInterface;
 
 /**
  * Bridge class that allows usage of a Laminas Cache Storage as a Doctrine Cache

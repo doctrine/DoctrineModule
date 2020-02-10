@@ -2,8 +2,8 @@
 
 namespace DoctrineModule\Paginator\Adapter;
 
-use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
 use Laminas\Paginator\Adapter\AdapterInterface;
 
 /**

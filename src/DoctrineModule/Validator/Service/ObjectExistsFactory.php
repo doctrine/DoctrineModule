@@ -1,10 +1,9 @@
 <?php
 
-
 namespace DoctrineModule\Validator\Service;
 
-use Interop\Container\ContainerInterface;
 use DoctrineModule\Validator\ObjectExists;
+use Interop\Container\ContainerInterface;
 
 /**
  * Factory for creating ObjectExists instances
