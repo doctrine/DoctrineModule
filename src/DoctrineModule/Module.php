@@ -3,15 +3,14 @@
 namespace DoctrineModule;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Laminas\ModuleManager\Feature\InitProviderInterface;
+use DoctrineModule\Component\Console\Output\PropertyOutput;
+use Laminas\Console\Adapter\AdapterInterface as Console;
+use Laminas\EventManager\EventInterface;
 use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
-use Laminas\EventManager\EventInterface;
-use Laminas\Console\Adapter\AdapterInterface as Console;
-
 use Symfony\Component\Console\Input\StringInput;
-use DoctrineModule\Component\Console\Output\PropertyOutput;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace DoctrineModule\Validator\Service\Exception;
 
 use RuntimeException as BaseRuntimeException;

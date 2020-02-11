@@ -1,6 +1,5 @@
 <?php
 
-
 namespace DoctrineModule\Validator\Service;
 
 use Interop\Container\ContainerInterface;

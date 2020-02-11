@@ -2,11 +2,11 @@
 
 namespace DoctrineModule\Controller;
 
+use DoctrineModule\Component\Console\Input\RequestInput;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Laminas\Mvc\Console\View\ViewModel;
 use Laminas\Mvc\Controller\AbstractActionController;
-use DoctrineModule\Component\Console\Input\RequestInput;
 
 /**
  * Index controller

@@ -1,13 +1,12 @@
 <?php
 
-
 namespace DoctrineModule\Validator\Service;
 
-use Laminas\ServiceManager\FactoryInterface;
-use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
+use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\ArrayUtils;
 
 /**

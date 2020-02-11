@@ -2,10 +2,10 @@
 
 namespace DoctrineModule\Mvc\Router\Console;
 
-use Laminas\Mvc\Console\Router\RouteInterface;
-use Laminas\Stdlib\RequestInterface as Request;
-use Laminas\Router\RouteMatch;
 use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Mvc\Console\Router\RouteInterface;
+use Laminas\Router\RouteMatch;
+use Laminas\Stdlib\RequestInterface as Request;
 use Symfony\Component\Console\Application;
 
 /**

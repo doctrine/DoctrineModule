@@ -2,15 +2,15 @@
 
 namespace DoctrineModule\Form\Element;
 
-use Traversable;
-use ReflectionMethod;
-use RuntimeException;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use InvalidArgumentException;
 use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Inflector\Inflector;
-use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use ReflectionMethod;
+use RuntimeException;
+use Traversable;
 
 class Proxy implements ObjectManagerAwareInterface
 {
