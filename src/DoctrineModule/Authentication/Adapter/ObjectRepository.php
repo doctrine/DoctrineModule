@@ -28,14 +28,14 @@ class ObjectRepository extends AbstractAdapter
     /**
      * Contains the authentication results.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $authenticationResultInfo = null;
 
     /**
      * Constructor
      *
-     * @param array|AuthenticationOptions $options
+     * @param mixed[]|AuthenticationOptions $options
      */
     public function __construct($options = [])
     {
@@ -43,9 +43,9 @@ class ObjectRepository extends AbstractAdapter
     }
 
     /**
-     * @param  array|AuthenticationOptions $options
+     * @param mixed[]|AuthenticationOptions $options
      */
-    public function setOptions($options)
+    public function setOptions($options) : self
     {
         if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
@@ -61,10 +61,7 @@ class ObjectRepository extends AbstractAdapter
         return $this->options;
     }
 
-    /*
-     * {@inheritDoc}
-     */
-    public function authenticate()
+    public function authenticate() : AuthenticationResult
     {
         $this->setup();
         $options  = $this->options;
@@ -79,9 +76,7 @@ class ObjectRepository extends AbstractAdapter
             return $this->createAuthenticationResult();
         }
 
-        $authResult = $this->validateIdentity($identity);
-
-        return $authResult;
+        return $this->validateIdentity($identity);
     }
 
     /**
@@ -137,7 +132,9 @@ class ObjectRepository extends AbstractAdapter
      * This method abstracts the steps involved with making sure that this adapter was
      * indeed setup properly with all required pieces of information.
      *
-     * @throws Exception\RuntimeException - in the event that setup was not done properly
+     * In the event that setup was not done properly throw exception
+     *
+     * @throws Exception\RuntimeException
      */
     protected function setup() : void
     {

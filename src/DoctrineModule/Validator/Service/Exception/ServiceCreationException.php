@@ -6,9 +6,8 @@ namespace DoctrineModule\Validator\Service\Exception;
 
 use RuntimeException as BaseRuntimeException;
 
-/**
- * @link    http://www.doctrine-project.org/
- */
+// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousExceptionNaming
 class ServiceCreationException extends BaseRuntimeException
 {
 }
+// phpcs:enable SlevomatCodingStandard.Classes.SuperfluousExceptionNaming

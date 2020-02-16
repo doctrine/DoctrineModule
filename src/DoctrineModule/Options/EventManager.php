@@ -18,12 +18,12 @@ class EventManager extends AbstractOptions
      * class to instantiate OR a string to be located with the
      * service locator.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $subscribers = [];
 
     /**
-     * @param  array $subscribers
+     * @param mixed[] $subscribers
      */
     public function setSubscribers(array $subscribers) : self
     {
@@ -33,7 +33,7 @@ class EventManager extends AbstractOptions
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getSubscribers() : array
     {

@@ -16,6 +16,9 @@ use function assert;
  */
 class SymfonyCliRouteFactory implements FactoryInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $application = $container->get('doctrine.cli');

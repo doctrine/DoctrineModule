@@ -15,7 +15,7 @@ use function sprintf;
  *
  * @link    http://www.doctrine-project.org/
  */
-abstract class AbstractFactory implements FactoryInterface
+abstract class ServiceFactory implements FactoryInterface
 {
     /**
      * Would normally be set to orm | odm
@@ -59,9 +59,10 @@ abstract class AbstractFactory implements FactoryInterface
             $name = $this->getName();
         }
 
-        $options = $container->get('config');
-        $options = $options['doctrine'];
-        if ($mappingType = $this->getMappingType()) {
+        $options     = $container->get('config');
+        $options     = $options['doctrine'];
+        $mappingType = $this->getMappingType();
+        if ($mappingType) {
             $options = $options[$mappingType];
         }
 

@@ -14,8 +14,12 @@ use Interop\Container\ContainerInterface;
  */
 class ObjectExistsFactory extends AbstractValidatorFactory
 {
+    /** @var string */
     protected $validatorClass = ObjectExists::class;
 
+    /**
+     * {@inheritDoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $container = $this->container($container);

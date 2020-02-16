@@ -25,7 +25,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
     }
 
     /**
-     * @param array|Traversable $options
+     * @param mixed $options
      */
     public function setOptions($options) : self
     {
@@ -36,6 +36,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
 
     /**
      * @param mixed $value
+     * @param mixed $key
      */
     public function setOption($key, $value) : self
     {

@@ -20,16 +20,20 @@ use function sprintf;
  *
  * @link    http://www.doctrine-project.org/
  */
+// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 abstract class AbstractValidatorFactory implements FactoryInterface
 {
+// phpcs:enable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
     public const DEFAULT_OBJECTMANAGER_KEY = 'doctrine.entitymanager.orm_default';
 
+    /** @var mixed[] */
     protected $creationOptions = [];
 
+    /** @var string $validatorClass */
     protected $validatorClass;
 
     /**
-     * @param array $options
+     * @param mixed[] $options
      *
      * @throws ServiceCreationException
      */
@@ -49,7 +53,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
     }
 
     /**
-     * @param array $options
+     * @param mixed[] $options
      */
     protected function getObjectManager(ContainerInterface $container, ?array $options = null) : ObjectManager
     {
@@ -63,9 +67,9 @@ abstract class AbstractValidatorFactory implements FactoryInterface
     }
 
     /**
-     * @param array $options
+     * @param mixed[] $options
      *
-     * @return array
+     * @return mixed[]
      */
     protected function getFields(array $options) : array
     {
@@ -81,10 +85,10 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      * together with the options array created based on the above
      * helper methods.
      *
-     * @param array $previousOptions
-     * @param array $newOptions
+     * @param mixed[] $previousOptions
+     * @param mixed[] $newOptions
      *
-     * @return array
+     * @return mixed[]
      */
     protected function merge(array $previousOptions, array $newOptions) : array
     {
@@ -106,11 +110,17 @@ abstract class AbstractValidatorFactory implements FactoryInterface
         return $container;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         return $this($serviceLocator, $this->validatorClass, $this->creationOptions);
     }
 
+    /**
+     * @param mixed[] $options
+     */
     public function setCreationOptions(array $options) : void
     {
         $this->creationOptions = $options;

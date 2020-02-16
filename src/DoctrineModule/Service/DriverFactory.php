@@ -26,7 +26,7 @@ use function sprintf;
  *
  * @link    http://www.doctrine-project.org/
  */
-class DriverFactory extends AbstractFactory
+class DriverFactory extends ServiceFactory
 {
     /**
      * {@inheritDoc}
@@ -51,9 +51,6 @@ class DriverFactory extends AbstractFactory
         return $this($container, MappingDriver::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\Driver';
@@ -94,7 +91,6 @@ class DriverFactory extends AbstractFactory
         }
 
         if ($options->getExtension() && $driver instanceof FileDriver) {
-            /** @var FileDriver $driver */
             $locator = $driver->getLocator();
             assert($locator instanceof FileLocator);
 
@@ -114,7 +110,6 @@ class DriverFactory extends AbstractFactory
 
         // Extra post-create options for DriverChain.
         if ($driver instanceof MappingDriverChain && $options->getDrivers()) {
-            /** @var MappingDriverChain $driver */
             $drivers = $options->getDrivers();
 
             if (! is_array($drivers)) {

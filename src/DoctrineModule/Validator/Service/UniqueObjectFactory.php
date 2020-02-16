@@ -9,8 +9,12 @@ use Interop\Container\ContainerInterface;
 
 class UniqueObjectFactory extends AbstractValidatorFactory
 {
+    /** @var string */
     protected $validatorClass = UniqueObject::class;
 
+    /**
+     * {@inheritDoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $container = $this->container($container);

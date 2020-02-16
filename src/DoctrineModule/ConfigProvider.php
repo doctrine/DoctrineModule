@@ -12,7 +12,7 @@ namespace DoctrineModule;
 class ConfigProvider
 {
     /**
-     * @return array
+     * @return mixed[]
      */
     public function __invoke() : array
     {
@@ -30,21 +30,24 @@ class ConfigProvider
     /**
      * Return application-level dependency configuration
      *
-     * @return array
+     * @return mixed[]
      */
     public function getDependencyConfig() : array
     {
+// phpcs:disable
+
         return [
             'invokables' => ['DoctrineModule\Authentication\Storage\Session' => 'Laminas\Authentication\Storage\Session'],
             'factories' => ['doctrine.cli' => 'DoctrineModule\Service\CliFactory'],
             'abstract_factories' => ['DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory'],
         ];
+// phpcs:enable
     }
 
     /**
      * Return controller configuration
      *
-     * @return array
+     * @return mixed[]
      */
     public function getControllerConfig() : array
     {
@@ -56,7 +59,7 @@ class ConfigProvider
     /**
      * Return route manager configuration
      *
-     * @return array
+     * @return mixed[]
      */
     public function getRouteManagerConfig() : array
     {
@@ -68,7 +71,7 @@ class ConfigProvider
     /**
      * Return configuration for console routes
      *
-     * @return array
+     * @return mixed[]
      */
     public function getConsoleConfig() : array
     {
@@ -84,7 +87,7 @@ class ConfigProvider
     /**
      * Default configuration for Doctrine module
      *
-     * @return array
+     * @return mixed[]
      */
     public function getDoctrineConfig() : array
     {
@@ -166,7 +169,7 @@ class ConfigProvider
     /**
      * Factory mappings - used to define which factory to use to instantiate a particular doctrine service type
      *
-     * @return array
+     * @return mixed[]
      */
     public function getDoctrineFactoryConfig() : array
     {
@@ -181,7 +184,7 @@ class ConfigProvider
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getValidatorConfig() : array
     {

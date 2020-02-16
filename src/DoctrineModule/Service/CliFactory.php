@@ -25,7 +25,7 @@ class CliFactory implements FactoryInterface
     /** @var HelperSet */
     protected $helperSet;
 
-    /** @var array */
+    /** @var mixed[] */
     protected $commands = [];
 
     public function getEventManager(ContainerInterface $container) : EventManagerInterface

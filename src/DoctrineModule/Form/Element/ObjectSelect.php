@@ -26,6 +26,8 @@ class ObjectSelect extends SelectElement
 
     /**
      * @param array|Traversable $options
+     *
+     * {@inheritDoc}
      */
     public function setOptions($options) : self
     {
@@ -36,6 +38,8 @@ class ObjectSelect extends SelectElement
 
     /**
      * @param mixed $value
+     *
+     * {@inheritDoc}
      */
     public function setOption($key, $value) : self
     {

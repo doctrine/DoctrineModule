@@ -23,6 +23,8 @@ class ObjectRadio extends RadioElement
 
     /**
      * @param array|Traversable $options
+     *
+     * {@inheritDoc}
      */
     public function setOptions($options) : self
     {
@@ -33,6 +35,8 @@ class ObjectRadio extends RadioElement
 
     /**
      * @param mixed $value
+     *
+     * {@inheritDoc}
      */
     public function setOption($key, $value) : self
     {

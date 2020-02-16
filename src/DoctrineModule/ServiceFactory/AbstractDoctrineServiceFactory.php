@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModule\ServiceFactory;
 
-use DoctrineModule\Service\AbstractFactory;
+use DoctrineModule\Service\ServiceFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\AbstractFactoryInterface;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
@@ -41,7 +41,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
 
         $factoryClass = $mappings['factoryClass'];
         $factory      = new $factoryClass($mappings['serviceName']);
-        assert($factory instanceof AbstractFactory);
+        assert($factory instanceof ServiceFactory);
 
         return $factory->createService($container);
     }
@@ -67,7 +67,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
     }
 
     /**
-     * @return array|bool
+     * @return mixed[]|bool
      */
     private function getFactoryMapping(ContainerInterface $serviceLocator, string $name)
     {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModule\Service\Authentication;
 
 use BadMethodCallException;
-use DoctrineModule\Service\AbstractFactory;
+use DoctrineModule\Service\ServiceFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -15,7 +15,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  *
  * @link    http://www.doctrine-project.org/
  */
-class AuthenticationServiceFactory extends AbstractFactory
+class AuthenticationServiceFactory extends ServiceFactory
 {
     /**
      * {@inheritDoc}
@@ -33,9 +33,6 @@ class AuthenticationServiceFactory extends AbstractFactory
         return $this($container, AuthenticationService::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getOptionsClass() : string
     {
         throw new BadMethodCallException('Not implemented');

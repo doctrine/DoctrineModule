@@ -25,7 +25,7 @@ class Driver extends AbstractOptions
      * may set this value as a string (for a single path) or an array
      * for multiple paths.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $paths = [];
 
@@ -52,7 +52,7 @@ class Driver extends AbstractOptions
      * "doctrine.driver.{key}" and pulled from the service
      * locator. This option is only valid for DriverChain.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $drivers = [];
 
@@ -63,7 +63,7 @@ class Driver extends AbstractOptions
 
     public function getCache() : string
     {
-        return "doctrine.cache.{$this->cache}";
+        return 'doctrine.cache.' . $this->cache;
     }
 
     public function setClass(string $class) : void
@@ -77,7 +77,7 @@ class Driver extends AbstractOptions
     }
 
     /**
-     * @param array $drivers
+     * @param mixed[] $drivers
      */
     public function setDrivers(array $drivers) : void
     {
@@ -85,7 +85,7 @@ class Driver extends AbstractOptions
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getDrivers() : array
     {
@@ -106,7 +106,7 @@ class Driver extends AbstractOptions
     }
 
     /**
-     * @param array $paths
+     * @param mixed[] $paths
      */
     public function setPaths(array $paths) : void
     {
@@ -114,7 +114,7 @@ class Driver extends AbstractOptions
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getPaths() : array
     {

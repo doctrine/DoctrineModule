@@ -18,7 +18,7 @@ class ObjectRepository implements StorageInterface
     protected $options;
 
     /**
-     * @param array|AuthenticationOptions $options
+     * @param mixed[]|AuthenticationOptions $options
      */
     public function setOptions($options) : ObjectRepository
     {
@@ -34,7 +34,7 @@ class ObjectRepository implements StorageInterface
     /**
      * Constructor
      *
-     * @param array|AuthenticationOptions $options
+     * @param mixed[]|AuthenticationOptions $options
      */
     public function __construct($options = [])
     {
@@ -52,7 +52,8 @@ class ObjectRepository implements StorageInterface
      */
     public function read() : ?object
     {
-        if (($identity = $this->options->getStorage()->read())) {
+        $identity = $this->options->getStorage()->read();
+        if ($identity) {
             return $this->options->getObjectRepository()->find($identity);
         }
 
@@ -70,6 +71,9 @@ class ObjectRepository implements StorageInterface
         return $identity = $this->options->getStorage()->read();
     }
 
+    /**
+     * @param mixed $identity
+     */
     public function write($identity) : void
     {
         $metadataInfo     = $this->options->getClassMetadata();

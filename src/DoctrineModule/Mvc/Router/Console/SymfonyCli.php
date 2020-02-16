@@ -22,14 +22,14 @@ class SymfonyCli implements RouteInterface
     /**
      * Default values.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $defaults;
 
     /**
      * Constructor
      *
-     * @param array $defaults
+     * @param mixed[] $defaults
      */
     public function __construct(Application $cliApplication, array $defaults = [])
     {
@@ -60,7 +60,7 @@ class SymfonyCli implements RouteInterface
      *
      * {@inheritDoc}
      *
-     * @throws BadMethodCallException this method is disabled
+     * @throws BadMethodCallException this method is disabled.
      */
     public function assemble(array $params = [], array $options = [])
     {
@@ -80,7 +80,7 @@ class SymfonyCli implements RouteInterface
      *
      * {@inheritDoc}
      *
-     * @throws BadMethodCallException this method is disabled
+     * @throws BadMethodCallException this method is disabled.
      */
     public static function factory($options = [])
     {

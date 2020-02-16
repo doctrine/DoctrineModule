@@ -123,9 +123,14 @@ class Authentication extends AbstractOptions
         return $this;
     }
 
-    // Causes issue with unit test StorageFactoryTest::testCanInstantiateStorageFromServiceLocator
-    // when return type is specified
-    public function getObjectManager() # : ObjectManager
+    /**
+     * Causes issue with unit test StorageFactoryTest::testCanInstantiateStorageFromServiceLocator
+     * when return type is specified
+     * : ObjectManager
+     *
+     * @return mixed
+     */
+    public function getObjectManager()
     {
         return $this->objectManager;
     }

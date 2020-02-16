@@ -6,7 +6,7 @@ namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Options\Authentication;
-use DoctrineModule\Service\AbstractFactory;
+use DoctrineModule\Service\ServiceFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use function assert;
@@ -17,7 +17,7 @@ use function is_string;
  *
  * @link    http://www.doctrine-project.org/
  */
-class StorageFactory extends AbstractFactory
+class StorageFactory extends ServiceFactory
 {
     /**
      * {@inheritDoc}
@@ -27,11 +27,13 @@ class StorageFactory extends AbstractFactory
         $options = $this->getOptions($container, 'authentication');
         assert($options instanceof Authentication);
 
-        if (is_string($objectManager = $options->getObjectManager())) {
+        $objectManager = $options->getObjectManager();
+        if (is_string($objectManager)) {
             $options->setObjectManager($container->get($objectManager));
         }
 
-        if (is_string($storage = $options->getStorage())) {
+        $storage = $options->getStorage();
+        if (is_string($storage)) {
             $options->setStorage($container->get($storage));
         }
 
@@ -48,9 +50,6 @@ class StorageFactory extends AbstractFactory
         return $this($container, ObjectRepository::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\Authentication';

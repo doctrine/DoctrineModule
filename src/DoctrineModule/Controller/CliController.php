@@ -34,6 +34,8 @@ class CliController extends AbstractActionController
 
     /**
      * Index action - runs the console application
+     *
+     * @return mixed
      */
     public function cliAction()
     {

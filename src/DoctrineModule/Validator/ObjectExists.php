@@ -30,7 +30,7 @@ class ObjectExists extends AbstractValidator
      */
     public const ERROR_NO_OBJECT_FOUND = 'noObjectFound';
 
-    /** @var array Message templates */
+    /** @var mixed[] Message templates */
     protected $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];
 
     /**
@@ -43,14 +43,14 @@ class ObjectExists extends AbstractValidator
     /**
      * Fields to be checked
      *
-     * @var array
+     * @var mixed[]
      */
     protected $fields;
 
     /**
      * Constructor
      *
-     * @param array $options required keys are `object_repository`, which must be an instance of
+     * @param mixed[] $options required keys are `object_repository`, which must be an instance of
      *                       Doctrine\Common\Persistence\ObjectRepository, and `fields`, with either
      *                       a string or an array of strings representing the fields to be matched by the validator.
      *
@@ -96,7 +96,7 @@ class ObjectExists extends AbstractValidator
     /**
      * Filters and validates the fields passed to the constructor
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws Exception\InvalidArgumentException
      */
@@ -122,10 +122,10 @@ class ObjectExists extends AbstractValidator
     }
 
     /**
-     * @param string|array $value a field value or an array of field values if more fields have been configured to be
+     * @param string|mixed[] $value a field value or an array of field values if more fields have been configured to be
      *                      matched
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws Exception\RuntimeException
      */

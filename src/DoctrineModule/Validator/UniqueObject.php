@@ -26,8 +26,10 @@ class UniqueObject extends ObjectExists
      */
     public const ERROR_OBJECT_NOT_UNIQUE = 'objectNotUnique';
 
-    /** @var array Message templates */
+    /** @var mixed[] */
+    // phpcs:disable
     protected $messageTemplates = [self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'"];
+    // phpcs:enable
 
     /** @var ObjectManager */
     protected $objectManager;
@@ -38,7 +40,7 @@ class UniqueObject extends ObjectExists
     /***
      * Constructor
      *
-     * @param array $options required keys are `object_repository`, which must be an instance of
+     * @param mixed[] $options required keys are `object_repository`, which must be an instance of
      *                       Doctrine\Common\Persistence\ObjectRepository, `object_manager`, which
      *                       must be an instance of Doctrine\Common\Persistence\ObjectManager,
      *                       and `fields`, with either a string or an array of strings representing
@@ -77,8 +79,8 @@ class UniqueObject extends ObjectExists
     /**
      * Returns false if there is another object with the same field values but other identifiers.
      *
-     * @param  mixed $value
-     * @param  mexed $context
+     * @param mixed $value
+     * @param mixed $context
      */
     public function isValid($value, $context = null) : bool
     {
@@ -108,7 +110,7 @@ class UniqueObject extends ObjectExists
     /**
      * Gets the identifiers from the matched object.
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws Exception\RuntimeException
      */
@@ -122,9 +124,9 @@ class UniqueObject extends ObjectExists
     /**
      * Gets the identifiers from the context.
      *
-     * @param  array|object $context
+     * @param  mixed[]|object $context
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws Exception\RuntimeException
      */
@@ -157,7 +159,7 @@ class UniqueObject extends ObjectExists
     }
 
     /**
-     * @return array the names of the identifiers
+     * @return mixed[] the names of the identifiers
      */
     protected function getIdentifiers() : array
     {

@@ -9,18 +9,13 @@ use Laminas\Paginator\Adapter\AdapterInterface;
 use function array_values;
 use function count;
 
-/**
- * Base module for Doctrine ORM.
- *
- * @link    http://www.doctrine-project.org/
- */
 class Collection implements AdapterInterface
 {
-    /** @var DoctrineCollection */
+    /** @var Doctrine\Common\Collections\Collection */
     protected $collection;
 
     /**
-     * @param DoctrineCollection $collection
+     * @param mixed[] $collection
      */
     public function __construct(DoctrineCollection $collection)
     {

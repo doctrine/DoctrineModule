@@ -18,7 +18,7 @@ use function is_string;
  *
  * @link    http://www.doctrine-project.org/
  */
-class CacheFactory extends AbstractFactory
+class CacheFactory extends ServiceFactory
 {
     /**
      * {@inheritDoc}
@@ -63,18 +63,18 @@ class CacheFactory extends AbstractFactory
         }
 
         if ($cache instanceof Cache\MemcacheCache) {
-            /** @var MemcacheCache $cache */
             $cache->setMemcache($instance);
         } elseif ($cache instanceof Cache\MemcachedCache) {
-            /** @var MemcachedCache $cache */
             $cache->setMemcached($instance);
         } elseif ($cache instanceof Cache\RedisCache) {
-            /** @var RedisCache $cache */
             $cache->setRedis($instance);
         }
 
-        if ($cache instanceof CacheProvider && ($namespace = $options->getNamespace())) {
-            $cache->setNamespace($namespace);
+        if ($cache instanceof CacheProvider) {
+            $namespace = $options->getNamespace();
+            if ($namespace) {
+                $cache->setNamespace($namespace);
+            }
         }
 
         return $cache;
@@ -92,9 +92,6 @@ class CacheFactory extends AbstractFactory
         return $this($container, \Doctrine\Common\Cache\Cache::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\Cache';
