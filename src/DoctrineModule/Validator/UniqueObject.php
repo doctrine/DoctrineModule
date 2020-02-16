@@ -16,8 +16,6 @@ use function sprintf;
 
 /**
  * Class that validates if objects exist in a given repository with a given list of matched fields only once.
- *
- * @link    http://www.doctrine-project.org/
  */
 class UniqueObject extends ObjectExists
 {
@@ -26,8 +24,8 @@ class UniqueObject extends ObjectExists
      */
     public const ERROR_OBJECT_NOT_UNIQUE = 'objectNotUnique';
 
-    /** @var mixed[] */
     // phpcs:disable
+    /** @var mixed[] */
     protected $messageTemplates = [self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'"];
     // phpcs:enable
 
