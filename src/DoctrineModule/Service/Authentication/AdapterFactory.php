@@ -47,7 +47,7 @@ class AdapterFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function getOptionsClass()
+    public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\Authentication';
     }

@@ -70,7 +70,7 @@ class ObjectRepository implements StorageInterface
         return $identity = $this->options->getStorage()->read();
     }
 
-    public function write(object $identity) : void
+    public function write($identity) : void
     {
         $metadataInfo     = $this->options->getClassMetadata();
         $identifierValues = $metadataInfo->getIdentifierValues($identity);

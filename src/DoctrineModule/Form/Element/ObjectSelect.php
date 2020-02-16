@@ -37,7 +37,7 @@ class ObjectSelect extends SelectElement
     /**
      * @param mixed $value
      */
-    public function setOption(string $key, $value) : self
+    public function setOption($key, $value) : self
     {
         $this->getProxy()->setOptions([$key => $value]);
 

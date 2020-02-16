@@ -39,7 +39,7 @@ class DoctrineCacheStorageTest extends TestCase
      */
     protected $phpDatatypes = ['NULL', 'boolean', 'integer', 'double', 'string', 'array', 'object', 'resource'];
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->options = new AdapterOptions();
         // @todo fix constructor as it is messy
@@ -57,7 +57,7 @@ class DoctrineCacheStorageTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         // be sure the error handler has been stopped
         if (ErrorHandler::started()) {

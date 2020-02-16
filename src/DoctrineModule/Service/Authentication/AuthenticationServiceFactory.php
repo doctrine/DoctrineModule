@@ -36,7 +36,7 @@ class AuthenticationServiceFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function getOptionsClass()
+    public function getOptionsClass() : string
     {
         throw new BadMethodCallException('Not implemented');
     }

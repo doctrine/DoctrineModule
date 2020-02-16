@@ -54,7 +54,7 @@ class DriverFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function getOptionsClass()
+    public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\Driver';
     }

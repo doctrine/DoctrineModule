@@ -28,7 +28,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
     /**
      * {@inheritDoc}.
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->element = new ObjectSelect();

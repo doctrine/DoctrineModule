@@ -26,7 +26,7 @@ class SymfonyCliTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->route = new SymfonyCli(new Application());
     }

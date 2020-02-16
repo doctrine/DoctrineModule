@@ -45,7 +45,7 @@ abstract class AbstractFactory implements FactoryInterface
      */
     public function getMappingType() : string
     {
-        return $this->mappingType;
+        return (string) $this->mappingType;
     }
 
     /**

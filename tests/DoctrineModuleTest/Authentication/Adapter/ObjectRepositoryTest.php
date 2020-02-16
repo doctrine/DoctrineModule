@@ -22,7 +22,7 @@ class ObjectRepositoryTest extends BaseTestCase
             'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
         );
         $this->expectExceptionMessage(
-            'Provided $identityProperty is invalid, boolean given'
+            'Provided $identityProperty is invalid, string given'
         );
 
         new ObjectRepositoryAdapter(['identity_property' => false]);
@@ -34,7 +34,7 @@ class ObjectRepositoryTest extends BaseTestCase
             'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
         );
         $this->expectExceptionMessage(
-            'Provided $credentialProperty is invalid, boolean given'
+            'Provided $credentialProperty is invalid, string given'
         );
         new ObjectRepositoryAdapter(['credential_property' => false]);
     }

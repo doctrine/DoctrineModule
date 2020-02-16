@@ -117,6 +117,8 @@ class ObjectExists extends AbstractValidator
         }
 
         $this->fields = array_values($fields);
+
+        return $this->fields;
     }
 
     /**

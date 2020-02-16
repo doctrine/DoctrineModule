@@ -78,9 +78,9 @@ class UniqueObject extends ObjectExists
      * Returns false if there is another object with the same field values but other identifiers.
      *
      * @param  mixed $value
-     * @param  array $context
+     * @param  mexed $context
      */
-    public function isValid($value, ?array $context = null) : bool
+    public function isValid($value, $context = null) : bool
     {
         if (! $this->useContext) {
             $context = (array) $value;

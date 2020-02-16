@@ -188,11 +188,9 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set the object manager
      */
-    public function setObjectManager(ObjectManager $objectManager) : Proxy
+    public function setObjectManager(ObjectManager $objectManager) : void
     {
         $this->objectManager = $objectManager;
-
-        return $this;
     }
 
     /**
@@ -243,17 +241,9 @@ class Proxy implements ObjectManagerAwareInterface
      * Set the label generator callable that is responsible for generating labels for the items in the collection
      *
      * @param callable $callable A callable used to create a label based off of an Entity
-     *
-     * @throws InvalidArgumentException
      */
     public function setLabelGenerator(callable $callable) : void
     {
-        if (! is_callable($callable)) {
-            throw new InvalidArgumentException(
-                'Property "label_generator" needs to be a callable function or a \Closure'
-            );
-        }
-
         $this->labelGenerator = $callable;
     }
 
@@ -474,7 +464,10 @@ class Proxy implements ObjectManagerAwareInterface
             if (($generatedLabel = $this->generateLabel($object)) !== null) {
                 $label = $generatedLabel;
             } elseif ($property = $this->property) {
-                if ($this->isMethod === false && ! $metadata->hasField($property)) {
+                if (
+                    ($this->getIsMethod() === false || $this->getIsMethod() === null)
+                    && ! $metadata->hasField($property)
+                ) {
                     throw new RuntimeException(
                         sprintf(
                             'Property "%s" could not be found in object "%s"',

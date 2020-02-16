@@ -22,7 +22,7 @@ class ModuleDefinedServicesTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->serviceManager = ServiceManagerFactory::getServiceManager();
     }

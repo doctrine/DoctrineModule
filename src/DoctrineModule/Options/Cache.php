@@ -63,7 +63,7 @@ class Cache extends AbstractOptions
 
     public function getInstance() : string
     {
-        return $this->instance;
+        return (string) $this->instance;
     }
 
     public function setNamespace(string $namespace) : self
