@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModule\Service\Authentication;
 
 use BadMethodCallException;
-use DoctrineModule\Service\ServiceFactory;
+use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -15,7 +15,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  *
  * @link    http://www.doctrine-project.org/
  */
-class AuthenticationServiceFactory extends ServiceFactory
+class AuthenticationServiceFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}

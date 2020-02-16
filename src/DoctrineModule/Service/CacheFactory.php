@@ -18,7 +18,7 @@ use function is_string;
  *
  * @link    http://www.doctrine-project.org/
  */
-class CacheFactory extends ServiceFactory
+class CacheFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}

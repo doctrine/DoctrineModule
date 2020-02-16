@@ -12,11 +12,11 @@ use function sprintf;
 
 /**
  * Base ServiceManager factory to be extended
- *
- * @link    http://www.doctrine-project.org/
  */
-abstract class ServiceFactory implements FactoryInterface
+// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
+abstract class AbstractFactory implements FactoryInterface
 {
+// phpcs:enable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
     /**
      * Would normally be set to orm | odm
      *

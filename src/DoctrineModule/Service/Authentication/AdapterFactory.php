@@ -6,7 +6,7 @@ namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use DoctrineModule\Options\Authentication;
-use DoctrineModule\Service\ServiceFactory;
+use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use function assert;
@@ -17,7 +17,7 @@ use function is_string;
  *
  * @link    http://www.doctrine-project.org/
  */
-class AdapterFactory extends ServiceFactory
+class AdapterFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
