@@ -36,7 +36,7 @@ class PropertyOutput extends Output
         parent::__construct($verbosity, $decorated, $formatter);
     }
 
-    protected function doWrite(string $message, bool $newline) : void
+    protected function doWrite(string $message, bool $newline)
     {
         $this->message .= $message . ($newline === false ? '' : PHP_EOL);
     }
