@@ -132,9 +132,8 @@ class ObjectRepository extends AbstractAdapter
      * This method abstracts the steps involved with making sure that this adapter was
      * indeed setup properly with all required pieces of information.
      *
-     * In the event that setup was not done properly throw exception
-     *
-     * @throws Exception\RuntimeException
+     * @throws Exception\RuntimeException In the event that setup was not
+     *                                    done properly throw exception.
      */
     protected function setup() : void
     {
