@@ -312,10 +312,6 @@ class UniqueObjectTest extends BaseTestCase
         $context     = new stdClass();
         $context->id = 'identifier';
 
-#        $context = [
-#            'id' => 'identifier'
-#        ];
-
         $match = new stdClass();
 
         $classMetadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
