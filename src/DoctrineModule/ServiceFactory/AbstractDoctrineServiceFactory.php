@@ -100,10 +100,10 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
             ];
         }
 
-        if (! isset($config['doctrine_factories'][$mappingType]) ||
-             ! isset($config['doctrine_factories'][$mappingType][$serviceType]) ||
-             ! isset($config['doctrine'][$mappingType][$serviceType][$serviceName])
-        ) {
+        if (! isset(
+            $config['doctrine_factories'][$mappingType][$serviceType],
+            $config['doctrine'][$mappingType][$serviceType][$serviceName]
+        )) {
             return false;
         }
 
