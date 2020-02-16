@@ -34,15 +34,16 @@ class ConfigProvider
      */
     public function getDependencyConfig() : array
     {
-// phpcs:disable
+    // phpcs:disable Generic.Files.LineLength
 
         return [
             'invokables' => ['DoctrineModule\Authentication\Storage\Session' => 'Laminas\Authentication\Storage\Session'],
             'factories' => ['doctrine.cli' => 'DoctrineModule\Service\CliFactory'],
             'abstract_factories' => ['DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory'],
         ];
-// phpcs:enable
     }
+
+    // phpcs:enable Generic.Files.LineLength
 
     /**
      * Return controller configuration

@@ -36,8 +36,10 @@ class PropertyOutput extends Output
         parent::__construct($verbosity, $decorated, $formatter);
     }
 
+    // phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint
     protected function doWrite(string $message, bool $newline)
     {
+    // phpcs:enable SlevomatCodingStandard.TypeHints.ReturnTypeHint
         $this->message .= $message . ($newline === false ? '' : PHP_EOL);
     }
 
