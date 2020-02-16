@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Cache;
 
 /**
- * @license MIT
- * @link    http://www.doctrine-project.org/
- *
  * @deprecated use \DoctrineModule\Cache\LaminasStorageCache
+ *
+ * @link    http://www.doctrine-project.org/
  */
 class ZendStorageCache extends LaminasStorageCache
 {

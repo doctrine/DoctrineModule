@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Options;
 
 use Laminas\Stdlib\AbstractOptions;
@@ -7,9 +9,7 @@ use Laminas\Stdlib\AbstractOptions;
 /**
  * Cache options
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 class Cache extends AbstractOptions
 {
@@ -42,78 +42,50 @@ class Cache extends AbstractOptions
      */
     protected $instance = null;
 
-    /**
-     * @param  string $class
-     * @return self
-     */
-    public function setClass($class)
+    public function setClass(string $class) : self
     {
         $this->class = $class;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getClass()
+    public function getClass() : string
     {
         return $this->class;
     }
 
-    /**
-     * @param  string $instance
-     * @return self
-     */
-    public function setInstance($instance)
+    public function setInstance(string $instance) : self
     {
         $this->instance = $instance;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getInstance()
+    public function getInstance() : string
     {
         return $this->instance;
     }
 
-    /**
-     * @param  string $namespace
-     * @return self
-     */
-    public function setNamespace($namespace)
+    public function setNamespace(string $namespace) : self
     {
         $this->namespace = (string) $namespace;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getNamespace()
+    public function getNamespace() : string
     {
         return $this->namespace;
     }
 
-    /**
-     * @param  string $directory
-     * @return self
-     */
-    public function setDirectory($directory)
+    public function setDirectory(string $directory) : self
     {
         $this->directory = $directory;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDirectory()
+    public function getDirectory() : string
     {
         return $this->directory;
     }

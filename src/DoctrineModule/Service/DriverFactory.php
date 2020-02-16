@@ -1,39 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\Annotations;
 use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\FileLocator;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Options\Driver as DriverOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use function assert;
+use function class_exists;
+use function get_class;
+use function is_array;
+use function is_subclass_of;
+use function sprintf;
 
 /**
  * MappingDriver ServiceManager factory
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 class DriverFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
+     *
      * @return MappingDriver
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        /* @var $options DriverOptions */
         $options = $this->getOptions($container, 'driver');
+        assert($options instanceof DriverOptions);
 
         return $this->createDriver($container, $options);
     }
+
     /**
      * {@inheritDoc}
+     *
      * @return MappingDriver
      */
     public function createService(ServiceLocatorInterface $container)
@@ -50,12 +60,9 @@ class DriverFactory extends AbstractFactory
     }
 
     /**
-     * @param  ContainerInterface $container
-     * @param  DriverOptions      $options
      * @throws InvalidArgumentException
-     * @return MappingDriver
      */
-    protected function createDriver(ContainerInterface $container, DriverOptions $options)
+    protected function createDriver(ContainerInterface $container, DriverOptions $options) : MappingDriver
     {
         $class = $options->getClass();
 
@@ -71,29 +78,27 @@ class DriverFactory extends AbstractFactory
         $paths = $options->getPaths();
 
         // Special options for AnnotationDrivers.
-        if ('Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver' === $class
+        if ($class === 'Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver'
             || is_subclass_of($class, 'Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver')
         ) {
-            $reader = new Annotations\AnnotationReader;
+            $reader = new Annotations\AnnotationReader();
             $reader = new Annotations\CachedReader(
                 new Annotations\IndexedReader($reader),
                 $container->get($options->getCache())
             );
-            /* @var $driver MappingDriver */
             $driver = new $class($reader, $paths);
+            assert($driver instanceof MappingDriver);
         } else {
-            /* @var $driver MappingDriver */
             $driver = new $class($paths);
+            assert($driver instanceof MappingDriver);
         }
 
         if ($options->getExtension() && $driver instanceof FileDriver) {
-            /* @var $driver FileDriver */
-            /* @var $locator \Doctrine\Common\Persistence\Mapping\Driver\FileLocator */
+            /** @var FileDriver $driver */
             $locator = $driver->getLocator();
+            assert($locator instanceof FileLocator);
 
-            if (get_class($locator) === 'Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator') {
-                $driver->setLocator(new DefaultFileLocator($locator->getPaths(), $options->getExtension()));
-            } else {
+            if (get_class($locator) !== 'Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator') {
                 throw new InvalidArgumentException(
                     sprintf(
                         'Discovered file locator for driver of type "%s" is an instance of "%s". This factory '
@@ -103,11 +108,13 @@ class DriverFactory extends AbstractFactory
                     )
                 );
             }
+
+            $driver->setLocator(new DefaultFileLocator($locator->getPaths(), $options->getExtension()));
         }
 
         // Extra post-create options for DriverChain.
         if ($driver instanceof MappingDriverChain && $options->getDrivers()) {
-            /* @var $driver \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain */
+            /** @var MappingDriverChain $driver */
             $drivers = $options->getDrivers();
 
             if (! is_array($drivers)) {
@@ -115,9 +122,10 @@ class DriverFactory extends AbstractFactory
             }
 
             foreach ($drivers as $namespace => $driverName) {
-                if (null === $driverName) {
+                if ($driverName === null) {
                     continue;
                 }
+
                 $options = $this->getOptions($container, 'driver', $driverName);
                 $driver->addDriver($this->createDriver($container, $options), $namespace);
             }

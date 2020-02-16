@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\EventManager;
@@ -7,6 +9,13 @@ use Doctrine\Common\EventSubscriber;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use function assert;
+use function class_exists;
+use function get_class;
+use function gettype;
+use function is_object;
+use function is_string;
+use function sprintf;
 
 /**
  * Factory responsible for creating EventManager instances
@@ -16,10 +25,10 @@ class EventManagerFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        /** @var $options \DoctrineModule\Options\EventManager */
-        $options      = $this->getOptions($container, 'eventmanager');
+        $options = $this->getOptions($container, 'eventmanager');
+        assert($options instanceof \DoctrineModule\Options\EventManager);
         $eventManager = new EventManager();
 
         foreach ($options->getSubscribers() as $subscriberName) {
@@ -62,10 +71,8 @@ class EventManagerFactory extends AbstractFactory
 
     /**
      * Get the class name of the options associated with this factory.
-     *
-     * @return string
      */
-    public function getOptionsClass()
+    public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\EventManager';
     }

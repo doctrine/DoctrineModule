@@ -1,39 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Validator;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Laminas\Validator\Exception;
+use function array_diff_assoc;
+use function array_key_exists;
+use function count;
+use function get_class;
+use function gettype;
+use function is_object;
+use function sprintf;
 
 /**
  * Class that validates if objects exist in a given repository with a given list of matched fields only once.
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Oskar Bley <oskar@programming-php.net>
  */
 class UniqueObject extends ObjectExists
 {
     /**
      * Error constants
      */
-    const ERROR_OBJECT_NOT_UNIQUE = 'objectNotUnique';
+    public const ERROR_OBJECT_NOT_UNIQUE = 'objectNotUnique';
 
-    /**
-     * @var array Message templates
-     */
-    protected $messageTemplates = [
-        self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'",
-    ];
+    /** @var array Message templates */
+    protected $messageTemplates = [self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'"];
 
-    /**
-     * @var ObjectManager
-     */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    /**
-     * @var boolean
-     */
+    /** @var bool */
     protected $useContext;
 
     /***
@@ -44,6 +43,7 @@ class UniqueObject extends ObjectExists
      *                       must be an instance of Doctrine\Common\Persistence\ObjectManager,
      *                       and `fields`, with either a string or an array of strings representing
      *                       the fields to be matched by the validator.
+     *
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(array $options)
@@ -57,7 +57,7 @@ class UniqueObject extends ObjectExists
                 if (is_object($options['object_manager'])) {
                     $provided = get_class($options['object_manager']);
                 } else {
-                    $provided = getType($options['object_manager']);
+                    $provided = gettype($options['object_manager']);
                 }
             }
 
@@ -71,7 +71,7 @@ class UniqueObject extends ObjectExists
         }
 
         $this->objectManager = $options['object_manager'];
-        $this->useContext    = isset($options['use_context']) ? (boolean) $options['use_context'] : false;
+        $this->useContext    = isset($options['use_context']) ? (bool) $options['use_context'] : false;
     }
 
     /**
@@ -79,9 +79,8 @@ class UniqueObject extends ObjectExists
      *
      * @param  mixed $value
      * @param  array $context
-     * @return boolean
      */
-    public function isValid($value, $context = null)
+    public function isValid($value, ?array $context = null) : bool
     {
         if (! $this->useContext) {
             $context = (array) $value;
@@ -97,22 +96,23 @@ class UniqueObject extends ObjectExists
         $expectedIdentifiers = $this->getExpectedIdentifiers($context);
         $foundIdentifiers    = $this->getFoundIdentifiers($match);
 
-        if (count(array_diff_assoc($expectedIdentifiers, $foundIdentifiers)) == 0) {
+        if (count(array_diff_assoc($expectedIdentifiers, $foundIdentifiers)) === 0) {
             return true;
         }
 
         $this->error(self::ERROR_OBJECT_NOT_UNIQUE, $value);
+
         return false;
     }
 
     /**
      * Gets the identifiers from the matched object.
      *
-     * @param object $match
      * @return array
+     *
      * @throws Exception\RuntimeException
      */
-    protected function getFoundIdentifiers($match)
+    protected function getFoundIdentifiers(object $match) : array
     {
         return $this->objectManager
                     ->getClassMetadata($this->objectRepository->getClassName())
@@ -123,10 +123,12 @@ class UniqueObject extends ObjectExists
      * Gets the identifiers from the context.
      *
      * @param  array|object $context
+     *
      * @return array
+     *
      * @throws Exception\RuntimeException
      */
-    protected function getExpectedIdentifiers($context = null)
+    protected function getExpectedIdentifiers($context = null) : array
     {
         if ($context === null) {
             throw new Exception\RuntimeException(
@@ -145,19 +147,19 @@ class UniqueObject extends ObjectExists
         $result = [];
         foreach ($this->getIdentifiers() as $identifierField) {
             if (! array_key_exists($identifierField, $context)) {
-                throw new Exception\RuntimeException(\sprintf('Expected context to contain %s', $identifierField));
+                throw new Exception\RuntimeException(sprintf('Expected context to contain %s', $identifierField));
             }
 
             $result[$identifierField] = $context[$identifierField];
         }
+
         return $result;
     }
-
 
     /**
      * @return array the names of the identifiers
      */
-    protected function getIdentifiers()
+    protected function getIdentifiers() : array
     {
         return $this->objectManager
                     ->getClassMetadata($this->objectRepository->getClassName())

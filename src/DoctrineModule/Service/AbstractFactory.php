@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Service;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\Stdlib\AbstractOptions;
 use RuntimeException;
+use function sprintf;
 
 /**
  * Base ServiceManager factory to be extended
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 abstract class AbstractFactory implements FactoryInterface
 {
@@ -22,38 +24,26 @@ abstract class AbstractFactory implements FactoryInterface
      */
     protected $mappingType;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
 
-    /**
-     * @var \Laminas\Stdlib\AbstractOptions
-     */
+    /** @var AbstractOptions */
     protected $options;
 
-    /**
-     * @param string $name
-     */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
      * Would normally be set to orm | odm
-     *
-     * @return string
      */
-    public function getMappingType()
+    public function getMappingType() : string
     {
         return $this->mappingType;
     }
@@ -61,13 +51,9 @@ abstract class AbstractFactory implements FactoryInterface
     /**
      * Gets options from configuration based on name.
      *
-     * @param  ContainerInterface $container
-     * @param  string             $key
-     * @param  null|string        $name
-     * @return \Laminas\Stdlib\AbstractOptions
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    public function getOptions(ContainerInterface $container, $key, $name = null)
+    public function getOptions(ContainerInterface $container, string $key, ?string $name = null) : AbstractOptions
     {
         if ($name === null) {
             $name = $this->getName();
@@ -78,9 +64,10 @@ abstract class AbstractFactory implements FactoryInterface
         if ($mappingType = $this->getMappingType()) {
             $options = $options[$mappingType];
         }
-        $options = isset($options[$key][$name]) ? $options[$key][$name] : null;
 
-        if (null === $options) {
+        $options = $options[$key][$name] ?? null;
+
+        if ($options === null) {
             throw new RuntimeException(
                 sprintf(
                     'Options with name "%s" could not be found in "doctrine.%s".',
@@ -99,7 +86,6 @@ abstract class AbstractFactory implements FactoryInterface
      * Get the class name of the options associated with this factory.
      *
      * @abstract
-     * @return string
      */
-    abstract public function getOptionsClass();
+    abstract public function getOptionsClass() : string;
 }

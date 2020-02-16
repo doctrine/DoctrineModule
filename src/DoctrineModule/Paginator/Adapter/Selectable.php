@@ -1,39 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
 use Laminas\Paginator\Adapter\AdapterInterface;
+use function count;
 
 /**
  * Provides a wrapper around a Selectable object
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Michaël Gallego <mic.gallego@gmail.com>
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class Selectable implements AdapterInterface
 {
-    /**
-     * @var DoctrineSelectable
-     */
+    /** @var DoctrineSelectable */
     protected $selectable;
 
-    /**
-     * @var \Doctrine\Common\Collections\Criteria
-     */
+    /** @var Criteria */
     protected $criteria;
 
     /**
      * Create a paginator around a Selectable object. You can also provide an optional Criteria object with
      * some predefined filters
-     *
-     * @param \Doctrine\Common\Collections\Selectable    $selectable
-     * @param \Doctrine\Common\Collections\Criteria|null $criteria
      */
-    public function __construct(DoctrineSelectable $selectable, Criteria $criteria = null)
+    public function __construct(DoctrineSelectable $selectable, ?Criteria $criteria = null)
     {
         $this->selectable = $selectable;
         $this->criteria   = $criteria ? clone $criteria : new Criteria();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Cache;
 
 use Doctrine\Common\Cache\Cache;
@@ -8,25 +10,18 @@ use Laminas\Cache\Storage\AvailableSpaceCapableInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Cache\Storage\TotalSpaceCapableInterface;
+use function assert;
 
 /**
  * Bridge class that allows usage of a Laminas Cache Storage as a Doctrine Cache
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class LaminasStorageCache extends CacheProvider
 {
-
-    /**
-     * @var StorageInterface
-     */
+    /** @var StorageInterface */
     protected $storage;
 
-    /**
-     * @param StorageInterface $storage
-     */
     public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
@@ -39,7 +34,7 @@ class LaminasStorageCache extends CacheProvider
     {
         $hit = $this->storage->getItem($id);
 
-        return null === $hit ? false : $hit;
+        return $hit ?? false;
     }
 
     /**
@@ -73,8 +68,8 @@ class LaminasStorageCache extends CacheProvider
     protected function doFlush()
     {
         if ($this->storage instanceof FlushableInterface) {
-            /* @var $storage FlushableInterface */
             $storage = $this->storage;
+            assert($storage instanceof FlushableInterface);
 
             return $storage->flush();
         }
@@ -87,9 +82,9 @@ class LaminasStorageCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        /* @var $storage TotalSpaceCapableInterface */
-        /* @var $storage AvailableSpaceCapableInterface */
         $storage = $this->storage;
+        assert($storage instanceof TotalSpaceCapableInterface);
+        assert($storage instanceof AvailableSpaceCapableInterface);
 
         return [
             Cache::STATS_HITS              => $this->storage->getMetadata(Cache::STATS_HITS),

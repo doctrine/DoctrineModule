@@ -1,48 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Form\Element;
 
-use DoctrineModule\Form\Element\Proxy;
-use Laminas\Form\Form;
 use Laminas\Form\Element\MultiCheckbox;
 use Laminas\Stdlib\ArrayUtils;
+use Traversable;
+use function array_map;
+use function is_array;
 
 class ObjectMultiCheckbox extends MultiCheckbox
 {
-    /**
-     * @var Proxy
-     */
+    /** @var Proxy */
     protected $proxy;
 
-    /**
-     * @return Proxy
-     */
-    public function getProxy()
+    public function getProxy() : Proxy
     {
-        if (null === $this->proxy) {
+        if ($this->proxy === null) {
             $this->proxy = new Proxy();
         }
+
         return $this->proxy;
     }
 
     /**
-     * @param  array|\Traversable $options
-     * @return self
+     * @param array|Traversable $options
      */
-    public function setOptions($options)
+    public function setOptions($options) : self
     {
         $this->getProxy()->setOptions($options);
+
         return parent::setOptions($options);
     }
 
     /**
-     * @param string $key
      * @param mixed $value
-     * @return self
      */
-    public function setOption($key, $value)
+    public function setOption(string $key, $value) : self
     {
         $this->getProxy()->setOptions([$key => $value]);
+
         return parent::setOption($key, $value);
     }
 
@@ -51,12 +49,12 @@ class ObjectMultiCheckbox extends MultiCheckbox
      */
     public function setValue($value)
     {
-        if ($value instanceof \Traversable) {
+        if ($value instanceof Traversable) {
             $value = ArrayUtils::iteratorToArray($value);
-        } elseif ($value == null) {
+        } elseif ($value === null) {
             return parent::setValue([]);
         } elseif (! is_array($value)) {
-            $value = (array)$value;
+            $value = (array) $value;
         }
 
         return parent::setValue(array_map([$this->getProxy(), 'getValue'], $value));

@@ -1,28 +1,31 @@
 <?php
+
+declare(strict_types=1);
+
 namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepository;
+use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use function assert;
+use function is_string;
 
 /**
  * Factory to create authentication storage object.
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Tim Roediger <superdweebie@gmail.com>
  */
 class StorageFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        /* @var $options \DoctrineModule\Options\Authentication */
         $options = $this->getOptions($container, 'authentication');
+        assert($options instanceof Authentication);
 
         if (is_string($objectManager = $options->getObjectManager())) {
             $options->setObjectManager($container->get($objectManager));
@@ -38,7 +41,7 @@ class StorageFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return \DoctrineModule\Authentication\Storage\ObjectRepository
+     * @return ObjectRepository
      */
     public function createService(ServiceLocatorInterface $container)
     {

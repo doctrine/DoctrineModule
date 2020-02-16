@@ -1,23 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Laminas\Paginator\Adapter\AdapterInterface;
+use function array_values;
+use function count;
 
 /**
  * Base module for Doctrine ORM.
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Michaël Gallego <mic.gallego@gmail.com>
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class Collection implements AdapterInterface
 {
-    /**
-     * @var DoctrineCollection
-     */
+    /** @var DoctrineCollection */
     protected $collection;
 
     /**

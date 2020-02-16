@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Authentication\Adapter;
 
 use Doctrine\Common\Inflector\Inflector;
@@ -7,21 +9,20 @@ use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Laminas\Authentication\Adapter\AbstractAdapter;
 use Laminas\Authentication\Adapter\Exception;
 use Laminas\Authentication\Result as AuthenticationResult;
+use function call_user_func;
+use function get_class;
+use function method_exists;
+use function property_exists;
+use function sprintf;
 
 /**
  * Authentication adapter that uses a Doctrine object for verification.
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.5.0
- * @author  Tim Roediger <superdweebie@gmail.com>
- * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
 class ObjectRepository extends AbstractAdapter
 {
-    /**
-     * @var AuthenticationOptions
-     */
+    /** @var AuthenticationOptions */
     protected $options;
 
     /**
@@ -51,13 +52,11 @@ class ObjectRepository extends AbstractAdapter
         }
 
         $this->options = $options;
+
         return $this;
     }
 
-    /**
-     * @return AuthenticationOptions
-     */
-    public function getOptions()
+    public function getOptions() : AuthenticationOptions
     {
         return $this->options;
     }
@@ -89,11 +88,9 @@ class ObjectRepository extends AbstractAdapter
      * This method attempts to validate that the record in the resultset is indeed a
      * record that matched the identity provided to this adapter.
      *
-     * @param  object                              $identity
      * @throws Exception\UnexpectedValueException
-     * @return AuthenticationResult
      */
-    protected function validateIdentity($identity)
+    protected function validateIdentity(object $identity) : AuthenticationResult
     {
         $credentialProperty = $this->options->getCredentialProperty();
         $getter             = 'get' . Inflector::classify($credentialProperty);
@@ -142,16 +139,16 @@ class ObjectRepository extends AbstractAdapter
      *
      * @throws Exception\RuntimeException - in the event that setup was not done properly
      */
-    protected function setup()
+    protected function setup() : void
     {
-        if (null === $this->identity) {
+        if ($this->identity === null) {
             throw new Exception\RuntimeException(
                 'A value for the identity was not provided prior to authentication with ObjectRepository '
                 . 'authentication adapter'
             );
         }
 
-        if (null === $this->credential) {
+        if ($this->credential === null) {
             throw new Exception\RuntimeException(
                 'A credential value was not provided prior to authentication with ObjectRepository'
                 . ' authentication adapter'
@@ -168,10 +165,8 @@ class ObjectRepository extends AbstractAdapter
     /**
      * Creates a Laminas\Authentication\Result object from the information that has been collected
      * during the authenticate() attempt.
-     *
-     * @return AuthenticationResult
      */
-    protected function createAuthenticationResult()
+    protected function createAuthenticationResult() : AuthenticationResult
     {
         return new AuthenticationResult(
             $this->authenticationResultInfo['code'],

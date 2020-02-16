@@ -1,40 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Controller;
 
 use DoctrineModule\Component\Console\Input\RequestInput;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Output\OutputInterface;
 use Laminas\Mvc\Console\View\ViewModel;
 use Laminas\Mvc\Controller\AbstractActionController;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Output\OutputInterface;
+use function is_numeric;
 
 /**
  * Index controller
- *
- * @license MIT
- * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
 class CliController extends AbstractActionController
 {
-    /**
-     * @var \Symfony\Component\Console\Application
-     */
+    /** @var Application */
     protected $cliApplication;
 
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
+    /** @var OutputInterface */
     protected $output;
 
-    /**
-     * @param \Symfony\Component\Console\Application $cliApplication
-     */
     public function __construct(Application $cliApplication)
     {
         $this->cliApplication = $cliApplication;
     }
 
-    public function setOutput(OutputInterface $output)
+    public function setOutput(OutputInterface $output) : void
     {
         $this->output = $output;
     }

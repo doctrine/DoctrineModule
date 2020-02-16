@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Options;
 
 use Laminas\Stdlib\AbstractOptions;
@@ -7,9 +9,7 @@ use Laminas\Stdlib\AbstractOptions;
 /**
  * EventManager options
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 class EventManager extends AbstractOptions
 {
@@ -24,9 +24,8 @@ class EventManager extends AbstractOptions
 
     /**
      * @param  array $subscribers
-     * @return self
      */
-    public function setSubscribers($subscribers)
+    public function setSubscribers(array $subscribers) : self
     {
         $this->subscribers = $subscribers;
 
@@ -36,7 +35,7 @@ class EventManager extends AbstractOptions
     /**
      * @return array
      */
-    public function getSubscribers()
+    public function getSubscribers() : array
     {
         return $this->subscribers;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Form\Element;
 
 use Doctrine\Common\Collections\Collection;
@@ -11,77 +13,65 @@ use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 use ReflectionMethod;
 use RuntimeException;
 use Traversable;
+use function array_change_key_case;
+use function array_key_exists;
+use function array_shift;
+use function call_user_func;
+use function count;
+use function current;
+use function get_class;
+use function gettype;
+use function is_callable;
+use function is_object;
+use function is_string;
+use function method_exists;
+use function sprintf;
+use function strtolower;
 
 class Proxy implements ObjectManagerAwareInterface
 {
     use ArrayOrTraversableGuardTrait;
 
-    /**
-     * @var array|Traversable
-     */
+    /** @var array|Traversable */
     protected $objects;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $targetClass;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $valueOptions = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $findMethod = [];
 
-    /**
-     * @var
-     */
+    /** @var */
     protected $property;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $option_attributes = [];
 
-    /**
-     * @var callable $labelGenerator A callable used to create a label based on an item in the collection an Entity
-     */
+    /** @var callable $labelGenerator A callable used to create a label based on an item in the collection an Entity */
     protected $labelGenerator;
 
-    /**
-     * @var bool|null
-     */
+    /** @var bool|null */
     protected $isMethod;
 
-    /**
-     * @var ObjectManager
-     */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $displayEmptyItem = false;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $emptyItemLabel = '';
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $optgroupIdentifier;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $optgroupDefault;
 
-    public function setOptions($options)
+    public function setOptions($options) : void
     {
         if (isset($options['object_manager'])) {
             $this->setObjectManager($options['object_manager']);
@@ -123,9 +113,11 @@ class Proxy implements ObjectManagerAwareInterface
             $this->setOptgroupIdentifier($options['optgroup_identifier']);
         }
 
-        if (isset($options['optgroup_default'])) {
-            $this->setOptgroupDefault($options['optgroup_default']);
+        if (! isset($options['optgroup_default'])) {
+            return;
         }
+
+        $this->setOptgroupDefault($options['optgroup_default']);
     }
 
     public function getValueOptions()
@@ -149,22 +141,15 @@ class Proxy implements ObjectManagerAwareInterface
 
     /**
      * Set the label for the empty option
-     *
-     * @param string $emptyItemLabel
-     *
-     * @return Proxy
      */
-    public function setEmptyItemLabel($emptyItemLabel)
+    public function setEmptyItemLabel(string $emptyItemLabel) : Proxy
     {
         $this->emptyItemLabel = $emptyItemLabel;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmptyItemLabel()
+    public function getEmptyItemLabel() : string
     {
         return $this->emptyItemLabel;
     }
@@ -172,7 +157,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @return array
      */
-    public function getOptionAttributes()
+    public function getOptionAttributes() : array
     {
         return $this->option_attributes;
     }
@@ -180,41 +165,30 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @param array $option_attributes
      */
-    public function setOptionAttributes(array $option_attributes)
+    public function setOptionAttributes(array $option_attributes) : void
     {
         $this->option_attributes = $option_attributes;
     }
 
     /**
      * Set a flag, whether to include the empty option at the beginning or not
-     *
-     * @param boolean $displayEmptyItem
-     *
-     * @return Proxy
      */
-    public function setDisplayEmptyItem($displayEmptyItem)
+    public function setDisplayEmptyItem(bool $displayEmptyItem) : Proxy
     {
         $this->displayEmptyItem = $displayEmptyItem;
 
         return $this;
     }
 
-    /**
-     * @return boolean
-     */
-    public function getDisplayEmptyItem()
+    public function getDisplayEmptyItem() : bool
     {
         return $this->displayEmptyItem;
     }
 
     /**
      * Set the object manager
-     *
-     * @param  ObjectManager $objectManager
-     *
-     * @return Proxy
      */
-    public function setObjectManager(ObjectManager $objectManager)
+    public function setObjectManager(ObjectManager $objectManager) : Proxy
     {
         $this->objectManager = $objectManager;
 
@@ -223,22 +197,16 @@ class Proxy implements ObjectManagerAwareInterface
 
     /**
      * Get the object manager
-     *
-     * @return ObjectManager
      */
-    public function getObjectManager()
+    public function getObjectManager() : ObjectManager
     {
         return $this->objectManager;
     }
 
     /**
      * Set the FQCN of the target object
-     *
-     * @param  string $targetClass
-     *
-     * @return Proxy
      */
-    public function setTargetClass($targetClass)
+    public function setTargetClass(string $targetClass) : Proxy
     {
         $this->targetClass = $targetClass;
 
@@ -247,22 +215,16 @@ class Proxy implements ObjectManagerAwareInterface
 
     /**
      * Get the target class
-     *
-     * @return string
      */
-    public function getTargetClass()
+    public function getTargetClass() : string
     {
         return $this->targetClass;
     }
 
     /**
      * Set the property to use as the label in the options
-     *
-     * @param  string $property
-     *
-     * @return Proxy
      */
-    public function setProperty($property)
+    public function setProperty(string $property) : Proxy
     {
         $this->property = $property;
 
@@ -283,10 +245,8 @@ class Proxy implements ObjectManagerAwareInterface
      * @param callable $callable A callable used to create a label based off of an Entity
      *
      * @throws InvalidArgumentException
-     *
-     * @return void
      */
-    public function setLabelGenerator($callable)
+    public function setLabelGenerator(callable $callable) : void
     {
         if (! is_callable($callable)) {
             throw new InvalidArgumentException(
@@ -297,54 +257,35 @@ class Proxy implements ObjectManagerAwareInterface
         $this->labelGenerator = $callable;
     }
 
-    /**
-     * @return callable|null
-     */
-    public function getLabelGenerator()
+    public function getLabelGenerator() : ?callable
     {
         return $this->labelGenerator;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getOptgroupIdentifier()
+    public function getOptgroupIdentifier() : ?string
     {
         return $this->optgroupIdentifier;
     }
 
-    /**
-     * @param string $optgroupIdentifier
-     */
-    public function setOptgroupIdentifier($optgroupIdentifier)
+    public function setOptgroupIdentifier(string $optgroupIdentifier) : void
     {
         $this->optgroupIdentifier = (string) $optgroupIdentifier;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getOptgroupDefault()
+    public function getOptgroupDefault() : ?string
     {
         return $this->optgroupDefault;
     }
 
-    /**
-     * @param string $optgroupDefault
-     */
-    public function setOptgroupDefault($optgroupDefault)
+    public function setOptgroupDefault(string $optgroupDefault) : void
     {
         $this->optgroupDefault = (string) $optgroupDefault;
     }
 
     /**
      * Set if the property is a method to use as the label in the options
-     *
-     * @param  boolean $method
-     *
-     * @return Proxy
      */
-    public function setIsMethod($method)
+    public function setIsMethod(bool $method) : Proxy
     {
         $this->isMethod = (bool) $method;
 
@@ -362,10 +303,8 @@ class Proxy implements ObjectManagerAwareInterface
     /** Set the findMethod property to specify the method to use on repository
      *
      * @param array $findMethod
-     *
-     * @return Proxy
      */
-    public function setFindMethod($findMethod)
+    public function setFindMethod(array $findMethod) : Proxy
     {
         $this->findMethod = $findMethod;
 
@@ -377,19 +316,14 @@ class Proxy implements ObjectManagerAwareInterface
      *
      * @return array
      */
-    public function getFindMethod()
+    public function getFindMethod() : array
     {
         return $this->findMethod;
     }
 
-    /**
-     * @param $targetEntity
-     *
-     * @return string|null
-     */
-    protected function generateLabel($targetEntity)
+    protected function generateLabel($targetEntity) : ?string
     {
-        if (null === ($labelGenerator = $this->getLabelGenerator())) {
+        if (($labelGenerator = $this->getLabelGenerator()) === null) {
             return null;
         }
 
@@ -400,6 +334,7 @@ class Proxy implements ObjectManagerAwareInterface
      * @param  $value
      *
      * @return array|mixed|object
+     *
      * @throws RuntimeException
      */
     public function getValue($value)
@@ -429,7 +364,7 @@ class Proxy implements ObjectManagerAwareInterface
                 $identifier = $metadata->getIdentifierFieldNames();
 
                 // TODO: handle composite (multiple) identifiers
-                if (null !== $identifier && count($identifier) > 1) {
+                if ($identifier !== null && count($identifier) > 1) {
                     //$value = $key;
                 } else {
                     $value = current($metadata->getIdentifierValues($value));
@@ -445,9 +380,8 @@ class Proxy implements ObjectManagerAwareInterface
      *
      * @throws RuntimeException
      * @throws Exception\InvalidRepositoryResultException
-     * @return void
      */
-    protected function loadObjects()
+    protected function loadObjects() : void
     {
         if (! empty($this->objects)) {
             return;
@@ -463,6 +397,7 @@ class Proxy implements ObjectManagerAwareInterface
             if (! isset($findMethod['name'])) {
                 throw new RuntimeException('No method name was set');
             }
+
             $findMethodName   = $findMethod['name'];
             $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : [];
             $repository       = $this->objectManager->getRepository($this->targetClass);
@@ -497,6 +432,7 @@ class Proxy implements ObjectManagerAwareInterface
                     );
                 }
             }
+
             $objects = $r->invokeArgs($repository, $args);
         }
 
@@ -513,9 +449,8 @@ class Proxy implements ObjectManagerAwareInterface
      * Load value options
      *
      * @throws RuntimeException
-     * @return void
      */
-    protected function loadValueOptions()
+    protected function loadValueOptions() : void
     {
         if (! ($om = $this->objectManager)) {
             throw new RuntimeException('No object manager was set');
@@ -536,10 +471,10 @@ class Proxy implements ObjectManagerAwareInterface
         }
 
         foreach ($objects as $key => $object) {
-            if (null !== ($generatedLabel = $this->generateLabel($object))) {
+            if (($generatedLabel = $this->generateLabel($object)) !== null) {
                 $label = $generatedLabel;
             } elseif ($property = $this->property) {
-                if ($this->isMethod == false && ! $metadata->hasField($property)) {
+                if ($this->isMethod === false && ! $metadata->hasField($property)) {
                     throw new RuntimeException(
                         sprintf(
                             'Property "%s" could not be found in object "%s"',
@@ -572,7 +507,7 @@ class Proxy implements ObjectManagerAwareInterface
                 $label = (string) $object;
             }
 
-            if (null !== $identifier && count($identifier) > 1) {
+            if ($identifier !== null && count($identifier) > 1) {
                 $value = $key;
             } else {
                 $value = current($metadata->getIdentifierValues($object));
@@ -620,7 +555,7 @@ class Proxy implements ObjectManagerAwareInterface
             $optgroup = $object->{$optgroupGetter}();
 
             // optgroup_identifier contains a valid group-name. Handle default grouping.
-            if (false === is_null($optgroup) && trim($optgroup) !== '') {
+            if (is_null($optgroup) === false && trim($optgroup) !== '') {
                 $options[$optgroup]['label']     = $optgroup;
                 $options[$optgroup]['options'][] = [
                     'label'      => $label,

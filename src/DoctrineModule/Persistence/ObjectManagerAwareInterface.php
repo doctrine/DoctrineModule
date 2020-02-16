@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Persistence;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -8,15 +10,11 @@ interface ObjectManagerAwareInterface
 {
     /**
      * Set the object manager
-     *
-     * @param ObjectManager $objectManager
      */
-    public function setObjectManager(ObjectManager $objectManager);
+    public function setObjectManager(ObjectManager $objectManager) : void;
 
     /**
      * Get the object manager
-     *
-     * @return ObjectManager
      */
-    public function getObjectManager();
+    public function getObjectManager() : ObjectManager;
 }
