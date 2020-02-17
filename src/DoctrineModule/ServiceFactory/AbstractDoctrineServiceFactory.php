@@ -9,7 +9,6 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\AbstractFactoryInterface;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use function assert;
 use function preg_match;
 
 /**
@@ -41,7 +40,6 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
 
         $factoryClass = $mappings['factoryClass'];
         $factory      = new $factoryClass($mappings['serviceName']);
-        assert($factory instanceof AbstractFactory);
 
         return $factory->createService($container);
     }

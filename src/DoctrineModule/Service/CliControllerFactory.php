@@ -12,7 +12,6 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Console\Application;
-use function assert;
 
 /**
  * Factory responsible of instantiating an {@see \DoctrineModule\Controller\CliController}
@@ -33,7 +32,6 @@ class CliControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : object
     {
         $application = $container->get('doctrine.cli');
-        assert($application instanceof Application);
 
         return new CliController($application);
     }

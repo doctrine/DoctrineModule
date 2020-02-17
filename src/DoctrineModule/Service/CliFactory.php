@@ -10,7 +10,6 @@ use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
-use function assert;
 
 /**
  * CLI Application ServiceManager factory responsible for instantiating a Symfony CLI application
@@ -32,7 +31,6 @@ class CliFactory implements FactoryInterface
     {
         if ($this->events === null) {
             $events = $container->get('EventManager');
-            assert($events instanceof EventManagerInterface);
 
             $events->addIdentifiers([self::class, 'doctrine']);
 

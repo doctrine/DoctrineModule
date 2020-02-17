@@ -15,7 +15,6 @@ use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
-use function assert;
 use function class_exists;
 
 /**
@@ -72,7 +71,6 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
     public function getConsoleUsage(Console $console)
     {
         $cli = $this->serviceManager->get('doctrine.cli');
-        assert($cli instanceof Application);
         $output = new PropertyOutput();
 
         $cli->run(new StringInput('list'), $output);

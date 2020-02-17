@@ -14,7 +14,6 @@ use DoctrineModule\Options\Driver as DriverOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use function assert;
 use function class_exists;
 use function get_class;
 use function is_array;
@@ -36,7 +35,6 @@ class DriverFactory extends AbstractFactory
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $options = $this->getOptions($container, 'driver');
-        assert($options instanceof DriverOptions);
 
         return $this->createDriver($container, $options);
     }
@@ -84,15 +82,12 @@ class DriverFactory extends AbstractFactory
                 $container->get($options->getCache())
             );
             $driver = new $class($reader, $paths);
-            assert($driver instanceof MappingDriver);
         } else {
             $driver = new $class($paths);
-            assert($driver instanceof MappingDriver);
         }
 
         if ($options->getExtension() && $driver instanceof FileDriver) {
             $locator = $driver->getLocator();
-            assert($locator instanceof FileLocator);
 
             if (get_class($locator) !== 'Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator') {
                 throw new InvalidArgumentException(

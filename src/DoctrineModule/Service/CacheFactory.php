@@ -10,7 +10,6 @@ use DoctrineModule\Cache\LaminasStorageCache;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use RuntimeException;
-use function assert;
 use function is_string;
 
 /**
@@ -30,7 +29,6 @@ class CacheFactory extends AbstractFactory
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $options = $this->getOptions($container, 'cache');
-        assert($options instanceof \DoctrineModule\Options\Cache);
         $class = $options->getClass();
 
         if (! $class) {

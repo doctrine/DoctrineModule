@@ -9,7 +9,6 @@ use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use function assert;
 use function is_string;
 
 /**
@@ -25,7 +24,6 @@ class AdapterFactory extends AbstractFactory
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $options = $this->getOptions($container, 'authentication');
-        assert($options instanceof Authentication);
 
         $objectManager = $options->getObjectManager();
         if (is_string($objectManager)) {
