@@ -288,10 +288,7 @@ class Proxy implements ObjectManagerAwareInterface
         return $this;
     }
 
-    /**
-     * @return boolean|null
-     */
-    public function getIsMethod()
+    public function getIsMethod() : ?bool
     {
         return $this->isMethod;
     }
