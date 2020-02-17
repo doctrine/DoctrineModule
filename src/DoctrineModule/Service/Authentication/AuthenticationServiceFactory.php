@@ -1,6 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace DoctrineModule\Service\Authentication;
 
+use BadMethodCallException;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Authentication\AuthenticationService;
@@ -9,17 +13,14 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 /**
  * Factory to create authentication service object.
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Tim Roediger <superdweebie@gmail.com>
  */
 class AuthenticationServiceFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return new AuthenticationService(
             $container->get('doctrine.authenticationstorage.' . $this->getName()),
@@ -27,21 +28,13 @@ class AuthenticationServiceFactory extends AbstractFactory
         );
     }
 
-    /**
-     *
-     * @param ServiceLocatorInterface $container
-     * @return AuthenticationService
-     */
-    public function createService(ServiceLocatorInterface $container)
+    public function createService(ServiceLocatorInterface $container) : AuthenticationService
     {
         return $this($container, AuthenticationService::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getOptionsClass()
+    public function getOptionsClass() : string
     {
-        throw new \BadMethodCallException('Not implemented');
+        throw new BadMethodCallException('Not implemented');
     }
 }

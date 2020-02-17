@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Service;
 
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventManagerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Console\Application;
@@ -11,38 +14,25 @@ use Symfony\Component\Console\Helper\HelperSet;
 /**
  * CLI Application ServiceManager factory responsible for instantiating a Symfony CLI application
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 class CliFactory implements FactoryInterface
 {
-    /**
-     * @var \Laminas\EventManager\EventManagerInterface
-     */
+    /** @var EventManagerInterface */
     protected $events;
 
-    /**
-     * @var \Symfony\Component\Console\Helper\HelperSet
-     */
+    /** @var HelperSet */
     protected $helperSet;
 
-    /**
-     * @var array
-     */
+    /** @var mixed[] */
     protected $commands = [];
 
-    /**
-     * @param  ContainerInterface $container
-     * @return \Laminas\EventManager\EventManagerInterface
-     */
-    public function getEventManager(ContainerInterface $container)
+    public function getEventManager(ContainerInterface $container) : EventManagerInterface
     {
-        if (null === $this->events) {
-            /* @var $events \Laminas\EventManager\EventManagerInterface */
+        if ($this->events === null) {
             $events = $container->get('EventManager');
 
-            $events->addIdentifiers([__CLASS__, 'doctrine']);
+            $events->addIdentifiers([self::class, 'doctrine']);
 
             $this->events = $events;
         }
@@ -52,13 +42,14 @@ class CliFactory implements FactoryInterface
 
     /**
      * {@inheritDoc}
+     *
      * @return Application
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $cli = new Application;
+        $cli = new Application();
         $cli->setName('DoctrineModule Command Line Interface');
-        $cli->setHelperSet(new HelperSet);
+        $cli->setHelperSet(new HelperSet());
         $cli->setCatchExceptions(true);
         $cli->setAutoExit(false);
 
@@ -70,6 +61,7 @@ class CliFactory implements FactoryInterface
 
     /**
      * {@inheritDoc}
+     *
      * @return Application
      */
     public function createService(ServiceLocatorInterface $container)

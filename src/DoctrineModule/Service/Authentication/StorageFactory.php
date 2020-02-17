@@ -1,34 +1,37 @@
 <?php
+
+declare(strict_types=1);
+
 namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepository;
+use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use function is_string;
 
 /**
  * Factory to create authentication storage object.
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Tim Roediger <superdweebie@gmail.com>
  */
 class StorageFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        /* @var $options \DoctrineModule\Options\Authentication */
         $options = $this->getOptions($container, 'authentication');
 
-        if (is_string($objectManager = $options->getObjectManager())) {
+        $objectManager = $options->getObjectManager();
+        if (is_string($objectManager)) {
             $options->setObjectManager($container->get($objectManager));
         }
 
-        if (is_string($storage = $options->getStorage())) {
+        $storage = $options->getStorage();
+        if (is_string($storage)) {
             $options->setStorage($container->get($storage));
         }
 
@@ -38,17 +41,14 @@ class StorageFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return \DoctrineModule\Authentication\Storage\ObjectRepository
+     * @return ObjectRepository
      */
     public function createService(ServiceLocatorInterface $container)
     {
         return $this($container, ObjectRepository::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getOptionsClass()
+    public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\Authentication';
     }

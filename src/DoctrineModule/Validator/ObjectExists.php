@@ -1,33 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Validator;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Validator\AbstractValidator;
 use Laminas\Validator\Exception;
+use function array_combine;
+use function array_key_exists;
+use function array_values;
+use function count;
+use function get_class;
+use function gettype;
+use function is_object;
+use function is_string;
+use function sprintf;
 
 /**
  * Class that validates if objects exist in a given repository with a given list of matched fields
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.4.0
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class ObjectExists extends AbstractValidator
 {
     /**
      * Error constants
      */
-    const ERROR_NO_OBJECT_FOUND = 'noObjectFound';
+    public const ERROR_NO_OBJECT_FOUND = 'noObjectFound';
 
-    /**
-     * @var array Message templates
-     */
-    protected $messageTemplates = [
-        self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found",
-    ];
+    /** @var mixed[] Message templates */
+    protected $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];
 
     /**
      * ObjectRepository from which to search for entities
@@ -39,16 +43,17 @@ class ObjectExists extends AbstractValidator
     /**
      * Fields to be checked
      *
-     * @var array
+     * @var mixed[]
      */
     protected $fields;
 
     /**
      * Constructor
      *
-     * @param array $options required keys are `object_repository`, which must be an instance of
+     * @param mixed[] $options required keys are `object_repository`, which must be an instance of
      *                       Doctrine\Common\Persistence\ObjectRepository, and `fields`, with either
      *                       a string or an array of strings representing the fields to be matched by the validator.
+     *
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(array $options)
@@ -60,7 +65,7 @@ class ObjectExists extends AbstractValidator
                 if (is_object($options['object_repository'])) {
                     $provided = get_class($options['object_repository']);
                 } else {
-                    $provided = getType($options['object_repository']);
+                    $provided = gettype($options['object_repository']);
                 }
             }
 
@@ -91,10 +96,11 @@ class ObjectExists extends AbstractValidator
     /**
      * Filters and validates the fields passed to the constructor
      *
+     * @return mixed[]
+     *
      * @throws Exception\InvalidArgumentException
-     * @return array
      */
-    private function validateFields()
+    private function validateFields() : array
     {
         $fields = (array) $this->fields;
 
@@ -111,15 +117,19 @@ class ObjectExists extends AbstractValidator
         }
 
         $this->fields = array_values($fields);
+
+        return $this->fields;
     }
 
     /**
-     * @param string|array $value a field value or an array of field values if more fields have been configured to be
+     * @param string|mixed[] $value a field value or an array of field values if more fields have been configured to be
      *                      matched
-     * @return array
+     *
+     * @return mixed[]
+     *
      * @throws Exception\RuntimeException
      */
-    protected function cleanSearchValue($value)
+    protected function cleanSearchValue($value) : array
     {
         $value = is_object($value) ? [$value] : (array) $value;
 
@@ -142,7 +152,7 @@ class ObjectExists extends AbstractValidator
         } else {
             $matchedFieldsValues = @array_combine($this->fields, $value);
 
-            if (false === $matchedFieldsValues) {
+            if ($matchedFieldsValues === false) {
                 throw new Exception\RuntimeException(
                     sprintf(
                         'Provided values count is %s, while expected number of fields to be matched is %s',

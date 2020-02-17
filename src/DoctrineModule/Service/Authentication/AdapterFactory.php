@@ -1,30 +1,32 @@
 <?php
+
+declare(strict_types=1);
+
 namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Adapter\ObjectRepository;
+use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use function is_string;
 
 /**
  * Factory to create authentication adapter object.
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Tim Roediger <superdweebie@gmail.com>
  */
 class AdapterFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        /* @var $options \DoctrineModule\Options\Authentication */
         $options = $this->getOptions($container, 'authentication');
 
-        if (is_string($objectManager = $options->getObjectManager())) {
+        $objectManager = $options->getObjectManager();
+        if (is_string($objectManager)) {
             $options->setObjectManager($container->get($objectManager));
         }
 
@@ -34,17 +36,14 @@ class AdapterFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return \DoctrineModule\Authentication\Adapter\ObjectRepository
+     * @return ObjectRepository
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         return $this($serviceLocator, ObjectRepository::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getOptionsClass()
+    public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\Authentication';
     }

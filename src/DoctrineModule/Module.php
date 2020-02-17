@@ -1,32 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Laminas\ModuleManager\Feature\InitProviderInterface;
+use DoctrineModule\Component\Console\Output\PropertyOutput;
+use Laminas\Console\Adapter\AdapterInterface as Console;
+use Laminas\EventManager\EventInterface;
 use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
-use Laminas\EventManager\EventInterface;
-use Laminas\Console\Adapter\AdapterInterface as Console;
-
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
-use DoctrineModule\Component\Console\Output\PropertyOutput;
+use function class_exists;
 
 /**
  * Base module for integration of Doctrine projects with ZF2 applications
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.1.0
- * @author  Kyle Spraggs <theman@spiffyjr.me>
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
 {
-    /**
-     * @var \Laminas\ServiceManager\ServiceLocatorInterface
-     */
+    /** @var ServiceLocatorInterface */
     private $serviceManager;
 
     /**
@@ -55,6 +53,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
     public function getConfig()
     {
         $provider = new ConfigProvider();
+
         return [
             'doctrine' => $provider->getDoctrineConfig(),
             'doctrine_factories' => $provider->getDoctrineFactoryConfig(),
@@ -71,8 +70,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
      */
     public function getConsoleUsage(Console $console)
     {
-        /* @var $cli \Symfony\Component\Console\Application */
-        $cli    = $this->serviceManager->get('doctrine.cli');
+        $cli = $this->serviceManager->get('doctrine.cli');
         $output = new PropertyOutput();
 
         $cli->run(new StringInput('list'), $output);

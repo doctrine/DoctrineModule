@@ -1,28 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Validator;
+
+use function is_object;
 
 /**
  * Class that validates if objects does not exist in a given repository with a given list of matched fields
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   0.4.0
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class NoObjectExists extends ObjectExists
 {
     /**
      * Error constants
      */
-    const ERROR_OBJECT_FOUND = 'objectFound';
+    public const ERROR_OBJECT_FOUND = 'objectFound';
 
-    /**
-     * @var array Message templates
-     */
-    protected $messageTemplates = [
-        self::ERROR_OBJECT_FOUND    => "An object matching '%value%' was found",
-    ];
+    /** @var mixed[] Message templates */
+    protected $messageTemplates = [self::ERROR_OBJECT_FOUND => "An object matching '%value%' was found"];
 
     /**
      * {@inheritDoc}

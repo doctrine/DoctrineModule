@@ -1,47 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Form\Element;
 
-use DoctrineModule\Form\Element\Proxy;
 use Laminas\Form\Element\Radio as RadioElement;
-use Laminas\Form\Form;
+use Traversable;
 
 class ObjectRadio extends RadioElement
 {
-    /**
-     * @var Proxy
-     */
+    /** @var Proxy */
     protected $proxy;
 
-    /**
-     * @return Proxy
-     */
-    public function getProxy()
+    public function getProxy() : Proxy
     {
-        if (null === $this->proxy) {
+        if ($this->proxy === null) {
             $this->proxy = new Proxy();
         }
+
         return $this->proxy;
     }
 
     /**
-     * @param  array|\Traversable $options
-     * @return self
+     * @param array|Traversable $options
+     *
+     * {@inheritDoc}
      */
-    public function setOptions($options)
+    public function setOptions($options) : self
     {
         $this->getProxy()->setOptions($options);
+
         return parent::setOptions($options);
     }
 
     /**
-     * @param string $key
      * @param mixed $value
-     * @return self
+     *
+     * {@inheritDoc}
      */
-    public function setOption($key, $value)
+    public function setOption($key, $value) : self
     {
         $this->getProxy()->setOptions([$key => $value]);
+
         return parent::setOption($key, $value);
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Cache;
 
 use Doctrine\Common\Cache\Cache;
@@ -8,19 +10,16 @@ use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 /**
  * Bridge class that allows usage of a Doctrine Cache Storage as a Laminas Cache Storage
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class DoctrineCacheStorage extends AbstractAdapter
 {
-    /**
-     * @var Cache
-     */
+    /** @var Cache */
     protected $cache;
 
     /**
      * {@inheritDoc}
+     *
      * @param Cache $cache
      */
     public function __construct($options, Cache $cache)
@@ -33,11 +32,11 @@ class DoctrineCacheStorage extends AbstractAdapter
     /**
      * {@inheritDoc}
      */
-    protected function internalGetItem(& $normalizedKey, & $success = null, & $casToken = null)
+    protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null)
     {
         $key     = $this->getOptions()->getNamespace() . $normalizedKey;
         $fetched = $this->cache->fetch($key);
-        $success = ($fetched === false ? false : true);
+        $success = ($fetched !== false);
 
         if ($success) {
             $casToken = $fetched;
@@ -51,7 +50,7 @@ class DoctrineCacheStorage extends AbstractAdapter
     /**
      * {@inheritDoc}
      */
-    protected function internalSetItem(& $normalizedKey, & $value)
+    protected function internalSetItem(&$normalizedKey, &$value)
     {
         $key = $this->getOptions()->getNamespace() . $normalizedKey;
         $ttl = $this->getOptions()->getTtl();
@@ -62,7 +61,7 @@ class DoctrineCacheStorage extends AbstractAdapter
     /**
      * {@inheritDoc}
      */
-    protected function internalRemoveItem(& $normalizedKey)
+    protected function internalRemoveItem(&$normalizedKey)
     {
         $key = $this->getOptions()->getNamespace() . $normalizedKey;
         if (! $this->cache->contains($key)) {

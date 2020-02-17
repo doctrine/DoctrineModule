@@ -1,48 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Form\Element;
 
-use DoctrineModule\Form\Element\Proxy;
 use Laminas\Form\Element\Select as SelectElement;
-use Laminas\Form\Form;
 use Laminas\Stdlib\ArrayUtils;
+use Traversable;
+use function array_map;
+use function is_array;
 
 class ObjectSelect extends SelectElement
 {
-    /**
-     * @var Proxy
-     */
+    /** @var Proxy */
     protected $proxy;
 
-    /**
-     * @return Proxy
-     */
-    public function getProxy()
+    public function getProxy() : Proxy
     {
-        if (null === $this->proxy) {
+        if ($this->proxy === null) {
             $this->proxy = new Proxy();
         }
+
         return $this->proxy;
     }
 
     /**
-     * @param  array|\Traversable $options
-     * @return self
+     * @param array|Traversable $options
+     *
+     * {@inheritDoc}
      */
-    public function setOptions($options)
+    public function setOptions($options) : self
     {
         $this->getProxy()->setOptions($options);
+
         return parent::setOptions($options);
     }
 
     /**
-     * @param string $key
      * @param mixed $value
-     * @return self
+     *
+     * {@inheritDoc}
      */
-    public function setOption($key, $value)
+    public function setOption($key, $value) : self
     {
         $this->getProxy()->setOptions([$key => $value]);
+
         return parent::setOption($key, $value);
     }
 
@@ -53,10 +55,10 @@ class ObjectSelect extends SelectElement
     {
         $multiple = $this->getAttribute('multiple');
 
-        if (true === $multiple || 'multiple' === $multiple) {
-            if ($value instanceof \Traversable) {
+        if ($multiple === true || $multiple === 'multiple') {
+            if ($value instanceof Traversable) {
                 $value = ArrayUtils::iteratorToArray($value);
-            } elseif ($value == null) {
+            } elseif ($value === null) {
                 return parent::setValue([]);
             } elseif (! is_array($value)) {
                 $value = (array) $value;

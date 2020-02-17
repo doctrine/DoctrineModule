@@ -23,7 +23,7 @@ class CollectionAdapterTest extends TestCase
     /**
      * {@inheritDoc}.
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->adapter = new CollectionAdapter(new ArrayCollection(range(1, 101)));

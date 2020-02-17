@@ -1,20 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule;
 
 /**
  * Config provider for DoctrineORMModule config
  *
- * @license MIT
  * @link    www.doctrine-project.org
- * @author  James Titcumb <james@asgrim.com>
  */
 class ConfigProvider
 {
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function __invoke()
+    public function __invoke() : array
     {
         return [
             'doctrine' => $this->getDoctrineConfig(),
@@ -30,64 +30,56 @@ class ConfigProvider
     /**
      * Return application-level dependency configuration
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getDependencyConfig()
+    public function getDependencyConfig() : array
     {
+    // phpcs:disable Generic.Files.LineLength
+
         return [
-            'invokables' => [
-                'DoctrineModule\Authentication\Storage\Session' => 'Laminas\Authentication\Storage\Session',
-            ],
-            'factories' => [
-                'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
-            ],
-            'abstract_factories' => [
-                'DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory',
-            ],
+            'invokables' => ['DoctrineModule\Authentication\Storage\Session' => 'Laminas\Authentication\Storage\Session'],
+            'factories' => ['doctrine.cli' => 'DoctrineModule\Service\CliFactory'],
+            'abstract_factories' => ['DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory'],
         ];
     }
+
+    // phpcs:enable Generic.Files.LineLength
 
     /**
      * Return controller configuration
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getControllerConfig()
+    public function getControllerConfig() : array
     {
         return [
-            'factories' => [
-                'DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory',
-            ],
+            'factories' => ['DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory'],
         ];
     }
 
     /**
      * Return route manager configuration
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getRouteManagerConfig()
+    public function getRouteManagerConfig() : array
     {
         return [
-            'factories' => [
-                'symfony_cli' => 'DoctrineModule\Service\SymfonyCliRouteFactory',
-            ],
+            'factories' => ['symfony_cli' => 'DoctrineModule\Service\SymfonyCliRouteFactory'],
         ];
     }
 
     /**
      * Return configuration for console routes
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getConsoleConfig()
+    public function getConsoleConfig() : array
     {
         return [
             'router' => [
                 'routes' => [
-                    'doctrine_cli' => [
-                        'type' => 'symfony_cli',
-                    ],
+                    'doctrine_cli' => ['type' => 'symfony_cli'],
                 ],
             ],
         ];
@@ -96,9 +88,9 @@ class ConfigProvider
     /**
      * Default configuration for Doctrine module
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getDoctrineConfig()
+    public function getDoctrineConfig() : array
     {
         return [
             'cache' => [
@@ -178,9 +170,9 @@ class ConfigProvider
     /**
      * Factory mappings - used to define which factory to use to instantiate a particular doctrine service type
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getDoctrineFactoryConfig()
+    public function getDoctrineFactoryConfig() : array
     {
         return [
             'cache'                 => 'DoctrineModule\Service\CacheFactory',
@@ -193,9 +185,9 @@ class ConfigProvider
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function getValidatorConfig()
+    public function getValidatorConfig() : array
     {
         return [
             'aliases'   => [

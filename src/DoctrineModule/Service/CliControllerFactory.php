@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Service;
 
 use DoctrineModule\Controller\CliController;
@@ -9,31 +11,26 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Symfony\Component\Console\Application;
 
 /**
  * Factory responsible of instantiating an {@see \DoctrineModule\Controller\CliController}
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class CliControllerFactory implements FactoryInterface
 {
     /**
      * Create an object
      *
-     * @param  ContainerInterface $container
-     * @param  string             $requestedName
-     * @param  null|array         $options
+     * {@inheritDoc}
      *
-     * @return object
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException if any other error occurs.
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : object
     {
-        /* @var $application \Symfony\Component\Console\Application */
         $application = $container->get('doctrine.cli');
 
         return new CliController($application);
@@ -42,7 +39,7 @@ class CliControllerFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      *
-     * @return \DoctrineModule\Controller\CliController
+     * @return CliController
      */
     public function createService(ServiceLocatorInterface $container)
     {
