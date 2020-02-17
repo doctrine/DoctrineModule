@@ -9,7 +9,6 @@ use Doctrine\Common\EventSubscriber;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use function assert;
 use function class_exists;
 use function get_class;
 use function gettype;
@@ -28,7 +27,6 @@ class EventManagerFactory extends AbstractFactory
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $options = $this->getOptions($container, 'eventmanager');
-        assert($options instanceof \DoctrineModule\Options\EventManager);
         $eventManager = new EventManager();
 
         foreach ($options->getSubscribers() as $subscriberName) {
