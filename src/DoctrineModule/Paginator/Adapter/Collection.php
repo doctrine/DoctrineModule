@@ -23,7 +23,8 @@ class Collection implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param integer $offset
+     * @param integer $itemCountPerPage
      */
     public function getItems($offset, $itemCountPerPage)
     {

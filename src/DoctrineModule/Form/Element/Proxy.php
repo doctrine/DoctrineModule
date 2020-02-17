@@ -289,7 +289,7 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
-     * @return mixed
+     * @return boolean|null
      */
     public function getIsMethod()
     {
