@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Persistence;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -9,27 +11,21 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 trait ProvidesObjectManager
 {
-    /**
-     * @var ObjectManager
-     */
+    /** @var ObjectManager */
     protected $objectManager;
 
     /**
      * Set the object manager
-     *
-     * @param ObjectManager $objectManager
      */
-    public function setObjectManager(ObjectManager $objectManager)
+    public function setObjectManager(ObjectManager $objectManager) : void
     {
         $this->objectManager = $objectManager;
     }
 
     /**
      * Get the object manager
-     *
-     * @return ObjectManager
      */
-    public function getObjectManager()
+    public function getObjectManager() : ObjectManager
     {
         return $this->objectManager;
     }

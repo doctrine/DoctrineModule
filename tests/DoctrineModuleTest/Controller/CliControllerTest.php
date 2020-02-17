@@ -21,7 +21,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->setApplicationConfig(ServiceManagerFactory::getConfiguration());
         parent::setUp();

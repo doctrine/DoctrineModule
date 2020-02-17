@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\Cache;
@@ -8,13 +10,13 @@ use DoctrineModule\Cache\LaminasStorageCache;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use RuntimeException;
+use function assert;
+use function is_string;
 
 /**
  * Cache ServiceManager factory
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 class CacheFactory extends AbstractFactory
 {
@@ -25,11 +27,11 @@ class CacheFactory extends AbstractFactory
      *
      * @throws RuntimeException
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        /** @var $options \DoctrineModule\Options\Cache */
         $options = $this->getOptions($container, 'cache');
-        $class   = $options->getClass();
+        assert($options instanceof \DoctrineModule\Options\Cache);
+        $class = $options->getClass();
 
         if (! $class) {
             throw new RuntimeException('Cache must have a class name to instantiate');
@@ -55,24 +57,24 @@ class CacheFactory extends AbstractFactory
                     break;
 
                 default:
-                    $cache = new $class;
+                    $cache = new $class();
                     break;
             }
         }
 
         if ($cache instanceof Cache\MemcacheCache) {
-            /* @var $cache MemcacheCache */
             $cache->setMemcache($instance);
         } elseif ($cache instanceof Cache\MemcachedCache) {
-            /* @var $cache MemcachedCache */
             $cache->setMemcached($instance);
         } elseif ($cache instanceof Cache\RedisCache) {
-            /* @var $cache RedisCache */
             $cache->setRedis($instance);
         }
 
-        if ($cache instanceof CacheProvider && ($namespace = $options->getNamespace())) {
-            $cache->setNamespace($namespace);
+        if ($cache instanceof CacheProvider) {
+            $namespace = $options->getNamespace();
+            if ($namespace) {
+                $cache->setNamespace($namespace);
+            }
         }
 
         return $cache;
@@ -90,10 +92,7 @@ class CacheFactory extends AbstractFactory
         return $this($container, \Doctrine\Common\Cache\Cache::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getOptionsClass()
+    public function getOptionsClass() : string
     {
         return 'DoctrineModule\Options\Cache';
     }

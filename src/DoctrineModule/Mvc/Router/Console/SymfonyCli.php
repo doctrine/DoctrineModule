@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Mvc\Router\Console;
 
+use BadMethodCallException;
 use Laminas\Console\Request as ConsoleRequest;
 use Laminas\Mvc\Console\Router\RouteInterface;
 use Laminas\Router\RouteMatch;
@@ -10,29 +13,23 @@ use Symfony\Component\Console\Application;
 
 /**
  * Route matching commands in Symfony CLI
- *
- * @license MIT
- * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
 class SymfonyCli implements RouteInterface
 {
-    /**
-     * @var \Symfony\Component\Console\Application
-     */
+    /** @var Application */
     protected $cliApplication;
 
     /**
      * Default values.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $defaults;
 
     /**
      * Constructor
      *
-     * @param \Symfony\Component\Console\Application $cliApplication
-     * @param array                                  $defaults
+     * @param mixed[] $defaults
      */
     public function __construct(Application $cliApplication, array $defaults = [])
     {
@@ -63,11 +60,11 @@ class SymfonyCli implements RouteInterface
      *
      * {@inheritDoc}
      *
-     * @throws \BadMethodCallException this method is disabled
+     * @throws BadMethodCallException this method is disabled.
      */
     public function assemble(array $params = [], array $options = [])
     {
-        throw new \BadMethodCallException('Unsupported');
+        throw new BadMethodCallException('Unsupported');
     }
 
     /**
@@ -83,10 +80,10 @@ class SymfonyCli implements RouteInterface
      *
      * {@inheritDoc}
      *
-     * @throws \BadMethodCallException this method is disabled
+     * @throws BadMethodCallException this method is disabled.
      */
     public static function factory($options = [])
     {
-        throw new \BadMethodCallException('Unsupported');
+        throw new BadMethodCallException('Unsupported');
     }
 }

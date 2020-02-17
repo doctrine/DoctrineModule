@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModule\Validator\Service;
 
 use DoctrineModule\Validator\ObjectExists;
@@ -8,26 +10,25 @@ use Interop\Container\ContainerInterface;
 /**
  * Factory for creating ObjectExists instances
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @since   1.3.0
- * @author  Fabian Grutschus <f.grutschus@lubyte.de>
  */
 class ObjectExistsFactory extends AbstractValidatorFactory
 {
+    /** @var string */
     protected $validatorClass = ObjectExists::class;
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $container = $this->container($container);
 
         $repository = $this->getRepository($container, $options);
 
-        $validator = new ObjectExists($this->merge($options, [
+        return new ObjectExists($this->merge($options, [
             'object_repository' => $repository,
             'fields'            => $this->getFields($options),
         ]));
-
-        return $validator;
     }
 }

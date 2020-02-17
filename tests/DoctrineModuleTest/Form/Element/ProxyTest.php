@@ -30,7 +30,7 @@ class ProxyTest extends TestCase
     /**
      * {@inheritDoc}.
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->proxy = new Proxy;
@@ -258,13 +258,13 @@ class ProxyTest extends TestCase
         $this->prepareProxy();
 
         $this->expectException(
-            'InvalidArgumentException'
+            'TypeError'
         );
         $this->expectExceptionMessage(
-            'Property "label_generator" needs to be a callable function or a \Closure'
+            'Argument 1 passed to DoctrineModule\Form\Element\Proxy::setLabelGenerator() must be callable'
         );
 
-        $this->proxy->setOptions(['label_generator' => 'I throw an InvalidArgumentException']);
+        $this->proxy->setOptions(['label_generator' => 'I throw an invalid type error']);
     }
 
     public function testUsingOptionAttributesOfTypeString()

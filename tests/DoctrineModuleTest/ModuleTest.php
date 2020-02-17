@@ -35,7 +35,7 @@ class ModuleTest extends TestCase
      */
     private $cli;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->application    = $this->getMockBuilder('Laminas\Mvc\Application')
             ->disableOriginalConstructor()
