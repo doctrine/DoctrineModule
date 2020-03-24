@@ -40,6 +40,3 @@ class Module
     }
 }
 ```
-
-This is not the suggested way of attaching new commands to the CLI, since ZF2 comes
-already with console support.

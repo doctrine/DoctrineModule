@@ -29,7 +29,7 @@ $paginator->setCurrentPageNumber(1)
 // Pass it to the view, and use it like a "standard" Laminas paginator
 ```
 
-For more information about Laminas Paginator, please read the [Laminas Paginator documentation](http://framework.zend.com/manual/2.0/en/modules/zend.paginator.introduction.html).
+For more information about Laminas paginator, please read the [laminas-paginator documentation](https://docs.laminas.dev/laminas-paginator/).
 
 ### Selectable adapter
 
@@ -77,4 +77,4 @@ $paginator->setCurrentPageNumber(1)
 // Pass it to the view, and use it like a "standard" Laminas paginator
 ```
 
-For more information about Laminas Paginator, please read the [Laminas Paginator documentation](http://framework.zend.com/manual/2.3/en/modules/zend.paginator.introduction.html).
+For more information about Laminas paginator, please read the [laminas-paginator documentation](https://docs.laminas.dev/laminas-paginator/).
