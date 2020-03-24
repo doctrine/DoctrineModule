@@ -1,196 +1,129 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Form\Element\TestAsset;
+
+use function assert;
 
 /**
  * Simple mock object for form element adapter tests
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
  */
 class FormObject
 {
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     protected $id;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $email;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $username;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $firstname;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $surname;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $password;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $optgroup;
 
-    public function __toString()
+    public function __toString() : string
     {
+        assert($this->username !== null);
+
         return $this->username;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return self
-     */
-    public function setId($id)
+    public function setId(int $id) : self
     {
         $this->id = (int) $id;
 
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId() : ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return self
-     */
-    public function setEmail($email)
+    public function setEmail(string $email) : self
     {
         $this->email = (string) $email;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getEmail()
+    public function getEmail() : ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $password
-     *
-     * @return self
-     */
-    public function setPassword($password)
+    public function setPassword(string $password) : self
     {
         $this->password = (string) $password;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPassword()
+    public function getPassword() : ?string
     {
         return $this->password;
     }
 
-    /**
-     * @param string $username
-     *
-     * @return self
-     */
-    public function setUsername($username)
+    public function setUsername(string $username) : self
     {
         $this->username = (string) $username;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getUsername()
+    public function getUsername() : ?string
     {
         return $this->username;
     }
 
-    /**
-     * @param string $firstname
-     *
-     * @return self
-     */
-    public function setFirstname($firstname)
+    public function setFirstname(string $firstname) : self
     {
         $this->firstname = (string) $firstname;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFirstname()
+    public function getFirstname() : ?string
     {
         return $this->firstname;
     }
 
-    /**
-     * @param string $surname
-     *
-     * @return self
-     */
-    public function setSurname($surname)
+    public function setSurname(string $surname) : self
     {
         $this->surname = (string) $surname;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSurname()
+    public function getSurname() : ?string
     {
         return $this->surname;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getName()
+    public function getName() : ?string
     {
-        return isset($this->firstname) && isset($this->surname) ? $this->firstname . " " . $this->surname : null;
+        return isset($this->firstname) && isset($this->surname) ? $this->firstname . ' ' . $this->surname : null;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getOptgroup()
+    public function getOptgroup() : ?string
     {
         return $this->optgroup;
     }
 
-    /**
-     * @param null|string $optgroup
-     */
-    public function setOptgroup($optgroup)
+    public function setOptgroup(?string $optgroup) : void
     {
         $this->optgroup = $optgroup;
     }

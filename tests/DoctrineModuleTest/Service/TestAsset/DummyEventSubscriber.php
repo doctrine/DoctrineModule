@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Service\TestAsset;
 
 use Doctrine\Common\EventSubscriber;
@@ -12,7 +14,7 @@ class DummyEventSubscriber implements EventSubscriber
     /**
      * Empty callback method
      */
-    public function dummy()
+    public function dummy() : void
     {
     }
 
@@ -21,8 +23,6 @@ class DummyEventSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return [
-            'dummy',
-        ];
+        return ['dummy'];
     }
 }

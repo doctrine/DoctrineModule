@@ -1,23 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Component\Console\Input;
 
-use PHPUnit\Framework\TestCase;
-use Laminas\Console\Request;
 use DoctrineModule\Component\Console\Input\RequestInput;
+use Laminas\Console\Request;
+use PHPUnit\Framework\TestCase;
+use function array_shift;
 
 /**
  * Tests for {@see \DoctrineModule\Component\Console\Input\RequestInput}
- *
- * @license MIT
- * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
 class RequestInputTest extends TestCase
 {
     /**
      * @covers \DoctrineModule\Component\Console\Input\RequestInput
      */
-    public function testParamsCorrectlySetted()
+    public function testParamsCorrectlySetted() : void
     {
         $params = [
             'scriptname.php',

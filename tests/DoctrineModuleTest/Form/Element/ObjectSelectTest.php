@@ -1,28 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Form\Element\ObjectSelect;
+use function get_class;
 
 /**
  * Tests for the ObjectSelect element
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ *
  * @covers  \DoctrineModule\Form\Element\ObjectSelect
  */
 class ObjectSelectTest extends ProxyAwareElementTestCase
 {
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     protected $values;
 
-    /**
-     * @var ObjectSelect
-     */
+    /** @var ObjectSelect */
     protected $element;
 
     /**
@@ -36,7 +34,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         $this->prepareProxy();
     }
 
-    public function testSetValueWithCollection()
+    public function testSetValueWithCollection() : void
     {
         $this->element->setAttribute('multiple', true);
 
@@ -50,7 +48,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         );
     }
 
-    public function testSetValueWithArray()
+    public function testSetValueWithArray() : void
     {
         $this->element->setAttribute('multiple', true);
 
@@ -64,7 +62,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         );
     }
 
-    public function testSetValueSingleValue()
+    public function testSetValueSingleValue() : void
     {
         $value = $this->values->toArray();
 
@@ -78,7 +76,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         );
     }
 
-    public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized()
+    public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized() : void
     {
         $element = $this->createPartialMock(get_class($this->element), ['setValueOptions']);
 
@@ -97,7 +95,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $element->getValueOptions());
     }
 
-    public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty()
+    public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty() : void
     {
         $options = ['foo' => 'bar'];
 
@@ -112,7 +110,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $this->element->getValueOptions());
     }
 
-    public function testOptionsCanBeSetSingle()
+    public function testOptionsCanBeSetSingle() : void
     {
         $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
         $proxy->expects($this->once())->method('setOptions')->with(['is_method' => true]);

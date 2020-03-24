@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Authentication\Adapter;
 
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Authentication\Adapter\ObjectRepository as ObjectRepositoryAdapter;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject;
+use PHPUnit\Framework\TestCase as BaseTestCase;
+use stdClass;
+use function crypt;
 
 /**
  * Tests for the ObjectRepository based authentication adapter
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class ObjectRepositoryTest extends BaseTestCase
 {
-    public function testWillRejectInvalidIdentityProperty()
+    public function testWillRejectInvalidIdentityProperty() : void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
@@ -28,7 +30,7 @@ class ObjectRepositoryTest extends BaseTestCase
         new ObjectRepositoryAdapter(['identity_property' => false]);
     }
 
-    public function testWillRejectInvalidCredentialProperty()
+    public function testWillRejectInvalidCredentialProperty() : void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
@@ -39,7 +41,7 @@ class ObjectRepositoryTest extends BaseTestCase
         new ObjectRepositoryAdapter(['credential_property' => false]);
     }
 
-    public function testWillRequireIdentityValue()
+    public function testWillRequireIdentityValue() : void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\RuntimeException'
@@ -57,7 +59,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testWillRequireCredentialValue()
+    public function testWillRequireCredentialValue() : void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\RuntimeException'
@@ -75,7 +77,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testWillRejectInvalidCredentialCallable()
+    public function testWillRejectInvalidCredentialCallable() : void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
@@ -93,7 +95,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testAuthentication()
+    public function testAuthentication() : void
     {
         $entity = new IdentityObject();
         $entity->setUsername('a username');
@@ -138,7 +140,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
-    public function testAuthenticationWithPublicProperties()
+    public function testAuthenticationWithPublicProperties() : void
     {
         $entity           = new PublicPropertiesIdentityObject();
         $entity->username = 'a username';
@@ -172,7 +174,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
-    public function testWillRefuseToAuthenticateWithoutGettersOrPublicMethods()
+    public function testWillRefuseToAuthenticateWithoutGettersOrPublicMethods() : void
     {
         $this->expectException('Laminas\Authentication\Adapter\Exception\UnexpectedValueException');
 
@@ -181,7 +183,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue(new \stdClass()));
+            ->will($this->returnValue(new stdClass()));
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -195,7 +197,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testCanValidateWithSpecialCrypt()
+    public function testCanValidateWithSpecialCrypt() : void
     {
         $hash   = '$2y$07$usesomesillystringforsalt$';
         $entity = new IdentityObject();
@@ -216,7 +218,7 @@ class ObjectRepositoryTest extends BaseTestCase
             'credential_property' => 'password',
             'identity_property' => 'username',
             // enforced type hinting to verify that closure is invoked correctly
-            'credential_callable' => function (IdentityObject $identity, $credentialValue) use ($hash) {
+            'credential_callable' => static function (IdentityObject $identity, $credentialValue) use ($hash) {
                 return $identity->getPassword() === crypt($credentialValue, $hash);
             },
         ]);
@@ -234,7 +236,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
-    public function testWillRefuseToAuthenticateWhenInvalidInstanceIsFound()
+    public function testWillRefuseToAuthenticateWhenInvalidInstanceIsFound() : void
     {
         $this->expectException('Laminas\Authentication\Adapter\Exception\UnexpectedValueException');
 
@@ -243,7 +245,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue(new \stdClass()));
+            ->will($this->returnValue(new stdClass()));
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -258,7 +260,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testWillNotCastAuthCredentialValue()
+    public function testWillNotCastAuthCredentialValue() : void
     {
         $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $adapter          = new ObjectRepositoryAdapter();
@@ -266,9 +268,9 @@ class ObjectRepositoryTest extends BaseTestCase
 
         $entity->setPassword(0);
         $adapter->setOptions([
-             'object_repository'   => $objectRepository,
-             'credential_property' => 'password',
-             'identity_property'   => 'username',
+            'object_repository'   => $objectRepository,
+            'credential_property' => 'password',
+            'identity_property'   => 'username',
         ]);
         $adapter->setIdentity('a username');
         $adapter->setCredential('00000');

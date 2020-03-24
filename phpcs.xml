@@ -19,6 +19,11 @@
         </properties>
     </rule>
 
+    <!-- need to use settype -->
+    <rule ref="Generic.PHP.ForbiddenFunctions.Found">
+        <exclude-pattern>tests/DoctrineModuleTest/Cache/DoctrineCacheStorageTest.php</exclude-pattern>
+    </rule>
+
     <!-- Paths to check -->
     <file>src</file>
     <file>tests</file>

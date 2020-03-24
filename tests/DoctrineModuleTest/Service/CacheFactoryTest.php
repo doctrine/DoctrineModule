@@ -1,41 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use DoctrineModule\Service\CacheFactory;
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase as BaseTestCase;
+use function assert;
 
 /**
  * Test for {@see \DoctrineModule\Service\CacheFactory}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
  */
 class CacheFactoryTest extends BaseTestCase
 {
     /**
      * @covers \DoctrineModule\Service\CacheFactory::createService
      */
-    public function testWillSetNamespace()
+    public function testWillSetNamespace() : void
     {
         $factory        = new CacheFactory('foo');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'config',
             [
-                 'doctrine' => [
-                     'cache' => [
-                         'foo' => [
-                             'namespace' => 'bar',
-                         ],
-                     ],
-                 ],
+                'doctrine' => [
+                    'cache' => [
+                        'foo' => ['namespace' => 'bar'],
+                    ],
+                ],
             ]
         );
 
-        /* @var $service \Doctrine\Common\Cache\ArrayCache */
         $service = $factory->createService($serviceManager);
+        assert($service instanceof ArrayCache);
 
         $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $service);
         $this->assertSame('bar', $service->getNamespace());
@@ -45,7 +45,7 @@ class CacheFactoryTest extends BaseTestCase
      * @covers \DoctrineModule\Service\CacheFactory::createService
      * @group 547
      */
-    public function testCreateLaminasCache()
+    public function testCreateLaminasCache() : void
     {
         $factory        = new CacheFactory('phpunit');
         $serviceManager = new ServiceManager();
@@ -63,9 +63,7 @@ class CacheFactoryTest extends BaseTestCase
                 ],
                 'caches' => [
                     'my-laminas-cache' => [
-                        'adapter' => [
-                            'name' => 'blackhole',
-                        ],
+                        'adapter' => ['name' => 'blackhole'],
                     ],
                 ],
             ]
@@ -77,7 +75,7 @@ class CacheFactoryTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModule\Cache\LaminasStorageCache', $cache);
     }
 
-    public function testCreatePredisCache()
+    public function testCreatePredisCache() : void
     {
         $factory        = new CacheFactory('predis');
         $serviceManager = new ServiceManager();
@@ -104,7 +102,7 @@ class CacheFactoryTest extends BaseTestCase
         $this->assertInstanceOf('Doctrine\Common\Cache\PredisCache', $cache);
     }
 
-    public function testUseServiceFactory()
+    public function testUseServiceFactory() : void
     {
         $factory        = new CacheFactory('chain');
         $serviceManager = new ServiceManager();
@@ -123,7 +121,7 @@ class CacheFactoryTest extends BaseTestCase
 
         $mock = $this->createMock(ChainCache::class);
 
-        $serviceManager->setFactory(ChainCache::class, function () use ($mock) {
+        $serviceManager->setFactory(ChainCache::class, static function () use ($mock) {
             return $mock;
         });
 
