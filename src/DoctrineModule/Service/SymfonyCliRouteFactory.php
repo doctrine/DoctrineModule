@@ -8,7 +8,6 @@ use DoctrineModule\Mvc\Router\Console\SymfonyCli;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Symfony\Component\Console\Application;
 
 /**
  * Factory responsible of instantiating {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}

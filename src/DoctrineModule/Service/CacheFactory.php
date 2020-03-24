@@ -29,7 +29,7 @@ class CacheFactory extends AbstractFactory
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $options = $this->getOptions($container, 'cache');
-        $class = $options->getClass();
+        $class   = $options->getClass();
 
         if (! $class) {
             throw new RuntimeException('Cache must have a class name to instantiate');

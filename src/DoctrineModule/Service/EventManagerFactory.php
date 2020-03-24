@@ -26,7 +26,7 @@ class EventManagerFactory extends AbstractFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $options = $this->getOptions($container, 'eventmanager');
+        $options      = $this->getOptions($container, 'eventmanager');
         $eventManager = new EventManager();
 
         foreach ($options->getSubscribers() as $subscriberName) {
