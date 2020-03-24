@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Validator;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Laminas\Validator\Exception;
 use function array_diff_assoc;
 use function array_key_exists;
@@ -39,8 +39,8 @@ class UniqueObject extends ObjectExists
      * Constructor
      *
      * @param mixed[] $options required keys are `object_repository`, which must be an instance of
-     *                       Doctrine\Common\Persistence\ObjectRepository, `object_manager`, which
-     *                       must be an instance of Doctrine\Common\Persistence\ObjectManager,
+     *                       Doctrine\Persistence\ObjectRepository, `object_manager`, which
+     *                       must be an instance of Doctrine\Persistence\ObjectManager,
      *                       and `fields`, with either a string or an array of strings representing
      *                       the fields to be matched by the validator.
      *
@@ -64,7 +64,7 @@ class UniqueObject extends ObjectExists
             throw new Exception\InvalidArgumentException(
                 sprintf(
                     'Option "object_manager" is required and must be an instance of'
-                    . ' Doctrine\Common\Persistence\ObjectManager, %s given',
+                    . ' Doctrine\Persistence\ObjectManager, %s given',
                     $provided
                 )
             );

@@ -17,7 +17,7 @@ class NoObjectExistsTest extends BaseTestCase
 {
     public function testCanValidateWithNoAvailableObjectInRepository()
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
         $repository
             ->expects($this->once())
@@ -31,7 +31,7 @@ class NoObjectExistsTest extends BaseTestCase
 
     public function testCannotValidateWithAvailableObjectInRepository()
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
         $repository
             ->expects($this->once())
@@ -45,7 +45,7 @@ class NoObjectExistsTest extends BaseTestCase
 
     public function testErrorMessageIsStringInsteadArray()
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $repository
             ->expects($this->once())
             ->method('findOneBy')

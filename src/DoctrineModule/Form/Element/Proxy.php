@@ -6,7 +6,7 @@ namespace DoctrineModule\Form\Element;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Inflector\Inflector;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 use ReflectionMethod;
@@ -20,6 +20,7 @@ use function count;
 use function current;
 use function get_class;
 use function gettype;
+use function interface_exists;
 use function is_callable;
 use function is_object;
 use function is_string;
@@ -588,3 +589,5 @@ class Proxy implements ObjectManagerAwareInterface
         $this->valueOptions = $options;
     }
 }
+
+interface_exists(ObjectManager::class);

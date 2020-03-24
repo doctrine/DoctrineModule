@@ -4,8 +4,8 @@ namespace DoctrineModule\Validator\Service;
 
 use PHPUnit\Framework\TestCase;
 use DoctrineModule\Validator\UniqueObject;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use Interop\Container\ContainerInterface;
 
 /**

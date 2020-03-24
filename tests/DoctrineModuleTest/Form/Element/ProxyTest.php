@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class ProxyTest extends TestCase
 {
     /**
-     * @var \Doctrine\Common\Persistence\Mapping\ClassMetadata
+     * @var \Doctrine\Persistence\Mapping\ClassMetadata
      */
     protected $metadata;
 
@@ -51,7 +51,7 @@ class ProxyTest extends TestCase
         $this->expectExceptionMessage('No target class was set');
 
         $this->proxy->setOptions([
-            'object_manager' => $this->createMock('Doctrine\Common\Persistence\ObjectManager'),
+            'object_manager' => $this->createMock('Doctrine\Persistence\ObjectManager'),
         ]);
         $this->proxy->getValueOptions();
     }
@@ -62,9 +62,9 @@ class ProxyTest extends TestCase
         $this->expectExceptionMessage('No method name was set');
 
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata    = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata    = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -82,11 +82,11 @@ class ProxyTest extends TestCase
     public function testExceptionFindMethodNameNotExistentInRepository()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata    = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata    = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
 
-        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -116,11 +116,11 @@ class ProxyTest extends TestCase
     public function testExceptionThrownForMissingRequiredParameter()
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata    = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata    = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
 
-        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -540,7 +540,7 @@ class ProxyTest extends TestCase
 
         $result = new ArrayCollection([$objectOne, $objectTwo]);
 
-        $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -561,12 +561,12 @@ class ProxyTest extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -619,7 +619,7 @@ class ProxyTest extends TestCase
 
         $result = new ArrayCollection([$objectOne, $objectTwo, $objectThree]);
 
-        $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -642,12 +642,12 @@ class ProxyTest extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -690,7 +690,7 @@ class ProxyTest extends TestCase
 
         $result = new ArrayCollection([$objectOne, $objectTwo]);
 
-        $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -711,12 +711,12 @@ class ProxyTest extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -758,7 +758,7 @@ class ProxyTest extends TestCase
 
         $result = new ArrayCollection([$objectOne, $objectTwo]);
 
-        $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
         $metadata
             ->expects($this->exactly(2))
             ->method('getIdentifierValues')
@@ -778,13 +778,13 @@ class ProxyTest extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $objectRepository
             ->expects($this->once())
             ->method('findBy')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager
             ->expects($this->once())
             ->method('getClassMetadata')
@@ -818,15 +818,15 @@ class ProxyTest extends TestCase
         }
 
         $objectClass      = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata         = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $objectRepository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $metadata         = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
         $objectRepository
             ->expects($this->once())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager
             ->expects($this->once())
             ->method('getClassMetadata')
