@@ -123,9 +123,9 @@ class Module
 }
 ```
 
-Please note that I am using here a ``Laminas\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Laminas\Authentication\AuthenticationService`` will allow it to be recognised by the Laminas [Identity view helper](https://framework.zend.com/manual/2.4/en/modules/zend.view.helpers.identity.html).
+Please note that I am using here a ``Laminas\Authentication\AuthenticationService`` name, but it can be anything else (``my_auth_service``…). However, using the name ``Laminas\Authentication\AuthenticationService`` will allow it to be recognised by the Laminas [Identity view helper](https://docs.laminas.dev/laminas-view/helpers/identity/).
 
-In ZF3, you can inject the ``Laminas\Authentication\AuthenticationService`` into your controller factories as in the example below:
+In Laminas, you can inject the ``Laminas\Authentication\AuthenticationService`` into your controller factories as in the example below:
 
 ```php
 <?php
@@ -146,7 +146,7 @@ class ApplicationControllerFactory implements FactoryInterface
 
 #### Using the AuthenticationService
 
-Now that we have defined how to create a `Laminas\Authentication\AuthenticationService` object we can use it in our code. For more information about Laminas authentication mechanisms please read [the ZF 2 Authentication's documentation](http://framework.zend.com/manual/2.4/en/modules/zend.authentication.intro.html).
+Now that we have defined how to create a `Laminas\Authentication\AuthenticationService` object we can use it in our code. For more information about Laminas authentication mechanisms please read [the laminas-authentication documentation](https://docs.laminas.dev/laminas-authentication/).
 
 Here is an example of how we could use it from a controller action (we stripped any Form things for simplicity):
 
@@ -173,7 +173,7 @@ public function loginAction()
 }
 ```
 
-Instead of ZF2, you can do like this in ZF3:
+Instead of Zend Framework 2, you can do like this in Zend Framework 3 and Laminas:
 
 ```php
 
@@ -227,7 +227,7 @@ The authentication storage will automatically handle the conversion from saved d
 
 #### View helper and controller helper
 
-You may also need to know if there is an authenticated user within your other controllers or in views. ZF2 provides a controller plugin and a view helper you may use.
+You may also need to know if there is an authenticated user within your other controllers or in views. Laminas provides a controller plugin and a view helper you may use.
 
 Here is how you use it in your controller :
 
