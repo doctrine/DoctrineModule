@@ -38,7 +38,7 @@ class Cache extends AbstractOptions
      * Key to use for fetching the memcache, memcached, or redis instance from
      * the service locator. Used only with Memcache. Memcached, and Redis.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $instance = null;
 

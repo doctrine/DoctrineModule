@@ -11,7 +11,6 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Symfony\Component\Console\Application;
 
 /**
  * Factory responsible of instantiating an {@see \DoctrineModule\Controller\CliController}

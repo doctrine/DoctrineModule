@@ -13,7 +13,6 @@ use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
 use function class_exists;
 
@@ -70,7 +69,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
      */
     public function getConsoleUsage(Console $console)
     {
-        $cli = $this->serviceManager->get('doctrine.cli');
+        $cli    = $this->serviceManager->get('doctrine.cli');
         $output = new PropertyOutput();
 
         $cli->run(new StringInput('list'), $output);
