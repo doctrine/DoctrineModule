@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Validator\Service;
 
-use PHPUnit\Framework\TestCase;
 use DoctrineModule\Validator\ObjectExists;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;

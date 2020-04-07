@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Validator\Service;
 
-use PHPUnit\Framework\TestCase;
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use DoctrineModule\Validator\NoObjectExists;
+use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use Interop\Container\ContainerInterface;
