@@ -15,7 +15,7 @@ class StorageFactoryTest extends BaseTestCase
         $name    = 'testFactory';
         $factory = new StorageFactory($name);
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(

@@ -42,7 +42,7 @@ class DriverFactoryTest extends BaseTestCase
                     'driver' => [
                         'testDriver' => ['class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock'],
                         'testChainDriver' => [
-                            'class' => 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain',
+                            'class' => 'Doctrine\Persistence\Mapping\Driver\MappingDriverChain',
                             'drivers' => [
                                 'Foo\Bar' => 'testDriver',
                                 'Foo\Baz' => null,
@@ -55,7 +55,7 @@ class DriverFactoryTest extends BaseTestCase
 
         $factory = new DriverFactory('testChainDriver');
         $driver  = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain', $driver);
+        $this->assertInstanceOf('Doctrine\Persistence\Mapping\Driver\MappingDriverChain', $driver);
         $drivers = $driver->getDrivers();
         $this->assertCount(1, $drivers);
         $this->assertArrayHasKey('Foo\Bar', $drivers);

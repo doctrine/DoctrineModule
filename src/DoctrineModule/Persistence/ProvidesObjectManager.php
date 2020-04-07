@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Persistence;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
+use function interface_exists;
 
 /**
  * Trait to provide object manager to a form (only works from PHP 5.4)
@@ -30,3 +31,5 @@ trait ProvidesObjectManager
         return $this->objectManager;
     }
 }
+
+interface_exists(ObjectManager::class);
