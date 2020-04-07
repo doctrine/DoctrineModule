@@ -1,54 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Authentication\Adapter\TestAsset;
 
 /**
  * Simple mock object for authentication adapter tests
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class IdentityObject
 {
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $username;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $password;
 
     /**
-     * @param string $password
+     * @param mixed $password
      */
-    public function setPassword($password)
+    public function setPassword($password) : void
     {
         $this->password = (string) $password;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPassword()
+    public function getPassword() : ?string
     {
         return $this->password;
     }
 
-    /**
-     * @param string $username
-     */
-    public function setUsername($username)
+    public function setUsername(string $username) : void
     {
         $this->username = (string) $username;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getUsername()
+    public function getUsername() : ?string
     {
         return $this->username;
     }

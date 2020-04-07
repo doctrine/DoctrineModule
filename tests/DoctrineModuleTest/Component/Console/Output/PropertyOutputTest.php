@@ -1,23 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Component\Console\Output;
 
-use PHPUnit\Framework\TestCase;
 use DoctrineModule\Component\Console\Output\PropertyOutput;
+use PHPUnit\Framework\TestCase;
+use const PHP_EOL;
 
 /**
  * Tests for {@see \DoctrineModule\Component\Console\Output\PropertyOutput}
- *
- * @license MIT
- * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  */
 class PropertyOutputTest extends TestCase
 {
-
     /**
      * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
      */
-    public function testWrite()
+    public function testWrite() : void
     {
         $message = 'message';
 
@@ -29,14 +28,14 @@ class PropertyOutputTest extends TestCase
     /**
      * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
      */
-    public function testWriteConcat()
+    public function testWriteConcat() : void
     {
         $message  = 'message';
         $message2 = 'message2';
 
         $output = new PropertyOutput();
-        $output->write($message, PHP_EOL);
-        $output->write($message2, PHP_EOL);
+        $output->write($message, true);
+        $output->write($message2, true);
 
         $expected = $message . PHP_EOL . $message2 . PHP_EOL;
         $this->assertEquals($expected, $output->getMessage());

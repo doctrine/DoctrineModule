@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest;
 
+use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
+use function assert;
 
 /**
  * Base test case to be used when a service manager instance is required
@@ -11,9 +15,9 @@ use Laminas\ServiceManager\ServiceManager;
 class ServiceManagerFactory
 {
     /**
-     * @return array
+     * @return mixed[]
      */
-    public static function getConfiguration()
+    public static function getConfiguration() : array
     {
         return include __DIR__ . '/../TestConfiguration.php';
     }
@@ -21,10 +25,9 @@ class ServiceManagerFactory
     /**
      * Retrieves a new ServiceManager instance
      *
-     * @param  array|null     $configuration
-     * @return ServiceManager
+     * @param mixed[]|null $configuration
      */
-    public static function getServiceManager(array $configuration = null)
+    public static function getServiceManager(?array $configuration = null) : ServiceManager
     {
         $configuration        = $configuration ?: static::getConfiguration();
         $serviceManager       = new ServiceManager();
@@ -36,8 +39,8 @@ class ServiceManagerFactory
             $serviceManager->setFactory('ServiceListener', 'Laminas\Mvc\Service\ServiceListenerFactory');
         }
 
-        /* @var $moduleManager \Laminas\ModuleManager\ModuleManagerInterface */
         $moduleManager = $serviceManager->get('ModuleManager');
+        assert($moduleManager instanceof ModuleManagerInterface);
         $moduleManager->loadModules();
 
         return $serviceManager;

@@ -1,30 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Cache;
 
-use DoctrineModule\Cache\LaminasStorageCache;
+use ArrayObject;
 use Doctrine\Common\Cache\Cache;
+use DoctrineModule\Cache\LaminasStorageCache;
 use Laminas\Cache\Storage\Adapter\Memory;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the cache bridge
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class LaminasStorageCacheTest extends TestCase
 {
-    /**
-     * @return LaminasStorageCache
-     */
-    protected function getCacheDriver()
+    protected function getCacheDriver() : LaminasStorageCache
     {
         return new LaminasStorageCache(new Memory());
     }
 
-    public function testBasics()
+    public function testBasics() : void
     {
         $cache = $this->getCacheDriver();
 
@@ -43,11 +41,11 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('test_key2'));
 
         // Fetch/save test with objects (Is cache driver serializes/unserializes objects correctly ?)
-        $cache->save('test_object_key', new \ArrayObject());
+        $cache->save('test_object_key', new ArrayObject());
         $this->assertInstanceOf('ArrayObject', $cache->fetch('test_object_key'));
     }
 
-    public function testDeleteAll()
+    public function testDeleteAll() : void
     {
         $cache = $this->getCacheDriver();
         $cache->save('test_key1', '1');
@@ -58,7 +56,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('test_key2'));
     }
 
-    public function testFlushAll()
+    public function testFlushAll() : void
     {
         $cache = $this->getCacheDriver();
         $cache->save('test_key1', '1');
@@ -69,7 +67,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('test_key2'));
     }
 
-    public function testNamespace()
+    public function testNamespace() : void
     {
         $cache = $this->getCacheDriver();
         $cache->setNamespace('test_');
@@ -82,7 +80,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('key1'));
     }
 
-    public function testGetStats()
+    public function testGetStats() : void
     {
         $cache = $this->getCacheDriver();
         $stats = $cache->getStats();

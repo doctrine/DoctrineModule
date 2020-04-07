@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Service;
 
 use DoctrineModule\Service\DriverFactory;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
  */
 class DriverFactoryTest extends BaseTestCase
 {
-    public function testCreateDriver()
+    public function testCreateDriver() : void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -19,9 +21,7 @@ class DriverFactoryTest extends BaseTestCase
             [
                 'doctrine' => [
                     'driver' => [
-                        'testDriver' => [
-                            'class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock',
-                        ],
+                        'testDriver' => ['class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock'],
                     ],
                 ],
             ]
@@ -32,7 +32,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModuleTest\Service\Mock\MetadataDriverMock', $driver);
     }
 
-    public function testCreateDriverChain()
+    public function testCreateDriverChain() : void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -40,9 +40,7 @@ class DriverFactoryTest extends BaseTestCase
             [
                 'doctrine' => [
                     'driver' => [
-                        'testDriver' => [
-                            'class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock',
-                        ],
+                        'testDriver' => ['class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock'],
                         'testChainDriver' => [
                             'class' => 'Doctrine\Persistence\Mapping\Driver\MappingDriverChain',
                             'drivers' => [

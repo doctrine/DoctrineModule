@@ -1,16 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
+use function array_shift;
+use function func_get_args;
+use function get_class;
 
 class ProxyAwareElementTestCase extends TestCase
 {
+    /** @var MockObject */
     protected $element;
 
-    protected function prepareProxy()
+    protected function prepareProxy() : void
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $objectOne   = new FormObject();
@@ -39,13 +47,15 @@ class ProxyAwareElementTestCase extends TestCase
             ->method('getIdentifierValues')
             ->will(
                 $this->returnCallback(
-                    function () use ($objectOne, $objectTwo) {
+                    static function () use ($objectOne, $objectTwo) {
                         $input = func_get_args();
                         $input = array_shift($input);
 
-                        if ($input == $objectOne) {
+                        if ($input === $objectOne) {
                             return ['id' => 1];
-                        } elseif ($input == $objectTwo) {
+                        }
+
+                        if ($input === $objectTwo) {
                             return ['id' => 2];
                         }
 
@@ -81,17 +91,14 @@ class ProxyAwareElementTestCase extends TestCase
 
     /**
      * Proxy should stay read only, use with care
-     *
-     * @param \PHPUnit\Framework\MockObject\MockObject $proxy
-     * @param \PHPUnit\Framework\MockObject\MockObject $element
      */
-    protected function setProxyViaReflection($proxy, $element = null)
+    protected function setProxyViaReflection(MockObject $proxy, ?MockObject $element = null) : void
     {
         if (! $element) {
             $element = $this->element;
         }
 
-        $prop = new \ReflectionProperty(get_class($this->element), 'proxy');
+        $prop = new ReflectionProperty(get_class($this->element), 'proxy');
         $prop->setAccessible(true);
         $prop->setValue($element, $proxy);
     }

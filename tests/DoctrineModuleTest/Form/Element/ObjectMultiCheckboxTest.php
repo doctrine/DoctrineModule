@@ -1,28 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Form\Element\ObjectMultiCheckbox;
+use function get_class;
 
 /**
  * Tests for the ObjectMultiCheckbox element
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Kyle Spraggs <theman@spiffyjr.me>
+ *
  * @covers  \DoctrineModule\Form\Element\ObjectMultiCheckbox
  */
 class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
 {
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     protected $values;
 
-    /**
-     * @var ObjectMultiCheckbox
-     */
+    /** @var ObjectMultiCheckbox */
     protected $element;
 
     /**
@@ -36,7 +34,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
         $this->prepareProxy();
     }
 
-    public function testSetValueWithCollection()
+    public function testSetValueWithCollection() : void
     {
         $this->element->setValue(
             $this->values
@@ -48,7 +46,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
         );
     }
 
-    public function testSetValueWithArray()
+    public function testSetValueWithArray() : void
     {
         $this->element->setValue(
             $this->values->toArray()
@@ -60,7 +58,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
         );
     }
 
-    public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized()
+    public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized() : void
     {
         $element = $this->createPartialMock(get_class($this->element), ['setValueOptions']);
 
@@ -79,7 +77,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $element->getValueOptions());
     }
 
-    public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty()
+    public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty() : void
     {
         $options = ['foo' => 'bar'];
 
@@ -94,7 +92,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $this->element->getValueOptions());
     }
 
-    public function testOptionsCanBeSetSingle()
+    public function testOptionsCanBeSetSingle() : void
     {
         $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
         $proxy->expects($this->once())->method('setOptions')->with(['is_method' => true]);

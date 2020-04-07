@@ -1,25 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Paginator\Adapter;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
-use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
+use function range;
 
 /**
  * Tests for the Selectable pagination adapter
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Michaël Gallego <mic.gallego@gmail.com>
  */
 class SelectableAdapterTest extends TestCase
 {
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
-    public function testGetItemsAtOffsetZeroWithEmptyCriteria()
+    public function testGetItemsAtOffsetZeroWithEmptyCriteria() : void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $adapter    = new SelectableAdapter($selectable);
@@ -31,7 +32,7 @@ class SelectableAdapterTest extends TestCase
             ->method('matching')
             ->with(
                 $this->callback(
-                    function (Criteria $criteria) use ($me) {
+                    static function (Criteria $criteria) use ($me) {
                         $me->assertEquals(0, $criteria->getFirstResult());
                         $me->assertEquals(10, $criteria->getMaxResults());
 
@@ -50,7 +51,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
-    public function testGetItemsAtOffsetZeroWithNonEmptyCriteria()
+    public function testGetItemsAtOffsetZeroWithNonEmptyCriteria() : void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
@@ -62,7 +63,7 @@ class SelectableAdapterTest extends TestCase
             ->method('matching')
             ->with(
                 $this->callback(
-                    function (Criteria $innerCriteria) use ($criteria, $me) {
+                    static function (Criteria $innerCriteria) use ($criteria, $me) {
                         // Criteria are cloned internally
                         $me->assertNotEquals($innerCriteria, $criteria);
                         $me->assertEquals(0, $innerCriteria->getFirstResult());
@@ -84,7 +85,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
-    public function testGetItemsAtOffsetTenWithEmptyCriteria()
+    public function testGetItemsAtOffsetTenWithEmptyCriteria() : void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $adapter    = new SelectableAdapter($selectable);
@@ -95,7 +96,7 @@ class SelectableAdapterTest extends TestCase
             ->method('matching')
             ->with(
                 $this->callback(
-                    function (Criteria $criteria) use ($me) {
+                    static function (Criteria $criteria) use ($me) {
                         $me->assertEquals(10, $criteria->getFirstResult());
                         $me->assertEquals(10, $criteria->getMaxResults());
 
@@ -114,7 +115,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
-    public function testGetItemsAtOffsetTenWithNonEmptyCriteria()
+    public function testGetItemsAtOffsetTenWithNonEmptyCriteria() : void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
@@ -126,7 +127,7 @@ class SelectableAdapterTest extends TestCase
             ->method('matching')
             ->with(
                 $this->callback(
-                    function (Criteria $innerCriteria) use ($criteria, $me) {
+                    static function (Criteria $innerCriteria) use ($criteria, $me) {
                         // Criteria are cloned internally
                         $me->assertNotEquals($innerCriteria, $criteria);
                         $me->assertEquals(10, $innerCriteria->getFirstResult());
@@ -148,7 +149,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::count
      */
-    public function testReturnsCorrectCount()
+    public function testReturnsCorrectCount() : void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $expression = Criteria::expr()->eq('foo', 'bar');
@@ -159,11 +160,11 @@ class SelectableAdapterTest extends TestCase
             ->method('matching')
             ->with(
                 $this->callback(
-                    function (Criteria $criteria) use ($expression) {
-                        return $criteria->getWhereExpression() == $expression
-                            && (['baz' => Criteria::DESC] === $criteria->getOrderings())
-                            && null === $criteria->getFirstResult()
-                            && null === $criteria->getMaxResults();
+                    static function (Criteria $criteria) use ($expression) {
+                        return $criteria->getWhereExpression() === $expression
+                            && ($criteria->getOrderings() === ['baz' => Criteria::DESC])
+                            && $criteria->getFirstResult() === null
+                            && $criteria->getMaxResults() === null;
                     }
                 )
             )

@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Service;
 
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Service\EventManagerFactory;
-use Laminas\ServiceManager\ServiceManager;
 use DoctrineModuleTest\Service\TestAsset\DummyEventSubscriber;
+use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**
  * Base test case to be used when a service manager instance is required
  */
 class EventManagerFactoryTest extends BaseTestCase
 {
-    public function testWillInstantiateFromFQCN()
+    public function testWillInstantiateFromFQCN() : void
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
@@ -40,7 +42,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertCount(1, $listeners);
     }
 
-    public function testWillAttachEventListenersFromConfiguredInstances()
+    public function testWillAttachEventListenersFromConfiguredInstances() : void
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
@@ -52,9 +54,7 @@ class EventManagerFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'eventmanager' => [
                         $name => [
-                            'subscribers' => [
-                                $subscriber,
-                            ],
+                            'subscribers' => [$subscriber],
                         ],
                     ],
                 ],
@@ -71,7 +71,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertContains($subscriber, $listeners);
     }
 
-    public function testWillAttachEventListenersFromServiceManagerAlias()
+    public function testWillAttachEventListenersFromServiceManagerAlias() : void
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
@@ -84,9 +84,7 @@ class EventManagerFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'eventmanager' => [
                         $name => [
-                            'subscribers' => [
-                                'dummy-subscriber',
-                            ],
+                            'subscribers' => ['dummy-subscriber'],
                         ],
                     ],
                 ],
@@ -103,7 +101,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertContains($subscriber, $listeners);
     }
 
-    public function testWillRefuseNonExistingSubscriber()
+    public function testWillRefuseNonExistingSubscriber() : void
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
@@ -114,9 +112,7 @@ class EventManagerFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'eventmanager' => [
                         $name => [
-                            'subscribers' => [
-                                'non-existing-subscriber',
-                            ],
+                            'subscribers' => ['non-existing-subscriber'],
                         ],
                     ],
                 ],

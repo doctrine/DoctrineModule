@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Validator\Adapter;
 
-use stdClass;
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Validator\ObjectExists;
+use PHPUnit\Framework\TestCase as BaseTestCase;
+use stdClass;
+use function str_replace;
 
 /**
  * Tests for the ObjectExists validator
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  *
  * @covers \DoctrineModule\Validator\ObjectExists
  */
 class ObjectExistsTest extends BaseTestCase
 {
-    public function testCanValidateWithSingleField()
+    public function testCanValidateWithSingleField() : void
     {
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
@@ -33,7 +34,7 @@ class ObjectExistsTest extends BaseTestCase
         $this->assertTrue($validator->isValid(['matchKey' => 'matchValue']));
     }
 
-    public function testCanValidateWithMultipleFields()
+    public function testCanValidateWithMultipleFields() : void
     {
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $repository
@@ -58,7 +59,7 @@ class ObjectExistsTest extends BaseTestCase
         $this->assertTrue($validator->isValid(['firstMatchValue', 'secondMatchValue']));
     }
 
-    public function testCanValidateFalseOnNoResult()
+    public function testCanValidateFalseOnNoResult() : void
     {
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $repository
@@ -73,28 +74,28 @@ class ObjectExistsTest extends BaseTestCase
         $this->assertFalse($validator->isValid('value'));
     }
 
-    public function testWillRefuseMissingRepository()
+    public function testWillRefuseMissingRepository() : void
     {
         $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists(['fields' => 'field']);
     }
 
-    public function testWillRefuseNonObjectRepository()
+    public function testWillRefuseNonObjectRepository() : void
     {
         $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists(['object_repository' => 'invalid', 'fields' => 'field']);
     }
 
-    public function testWillRefuseInvalidRepository()
+    public function testWillRefuseInvalidRepository() : void
     {
         $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
         new ObjectExists(['object_repository' => new stdClass(), 'fields' => 'field']);
     }
 
-    public function testWillRefuseMissingFields()
+    public function testWillRefuseMissingFields() : void
     {
         $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
@@ -103,7 +104,7 @@ class ObjectExistsTest extends BaseTestCase
         ]);
     }
 
-    public function testWillRefuseEmptyFields()
+    public function testWillRefuseEmptyFields() : void
     {
         $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
 
@@ -113,7 +114,7 @@ class ObjectExistsTest extends BaseTestCase
         ]);
     }
 
-    public function testWillRefuseNonStringFields()
+    public function testWillRefuseNonStringFields() : void
     {
         $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
         new ObjectExists([
@@ -122,7 +123,7 @@ class ObjectExistsTest extends BaseTestCase
         ]);
     }
 
-    public function testWillNotValidateOnFieldsCountMismatch()
+    public function testWillNotValidateOnFieldsCountMismatch() : void
     {
         $this->expectException(
             'Laminas\Validator\Exception\RuntimeException'
@@ -137,7 +138,7 @@ class ObjectExistsTest extends BaseTestCase
         $validator->isValid(['field1Value']);
     }
 
-    public function testWillNotValidateOnFieldKeysMismatch()
+    public function testWillNotValidateOnFieldKeysMismatch() : void
     {
         $this->expectException(
             'Laminas\Validator\Exception\RuntimeException'
@@ -154,7 +155,7 @@ class ObjectExistsTest extends BaseTestCase
         $validator->isValid(['field1' => 'field1Value']);
     }
 
-    public function testErrorMessageIsStringInsteadArray()
+    public function testErrorMessageIsStringInsteadArray() : void
     {
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $validator  = new ObjectExists([
