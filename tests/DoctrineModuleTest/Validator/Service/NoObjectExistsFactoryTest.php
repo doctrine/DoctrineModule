@@ -6,8 +6,8 @@ use PHPUnit\Framework\TestCase;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use DoctrineModule\Validator\NoObjectExists;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use Interop\Container\ContainerInterface;
 
 /**

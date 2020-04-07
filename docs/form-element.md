@@ -20,7 +20,7 @@ namespace Module\Form;
 
 use Laminas\Form\Form;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class MyForm extends Form implements ObjectManagerAwareInterface
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Validator;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Validator\AbstractValidator;
 use Laminas\Validator\Exception;
@@ -51,7 +51,7 @@ class ObjectExists extends AbstractValidator
      * Constructor
      *
      * @param mixed[] $options required keys are `object_repository`, which must be an instance of
-     *                       Doctrine\Common\Persistence\ObjectRepository, and `fields`, with either
+     *                       Doctrine\Persistence\ObjectRepository, and `fields`, with either
      *                       a string or an array of strings representing the fields to be matched by the validator.
      *
      * @throws Exception\InvalidArgumentException
@@ -72,7 +72,7 @@ class ObjectExists extends AbstractValidator
             throw new Exception\InvalidArgumentException(
                 sprintf(
                     'Option "object_repository" is required and must be an instance of'
-                    . ' Doctrine\Common\Persistence\ObjectRepository, %s given',
+                    . ' Doctrine\Persistence\ObjectRepository, %s given',
                     $provided
                 )
             );

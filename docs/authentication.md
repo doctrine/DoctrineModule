@@ -35,7 +35,7 @@ return [
 
 Here are some explanations about the keys:
 
-* the `object_manager` key can either be a concrete instance of a `Doctrine\Common\Persistence\ObjectManager` or a single string that will fetched from the Service Manager in order to get a concrete instance. If you are using DoctrineORMModule, you can simply write 'Doctrine\ORM\EntityManager' (as the EntityManager implements the class `Doctrine\Common\Persistence\ObjectManager`).
+* the `object_manager` key can either be a concrete instance of a `Doctrine\Persistence\ObjectManager` or a single string that will fetched from the Service Manager in order to get a concrete instance. If you are using DoctrineORMModule, you can simply write 'Doctrine\ORM\EntityManager' (as the EntityManager implements the class `Doctrine\Persistence\ObjectManager`).
 * the `identity_class` contains the FQCN of the entity that will be used during the authentication process.
 * the `identity_property` contains the name of the property that will be used as the identity property (most often, this is email, username…). Please note that we are talking here of the PROPERTY, not the table column name (although it can be the same in most of the cases).
 * the `credential_property` contains the name of the property that will be used as the credential property (most often, this is password…).
