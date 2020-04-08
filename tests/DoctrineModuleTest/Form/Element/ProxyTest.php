@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
 use PHPUnit\Framework\TestCase;
@@ -24,9 +24,7 @@ use function get_class;
  */
 class ProxyTest extends TestCase
 {
-    /**
-     * @var \Doctrine\Persistence\Mapping\ClassMetadata
-     */
+    /** @var ClassMetadata */
     protected $metadata;
 
     /** @var Proxy */

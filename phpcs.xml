@@ -24,6 +24,11 @@
         <exclude-pattern>tests/DoctrineModuleTest/Cache/DoctrineCacheStorageTest.php</exclude-pattern>
     </rule>
 
+    <!-- needed for BC with doctrine/persistence <1.3 -->
+    <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+
     <!-- Paths to check -->
     <file>src</file>
     <file>tests</file>
