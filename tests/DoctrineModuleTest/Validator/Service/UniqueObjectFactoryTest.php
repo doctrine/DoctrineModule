@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Validator\Service;
 
-use PHPUnit\Framework\TestCase;
-use DoctrineModule\Validator\UniqueObject;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
+use DoctrineModule\Validator\UniqueObject;
 use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 

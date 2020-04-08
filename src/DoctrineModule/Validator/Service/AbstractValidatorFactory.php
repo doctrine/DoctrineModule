@@ -12,6 +12,7 @@ use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\ArrayUtils;
+use function interface_exists;
 use function is_string;
 use function sprintf;
 

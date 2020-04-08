@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service\Mock;
 
-use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 
 class MetadataDriverMock implements MappingDriver
 {

@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace DoctrineModuleTest\Validator\Adapter;
 
 use DateTime;
+use Doctrine\Persistence\ObjectManager;
 use DoctrineModule\Validator\UniqueObject;
-use Laminas\Validator\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Laminas\Validator\Exception\RuntimeException;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
+use function sprintf;
 use function str_replace;
 
 /**
@@ -263,8 +265,11 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testThrowsAnExceptionOnMissingObjectManager() : void
     {
-        $this->expectException(\Laminas\Validator\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "object_manager" is required and must be an instance of Doctrine\\Persistence\\ObjectManager, nothing given');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Option "object_manager" is required and must be an instance of %s, nothing given',
+            ObjectManager::class
+        ));
 
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
@@ -276,8 +281,11 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testThrowsAnExceptionOnWrongObjectManager() : void
     {
-        $this->expectException(\Laminas\Validator\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "object_manager" is required and must be an instance of Doctrine\\Persistence\\ObjectManager, stdClass given');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Option "object_manager" is required and must be an instance of %s, stdClass given',
+            ObjectManager::class
+        ));
 
         $objectManager = new stdClass();
 
@@ -292,7 +300,7 @@ class UniqueObjectTest extends BaseTestCase
 
     public function testCanValidateWithNotAvailableObjectInRepositoryByDateTimeObject() : void
     {
-        $date       = new \DateTime("17 March 2014");
+        $date       = new DateTime('17 March 2014');
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $repository
             ->expects($this->once())
