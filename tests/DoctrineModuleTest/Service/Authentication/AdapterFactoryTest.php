@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Service\Authentication;
 
 use DoctrineModule\Service\Authentication\AdapterFactory;
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class AdapterFactoryTest extends BaseTestCase
 {
-    public function testWillInstantiateFromFQCN()
+    public function testWillInstantiateFromFQCN() : void
     {
-
         $name           = 'testFactory';
         $factory        = new AdapterFactory($name);
-        $objectManager  = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager  = $this->createMock('Doctrine\Persistence\ObjectManager');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'config',

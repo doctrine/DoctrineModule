@@ -1,46 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest;
 
-use PHPUnit\Framework\TestCase;
 use DoctrineModule\Module;
-use Symfony\Component\Console\Output\OutputInterface;
+use Laminas\Mvc\Application;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use function serialize;
+use function unserialize;
 
 /**
- * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @covers \DoctrineModule\Module
  */
 class ModuleTest extends TestCase
 {
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Laminas\Mvc\Application
-     */
+    /** @var PHPUnit_Framework_MockObject_MockObject|Application */
     private $application;
 
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Laminas\Mvc\MvcEvent
-     */
+    /** @var PHPUnit_Framework_MockObject_MockObject|MvcEvent */
     private $event;
 
 
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Laminas\ServiceManager\ServiceManager
-     */
+    /** @var PHPUnit_Framework_MockObject_MockObject|ServiceManager */
     private $serviceManager;
 
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Application
-     */
+    /** @var PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Application */
     private $cli;
 
     protected function setUp() : void
     {
         $this->application    = $this->getMockBuilder('Laminas\Mvc\Application')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $this->event          = $this->createMock('Laminas\Mvc\MvcEvent');
         $this->serviceManager = $this->createMock('Laminas\ServiceManager\ServiceManager');
         $this->cli            = $this->createPartialMock('Symfony\Component\Console\Application', ['run']);
@@ -68,7 +64,7 @@ class ModuleTest extends TestCase
     /**
      * @covers \DoctrineModule\Module::getConfig
      */
-    public function testGetConfig()
+    public function testGetConfig() : void
     {
         $module = new Module();
 
@@ -87,9 +83,10 @@ class ModuleTest extends TestCase
 
     /**
      * Should display the help message in plain message
+     *
      * @covers \DoctrineModule\Module::getConsoleUsage
      */
-    public function testGetConsoleUsage()
+    public function testGetConsoleUsage() : void
     {
         $this
             ->cli
@@ -99,11 +96,10 @@ class ModuleTest extends TestCase
                 $this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface')
             )
-            ->will($this->returnCallback(function (InputInterface $input, OutputInterface $output) {
+            ->will($this->returnCallback(static function (InputInterface $input, OutputInterface $output) : void {
                 $output->write($input->getFirstArgument() . ' - TEST');
                 $output->write(' - More output');
             }));
-
 
         $module = new Module();
 

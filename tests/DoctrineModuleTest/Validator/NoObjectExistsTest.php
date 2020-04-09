@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Validator\Adapter;
 
-use stdClass;
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use DoctrineModule\Validator\NoObjectExists;
+use PHPUnit\Framework\TestCase as BaseTestCase;
+use stdClass;
+use function str_replace;
 
 /**
  * Tests for the NoObjectExists tests
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class NoObjectExistsTest extends BaseTestCase
 {
-    public function testCanValidateWithNoAvailableObjectInRepository()
+    public function testCanValidateWithNoAvailableObjectInRepository() : void
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
         $repository
             ->expects($this->once())
@@ -29,9 +30,9 @@ class NoObjectExistsTest extends BaseTestCase
         $this->assertTrue($validator->isValid('matchValue'));
     }
 
-    public function testCannotValidateWithAvailableObjectInRepository()
+    public function testCannotValidateWithAvailableObjectInRepository() : void
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
         $repository
             ->expects($this->once())
@@ -43,9 +44,9 @@ class NoObjectExistsTest extends BaseTestCase
         $this->assertFalse($validator->isValid('matchValue'));
     }
 
-    public function testErrorMessageIsStringInsteadArray()
+    public function testErrorMessageIsStringInsteadArray() : void
     {
-        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $repository
             ->expects($this->once())
             ->method('findOneBy')

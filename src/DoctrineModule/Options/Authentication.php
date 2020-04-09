@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Options;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use Laminas\Authentication\Adapter\Exception;
 use Laminas\Authentication\Storage\StorageInterface;
 use Laminas\Stdlib\AbstractOptions;
 use function gettype;
+use function interface_exists;
 use function is_callable;
 use function is_string;
 use function sprintf;
@@ -264,3 +265,6 @@ class Authentication extends AbstractOptions
         $this->storage = $storage;
     }
 }
+
+interface_exists(ClassMetadata::class);
+interface_exists(ObjectRepository::class);

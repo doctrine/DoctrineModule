@@ -1,37 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Mvc\Router\Console;
 
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Application;
 use Laminas\Console\Request;
 use Laminas\Router\RouteMatch;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Application;
 
 /**
  * Tests for {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}
- *
- * @license MIT
- * @author Aleksandr Sandrovskiy <a.sandrovsky@gmail.com>
  *
  * @covers \DoctrineModule\Mvc\Router\Console\SymfonyCli
  */
 class SymfonyCliTest extends TestCase
 {
-    /**
-     * @var \DoctrineModule\Mvc\Router\Console\SymfonyCli
-     */
+    /** @var SymfonyCli */
     protected $route;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp() : void
     {
         $this->route = new SymfonyCli(new Application());
     }
 
-    public function testMatching()
+    public function testMatching() : void
     {
         $this->assertInstanceOf(
             RouteMatch::class,
@@ -39,7 +33,7 @@ class SymfonyCliTest extends TestCase
         );
     }
 
-    public function testMatchingWithParams()
+    public function testMatchingWithParams() : void
     {
         $this->assertInstanceOf(
             RouteMatch::class,
@@ -47,7 +41,7 @@ class SymfonyCliTest extends TestCase
         );
     }
 
-    public function testNotMatching()
+    public function testNotMatching() : void
     {
         $this->assertNull($this->route->match(new Request(['scriptname.php', 'unknowncommand'])));
     }

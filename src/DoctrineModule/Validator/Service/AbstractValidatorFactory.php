@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Validator\Service;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\ArrayUtils;
+use function interface_exists;
 use function is_string;
 use function sprintf;
 
@@ -126,3 +127,6 @@ abstract class AbstractValidatorFactory implements FactoryInterface
         $this->creationOptions = $options;
     }
 }
+
+interface_exists(ObjectManager::class);
+interface_exists(ObjectRepository::class);

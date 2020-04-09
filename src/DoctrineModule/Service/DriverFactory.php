@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\Annotations;
-use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
-use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\Persistence\Mapping\Driver\DefaultFileLocator;
+use Doctrine\Persistence\Mapping\Driver\FileDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Options\Driver as DriverOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use function class_exists;
 use function get_class;
+use function interface_exists;
 use function is_array;
 use function is_subclass_of;
 use function sprintf;
@@ -72,8 +73,8 @@ class DriverFactory extends AbstractFactory
         $paths = $options->getPaths();
 
         // Special options for AnnotationDrivers.
-        if ($class === 'Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver'
-            || is_subclass_of($class, 'Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver')
+        if ($class === 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver'
+            || is_subclass_of($class, 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver')
         ) {
             $reader = new Annotations\AnnotationReader();
             $reader = new Annotations\CachedReader(
@@ -88,7 +89,7 @@ class DriverFactory extends AbstractFactory
         if ($options->getExtension() && $driver instanceof FileDriver) {
             $locator = $driver->getLocator();
 
-            if (get_class($locator) !== 'Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator') {
+            if (get_class($locator) !== 'Doctrine\Persistence\Mapping\Driver\DefaultFileLocator') {
                 throw new InvalidArgumentException(
                     sprintf(
                         'Discovered file locator for driver of type "%s" is an instance of "%s". This factory '
@@ -123,3 +124,5 @@ class DriverFactory extends AbstractFactory
         return $driver;
     }
 }
+
+interface_exists(MappingDriver::class);

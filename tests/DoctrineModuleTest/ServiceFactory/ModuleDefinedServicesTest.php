@@ -1,27 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\ServiceFactory;
 
 use DoctrineModuleTest\ServiceManagerFactory;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test that verifies that services are defined correctly
  *
- * @license MIT
  * @link    http://www.doctrine-project.org/
- * @author  Marco Pivetta <ocramius@gmail.com>
  */
 class ModuleDefinedServicesTest extends TestCase
 {
-    /**
-     * @var \Laminas\ServiceManager\ServiceLocatorInterface
-     */
+    /** @var ServiceLocatorInterface */
     protected $serviceManager;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp() : void
     {
         $this->serviceManager = ServiceManagerFactory::getServiceManager();
@@ -32,7 +28,7 @@ class ModuleDefinedServicesTest extends TestCase
      *
      * @dataProvider getServicesThatShouldBeDefined
      */
-    public function testModuleDefinedServices($serviceName, $defined)
+    public function testModuleDefinedServices(string $serviceName, bool $defined) : void
     {
         $this->assertSame($defined, $this->serviceManager->has($serviceName));
     }
@@ -42,7 +38,7 @@ class ModuleDefinedServicesTest extends TestCase
      *
      * @dataProvider getServicesThatCanBeFetched
      */
-    public function testModuleFetchedService($serviceName, $expectedClass)
+    public function testModuleFetchedService(string $serviceName, string $expectedClass) : void
     {
         $this->assertInstanceOf($expectedClass, $this->serviceManager->get($serviceName));
     }
@@ -52,7 +48,7 @@ class ModuleDefinedServicesTest extends TestCase
      *
      * @dataProvider getServicesThatCannotBeFetched
      */
-    public function testModuleInvalidService($serviceName)
+    public function testModuleInvalidService(string $serviceName) : void
     {
         $this->expectException('Laminas\ServiceManager\Exception\ServiceNotFoundException');
 
@@ -60,9 +56,9 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return mixed[][]
      */
-    public function getServicesThatShouldBeDefined()
+    public function getServicesThatShouldBeDefined() : array
     {
         return [
             ['doctrine.cache.array', true],
@@ -92,9 +88,9 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return string[][]
      */
-    public function getServicesThatCanBeFetched()
+    public function getServicesThatCanBeFetched() : array
     {
         return [
             ['doctrine.cache.array', 'Doctrine\Common\Cache\ArrayCache'],
@@ -102,9 +98,9 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return string[][]
      */
-    public function getServicesThatCannotBeFetched()
+    public function getServicesThatCannotBeFetched() : array
     {
         return [
             ['foo'],

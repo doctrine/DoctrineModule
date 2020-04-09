@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Service\Authentication;
 
 use DoctrineModule\Service\Authentication\StorageFactory;
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class StorageFactoryTest extends BaseTestCase
 {
-    public function testWillInstantiateFromFQCN()
+    public function testWillInstantiateFromFQCN() : void
     {
         $name    = 'testFactory';
         $factory = new StorageFactory($name);
 
-        $objectManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
 
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(
@@ -40,7 +42,7 @@ class StorageFactoryTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
     }
 
-    public function testCanInstantiateStorageFromServiceLocator()
+    public function testCanInstantiateStorageFromServiceLocator() : void
     {
         $factory        = new StorageFactory('testFactory');
         $serviceManager = $this->createMock('Laminas\ServiceManager\ServiceManager');

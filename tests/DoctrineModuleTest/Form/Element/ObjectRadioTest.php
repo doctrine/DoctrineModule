@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineModuleTest\Form\Element;
 
 use DoctrineModule\Form\Element\ObjectRadio;
+use function get_class;
 
 /**
  * Tests for the ObjectRadio element
@@ -11,9 +14,7 @@ use DoctrineModule\Form\Element\ObjectRadio;
  */
 class ObjectRadioTest extends ProxyAwareElementTestCase
 {
-    /**
-     * @var ObjectRadio
-     */
+    /** @var ObjectRadio */
     protected $element;
 
     /**
@@ -25,7 +26,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
         $this->element = new ObjectRadio();
     }
 
-    public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized()
+    public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized() : void
     {
         $element = $this->createPartialMock(get_class($this->element), ['setValueOptions']);
 
@@ -44,7 +45,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $element->getValueOptions());
     }
 
-    public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty()
+    public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty() : void
     {
         $options = ['foo' => 'bar'];
 
@@ -59,7 +60,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $this->element->getValueOptions());
     }
 
-    public function testOptionsCanBeSetSingle()
+    public function testOptionsCanBeSetSingle() : void
     {
         $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
         $proxy->expects($this->once())->method('setOptions')->with(['is_method' => true]);
