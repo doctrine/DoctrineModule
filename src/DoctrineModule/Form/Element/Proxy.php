@@ -76,7 +76,7 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var Inflector */
     protected $inflector;
 
-    public function __construct(Inflector $inflector = null)
+    public function __construct(?Inflector $inflector = null)
     {
         $this->inflector = $inflector ?? InflectorFactory::create()->build();
     }
