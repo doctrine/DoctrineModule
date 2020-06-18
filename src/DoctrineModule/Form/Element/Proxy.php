@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace DoctrineModule\Form\Element;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Doctrine\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
@@ -71,6 +72,14 @@ class Proxy implements ObjectManagerAwareInterface
 
     /** @var string|null */
     protected $optgroupDefault;
+
+    /** @var Inflector */
+    protected $inflector;
+
+    public function __construct(Inflector $inflector = null)
+    {
+        $this->inflector = $inflector ?? InflectorFactory::create()->build();
+    }
 
     /**
      * @param mixed[] $options
@@ -486,7 +495,7 @@ class Proxy implements ObjectManagerAwareInterface
                     );
                 }
 
-                $getter = 'get' . Inflector::classify($property);
+                $getter = 'get' . $this->inflector->classify($property);
 
                 if (! is_callable([$object, $getter])) {
                     throw new RuntimeException(
@@ -546,7 +555,7 @@ class Proxy implements ObjectManagerAwareInterface
             }
 
             // optgroup_identifier found, handle grouping
-            $optgroupGetter = 'get' . Inflector::classify($this->getOptgroupIdentifier());
+            $optgroupGetter = 'get' . $this->inflector->classify($this->getOptgroupIdentifier());
 
             if (! is_callable([$object, $optgroupGetter])) {
                 throw new RuntimeException(
