@@ -48,7 +48,6 @@
     "require": {
         "php": "^7.2",
         "doctrine/cache": "^1.7",
-        "doctrine/common": "^3.0",
         "doctrine/doctrine-laminas-hydrator": "^2.0.3",
         "doctrine/inflector": "^2.0",
         "doctrine/persistence": "^2.0",
