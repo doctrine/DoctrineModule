@@ -48,9 +48,10 @@
     "require": {
         "php": "^7.2",
         "doctrine/cache": "^1.7",
-        "doctrine/common": "^2.8",
-        "doctrine/doctrine-laminas-hydrator": "^2.0.2",
-        "doctrine/persistence": "^1.3.7",
+        "doctrine/doctrine-laminas-hydrator": "^2.0.3",
+        "doctrine/event-manager": "^1.0.0",
+        "doctrine/inflector": "^2.0",
+        "doctrine/persistence": "^2.0",
         "laminas/laminas-authentication": "^2.5.3",
         "laminas/laminas-cache": "^2.7.1",
         "laminas/laminas-form": "^2.11",

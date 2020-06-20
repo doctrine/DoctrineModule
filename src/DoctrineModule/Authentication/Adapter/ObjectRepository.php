@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Authentication\Adapter;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Laminas\Authentication\Adapter\AbstractAdapter;
 use Laminas\Authentication\Adapter\Exception;
@@ -32,14 +33,18 @@ class ObjectRepository extends AbstractAdapter
      */
     protected $authenticationResultInfo = null;
 
+    /** @var Inflector */
+    protected $inflector;
+
     /**
      * Constructor
      *
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function __construct($options = [])
+    public function __construct($options = [], ?Inflector $inflector = null)
     {
         $this->setOptions($options);
+        $this->inflector = $inflector ?? InflectorFactory::create()->build();
     }
 
     /**
@@ -88,7 +93,7 @@ class ObjectRepository extends AbstractAdapter
     protected function validateIdentity(object $identity) : AuthenticationResult
     {
         $credentialProperty = $this->options->getCredentialProperty();
-        $getter             = 'get' . Inflector::classify($credentialProperty);
+        $getter             = 'get' . $this->inflector->classify($credentialProperty);
         $documentCredential = null;
 
         if (method_exists($identity, $getter)) {
