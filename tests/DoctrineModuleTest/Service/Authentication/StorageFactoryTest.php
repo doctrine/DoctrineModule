@@ -71,4 +71,9 @@ class StorageFactoryTest extends BaseTestCase
             $factory->createService($serviceManager)
         );
     }
+
+    public function testCanInstantiateCustomStorage()
+    {
+        // TODO: this
+    }
 }
