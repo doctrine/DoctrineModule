@@ -115,11 +115,15 @@ class Authentication extends AbstractOptions
     protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
     /**
+     * Session container to use in the underlying session storage
+     *
      * @var string
      */
     protected $sessionContainer;
 
     /**
+     * Session member to use in the underlying session storage
+     *
      * @var string
      */
     protected $sessionMember;
@@ -275,25 +279,16 @@ class Authentication extends AbstractOptions
         $this->storage = $storage;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSessionContainer() : ?string
     {
         return $this->sessionContainer;
     }
 
-    /**
-     * @param string $container
-     */
     public function setSessionContainer(string $container) : void
     {
         $this->sessionContainer = $container;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSessionMember() : ?string
     {
         return $this->sessionMember;

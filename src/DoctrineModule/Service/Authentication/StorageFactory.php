@@ -33,7 +33,7 @@ class StorageFactory extends AbstractFactory
         $storage = $options->getStorage();
         if (is_string($storage)) {
             $sessionContainer = $options->getSessionContainer();
-            $sessionMember = $options->getSessionMember();
+            $sessionMember    = $options->getSessionMember();
             if ($sessionContainer || $sessionMember) {
                 $storage = new Session(
                     $options->getSessionContainer(),
@@ -42,6 +42,7 @@ class StorageFactory extends AbstractFactory
             } else {
                 $storage = $container->get($storage);
             }
+
             $options->setStorage($storage);
         }
 
