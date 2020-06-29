@@ -110,7 +110,7 @@ class Authentication extends AbstractOptions
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
-     * @var StorageInterface
+     * @var StorageInterface|string
      */
     protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
