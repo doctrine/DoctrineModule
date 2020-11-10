@@ -31,17 +31,18 @@ matrix:
         - DEPS=latest
 
 before_install:
-  - travis_retry composer self-update
+  - travis_retry php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - travis_retry php composer-setup.php --version=1.10.16
 
 install:
-  - if [[ $DEPS == 'dev' ]]; then travis_retry composer config minimum-stability dev ; fi
-  - if [[ $DEPS == 'latest' || $DEPS == 'dev' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
-  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
-  - travis_retry composer install $COMPOSER_ARGS
-  - composer show
+  - if [[ $DEPS == 'dev' ]]; then travis_retry ./composer.phar config minimum-stability dev ; fi
+  - if [[ $DEPS == 'latest' || $DEPS == 'dev' ]]; then travis_retry ./composer.phar update $COMPOSER_ARGS ; fi
+  - if [[ $DEPS == 'lowest' ]]; then travis_retry ./composer.phar update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
+  - travis_retry ./composer.phar install $COMPOSER_ARGS
+  - ./composer.phar show
 
 script:
-  - if [[ $TEST_COVERAGE == 'true' ]]; then composer test-coverage ; else composer test ; fi
+  - if [[ $TEST_COVERAGE == 'true' ]]; then ./composer.phar test-coverage ; else composer test ; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then php build/coverage-checker.php build/clover.xml 70 ; fi
 
 after_script:
