@@ -18,8 +18,7 @@ use Laminas\Cache\Storage\TotalSpaceCapableInterface;
  */
 class LaminasStorageCache extends CacheProvider
 {
-    /** @var StorageInterface */
-    protected $storage;
+    protected StorageInterface $storage;
 
     public function __construct(StorageInterface $storage)
     {

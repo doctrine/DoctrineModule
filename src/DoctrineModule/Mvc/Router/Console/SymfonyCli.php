@@ -16,15 +16,14 @@ use Symfony\Component\Console\Application;
  */
 class SymfonyCli implements RouteInterface
 {
-    /** @var Application */
-    protected $cliApplication;
+    protected Application $cliApplication;
 
     /**
      * Default values.
      *
      * @var mixed[]
      */
-    protected $defaults;
+    protected array $defaults;
 
     /**
      * Constructor

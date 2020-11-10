@@ -7,6 +7,7 @@ namespace DoctrineModule\Paginator\Adapter;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
 use Laminas\Paginator\Adapter\AdapterInterface;
+
 use function count;
 
 /**
@@ -16,11 +17,9 @@ use function count;
  */
 class Selectable implements AdapterInterface
 {
-    /** @var DoctrineSelectable */
-    protected $selectable;
+    protected DoctrineSelectable $selectable;
 
-    /** @var Criteria */
-    protected $criteria;
+    protected Criteria $criteria;
 
     /**
      * Create a paginator around a Selectable object. You can also provide an optional Criteria object with

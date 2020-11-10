@@ -13,117 +13,110 @@ use function assert;
  */
 class FormObject
 {
-    /** @var int|null */
-    protected $id;
+    protected ?int $id = null;
 
-    /** @var string|null */
-    public $email;
+    public ?string $email = null;
 
-    /** @var string|null */
-    protected $username;
+    protected ?string $username = null;
 
-    /** @var string|null */
-    protected $firstname;
+    protected ?string $firstname = null;
 
-    /** @var string|null */
-    protected $surname;
+    protected ?string $surname = null;
 
-    /** @var string|null */
-    protected $password;
+    protected ?string $password = null;
 
-    /** @var string|null */
-    protected $optgroup;
+    protected ?string $optgroup = null;
 
-    public function __toString() : string
+    public function __toString(): string
     {
         assert($this->username !== null);
 
         return $this->username;
     }
 
-    public function setId(int $id) : self
+    public function setId(int $id): self
     {
         $this->id = (int) $id;
 
         return $this;
     }
 
-    public function getId() : ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setEmail(string $email) : self
+    public function setEmail(string $email): self
     {
         $this->email = (string) $email;
 
         return $this;
     }
 
-    public function getEmail() : ?string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setPassword(string $password) : self
+    public function setPassword(string $password): self
     {
         $this->password = (string) $password;
 
         return $this;
     }
 
-    public function getPassword() : ?string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setUsername(string $username) : self
+    public function setUsername(string $username): self
     {
         $this->username = (string) $username;
 
         return $this;
     }
 
-    public function getUsername() : ?string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    public function setFirstname(string $firstname) : self
+    public function setFirstname(string $firstname): self
     {
         $this->firstname = (string) $firstname;
 
         return $this;
     }
 
-    public function getFirstname() : ?string
+    public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
-    public function setSurname(string $surname) : self
+    public function setSurname(string $surname): self
     {
         $this->surname = (string) $surname;
 
         return $this;
     }
 
-    public function getSurname() : ?string
+    public function getSurname(): ?string
     {
         return $this->surname;
     }
 
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return isset($this->firstname) && isset($this->surname) ? $this->firstname . ' ' . $this->surname : null;
     }
 
-    public function getOptgroup() : ?string
+    public function getOptgroup(): ?string
     {
         return $this->optgroup;
     }
 
-    public function setOptgroup(?string $optgroup) : void
+    public function setOptgroup(?string $optgroup): void
     {
         $this->optgroup = $optgroup;
     }

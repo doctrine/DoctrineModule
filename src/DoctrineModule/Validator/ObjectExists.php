@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectRepository;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Validator\AbstractValidator;
 use Laminas\Validator\Exception;
+
 use function array_combine;
 use function array_key_exists;
 use function array_values;
@@ -31,21 +32,19 @@ class ObjectExists extends AbstractValidator
     public const ERROR_NO_OBJECT_FOUND = 'noObjectFound';
 
     /** @var mixed[] Message templates */
-    protected $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];
+    protected array $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];
 
     /**
      * ObjectRepository from which to search for entities
-     *
-     * @var ObjectRepository
      */
-    protected $objectRepository;
+    protected ObjectRepository $objectRepository;
 
     /**
      * Fields to be checked
      *
      * @var mixed[]
      */
-    protected $fields;
+    protected array $fields;
 
     /**
      * Constructor
@@ -100,7 +99,7 @@ class ObjectExists extends AbstractValidator
      *
      * @throws Exception\InvalidArgumentException
      */
-    private function validateFields() : array
+    private function validateFields(): array
     {
         $fields = (array) $this->fields;
 
@@ -129,7 +128,7 @@ class ObjectExists extends AbstractValidator
      *
      * @throws Exception\RuntimeException
      */
-    protected function cleanSearchValue($value) : array
+    protected function cleanSearchValue($value): array
     {
         $value = is_object($value) ? [$value] : (array) $value;
 

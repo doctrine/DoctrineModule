@@ -14,8 +14,7 @@ use Laminas\Cache\Storage\Adapter\AbstractAdapter;
  */
 class DoctrineCacheStorage extends AbstractAdapter
 {
-    /** @var Cache */
-    protected $cache;
+    protected Cache $cache;
 
     /**
      * {@inheritDoc}

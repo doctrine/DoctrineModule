@@ -11,31 +11,29 @@ namespace DoctrineModuleTest\Authentication\Adapter\TestAsset;
  */
 class IdentityObject
 {
-    /** @var string|null */
-    protected $username;
+    protected ?string $username = null;
 
-    /** @var string|null */
-    protected $password;
+    protected ?string $password = null;
 
     /**
      * @param mixed $password
      */
-    public function setPassword($password) : void
+    public function setPassword($password): void
     {
         $this->password = (string) $password;
     }
 
-    public function getPassword() : ?string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setUsername(string $username) : void
+    public function setUsername(string $username): void
     {
         $this->username = (string) $username;
     }
 
-    public function getUsername() : ?string
+    public function getUsername(): ?string
     {
         return $this->username;
     }

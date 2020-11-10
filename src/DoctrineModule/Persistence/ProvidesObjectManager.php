@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModule\Persistence;
 
 use Doctrine\Persistence\ObjectManager;
+
 use function interface_exists;
 
 /**
@@ -12,13 +13,12 @@ use function interface_exists;
  */
 trait ProvidesObjectManager
 {
-    /** @var ObjectManager */
-    protected $objectManager;
+    protected ObjectManager $objectManager;
 
     /**
      * Set the object manager
      */
-    public function setObjectManager(ObjectManager $objectManager) : void
+    public function setObjectManager(ObjectManager $objectManager): void
     {
         $this->objectManager = $objectManager;
     }
@@ -26,7 +26,7 @@ trait ProvidesObjectManager
     /**
      * Get the object manager
      */
-    public function getObjectManager() : ObjectManager
+    public function getObjectManager(): ObjectManager
     {
         return $this->objectManager;
     }

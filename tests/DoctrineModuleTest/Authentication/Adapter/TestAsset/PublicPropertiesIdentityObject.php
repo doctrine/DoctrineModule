@@ -11,9 +11,7 @@ namespace DoctrineModuleTest\Authentication\Adapter\TestAsset;
  */
 class PublicPropertiesIdentityObject
 {
-    /** @var string|null */
-    public $username;
+    public ?string $username = null;
 
-    /** @var string|null */
-    public $password;
+    public ?string $password = null;
 }

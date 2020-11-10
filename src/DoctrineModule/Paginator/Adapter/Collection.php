@@ -6,13 +6,13 @@ namespace DoctrineModule\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Laminas\Paginator\Adapter\AdapterInterface;
+
 use function array_values;
 use function count;
 
 class Collection implements AdapterInterface
 {
-    /** @var Doctrine\Common\Collections\Collection */
-    protected $collection;
+    protected Doctrine\Common\Collections\Collection $collection;
 
     /**
      * @param mixed[] $collection

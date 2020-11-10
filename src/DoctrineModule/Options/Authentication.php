@@ -10,6 +10,7 @@ use Doctrine\Persistence\ObjectRepository;
 use Laminas\Authentication\Adapter\Exception;
 use Laminas\Authentication\Storage\StorageInterface;
 use Laminas\Stdlib\AbstractOptions;
+
 use function gettype;
 use function interface_exists;
 use function is_callable;
@@ -61,31 +62,23 @@ class Authentication extends AbstractOptions
 
     /**
      * A valid object implementing ObjectRepository interface (or ObjectManager/identityClass)
-     *
-     * @var ObjectRepository
      */
-    protected $objectRepository;
+    protected ObjectRepository $objectRepository;
 
     /**
      * Entity's class name
-     *
-     * @var string
      */
-    protected $identityClass;
+    protected string $identityClass;
 
     /**
      * Property to use for the identity
-     *
-     * @var string
      */
-    protected $identityProperty;
+    protected string $identityProperty;
 
     /**
      * Property to use for the credential
-     *
-     * @var string
      */
-    protected $credentialProperty;
+    protected string $credentialProperty;
 
     /**
      * Callable function to check if a credential is valid
@@ -97,10 +90,8 @@ class Authentication extends AbstractOptions
     /**
      * If an objectManager is not supplied, this metadata will be used
      * by DoctrineModule/Authentication/Storage/ObjectRepository
-     *
-     * @var ClassMetadata
      */
-    protected $classMetadata;
+    protected ClassMetadata $classMetadata;
 
     /**
      * When using this options class to create a DoctrineModule/Authentication/Storage/ObjectRepository
@@ -117,7 +108,7 @@ class Authentication extends AbstractOptions
     /**
      * @param  string | ObjectManager $objectManager
      */
-    public function setObjectManager($objectManager) : Authentication
+    public function setObjectManager($objectManager): Authentication
     {
         $this->objectManager = $objectManager;
 
@@ -136,14 +127,14 @@ class Authentication extends AbstractOptions
         return $this->objectManager;
     }
 
-    public function setObjectRepository(ObjectRepository $objectRepository) : Authentication
+    public function setObjectRepository(ObjectRepository $objectRepository): Authentication
     {
         $this->objectRepository = $objectRepository;
 
         return $this;
     }
 
-    public function getObjectRepository() : ObjectRepository
+    public function getObjectRepository(): ObjectRepository
     {
         if ($this->objectRepository) {
             return $this->objectRepository;
@@ -152,14 +143,14 @@ class Authentication extends AbstractOptions
         return $this->objectManager->getRepository($this->identityClass);
     }
 
-    public function setIdentityClass(string $identityClass) : Authentication
+    public function setIdentityClass(string $identityClass): Authentication
     {
         $this->identityClass = $identityClass;
 
         return $this;
     }
 
-    public function getIdentityClass() : string
+    public function getIdentityClass(): string
     {
         return $this->identityClass;
     }
@@ -167,7 +158,7 @@ class Authentication extends AbstractOptions
     /**
      * @throws Exception\InvalidArgumentException
      */
-    public function setIdentityProperty(string $identityProperty) : Authentication
+    public function setIdentityProperty(string $identityProperty): Authentication
     {
         if (! is_string($identityProperty) || $identityProperty === '') {
             throw new Exception\InvalidArgumentException(
@@ -180,7 +171,7 @@ class Authentication extends AbstractOptions
         return $this;
     }
 
-    public function getIdentityProperty() : string
+    public function getIdentityProperty(): string
     {
         return $this->identityProperty;
     }
@@ -188,7 +179,7 @@ class Authentication extends AbstractOptions
     /**
      * @throws Exception\InvalidArgumentException
      */
-    public function setCredentialProperty(string $credentialProperty) : Authentication
+    public function setCredentialProperty(string $credentialProperty): Authentication
     {
         if (! is_string($credentialProperty) || $credentialProperty === '') {
             throw new Exception\InvalidArgumentException(
@@ -201,7 +192,7 @@ class Authentication extends AbstractOptions
         return $this;
     }
 
-    public function getCredentialProperty() : string
+    public function getCredentialProperty(): string
     {
         return $this->credentialProperty;
     }
@@ -211,7 +202,7 @@ class Authentication extends AbstractOptions
      *
      * @throws Exception\InvalidArgumentException
      */
-    public function setCredentialCallable($credentialCallable) : Authentication
+    public function setCredentialCallable($credentialCallable): Authentication
     {
         if (! is_callable($credentialCallable)) {
             throw new Exception\InvalidArgumentException(
@@ -235,7 +226,7 @@ class Authentication extends AbstractOptions
         return $this->credentialCallable;
     }
 
-    public function getClassMetadata() : ClassMetadata
+    public function getClassMetadata(): ClassMetadata
     {
         if ($this->classMetadata) {
             return $this->classMetadata;
@@ -244,7 +235,7 @@ class Authentication extends AbstractOptions
         return $this->objectManager->getClassMetadata($this->identityClass);
     }
 
-    public function setClassMetadata(ClassMetadata $classMetadata) : void
+    public function setClassMetadata(ClassMetadata $classMetadata): void
     {
         $this->classMetadata = $classMetadata;
     }
@@ -260,7 +251,7 @@ class Authentication extends AbstractOptions
     /**
      * @param StorageInterface|string $storage
      */
-    public function setStorage($storage) : void
+    public function setStorage($storage): void
     {
         $this->storage = $storage;
     }

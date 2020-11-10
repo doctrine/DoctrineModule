@@ -18,14 +18,13 @@ use PHPUnit\Framework\TestCase;
  */
 class ObjectExistsFactoryTest extends TestCase
 {
-    /** @var ObjectExistsFactory */
-    protected $object;
+    protected ObjectExistsFactory $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->object = new ObjectExistsFactory();
     }
@@ -33,7 +32,7 @@ class ObjectExistsFactoryTest extends TestCase
     /**
      * @covers ::__invoke
      */
-    public function testInvoke() : void
+    public function testInvoke(): void
     {
         $options = [
             'target_class' => 'Foo\Bar',

@@ -18,14 +18,13 @@ use PHPUnit\Framework\TestCase;
  */
 class UniqueObjectFactoryTest extends TestCase
 {
-    /** @var UniqueObjectFactory */
-    private $object;
+    private UniqueObjectFactory $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->object = new UniqueObjectFactory();
     }
@@ -33,7 +32,7 @@ class UniqueObjectFactoryTest extends TestCase
     /**
      * @covers ::__invoke
      */
-    public function testInvoke() : void
+    public function testInvoke(): void
     {
         $options = [
             'target_class' => 'Foo\Bar',

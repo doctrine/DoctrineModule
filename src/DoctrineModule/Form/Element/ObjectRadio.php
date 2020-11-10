@@ -9,10 +9,9 @@ use Traversable;
 
 class ObjectRadio extends RadioElement
 {
-    /** @var Proxy */
-    protected $proxy;
+    protected Proxy $proxy;
 
-    public function getProxy() : Proxy
+    public function getProxy(): Proxy
     {
         if ($this->proxy === null) {
             $this->proxy = new Proxy();
@@ -26,7 +25,7 @@ class ObjectRadio extends RadioElement
      *
      * {@inheritDoc}
      */
-    public function setOptions($options) : self
+    public function setOptions($options): self
     {
         $this->getProxy()->setOptions($options);
 
@@ -38,7 +37,7 @@ class ObjectRadio extends RadioElement
      *
      * {@inheritDoc}
      */
-    public function setOption($key, $value) : self
+    public function setOption($key, $value): self
     {
         $this->getProxy()->setOptions([$key => $value]);
 

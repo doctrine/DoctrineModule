@@ -9,6 +9,7 @@ use Laminas\Mvc\Console\View\ViewModel;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function is_numeric;
 
 /**
@@ -16,18 +17,16 @@ use function is_numeric;
  */
 class CliController extends AbstractActionController
 {
-    /** @var Application */
-    protected $cliApplication;
+    protected Application $cliApplication;
 
-    /** @var OutputInterface */
-    protected $output;
+    protected OutputInterface $output;
 
     public function __construct(Application $cliApplication)
     {
         $this->cliApplication = $cliApplication;
     }
 
-    public function setOutput(OutputInterface $output) : void
+    public function setOutput(OutputInterface $output): void
     {
         $this->output = $output;
     }

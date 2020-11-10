@@ -12,6 +12,7 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+
 use function interface_exists;
 
 /**
@@ -22,14 +23,13 @@ use function interface_exists;
  */
 class NoObjectExistsFactoryTest extends TestCase
 {
-    /** @var NoObjectExistsFactory */
-    private $object;
+    private NoObjectExistsFactory $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->object = new NoObjectExistsFactory();
     }
@@ -37,7 +37,7 @@ class NoObjectExistsFactoryTest extends TestCase
     /**
      * @coversNothing
      */
-    public function testCallable() : void
+    public function testCallable(): void
     {
         $this->assertIsCallable($this->object);
     }
@@ -49,7 +49,7 @@ class NoObjectExistsFactoryTest extends TestCase
      * @covers ::getObjectManager
      * @covers ::getFields
      */
-    public function testInvoke() : void
+    public function testInvoke(): void
     {
         $options = [
             'target_class' => 'Foo\Bar',
@@ -82,7 +82,7 @@ class NoObjectExistsFactoryTest extends TestCase
      * @covers ::getObjectManager
      * @covers ::getFields
      */
-    public function testInvokeWithObjectManagerGiven() : void
+    public function testInvokeWithObjectManagerGiven(): void
     {
         $repository    = $this->prophesize(ObjectRepository::class);
         $objectManager = $this->prophesize(ObjectManager::class);
@@ -111,7 +111,7 @@ class NoObjectExistsFactoryTest extends TestCase
     /**
      * @covers ::merge
      */
-    public function testInvokeWithMerge() : void
+    public function testInvokeWithMerge(): void
     {
         $options = [
             'target_class' => 'Foo\Bar',
@@ -143,7 +143,7 @@ class NoObjectExistsFactoryTest extends TestCase
     /**
      * @covers ::getRepository
      */
-    public function testInvokeWithoutTargetClass() : void
+    public function testInvokeWithoutTargetClass(): void
     {
         $this->expectException(ServiceCreationException::class);
 
@@ -159,7 +159,7 @@ class NoObjectExistsFactoryTest extends TestCase
      * @covers ::createService
      * @covers ::setCreationOptions
      */
-    public function testCreateService() : void
+    public function testCreateService(): void
     {
         $options = [
             'target_class' => 'Foo\Bar',
@@ -185,7 +185,7 @@ class NoObjectExistsFactoryTest extends TestCase
     /**
      * @covers ::container
      */
-    public function testCreateServiceWithServiceLocatorAwareInterface() : void
+    public function testCreateServiceWithServiceLocatorAwareInterface(): void
     {
         if (! interface_exists(ServiceLocatorAwareInterface::class)) {
             $this->markTestSkipped('ServiceLocatorAwareInterface not defined');

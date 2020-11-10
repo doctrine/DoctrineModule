@@ -7,15 +7,15 @@ namespace DoctrineModule\Form\Element;
 use Laminas\Form\Element\MultiCheckbox;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
+
 use function array_map;
 use function is_array;
 
 class ObjectMultiCheckbox extends MultiCheckbox
 {
-    /** @var Proxy */
-    protected $proxy;
+    protected Proxy $proxy;
 
-    public function getProxy() : Proxy
+    public function getProxy(): Proxy
     {
         if ($this->proxy === null) {
             $this->proxy = new Proxy();
@@ -27,7 +27,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
     /**
      * @param mixed $options
      */
-    public function setOptions($options) : self
+    public function setOptions($options): self
     {
         $this->getProxy()->setOptions($options);
 
@@ -38,7 +38,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
      * @param mixed $value
      * @param mixed $key
      */
-    public function setOption($key, $value) : self
+    public function setOption($key, $value): self
     {
         $this->getProxy()->setOptions([$key => $value]);
 

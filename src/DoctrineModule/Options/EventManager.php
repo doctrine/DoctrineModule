@@ -20,12 +20,12 @@ class EventManager extends AbstractOptions
      *
      * @var mixed[]
      */
-    protected $subscribers = [];
+    protected array $subscribers = [];
 
     /**
      * @param mixed[] $subscribers
      */
-    public function setSubscribers(array $subscribers) : self
+    public function setSubscribers(array $subscribers): self
     {
         $this->subscribers = $subscribers;
 
@@ -35,7 +35,7 @@ class EventManager extends AbstractOptions
     /**
      * @return mixed[]
      */
-    public function getSubscribers() : array
+    public function getSubscribers(): array
     {
         return $this->subscribers;
     }

@@ -14,6 +14,7 @@ use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Console\Input\StringInput;
+
 use function class_exists;
 
 /**
@@ -23,8 +24,7 @@ use function class_exists;
  */
 class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
 {
-    /** @var ServiceLocatorInterface */
-    private $serviceManager;
+    private ServiceLocatorInterface $serviceManager;
 
     /**
      * {@inheritDoc}

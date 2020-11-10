@@ -15,10 +15,8 @@ class Driver extends AbstractOptions
 {
     /**
      * The class name of the Driver.
-     *
-     * @var string
      */
-    protected $class;
+    protected string $class;
 
     /**
      * All drivers (except DriverChain) require paths to work on. You
@@ -27,25 +25,21 @@ class Driver extends AbstractOptions
      *
      * @var mixed[]
      */
-    protected $paths = [];
+    protected array $paths = [];
 
     /**
      * Set the cache key for the annotation cache. Cache key
      * is assembled as "doctrine.cache.{key}" and pulled from
      * service locator. This option is only valid for the
      * AnnotationDriver.
-     *
-     * @var string
      */
-    protected $cache = 'array';
+    protected string $cache = 'array';
 
     /**
      * Set the file extension to use. This option is only
      * valid for FileDrivers (XmlDriver, YamlDriver, PHPDriver, etc).
-     *
-     * @var string|null
      */
-    protected $extension = null;
+    protected ?string $extension = null;
 
     /**
      * Set the driver keys to use which are assembled as
@@ -54,24 +48,24 @@ class Driver extends AbstractOptions
      *
      * @var mixed[]
      */
-    protected $drivers = [];
+    protected array $drivers = [];
 
-    public function setCache(string $cache) : void
+    public function setCache(string $cache): void
     {
         $this->cache = $cache;
     }
 
-    public function getCache() : string
+    public function getCache(): string
     {
         return 'doctrine.cache.' . $this->cache;
     }
 
-    public function setClass(string $class) : void
+    public function setClass(string $class): void
     {
         $this->class = $class;
     }
 
-    public function getClass() : string
+    public function getClass(): string
     {
         return $this->class;
     }
@@ -79,7 +73,7 @@ class Driver extends AbstractOptions
     /**
      * @param mixed[] $drivers
      */
-    public function setDrivers(array $drivers) : void
+    public function setDrivers(array $drivers): void
     {
         $this->drivers = $drivers;
     }
@@ -87,7 +81,7 @@ class Driver extends AbstractOptions
     /**
      * @return mixed[]
      */
-    public function getDrivers() : array
+    public function getDrivers(): array
     {
         return $this->drivers;
     }
@@ -95,12 +89,12 @@ class Driver extends AbstractOptions
     /**
      * @param null $extension
      */
-    public function setExtension($extension) : void
+    public function setExtension($extension): void
     {
         $this->extension = $extension;
     }
 
-    public function getExtension() : ?string
+    public function getExtension(): ?string
     {
         return $this->extension;
     }
@@ -108,7 +102,7 @@ class Driver extends AbstractOptions
     /**
      * @param mixed[] $paths
      */
-    public function setPaths(array $paths) : void
+    public function setPaths(array $paths): void
     {
         $this->paths = $paths;
     }
@@ -116,7 +110,7 @@ class Driver extends AbstractOptions
     /**
      * @return mixed[]
      */
-    public function getPaths() : array
+    public function getPaths(): array
     {
         return $this->paths;
     }

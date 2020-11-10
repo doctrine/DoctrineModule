@@ -19,7 +19,7 @@ class NoObjectExists extends ObjectExists
     public const ERROR_OBJECT_FOUND = 'objectFound';
 
     /** @var mixed[] Message templates */
-    protected $messageTemplates = [self::ERROR_OBJECT_FOUND => "An object matching '%value%' was found"];
+    protected array $messageTemplates = [self::ERROR_OBJECT_FOUND => "An object matching '%value%' was found"];
 
     /**
      * {@inheritDoc}

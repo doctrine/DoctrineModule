@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class AdapterFactoryTest extends BaseTestCase
 {
-    public function testWillInstantiateFromFQCN() : void
+    public function testWillInstantiateFromFQCN(): void
     {
         $name           = 'testFactory';
         $factory        = new AdapterFactory($name);

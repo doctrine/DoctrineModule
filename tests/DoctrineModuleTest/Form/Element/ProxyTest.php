@@ -11,6 +11,7 @@ use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use stdClass;
+
 use function array_shift;
 use function func_get_args;
 use function get_class;
@@ -24,22 +25,20 @@ use function get_class;
  */
 class ProxyTest extends TestCase
 {
-    /** @var ClassMetadata */
-    protected $metadata;
+    protected ClassMetadata $metadata;
 
-    /** @var Proxy */
-    protected $proxy;
+    protected Proxy $proxy;
 
     /**
      * {@inheritDoc}.
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->proxy = new Proxy();
     }
 
-    public function testExceptionThrownForMissingObjectManager() : void
+    public function testExceptionThrownForMissingObjectManager(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No object manager was set');
@@ -48,7 +47,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    public function testExceptionThrownForMissingTargetClass() : void
+    public function testExceptionThrownForMissingTargetClass(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No target class was set');
@@ -59,7 +58,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    public function testExceptionThrownForMissingFindMethodName() : void
+    public function testExceptionThrownForMissingFindMethodName(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No method name was set');
@@ -82,7 +81,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    public function testExceptionFindMethodNameNotExistentInRepository() : void
+    public function testExceptionFindMethodNameNotExistentInRepository(): void
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $metadata    = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
@@ -116,7 +115,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    public function testExceptionThrownForMissingRequiredParameter() : void
+    public function testExceptionThrownForMissingRequiredParameter(): void
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $metadata    = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
@@ -154,7 +153,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    public function testToStringIsUsedForGetValueOptions() : void
+    public function testToStringIsUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
 
@@ -165,7 +164,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
-    public function testPropertyGetterUsedForGetValueOptions() : void
+    public function testPropertyGetterUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
 
@@ -183,7 +182,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
-    public function testPublicPropertyUsedForGetValueOptions() : void
+    public function testPublicPropertyUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
 
@@ -203,7 +202,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
-    public function testIsMethodOptionUsedForGetValueOptions() : void
+    public function testIsMethodOptionUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
 
@@ -222,7 +221,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
-    public function testDisplayEmptyItemAndEmptyItemLabelOptionsUsedForGetValueOptions() : void
+    public function testDisplayEmptyItemAndEmptyItemLabelOptionsUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
 
@@ -236,7 +235,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[''], '---');
     }
 
-    public function testLabelGeneratorUsedForGetValueOptions() : void
+    public function testLabelGeneratorUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
 
@@ -256,7 +255,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
-    public function testExceptionThrownForNonCallableLabelGenerator() : void
+    public function testExceptionThrownForNonCallableLabelGenerator(): void
     {
         $this->prepareProxy();
 
@@ -270,7 +269,7 @@ class ProxyTest extends TestCase
         $this->proxy->setOptions(['label_generator' => 'I throw an invalid type error']);
     }
 
-    public function testUsingOptionAttributesOfTypeString() : void
+    public function testUsingOptionAttributesOfTypeString(): void
     {
         $this->prepareProxy();
 
@@ -297,7 +296,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($expectedAttributes, $options[1]['attributes']);
     }
 
-    public function testUsingOptionAttributesOfTypeCallableReturningString() : void
+    public function testUsingOptionAttributesOfTypeCallableReturningString(): void
     {
         $this->prepareProxy();
 
@@ -320,7 +319,7 @@ class ProxyTest extends TestCase
         $this->assertEquals(['data-id' => 2], $options[1]['attributes']);
     }
 
-    public function testRuntimeExceptionOnWrongOptionAttributesValue() : void
+    public function testRuntimeExceptionOnWrongOptionAttributesValue(): void
     {
         $this->prepareProxy();
 
@@ -335,7 +334,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    public function testCanWorkWithEmptyTables() : void
+    public function testCanWorkWithEmptyTables(): void
     {
         $this->prepareEmptyProxy();
 
@@ -343,7 +342,7 @@ class ProxyTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-    public function testCanWorkWithEmptyDataReturnedAsArray() : void
+    public function testCanWorkWithEmptyDataReturnedAsArray(): void
     {
         $this->prepareEmptyProxy([]);
 
@@ -351,7 +350,7 @@ class ProxyTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-    public function testExceptionThrownForNonTraversableResults() : void
+    public function testExceptionThrownForNonTraversableResults(): void
     {
         $this->prepareEmptyProxy(new stdClass());
 
@@ -365,7 +364,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
-    public function testUsingFindMethod() : void
+    public function testUsingFindMethod(): void
     {
         $this->prepareFilteredProxy();
 
@@ -376,7 +375,7 @@ class ProxyTest extends TestCase
      * A \RuntimeException should be thrown when the optgroup_identifier option does not reflect an existing method
      * within the target object
      */
-    public function testExceptionThrownWhenOptgroupIdentifiesNotCallable() : void
+    public function testExceptionThrownWhenOptgroupIdentifiesNotCallable(): void
     {
         $this->prepareProxyWithOptgroupPreset();
 
@@ -396,7 +395,7 @@ class ProxyTest extends TestCase
      *
      * Entries should be grouped accordingly under the respective keys.
      */
-    public function testValueOptionsGeneratedProperlyWithOptgroups() : void
+    public function testValueOptionsGeneratedProperlyWithOptgroups(): void
     {
         $this->prepareProxyWithOptgroupPreset();
 
@@ -444,7 +443,7 @@ class ProxyTest extends TestCase
      *
      * Both entries should be grouped under the optgroup_default key.
      */
-    public function testEmptyOptgroupValueBelongsToOptgroupDefaultIfConfigured() : void
+    public function testEmptyOptgroupValueBelongsToOptgroupDefaultIfConfigured(): void
     {
         $this->prepareProxy();
 
@@ -486,7 +485,7 @@ class ProxyTest extends TestCase
      *
      * Entry one should be grouped, entry two shouldn't be.
      */
-    public function testEmptyOptgroupValueBelongsToNoOptgroupIfNotConfigured() : void
+    public function testEmptyOptgroupValueBelongsToNoOptgroupIfNotConfigured(): void
     {
         $this->prepareProxyWithOptgroupPresetThatHasPartiallyEmptyOptgroupValues();
 
@@ -515,7 +514,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($expectedOutput, $valueOptions);
     }
 
-    protected function prepareProxy() : void
+    protected function prepareProxy(): void
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $objectOne   = new FormObject();
@@ -585,7 +584,7 @@ class ProxyTest extends TestCase
         $this->metadata = $metadata;
     }
 
-    protected function prepareProxyWithOptgroupPreset() : void
+    protected function prepareProxyWithOptgroupPreset(): void
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $objectOne   = new FormObject();
@@ -670,7 +669,7 @@ class ProxyTest extends TestCase
         $this->metadata = $metadata;
     }
 
-    protected function prepareProxyWithOptgroupPresetThatHasPartiallyEmptyOptgroupValues() : void
+    protected function prepareProxyWithOptgroupPresetThatHasPartiallyEmptyOptgroupValues(): void
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $objectOne   = new FormObject();
@@ -741,7 +740,7 @@ class ProxyTest extends TestCase
         $this->metadata = $metadata;
     }
 
-    protected function prepareFilteredProxy() : void
+    protected function prepareFilteredProxy(): void
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $objectOne   = new FormObject();
@@ -821,7 +820,7 @@ class ProxyTest extends TestCase
     /**
      * @param mixed $result
      */
-    public function prepareEmptyProxy($result = null) : void
+    public function prepareEmptyProxy($result = null): void
     {
         if ($result === null) {
             $result = new ArrayCollection();

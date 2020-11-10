@@ -8,6 +8,7 @@ use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+
 use function is_string;
 
 /**
@@ -47,7 +48,7 @@ class StorageFactory extends AbstractFactory
         return $this($container, ObjectRepository::class);
     }
 
-    public function getOptionsClass() : string
+    public function getOptionsClass(): string
     {
         return 'DoctrineModule\Options\Authentication';
     }
