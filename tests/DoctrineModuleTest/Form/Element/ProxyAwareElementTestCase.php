@@ -9,6 +9,7 @@ use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+
 use function array_shift;
 use function func_get_args;
 use function get_class;
@@ -18,7 +19,7 @@ class ProxyAwareElementTestCase extends TestCase
     /** @var MockObject */
     protected $element;
 
-    protected function prepareProxy() : void
+    protected function prepareProxy(): void
     {
         $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
         $objectOne   = new FormObject();
@@ -92,7 +93,7 @@ class ProxyAwareElementTestCase extends TestCase
     /**
      * Proxy should stay read only, use with care
      */
-    protected function setProxyViaReflection(MockObject $proxy, ?MockObject $element = null) : void
+    protected function setProxyViaReflection(MockObject $proxy, ?MockObject $element = null): void
     {
         if (! $element) {
             $element = $this->element;

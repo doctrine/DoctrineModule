@@ -6,9 +6,11 @@ namespace DoctrineModule\Component\Console\Output;
 
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\Output;
+
 use function function_exists;
 use function getenv;
 use function posix_isatty;
+
 use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 use const STDOUT;
@@ -51,7 +53,7 @@ class PropertyOutput extends Output
         return $this->message;
     }
 
-    protected function hasColorSupport() : bool
+    protected function hasColorSupport(): bool
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             return getenv('ANSICON') !== false || getenv('ConEmuANSI') === 'ON';

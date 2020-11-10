@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class AuthenticationServiceFactoryTest extends BaseTestCase
 {
-    public function testWillInstantiateFromFQCN() : void
+    public function testWillInstantiateFromFQCN(): void
     {
         $name    = 'testFactory';
         $factory = new AuthenticationServiceFactory($name);

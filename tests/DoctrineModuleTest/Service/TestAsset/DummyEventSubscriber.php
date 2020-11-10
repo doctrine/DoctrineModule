@@ -14,7 +14,7 @@ class DummyEventSubscriber implements EventSubscriber
     /**
      * Empty callback method
      */
-    public function dummy() : void
+    public function dummy(): void
     {
     }
 

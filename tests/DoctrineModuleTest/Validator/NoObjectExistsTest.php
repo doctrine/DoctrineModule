@@ -7,6 +7,7 @@ namespace DoctrineModuleTest\Validator\Adapter;
 use DoctrineModule\Validator\NoObjectExists;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
+
 use function str_replace;
 
 /**
@@ -16,7 +17,7 @@ use function str_replace;
  */
 class NoObjectExistsTest extends BaseTestCase
 {
-    public function testCanValidateWithNoAvailableObjectInRepository() : void
+    public function testCanValidateWithNoAvailableObjectInRepository(): void
     {
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
@@ -30,7 +31,7 @@ class NoObjectExistsTest extends BaseTestCase
         $this->assertTrue($validator->isValid('matchValue'));
     }
 
-    public function testCannotValidateWithAvailableObjectInRepository() : void
+    public function testCannotValidateWithAvailableObjectInRepository(): void
     {
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
 
@@ -44,7 +45,7 @@ class NoObjectExistsTest extends BaseTestCase
         $this->assertFalse($validator->isValid('matchValue'));
     }
 
-    public function testErrorMessageIsStringInsteadArray() : void
+    public function testErrorMessageIsStringInsteadArray(): void
     {
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $repository

@@ -9,6 +9,7 @@ use Doctrine\Common\Cache\ChainCache;
 use DoctrineModule\Service\CacheFactory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+
 use function assert;
 
 /**
@@ -19,7 +20,7 @@ class CacheFactoryTest extends BaseTestCase
     /**
      * @covers \DoctrineModule\Service\CacheFactory::createService
      */
-    public function testWillSetNamespace() : void
+    public function testWillSetNamespace(): void
     {
         $factory        = new CacheFactory('foo');
         $serviceManager = new ServiceManager();
@@ -45,7 +46,7 @@ class CacheFactoryTest extends BaseTestCase
      * @covers \DoctrineModule\Service\CacheFactory::createService
      * @group 547
      */
-    public function testCreateLaminasCache() : void
+    public function testCreateLaminasCache(): void
     {
         $factory        = new CacheFactory('phpunit');
         $serviceManager = new ServiceManager();
@@ -75,7 +76,7 @@ class CacheFactoryTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModule\Cache\LaminasStorageCache', $cache);
     }
 
-    public function testCreatePredisCache() : void
+    public function testCreatePredisCache(): void
     {
         $factory        = new CacheFactory('predis');
         $serviceManager = new ServiceManager();
@@ -102,7 +103,7 @@ class CacheFactoryTest extends BaseTestCase
         $this->assertInstanceOf('Doctrine\Common\Cache\PredisCache', $cache);
     }
 
-    public function testUseServiceFactory() : void
+    public function testUseServiceFactory(): void
     {
         $factory        = new CacheFactory('chain');
         $serviceManager = new ServiceManager();

@@ -13,6 +13,7 @@ use DoctrineModule\Options\Driver as DriverOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+
 use function class_exists;
 use function get_class;
 use function interface_exists;
@@ -49,7 +50,7 @@ class DriverFactory extends AbstractFactory
         return $this($container, MappingDriver::class);
     }
 
-    public function getOptionsClass() : string
+    public function getOptionsClass(): string
     {
         return 'DoctrineModule\Options\Driver';
     }
@@ -57,7 +58,7 @@ class DriverFactory extends AbstractFactory
     /**
      * @throws InvalidArgumentException
      */
-    protected function createDriver(ContainerInterface $container, DriverOptions $options) : MappingDriver
+    protected function createDriver(ContainerInterface $container, DriverOptions $options): MappingDriver
     {
         $class = $options->getClass();
 
@@ -73,7 +74,8 @@ class DriverFactory extends AbstractFactory
         $paths = $options->getPaths();
 
         // Special options for AnnotationDrivers.
-        if ($class === 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver'
+        if (
+            $class === 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver'
             || is_subclass_of($class, 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver')
         ) {
             $reader = new Annotations\AnnotationReader();

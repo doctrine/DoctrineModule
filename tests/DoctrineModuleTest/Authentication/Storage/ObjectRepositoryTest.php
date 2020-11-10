@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
  */
 class ObjectRepositoryTest extends BaseTestCase
 {
-    public function testCanRetrieveEntityFromObjectRepositoryStorage() : void
+    public function testCanRetrieveEntityFromObjectRepositoryStorage(): void
     {
         // Identifier is considered to be username here
         $entity = new IdentityObject();

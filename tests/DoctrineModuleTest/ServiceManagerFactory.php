@@ -7,6 +7,7 @@ namespace DoctrineModuleTest;
 use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
+
 use function assert;
 
 /**
@@ -17,7 +18,7 @@ class ServiceManagerFactory
     /**
      * @return mixed[]
      */
-    public static function getConfiguration() : array
+    public static function getConfiguration(): array
     {
         return include __DIR__ . '/../TestConfiguration.php';
     }
@@ -27,7 +28,7 @@ class ServiceManagerFactory
      *
      * @param mixed[]|null $configuration
      */
-    public static function getServiceManager(?array $configuration = null) : ServiceManager
+    public static function getServiceManager(?array $configuration = null): ServiceManager
     {
         $configuration        = $configuration ?: static::getConfiguration();
         $serviceManager       = new ServiceManager();

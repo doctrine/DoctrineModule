@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
  */
 class DriverFactoryTest extends BaseTestCase
 {
-    public function testCreateDriver() : void
+    public function testCreateDriver(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -32,7 +32,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModuleTest\Service\Mock\MetadataDriverMock', $driver);
     }
 
-    public function testCreateDriverChain() : void
+    public function testCreateDriverChain(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(

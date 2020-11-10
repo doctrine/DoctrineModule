@@ -9,6 +9,7 @@ use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use Laminas\Authentication\Adapter\AbstractAdapter;
 use Laminas\Authentication\Adapter\Exception;
 use Laminas\Authentication\Result as AuthenticationResult;
+
 use function call_user_func;
 use function get_class;
 use function method_exists;
@@ -45,7 +46,7 @@ class ObjectRepository extends AbstractAdapter
     /**
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function setOptions($options) : self
+    public function setOptions($options): self
     {
         if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
@@ -56,12 +57,12 @@ class ObjectRepository extends AbstractAdapter
         return $this;
     }
 
-    public function getOptions() : AuthenticationOptions
+    public function getOptions(): AuthenticationOptions
     {
         return $this->options;
     }
 
-    public function authenticate() : AuthenticationResult
+    public function authenticate(): AuthenticationResult
     {
         $this->setup();
         $options  = $this->options;
@@ -85,7 +86,7 @@ class ObjectRepository extends AbstractAdapter
      *
      * @throws Exception\UnexpectedValueException
      */
-    protected function validateIdentity(object $identity) : AuthenticationResult
+    protected function validateIdentity(object $identity): AuthenticationResult
     {
         $credentialProperty = $this->options->getCredentialProperty();
         $getter             = 'get' . Inflector::classify($credentialProperty);
@@ -135,7 +136,7 @@ class ObjectRepository extends AbstractAdapter
      * @throws Exception\RuntimeException In the event that setup was not
      *                                    done properly throw exception.
      */
-    protected function setup() : void
+    protected function setup(): void
     {
         if ($this->identity === null) {
             throw new Exception\RuntimeException(
@@ -162,7 +163,7 @@ class ObjectRepository extends AbstractAdapter
      * Creates a Laminas\Authentication\Result object from the information that has been collected
      * during the authenticate() attempt.
      */
-    protected function createAuthenticationResult() : AuthenticationResult
+    protected function createAuthenticationResult(): AuthenticationResult
     {
         return new AuthenticationResult(
             $this->authenticationResultInfo['code'],

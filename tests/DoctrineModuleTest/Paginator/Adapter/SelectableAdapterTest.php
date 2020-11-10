@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
 use PHPUnit\Framework\TestCase;
+
 use function range;
 
 /**
@@ -20,7 +21,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
-    public function testGetItemsAtOffsetZeroWithEmptyCriteria() : void
+    public function testGetItemsAtOffsetZeroWithEmptyCriteria(): void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $adapter    = new SelectableAdapter($selectable);
@@ -51,7 +52,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
-    public function testGetItemsAtOffsetZeroWithNonEmptyCriteria() : void
+    public function testGetItemsAtOffsetZeroWithNonEmptyCriteria(): void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
@@ -85,7 +86,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
-    public function testGetItemsAtOffsetTenWithEmptyCriteria() : void
+    public function testGetItemsAtOffsetTenWithEmptyCriteria(): void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $adapter    = new SelectableAdapter($selectable);
@@ -115,7 +116,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
      */
-    public function testGetItemsAtOffsetTenWithNonEmptyCriteria() : void
+    public function testGetItemsAtOffsetTenWithNonEmptyCriteria(): void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
@@ -149,7 +150,7 @@ class SelectableAdapterTest extends TestCase
     /**
      * @covers \DoctrineModule\Paginator\Adapter\Selectable::count
      */
-    public function testReturnsCorrectCount() : void
+    public function testReturnsCorrectCount(): void
     {
         $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
         $expression = Criteria::expr()->eq('foo', 'bar');
