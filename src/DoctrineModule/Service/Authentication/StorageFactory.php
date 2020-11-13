@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepository;
+use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Authentication\Storage\Session;
@@ -62,6 +63,6 @@ class StorageFactory extends AbstractFactory
 
     public function getOptionsClass(): string
     {
-        return 'DoctrineModule\Options\Authentication';
+        return AuthenticationOptions::class;
     }
 }

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service\Authentication;
 
+use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Service\Authentication\StorageFactory;
+use Laminas\Authentication\Storage\StorageInterface;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use ReflectionClass;
 
 class StorageFactoryTest extends BaseTestCase
 {
@@ -39,14 +42,14 @@ class StorageFactoryTest extends BaseTestCase
         );
 
         $adapter = $factory->createService($serviceManager);
-        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
+        $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 
     public function testCanInstantiateStorageFromServiceLocator(): void
     {
         $factory        = new StorageFactory('testFactory');
-        $serviceManager = $this->createMock('Laminas\ServiceManager\ServiceManager');
-        $storage        = $this->createMock('Laminas\Authentication\Storage\StorageInterface');
+        $serviceManager = $this->createMock(ServiceManager::class);
+        $storage        = $this->createMock(StorageInterface::class);
         $config         = [
             'doctrine' => [
                 'authentication' => [
@@ -67,13 +70,46 @@ class StorageFactoryTest extends BaseTestCase
             ->will($this->returnValue($storage));
 
         $this->assertInstanceOf(
-            'DoctrineModule\Authentication\Storage\ObjectRepository',
+            ObjectRepository::class,
             $factory->createService($serviceManager)
         );
     }
 
     public function testCanInstantiateCustomStorage(): void
     {
-        // TODO: this
+        $factory        = new StorageFactory('customFactory');
+        $serviceManager = $this->createMock(ServiceManager::class);
+        $config         = [
+            'doctrine' => [
+                'authentication' => [
+                    'customFactory' => [
+                        'sessionContainer' => 'customContainer',
+                        'sessionMember' => 'customMember',
+                        'storage' => 'custom_storage',
+                    ],
+                ],
+            ],
+        ];
+
+        $serviceManager
+            ->expects($this->at(0))
+            ->method('get')
+            ->with('config')
+            ->will($this->returnValue($config));
+
+        $objectRepository = $factory->createService($serviceManager);
+
+        $reflection = new ReflectionClass($objectRepository);
+        $property   = $reflection->getProperty('options');
+        $property->setAccessible(true);
+        $options = $property->getValue($objectRepository);
+
+        $this->assertSame('customContainer', $options->getStorage()->getNamespace());
+        $this->assertSame('customMember', $options->getStorage()->getMember());
+
+        $this->assertInstanceOf(
+            ObjectRepository::class,
+            $objectRepository
+        );
     }
 }
