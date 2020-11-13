@@ -72,7 +72,7 @@ class StorageFactoryTest extends BaseTestCase
         );
     }
 
-    public function testCanInstantiateCustomStorage() : void
+    public function testCanInstantiateCustomStorage(): void
     {
         // TODO: this
     }

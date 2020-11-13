@@ -280,22 +280,22 @@ class Authentication extends AbstractOptions
         $this->storage = $storage;
     }
 
-    public function getSessionContainer() : ?string
+    public function getSessionContainer(): ?string
     {
         return $this->sessionContainer;
     }
 
-    public function setSessionContainer(string $container) : void
+    public function setSessionContainer(string $container): void
     {
         $this->sessionContainer = $container;
     }
 
-    public function getSessionMember() : ?string
+    public function getSessionMember(): ?string
     {
         return $this->sessionMember;
     }
 
-    public function setSessionMember(string $member) : void
+    public function setSessionMember(string $member): void
     {
         $this->sessionMember = $member;
     }
