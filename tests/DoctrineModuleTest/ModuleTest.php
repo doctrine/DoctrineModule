@@ -11,6 +11,7 @@ use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function serialize;
 use function unserialize;
 
@@ -32,7 +33,7 @@ class ModuleTest extends TestCase
     /** @var PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Application */
     private $cli;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->application    = $this->getMockBuilder('Laminas\Mvc\Application')
             ->disableOriginalConstructor()
@@ -64,7 +65,7 @@ class ModuleTest extends TestCase
     /**
      * @covers \DoctrineModule\Module::getConfig
      */
-    public function testGetConfig() : void
+    public function testGetConfig(): void
     {
         $module = new Module();
 
@@ -86,7 +87,7 @@ class ModuleTest extends TestCase
      *
      * @covers \DoctrineModule\Module::getConsoleUsage
      */
-    public function testGetConsoleUsage() : void
+    public function testGetConsoleUsage(): void
     {
         $this
             ->cli
@@ -96,7 +97,7 @@ class ModuleTest extends TestCase
                 $this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface')
             )
-            ->will($this->returnCallback(static function (InputInterface $input, OutputInterface $output) : void {
+            ->will($this->returnCallback(static function (InputInterface $input, OutputInterface $output): void {
                 $output->write($input->getFirstArgument() . ' - TEST');
                 $output->write(' - More output');
             }));

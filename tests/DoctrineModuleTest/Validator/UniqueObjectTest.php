@@ -11,6 +11,7 @@ use InvalidArgumentException;
 use Laminas\Validator\Exception\RuntimeException;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
+
 use function sprintf;
 use function str_replace;
 
@@ -21,7 +22,7 @@ use function str_replace;
  */
 class UniqueObjectTest extends BaseTestCase
 {
-    public function testCanValidateWithNotAvailableObjectInRepository() : void
+    public function testCanValidateWithNotAvailableObjectInRepository(): void
     {
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $repository
@@ -40,7 +41,7 @@ class UniqueObjectTest extends BaseTestCase
         $this->assertTrue($validator->isValid('matchValue'));
     }
 
-    public function testCanValidateIfThereIsTheSameObjectInTheRepository() : void
+    public function testCanValidateIfThereIsTheSameObjectInTheRepository(): void
     {
         $match = new stdClass();
 
@@ -80,7 +81,7 @@ class UniqueObjectTest extends BaseTestCase
         $this->assertTrue($validator->isValid(['matchKey' => 'matchValue', 'id' => 'identifier']));
     }
 
-    public function testCannotValidateIfThereIsAnotherObjectWithTheSameValueInTheRepository() : void
+    public function testCannotValidateIfThereIsAnotherObjectWithTheSameValueInTheRepository(): void
     {
         $match = new stdClass();
 
@@ -120,7 +121,7 @@ class UniqueObjectTest extends BaseTestCase
         $this->assertFalse($validator->isValid(['matchKey' => 'matchValue', 'id' => 'another identifier']));
     }
 
-    public function testCanFetchIdentifierFromContext() : void
+    public function testCanFetchIdentifierFromContext(): void
     {
         $match = new stdClass();
 
@@ -161,7 +162,7 @@ class UniqueObjectTest extends BaseTestCase
         $this->assertTrue($validator->isValid('matchValue', ['id' => 'identifier']));
     }
 
-    public function testThrowsAnExceptionOnUsedButMissingContext() : void
+    public function testThrowsAnExceptionOnUsedButMissingContext(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Expected context to be an array but is null');
@@ -186,7 +187,7 @@ class UniqueObjectTest extends BaseTestCase
         $validator->isValid('matchValue');
     }
 
-    public function testThrowsAnExceptionOnMissingIdentifier() : void
+    public function testThrowsAnExceptionOnMissingIdentifier(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Expected context to contain id');
@@ -224,7 +225,7 @@ class UniqueObjectTest extends BaseTestCase
         $validator->isValid('matchValue');
     }
 
-    public function testThrowsAnExceptionOnMissingIdentifierInContext() : void
+    public function testThrowsAnExceptionOnMissingIdentifierInContext(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Expected context to contain id');
@@ -263,7 +264,7 @@ class UniqueObjectTest extends BaseTestCase
         $validator->isValid('matchValue', []);
     }
 
-    public function testThrowsAnExceptionOnMissingObjectManager() : void
+    public function testThrowsAnExceptionOnMissingObjectManager(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
@@ -279,7 +280,7 @@ class UniqueObjectTest extends BaseTestCase
         ]);
     }
 
-    public function testThrowsAnExceptionOnWrongObjectManager() : void
+    public function testThrowsAnExceptionOnWrongObjectManager(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
@@ -298,7 +299,7 @@ class UniqueObjectTest extends BaseTestCase
         ]);
     }
 
-    public function testCanValidateWithNotAvailableObjectInRepositoryByDateTimeObject() : void
+    public function testCanValidateWithNotAvailableObjectInRepositoryByDateTimeObject(): void
     {
         $date       = new DateTime('17 March 2014');
         $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
@@ -319,7 +320,7 @@ class UniqueObjectTest extends BaseTestCase
         $this->assertTrue($validator->isValid($date));
     }
 
-    public function testCanFetchIdentifierFromObjectContext() : void
+    public function testCanFetchIdentifierFromObjectContext(): void
     {
         $context     = new stdClass();
         $context->id = 'identifier';
@@ -365,7 +366,7 @@ class UniqueObjectTest extends BaseTestCase
         $this->assertTrue($validator->isValid('matchValue', $context));
     }
 
-    public function testErrorMessageIsStringInsteadArray() : void
+    public function testErrorMessageIsStringInsteadArray(): void
     {
         $match = new stdClass();
 

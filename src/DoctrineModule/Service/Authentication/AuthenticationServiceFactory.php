@@ -28,12 +28,12 @@ class AuthenticationServiceFactory extends AbstractFactory
         );
     }
 
-    public function createService(ServiceLocatorInterface $container) : AuthenticationService
+    public function createService(ServiceLocatorInterface $container): AuthenticationService
     {
         return $this($container, AuthenticationService::class);
     }
 
-    public function getOptionsClass() : string
+    public function getOptionsClass(): string
     {
         throw new BadMethodCallException('Not implemented');
     }

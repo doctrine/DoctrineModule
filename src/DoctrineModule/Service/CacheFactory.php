@@ -10,6 +10,7 @@ use DoctrineModule\Cache\LaminasStorageCache;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use RuntimeException;
+
 use function is_string;
 
 /**
@@ -90,7 +91,7 @@ class CacheFactory extends AbstractFactory
         return $this($container, \Doctrine\Common\Cache\Cache::class);
     }
 
-    public function getOptionsClass() : string
+    public function getOptionsClass(): string
     {
         return 'DoctrineModule\Options\Cache';
     }

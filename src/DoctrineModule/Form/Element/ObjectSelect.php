@@ -7,6 +7,7 @@ namespace DoctrineModule\Form\Element;
 use Laminas\Form\Element\Select as SelectElement;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
+
 use function array_map;
 use function is_array;
 
@@ -15,7 +16,7 @@ class ObjectSelect extends SelectElement
     /** @var Proxy */
     protected $proxy;
 
-    public function getProxy() : Proxy
+    public function getProxy(): Proxy
     {
         if ($this->proxy === null) {
             $this->proxy = new Proxy();
@@ -29,7 +30,7 @@ class ObjectSelect extends SelectElement
      *
      * {@inheritDoc}
      */
-    public function setOptions($options) : self
+    public function setOptions($options): self
     {
         $this->getProxy()->setOptions($options);
 
@@ -41,7 +42,7 @@ class ObjectSelect extends SelectElement
      *
      * {@inheritDoc}
      */
-    public function setOption($key, $value) : self
+    public function setOption($key, $value): self
     {
         $this->getProxy()->setOptions([$key => $value]);
 

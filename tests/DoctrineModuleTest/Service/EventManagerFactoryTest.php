@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
  */
 class EventManagerFactoryTest extends BaseTestCase
 {
-    public function testWillInstantiateFromFQCN() : void
+    public function testWillInstantiateFromFQCN(): void
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
@@ -42,7 +42,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertCount(1, $listeners);
     }
 
-    public function testWillAttachEventListenersFromConfiguredInstances() : void
+    public function testWillAttachEventListenersFromConfiguredInstances(): void
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
@@ -71,7 +71,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertContains($subscriber, $listeners);
     }
 
-    public function testWillAttachEventListenersFromServiceManagerAlias() : void
+    public function testWillAttachEventListenersFromServiceManagerAlias(): void
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);
@@ -101,7 +101,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertContains($subscriber, $listeners);
     }
 
-    public function testWillRefuseNonExistingSubscriber() : void
+    public function testWillRefuseNonExistingSubscriber(): void
     {
         $name           = 'eventManagerFactory';
         $factory        = new EventManagerFactory($name);

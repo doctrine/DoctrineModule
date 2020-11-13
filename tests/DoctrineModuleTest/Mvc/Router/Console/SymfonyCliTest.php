@@ -20,12 +20,12 @@ class SymfonyCliTest extends TestCase
     /** @var SymfonyCli */
     protected $route;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->route = new SymfonyCli(new Application());
     }
 
-    public function testMatching() : void
+    public function testMatching(): void
     {
         $this->assertInstanceOf(
             RouteMatch::class,
@@ -33,7 +33,7 @@ class SymfonyCliTest extends TestCase
         );
     }
 
-    public function testMatchingWithParams() : void
+    public function testMatchingWithParams(): void
     {
         $this->assertInstanceOf(
             RouteMatch::class,
@@ -41,7 +41,7 @@ class SymfonyCliTest extends TestCase
         );
     }
 
-    public function testNotMatching() : void
+    public function testNotMatching(): void
     {
         $this->assertNull($this->route->match(new Request(['scriptname.php', 'unknowncommand'])));
     }

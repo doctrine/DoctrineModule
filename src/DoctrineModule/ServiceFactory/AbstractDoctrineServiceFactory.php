@@ -8,6 +8,7 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\AbstractFactoryInterface;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+
 use function preg_match;
 
 /**
@@ -70,11 +71,13 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
     {
         $matches = [];
 
-        if (! preg_match(
-            '/^doctrine\.((?<mappingType>orm|odm)\.|)(?<serviceType>[a-z0-9_]+)\.(?<serviceName>[a-z0-9_]+)$/',
-            $name,
-            $matches
-        )) {
+        if (
+            ! preg_match(
+                '/^doctrine\.((?<mappingType>orm|odm)\.|)(?<serviceType>[a-z0-9_]+)\.(?<serviceName>[a-z0-9_]+)$/',
+                $name,
+                $matches
+            )
+        ) {
             return false;
         }
 
@@ -84,7 +87,8 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         $serviceName = $matches['serviceName'];
 
         if ($mappingType === '') {
-            if (! isset($config['doctrine_factories'][$serviceType]) ||
+            if (
+                ! isset($config['doctrine_factories'][$serviceType]) ||
                  ! isset($config['doctrine'][$serviceType][$serviceName])
             ) {
                 return false;
@@ -97,10 +101,12 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
             ];
         }
 
-        if (! isset(
-            $config['doctrine_factories'][$mappingType][$serviceType],
-            $config['doctrine'][$mappingType][$serviceType][$serviceName]
-        )) {
+        if (
+            ! isset(
+                $config['doctrine_factories'][$mappingType][$serviceType],
+                $config['doctrine'][$mappingType][$serviceType][$serviceName]
+            )
+        ) {
             return false;
         }
 

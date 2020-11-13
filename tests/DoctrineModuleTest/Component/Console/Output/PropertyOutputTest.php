@@ -6,6 +6,7 @@ namespace DoctrineModuleTest\Component\Console\Output;
 
 use DoctrineModule\Component\Console\Output\PropertyOutput;
 use PHPUnit\Framework\TestCase;
+
 use const PHP_EOL;
 
 /**
@@ -16,7 +17,7 @@ class PropertyOutputTest extends TestCase
     /**
      * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
      */
-    public function testWrite() : void
+    public function testWrite(): void
     {
         $message = 'message';
 
@@ -28,7 +29,7 @@ class PropertyOutputTest extends TestCase
     /**
      * @covers \DoctrineModule\Component\Console\Output\PropertyOutput
      */
-    public function testWriteConcat() : void
+    public function testWriteConcat(): void
     {
         $message  = 'message';
         $message2 = 'message2';

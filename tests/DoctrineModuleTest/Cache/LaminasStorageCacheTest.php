@@ -17,12 +17,12 @@ use PHPUnit\Framework\TestCase;
  */
 class LaminasStorageCacheTest extends TestCase
 {
-    protected function getCacheDriver() : LaminasStorageCache
+    protected function getCacheDriver(): LaminasStorageCache
     {
         return new LaminasStorageCache(new Memory());
     }
 
-    public function testBasics() : void
+    public function testBasics(): void
     {
         $cache = $this->getCacheDriver();
 
@@ -45,7 +45,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertInstanceOf('ArrayObject', $cache->fetch('test_object_key'));
     }
 
-    public function testDeleteAll() : void
+    public function testDeleteAll(): void
     {
         $cache = $this->getCacheDriver();
         $cache->save('test_key1', '1');
@@ -56,7 +56,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('test_key2'));
     }
 
-    public function testFlushAll() : void
+    public function testFlushAll(): void
     {
         $cache = $this->getCacheDriver();
         $cache->save('test_key1', '1');
@@ -67,7 +67,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('test_key2'));
     }
 
-    public function testNamespace() : void
+    public function testNamespace(): void
     {
         $cache = $this->getCacheDriver();
         $cache->setNamespace('test_');
@@ -80,7 +80,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('key1'));
     }
 
-    public function testGetStats() : void
+    public function testGetStats(): void
     {
         $cache = $this->getCacheDriver();
         $stats = $cache->getStats();

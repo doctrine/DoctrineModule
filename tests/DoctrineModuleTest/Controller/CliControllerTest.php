@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
  */
 class CliControllerTest extends AbstractConsoleControllerTestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->setApplicationConfig(ServiceManagerFactory::getConfiguration());
         parent::setUp();
@@ -35,7 +35,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
     /**
      * Verifies that the controller handling the DoctrineModule CLI functionality can be reached
      */
-    public function testIndexActionCanBeAccessed() : void
+    public function testIndexActionCanBeAccessed(): void
     {
         $this->dispatch(new Request(['scriptname.php', 'list']));
 
@@ -47,14 +47,14 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
         $this->assertMatchedRouteName('doctrine_cli');
     }
 
-    public function testNonZeroExitCode() : void
+    public function testNonZeroExitCode(): void
     {
         $this->dispatch(new Request(['scriptname.php', 'fail']));
 
         $this->assertNotResponseStatusCode(0);
     }
 
-    public function testException() : void
+    public function testException(): void
     {
         $this->dispatch(new Request(['scriptname.php', '-q', 'fail', '--exception']));
 
