@@ -59,15 +59,9 @@ class StorageFactoryTest extends BaseTestCase
         ];
 
         $serviceManager
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('get')
-            ->with('config')
-            ->will($this->returnValue($config));
-        $serviceManager
-            ->expects($this->at(1))
-            ->method('get')
-            ->with('some_storage')
-            ->will($this->returnValue($storage));
+            ->will($this->onConsecutiveCalls($config, $storage));
 
         $this->assertInstanceOf(
             ObjectRepository::class,
@@ -92,7 +86,7 @@ class StorageFactoryTest extends BaseTestCase
         ];
 
         $serviceManager
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('get')
             ->with('config')
             ->will($this->returnValue($config));
