@@ -38,8 +38,8 @@ class StorageFactory extends AbstractFactory
             $sessionMember    = $options->getSessionMember();
             if ($sessionContainer || $sessionMember) {
                 $storage = new Session(
-                    $options->getSessionContainer(),
-                    $options->getSessionMember()
+                    $sessionContainer,
+                    $sessionMember
                 );
             } else {
                 $storage = $container->get($storage);
