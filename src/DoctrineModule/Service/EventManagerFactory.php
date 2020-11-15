@@ -9,6 +9,7 @@ use Doctrine\Common\EventSubscriber;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+
 use function class_exists;
 use function get_class;
 use function gettype;
@@ -70,7 +71,7 @@ class EventManagerFactory extends AbstractFactory
     /**
      * Get the class name of the options associated with this factory.
      */
-    public function getOptionsClass() : string
+    public function getOptionsClass(): string
     {
         return 'DoctrineModule\Options\EventManager';
     }

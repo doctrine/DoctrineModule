@@ -7,6 +7,7 @@ namespace DoctrineModule\Component\Console\Input;
 use Laminas\Console\Request;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputDefinition;
+
 use function is_numeric;
 
 /**

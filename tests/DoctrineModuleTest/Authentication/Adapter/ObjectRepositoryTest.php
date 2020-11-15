@@ -9,6 +9,7 @@ use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentityObject;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
+
 use function crypt;
 
 /**
@@ -18,7 +19,7 @@ use function crypt;
  */
 class ObjectRepositoryTest extends BaseTestCase
 {
-    public function testWillRejectInvalidIdentityProperty() : void
+    public function testWillRejectInvalidIdentityProperty(): void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
@@ -30,7 +31,7 @@ class ObjectRepositoryTest extends BaseTestCase
         new ObjectRepositoryAdapter(['identity_property' => false]);
     }
 
-    public function testWillRejectInvalidCredentialProperty() : void
+    public function testWillRejectInvalidCredentialProperty(): void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
@@ -41,7 +42,7 @@ class ObjectRepositoryTest extends BaseTestCase
         new ObjectRepositoryAdapter(['credential_property' => false]);
     }
 
-    public function testWillRequireIdentityValue() : void
+    public function testWillRequireIdentityValue(): void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\RuntimeException'
@@ -59,7 +60,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testWillRequireCredentialValue() : void
+    public function testWillRequireCredentialValue(): void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\RuntimeException'
@@ -77,7 +78,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testWillRejectInvalidCredentialCallable() : void
+    public function testWillRejectInvalidCredentialCallable(): void
     {
         $this->expectException(
             'Laminas\Authentication\Adapter\Exception\InvalidArgumentException'
@@ -95,7 +96,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testAuthentication() : void
+    public function testAuthentication(): void
     {
         $entity = new IdentityObject();
         $entity->setUsername('a username');
@@ -140,7 +141,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
-    public function testAuthenticationWithPublicProperties() : void
+    public function testAuthenticationWithPublicProperties(): void
     {
         $entity           = new PublicPropertiesIdentityObject();
         $entity->username = 'a username';
@@ -174,7 +175,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
-    public function testWillRefuseToAuthenticateWithoutGettersOrPublicMethods() : void
+    public function testWillRefuseToAuthenticateWithoutGettersOrPublicMethods(): void
     {
         $this->expectException('Laminas\Authentication\Adapter\Exception\UnexpectedValueException');
 
@@ -197,7 +198,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testCanValidateWithSpecialCrypt() : void
+    public function testCanValidateWithSpecialCrypt(): void
     {
         $hash   = '$2y$07$usesomesillystringforsalt$';
         $entity = new IdentityObject();
@@ -236,7 +237,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
-    public function testWillRefuseToAuthenticateWhenInvalidInstanceIsFound() : void
+    public function testWillRefuseToAuthenticateWhenInvalidInstanceIsFound(): void
     {
         $this->expectException('Laminas\Authentication\Adapter\Exception\UnexpectedValueException');
 
@@ -260,7 +261,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
-    public function testWillNotCastAuthCredentialValue() : void
+    public function testWillNotCastAuthCredentialValue(): void
     {
         $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
         $adapter          = new ObjectRepositoryAdapter();

@@ -25,7 +25,7 @@ class ObjectExistsFactoryTest extends TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->object = new ObjectExistsFactory();
     }
@@ -33,7 +33,7 @@ class ObjectExistsFactoryTest extends TestCase
     /**
      * @covers ::__invoke
      */
-    public function testInvoke() : void
+    public function testInvoke(): void
     {
         $options = [
             'target_class' => 'Foo\Bar',

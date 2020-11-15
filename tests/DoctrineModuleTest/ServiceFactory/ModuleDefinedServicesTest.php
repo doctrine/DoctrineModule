@@ -18,7 +18,7 @@ class ModuleDefinedServicesTest extends TestCase
     /** @var ServiceLocatorInterface */
     protected $serviceManager;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->serviceManager = ServiceManagerFactory::getServiceManager();
     }
@@ -28,7 +28,7 @@ class ModuleDefinedServicesTest extends TestCase
      *
      * @dataProvider getServicesThatShouldBeDefined
      */
-    public function testModuleDefinedServices(string $serviceName, bool $defined) : void
+    public function testModuleDefinedServices(string $serviceName, bool $defined): void
     {
         $this->assertSame($defined, $this->serviceManager->has($serviceName));
     }
@@ -38,7 +38,7 @@ class ModuleDefinedServicesTest extends TestCase
      *
      * @dataProvider getServicesThatCanBeFetched
      */
-    public function testModuleFetchedService(string $serviceName, string $expectedClass) : void
+    public function testModuleFetchedService(string $serviceName, string $expectedClass): void
     {
         $this->assertInstanceOf($expectedClass, $this->serviceManager->get($serviceName));
     }
@@ -48,7 +48,7 @@ class ModuleDefinedServicesTest extends TestCase
      *
      * @dataProvider getServicesThatCannotBeFetched
      */
-    public function testModuleInvalidService(string $serviceName) : void
+    public function testModuleInvalidService(string $serviceName): void
     {
         $this->expectException('Laminas\ServiceManager\Exception\ServiceNotFoundException');
 
@@ -58,7 +58,7 @@ class ModuleDefinedServicesTest extends TestCase
     /**
      * @return mixed[][]
      */
-    public function getServicesThatShouldBeDefined() : array
+    public function getServicesThatShouldBeDefined(): array
     {
         return [
             ['doctrine.cache.array', true],
@@ -90,7 +90,7 @@ class ModuleDefinedServicesTest extends TestCase
     /**
      * @return string[][]
      */
-    public function getServicesThatCanBeFetched() : array
+    public function getServicesThatCanBeFetched(): array
     {
         return [
             ['doctrine.cache.array', 'Doctrine\Common\Cache\ArrayCache'],
@@ -100,7 +100,7 @@ class ModuleDefinedServicesTest extends TestCase
     /**
      * @return string[][]
      */
-    public function getServicesThatCannotBeFetched() : array
+    public function getServicesThatCannotBeFetched(): array
     {
         return [
             ['foo'],

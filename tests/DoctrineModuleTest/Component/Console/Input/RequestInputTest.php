@@ -7,6 +7,7 @@ namespace DoctrineModuleTest\Component\Console\Input;
 use DoctrineModule\Component\Console\Input\RequestInput;
 use Laminas\Console\Request;
 use PHPUnit\Framework\TestCase;
+
 use function array_shift;
 
 /**
@@ -17,7 +18,7 @@ class RequestInputTest extends TestCase
     /**
      * @covers \DoctrineModule\Component\Console\Input\RequestInput
      */
-    public function testParamsCorrectlySetted() : void
+    public function testParamsCorrectlySetted(): void
     {
         $params = [
             'scriptname.php',

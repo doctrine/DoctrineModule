@@ -13,6 +13,7 @@ use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 use ReflectionMethod;
 use RuntimeException;
 use Traversable;
+
 use function array_change_key_case;
 use function array_key_exists;
 use function array_shift;
@@ -84,7 +85,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @param mixed[] $options
      */
-    public function setOptions(array $options) : void
+    public function setOptions(array $options): void
     {
         if (isset($options['object_manager'])) {
             $this->setObjectManager($options['object_manager']);
@@ -158,14 +159,14 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set the label for the empty option
      */
-    public function setEmptyItemLabel(string $emptyItemLabel) : Proxy
+    public function setEmptyItemLabel(string $emptyItemLabel): Proxy
     {
         $this->emptyItemLabel = $emptyItemLabel;
 
         return $this;
     }
 
-    public function getEmptyItemLabel() : string
+    public function getEmptyItemLabel(): string
     {
         return $this->emptyItemLabel;
     }
@@ -173,7 +174,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @return mixed[]
      */
-    public function getOptionAttributes() : array
+    public function getOptionAttributes(): array
     {
         return $this->optionAttributes;
     }
@@ -181,7 +182,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @param mixed[] $optionAttributes
      */
-    public function setOptionAttributes(array $optionAttributes) : void
+    public function setOptionAttributes(array $optionAttributes): void
     {
         $this->optionAttributes = $optionAttributes;
     }
@@ -189,14 +190,14 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set a flag, whether to include the empty option at the beginning or not
      */
-    public function setDisplayEmptyItem(bool $displayEmptyItem) : Proxy
+    public function setDisplayEmptyItem(bool $displayEmptyItem): Proxy
     {
         $this->displayEmptyItem = $displayEmptyItem;
 
         return $this;
     }
 
-    public function getDisplayEmptyItem() : bool
+    public function getDisplayEmptyItem(): bool
     {
         return $this->displayEmptyItem;
     }
@@ -204,7 +205,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set the object manager
      */
-    public function setObjectManager(ObjectManager $objectManager) : void
+    public function setObjectManager(ObjectManager $objectManager): void
     {
         $this->objectManager = $objectManager;
     }
@@ -212,7 +213,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Get the object manager
      */
-    public function getObjectManager() : ObjectManager
+    public function getObjectManager(): ObjectManager
     {
         return $this->objectManager;
     }
@@ -220,7 +221,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set the FQCN of the target object
      */
-    public function setTargetClass(string $targetClass) : Proxy
+    public function setTargetClass(string $targetClass): Proxy
     {
         $this->targetClass = $targetClass;
 
@@ -230,7 +231,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Get the target class
      */
-    public function getTargetClass() : string
+    public function getTargetClass(): string
     {
         return $this->targetClass;
     }
@@ -238,7 +239,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set the property to use as the label in the options
      */
-    public function setProperty(string $property) : Proxy
+    public function setProperty(string $property): Proxy
     {
         $this->property = $property;
 
@@ -258,32 +259,32 @@ class Proxy implements ObjectManagerAwareInterface
      *
      * @param callable $callable A callable used to create a label based off of an Entity
      */
-    public function setLabelGenerator(callable $callable) : void
+    public function setLabelGenerator(callable $callable): void
     {
         $this->labelGenerator = $callable;
     }
 
-    public function getLabelGenerator() : ?callable
+    public function getLabelGenerator(): ?callable
     {
         return $this->labelGenerator;
     }
 
-    public function getOptgroupIdentifier() : ?string
+    public function getOptgroupIdentifier(): ?string
     {
         return $this->optgroupIdentifier;
     }
 
-    public function setOptgroupIdentifier(string $optgroupIdentifier) : void
+    public function setOptgroupIdentifier(string $optgroupIdentifier): void
     {
         $this->optgroupIdentifier = (string) $optgroupIdentifier;
     }
 
-    public function getOptgroupDefault() : ?string
+    public function getOptgroupDefault(): ?string
     {
         return $this->optgroupDefault;
     }
 
-    public function setOptgroupDefault(string $optgroupDefault) : void
+    public function setOptgroupDefault(string $optgroupDefault): void
     {
         $this->optgroupDefault = (string) $optgroupDefault;
     }
@@ -291,14 +292,14 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * Set if the property is a method to use as the label in the options
      */
-    public function setIsMethod(bool $method) : Proxy
+    public function setIsMethod(bool $method): Proxy
     {
         $this->isMethod = (bool) $method;
 
         return $this;
     }
 
-    public function getIsMethod() : ?bool
+    public function getIsMethod(): ?bool
     {
         return $this->isMethod;
     }
@@ -307,7 +308,7 @@ class Proxy implements ObjectManagerAwareInterface
      *
      * @param mixed[] $findMethod
      */
-    public function setFindMethod(array $findMethod) : Proxy
+    public function setFindMethod(array $findMethod): Proxy
     {
         $this->findMethod = $findMethod;
 
@@ -319,7 +320,7 @@ class Proxy implements ObjectManagerAwareInterface
      *
      * @return mixed[]
      */
-    public function getFindMethod() : array
+    public function getFindMethod(): array
     {
         return $this->findMethod;
     }
@@ -327,7 +328,7 @@ class Proxy implements ObjectManagerAwareInterface
     /**
      * @param mixed $targetEntity
      */
-    protected function generateLabel($targetEntity) : ?string
+    protected function generateLabel($targetEntity): ?string
     {
         if ($this->getLabelGenerator() === null) {
             return null;
@@ -388,7 +389,7 @@ class Proxy implements ObjectManagerAwareInterface
      * @throws RuntimeException
      * @throws Exception\InvalidRepositoryResultException
      */
-    protected function loadObjects() : void
+    protected function loadObjects(): void
     {
         if (! empty($this->objects)) {
             return;
@@ -457,7 +458,7 @@ class Proxy implements ObjectManagerAwareInterface
      *
      * @throws RuntimeException
      */
-    protected function loadValueOptions() : void
+    protected function loadValueOptions(): void
     {
         if (! $this->objectManager) {
             throw new RuntimeException('No object manager was set');
@@ -483,7 +484,8 @@ class Proxy implements ObjectManagerAwareInterface
                 $label = $generatedLabel;
             } elseif ($this->property) {
                 $property = $this->property;
-                if (($this->getIsMethod() === false || $this->getIsMethod() === null)
+                if (
+                    ($this->getIsMethod() === false || $this->getIsMethod() === null)
                     && ! $metadata->hasField($property)
                 ) {
                     throw new RuntimeException(

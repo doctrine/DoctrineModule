@@ -64,7 +64,7 @@
         "symfony/console": "^5.0"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^7.0",
+        "doctrine/coding-standard": "^8.2",
         "laminas/laminas-i18n": "^2.7",
         "laminas/laminas-log": "^2.9",
         "laminas/laminas-modulemanager": "^2.8",

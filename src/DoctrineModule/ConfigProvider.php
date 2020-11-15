@@ -14,7 +14,7 @@ class ConfigProvider
     /**
      * @return mixed[]
      */
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'doctrine' => $this->getDoctrineConfig(),
@@ -32,7 +32,7 @@ class ConfigProvider
      *
      * @return mixed[]
      */
-    public function getDependencyConfig() : array
+    public function getDependencyConfig(): array
     {
     // phpcs:disable Generic.Files.LineLength
         return [
@@ -49,7 +49,7 @@ class ConfigProvider
      *
      * @return mixed[]
      */
-    public function getControllerConfig() : array
+    public function getControllerConfig(): array
     {
         return [
             'factories' => ['DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory'],
@@ -61,7 +61,7 @@ class ConfigProvider
      *
      * @return mixed[]
      */
-    public function getRouteManagerConfig() : array
+    public function getRouteManagerConfig(): array
     {
         return [
             'factories' => ['symfony_cli' => 'DoctrineModule\Service\SymfonyCliRouteFactory'],
@@ -73,7 +73,7 @@ class ConfigProvider
      *
      * @return mixed[]
      */
-    public function getConsoleConfig() : array
+    public function getConsoleConfig(): array
     {
         return [
             'router' => [
@@ -89,7 +89,7 @@ class ConfigProvider
      *
      * @return mixed[]
      */
-    public function getDoctrineConfig() : array
+    public function getDoctrineConfig(): array
     {
         return [
             'cache' => [
@@ -171,7 +171,7 @@ class ConfigProvider
      *
      * @return mixed[]
      */
-    public function getDoctrineFactoryConfig() : array
+    public function getDoctrineFactoryConfig(): array
     {
         return [
             'cache'                 => 'DoctrineModule\Service\CacheFactory',
@@ -186,7 +186,7 @@ class ConfigProvider
     /**
      * @return mixed[]
      */
-    public function getValidatorConfig() : array
+    public function getValidatorConfig(): array
     {
         return [
             'aliases'   => [

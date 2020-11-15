@@ -8,6 +8,7 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Stdlib\AbstractOptions;
 use RuntimeException;
+
 use function sprintf;
 
 /**
@@ -35,7 +36,7 @@ abstract class AbstractFactory implements FactoryInterface
         $this->name = $name;
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -43,7 +44,7 @@ abstract class AbstractFactory implements FactoryInterface
     /**
      * Would normally be set to orm | odm
      */
-    public function getMappingType() : string
+    public function getMappingType(): string
     {
         return (string) $this->mappingType;
     }
@@ -53,7 +54,7 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @throws RuntimeException
      */
-    public function getOptions(ContainerInterface $container, string $key, ?string $name = null) : AbstractOptions
+    public function getOptions(ContainerInterface $container, string $key, ?string $name = null): AbstractOptions
     {
         if ($name === null) {
             $name = $this->getName();
@@ -88,5 +89,5 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @abstract
      */
-    abstract public function getOptionsClass() : string;
+    abstract public function getOptionsClass(): string;
 }

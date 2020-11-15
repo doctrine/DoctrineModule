@@ -6,6 +6,7 @@ namespace DoctrineModule\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Laminas\Paginator\Adapter\AdapterInterface;
+
 use function array_values;
 use function count;
 
