@@ -12,14 +12,14 @@ class MetadataDriverMock implements MappingDriver
     /**
      * {@inheritDoc}
      */
-    public function loadMetadataForClass($className, ClassMetadata $metadata) : void
+    public function loadMetadataForClass($className, ClassMetadata $metadata): void
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isTransient($className) : bool
+    public function isTransient($className): bool
     {
         return false;
     }
@@ -27,7 +27,7 @@ class MetadataDriverMock implements MappingDriver
     /**
      * @return string[]
      */
-    public function getAllClassNames() : array
+    public function getAllClassNames(): array
     {
         return [];
     }

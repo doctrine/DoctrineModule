@@ -6,6 +6,7 @@ namespace DoctrineModuleTest;
 
 use DoctrineModule\ConfigProvider;
 use PHPUnit\Framework\TestCase;
+
 use function serialize;
 use function unserialize;
 
@@ -16,7 +17,7 @@ use function unserialize;
  */
 class ConfigProviderTest extends TestCase
 {
-    public function testInvokeHasCorrectKeys() : void
+    public function testInvokeHasCorrectKeys(): void
     {
         $config = (new ConfigProvider())->__invoke();
 

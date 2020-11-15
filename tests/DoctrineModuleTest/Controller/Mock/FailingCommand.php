@@ -11,13 +11,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class FailingCommand extends Command
 {
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('fail')
             ->addOption('exception', null, null, 'fail with an exception');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('exception')) {
             throw new RuntimeException();

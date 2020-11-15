@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class StorageFactoryTest extends BaseTestCase
 {
-    public function testWillInstantiateFromFQCN() : void
+    public function testWillInstantiateFromFQCN(): void
     {
         $name    = 'testFactory';
         $factory = new StorageFactory($name);
@@ -42,7 +42,7 @@ class StorageFactoryTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
     }
 
-    public function testCanInstantiateStorageFromServiceLocator() : void
+    public function testCanInstantiateStorageFromServiceLocator(): void
     {
         $factory        = new StorageFactory('testFactory');
         $serviceManager = $this->createMock('Laminas\ServiceManager\ServiceManager');

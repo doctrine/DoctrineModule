@@ -20,7 +20,7 @@ class ObjectRepository implements StorageInterface
     /**
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function setOptions($options) : ObjectRepository
+    public function setOptions($options): ObjectRepository
     {
         if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
@@ -41,7 +41,7 @@ class ObjectRepository implements StorageInterface
         $this->setOptions($options);
     }
 
-    public function isEmpty() : bool
+    public function isEmpty(): bool
     {
         return $this->options->getStorage()->isEmpty();
     }
@@ -50,7 +50,7 @@ class ObjectRepository implements StorageInterface
      * This function assumes that the storage only contains identifier values (which is the case if
      * the ObjectRepository authentication adapter is used).
      */
-    public function read() : ?object
+    public function read(): ?object
     {
         $identity = $this->options->getStorage()->read();
         if ($identity) {
@@ -74,7 +74,7 @@ class ObjectRepository implements StorageInterface
     /**
      * @param mixed $identity
      */
-    public function write($identity) : void
+    public function write($identity): void
     {
         $metadataInfo     = $this->options->getClassMetadata();
         $identifierValues = $metadataInfo->getIdentifierValues($identity);
@@ -82,7 +82,7 @@ class ObjectRepository implements StorageInterface
         $this->options->getStorage()->write($identifierValues);
     }
 
-    public function clear() : void
+    public function clear(): void
     {
         $this->options->getStorage()->clear();
     }

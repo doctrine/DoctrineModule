@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectRepository;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Validator\AbstractValidator;
 use Laminas\Validator\Exception;
+
 use function array_combine;
 use function array_key_exists;
 use function array_values;
@@ -100,7 +101,7 @@ class ObjectExists extends AbstractValidator
      *
      * @throws Exception\InvalidArgumentException
      */
-    private function validateFields() : array
+    private function validateFields(): array
     {
         $fields = (array) $this->fields;
 
@@ -129,7 +130,7 @@ class ObjectExists extends AbstractValidator
      *
      * @throws Exception\RuntimeException
      */
-    protected function cleanSearchValue($value) : array
+    protected function cleanSearchValue($value): array
     {
         $value = is_object($value) ? [$value] : (array) $value;
 

@@ -12,6 +12,7 @@ use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\ArrayUtils;
+
 use function interface_exists;
 use function is_string;
 use function sprintf;
@@ -38,7 +39,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      *
      * @throws ServiceCreationException
      */
-    protected function getRepository(ContainerInterface $container, ?array $options = null) : ObjectRepository
+    protected function getRepository(ContainerInterface $container, ?array $options = null): ObjectRepository
     {
         if (empty($options['target_class'])) {
             throw new ServiceCreationException(sprintf(
@@ -56,7 +57,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
     /**
      * @param mixed[] $options
      */
-    protected function getObjectManager(ContainerInterface $container, ?array $options = null) : ObjectManager
+    protected function getObjectManager(ContainerInterface $container, ?array $options = null): ObjectManager
     {
         $objectManager = $options['object_manager'] ?? self::DEFAULT_OBJECTMANAGER_KEY;
 
@@ -72,7 +73,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      *
      * @return mixed[]
      */
-    protected function getFields(array $options) : array
+    protected function getFields(array $options): array
     {
         if (isset($options['fields'])) {
             return (array) $options['fields'];
@@ -91,7 +92,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      *
      * @return mixed[]
      */
-    protected function merge(array $previousOptions, array $newOptions) : array
+    protected function merge(array $previousOptions, array $newOptions): array
     {
         return ArrayUtils::merge($previousOptions, $newOptions, true);
     }
@@ -102,7 +103,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      * In ZF2 the plugin manager instance if passed to `createService`
      * instead of the global service manager instance (as in ZF3).
      */
-    protected function container(ContainerInterface $container) : ContainerInterface
+    protected function container(ContainerInterface $container): ContainerInterface
     {
         if ($container instanceof ServiceLocatorAwareInterface) {
             $container = $container->getServiceLocator();
@@ -122,7 +123,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
     /**
      * @param mixed[] $options
      */
-    public function setCreationOptions(array $options) : void
+    public function setCreationOptions(array $options): void
     {
         $this->creationOptions = $options;
     }

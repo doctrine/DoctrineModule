@@ -27,7 +27,7 @@ class CliFactory implements FactoryInterface
     /** @var mixed[] */
     protected $commands = [];
 
-    public function getEventManager(ContainerInterface $container) : EventManagerInterface
+    public function getEventManager(ContainerInterface $container): EventManagerInterface
     {
         if ($this->events === null) {
             $events = $container->get('EventManager');

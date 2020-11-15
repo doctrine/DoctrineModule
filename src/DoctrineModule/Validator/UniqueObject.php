@@ -6,6 +6,7 @@ namespace DoctrineModule\Validator;
 
 use Doctrine\Persistence\ObjectManager;
 use Laminas\Validator\Exception;
+
 use function array_diff_assoc;
 use function array_key_exists;
 use function count;
@@ -80,7 +81,7 @@ class UniqueObject extends ObjectExists
      * @param mixed $value
      * @param mixed $context
      */
-    public function isValid($value, $context = null) : bool
+    public function isValid($value, $context = null): bool
     {
         if (! $this->useContext) {
             $context = (array) $value;
@@ -112,7 +113,7 @@ class UniqueObject extends ObjectExists
      *
      * @throws Exception\RuntimeException
      */
-    protected function getFoundIdentifiers(object $match) : array
+    protected function getFoundIdentifiers(object $match): array
     {
         return $this->objectManager
                     ->getClassMetadata($this->objectRepository->getClassName())
@@ -128,7 +129,7 @@ class UniqueObject extends ObjectExists
      *
      * @throws Exception\RuntimeException
      */
-    protected function getExpectedIdentifiers($context = null) : array
+    protected function getExpectedIdentifiers($context = null): array
     {
         if ($context === null) {
             throw new Exception\RuntimeException(
@@ -159,7 +160,7 @@ class UniqueObject extends ObjectExists
     /**
      * @return mixed[] the names of the identifiers
      */
-    protected function getIdentifiers() : array
+    protected function getIdentifiers(): array
     {
         return $this->objectManager
                     ->getClassMetadata($this->objectRepository->getClassName())

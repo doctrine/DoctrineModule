@@ -14,6 +14,7 @@ use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Console\Input\StringInput;
+
 use function class_exists;
 
 /**
