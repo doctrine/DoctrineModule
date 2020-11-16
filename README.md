@@ -8,6 +8,12 @@ DoctrineModule provides basic functionality consumed by
 and [DoctrineMongoODMModule](https://github.com/doctrine/DoctrineMongoODMModule)
 (if you want to use [MongoDB ODM](https://github.com/doctrine/mongodb-odm))
 
+## Versions
+
+The most recent versions of this module are on the **2.0.x** branch.
+There is a 2.1.x branch and release but this is reserved for future integrations with unreleased Doctrine projects.
+If you are including this module in your composer file then use a **2.0.x** release.
+
 ## Documentation
 
 Please check the [`docs` dir](https://github.com/doctrine/DoctrineModule/tree/master/docs)
