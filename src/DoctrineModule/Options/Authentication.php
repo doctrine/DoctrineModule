@@ -111,9 +111,23 @@ class Authentication extends AbstractOptions
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
-     * @var StorageInterface|string;
+     * @var StorageInterface|string
      */
     protected $storage = 'DoctrineModule\Authentication\Storage\Session';
+
+    /**
+     * Session container to use in the underlying session storage
+     *
+     * @var string
+     */
+    protected $sessionContainer;
+
+    /**
+     * Session member to use in the underlying session storage
+     *
+     * @var string
+     */
+    protected $sessionMember;
 
     /**
      * @param  string | ObjectManager $objectManager
@@ -264,6 +278,26 @@ class Authentication extends AbstractOptions
     public function setStorage($storage): void
     {
         $this->storage = $storage;
+    }
+
+    public function getSessionContainer(): ?string
+    {
+        return $this->sessionContainer;
+    }
+
+    public function setSessionContainer(string $container): void
+    {
+        $this->sessionContainer = $container;
+    }
+
+    public function getSessionMember(): ?string
+    {
+        return $this->sessionMember;
+    }
+
+    public function setSessionMember(string $member): void
+    {
+        $this->sessionMember = $member;
     }
 }
 
