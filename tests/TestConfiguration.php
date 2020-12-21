@@ -6,7 +6,6 @@ return [
     'modules' => [
         'Laminas\Cache',
         'Laminas\Form',
-        'Laminas\Hydrator',
         'Laminas\Mvc\Console',
         'Laminas\Paginator',
         'Laminas\Router',
