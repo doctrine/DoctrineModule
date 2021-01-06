@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Authentication\Storage\ObjectRepository;
+use DoctrineModule\Options\Authentication as AuthenticationOptions;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
+use Laminas\Authentication\Storage\Session;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 use function is_string;
@@ -32,7 +34,18 @@ class StorageFactory extends AbstractFactory
 
         $storage = $options->getStorage();
         if (is_string($storage)) {
-            $options->setStorage($container->get($storage));
+            $sessionContainer = $options->getSessionContainer();
+            $sessionMember    = $options->getSessionMember();
+            if ($sessionContainer || $sessionMember) {
+                $storage = new Session(
+                    $sessionContainer,
+                    $sessionMember
+                );
+            } else {
+                $storage = $container->get($storage);
+            }
+
+            $options->setStorage($storage);
         }
 
         return new ObjectRepository($options);
@@ -50,6 +63,6 @@ class StorageFactory extends AbstractFactory
 
     public function getOptionsClass(): string
     {
-        return 'DoctrineModule\Options\Authentication';
+        return AuthenticationOptions::class;
     }
 }
