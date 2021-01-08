@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectRepository;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Validator\AbstractValidator;
 use Laminas\Validator\Exception;
+use ValueError;
 
 use function array_combine;
 use function array_key_exists;
@@ -151,7 +152,11 @@ class ObjectExists extends AbstractValidator
                 $matchedFieldsValues[$field] = $value[$field];
             }
         } else {
-            $matchedFieldsValues = @array_combine($this->fields, $value);
+            try {
+                $matchedFieldsValues = @array_combine($this->fields, $value);
+            } catch (ValueError $valueError) {
+                $matchedFieldsValues = false;
+            }
 
             if ($matchedFieldsValues === false) {
                 throw new Exception\RuntimeException(
