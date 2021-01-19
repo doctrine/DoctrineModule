@@ -46,7 +46,7 @@
         }
     },
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ^8.0",
         "doctrine/cache": "^1.7",
         "doctrine/doctrine-laminas-hydrator": "^2.0.3",
         "doctrine/event-manager": "^1.0.0",

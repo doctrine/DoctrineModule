@@ -16,6 +16,8 @@ use function array_shift;
 use function func_get_args;
 use function get_class;
 
+use const PHP_VERSION_ID;
+
 /**
  * Tests for the Collection pagination adapter
  *
@@ -265,7 +267,9 @@ class ProxyTest extends TestCase
             'TypeError'
         );
         $this->expectExceptionMessage(
-            'Argument 1 passed to DoctrineModule\Form\Element\Proxy::setLabelGenerator() must be callable'
+            PHP_VERSION_ID >= 80000
+            ? 'DoctrineModule\Form\Element\Proxy::setLabelGenerator(): Argument #1 ($callable) must be of type callable'
+            : 'Argument 1 passed to DoctrineModule\Form\Element\Proxy::setLabelGenerator() must be callable'
         );
 
         $this->proxy->setOptions(['label_generator' => 'I throw an invalid type error']);
