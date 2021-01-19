@@ -1,6 +1,7 @@
 # DoctrineModule for Laminas
 
-[![Master Branch Build Status](https://secure.travis-ci.org/doctrine/DoctrineModule.png?branch=master)](http://travis-ci.org/doctrine/DoctrineModule) [![Code Coverage](https://codecov.io/gh/doctrine/DoctrineModule/branch/4.1.x)](https://codecov.io/gh/doctrine/DoctrineModule/branch/4.1.x)
+[![Master Branch Build Status](https://secure.travis-ci.org/doctrine/DoctrineModule.png?branch=master)](http://travis-ci.org/doctrine/DoctrineModule) 
+[![Code Coverage](https://codecov.io/github/doctrine/DoctrineModule/coverage.svg?branch=4.1.x)](https://codecov.io/gh/doctrine/DoctrineModule/branch/4.1.x)
 
 DoctrineModule provides basic functionality consumed by
 [DoctrineORMModule](http://www.github.com/doctrine/DoctrineORMModule)
