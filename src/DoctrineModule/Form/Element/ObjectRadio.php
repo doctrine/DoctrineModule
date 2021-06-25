@@ -56,7 +56,7 @@ class ObjectRadio extends RadioElement
     /**
      * {@inheritDoc}
      */
-    public function getValueOptions()
+    public function getValueOptions(): array
     {
         if (! empty($this->valueOptions)) {
             return $this->valueOptions;
