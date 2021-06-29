@@ -28,7 +28,7 @@ class ObjectRepositoryTest extends BaseTestCase
             'Provided $identityProperty is invalid, string given'
         );
 
-        new ObjectRepositoryAdapter(['identity_property' => false]);
+        new ObjectRepositoryAdapter(['identity_property' => '']);
     }
 
     public function testWillRejectInvalidCredentialProperty(): void
@@ -39,7 +39,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->expectExceptionMessage(
             'Provided $credentialProperty is invalid, string given'
         );
-        new ObjectRepositoryAdapter(['credential_property' => false]);
+        new ObjectRepositoryAdapter(['credential_property' => '']);
     }
 
     public function testWillRequireIdentityValue(): void

@@ -6,7 +6,9 @@ on:
   pull_request:
   push:
     branches:
-      - "master"
+      - '[0-9]+.[0-9]+.x'
+      - 'refs/pull/*'
+    tags:
 
 jobs:
   coding-standards:
@@ -17,7 +19,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.2"
+          - "7.4"
 
     steps:
       - name: "Checkout"
@@ -41,3 +43,37 @@ jobs:
 
       - name: "Run squizlabs/php_codesniffer"
         run: "composer cs-check"
+
+  unit-tests:
+    name: "Unit Tests"
+
+    runs-on: "ubuntu-18.04"
+
+    strategy:
+      matrix:
+        php-version:
+          - "7.3"
+          - "7.4"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Cache dependencies installed with composer"
+        uses: "actions/cache@v1.0.3"
+        with:
+          path: "~/.composer/cache"
+          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.json') }}"
+          restore-keys: "php-${{ matrix.php-version }}-composer-"
+
+      - name: "Install dependencies with composer"
+        run: "composer update --no-interaction --no-progress --no-suggest"
+
+      - name: "Run PHPUnit"
+        run: "composer test-coverage"
