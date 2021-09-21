@@ -75,8 +75,9 @@ class DriverFactory extends AbstractFactory
 
         // Special options for AnnotationDrivers.
         if (
-            $class === 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver'
-            || is_subclass_of($class, 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver')
+            $class === 'Doctrine\Persistence\Mapping\Driver\AttributDriver' && (
+                $class === 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver'
+                || is_subclass_of($class, 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver'))
         ) {
             $reader = new Annotations\AnnotationReader();
             $reader = new Annotations\CachedReader(
