@@ -13,17 +13,7 @@ use function is_array;
 
 class ObjectSelect extends SelectElement
 {
-    /** @var Proxy */
-    protected $proxy;
-
-    public function getProxy(): Proxy
-    {
-        if ($this->proxy === null) {
-            $this->proxy = new Proxy();
-        }
-
-        return $this->proxy;
-    }
+    use GetProxy;
 
     /**
      * @param array|Traversable $options

@@ -13,17 +13,7 @@ use function is_array;
 
 class ObjectMultiCheckbox extends MultiCheckbox
 {
-    /** @var Proxy */
-    protected $proxy;
-
-    public function getProxy(): Proxy
-    {
-        if ($this->proxy === null) {
-            $this->proxy = new Proxy();
-        }
-
-        return $this->proxy;
-    }
+    use GetProxy;
 
     /**
      * @param mixed $options

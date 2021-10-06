@@ -9,17 +9,7 @@ use Traversable;
 
 class ObjectRadio extends RadioElement
 {
-    /** @var Proxy */
-    protected $proxy;
-
-    public function getProxy(): Proxy
-    {
-        if ($this->proxy === null) {
-            $this->proxy = new Proxy();
-        }
-
-        return $this->proxy;
-    }
+    use GetProxy;
 
     /**
      * @param array|Traversable $options
