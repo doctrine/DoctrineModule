@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Form\Element;
 
-use Laminas\Form\Element\Radio as RadioElement;
+use Laminas\Form\Element\Select as SelectElement;
+use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
-class ObjectRadio extends RadioElement
+use function array_map;
+use function is_array;
+
+class ObjectSelectV3Polyfill extends SelectElement
 {
     use GetProxy;
 
@@ -40,13 +44,27 @@ class ObjectRadio extends RadioElement
      */
     public function setValue($value)
     {
+        $multiple = $this->getAttribute('multiple');
+
+        if ($multiple === true || $multiple === 'multiple') {
+            if ($value instanceof Traversable) {
+                $value = ArrayUtils::iteratorToArray($value);
+            } elseif ($value === null) {
+                return parent::setValue([]);
+            } elseif (! is_array($value)) {
+                $value = (array) $value;
+            }
+
+            return parent::setValue(array_map([$this->getProxy(), 'getValue'], $value));
+        }
+
         return parent::setValue($this->getProxy()->getValue($value));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getValueOptions()
+    public function getValueOptions(): array
     {
         if (! empty($this->valueOptions)) {
             return $this->valueOptions;
