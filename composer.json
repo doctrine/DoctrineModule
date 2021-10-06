@@ -101,6 +101,6 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --coverage-clover build/clover.xml"
+        "test-coverage": "phpunit --coverage-clover=coverage.xml"
     }
 }
