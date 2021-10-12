@@ -36,13 +36,9 @@
         }
     ],
     "extra": {
-        "zf": {
+        "laminas": {
             "config-provider": "DoctrineModule\\ConfigProvider",
             "module": "DoctrineModule"
-        },
-        "branch-alias": {
-            "dev-1.2-dev": "1.2-dev",
-            "dev-2.0-dev": "2.0-dev"
         }
     },
     "require": {
