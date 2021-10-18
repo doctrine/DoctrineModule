@@ -1,4 +1,4 @@
 #!/usr/bin/env php
 <?php
 
-include('doctrine-module.php');
+include(__DIR__ . '/doctrine-module.php');

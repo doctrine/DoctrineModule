@@ -62,6 +62,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0.0",
+        "doctrine/orm": "^2.9.0",
         "laminas/laminas-i18n": "^2.11.1",
         "laminas/laminas-log": "^2.13.1",
         "laminas/laminas-modulemanager": "^2.10.2",
