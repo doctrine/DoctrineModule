@@ -11,7 +11,7 @@ and [DoctrineMongoODMModule](https://github.com/doctrine/DoctrineMongoODMModule)
 
 ## Documentation
 
-Please check the [`docs` dir](https://github.com/doctrine/DoctrineModule/tree/master/docs)
+Please check the [`docs` dir](https://github.com/doctrine/DoctrineModule/tree/master/docs/en)
 for more detailed documentation on the features provided by this module.
 
 ## Installation
