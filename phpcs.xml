@@ -6,6 +6,9 @@
     <arg value="p"/>
     <arg name="colors"/>
 
+    <!-- set minimal require PHP version (7.3) -->
+    <config name="php_version" value="70300"/>
+
     <!-- inherit rules from: -->
     <rule ref="Doctrine"/>
     <rule ref="Squiz.WhiteSpace.OperatorSpacing">
