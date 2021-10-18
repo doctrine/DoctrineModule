@@ -78,12 +78,12 @@
         "laminas/laminas-mvc-console":    "^1.1.11 if you want to use the Laminas console libraries"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "DoctrineModule\\": "src/"
         }
     },
     "autoload-dev": {
-        "psr-0": {
+        "psr-4": {
             "DoctrineModuleTest\\": "tests/"
         }
     },

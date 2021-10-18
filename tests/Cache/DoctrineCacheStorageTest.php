@@ -61,12 +61,12 @@ class DoctrineCacheStorageTest extends TestCase
         $this->assertInstanceOf(
             'Laminas\Cache\Storage\StorageInterface',
             $this->storage,
-            'Storage adapter instance is needed for tests'
+            'Storage adapter instance is needed for test'
         );
         $this->assertInstanceOf(
             'Laminas\Cache\Storage\Adapter\AdapterOptions',
             $this->options,
-            'Options instance is needed for tests'
+            'Options instance is needed for test'
         );
     }
 

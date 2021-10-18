@@ -20,7 +20,7 @@ class ServiceManagerFactory
      */
     public static function getConfiguration(): array
     {
-        return include __DIR__ . '/../TestConfiguration.php';
+        return include __DIR__ . '/TestConfiguration.php';
     }
 
     /**
