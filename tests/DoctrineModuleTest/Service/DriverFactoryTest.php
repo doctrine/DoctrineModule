@@ -61,4 +61,23 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertArrayHasKey('Foo\Bar', $drivers);
         $this->assertInstanceOf('DoctrineModuleTest\Service\Mock\MetadataDriverMock', $drivers['Foo\Bar']);
     }
+
+    public function testCreateAttributeDriver(): void
+    {
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'config',
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'testDriver' => ['class' => 'Doctrine\ORM\Mapping\Driver\AttributeDriver'],
+                    ],
+                ],
+            ]
+        );
+
+        $factory = new DriverFactory('testDriver');
+        $driver  = $factory->createService($serviceManager);
+        $this->assertInstanceOf('Doctrine\ORM\Mapping\Driver\AttributeDriver', $driver);
+    }
 }
