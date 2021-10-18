@@ -58,7 +58,7 @@ Here are some explanations about the keys:
    ``Doctrine\Persistence\ObjectManager`` or a single string that will
    fetched from the Service Manager in order to get a concrete instance.
    If you are using DoctrineORMModule, you can simply write
-   ‘Doctrine:raw-latex:`\ORM`:raw-latex:`\EntityManager`’ (as the
+   ``Doctrine\ORM\EntityManager`` (as the
    EntityManager implements the class
    ``Doctrine\Persistence\ObjectManager``).
 -  the ``identity_class`` contains the FQCN of the entity that will be

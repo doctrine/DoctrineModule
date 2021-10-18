@@ -27,7 +27,7 @@ For the ``use_context`` option and other specifics to
    ``getRepository`` function of any valid object manager instance,
    passing it the FQCN of the class. For instance, in the context of
    Doctrine 2 ORM, here is how you get the ``object_repository`` of the
-   ‘Application:raw-latex:`\Entity`:raw-latex:`\User`’ entity:
+   ``Application\Entity\User`` entity:
 
 .. code:: php
 
