@@ -62,6 +62,9 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModuleTest\Service\Mock\MetadataDriverMock', $drivers['Foo\Bar']);
     }
 
+    /**
+     * @requires PHP 8.0
+     */
     public function testCreateAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();
