@@ -4,6 +4,10 @@
 
     <!-- display progress -->
     <arg value="p"/>
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="80"/>
+    <arg name="cache" value=".phpcs.cache"/>
     <arg name="colors"/>
 
     <!-- set minimal require PHP version (7.3) -->

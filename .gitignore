@@ -1,8 +1,7 @@
-.idea/
-vendor/
-phpunit.xml
-.project/
-nbproject/
-composer.lock
-.DS_Store
-.phpunit.result.cache
+/.phpcs.cache
+/.phpunit.result.cache
+/clover.xml
+/composer.lock
+/phpcs.xml.dist
+/phpunit.xml
+/vendor/
