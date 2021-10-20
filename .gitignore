@@ -2,6 +2,6 @@
 /.phpunit.result.cache
 /clover.xml
 /composer.lock
-/phpcs.xml.dist
+/phpcs.xml
 /phpunit.xml
 /vendor/
