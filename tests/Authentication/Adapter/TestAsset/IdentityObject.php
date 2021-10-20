@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModuleTest\Authentication\Adapter\TestAsset;
 
 /**
- * Simple mock object for authentication adapter tests
+ * Simple mock object for authentication adapter test
  *
  * @link    http://www.doctrine-project.org/
  */

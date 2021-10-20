@@ -7,7 +7,7 @@ namespace DoctrineModuleTest\Form\Element\TestAsset;
 use function assert;
 
 /**
- * Simple mock object for form element adapter tests
+ * Simple mock object for form element adapter test
  *
  * @link    http://www.doctrine-project.org/
  */

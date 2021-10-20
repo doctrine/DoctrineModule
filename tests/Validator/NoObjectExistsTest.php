@@ -11,7 +11,7 @@ use stdClass;
 use function str_replace;
 
 /**
- * Tests for the NoObjectExists tests
+ * Tests for the NoObjectExists test
  *
  * @link    http://www.doctrine-project.org/
  */

@@ -15,11 +15,11 @@ use stdClass;
 use function array_keys;
 use function count;
 use function fopen;
+use function gettype;
 use function is_string;
 use function ksort;
 use function method_exists;
 use function rand;
-use function settype;
 use function sort;
 use function sprintf;
 use function str_replace;
@@ -61,12 +61,12 @@ class DoctrineCacheStorageTest extends TestCase
         $this->assertInstanceOf(
             'Laminas\Cache\Storage\StorageInterface',
             $this->storage,
-            'Storage adapter instance is needed for tests'
+            'Storage adapter instance is needed for test'
         );
         $this->assertInstanceOf(
             'Laminas\Cache\Storage\Adapter\AdapterOptions',
             $this->options,
-            'Options instance is needed for tests'
+            'Options instance is needed for test'
         );
     }
 
@@ -530,7 +530,7 @@ class DoctrineCacheStorageTest extends TestCase
             if ($targetType === true) {
                 $this->assertSame($value, $this->storage->getItem('key'));
             } elseif (is_string($targetType)) {
-                settype($value, $targetType);
+                $this->assertEquals($targetType, gettype($value));
                 $this->assertEquals($value, $this->storage->getItem('key'));
             }
         }
