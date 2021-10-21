@@ -17,6 +17,8 @@ use const STDOUT;
 
 /**
  * Output writing in class member variable
+ *
+ * @deprecated 4.2.0 PropertyOutput is deprecated and will be removed in 5.0.0.
  */
 class PropertyOutput extends Output
 {

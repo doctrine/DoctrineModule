@@ -13,6 +13,8 @@ use Symfony\Component\Console\Application;
 
 /**
  * Route matching commands in Symfony CLI
+ *
+ * @deprecated 4.2.0 SymfonyCli is deprecated and will be removed in 5.0.0. Please use the doctrine-module bin script.
  */
 class SymfonyCli implements RouteInterface
 {

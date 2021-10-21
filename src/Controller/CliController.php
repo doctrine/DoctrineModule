@@ -14,6 +14,8 @@ use function is_numeric;
 
 /**
  * Index controller
+ *
+ * @deprecated 4.2.0 CliController is deprecated and will be removed in 5.0.0. Please use the doctrine-module bin script.
  */
 class CliController extends AbstractActionController
 {

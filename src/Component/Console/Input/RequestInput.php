@@ -12,6 +12,8 @@ use function is_numeric;
 
 /**
  * RequestInput represents an input provided as an console request.
+ *
+ * @deprecated 4.2.0 RequestInput is deprecated and will be removed in 5.0.0.
  */
 class RequestInput extends ArgvInput
 {
