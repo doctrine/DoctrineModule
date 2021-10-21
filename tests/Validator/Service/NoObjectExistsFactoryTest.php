@@ -12,6 +12,7 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 use function interface_exists;
 
@@ -23,6 +24,8 @@ use function interface_exists;
  */
 class NoObjectExistsFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @var NoObjectExistsFactory */
     private $object;
 

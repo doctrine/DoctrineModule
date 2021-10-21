@@ -56,15 +56,12 @@ class StorageFactoryTest extends BaseTestCase
         ];
 
         $serviceManager
-            ->expects($this->at(0))
+            ->expects($this->atLeastOnce())
             ->method('get')
-            ->with('config')
-            ->will($this->returnValue($config));
-        $serviceManager
-            ->expects($this->at(1))
-            ->method('get')
-            ->with('some_storage')
-            ->will($this->returnValue($storage));
+            ->willReturnMap([
+                ['config', $config],
+                ['some_storage', $storage],
+            ]);
 
         $this->assertInstanceOf(
             'DoctrineModule\Authentication\Storage\ObjectRepository',

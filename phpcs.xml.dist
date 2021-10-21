@@ -1,42 +1,21 @@
 <?xml version="1.0"?>
 <ruleset name="Doctrine coding standard">
-    <description>Doctrine coding standard</description>
-
-    <!-- display progress -->
-    <arg value="p"/>
     <arg name="basepath" value="."/>
     <arg name="extensions" value="php"/>
     <arg name="parallel" value="80"/>
     <arg name="cache" value=".phpcs.cache"/>
     <arg name="colors"/>
 
-    <!-- set minimal require PHP version (7.3) -->
+    <!-- set minimal required PHP version (7.3) -->
     <config name="php_version" value="70300"/>
 
-    <!-- inherit rules from: -->
-    <rule ref="Doctrine"/>
-    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
-        <properties>
-            <property name="ignoreNewlines" value="true"/>
-        </properties>
-    </rule>
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
-        <properties>
-            <property name="ignoreBlankLines" value="false"/>
-        </properties>
-    </rule>
+    <!-- Ignore warnings, show progress of the run and show sniff names -->
+    <arg value="nps"/>
 
-    <!-- need to use settype -->
-    <rule ref="Generic.PHP.ForbiddenFunctions.Found">
-        <exclude-pattern>tests/DoctrineModuleTest/Cache/DoctrineCacheStorageTest.php</exclude-pattern>
-    </rule>
-
-    <!-- needed for BC with doctrine/persistence <1.3 -->
-    <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
-
-    <!-- Paths to check -->
+    <!-- Directories to be checked -->
     <file>src</file>
     <file>tests</file>
+
+    <!-- Include full Doctrine Coding Standard -->
+    <rule ref="Doctrine"/>
 </ruleset>
