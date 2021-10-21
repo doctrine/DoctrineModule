@@ -8,7 +8,19 @@ use Laminas\Console\Request;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputDefinition;
 
+use function class_exists;
 use function is_numeric;
+use function sprintf;
+use function trigger_error;
+
+if (! class_exists(Request::class)) {
+    trigger_error(sprintf(
+        'Using %s requires the package laminas/laminas-console, which is currently not installed.',
+        RequestInput::class
+    ));
+
+    return;
+}
 
 /**
  * RequestInput represents an input provided as an console request.

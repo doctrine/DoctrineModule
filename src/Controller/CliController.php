@@ -10,7 +10,19 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function class_exists;
 use function is_numeric;
+use function sprintf;
+use function trigger_error;
+
+if (! class_exists(AbstractActionController::class)) {
+    trigger_error(sprintf(
+        'Using %s requires the package laminas/laminas-mvc-console, which is currently not installed.',
+        CliController::class
+    ));
+
+    return;
+}
 
 /**
  * Index controller
