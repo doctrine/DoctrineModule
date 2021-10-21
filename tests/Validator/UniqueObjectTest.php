@@ -329,15 +329,12 @@ class UniqueObjectTest extends BaseTestCase
 
         $classMetadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
         $classMetadata
-            ->expects($this->at(0))
+            ->expects($this->atLeastOnce())
             ->method('getIdentifierValues')
-            ->with($context)
-            ->will($this->returnValue(['id' => 'identifier']));
-        $classMetadata
-            ->expects($this->at(1))
-            ->method('getIdentifierValues')
-            ->with($match)
-            ->will($this->returnValue(['id' => 'identifier']));
+            ->willReturnMap([
+                [$context, ['id' => 'identifier']],
+                [$match, ['id' => 'identifier']],
+            ]);
 
         $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
         $objectManager->expects($this->any())

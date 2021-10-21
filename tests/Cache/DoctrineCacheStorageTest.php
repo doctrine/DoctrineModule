@@ -85,7 +85,7 @@ class DoctrineCacheStorageTest extends TestCase
     {
         $options = $this->storage->getOptions()->toArray();
         foreach ($options as $name => $value) {
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 '/^[a-z]+[a-z0-9_]*[a-z0-9]+$/',
                 $name,
                 sprintf(

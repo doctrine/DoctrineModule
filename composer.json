@@ -70,7 +70,8 @@
         "laminas/laminas-serializer": "^2.10.1",
         "laminas/laminas-session": "^2.12.0",
         "laminas/laminas-test": "^3.5.1",
-        "phpunit/phpunit": "^8.5.21",
+        "phpspec/prophecy-phpunit": "^2.0.1",
+        "phpunit/phpunit": "^9.5.10",
         "predis/predis": "^1.1.9"
     },
     "suggest": {
@@ -93,6 +94,9 @@
     "bin": [
         "bin/doctrine-module"
     ],
+    "config": {
+        "sort-packages": true
+    },
     "scripts": {
         "check": [
             "@cs-check",
