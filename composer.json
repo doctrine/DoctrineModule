@@ -52,8 +52,8 @@
         "doctrine/persistence": "^2.2.1",
         "laminas/laminas-authentication": "^2.8.0",
         "laminas/laminas-cache": "^2.11.2",
-        "laminas/laminas-form": "^2.17.0",
-        "laminas/laminas-mvc": "^3.2",
+        "laminas/laminas-form": "^2.17.0 || ^3.0.1",
+        "laminas/laminas-mvc": "^3.2.0",
         "laminas/laminas-paginator": "^2.10.0",
         "laminas/laminas-servicemanager": "^3.6.4",
         "laminas/laminas-stdlib": "^3.3.1",
@@ -80,7 +80,10 @@
     "autoload": {
         "psr-4": {
             "DoctrineModule\\": "src/"
-        }
+        },
+        "files": [
+            "autoload/polyfill-form-elements.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -98,6 +101,6 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --coverage-clover build/clover.xml"
+        "test-coverage": "phpunit --coverage-clover=coverage.xml"
     }
 }

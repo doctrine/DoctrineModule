@@ -11,19 +11,9 @@ use Traversable;
 use function array_map;
 use function is_array;
 
-class ObjectSelect extends SelectElement
+class ObjectSelectV3Polyfill extends SelectElement
 {
-    /** @var Proxy */
-    protected $proxy;
-
-    public function getProxy(): Proxy
-    {
-        if ($this->proxy === null) {
-            $this->proxy = new Proxy();
-        }
-
-        return $this->proxy;
-    }
+    use GetProxy;
 
     /**
      * @param array|Traversable $options
@@ -74,7 +64,7 @@ class ObjectSelect extends SelectElement
     /**
      * {@inheritDoc}
      */
-    public function getValueOptions()
+    public function getValueOptions(): array
     {
         if (! empty($this->valueOptions)) {
             return $this->valueOptions;

@@ -11,19 +11,9 @@ use Traversable;
 use function array_map;
 use function is_array;
 
-class ObjectMultiCheckbox extends MultiCheckbox
+class ObjectMultiCheckboxV3Polyfill extends MultiCheckbox
 {
-    /** @var Proxy */
-    protected $proxy;
-
-    public function getProxy(): Proxy
-    {
-        if ($this->proxy === null) {
-            $this->proxy = new Proxy();
-        }
-
-        return $this->proxy;
-    }
+    use GetProxy;
 
     /**
      * @param mixed $options
@@ -65,7 +55,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
     /**
      * {@inheritDoc}
      */
-    public function getValueOptions()
+    public function getValueOptions(): array
     {
         if (! empty($this->valueOptions)) {
             return $this->valueOptions;
