@@ -15,7 +15,7 @@ use function trigger_error;
 
 if (! class_exists(Request::class)) {
     trigger_error(sprintf(
-        'Using %s requires the package laminas/laminas-console, which is currently not installed.',
+        'Using %s requires the package laminas/laminas-mvc-console, which is currently not installed.',
         RequestInput::class
     ));
 
@@ -25,7 +25,8 @@ if (! class_exists(Request::class)) {
 /**
  * RequestInput represents an input provided as an console request.
  *
- * @deprecated 4.2.0 RequestInput is deprecated and will be removed in 5.0.0.
+ * @deprecated 4.2.0 Usage of laminas/laminas-mvc-console is deprecated, integration will be removed in 5.0.0.
+ *                   Please use ./vendor/bin/doctrine-module instead.
  */
 class RequestInput extends ArgvInput
 {

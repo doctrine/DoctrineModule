@@ -98,10 +98,10 @@ abstract class AbstractValidatorFactory implements FactoryInterface
     }
 
     /**
-     * Helper method for ZF2 compatiblity.
+     * Helper method for Laminas compatiblity.
      *
-     * In ZF2 the plugin manager instance if passed to `createService`
-     * instead of the global service manager instance (as in ZF3).
+     * In Laminas v2 the plugin manager instance if passed to `createService`
+     * instead of the global service manager instance (as in Laminas v3).
      */
     protected function container(ContainerInterface $container): ContainerInterface
     {

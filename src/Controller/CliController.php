@@ -27,7 +27,8 @@ if (! class_exists(AbstractActionController::class)) {
 /**
  * Index controller
  *
- * @deprecated 4.2.0 CliController is deprecated and will be removed in 5.0.0. Please use the doctrine-module bin script.
+ * @deprecated 4.2.0 Usage of laminas/laminas-mvc-console is deprecated, integration will be removed in 5.0.0.
+ *                   Please use ./vendor/bin/doctrine-module instead.
  */
 class CliController extends AbstractActionController
 {

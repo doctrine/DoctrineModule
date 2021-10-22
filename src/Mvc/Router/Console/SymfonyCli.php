@@ -27,7 +27,8 @@ if (! interface_exists(RouteInterface::class)) {
 /**
  * Route matching commands in Symfony CLI
  *
- * @deprecated 4.2.0 SymfonyCli is deprecated and will be removed in 5.0.0. Please use the doctrine-module bin script.
+ * @deprecated 4.2.0 Usage of laminas/laminas-mvc-console is deprecated, integration will be removed in 5.0.0.
+ *                   Please use ./vendor/bin/doctrine-module instead.
  */
 class SymfonyCli implements RouteInterface
 {

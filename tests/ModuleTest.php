@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function serialize;
 use function unserialize;
 
+use const PHP_VERSION_ID;
+
 /**
  * @covers \DoctrineModule\Module
  */
@@ -89,6 +91,10 @@ class ModuleTest extends TestCase
      */
     public function testGetConsoleUsage(): void
     {
+        if (PHP_VERSION_ID >= 80000) {
+            $this->markTestSkipped('Method getConsoleUsage() is only available PHP <= 7.4.');
+        }
+
         $this
             ->cli
             ->expects($this->once())
