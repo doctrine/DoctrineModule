@@ -1,7 +1,9 @@
 # DoctrineModule for Laminas
 
-[![Build Status](https://github.com/doctrine/DoctrineModule/workflows/Continuous%20Integration/badge.svg)](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml?query=branch%3A4.2.x+)
-[![Code Coverage](https://codecov.io/github/doctrine/DoctrineModule/coverage.svg?branch=4.2.x)](https://codecov.io/gh/doctrine/DoctrineModule/branch/4.2.x)
+[![Build Status](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml?query=branch%3A4.2.x)
+[![Code Coverage](https://codecov.io/gh/doctrine/DoctrineModule/branch/4.2.x/graphs/badge.svg)](https://codecov.io/gh/doctrine/DoctrineModule/branch/4.2.x)
+[![Latest Stable Version](https://poser.pugx.org/doctrine/doctrine-module/v/stable.png)](https://packagist.org/packages/doctrine/doctrine-module)
+[![Total Downloads](https://poser.pugx.org/doctrine/doctrine-module/downloads.png)](https://packagist.org/packages/doctrine/doctrine-module)
 
 DoctrineModule provides basic functionality consumed by
 [DoctrineORMModule](http://www.github.com/doctrine/DoctrineORMModule)
