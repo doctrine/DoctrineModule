@@ -1,8 +1,7 @@
 {
   "active": true,
   "name": "Doctrine Module for Laminas",
-  "slug": "DoctrineModule",
-  "docsSlug": "doctrine-module",
+  "slug": "doctrine-module",
   "versions": [
     {
       "name": "4.2",
