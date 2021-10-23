@@ -11,28 +11,19 @@ DoctrineModule provides basic functionality consumed by
 and [DoctrineMongoODMModule](https://github.com/doctrine/DoctrineMongoODMModule)
 (if you want to use [MongoDB ODM](https://github.com/doctrine/mongodb-odm)).
 
-## Documentation
-
-Please check the [`docs` dir](https://github.com/doctrine/DoctrineModule/tree/master/docs/en)
-for more detailed documentation on the features provided by this module.
-
 ## Installation
 
-Installation of DoctrineModule uses composer. For composer documentation, please refer to
-[getcomposer.org](http://getcomposer.org/).
+Run the following to install this library using [Composer](https://getcomposer.org/):
 
-```sh
-composer require doctrine/doctrine-module
+```bash
+$ composer require doctrine/doctrine-module
 ```
 
-Then add `DoctrineModule` to your `config/application.config.php`
+### Note on PHP 8.0 or later
 
-Installation without composer is not officially supported, and requires you to install and autoload
-the dependencies specified in the `composer.json`.
-
-## Installation with PHP 8.0
-
-End-users (i.e. not this library) need to specify the following in the composer.json to run DoctrineModule with PHP 8.0:
+This module provides an integration with [laminas-cache](https://docs.laminas.dev/laminas-cache/), which currently comes
+with some storage adapters which are not compatible with PHP 8.0 or later. To prevent installation of these unused cache
+adapters, you will need to add the following to your `composer.json` file:
 
 ```
     "require": {
@@ -49,3 +40,12 @@ End-users (i.e. not this library) need to specify the following in the composer.
         "laminas/laminas-cache-storage-adapter-zend-server": "*"
     }
 ```
+
+Consult the [laminas-cache documentation](https://docs.laminas.dev/laminas-cache/installation/#avoid-unused-cache-adapters-are-being-installed)
+for further information on this issue.
+
+## Documentation
+
+Please check the [documentation on the Doctrine website](https://www.doctrine-project.org/projects/doctrine-module.html)
+for more detailed information on features provided by this component. The source files for the documentation can be
+found in the [docs directory](./docs/en).
