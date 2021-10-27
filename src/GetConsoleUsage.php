@@ -29,13 +29,15 @@ if (PHP_VERSION_ID > 80000) {
      * @internal
      * @deprecated 4.2.0 Usage of laminas/laminas-mvc-console is deprecated, integration will be removed in 5.0.0.
      *                   Please use ./vendor/bin/doctrine-module instead.
+     *
+     * @psalm-suppress DuplicateClass
      */
     trait GetConsoleUsage
     {
         /**
-         * {@inheritDoc}
+         * Prints console usage information for laminas-mvc-console
          */
-        public function getConsoleUsage(Console $console)
+        public function getConsoleUsage(Console $console): string
         {
             if (! interface_exists(Console::class)) {
                 trigger_error(sprintf(

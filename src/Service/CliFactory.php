@@ -66,8 +66,8 @@ class CliFactory implements FactoryInterface
      *
      * @return Application
      */
-    public function createService(ServiceLocatorInterface $container)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($container, Application::class);
+        return $this($serviceLocator, Application::class);
     }
 }

@@ -28,10 +28,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
     /** @var ServiceLocatorInterface */
     private $serviceManager;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function init(ModuleManagerInterface $moduleManager)
+    public function init(ModuleManagerInterface $manager): void
     {
         AnnotationRegistry::registerLoader(
             static function ($className) {
@@ -40,19 +37,16 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onBootstrap(EventInterface $event)
+    public function onBootstrap(EventInterface $e): void
     {
-        assert($event->getTarget() instanceof Application);
-        $this->serviceManager = $event->getTarget()->getServiceManager();
+        assert($e->getTarget() instanceof Application);
+        $this->serviceManager = $e->getTarget()->getServiceManager();
     }
 
     /**
-     * {@inheritDoc}
+     * @return array<string, mixed>
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $provider = new ConfigProvider();
 

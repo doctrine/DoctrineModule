@@ -34,8 +34,8 @@ class CliControllerFactory implements FactoryInterface
      *
      * @return CliController
      */
-    public function createService(ServiceLocatorInterface $container)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($container, CliController::class);
+        return $this($serviceLocator, CliController::class);
     }
 }
