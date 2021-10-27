@@ -17,6 +17,9 @@ use const STDOUT;
 
 /**
  * Output writing in class member variable
+ *
+ * @deprecated 4.2.0 Usage of laminas/laminas-mvc-console is deprecated, integration will be removed in 5.0.0.
+ *                   Please use ./vendor/bin/doctrine-module instead.
  */
 class PropertyOutput extends Output
 {

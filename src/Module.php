@@ -5,25 +5,24 @@ declare(strict_types=1);
 namespace DoctrineModule;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use DoctrineModule\Component\Console\Output\PropertyOutput;
-use Laminas\Console\Adapter\AdapterInterface as Console;
 use Laminas\EventManager\EventInterface;
 use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Symfony\Component\Console\Input\StringInput;
 
 use function class_exists;
 
 /**
- * Base module for integration of Doctrine projects with ZF2 applications
+ * Base module for integration of Doctrine projects with Laminas applications
  *
  * @link    http://www.doctrine-project.org/
  */
 class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
 {
+    use GetConsoleUsage;
+
     /** @var ServiceLocatorInterface */
     private $serviceManager;
 
@@ -63,18 +62,5 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
             'console' => $provider->getConsoleConfig(),
             'validators' => $provider->getValidatorConfig(),
         ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getConsoleUsage(Console $console)
-    {
-        $cli    = $this->serviceManager->get('doctrine.cli');
-        $output = new PropertyOutput();
-
-        $cli->run(new StringInput('list'), $output);
-
-        return $output->getMessage();
     }
 }

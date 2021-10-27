@@ -19,10 +19,24 @@ jobs:
           - "7.4"
         dependencies:
           - "highest"
-          - "lowest"
         laminas-form-version:
           - "3.0.0"
           - "2.17.0"
+        include:
+          - php-version: "7.3"
+            dependencies: "lowest"
+            laminas-form-version: "2.17.0"
+          - php-version: "7.3"
+            dependencies: "lowest"
+            laminas-form-version: "3.0.0"
+          - php-version: "8.0"
+            composer-options: "--ignore-platform-req=php"
+            dependencies: "highest"
+            laminas-form-version: "2.17.0"
+          - php-version: "8.0"
+            composer-options: "--ignore-platform-req=php"
+            dependencies: "highest"
+            laminas-form-version: "3.0.0"
 
     steps:
       - name: "Checkout"
@@ -45,7 +59,7 @@ jobs:
         uses: "ramsey/composer-install@v1"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist"
+          composer-options: "--prefer-dist ${{ matrix.composer-options }}"
 
       - name: "Run PHPUnit"
         run: "composer test-coverage"

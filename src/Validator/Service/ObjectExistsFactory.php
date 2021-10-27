@@ -22,8 +22,6 @@ class ObjectExistsFactory extends AbstractValidatorFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $container = $this->container($container);
-
         $repository = $this->getRepository($container, $options);
 
         return new ObjectExists($this->merge($options, [

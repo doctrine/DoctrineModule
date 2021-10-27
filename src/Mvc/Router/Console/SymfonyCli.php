@@ -11,8 +11,24 @@ use Laminas\Router\RouteMatch;
 use Laminas\Stdlib\RequestInterface as Request;
 use Symfony\Component\Console\Application;
 
+use function interface_exists;
+use function sprintf;
+use function trigger_error;
+
+if (! interface_exists(RouteInterface::class)) {
+    trigger_error(sprintf(
+        'Using %s requires the package laminas/laminas-mvc-console, which is currently not installed.',
+        SymfonyCli::class
+    ));
+
+    return;
+}
+
 /**
  * Route matching commands in Symfony CLI
+ *
+ * @deprecated 4.2.0 Usage of laminas/laminas-mvc-console is deprecated, integration will be removed in 5.0.0.
+ *                   Please use ./vendor/bin/doctrine-module instead.
  */
 class SymfonyCli implements RouteInterface
 {
