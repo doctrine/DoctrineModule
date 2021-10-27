@@ -9,8 +9,9 @@ use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-
 use RuntimeException;
+
+use function get_class;
 use function is_string;
 use function sprintf;
 
@@ -28,7 +29,7 @@ class StorageFactory extends AbstractFactory
     {
         $options = $this->getOptions($container, 'authentication');
 
-        if (!$options instanceof Authentication) {
+        if (! $options instanceof Authentication) {
             throw new RuntimeException(sprintf(
                 'Invalid options received, expected %s, got %s.',
                 Authentication::class,
@@ -53,6 +54,7 @@ class StorageFactory extends AbstractFactory
      * {@inheritDoc}
      *
      * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
+     *
      * @return ObjectRepository
      */
     public function createService(ServiceLocatorInterface $container)

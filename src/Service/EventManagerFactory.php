@@ -29,9 +29,9 @@ class EventManagerFactory extends AbstractFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $options      = $this->getOptions($container, 'eventmanager');
+        $options = $this->getOptions($container, 'eventmanager');
 
-        if (!$options instanceof EventManagerOptions) {
+        if (! $options instanceof EventManagerOptions) {
             throw new RuntimeException(sprintf(
                 'Invalid options received, expected %s, got %s.',
                 EventManagerOptions::class,

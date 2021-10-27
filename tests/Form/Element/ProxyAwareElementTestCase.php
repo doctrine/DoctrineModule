@@ -10,10 +10,12 @@ use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use RuntimeException;
 
 use function array_shift;
 use function func_get_args;
 use function get_class;
+use function method_exists;
 
 class ProxyAwareElementTestCase extends TestCase
 {
@@ -89,8 +91,8 @@ class ProxyAwareElementTestCase extends TestCase
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
 
-        if (!method_exists($this->element, 'getProxy')) {
-            throw new \RuntimeException('Element must implement getProxy().');
+        if (! method_exists($this->element, 'getProxy')) {
+            throw new RuntimeException('Element must implement getProxy().');
         }
 
         $this->element->getProxy()->setOptions([

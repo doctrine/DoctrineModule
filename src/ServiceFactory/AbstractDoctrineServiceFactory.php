@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace DoctrineModule\ServiceFactory;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 use function preg_match;

@@ -330,13 +330,11 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxy();
 
-        $stdClass = new stdClass();
+        $stdClass     = new stdClass();
         $stdClass->id = 1;
 
         $this->proxy->setOptions([
-            'option_attributes' => [
-                'data-id' => $stdClass,
-            ],
+            'option_attributes' => ['data-id' => $stdClass],
         ]);
 
         $this->expectException('RuntimeException');

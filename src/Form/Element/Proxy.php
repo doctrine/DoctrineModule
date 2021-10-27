@@ -38,7 +38,7 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var mixed[]|Traversable */
     protected $objects;
 
-    /** @var string */
+    /** @var ?string */
     protected $targetClass;
 
     /** @var mixed[] */
@@ -59,7 +59,7 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var bool|null */
     protected $isMethod;
 
-    /** @var ObjectManager */
+    /** @var ?ObjectManager */
     protected $objectManager;
 
     /** @var bool */

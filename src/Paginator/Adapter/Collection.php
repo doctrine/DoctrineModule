@@ -10,13 +10,17 @@ use Laminas\Paginator\Adapter\AdapterInterface;
 use function array_values;
 use function count;
 
+/**
+ * @psalm-template TKey of array-key
+ * @psalm-template T
+ */
 class Collection implements AdapterInterface
 {
-    /** @var DoctrineCollection */
+    /** @var DoctrineCollection<TKey,T> */
     protected $collection;
 
     /**
-     * @param DoctrineCollection $collection
+     * @param DoctrineCollection<TKey,T> $collection
      */
     public function __construct(DoctrineCollection $collection)
     {

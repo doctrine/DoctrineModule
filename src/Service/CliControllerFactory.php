@@ -6,9 +6,6 @@ namespace DoctrineModule\Service;
 
 use DoctrineModule\Controller\CliController;
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
-use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
-use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -34,6 +31,7 @@ class CliControllerFactory implements FactoryInterface
      * {@inheritDoc}
      *
      * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
+     *
      * @return CliController
      */
     public function createService(ServiceLocatorInterface $container)

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Service\DriverFactory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+
+use function assert;
 
 /**
  * Base test case to be used when a service manager instance is required
@@ -56,7 +59,7 @@ class DriverFactoryTest extends BaseTestCase
         $factory = new DriverFactory('testChainDriver');
         $driver  = $factory->createService($serviceManager);
         $this->assertInstanceOf('Doctrine\Persistence\Mapping\Driver\MappingDriverChain', $driver);
-        assert($driver instanceof \Doctrine\Persistence\Mapping\Driver\MappingDriverChain);
+        assert($driver instanceof MappingDriverChain);
         $drivers = $driver->getDrivers();
         $this->assertCount(1, $drivers);
         $this->assertArrayHasKey('Foo\Bar', $drivers);

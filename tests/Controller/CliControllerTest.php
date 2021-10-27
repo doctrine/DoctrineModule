@@ -40,6 +40,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
      */
     public function testIndexActionCanBeAccessed(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->dispatch(new Request(['scriptname.php', 'list']));
 
         $this->assertResponseStatusCode(0);
@@ -52,6 +53,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
 
     public function testNonZeroExitCode(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->dispatch(new Request(['scriptname.php', 'fail']));
 
         $this->assertNotResponseStatusCode(0);
@@ -59,6 +61,7 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
 
     public function testException(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->dispatch(new Request(['scriptname.php', '-q', 'fail', '--exception']));
 
         $this->assertNotResponseStatusCode(0);

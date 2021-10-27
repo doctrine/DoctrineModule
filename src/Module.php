@@ -13,6 +13,7 @@ use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\Mvc\Application;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
+use function assert;
 use function class_exists;
 
 /**
