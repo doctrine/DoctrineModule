@@ -56,6 +56,7 @@ class DriverFactoryTest extends BaseTestCase
         $factory = new DriverFactory('testChainDriver');
         $driver  = $factory->createService($serviceManager);
         $this->assertInstanceOf('Doctrine\Persistence\Mapping\Driver\MappingDriverChain', $driver);
+        assert($driver instanceof \Doctrine\Persistence\Mapping\Driver\MappingDriverChain);
         $drivers = $driver->getDrivers();
         $this->assertCount(1, $drivers);
         $this->assertArrayHasKey('Foo\Bar', $drivers);

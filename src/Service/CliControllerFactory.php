@@ -15,18 +15,13 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 /**
  * Factory responsible of instantiating an {@see \DoctrineModule\Controller\CliController}
  *
- * @link    http://www.doctrine-project.org/
+ * @deprecated 4.2.0 Through the deprecation of \DoctrineModule\Controller\CliController, this class is not needed
+ *                   anymore and will be removed in 5.0.0.
  */
 class CliControllerFactory implements FactoryInterface
 {
     /**
-     * Create an object
-     *
      * {@inheritDoc}
-     *
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when creating a service.
-     * @throws ContainerException if any other error occurs.
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): object
     {
@@ -38,10 +33,11 @@ class CliControllerFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      *
+     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
      * @return CliController
      */
     public function createService(ServiceLocatorInterface $container)
     {
-        return $this($container->getServiceLocator(), CliController::class);
+        return $this($container, CliController::class);
     }
 }

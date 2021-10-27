@@ -17,6 +17,9 @@ use Symfony\Component\Console\Output\BufferedOutput;
  */
 class CliControllerTest extends AbstractConsoleControllerTestCase
 {
+    /** @var BufferedOutput */
+    private $output;
+
     protected function setUp(): void
     {
         $this->setApplicationConfig(ServiceManagerFactory::getConfiguration());

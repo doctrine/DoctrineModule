@@ -10,6 +10,7 @@ use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
+use Laminas\Mvc\Application;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 use function class_exists;
@@ -43,6 +44,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
      */
     public function onBootstrap(EventInterface $event)
     {
+        assert($event->getTarget() instanceof Application);
         $this->serviceManager = $event->getTarget()->getServiceManager();
     }
 

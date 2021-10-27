@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,8 +17,14 @@ use function get_class;
 
 class ProxyAwareElementTestCase extends TestCase
 {
+    /** @var MockObject&ClassMetadata */
+    protected $metadata;
+
     /** @var MockObject */
     protected $element;
+
+    /** @var ArrayCollection */
+    protected $values;
 
     protected function prepareProxy(): void
     {
@@ -81,6 +88,10 @@ class ProxyAwareElementTestCase extends TestCase
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
             ->will($this->returnValue($objectRepository));
+
+        if (!method_exists($this->element, 'getProxy')) {
+            throw new \RuntimeException('Element must implement getProxy().');
+        }
 
         $this->element->getProxy()->setOptions([
             'object_manager' => $objectManager,

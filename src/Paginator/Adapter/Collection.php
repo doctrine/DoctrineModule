@@ -12,11 +12,11 @@ use function count;
 
 class Collection implements AdapterInterface
 {
-    /** @var Doctrine\Common\Collections\Collection */
+    /** @var DoctrineCollection */
     protected $collection;
 
     /**
-     * @param mixed[] $collection
+     * @param DoctrineCollection $collection
      */
     public function __construct(DoctrineCollection $collection)
     {

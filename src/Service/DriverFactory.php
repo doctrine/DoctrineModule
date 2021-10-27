@@ -9,6 +9,7 @@ use Doctrine\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use DoctrineModule\Options\Driver;
 use DoctrineModule\Options\Driver as DriverOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
@@ -43,6 +44,7 @@ class DriverFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
+     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
      * @return MappingDriver
      */
     public function createService(ServiceLocatorInterface $container)
@@ -52,7 +54,7 @@ class DriverFactory extends AbstractFactory
 
     public function getOptionsClass(): string
     {
-        return 'DoctrineModule\Options\Driver';
+        return Driver::class;
     }
 
     /**

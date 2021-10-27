@@ -7,11 +7,13 @@ namespace DoctrineModule\Service;
 use Doctrine\Common\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 use DoctrineModule\Cache\LaminasStorageCache;
+use DoctrineModule\Options\Cache as CacheOptions;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use RuntimeException;
 
 use function is_string;
+use function sprintf;
 
 /**
  * Cache ServiceManager factory
@@ -23,13 +25,21 @@ class CacheFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return \Doctrine\Common\Cache\Cache
-     *
+     * @return Cache\Cache
      * @throws RuntimeException
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $options = $this->getOptions($container, 'cache');
+
+        if (!$options instanceof CacheOptions) {
+            throw new RuntimeException(sprintf(
+                'Invalid options received, expected %s, got %s.',
+                CacheOptions::class,
+                get_class($options)
+            ));
+        }
+
         $class   = $options->getClass();
 
         if (! $class) {
@@ -82,17 +92,17 @@ class CacheFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return \Doctrine\Common\Cache\Cache
-     *
+     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
+     * @return Cache\Cache
      * @throws RuntimeException
      */
     public function createService(ServiceLocatorInterface $container)
     {
-        return $this($container, \Doctrine\Common\Cache\Cache::class);
+        return $this($container, Cache\Cache::class);
     }
 
     public function getOptionsClass(): string
     {
-        return 'DoctrineModule\Options\Cache';
+        return CacheOptions::class;
     }
 }

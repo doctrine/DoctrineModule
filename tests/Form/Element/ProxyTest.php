@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use stdClass;
@@ -27,7 +28,7 @@ use const PHP_VERSION_ID;
  */
 class ProxyTest extends TestCase
 {
-    /** @var ClassMetadata */
+    /** @var MockObject&ClassMetadata */
     protected $metadata;
 
     /** @var Proxy */
@@ -329,9 +330,12 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxy();
 
+        $stdClass = new stdClass();
+        $stdClass->id = 1;
+
         $this->proxy->setOptions([
             'option_attributes' => [
-                'data-id' => new stdClass(['id' => 1]),
+                'data-id' => $stdClass,
             ],
         ]);
 

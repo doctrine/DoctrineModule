@@ -8,7 +8,9 @@ use DoctrineModule\Module;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,17 +24,16 @@ use const PHP_VERSION_ID;
  */
 class ModuleTest extends TestCase
 {
-    /** @var PHPUnit_Framework_MockObject_MockObject|Application */
+    /** @var MockObject&Application */
     private $application;
 
-    /** @var PHPUnit_Framework_MockObject_MockObject|MvcEvent */
+    /** @var MockObject&MvcEvent */
     private $event;
 
-
-    /** @var PHPUnit_Framework_MockObject_MockObject|ServiceManager */
+    /** @var MockObject&ServiceManager */
     private $serviceManager;
 
-    /** @var PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Application */
+    /** @var MockObject&SymfonyApplication */
     private $cli;
 
     protected function setUp(): void
