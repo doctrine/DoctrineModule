@@ -1,5 +1,5 @@
-DoctrineModule
-==============
+Introduction
+============
 
 DoctrineModule provides a bridge between Laminas and Doctrine 2. It
 gives you access to features that can be used across Doctrine 2 ORM as
@@ -55,30 +55,28 @@ Next Steps
 
 You can find more details about the features offered by DoctrineModule:
 
--  `Authentication
-   documentation <https://github.com/doctrine/DoctrineModule/blob/master/docs/authentication.md>`__:
+-  :doc:`Authentication documentation <authentication>`:
    this explains how you can use the DoctrineModule authentication
    adapter and authentication storage adapter to provide a simple way to
    authenticate users using Doctrine.
--  `Caching
-   documentation <https://github.com/doctrine/DoctrineModule/blob/master/docs/caching.md>`__:
+-  :doc:`Caching documentation <caching>`:
    DoctrineModule provides simple classes to allow easier caching using
    Doctrine.
--  `CLI
-   documentation <https://github.com/doctrine/DoctrineModule/blob/master/docs/cli.md>`__:
+-  :doc:`CLI documentation <cli>`:
    learn how to use the Doctrine 2 command line tool, and how to add
    your own command.
+-  :doc:`Form elements <form-element>`:
+   if you are using Laminas Forms, this module provides select, radio and
+   checkbox elements for selecting objects from relationships.
 -  `Hydrator
-   documentation <https://github.com/doctrine/doctrine-laminas-hydrator/blob/master/README.md>`__:
-   if you are using Laminas Forms (and I hope you are !),
-   doctrine-laminas-hydrator provides a powerful hydrator that allows
+   documentation <https://www.doctrine-project.org/projects/doctrine-laminas-hydrator.html>`__:
+   if you are using Laminas Forms,
+   ``doctrine-laminas-hydrator`` provides a powerful hydrator that allows
    you to easily deal with OneToOne, OneToMany and ManyToOne
    relationships when using forms.
--  `Paginator
-   documentation <https://github.com/doctrine/DoctrineModule/blob/master/docs/paginator.md>`__:
+-  :doc:`Paginator documentation <paginator>`:
    discover how to use the DoctrineModule Paginator adapter.
--  `Validator
-   documentation <https://github.com/doctrine/DoctrineModule/blob/master/docs/validator.md>`__:
+-  :doc:`Validator documentation <validator>`:
    this chapter explains how to use ObjectExists and NoObjectExists
    validator, that allow you to easily validate if a given entity exists
    or not.

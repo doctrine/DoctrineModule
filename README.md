@@ -16,7 +16,7 @@ and [DoctrineMongoODMModule](https://github.com/doctrine/DoctrineMongoODMModule)
 Run the following to install this library using [Composer](https://getcomposer.org/):
 
 ```bash
-$ composer require doctrine/doctrine-module
+composer require doctrine/doctrine-module
 ```
 
 ### Note on PHP 8.0 or later
