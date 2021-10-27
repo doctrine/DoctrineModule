@@ -28,6 +28,11 @@ class AuthenticationServiceFactory extends AbstractFactory
         );
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
+     */
     public function createService(ServiceLocatorInterface $container): AuthenticationService
     {
         return $this($container, AuthenticationService::class);

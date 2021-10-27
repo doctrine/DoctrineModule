@@ -62,10 +62,12 @@ class CliFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      *
+     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
+     *
      * @return Application
      */
-    public function createService(ServiceLocatorInterface $container)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($container, Application::class);
+        return $this($serviceLocator, Application::class);
     }
 }

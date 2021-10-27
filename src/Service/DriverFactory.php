@@ -9,10 +9,11 @@ use Doctrine\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
-use DoctrineModule\Options\Driver as DriverOptions;
+use DoctrineModule\Options\Driver;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use RuntimeException;
 
 use function class_exists;
 use function get_class;
@@ -37,11 +38,21 @@ class DriverFactory extends AbstractFactory
     {
         $options = $this->getOptions($container, 'driver');
 
+        if (! $options instanceof Driver) {
+            throw new RuntimeException(sprintf(
+                'Invalid options received, expected %s, got %s.',
+                Driver::class,
+                get_class($options)
+            ));
+        }
+
         return $this->createDriver($container, $options);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
      *
      * @return MappingDriver
      */
@@ -52,13 +63,13 @@ class DriverFactory extends AbstractFactory
 
     public function getOptionsClass(): string
     {
-        return 'DoctrineModule\Options\Driver';
+        return Driver::class;
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    protected function createDriver(ContainerInterface $container, DriverOptions $options): MappingDriver
+    protected function createDriver(ContainerInterface $container, Driver $options): MappingDriver
     {
         $class = $options->getClass();
 
@@ -120,6 +131,15 @@ class DriverFactory extends AbstractFactory
                 }
 
                 $options = $this->getOptions($container, 'driver', $driverName);
+
+                if (! $options instanceof Driver) {
+                    throw new RuntimeException(sprintf(
+                        'Invalid options received, expected %s, got %s.',
+                        Driver::class,
+                        get_class($options)
+                    ));
+                }
+
                 $driver->addDriver($this->createDriver($container, $options), $namespace);
             }
         }

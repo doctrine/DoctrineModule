@@ -47,7 +47,7 @@ class LaminasStorageCache extends CacheProvider
     /**
      * {@inheritDoc}
      */
-    protected function doSave($id, $data, $lifeTime = false)
+    protected function doSave($id, $data, $lifeTime = 0)
     {
         // @todo check if lifetime can be set
         return $this->storage->setItem($id, $data);

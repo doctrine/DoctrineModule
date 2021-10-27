@@ -6,9 +6,11 @@ namespace DoctrineModule\Service;
 
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
+use DoctrineModule\Options\EventManager as EventManagerOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use RuntimeException;
 
 use function class_exists;
 use function get_class;
@@ -27,7 +29,16 @@ class EventManagerFactory extends AbstractFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $options      = $this->getOptions($container, 'eventmanager');
+        $options = $this->getOptions($container, 'eventmanager');
+
+        if (! $options instanceof EventManagerOptions) {
+            throw new RuntimeException(sprintf(
+                'Invalid options received, expected %s, got %s.',
+                EventManagerOptions::class,
+                get_class($options)
+            ));
+        }
+
         $eventManager = new EventManager();
 
         foreach ($options->getSubscribers() as $subscriberName) {
@@ -62,6 +73,8 @@ class EventManagerFactory extends AbstractFactory
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
      */
     public function createService(ServiceLocatorInterface $container)
     {
@@ -73,6 +86,6 @@ class EventManagerFactory extends AbstractFactory
      */
     public function getOptionsClass(): string
     {
-        return 'DoctrineModule\Options\EventManager';
+        return EventManagerOptions::class;
     }
 }

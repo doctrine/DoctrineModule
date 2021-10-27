@@ -38,7 +38,7 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var mixed[]|Traversable */
     protected $objects;
 
-    /** @var string */
+    /** @var ?string */
     protected $targetClass;
 
     /** @var mixed[] */
@@ -59,7 +59,7 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var bool|null */
     protected $isMethod;
 
-    /** @var ObjectManager */
+    /** @var ?ObjectManager */
     protected $objectManager;
 
     /** @var bool */
@@ -215,6 +215,10 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function getObjectManager(): ObjectManager
     {
+        if (! $this->objectManager) {
+            throw new RuntimeException('No object manager was set');
+        }
+
         return $this->objectManager;
     }
 
@@ -233,6 +237,10 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function getTargetClass(): string
     {
+        if (! $this->targetClass) {
+            throw new RuntimeException('No target class was set');
+        }
+
         return $this->targetClass;
     }
 
@@ -346,14 +354,6 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function getValue($value)
     {
-        if (! $this->getObjectManager()) {
-            throw new RuntimeException('No object manager was set');
-        }
-
-        if (! $this->getTargetClass()) {
-            throw new RuntimeException('No target class was set');
-        }
-
         $metadata = $this->getObjectManager()->getClassMetadata($this->getTargetClass());
 
         if (is_object($value)) {
@@ -460,14 +460,6 @@ class Proxy implements ObjectManagerAwareInterface
      */
     protected function loadValueOptions(): void
     {
-        if (! $this->objectManager) {
-            throw new RuntimeException('No object manager was set');
-        }
-
-        if (! $this->targetClass) {
-            throw new RuntimeException('No target class was set');
-        }
-
         $metadata         = $this->getObjectManager()->getClassMetadata($this->getTargetClass());
         $identifier       = $metadata->getIdentifierFieldNames();
         $objects          = $this->getObjects();

@@ -346,6 +346,7 @@ class DoctrineCacheStorageTest extends TestCase
 
         $metadatas = $this->storage->getMetadatas(array_keys($items));
         $this->assertIsArray($metadatas);
+        /** @phpstan-ignore-next-line */
         $this->assertSame(count($items), count($metadatas));
         foreach ($metadatas as $metadata) {
             $this->assertIsArray($metadata);

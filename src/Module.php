@@ -10,8 +10,10 @@ use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
+use Laminas\Mvc\Application;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
+use function assert;
 use function class_exists;
 
 /**
@@ -26,10 +28,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
     /** @var ServiceLocatorInterface */
     private $serviceManager;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function init(ModuleManagerInterface $moduleManager)
+    public function init(ModuleManagerInterface $manager): void
     {
         AnnotationRegistry::registerLoader(
             static function ($className) {
@@ -38,18 +37,16 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onBootstrap(EventInterface $event)
+    public function onBootstrap(EventInterface $e): void
     {
-        $this->serviceManager = $event->getTarget()->getServiceManager();
+        assert($e->getTarget() instanceof Application);
+        $this->serviceManager = $e->getTarget()->getServiceManager();
     }
 
     /**
-     * {@inheritDoc}
+     * @return array<string, mixed>
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $provider = new ConfigProvider();
 

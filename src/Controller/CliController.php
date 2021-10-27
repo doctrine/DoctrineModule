@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModule\Controller;
 
 use DoctrineModule\Component\Console\Input\RequestInput;
+use Laminas\Console\Request;
 use Laminas\Mvc\Console\View\ViewModel as ConsoleViewModel;
 use Laminas\Mvc\Controller\AbstractActionController;
 use RuntimeException;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function class_exists;
+use function get_class;
 use function is_numeric;
 use function sprintf;
 
@@ -50,6 +52,14 @@ class CliController extends AbstractActionController
             throw new RuntimeException(sprintf(
                 'Using %s requires the package laminas/laminas-mvc-console, which is currently not installed.',
                 __METHOD__
+            ));
+        }
+
+        if (! $this->getRequest() instanceof Request) {
+            throw new RuntimeException(sprintf(
+                'Expected request of type %s, received %s.',
+                Request::class,
+                get_class($this->getRequest())
             ));
         }
 

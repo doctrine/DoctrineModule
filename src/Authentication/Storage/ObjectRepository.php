@@ -72,12 +72,12 @@ class ObjectRepository implements StorageInterface
     }
 
     /**
-     * @param mixed $identity
+     * @param mixed $contents
      */
-    public function write($identity): void
+    public function write($contents): void
     {
         $metadataInfo     = $this->options->getClassMetadata();
-        $identifierValues = $metadataInfo->getIdentifierValues($identity);
+        $identifierValues = $metadataInfo->getIdentifierValues($contents);
 
         $this->options->getStorage()->write($identifierValues);
     }
