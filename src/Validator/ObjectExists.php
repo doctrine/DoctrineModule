@@ -124,7 +124,7 @@ class ObjectExists extends AbstractValidator
     }
 
     /**
-     * @param string|mixed[] $value a field value or an array of field values if more fields have been configured to be
+     * @param string|object|mixed[] $value a field value or an array of field values if more fields have been configured to be
      *                      matched
      *
      * @return mixed[]

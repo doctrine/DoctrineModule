@@ -63,7 +63,7 @@ class Authentication extends AbstractOptions
     /**
      * A valid object implementing ObjectRepository interface (or ObjectManager/identityClass)
      *
-     * @var ObjectRepository
+     * @var ?ObjectRepository
      */
     protected $objectRepository;
 
@@ -99,7 +99,7 @@ class Authentication extends AbstractOptions
      * If an objectManager is not supplied, this metadata will be used
      * by DoctrineModule/Authentication/Storage/ObjectRepository
      *
-     * @var ClassMetadata
+     * @var ?ClassMetadata
      */
     protected $classMetadata;
 
