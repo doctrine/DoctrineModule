@@ -20,7 +20,7 @@ following workflow is used:
    configuration.
 2. Create a storage adapter. If the authentication succeeds, the
    identifier of the entity will be automatically stored in session.
-3. Create a ``Laminas\Authentication\AuthenticationService``\ instance
+3. Create a ``Laminas\Authentication\AuthenticationService`` instance
    that contains both the authentication adapter and the storage
    adapter.
 
@@ -173,7 +173,7 @@ the following code in your Module.php class:
 
 Please note that I am using here a
 ``Laminas\Authentication\AuthenticationService`` name, but it can be
-anything else (``my_auth_service``\ …). However, using the name
+anything else (``my_auth_service`` …). However, using the name
 ``Laminas\Authentication\AuthenticationService`` will allow it to be
 recognised by the Laminas `Identity view
 helper <https://docs.laminas.dev/laminas-view/helpers/identity/>`__.
