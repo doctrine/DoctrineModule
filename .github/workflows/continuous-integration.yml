@@ -72,9 +72,6 @@ jobs:
       - name: "Run PHPUnit"
         run: "composer test-coverage"
 
-      - name: "Test coverage"
-        run: "php build/coverage-checker.php coverage.xml 70"
-
       - name: "Upload coverage file"
         uses: "actions/upload-artifact@v2"
         with:
