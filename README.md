@@ -9,7 +9,7 @@ DoctrineModule provides basic functionality consumed by
 [DoctrineORMModule](http://www.github.com/doctrine/DoctrineORMModule)
 (if you want to use [Doctrine ORM](https://github.com/doctrine/orm))
 and [DoctrineMongoODMModule](https://github.com/doctrine/DoctrineMongoODMModule)
-(if you want to use [MongoDB ODM](https://github.com/doctrine/mongodb-odm)).
+(if you want to use [Doctrine MongoDB ODM](https://github.com/doctrine/mongodb-odm)).
 
 ## Installation
 

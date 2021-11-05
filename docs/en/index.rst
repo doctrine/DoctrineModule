@@ -1,16 +1,18 @@
 Introduction
 ============
 
-DoctrineModule provides a bridge between Laminas and Doctrine 2. It
-gives you access to features that can be used across Doctrine 2 ORM as
-well as Doctrine 2 ODM. It provides an abstraction layer on top of
-`Doctrine\Common <https://github.com/doctrine/common>`__ which
-allows the end user to build functionality being completely unaware if
-he’s currently working with Doctrine ORM or Doctrine MongoDB ODM.
+DoctrineModule provides a bridge between `Laminas <https://getlaminas.org/>`__ and Doctrine. It
+gives you access to features that can be used across
+`Doctrine ORM <https://www.doctrine-project.org/projects/doctrine-orm/en/current/index.html>`__ as well as
+`Doctrine MongoDB ODM <https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/current/index.html>`__.
+It provides an abstraction layer on top of
+`Doctrine\Common <https://www.doctrine-project.org/projects/doctrine-common/en/current/index.html>`__
+which allows the end user to build functionality being completely unaware if he’s currently working
+with Doctrine ORM or Doctrine MongoDB ODM.
 
 To use Doctrine ORM or ODM, you will need
-`DoctrineORMModule <https://github.com/doctrine/DoctrineORMModule>`__ or
-`DoctrineMongoODMModule <https://github.com/doctrine/DoctrineMongoODMModule>`__
+`DoctrineORMModule <https://www.doctrine-project.org/projects/doctrine-orm-module/en/current/index.html>`__ or
+`DoctrineMongoODMModule <https://www.doctrine-project.org/projects/doctrine-mongo-odm-module/en/current/index.html>`__
 respectively.
 
 Installation
