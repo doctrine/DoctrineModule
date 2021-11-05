@@ -17,6 +17,8 @@ jobs:
         php-version:
           - "7.3"
           - "7.4"
+          - "8.0"
+          - "8.1"
         dependencies:
           - "highest"
         laminas-form-version:
@@ -28,22 +30,6 @@ jobs:
             laminas-form-version: "2.17.0"
           - php-version: "7.3"
             dependencies: "lowest"
-            laminas-form-version: "3.0.0"
-          - php-version: "8.0"
-            composer-options: "--ignore-platform-req=php"
-            dependencies: "highest"
-            laminas-form-version: "2.17.0"
-          - php-version: "8.0"
-            composer-options: "--ignore-platform-req=php"
-            dependencies: "highest"
-            laminas-form-version: "3.0.0"
-          - php-version: "8.1"
-            composer-options: "--ignore-platform-req=php"
-            dependencies: "highest"
-            laminas-form-version: "2.17.0"
-          - php-version: "8.1"
-            composer-options: "--ignore-platform-req=php"
-            dependencies: "highest"
             laminas-form-version: "3.0.0"
 
     steps:
@@ -60,14 +46,26 @@ jobs:
           ini-values: "zend.assertions=1"
 
       - name: "Require specific laminas-form version"
+        if: "! startsWith(matrix.php-version, '8')"
         run: "composer require laminas/laminas-form ^${{ matrix.laminas-form-version }} --no-update"
-        if: "${{ matrix.laminas-form-version != 'default' }}"
+
+      - name: "Require specific laminas-form version (--ignore-platform-req=php)"
+        if: "startsWith(matrix.php-version, '8')"
+        run: "composer require laminas/laminas-form ^${{ matrix.laminas-form-version }} --no-update --ignore-platform-req=php"
 
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v1"
+        if: "! startsWith(matrix.php-version, '8')"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist ${{ matrix.composer-options }}"
+          composer-options: "--prefer-dist"
+
+      - name: "Install dependencies with Composer (--ignore-platform-req=php)"
+        uses: "ramsey/composer-install@v1"
+        if: "startsWith(matrix.php-version, '8')"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--prefer-dist --ignore-platform-req=php"
 
       - name: "Run PHPUnit"
         run: "composer test-coverage"
