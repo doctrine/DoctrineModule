@@ -33,7 +33,7 @@ with some storage adapters which are not compatible with PHP 8.0 or later. To pr
 installation of these unused cache adapters, you will need to add the following to
 your ``composer.json`` file:
 
-.. code::
+.. code:: json
 
     "require": {
          "doctrine/doctrine-module": "^4.2.0"
