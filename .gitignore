@@ -4,5 +4,4 @@
 /composer.lock
 /phpcs.xml
 /phpunit.xml
-/psalm.xml
 /vendor/
