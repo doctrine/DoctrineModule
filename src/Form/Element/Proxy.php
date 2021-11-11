@@ -12,7 +12,6 @@ use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 use ReflectionMethod;
 use RuntimeException;
-use Traversable;
 
 use function array_change_key_case;
 use function array_key_exists;
@@ -35,7 +34,7 @@ class Proxy implements ObjectManagerAwareInterface
 {
     use ArrayOrTraversableGuardTrait;
 
-    /** @var mixed[]|Traversable */
+    /** @var mixed[] */
     protected $objects;
 
     /** @var ?string */
