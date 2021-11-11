@@ -14,6 +14,8 @@ use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function assert;
+use function method_exists;
 use function serialize;
 use function unserialize;
 
@@ -110,6 +112,7 @@ class ModuleTest extends TestCase
             }));
 
         $module = new Module();
+        assert(method_exists($module, 'getConsoleUsage'));
 
         $module->onBootstrap($this->event);
 
