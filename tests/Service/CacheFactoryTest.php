@@ -7,10 +7,13 @@ namespace DoctrineModuleTest\Service;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use DoctrineModule\Service\CacheFactory;
+use Laminas\Cache\ConfigProvider;
+use Laminas\Cache\Storage\Adapter\BlackHole;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 use function assert;
+use function class_exists;
 
 /**
  * Test for {@see \DoctrineModule\Service\CacheFactory}
@@ -49,7 +52,12 @@ class CacheFactoryTest extends BaseTestCase
     public function testCreateLaminasCache(): void
     {
         $factory        = new CacheFactory('phpunit');
-        $serviceManager = new ServiceManager();
+        $serviceManager = new ServiceManager((new ConfigProvider())->getDependencyConfig());
+
+        if (class_exists(BlackHole\ConfigProvider::class)) {
+            $serviceManager->configure((new BlackHole\ConfigProvider())->getServiceDependencies());
+        }
+
         $serviceManager->setService(
             'config',
             [
@@ -63,13 +71,10 @@ class CacheFactoryTest extends BaseTestCase
                     ],
                 ],
                 'caches' => [
-                    'my-laminas-cache' => [
-                        'adapter' => ['name' => 'blackhole'],
-                    ],
+                    'my-laminas-cache' => ['adapter' => 'blackhole'],
                 ],
-            ]
+            ],
         );
-        $serviceManager->addAbstractFactory('Laminas\Cache\Service\StorageCacheAbstractServiceFactory');
 
         $cache = $factory->createService($serviceManager);
 
