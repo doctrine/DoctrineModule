@@ -7,10 +7,14 @@ namespace DoctrineModuleTest\Service;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use DoctrineModule\Service\CacheFactory;
+use Laminas\Cache\ConfigProvider;
+use Laminas\Cache\Storage\Adapter\Memory\AdapterPluginManagerDelegatorFactory;
+use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 use function assert;
+use function class_exists;
 
 /**
  * Test for {@see \DoctrineModule\Service\CacheFactory}
@@ -64,12 +68,18 @@ class CacheFactoryTest extends BaseTestCase
                 ],
                 'caches' => [
                     'my-laminas-cache' => [
-                        'adapter' => ['name' => 'blackhole'],
+                        'adapter' => 'memory',
                     ],
                 ],
             ]
         );
-        $serviceManager->addAbstractFactory('Laminas\Cache\Service\StorageCacheAbstractServiceFactory');
+
+        $cacheConfigProvider = new ConfigProvider();
+        $serviceManager->configure($cacheConfigProvider->getDependencyConfig());
+
+        if (class_exists(AdapterPluginManagerDelegatorFactory::class)) {
+            $serviceManager->addDelegator(AdapterPluginManager::class, AdapterPluginManagerDelegatorFactory::class);
+        }
 
         $cache = $factory->createService($serviceManager);
 
