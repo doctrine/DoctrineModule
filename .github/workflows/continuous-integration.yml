@@ -24,13 +24,22 @@ jobs:
         laminas-form-version:
           - "3.0.0"
           - "2.17.0"
+        laminas-cache-version:
+          - "3.1.0"
+          - "2.13.2"
         include:
           - php-version: "7.3"
             dependencies: "lowest"
             laminas-form-version: "2.17.0"
+            laminas-cache: "3.1.0"
+            laminas-cache-storage-adapter-blackhole: "2.0.0"
+            laminas-cache-storage-adapter-memory: "2.0.0"
           - php-version: "7.3"
             dependencies: "lowest"
             laminas-form-version: "3.0.0"
+            laminas-cache: "2.13.2"
+            laminas-cache-storage-adapter-blackhole: "1.2.1"
+            laminas-cache-storage-adapter-memory: "1.1.0"
 
     steps:
       - name: "Checkout"
@@ -48,6 +57,9 @@ jobs:
       - name: "Require specific laminas-form version"
         if: "! startsWith(matrix.php-version, '8')"
         run: "composer require laminas/laminas-form ^${{ matrix.laminas-form-version }} --no-update"
+
+      - name: "Require specific laminas-cache version"
+        run: "composer require laminas/laminas-cache ^${{ matrix.laminas-cache-version }} laminas/laminas-cache-storage-adapter-blackhole ^${{ matrix.laminas-cache-storage-adapter-blackhole }} laminas/laminas-cache-storage-adapter-memory ^${{ matrix.laminas-cache-storage-adapter-memory }} --no-update"
 
       - name: "Require specific laminas-form version (--ignore-platform-req=php)"
         if: "startsWith(matrix.php-version, '8')"
