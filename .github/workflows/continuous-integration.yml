@@ -36,7 +36,6 @@ jobs:
             dependencies: "lowest"
             laminas-form-version: "3.0.0"
             laminas-cache-version: "3.1.2"
-            laminas-cache-blackhole-version: "2.0.0"
 
     steps:
       - name: "Checkout"
@@ -61,10 +60,6 @@ jobs:
 
       - name: "Require specific laminas-cache version"
         run: "composer require laminas/laminas-cache ^${{ matrix.laminas-cache-version }} --no-update"
-
-      - name: "Require specific laminas-cache-storage-adapter-blackhole version"
-        if: "matrix.laminas-cache-blackhole-version"
-        run: "composer require laminas/laminas-cache-storage-adapter-blackhole ^${{ matrix.laminas-cache-blackhole-version }} --no-update"
 
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v1"
