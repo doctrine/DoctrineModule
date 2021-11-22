@@ -6,11 +6,17 @@ namespace DoctrineModuleTest\Service;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
+use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModule\Service\CacheFactory;
+use Laminas\Cache\ConfigProvider;
+use Laminas\Cache\Storage\Adapter\BlackHole;
+use Laminas\Cache\Storage\AdapterPluginManager;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 use function assert;
+use function class_exists;
 
 /**
  * Test for {@see \DoctrineModule\Service\CacheFactory}
@@ -49,31 +55,45 @@ class CacheFactoryTest extends BaseTestCase
     public function testCreateLaminasCache(): void
     {
         $factory        = new CacheFactory('phpunit');
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'config',
-            [
-                'doctrine' => [
-                    'cache' => [
-                        'phpunit' => [
-                            'class' => 'DoctrineModule\Cache\LaminasStorageCache',
-                            'instance' => 'my-laminas-cache',
-                            'namespace' => 'DoctrineModule',
-                        ],
+        $serviceManager = new ServiceManager((new ConfigProvider())->getDependencyConfig());
+        $config         = [
+            'doctrine' => [
+                'cache' => [
+                    'phpunit' => [
+                        'class' => 'DoctrineModule\Cache\LaminasStorageCache',
+                        'instance' => 'my-laminas-cache',
+                        'namespace' => 'DoctrineModule',
                     ],
                 ],
-                'caches' => [
-                    'my-laminas-cache' => [
-                        'adapter' => ['name' => 'blackhole'],
-                    ],
+            ],
+            'caches' => [
+                'my-laminas-cache' => ['adapter' => 'blackhole'],
+            ],
+        ];
+
+        if (class_exists(BlackHole\ConfigProvider::class)) {
+            // setup for laminas-cache 3 with blackhole adapter 2
+            $serviceManager->configure((new BlackHole\ConfigProvider())->getServiceDependencies());
+            $serviceManager->setService('config', $config);
+        } else {
+            // setup for laminas-cache 2 and 3 with blackhole adapter 1
+            $config['caches']['my-laminas-cache']['name'] = 'blackhole';
+            $pluginManager                                = $serviceManager->get(AdapterPluginManager::class);
+            assert($pluginManager instanceof AdapterPluginManager);
+            $pluginManager->configure([
+                'factories' => [
+                    BlackHole::class => InvokableFactory::class,
                 ],
-            ]
-        );
-        $serviceManager->addAbstractFactory('Laminas\Cache\Service\StorageCacheAbstractServiceFactory');
+                'aliases'   => [
+                    'blackhole'  => BlackHole::class,
+                ],
+            ]);
+            $serviceManager->setService('config', $config);
+        }
 
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory->__invoke($serviceManager, LaminasStorageCache::class);
 
-        $this->assertInstanceOf('DoctrineModule\Cache\LaminasStorageCache', $cache);
+        $this->assertInstanceOf(LaminasStorageCache::class, $cache);
     }
 
     public function testCreatePredisCache(): void
