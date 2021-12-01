@@ -63,6 +63,9 @@
         "laminas/laminas-validator": "^2.15.0",
         "symfony/console": "^5.3.7 || ^6.0.0"
     },
+    "provide": {
+        "laminas/laminas-cache-storage-implementation": "1.0"
+    },
     "require-dev": {
         "doctrine/coding-standard": "^9.0.0",
         "doctrine/orm": "^2.10.2",
