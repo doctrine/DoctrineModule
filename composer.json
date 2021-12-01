@@ -61,7 +61,7 @@
         "laminas/laminas-servicemanager": "^3.7.0",
         "laminas/laminas-stdlib": "^3.6.0",
         "laminas/laminas-validator": "^2.15.0",
-        "symfony/console": "^5.3.7"
+        "symfony/console": "^5.3.7 || ^6.0.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0.0",
