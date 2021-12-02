@@ -36,7 +36,7 @@ your ``composer.json`` file:
 .. code:: json
 
     "require": {
-         "doctrine/doctrine-module": "^4.2.0"
+         "doctrine/doctrine-module": "^4.3.0"
     },
     "replace": {
         "laminas/laminas-cache-storage-adapter-apc": "*",
