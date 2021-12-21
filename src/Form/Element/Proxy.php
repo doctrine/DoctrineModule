@@ -9,9 +9,11 @@ use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
 use Doctrine\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use Laminas\Stdlib\ArrayUtils;
 use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 use ReflectionMethod;
 use RuntimeException;
+use Traversable;
 
 use function array_change_key_case;
 use function array_key_exists;
@@ -82,10 +84,14 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
-     * @param mixed[] $options
+     * @param iterable<mixed> $options
      */
-    public function setOptions(array $options): void
+    public function setOptions(iterable $options): void
     {
+        if ($options instanceof Traversable) {
+            $options = ArrayUtils::iteratorToArray($options);
+        }
+
         if (isset($options['object_manager'])) {
             $this->setObjectManager($options['object_manager']);
         }
