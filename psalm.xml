@@ -17,12 +17,4 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
-    <issueHandlers>
-        <DuplicateClass>
-            <errorLevel type="suppress">
-                <!-- These files contain a php 7 and a php 8 version of the same trait -->
-                <file name="src/GetConsoleUsage.php"/>
-            </errorLevel>
-        </DuplicateClass>
-    </issueHandlers>
 </psalm>

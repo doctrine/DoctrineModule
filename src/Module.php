@@ -23,8 +23,6 @@ use function class_exists;
  */
 class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
 {
-    use GetConsoleUsage;
-
     /** @var ServiceLocatorInterface */
     private $serviceManager;
 
@@ -54,9 +52,6 @@ class Module implements ConfigProviderInterface, InitProviderInterface, Bootstra
             'doctrine' => $provider->getDoctrineConfig(),
             'doctrine_factories' => $provider->getDoctrineFactoryConfig(),
             'service_manager' => $provider->getDependencyConfig(),
-            'controllers' => $provider->getControllerConfig(),
-            'route_manager' => $provider->getRouteManagerConfig(),
-            'console' => $provider->getConsoleConfig(),
             'validators' => $provider->getValidatorConfig(),
         ];
     }
