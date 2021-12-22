@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service\Authentication;
 
+use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Service\Authentication\StorageFactory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -38,8 +39,8 @@ class StorageFactoryTest extends BaseTestCase
             ]
         );
 
-        $adapter = $factory->createService($serviceManager);
-        $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
+        $adapter = $factory->__invoke($serviceManager, ObjectRepository::class);
+        $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 
     public function testCanInstantiateStorageFromServiceLocator(): void
@@ -63,9 +64,7 @@ class StorageFactoryTest extends BaseTestCase
                 ['some_storage', $storage],
             ]);
 
-        $this->assertInstanceOf(
-            'DoctrineModule\Authentication\Storage\ObjectRepository',
-            $factory->createService($serviceManager)
-        );
+        $adapter = $factory->__invoke($serviceManager, ObjectRepository::class);
+        $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 }
