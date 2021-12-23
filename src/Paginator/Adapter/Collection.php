@@ -6,6 +6,7 @@ namespace DoctrineModule\Paginator\Adapter;
 
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Laminas\Paginator\Adapter\AdapterInterface;
+use ReturnTypeWillChange;
 
 use function array_values;
 use function count;
@@ -38,6 +39,7 @@ class Collection implements AdapterInterface
     /**
      * {@inheritDoc}
      */
+    #[ReturnTypeWillChange]
     public function count()
     {
         return count($this->collection);

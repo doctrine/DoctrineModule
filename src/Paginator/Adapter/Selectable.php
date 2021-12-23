@@ -7,6 +7,7 @@ namespace DoctrineModule\Paginator\Adapter;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable as DoctrineSelectable;
 use Laminas\Paginator\Adapter\AdapterInterface;
+use ReturnTypeWillChange;
 
 use function count;
 
@@ -46,6 +47,7 @@ class Selectable implements AdapterInterface
     /**
      * {@inheritDoc}
      */
+    #[ReturnTypeWillChange]
     public function count()
     {
         $criteria = clone $this->criteria;
