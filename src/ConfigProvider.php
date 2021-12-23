@@ -9,7 +9,7 @@ namespace DoctrineModule;
  *
  * @link    www.doctrine-project.org
  */
-class ConfigProvider
+final class ConfigProvider
 {
     /**
      * @return mixed[]

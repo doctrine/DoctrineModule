@@ -11,7 +11,7 @@ use Laminas\Stdlib\AbstractOptions;
  *
  * @link    http://www.doctrine-project.org/
  */
-class Driver extends AbstractOptions
+final class Driver extends AbstractOptions
 {
     /**
      * The class name of the Driver.

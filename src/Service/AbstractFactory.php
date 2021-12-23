@@ -13,6 +13,8 @@ use function sprintf;
 
 /**
  * Base ServiceManager factory to be extended
+ *
+ * @interal
  */
 // phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 abstract class AbstractFactory implements FactoryInterface

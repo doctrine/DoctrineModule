@@ -16,9 +16,9 @@ use function is_string;
 use function sprintf;
 
 /**
- * Factory for creating NoObjectExists instances
+ * Base validator factory to be extended
  *
- * @link http://www.doctrine-project.org/
+ * @internal
  */
 // phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 abstract class AbstractValidatorFactory implements FactoryInterface

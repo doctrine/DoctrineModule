@@ -19,7 +19,7 @@ use function sprintf;
  *
  * @link    http://www.doctrine-project.org/
  */
-class AdapterFactory extends AbstractFactory
+final class AdapterFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}

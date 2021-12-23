@@ -21,7 +21,7 @@ use function sprintf;
 /**
  * Factory responsible for creating EventManager instances
  */
-class EventManagerFactory extends AbstractFactory
+final class EventManagerFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}

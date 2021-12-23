@@ -51,7 +51,7 @@ use function sprintf;
  *
  * @link    http://www.doctrine-project.org/
  */
-class Authentication extends AbstractOptions
+final class Authentication extends AbstractOptions
 {
     /**
      * A valid object implementing ObjectManager interface

@@ -16,7 +16,7 @@ use function preg_match;
  *
  * @link    http://www.doctrine-project.org/
  */
-class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
+final class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
 {
     /**
      * {@inheritDoc}

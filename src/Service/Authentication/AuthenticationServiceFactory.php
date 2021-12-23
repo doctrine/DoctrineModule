@@ -14,7 +14,7 @@ use Laminas\Authentication\AuthenticationService;
  *
  * @link    http://www.doctrine-project.org/
  */
-class AuthenticationServiceFactory extends AbstractFactory
+final class AuthenticationServiceFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}

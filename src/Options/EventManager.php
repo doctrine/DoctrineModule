@@ -11,7 +11,7 @@ use Laminas\Stdlib\AbstractOptions;
  *
  * @link    http://www.doctrine-project.org/
  */
-class EventManager extends AbstractOptions
+final class EventManager extends AbstractOptions
 {
     /**
      * An array of subscribers. The array can contain the FQN of the

@@ -7,12 +7,7 @@ namespace DoctrineModule\Validator\Service;
 use DoctrineModule\Validator\NoObjectExists;
 use Interop\Container\ContainerInterface;
 
-/**
- * Factory for creating NoObjectExists instances
- *
- * @link    http://www.doctrine-project.org/
- */
-class NoObjectExistsFactory extends AbstractValidatorFactory
+final class NoObjectExistsFactory extends AbstractValidatorFactory
 {
     protected string $validatorClass = NoObjectExists::class;
 

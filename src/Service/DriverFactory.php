@@ -26,7 +26,7 @@ use function sprintf;
  *
  * @link    http://www.doctrine-project.org/
  */
-class DriverFactory extends AbstractFactory
+final class DriverFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
