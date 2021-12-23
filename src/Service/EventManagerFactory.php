@@ -9,7 +9,6 @@ use Doctrine\Common\EventSubscriber;
 use DoctrineModule\Options\EventManager as EventManagerOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use RuntimeException;
 
 use function class_exists;
@@ -69,16 +68,6 @@ class EventManagerFactory extends AbstractFactory
         }
 
         return $eventManager;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, EventManager::class);
     }
 
     /**

@@ -12,7 +12,6 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Options\Driver;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use RuntimeException;
 
 use function class_exists;
@@ -47,18 +46,6 @@ class DriverFactory extends AbstractFactory
         }
 
         return $this->createDriver($container, $options);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     *
-     * @return MappingDriver
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, MappingDriver::class);
     }
 
     public function getOptionsClass(): string

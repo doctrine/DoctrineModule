@@ -157,11 +157,7 @@ class NoObjectExistsFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @covers ::createService
-     * @covers ::setCreationOptions
-     */
-    public function testCreateService(): void
+    public function testInvokeWithOptions(): void
     {
         $options = [
             'target_class' => 'Foo\Bar',
@@ -179,8 +175,11 @@ class NoObjectExistsFactoryTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($objectManager->reveal());
 
-        $this->object->setCreationOptions($options);
-        $instance = $this->object->createService($container->reveal());
+        $instance = $this->object->__invoke(
+            $container->reveal(),
+            NoObjectExists::class,
+            $options
+        );
         $this->assertInstanceOf(NoObjectExists::class, $instance);
     }
 }

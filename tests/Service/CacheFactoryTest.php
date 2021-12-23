@@ -6,6 +6,7 @@ namespace DoctrineModuleTest\Service;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
+use Doctrine\Common\Cache\PredisCache;
 use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModule\Service\CacheFactory;
 use Laminas\Cache\ConfigProvider;
@@ -41,10 +42,10 @@ class CacheFactoryTest extends BaseTestCase
             ]
         );
 
-        $service = $factory->createService($serviceManager);
+        $service = $factory->__invoke($serviceManager, ArrayCache::class);
         assert($service instanceof ArrayCache);
 
-        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $service);
+        $this->assertInstanceOf(ArrayCache::class, $service);
         $this->assertSame('bar', $service->getNamespace());
     }
 
@@ -118,9 +119,9 @@ class CacheFactoryTest extends BaseTestCase
             'my_predis_alias',
             $this->createMock('Predis\ClientInterface')
         );
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory->__invoke($serviceManager, PredisCache::class);
 
-        $this->assertInstanceOf('Doctrine\Common\Cache\PredisCache', $cache);
+        $this->assertInstanceOf(PredisCache::class, $cache);
     }
 
     public function testUseServiceFactory(): void
@@ -146,7 +147,7 @@ class CacheFactoryTest extends BaseTestCase
             return $mock;
         });
 
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory->__invoke($serviceManager, ChainCache::class);
 
         $this->assertSame($mock, $cache);
     }

@@ -8,7 +8,6 @@ use BadMethodCallException;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Authentication\AuthenticationService;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory to create authentication service object.
@@ -26,16 +25,6 @@ class AuthenticationServiceFactory extends AbstractFactory
             $container->get('doctrine.authenticationstorage.' . $this->getName()),
             $container->get('doctrine.authenticationadapter.' . $this->getName())
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     */
-    public function createService(ServiceLocatorInterface $container): AuthenticationService
-    {
-        return $this($container, AuthenticationService::class);
     }
 
     public function getOptionsClass(): string

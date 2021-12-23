@@ -8,7 +8,6 @@ use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use RuntimeException;
 
 use function get_class;
@@ -48,18 +47,6 @@ class StorageFactory extends AbstractFactory
         }
 
         return new ObjectRepository($options);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     *
-     * @return ObjectRepository
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, ObjectRepository::class);
     }
 
     public function getOptionsClass(): string
