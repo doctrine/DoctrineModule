@@ -18,11 +18,9 @@ use function get_class;
  */
 class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
 {
-    /** @var ArrayCollection */
-    protected $values;
+    protected ArrayCollection $values;
 
-    /** @var ObjectMultiCheckbox */
-    protected $element;
+    protected ObjectMultiCheckbox $element;
 
     /**
      * {@inheritDoc}.

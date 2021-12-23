@@ -15,8 +15,7 @@ use function get_class;
  */
 class ObjectRadioTest extends ProxyAwareElementTestCase
 {
-    /** @var ObjectRadio */
-    protected $element;
+    protected ObjectRadio $element;
 
     /**
      * {@inheritDoc}.

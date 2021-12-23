@@ -33,21 +33,19 @@ class ObjectExists extends AbstractValidator
     public const ERROR_NO_OBJECT_FOUND = 'noObjectFound';
 
     /** @var mixed[] Message templates */
-    protected $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];
+    protected array $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];
 
     /**
      * ObjectRepository from which to search for entities
-     *
-     * @var ObjectRepository
      */
-    protected $objectRepository;
+    protected ObjectRepository $objectRepository;
 
     /**
      * Fields to be checked
      *
      * @var mixed[]
      */
-    protected $fields;
+    protected array $fields;
 
     /**
      * Constructor

@@ -14,8 +14,7 @@ use Laminas\Authentication\Storage\StorageInterface;
  */
 class ObjectRepository implements StorageInterface
 {
-    /** @var AuthenticationOptions */
-    protected $options;
+    protected AuthenticationOptions $options;
 
     /**
      * @param mixed[]|AuthenticationOptions $options

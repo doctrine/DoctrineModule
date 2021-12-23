@@ -18,11 +18,9 @@ use function get_class;
  */
 class ObjectSelectTest extends ProxyAwareElementTestCase
 {
-    /** @var ArrayCollection */
-    protected $values;
+    protected ArrayCollection $values;
 
-    /** @var ObjectSelect */
-    protected $element;
+    protected ObjectSelect $element;
 
     /**
      * {@inheritDoc}.

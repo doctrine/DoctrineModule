@@ -17,8 +17,7 @@ use function range;
  */
 class CollectionAdapterTest extends TestCase
 {
-    /** @var CollectionAdapter */
-    protected $adapter;
+    protected CollectionAdapter $adapter;
 
     /**
      * {@inheritDoc}.

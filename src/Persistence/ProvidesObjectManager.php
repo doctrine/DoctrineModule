@@ -13,8 +13,7 @@ use function interface_exists;
  */
 trait ProvidesObjectManager
 {
-    /** @var ObjectManager */
-    protected $objectManager;
+    protected ObjectManager $objectManager;
 
     /**
      * Set the object manager

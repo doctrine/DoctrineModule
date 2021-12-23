@@ -18,7 +18,7 @@ use function count;
 class Collection implements AdapterInterface
 {
     /** @var DoctrineCollection<TKey,T> */
-    protected $collection;
+    protected DoctrineCollection $collection;
 
     /**
      * @param DoctrineCollection<TKey,T> $collection

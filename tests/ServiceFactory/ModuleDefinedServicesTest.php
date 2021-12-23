@@ -15,8 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ModuleDefinedServicesTest extends TestCase
 {
-    /** @var ServiceLocatorInterface */
-    protected $serviceManager;
+    protected ServiceLocatorInterface $serviceManager;
 
     protected function setUp(): void
     {

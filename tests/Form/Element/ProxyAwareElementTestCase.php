@@ -22,11 +22,9 @@ class ProxyAwareElementTestCase extends TestCase
     /** @var MockObject&ClassMetadata */
     protected $metadata;
 
-    /** @var object */
-    protected $element;
+    protected object $element;
 
-    /** @var ArrayCollection */
-    protected $values;
+    protected ArrayCollection $values;
 
     protected function prepareProxy(): void
     {

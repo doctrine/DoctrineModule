@@ -35,22 +35,19 @@ use function ucwords;
  */
 class DoctrineCacheStorageTest extends TestCase
 {
-    /** @var AdapterOptions */
-    protected $options;
+    protected AdapterOptions $options;
 
     /**
      * The storage adapter
-     *
-     * @var StorageInterface
      */
-    protected $storage;
+    protected StorageInterface $storage;
 
     /**
      * All datatypes of PHP
      *
      * @var string[]
      */
-    protected $phpDatatypes = ['NULL', 'boolean', 'integer', 'double', 'string', 'array', 'object', 'resource'];
+    protected array $phpDatatypes = ['NULL', 'boolean', 'integer', 'double', 'string', 'array', 'object', 'resource'];
 
     protected function setUp(): void
     {
