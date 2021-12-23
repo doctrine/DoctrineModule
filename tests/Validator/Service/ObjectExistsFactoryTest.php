@@ -22,8 +22,7 @@ class ObjectExistsFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ObjectExistsFactory */
-    protected $object;
+    protected ObjectExistsFactory $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.

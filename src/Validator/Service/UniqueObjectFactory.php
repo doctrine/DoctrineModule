@@ -9,8 +9,7 @@ use Interop\Container\ContainerInterface;
 
 class UniqueObjectFactory extends AbstractValidatorFactory
 {
-    /** @var string */
-    protected $validatorClass = UniqueObject::class;
+    protected string $validatorClass = UniqueObject::class;
 
     /**
      * {@inheritDoc}

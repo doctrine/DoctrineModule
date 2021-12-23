@@ -31,8 +31,7 @@ class ProxyTest extends TestCase
     /** @var MockObject&ClassMetadata */
     protected $metadata;
 
-    /** @var Proxy */
-    protected $proxy;
+    protected Proxy $proxy;
 
     /**
      * {@inheritDoc}.

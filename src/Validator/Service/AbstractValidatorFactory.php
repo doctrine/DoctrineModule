@@ -27,10 +27,9 @@ abstract class AbstractValidatorFactory implements FactoryInterface
     public const DEFAULT_OBJECTMANAGER_KEY = 'doctrine.entitymanager.orm_default';
 
     /** @var mixed[] */
-    protected $creationOptions = [];
+    protected array $creationOptions = [];
 
-    /** @var string $validatorClass */
-    protected $validatorClass;
+    protected string $validatorClass;
 
     /**
      * @param mixed[] $options

@@ -22,8 +22,7 @@ class UniqueObjectFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var UniqueObjectFactory */
-    private $object;
+    private UniqueObjectFactory $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.

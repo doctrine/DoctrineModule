@@ -14,8 +14,7 @@ use Interop\Container\ContainerInterface;
  */
 class NoObjectExistsFactory extends AbstractValidatorFactory
 {
-    /** @var string */
-    protected $validatorClass = NoObjectExists::class;
+    protected string $validatorClass = NoObjectExists::class;
 
     /**
      * {@inheritDoc}

@@ -14,8 +14,7 @@ use Interop\Container\ContainerInterface;
  */
 class ObjectExistsFactory extends AbstractValidatorFactory
 {
-    /** @var string */
-    protected $validatorClass = ObjectExists::class;
+    protected string $validatorClass = ObjectExists::class;
 
     /**
      * {@inheritDoc}

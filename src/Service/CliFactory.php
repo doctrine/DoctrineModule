@@ -17,14 +17,12 @@ use Symfony\Component\Console\Helper\HelperSet;
  */
 class CliFactory implements FactoryInterface
 {
-    /** @var EventManagerInterface */
-    protected $events;
+    protected ?EventManagerInterface $events = null;
 
-    /** @var HelperSet */
-    protected $helperSet;
+    protected HelperSet $helperSet;
 
     /** @var mixed[] */
-    protected $commands = [];
+    protected array $commands = [];
 
     public function getEventManager(ContainerInterface $container): EventManagerInterface
     {

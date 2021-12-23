@@ -15,32 +15,24 @@ class Cache extends AbstractOptions
 {
     /**
      * Class used to instantiate the cache.
-     *
-     * @var string
      */
-    protected $class = 'Doctrine\Common\Cache\ArrayCache';
+    protected string $class = 'Doctrine\Common\Cache\ArrayCache';
 
     /**
      * Namespace to prefix all cache ids with.
-     *
-     * @var string
      */
-    protected $namespace = '';
+    protected string $namespace = '';
 
     /**
      * Directory for file-based caching
-     *
-     * @var string
      */
-    protected $directory;
+    protected string $directory;
 
     /**
      * Key to use for fetching the memcache, memcached, or redis instance from
      * the service locator. Used only with Memcache. Memcached, and Redis.
-     *
-     * @var string|null
      */
-    protected $instance = null;
+    protected ?string $instance = null;
 
     public function setClass(string $class): self
     {

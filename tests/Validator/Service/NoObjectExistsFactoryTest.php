@@ -24,8 +24,7 @@ class NoObjectExistsFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var NoObjectExistsFactory */
-    private $object;
+    private NoObjectExistsFactory $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.

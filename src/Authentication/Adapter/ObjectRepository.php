@@ -24,18 +24,16 @@ use function sprintf;
  */
 class ObjectRepository extends AbstractAdapter
 {
-    /** @var AuthenticationOptions */
-    protected $options;
+    protected AuthenticationOptions $options;
 
     /**
      * Contains the authentication results.
      *
      * @var mixed[]
      */
-    protected $authenticationResultInfo = null;
+    protected ?array $authenticationResultInfo = null;
 
-    /** @var Inflector */
-    protected $inflector;
+    protected Inflector $inflector;
 
     /**
      * Constructor

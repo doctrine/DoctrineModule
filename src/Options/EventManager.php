@@ -20,7 +20,7 @@ class EventManager extends AbstractOptions
      *
      * @var mixed[]
      */
-    protected $subscribers = [];
+    protected array $subscribers = [];
 
     /**
      * @param mixed[] $subscribers

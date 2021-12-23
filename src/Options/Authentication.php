@@ -62,31 +62,23 @@ class Authentication extends AbstractOptions
 
     /**
      * A valid object implementing ObjectRepository interface (or ObjectManager/identityClass)
-     *
-     * @var ?ObjectRepository
      */
-    protected $objectRepository;
+    protected ?ObjectRepository $objectRepository = null;
 
     /**
      * Entity's class name
-     *
-     * @var string
      */
-    protected $identityClass;
+    protected string $identityClass;
 
     /**
      * Property to use for the identity
-     *
-     * @var string
      */
-    protected $identityProperty;
+    protected string $identityProperty;
 
     /**
      * Property to use for the credential
-     *
-     * @var string
      */
-    protected $credentialProperty;
+    protected string $credentialProperty;
 
     /**
      * Callable function to check if a credential is valid
@@ -98,10 +90,8 @@ class Authentication extends AbstractOptions
     /**
      * If an objectManager is not supplied, this metadata will be used
      * by DoctrineModule/Authentication/Storage/ObjectRepository
-     *
-     * @var ?ClassMetadata
      */
-    protected $classMetadata;
+    protected ?ClassMetadata $classMetadata = null;
 
     /**
      * When using this options class to create a DoctrineModule/Authentication/Storage/ObjectRepository

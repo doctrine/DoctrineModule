@@ -27,14 +27,12 @@ class UniqueObject extends ObjectExists
 
     // phpcs:disable Generic.Files.LineLength
     /** @var mixed[] */
-    protected $messageTemplates = [self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'"];
+    protected array $messageTemplates = [self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'"];
     // phpcs:enable Generic.Files.LineLength
 
-    /** @var ObjectManager */
-    protected $objectManager;
+    protected ObjectManager $objectManager;
 
-    /** @var bool */
-    protected $useContext;
+    protected bool $useContext;
 
     /***
      * Constructor

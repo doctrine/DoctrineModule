@@ -36,47 +36,39 @@ class Proxy implements ObjectManagerAwareInterface
 {
     use ArrayOrTraversableGuardTrait;
 
-    /** @var mixed[] */
-    protected $objects;
+    /** @var iterable<object>|null */
+    protected ?iterable $objects = null;
 
-    /** @var ?string */
-    protected $targetClass;
-
-    /** @var mixed[] */
-    protected $valueOptions = [];
+    protected ?string $targetClass = null;
 
     /** @var mixed[] */
-    protected $findMethod = [];
+    protected array $valueOptions = [];
+
+    /** @var mixed[] */
+    protected array $findMethod = [];
 
     /** @var mixed */
     protected $property;
 
     /** @var mixed[] */
-    protected $optionAttributes = [];
+    protected array $optionAttributes = [];
 
     /** @var callable $labelGenerator A callable used to create a label based on an item in the collection an Entity */
     protected $labelGenerator;
 
-    /** @var bool|null */
-    protected $isMethod;
+    protected ?bool $isMethod = null;
 
-    /** @var ?ObjectManager */
-    protected $objectManager;
+    protected ?ObjectManager $objectManager = null;
 
-    /** @var bool */
-    protected $displayEmptyItem = false;
+    protected bool $displayEmptyItem = false;
 
-    /** @var string */
-    protected $emptyItemLabel = '';
+    protected string $emptyItemLabel = '';
 
-    /** @var string|null */
-    protected $optgroupIdentifier;
+    protected ?string $optgroupIdentifier = null;
 
-    /** @var string|null */
-    protected $optgroupDefault;
+    protected ?string $optgroupDefault = null;
 
-    /** @var Inflector */
-    protected $inflector;
+    protected Inflector $inflector;
 
     public function __construct(?Inflector $inflector = null)
     {
