@@ -11,9 +11,6 @@
     <projectFiles>
         <directory name="src" />
         <ignoreFiles>
-            <file name="src/Form/Element/ObjectMultiCheckboxV2Polyfill.php" />
-            <file name="src/Form/Element/ObjectRadioV2Polyfill.php" />
-            <file name="src/Form/Element/ObjectSelectV2Polyfill.php" />
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
