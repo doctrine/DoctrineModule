@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModuleTest\Form\Element;
 
 use DoctrineModule\Form\Element\ObjectRadio;
+use Laminas\Form\Element;
 
 use function get_class;
 
@@ -15,7 +16,8 @@ use function get_class;
  */
 class ObjectRadioTest extends ProxyAwareElementTestCase
 {
-    protected ObjectRadio $element;
+    /** @var ObjectRadio  */
+    protected Element $element;
 
     /**
      * {@inheritDoc}.

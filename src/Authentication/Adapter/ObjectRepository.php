@@ -31,7 +31,7 @@ class ObjectRepository extends AbstractAdapter
      *
      * @var mixed[]
      */
-    protected array $authenticationResultInfo = null;
+    protected ?array $authenticationResultInfo = null;
 
     protected Inflector $inflector;
 

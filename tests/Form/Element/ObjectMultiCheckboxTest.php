@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Form\Element;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Form\Element\ObjectMultiCheckbox;
+use Laminas\Form\Element;
 
 use function get_class;
 
@@ -18,9 +18,8 @@ use function get_class;
  */
 class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
 {
-    protected ArrayCollection $values;
-
-    protected ObjectMultiCheckbox $element;
+    /** @var ObjectMultiCheckbox  */
+    protected Element $element;
 
     /**
      * {@inheritDoc}.

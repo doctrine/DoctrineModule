@@ -21,11 +21,11 @@ abstract class AbstractFactory implements FactoryInterface
     /**
      * Would normally be set to orm | odm
      */
-    protected string $mappingType;
+    protected ?string $mappingType = null;
 
     protected string $name;
 
-    protected AbstractOptions $options;
+    protected ?AbstractOptions $options = null;
 
     public function __construct(string $name)
     {

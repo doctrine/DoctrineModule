@@ -36,8 +36,8 @@ class Proxy implements ObjectManagerAwareInterface
 {
     use ArrayOrTraversableGuardTrait;
 
-    /** @var mixed[] */
-    protected array $objects;
+    /** @var iterable<object>|null */
+    protected ?iterable $objects = null;
 
     protected ?string $targetClass = null;
 

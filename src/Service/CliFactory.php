@@ -17,7 +17,7 @@ use Symfony\Component\Console\Helper\HelperSet;
  */
 class CliFactory implements FactoryInterface
 {
-    protected EventManagerInterface $events;
+    protected ?EventManagerInterface $events = null;
 
     protected HelperSet $helperSet;
 
