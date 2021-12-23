@@ -20,9 +20,6 @@ class ConfigProvider
             'doctrine' => $this->getDoctrineConfig(),
             'doctrine_factories' => $this->getDoctrineFactoryConfig(),
             'dependencies' => $this->getDependencyConfig(),
-            'controllers' => $this->getControllerConfig(),
-            'route_manager' => $this->getRouteManagerConfig(),
-            'console' => $this->getConsoleConfig(),
             'validators' => $this->getValidatorConfig(),
         ];
     }
@@ -34,53 +31,10 @@ class ConfigProvider
      */
     public function getDependencyConfig(): array
     {
-    // phpcs:disable Generic.Files.LineLength
         return [
             'invokables' => ['DoctrineModule\Authentication\Storage\Session' => 'Laminas\Authentication\Storage\Session'],
             'factories' => ['doctrine.cli' => 'DoctrineModule\Service\CliFactory'],
             'abstract_factories' => ['DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory'],
-        ];
-    }
-
-    // phpcs:enable Generic.Files.LineLength
-
-    /**
-     * Return controller configuration
-     *
-     * @return mixed[]
-     */
-    public function getControllerConfig(): array
-    {
-        return [
-            'factories' => ['DoctrineModule\Controller\Cli' => 'DoctrineModule\Service\CliControllerFactory'],
-        ];
-    }
-
-    /**
-     * Return route manager configuration
-     *
-     * @return mixed[]
-     */
-    public function getRouteManagerConfig(): array
-    {
-        return [
-            'factories' => ['symfony_cli' => 'DoctrineModule\Service\SymfonyCliRouteFactory'],
-        ];
-    }
-
-    /**
-     * Return configuration for console routes
-     *
-     * @return mixed[]
-     */
-    public function getConsoleConfig(): array
-    {
-        return [
-            'router' => [
-                'routes' => [
-                    'doctrine_cli' => ['type' => 'symfony_cli'],
-                ],
-            ],
         ];
     }
 

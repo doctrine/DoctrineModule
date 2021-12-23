@@ -11,15 +11,9 @@ use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application as SymfonyApplication;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-use function assert;
-use function method_exists;
 use function serialize;
 use function unserialize;
-
-use const PHP_VERSION_ID;
 
 /**
  * @covers \DoctrineModule\Module
@@ -80,45 +74,7 @@ class ModuleTest extends TestCase
         $this->assertArrayHasKey('doctrine', $config);
         $this->assertArrayHasKey('doctrine_factories', $config);
         $this->assertArrayHasKey('service_manager', $config);
-        $this->assertArrayHasKey('controllers', $config);
-        $this->assertArrayHasKey('route_manager', $config);
-        $this->assertArrayHasKey('console', $config);
 
         $this->assertSame($config, unserialize(serialize($config)));
-    }
-
-    /**
-     * Should display the help message in plain message
-     *
-     * @covers \DoctrineModule\Module::getConsoleUsage
-     */
-    public function testGetConsoleUsage(): void
-    {
-        if (PHP_VERSION_ID >= 80000) {
-            $this->markTestSkipped('Method getConsoleUsage() is only available PHP <= 7.4.');
-        }
-
-        $this
-            ->cli
-            ->expects($this->once())
-            ->method('run')
-            ->with(
-                $this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
-                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface')
-            )
-            ->will($this->returnCallback(static function (InputInterface $input, OutputInterface $output): void {
-                $output->write($input->getFirstArgument() . ' - TEST');
-                $output->write(' - More output');
-            }));
-
-        $module = new Module();
-        assert(method_exists($module, 'getConsoleUsage'));
-
-        $module->onBootstrap($this->event);
-
-        $this->assertSame(
-            'list - TEST - More output',
-            $module->getConsoleUsage($this->createMock('Laminas\Console\Adapter\AdapterInterface'))
-        );
     }
 }

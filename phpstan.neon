@@ -7,10 +7,6 @@ parameters:
         - src/Form/Element/ObjectMultiCheckboxV2Polyfill.php
         - src/Form/Element/ObjectRadioV2Polyfill.php
         - src/Form/Element/ObjectSelectV2Polyfill.php
-    ignoreErrors:
-        -
-            message: '#Property DoctrineModule\\Module::\$serviceManager is never read, only written.#'
-            path: src/Module.php
 includes:
     - vendor/phpstan/phpstan-phpunit/rules.neon
     - vendor/jangregor/phpstan-prophecy/extension.neon
