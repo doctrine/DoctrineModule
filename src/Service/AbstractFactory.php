@@ -12,7 +12,7 @@ use RuntimeException;
 use function sprintf;
 
 /**
- * Base ServiceManager factory to be extended
+ * Base ServiceManager factory
  *
  * @interal
  */

@@ -16,8 +16,6 @@ use function sprintf;
 
 /**
  * Factory to create authentication adapter object.
- *
- * @link    http://www.doctrine-project.org/
  */
 final class AdapterFactory extends AbstractFactory
 {

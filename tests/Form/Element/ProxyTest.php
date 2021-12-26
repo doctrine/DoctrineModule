@@ -22,8 +22,6 @@ use const PHP_VERSION_ID;
 /**
  * Tests for the Collection pagination adapter
  *
- * @link    http://www.doctrine-project.org/
- *
  * @covers  \DoctrineModule\Form\Element\Proxy
  */
 class ProxyTest extends TestCase

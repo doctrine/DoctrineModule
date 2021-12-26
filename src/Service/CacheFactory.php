@@ -17,8 +17,6 @@ use function sprintf;
 
 /**
  * Cache ServiceManager factory
- *
- * @link    http://www.doctrine-project.org/
  */
 final class CacheFactory extends AbstractFactory
 {

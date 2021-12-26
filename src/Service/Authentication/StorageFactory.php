@@ -16,8 +16,6 @@ use function sprintf;
 
 /**
  * Factory to create authentication storage object.
- *
- * @link    http://www.doctrine-project.org/
  */
 final class StorageFactory extends AbstractFactory
 {

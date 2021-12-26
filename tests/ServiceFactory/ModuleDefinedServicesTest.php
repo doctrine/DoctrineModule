@@ -10,8 +10,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test that verifies that services are defined correctly
- *
- * @link    http://www.doctrine-project.org/
  */
 class ModuleDefinedServicesTest extends TestCase
 {

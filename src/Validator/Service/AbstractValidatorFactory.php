@@ -16,7 +16,7 @@ use function is_string;
 use function sprintf;
 
 /**
- * Base validator factory to be extended
+ * Base validator factory
  *
  * @internal
  */

@@ -9,8 +9,6 @@ use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 
 /**
  * Bridge class that allows usage of a Doctrine Cache Storage as a Laminas Cache Storage
- *
- * @link    http://www.doctrine-project.org/
  */
 class DoctrineCacheStorage extends AbstractAdapter
 {

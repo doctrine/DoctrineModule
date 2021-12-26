@@ -23,8 +23,6 @@ use function sprintf;
 
 /**
  * MappingDriver ServiceManager factory
- *
- * @link    http://www.doctrine-project.org/
  */
 final class DriverFactory extends AbstractFactory
 {

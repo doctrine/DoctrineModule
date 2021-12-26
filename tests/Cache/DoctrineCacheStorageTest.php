@@ -28,8 +28,6 @@ use function ucwords;
 /**
  * Tests for the cache bridge
  *
- * @link    http://www.doctrine-project.org/
- *
  * @todo extend \ZendTest\Cache\Storage\CommonAdapterTest instead
  * @covers \DoctrineModule\Cache\DoctrineCacheStorage
  */

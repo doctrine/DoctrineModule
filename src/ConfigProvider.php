@@ -6,8 +6,6 @@ namespace DoctrineModule;
 
 /**
  * Config provider for DoctrineORMModule config
- *
- * @link    www.doctrine-project.org
  */
 final class ConfigProvider
 {

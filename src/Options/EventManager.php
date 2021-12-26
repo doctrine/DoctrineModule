@@ -8,8 +8,6 @@ use Laminas\Stdlib\AbstractOptions;
 
 /**
  * EventManager options
- *
- * @link    http://www.doctrine-project.org/
  */
 final class EventManager extends AbstractOptions
 {

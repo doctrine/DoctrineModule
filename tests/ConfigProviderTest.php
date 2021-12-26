@@ -12,8 +12,6 @@ use function unserialize;
 
 /**
  * Tests used to ensure ConfigProvider operates as expected
- *
- * @link    http://www.doctrine-project.org/
  */
 class ConfigProviderTest extends TestCase
 {
