@@ -16,10 +16,8 @@ use function sprintf;
  *
  * @interal
  */
-// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 abstract class AbstractFactory implements FactoryInterface
 {
-// phpcs:enable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
     /**
      * Would normally be set to orm | odm
      */

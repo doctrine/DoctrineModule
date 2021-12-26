@@ -20,10 +20,8 @@ use function sprintf;
  *
  * @internal
  */
-// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 abstract class AbstractValidatorFactory implements FactoryInterface
 {
-// phpcs:enable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
     public const DEFAULT_OBJECTMANAGER_KEY = 'doctrine.entitymanager.orm_default';
 
     /** @var mixed[] */
