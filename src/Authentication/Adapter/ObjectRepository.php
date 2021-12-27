@@ -19,8 +19,6 @@ use function sprintf;
 
 /**
  * Authentication adapter that uses a Doctrine object for verification.
- *
- * @link    http://www.doctrine-project.org/
  */
 class ObjectRepository extends AbstractAdapter
 {

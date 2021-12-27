@@ -16,14 +16,12 @@ use function is_string;
 use function sprintf;
 
 /**
- * Factory for creating NoObjectExists instances
+ * Base validator factory
  *
- * @link http://www.doctrine-project.org/
+ * @internal
  */
-// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 abstract class AbstractValidatorFactory implements FactoryInterface
 {
-// phpcs:enable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
     public const DEFAULT_OBJECTMANAGER_KEY = 'doctrine.entitymanager.orm_default';
 
     /** @var mixed[] */

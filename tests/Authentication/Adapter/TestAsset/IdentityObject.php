@@ -6,8 +6,6 @@ namespace DoctrineModuleTest\Authentication\Adapter\TestAsset;
 
 /**
  * Simple mock object for authentication adapter test
- *
- * @link    http://www.doctrine-project.org/
  */
 class IdentityObject
 {

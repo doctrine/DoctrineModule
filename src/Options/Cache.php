@@ -8,10 +8,8 @@ use Laminas\Stdlib\AbstractOptions;
 
 /**
  * Cache options
- *
- * @link    http://www.doctrine-project.org/
  */
-class Cache extends AbstractOptions
+final class Cache extends AbstractOptions
 {
     /**
      * Class used to instantiate the cache.

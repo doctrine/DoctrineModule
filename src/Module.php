@@ -13,10 +13,8 @@ use function class_exists;
 
 /**
  * Base module for integration of Doctrine projects with Laminas applications
- *
- * @link    http://www.doctrine-project.org/
  */
-class Module implements ConfigProviderInterface, InitProviderInterface
+final class Module implements ConfigProviderInterface, InitProviderInterface
 {
     public function init(ModuleManagerInterface $manager): void
     {

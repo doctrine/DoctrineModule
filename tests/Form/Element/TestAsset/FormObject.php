@@ -8,8 +8,6 @@ use function assert;
 
 /**
  * Simple mock object for form element adapter test
- *
- * @link    http://www.doctrine-project.org/
  */
 class FormObject
 {

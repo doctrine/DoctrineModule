@@ -12,10 +12,8 @@ use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * CLI Application ServiceManager factory responsible for instantiating a Symfony CLI application
- *
- * @link    http://www.doctrine-project.org/
  */
-class CliFactory implements FactoryInterface
+final class CliFactory implements FactoryInterface
 {
     protected ?EventManagerInterface $events = null;
 

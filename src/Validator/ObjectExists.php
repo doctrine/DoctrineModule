@@ -22,8 +22,6 @@ use function sprintf;
 
 /**
  * Class that validates if objects exist in a given repository with a given list of matched fields
- *
- * @link    http://www.doctrine-project.org/
  */
 class ObjectExists extends AbstractValidator
 {

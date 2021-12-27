@@ -17,10 +17,8 @@ use function sprintf;
 
 /**
  * Cache ServiceManager factory
- *
- * @link    http://www.doctrine-project.org/
  */
-class CacheFactory extends AbstractFactory
+final class CacheFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}

@@ -12,8 +12,6 @@ use function get_class;
 /**
  * Tests for the ObjectMultiCheckbox element
  *
- * @link    http://www.doctrine-project.org/
- *
  * @covers  \DoctrineModule\Form\Element\ObjectMultiCheckbox
  */
 class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase

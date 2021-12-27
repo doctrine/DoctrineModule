@@ -23,10 +23,8 @@ use function sprintf;
 
 /**
  * MappingDriver ServiceManager factory
- *
- * @link    http://www.doctrine-project.org/
  */
-class DriverFactory extends AbstractFactory
+final class DriverFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}

@@ -8,8 +8,6 @@ use function is_object;
 
 /**
  * Class that validates if objects does not exist in a given repository with a given list of matched fields
- *
- * @link    http://www.doctrine-project.org/
  */
 class NoObjectExists extends ObjectExists
 {

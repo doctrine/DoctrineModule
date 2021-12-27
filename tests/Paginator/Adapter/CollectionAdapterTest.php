@@ -12,8 +12,6 @@ use function range;
 
 /**
  * Tests for the Collection pagination adapter
- *
- * @link    http://www.doctrine-project.org/
  */
 class CollectionAdapterTest extends TestCase
 {

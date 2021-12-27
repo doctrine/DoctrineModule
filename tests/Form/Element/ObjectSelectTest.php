@@ -12,8 +12,6 @@ use function get_class;
 /**
  * Tests for the ObjectSelect element
  *
- * @link    http://www.doctrine-project.org/
- *
  * @covers  \DoctrineModule\Form\Element\ObjectSelect
  */
 class ObjectSelectTest extends ProxyAwareElementTestCase

@@ -13,8 +13,6 @@ use function count;
 
 /**
  * Provides a wrapper around a Selectable object
- *
- * @link    http://www.doctrine-project.org/
  */
 class Selectable implements AdapterInterface
 {

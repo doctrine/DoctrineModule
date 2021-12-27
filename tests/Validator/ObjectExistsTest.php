@@ -13,8 +13,6 @@ use function str_replace;
 /**
  * Tests for the ObjectExists validator
  *
- * @link    http://www.doctrine-project.org/
- *
  * @covers \DoctrineModule\Validator\ObjectExists
  */
 class ObjectExistsTest extends BaseTestCase

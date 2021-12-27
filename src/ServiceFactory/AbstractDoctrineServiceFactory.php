@@ -13,10 +13,8 @@ use function preg_match;
 /**
  * Abstract service factory capable of instantiating services whose names match the
  * pattern <code>doctrine.$serviceType.$serviceName</doctrine>
- *
- * @link    http://www.doctrine-project.org/
  */
-class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
+final class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
 {
     /**
      * {@inheritDoc}

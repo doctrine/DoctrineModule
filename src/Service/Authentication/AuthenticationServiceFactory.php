@@ -11,10 +11,8 @@ use Laminas\Authentication\AuthenticationService;
 
 /**
  * Factory to create authentication service object.
- *
- * @link    http://www.doctrine-project.org/
  */
-class AuthenticationServiceFactory extends AbstractFactory
+final class AuthenticationServiceFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}

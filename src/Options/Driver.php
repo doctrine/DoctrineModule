@@ -8,10 +8,8 @@ use Laminas\Stdlib\AbstractOptions;
 
 /**
  * MappingDriver options
- *
- * @link    http://www.doctrine-project.org/
  */
-class Driver extends AbstractOptions
+final class Driver extends AbstractOptions
 {
     /**
      * The class name of the Driver.
