@@ -10,7 +10,9 @@ use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Stdlib\ArrayUtils;
+use LogicException;
 
+use function class_exists;
 use function interface_exists;
 use function is_string;
 use function sprintf;
@@ -45,6 +47,10 @@ abstract class AbstractValidatorFactory implements FactoryInterface
 
         $objectManager   = $this->getObjectManager($container, $options);
         $targetClassName = $options['target_class'];
+
+        if (! class_exists($targetClassName)) {
+            throw new LogicException(sprintf('Class %s could not be found.', $targetClassName));
+        }
 
         return $objectManager->getRepository($targetClassName);
     }

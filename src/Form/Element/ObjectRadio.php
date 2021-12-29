@@ -45,6 +45,8 @@ class ObjectRadio extends RadioElement
 
     /**
      * {@inheritDoc}
+     *
+     * @return array<array-key,mixed>
      */
     public function getValueOptions(): array
     {

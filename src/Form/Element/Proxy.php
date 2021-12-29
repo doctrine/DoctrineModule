@@ -231,6 +231,8 @@ class Proxy implements ObjectManagerAwareInterface
 
     /**
      * Get the target class
+     *
+     * @return class-string
      */
     public function getTargetClass(): string
     {
@@ -396,7 +398,7 @@ class Proxy implements ObjectManagerAwareInterface
 
         if (! $findMethod) {
             $findMethodName = 'findAll';
-            $repository     = $this->objectManager->getRepository($this->targetClass);
+            $repository     = $this->objectManager->getRepository($this->getTargetClass());
             $objects        = $repository->findAll();
         } else {
             if (! isset($findMethod['name'])) {
@@ -405,7 +407,7 @@ class Proxy implements ObjectManagerAwareInterface
 
             $findMethodName   = $findMethod['name'];
             $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : [];
-            $repository       = $this->objectManager->getRepository($this->targetClass);
+            $repository       = $this->objectManager->getRepository($this->getTargetClass());
 
             if (! method_exists($repository, $findMethodName)) {
                 throw new RuntimeException(

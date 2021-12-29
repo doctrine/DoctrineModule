@@ -65,6 +65,8 @@ final class Authentication extends AbstractOptions
 
     /**
      * Entity's class name
+     *
+     * @psalm-var class-string
      */
     protected string $identityClass;
 

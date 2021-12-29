@@ -112,7 +112,7 @@ class UniqueObject extends ObjectExists
     protected function getFoundIdentifiers(object $match): array
     {
         return $this->objectManager
-                    ->getClassMetadata($this->objectRepository->getClassName())
+                    ->getClassMetadata($this->getClassName())
                     ->getIdentifierValues($match);
     }
 
@@ -137,7 +137,7 @@ class UniqueObject extends ObjectExists
 
         if ($context instanceof $className) {
             return $this->objectManager
-                        ->getClassMetadata($this->objectRepository->getClassName())
+                        ->getClassMetadata($this->getClassName())
                         ->getIdentifierValues($context);
         }
 
@@ -159,7 +159,15 @@ class UniqueObject extends ObjectExists
     protected function getIdentifiers(): array
     {
         return $this->objectManager
-                    ->getClassMetadata($this->objectRepository->getClassName())
+                    ->getClassMetadata($this->getClassName())
                     ->getIdentifierFieldNames();
+    }
+
+    /**
+     * @return class-string
+     */
+    protected function getClassName(): string
+    {
+        return $this->objectRepository->getClassName();
     }
 }

@@ -30,6 +30,8 @@ class Collection implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @return list<T>
      */
     public function getItems($offset, $itemCountPerPage)
     {
