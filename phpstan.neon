@@ -1,12 +1,9 @@
 parameters:
-    level: 5
+    level: 6
+    checkGenericClassInNonGenericObjectType: false
     paths:
         - src
         - tests
-    excludePaths:
-        - src/Form/Element/ObjectMultiCheckboxV2Polyfill.php
-        - src/Form/Element/ObjectRadioV2Polyfill.php
-        - src/Form/Element/ObjectSelectV2Polyfill.php
 includes:
     - vendor/phpstan/phpstan-phpunit/rules.neon
     - vendor/jangregor/phpstan-prophecy/extension.neon
