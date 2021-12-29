@@ -65,6 +65,8 @@ final class Authentication extends AbstractOptions
 
     /**
      * Entity's class name
+     *
+     * @psalm-var class-string
      */
     protected string $identityClass;
 
@@ -99,7 +101,7 @@ final class Authentication extends AbstractOptions
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
-     * @var StorageInterface|string;
+     * @var StorageInterface|string
      */
     protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
@@ -158,7 +160,7 @@ final class Authentication extends AbstractOptions
      */
     public function setIdentityProperty(string $identityProperty): Authentication
     {
-        if (! is_string($identityProperty) || $identityProperty === '') {
+        if ($identityProperty === '') {
             throw new Exception\InvalidArgumentException(
                 sprintf('Provided $identityProperty is invalid, %s given', gettype($identityProperty))
             );
@@ -179,7 +181,7 @@ final class Authentication extends AbstractOptions
      */
     public function setCredentialProperty(string $credentialProperty): Authentication
     {
-        if (! is_string($credentialProperty) || $credentialProperty === '') {
+        if ($credentialProperty === '') {
             throw new Exception\InvalidArgumentException(
                 sprintf('Provided $credentialProperty is invalid, %s given', gettype($credentialProperty))
             );

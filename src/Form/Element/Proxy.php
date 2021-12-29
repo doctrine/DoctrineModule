@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Form\Element;
 
+use BadMethodCallException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
@@ -231,6 +232,8 @@ class Proxy implements ObjectManagerAwareInterface
 
     /**
      * Get the target class
+     *
+     * @return class-string
      */
     public function getTargetClass(): string
     {
@@ -281,7 +284,7 @@ class Proxy implements ObjectManagerAwareInterface
 
     public function setOptgroupIdentifier(string $optgroupIdentifier): void
     {
-        $this->optgroupIdentifier = (string) $optgroupIdentifier;
+        $this->optgroupIdentifier = $optgroupIdentifier;
     }
 
     public function getOptgroupDefault(): ?string
@@ -291,7 +294,7 @@ class Proxy implements ObjectManagerAwareInterface
 
     public function setOptgroupDefault(string $optgroupDefault): void
     {
-        $this->optgroupDefault = (string) $optgroupDefault;
+        $this->optgroupDefault = $optgroupDefault;
     }
 
     /**
@@ -299,7 +302,7 @@ class Proxy implements ObjectManagerAwareInterface
      */
     public function setIsMethod(bool $method): Proxy
     {
-        $this->isMethod = (bool) $method;
+        $this->isMethod = $method;
 
         return $this;
     }
@@ -367,13 +370,15 @@ class Proxy implements ObjectManagerAwareInterface
                 $metadata   = $this->getObjectManager()->getClassMetadata(get_class($value));
                 $identifier = $metadata->getIdentifierFieldNames();
 
-                // TODO: handle composite (multiple) identifiers
                 if ($identifier !== null && count($identifier) > 1) {
-                    //$value = $key;
-                    $todo = true;
-                } else {
-                    $value = current($metadata->getIdentifierValues($value));
+                    // Handling composite (multiple) identifiers is not yet supported
+                    throw new BadMethodCallException(sprintf(
+                        'Composite identiers are not yet supported in %s.',
+                        self::class
+                    ));
                 }
+
+                $value = current($metadata->getIdentifierValues($value));
             }
         }
 
@@ -392,11 +397,11 @@ class Proxy implements ObjectManagerAwareInterface
             return;
         }
 
-        $findMethod = (array) $this->getFindMethod();
+        $findMethod = $this->getFindMethod();
 
         if (! $findMethod) {
             $findMethodName = 'findAll';
-            $repository     = $this->objectManager->getRepository($this->targetClass);
+            $repository     = $this->objectManager->getRepository($this->getTargetClass());
             $objects        = $repository->findAll();
         } else {
             if (! isset($findMethod['name'])) {
@@ -405,7 +410,7 @@ class Proxy implements ObjectManagerAwareInterface
 
             $findMethodName   = $findMethod['name'];
             $findMethodParams = isset($findMethod['params']) ? array_change_key_case($findMethod['params']) : [];
-            $repository       = $this->objectManager->getRepository($this->targetClass);
+            $repository       = $this->objectManager->getRepository($this->getTargetClass());
 
             if (! method_exists($repository, $findMethodName)) {
                 throw new RuntimeException(

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\Annotations;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
@@ -17,7 +19,6 @@ use RuntimeException;
 use function class_exists;
 use function get_class;
 use function interface_exists;
-use function is_array;
 use function is_subclass_of;
 use function sprintf;
 
@@ -71,9 +72,8 @@ final class DriverFactory extends AbstractFactory
 
         // Special options for AnnotationDrivers.
         if (
-            $class !== 'Doctrine\ORM\Mapping\Driver\AttributeDriver' && (
-                $class === 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver'
-                || is_subclass_of($class, 'Doctrine\Persistence\Mapping\Driver\AnnotationDriver'))
+            $class !== AttributeDriver::class &&
+            ($class === AnnotationDriver::class || is_subclass_of($class, AnnotationDriver::class))
         ) {
             $reader = new Annotations\AnnotationReader();
             $reader = new Annotations\CachedReader(
@@ -88,7 +88,7 @@ final class DriverFactory extends AbstractFactory
         if ($options->getExtension() && $driver instanceof FileDriver) {
             $locator = $driver->getLocator();
 
-            if (get_class($locator) !== 'Doctrine\Persistence\Mapping\Driver\DefaultFileLocator') {
+            if (get_class($locator) !== DefaultFileLocator::class) {
                 throw new InvalidArgumentException(
                     sprintf(
                         'Discovered file locator for driver of type "%s" is an instance of "%s". This factory '
@@ -105,10 +105,6 @@ final class DriverFactory extends AbstractFactory
         // Extra post-create options for DriverChain.
         if ($driver instanceof MappingDriverChain && $options->getDrivers()) {
             $drivers = $options->getDrivers();
-
-            if (! is_array($drivers)) {
-                $drivers = [$drivers];
-            }
 
             foreach ($drivers as $namespace => $driverName) {
                 if ($driverName === null) {

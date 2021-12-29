@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\ObjectExists;
 use DoctrineModule\Validator\Service\ObjectExistsFactory;
+use DoctrineModuleTest\Validator\TestAsset\DummyClass;
 use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -39,13 +40,13 @@ class ObjectExistsFactoryTest extends TestCase
     public function testInvoke(): void
     {
         $options = [
-            'target_class' => 'Foo\Bar',
+            'target_class' => DummyClass::class,
             'fields'       => ['test'],
         ];
 
         $repository    = $this->prophesize(ObjectRepository::class);
         $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository('Foo\Bar')
+        $objectManager->getRepository(DummyClass::class)
             ->shouldBeCalled()
             ->willReturn($repository->reveal());
 

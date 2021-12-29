@@ -58,6 +58,8 @@ class ObjectMultiCheckbox extends MultiCheckbox
 
     /**
      * {@inheritDoc}
+     *
+     * @return array<array-key,mixed>
      */
     public function getValueOptions(): array
     {

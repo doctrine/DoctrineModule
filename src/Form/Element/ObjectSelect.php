@@ -64,6 +64,8 @@ class ObjectSelect extends SelectElement
 
     /**
      * {@inheritDoc}
+     *
+     * @return array<array-key,mixed>
      */
     public function getValueOptions(): array
     {
