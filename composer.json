@@ -59,7 +59,7 @@
         "laminas/laminas-mvc": "^3.3.0",
         "laminas/laminas-paginator": "^2.12.1",
         "laminas/laminas-servicemanager": "^3.10.0",
-        "laminas/laminas-stdlib": "^3.6.2",
+        "laminas/laminas-stdlib": "^3.6.4",
         "laminas/laminas-validator": "^2.15.1",
         "symfony/console": "^5.4.1 || ^6.0.1"
     },
@@ -79,9 +79,9 @@
         "phpspec/prophecy-phpunit": "^2.0.1",
         "phpstan/phpstan": "^1.2.0",
         "phpstan/phpstan-phpunit": "^1.0.0",
-        "phpunit/phpunit": "^9.5.10",
+        "phpunit/phpunit": "^9.5.11",
         "predis/predis": "^1.1.9",
-        "vimeo/psalm": "^4.15.0"
+        "vimeo/psalm": "^4.16.1"
     },
     "suggest": {
         "doctrine/data-fixtures":         "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
