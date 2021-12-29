@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Validator\Service;
 
+use BadMethodCallException;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Stdlib\ArrayUtils;
-use LogicException;
 
 use function class_exists;
 use function interface_exists;
@@ -49,7 +49,7 @@ abstract class AbstractValidatorFactory implements FactoryInterface
         $targetClassName = $options['target_class'];
 
         if (! class_exists($targetClassName)) {
-            throw new LogicException(sprintf('Class %s could not be found.', $targetClassName));
+            throw new BadMethodCallException(sprintf('Class %s could not be found.', $targetClassName));
         }
 
         return $objectManager->getRepository($targetClassName);
