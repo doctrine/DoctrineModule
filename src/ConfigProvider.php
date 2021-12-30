@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace DoctrineModule;
 
+use Doctrine\Common\Cache;
+use Laminas\Authentication\Storage\Session as LaminasSessionStorage;
+
 /**
  * Config provider for DoctrineORMModule config
  */
@@ -30,9 +33,9 @@ final class ConfigProvider
     public function getDependencyConfig(): array
     {
         return [
-            'invokables' => ['DoctrineModule\Authentication\Storage\Session' => 'Laminas\Authentication\Storage\Session'],
-            'factories' => ['doctrine.cli' => 'DoctrineModule\Service\CliFactory'],
-            'abstract_factories' => ['DoctrineModule' => 'DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory'],
+            'invokables' => ['DoctrineModule\Authentication\Storage\Session' => LaminasSessionStorage::class],
+            'factories' => ['doctrine.cli' => Service\CliFactory::class],
+            'abstract_factories' => ['DoctrineModule' => ServiceFactory\AbstractDoctrineServiceFactory::class],
         ];
     }
 
@@ -46,52 +49,52 @@ final class ConfigProvider
         return [
             'cache' => [
                 'apc' => [
-                    'class'     => 'Doctrine\Common\Cache\ApcCache',
+                    'class'     => Cache\ApcCache::class,
                     'namespace' => 'DoctrineModule',
                 ],
                 'apcu' => [
-                    'class'     => 'Doctrine\Common\Cache\ApcuCache',
+                    'class'     => Cache\ApcuCache::class,
                     'namespace' => 'DoctrineModule',
                 ],
                 'array' => [
-                    'class' => 'Doctrine\Common\Cache\ArrayCache',
+                    'class' => Cache\ArrayCache::class,
                     'namespace' => 'DoctrineModule',
                 ],
                 'filesystem' => [
-                    'class'     => 'Doctrine\Common\Cache\FilesystemCache',
+                    'class'     => Cache\FilesystemCache::class,
                     'directory' => 'data/DoctrineModule/cache',
                     'namespace' => 'DoctrineModule',
                 ],
                 'memcache' => [
-                    'class'     => 'Doctrine\Common\Cache\MemcacheCache',
+                    'class'     => Cache\MemcacheCache::class,
                     'instance'  => 'my_memcache_alias',
                     'namespace' => 'DoctrineModule',
                 ],
                 'memcached' => [
-                    'class'     => 'Doctrine\Common\Cache\MemcachedCache',
+                    'class'     => Cache\MemcachedCache::class,
                     'instance'  => 'my_memcached_alias',
                     'namespace' => 'DoctrineModule',
                 ],
                 'predis' => [
-                    'class'     => 'Doctrine\Common\Cache\PredisCache',
+                    'class'     => Cache\PredisCache::class,
                     'instance'  => 'my_predis_alias',
                     'namespace' => 'DoctrineModule',
                 ],
                 'redis' => [
-                    'class'     => 'Doctrine\Common\Cache\RedisCache',
+                    'class'     => Cache\RedisCache::class,
                     'instance'  => 'my_redis_alias',
                     'namespace' => 'DoctrineModule',
                 ],
                 'wincache' => [
-                    'class'     => 'Doctrine\Common\Cache\WinCacheCache',
+                    'class'     => Cache\WinCacheCache::class,
                     'namespace' => 'DoctrineModule',
                 ],
                 'xcache' => [
-                    'class'     => 'Doctrine\Common\Cache\XcacheCache',
+                    'class'     => Cache\XcacheCache::class,
                     'namespace' => 'DoctrineModule',
                 ],
                 'zenddata' => [
-                    'class'     => 'Doctrine\Common\Cache\ZendDataCache',
+                    'class'     => Cache\ZendDataCache::class,
                     'namespace' => 'DoctrineModule',
                 ],
             ],
@@ -126,12 +129,12 @@ final class ConfigProvider
     public function getDoctrineFactoryConfig(): array
     {
         return [
-            'cache'                 => 'DoctrineModule\Service\CacheFactory',
-            'eventmanager'          => 'DoctrineModule\Service\EventManagerFactory',
-            'driver'                => 'DoctrineModule\Service\DriverFactory',
-            'authenticationadapter' => 'DoctrineModule\Service\Authentication\AdapterFactory',
-            'authenticationstorage' => 'DoctrineModule\Service\Authentication\StorageFactory',
-            'authenticationservice' => 'DoctrineModule\Service\Authentication\AuthenticationServiceFactory',
+            'cache'                 => Service\CacheFactory::class,
+            'eventmanager'          => Service\EventManagerFactory::class,
+            'driver'                => Service\DriverFactory::class,
+            'authenticationadapter' => Service\Authentication\AdapterFactory::class,
+            'authenticationstorage' => Service\Authentication\StorageFactory::class,
+            'authenticationservice' => Service\Authentication\AuthenticationServiceFactory::class,
         ];
     }
 

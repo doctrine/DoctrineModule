@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Options;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Laminas\Stdlib\AbstractOptions;
 
 /**
@@ -14,7 +15,7 @@ final class Cache extends AbstractOptions
     /**
      * Class used to instantiate the cache.
      */
-    protected string $class = 'Doctrine\Common\Cache\ArrayCache';
+    protected string $class = ArrayCache::class;
 
     /**
      * Namespace to prefix all cache ids with.
