@@ -4,23 +4,29 @@
   "slug": "doctrine-module",
   "versions": [
     {
-      "name": "5.0",
-      "branchName": "5.0.x",
-      "slug": "5.0",
-      "aliases":[
+      "name": "5.1",
+      "branchName": "5.1.x",
+      "slug": "5.1",
+      "aliases": [
         "latest"
       ],
       "upcoming": true
     },
     {
-      "name": "4.4",
-      "branchName": "4.4.x",
-      "slug": "4.4",
-      "aliases":[
+      "name": "5.0",
+      "branchName": "5.0.x",
+      "slug": "5.0",
+      "aliases": [
         "current",
         "stable"
       ],
       "current": true,
+      "maintained": true
+    },
+    {
+      "name": "4.4",
+      "branchName": "4.4.x",
+      "slug": "4.4",
       "maintained": true
     },
     {
