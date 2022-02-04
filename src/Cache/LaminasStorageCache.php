@@ -13,13 +13,10 @@ use Laminas\Cache\Storage\TotalSpaceCapableInterface;
 
 /**
  * Bridge class that allows usage of a Laminas Cache Storage as a Doctrine Cache
- *
- * @link    http://www.doctrine-project.org/
  */
 class LaminasStorageCache extends CacheProvider
 {
-    /** @var StorageInterface */
-    protected $storage;
+    protected StorageInterface $storage;
 
     public function __construct(StorageInterface $storage)
     {

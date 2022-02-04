@@ -14,8 +14,6 @@ use function crypt;
 
 /**
  * Tests for the ObjectRepository based authentication adapter
- *
- * @link    http://www.doctrine-project.org/
  */
 class ObjectRepositoryTest extends BaseTestCase
 {

@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\Service\UniqueObjectFactory;
 use DoctrineModule\Validator\UniqueObject;
+use DoctrineModuleTest\Validator\TestAsset\DummyClass;
 use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -22,8 +23,7 @@ class UniqueObjectFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var UniqueObjectFactory */
-    private $object;
+    private UniqueObjectFactory $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -40,13 +40,13 @@ class UniqueObjectFactoryTest extends TestCase
     public function testInvoke(): void
     {
         $options = [
-            'target_class' => 'Foo\Bar',
+            'target_class' => DummyClass::class,
             'fields'       => ['test'],
         ];
 
         $repository    = $this->prophesize(ObjectRepository::class);
         $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository('Foo\Bar')
+        $objectManager->getRepository(DummyClass::class)
             ->shouldBeCalled()
             ->willReturn($repository->reveal());
 

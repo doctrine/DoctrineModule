@@ -17,7 +17,7 @@ use function count;
 class Collection implements AdapterInterface
 {
     /** @var DoctrineCollection<TKey,T> */
-    protected $collection;
+    protected DoctrineCollection $collection;
 
     /**
      * @param DoctrineCollection<TKey,T> $collection
@@ -29,16 +29,15 @@ class Collection implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @return list<T>
      */
     public function getItems($offset, $itemCountPerPage)
     {
         return array_values($this->collection->slice($offset, $itemCountPerPage));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function count()
+    public function count(): int
     {
         return count($this->collection);
     }

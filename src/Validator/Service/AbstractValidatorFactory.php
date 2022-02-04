@@ -4,34 +4,32 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Validator\Service;
 
+use BadMethodCallException;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\ArrayUtils;
 
+use function class_exists;
 use function interface_exists;
 use function is_string;
 use function sprintf;
 
 /**
- * Factory for creating NoObjectExists instances
+ * Base validator factory
  *
- * @link http://www.doctrine-project.org/
+ * @internal
  */
-// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 abstract class AbstractValidatorFactory implements FactoryInterface
 {
-// phpcs:enable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
     public const DEFAULT_OBJECTMANAGER_KEY = 'doctrine.entitymanager.orm_default';
 
     /** @var mixed[] */
-    protected $creationOptions = [];
+    protected array $creationOptions = [];
 
-    /** @var string $validatorClass */
-    protected $validatorClass;
+    protected string $validatorClass;
 
     /**
      * @param mixed[] $options
@@ -49,6 +47,10 @@ abstract class AbstractValidatorFactory implements FactoryInterface
 
         $objectManager   = $this->getObjectManager($container, $options);
         $targetClassName = $options['target_class'];
+
+        if (! class_exists($targetClassName)) {
+            throw new BadMethodCallException(sprintf('Class %s could not be found.', $targetClassName));
+        }
 
         return $objectManager->getRepository($targetClassName);
     }
@@ -94,39 +96,6 @@ abstract class AbstractValidatorFactory implements FactoryInterface
     protected function merge(array $previousOptions, array $newOptions): array
     {
         return ArrayUtils::merge($previousOptions, $newOptions, true);
-    }
-
-    /**
-     * Helper method for Laminas compatiblity.
-     *
-     * In Laminas v2 the plugin manager instance if passed to `createService`
-     * instead of the global service manager instance (as in Laminas v3).
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     */
-    protected function container(ContainerInterface $container): ContainerInterface
-    {
-        return $container;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, $this->validatorClass, $this->creationOptions);
-    }
-
-    /**
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     *
-     * @param mixed[] $options
-     */
-    public function setCreationOptions(array $options): void
-    {
-        $this->creationOptions = $options;
     }
 }
 

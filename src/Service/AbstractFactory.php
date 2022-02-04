@@ -12,24 +12,20 @@ use RuntimeException;
 use function sprintf;
 
 /**
- * Base ServiceManager factory to be extended
+ * Base ServiceManager factory
+ *
+ * @interal
  */
-// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 abstract class AbstractFactory implements FactoryInterface
 {
-// phpcs:enable SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
     /**
      * Would normally be set to orm | odm
-     *
-     * @var string
      */
-    protected $mappingType;
+    protected ?string $mappingType = null;
 
-    /** @var string */
-    protected $name;
+    protected string $name;
 
-    /** @var AbstractOptions */
-    protected $options;
+    protected ?AbstractOptions $options = null;
 
     public function __construct(string $name)
     {

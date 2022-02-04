@@ -13,8 +13,6 @@ use function range;
 
 /**
  * Tests for the Selectable pagination adapter
- *
- * @link    http://www.doctrine-project.org/
  */
 class SelectableAdapterTest extends TestCase
 {

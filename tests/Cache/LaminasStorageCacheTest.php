@@ -12,8 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the cache bridge
- *
- * @link    http://www.doctrine-project.org/
  */
 class LaminasStorageCacheTest extends TestCase
 {

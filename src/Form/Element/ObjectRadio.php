@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Form\Element;
 
-use Laminas\Form\Element\Select as SelectElement;
-use Laminas\Stdlib\ArrayUtils;
-use Traversable;
+use Laminas\Form\Element\Radio as RadioElement;
 
-use function array_map;
-use function is_array;
-
-class ObjectSelectV3Polyfill extends SelectElement
+class ObjectRadio extends RadioElement
 {
     use GetProxy;
 
     /**
-     * @param array|Traversable $options
+     * @param iterable<mixed> $options
      *
-     * {@inheritDoc}
+     * @return $this
      */
-    public function setOptions($options): self
+    public function setOptions(iterable $options): self
     {
         $this->getProxy()->setOptions($options);
 
@@ -29,8 +24,9 @@ class ObjectSelectV3Polyfill extends SelectElement
 
     /**
      * @param mixed $value
+     * @param mixed $key
      *
-     * {@inheritDoc}
+     * @return $this
      */
     public function setOption($key, $value): self
     {
@@ -44,25 +40,13 @@ class ObjectSelectV3Polyfill extends SelectElement
      */
     public function setValue($value)
     {
-        $multiple = $this->getAttribute('multiple');
-
-        if ($multiple === true || $multiple === 'multiple') {
-            if ($value instanceof Traversable) {
-                $value = ArrayUtils::iteratorToArray($value);
-            } elseif ($value === null) {
-                return parent::setValue([]);
-            } elseif (! is_array($value)) {
-                $value = (array) $value;
-            }
-
-            return parent::setValue(array_map([$this->getProxy(), 'getValue'], $value));
-        }
-
         return parent::setValue($this->getProxy()->getValue($value));
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return array<array-key,mixed>
      */
     public function getValueOptions(): array
     {

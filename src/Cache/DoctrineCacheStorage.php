@@ -6,21 +6,20 @@ namespace DoctrineModule\Cache;
 
 use Doctrine\Common\Cache\Cache;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 
 /**
  * Bridge class that allows usage of a Doctrine Cache Storage as a Laminas Cache Storage
- *
- * @link    http://www.doctrine-project.org/
  */
 class DoctrineCacheStorage extends AbstractAdapter
 {
-    /** @var Cache */
-    protected $cache;
+    protected Cache $cache;
 
     /**
      * {@inheritDoc}
      *
-     * @param Cache $cache
+     * @param iterable<mixed>|AdapterOptions $options
+     * @param Cache                          $cache
      */
     public function __construct($options, Cache $cache)
     {

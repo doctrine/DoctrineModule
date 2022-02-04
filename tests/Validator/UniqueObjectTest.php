@@ -17,8 +17,6 @@ use function str_replace;
 
 /**
  * Tests for the UniqueObject validator
- *
- * @link    http://www.doctrine-project.org/
  */
 class UniqueObjectTest extends BaseTestCase
 {

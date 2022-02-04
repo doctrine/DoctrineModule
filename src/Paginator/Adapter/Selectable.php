@@ -13,19 +13,21 @@ use function count;
 /**
  * Provides a wrapper around a Selectable object
  *
- * @link    http://www.doctrine-project.org/
+ * @psalm-template TKey of array-key
+ * @psalm-template T
  */
 class Selectable implements AdapterInterface
 {
-    /** @var DoctrineSelectable */
-    protected $selectable;
+    /** @var DoctrineSelectable<TKey,T> $selectable */
+    protected DoctrineSelectable $selectable;
 
-    /** @var Criteria */
-    protected $criteria;
+    protected Criteria $criteria;
 
     /**
      * Create a paginator around a Selectable object. You can also provide an optional Criteria object with
      * some predefined filters
+     *
+     * @param DoctrineSelectable<TKey,T> $selectable
      */
     public function __construct(DoctrineSelectable $selectable, ?Criteria $criteria = null)
     {
@@ -35,6 +37,8 @@ class Selectable implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @return array<TKey,T>
      */
     public function getItems($offset, $itemCountPerPage)
     {
@@ -43,10 +47,7 @@ class Selectable implements AdapterInterface
         return $this->selectable->matching($this->criteria)->toArray();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function count()
+    public function count(): int
     {
         $criteria = clone $this->criteria;
 

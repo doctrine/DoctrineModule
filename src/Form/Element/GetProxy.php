@@ -6,8 +6,7 @@ namespace DoctrineModule\Form\Element;
 
 trait GetProxy
 {
-    /** @var Proxy */
-    protected $proxy;
+    protected ?Proxy $proxy = null;
 
     public function getProxy(): Proxy
     {

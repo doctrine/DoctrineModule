@@ -25,16 +25,12 @@ class UniqueObject extends ObjectExists
      */
     public const ERROR_OBJECT_NOT_UNIQUE = 'objectNotUnique';
 
-    // phpcs:disable Generic.Files.LineLength
     /** @var mixed[] */
-    protected $messageTemplates = [self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'"];
-    // phpcs:enable Generic.Files.LineLength
+    protected array $messageTemplates = [self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'"];
 
-    /** @var ObjectManager */
-    protected $objectManager;
+    protected ObjectManager $objectManager;
 
-    /** @var bool */
-    protected $useContext;
+    protected bool $useContext;
 
     /***
      * Constructor
@@ -116,7 +112,7 @@ class UniqueObject extends ObjectExists
     protected function getFoundIdentifiers(object $match): array
     {
         return $this->objectManager
-                    ->getClassMetadata($this->objectRepository->getClassName())
+                    ->getClassMetadata($this->getClassName())
                     ->getIdentifierValues($match);
     }
 
@@ -141,7 +137,7 @@ class UniqueObject extends ObjectExists
 
         if ($context instanceof $className) {
             return $this->objectManager
-                        ->getClassMetadata($this->objectRepository->getClassName())
+                        ->getClassMetadata($this->getClassName())
                         ->getIdentifierValues($context);
         }
 
@@ -163,7 +159,15 @@ class UniqueObject extends ObjectExists
     protected function getIdentifiers(): array
     {
         return $this->objectManager
-                    ->getClassMetadata($this->objectRepository->getClassName())
+                    ->getClassMetadata($this->getClassName())
                     ->getIdentifierFieldNames();
+    }
+
+    /**
+     * @return class-string
+     */
+    protected function getClassName(): string
+    {
+        return $this->objectRepository->getClassName();
     }
 }

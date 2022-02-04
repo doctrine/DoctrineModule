@@ -19,23 +19,19 @@ use function sprintf;
 
 /**
  * Authentication adapter that uses a Doctrine object for verification.
- *
- * @link    http://www.doctrine-project.org/
  */
 class ObjectRepository extends AbstractAdapter
 {
-    /** @var AuthenticationOptions */
-    protected $options;
+    protected AuthenticationOptions $options;
 
     /**
      * Contains the authentication results.
      *
      * @var mixed[]
      */
-    protected $authenticationResultInfo = null;
+    protected ?array $authenticationResultInfo = null;
 
-    /** @var Inflector */
-    protected $inflector;
+    protected Inflector $inflector;
 
     /**
      * Constructor

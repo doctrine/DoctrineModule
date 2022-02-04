@@ -7,17 +7,14 @@ namespace DoctrineModule\ServiceFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 use function preg_match;
 
 /**
  * Abstract service factory capable of instantiating services whose names match the
  * pattern <code>doctrine.$serviceType.$serviceName</doctrine>
- *
- * @link    http://www.doctrine-project.org/
  */
-class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
+final class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
 {
     /**
      * {@inheritDoc}
@@ -41,27 +38,7 @@ class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         $factoryClass = $mappings['factoryClass'];
         $factory      = new $factoryClass($mappings['serviceName']);
 
-        return $factory->createService($container);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     */
-    public function canCreateServiceWithName(ServiceLocatorInterface $container, $name, $requestedName)
-    {
-        return $this->canCreate($container, $requestedName);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     */
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this($serviceLocator, $requestedName);
+        return $factory->__invoke($container, $requestedName);
     }
 
     /**

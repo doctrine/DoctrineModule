@@ -9,13 +9,10 @@ use Laminas\Authentication\Storage\StorageInterface;
 
 /**
  * This class implements StorageInterface and allow to save the result of an authentication against an object repository
- *
- * @link    http://www.doctrine-project.org/
  */
 class ObjectRepository implements StorageInterface
 {
-    /** @var AuthenticationOptions */
-    protected $options;
+    protected AuthenticationOptions $options;
 
     /**
      * @param mixed[]|AuthenticationOptions $options

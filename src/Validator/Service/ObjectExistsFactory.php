@@ -7,15 +7,9 @@ namespace DoctrineModule\Validator\Service;
 use DoctrineModule\Validator\ObjectExists;
 use Interop\Container\ContainerInterface;
 
-/**
- * Factory for creating ObjectExists instances
- *
- * @link    http://www.doctrine-project.org/
- */
-class ObjectExistsFactory extends AbstractValidatorFactory
+final class ObjectExistsFactory extends AbstractValidatorFactory
 {
-    /** @var string */
-    protected $validatorClass = ObjectExists::class;
+    protected string $validatorClass = ObjectExists::class;
 
     /**
      * {@inheritDoc}

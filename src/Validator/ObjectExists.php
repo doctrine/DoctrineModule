@@ -22,8 +22,6 @@ use function sprintf;
 
 /**
  * Class that validates if objects exist in a given repository with a given list of matched fields
- *
- * @link    http://www.doctrine-project.org/
  */
 class ObjectExists extends AbstractValidator
 {
@@ -33,21 +31,19 @@ class ObjectExists extends AbstractValidator
     public const ERROR_NO_OBJECT_FOUND = 'noObjectFound';
 
     /** @var mixed[] Message templates */
-    protected $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];
+    protected array $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];
 
     /**
      * ObjectRepository from which to search for entities
-     *
-     * @var ObjectRepository
      */
-    protected $objectRepository;
+    protected ObjectRepository $objectRepository;
 
     /**
      * Fields to be checked
      *
-     * @var mixed[]
+     * @var mixed[]|string
      */
-    protected $fields;
+    protected $fields = null;
 
     /**
      * Constructor
