@@ -84,8 +84,7 @@
         "vimeo/psalm": "^4.16.1"
     },
     "suggest": {
-        "doctrine/data-fixtures":         "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
-        "laminas/laminas-mvc-console":    "^1.1.11 if you want to use the Laminas console libraries"
+        "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
     },
     "autoload": {
         "psr-4": {
