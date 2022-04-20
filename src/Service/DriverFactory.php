@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\Annotations;
-use Doctrine\ORM\Mapping\Driver\AttributeDriver;
-use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
@@ -14,12 +12,12 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Options\Driver;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use ReflectionClass;
 use RuntimeException;
 
 use function class_exists;
 use function get_class;
 use function interface_exists;
-use function is_subclass_of;
 use function sprintf;
 
 /**
@@ -70,10 +68,10 @@ final class DriverFactory extends AbstractFactory
         // Not all drivers (DriverChain) require paths.
         $paths = $options->getPaths();
 
+        $constructor = (new ReflectionClass($class))->getConstructor();
         // Special options for AnnotationDrivers.
         if (
-            $class !== AttributeDriver::class &&
-            ($class === AnnotationDriver::class || is_subclass_of($class, AnnotationDriver::class))
+            $constructor !== null && $constructor->getNumberOfParameters() === 2
         ) {
             $reader = new Annotations\AnnotationReader();
             $reader = new Annotations\CachedReader(
