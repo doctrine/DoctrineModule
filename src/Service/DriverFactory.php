@@ -6,7 +6,7 @@ namespace DoctrineModule\Service;
 
 use Doctrine\Common\Annotations;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
-use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
