@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Service\DriverFactory;
 use Laminas\ServiceManager\ServiceManager;
@@ -86,5 +89,30 @@ class DriverFactoryTest extends BaseTestCase
         $factory = new DriverFactory('testDriver');
         $driver  = $factory->createService($serviceManager);
         $this->assertInstanceOf('Doctrine\ORM\Mapping\Driver\AttributeDriver', $driver);
+    }
+
+    public function testCreateAnnotationDriver(): void
+    {
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'config',
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'testDriver' => ['class' => AnnotationDriver::class],
+                    ],
+                ],
+            ]
+        );
+        $serviceManager->setService(
+            'doctrine.cache.array',
+            new ArrayCache()
+        );
+
+        $factory = new DriverFactory('testDriver');
+        $driver  = $factory->__invoke($serviceManager, AnnotationDriver::class);
+        $this->assertInstanceOf(AnnotationDriver::class, $driver);
+        assert($driver instanceof AnnotationDriver);
+        $this->assertInstanceOf(Reader::class, $driver->getReader());
     }
 }
