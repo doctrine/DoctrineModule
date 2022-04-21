@@ -115,7 +115,6 @@ class DriverFactoryTest extends BaseTestCase
         $factory = new DriverFactory('testDriver');
         $driver  = $factory->__invoke($serviceManager, AnnotationDriver::class);
         $this->assertInstanceOf(AnnotationDriver::class, $driver);
-        assert($driver instanceof AnnotationDriver);
         $this->assertInstanceOf(Reader::class, $driver->getReader());
     }
 }
