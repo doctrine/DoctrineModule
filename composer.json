@@ -101,10 +101,7 @@
         "bin/doctrine-module"
     ],
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": false
-        }
+        "sort-packages": true
     },
     "scripts": {
         "check": [
