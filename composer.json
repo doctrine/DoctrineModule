@@ -68,6 +68,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0.0",
+        "doctrine/mongodb-odm": "^2.3.3",
         "doctrine/orm": "^2.11.1",
         "jangregor/phpstan-prophecy": "^1.0.0",
         "laminas/laminas-cache-storage-adapter-blackhole": "^2.0.0",
@@ -100,7 +101,10 @@
         "bin/doctrine-module"
     ],
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        }
     },
     "scripts": {
         "check": [
