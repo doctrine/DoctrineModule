@@ -9,7 +9,6 @@ use Doctrine\Common\Cache\CacheProvider;
 use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModule\Options\Cache as CacheOptions;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use RuntimeException;
 
 use function get_class;
@@ -18,10 +17,8 @@ use function sprintf;
 
 /**
  * Cache ServiceManager factory
- *
- * @link    http://www.doctrine-project.org/
  */
-class CacheFactory extends AbstractFactory
+final class CacheFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
@@ -89,20 +86,6 @@ class CacheFactory extends AbstractFactory
         }
 
         return $cache;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     *
-     * @return Cache\Cache
-     *
-     * @throws RuntimeException
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, Cache\Cache::class);
     }
 
     public function getOptionsClass(): string

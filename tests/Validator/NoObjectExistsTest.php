@@ -12,8 +12,6 @@ use function str_replace;
 
 /**
  * Tests for the NoObjectExists test
- *
- * @link    http://www.doctrine-project.org/
  */
 class NoObjectExistsTest extends BaseTestCase
 {

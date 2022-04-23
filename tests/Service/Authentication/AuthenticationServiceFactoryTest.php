@@ -7,6 +7,7 @@ namespace DoctrineModuleTest\Service\Authentication;
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use DoctrineModule\Service\Authentication\AuthenticationServiceFactory;
 use DoctrineModule\Service\Authentication\StorageFactory;
+use Laminas\Authentication\AuthenticationService;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -42,7 +43,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         $serviceManager->setFactory('doctrine.authenticationadapter.' . $name, new AdapterFactory($name));
         $serviceManager->setFactory('doctrine.authenticationstorage.' . $name, new StorageFactory($name));
 
-        $authenticationService = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Laminas\Authentication\AuthenticationService', $authenticationService);
+        $authenticationService = $factory->__invoke($serviceManager, AuthenticationService::class);
+        $this->assertInstanceOf(AuthenticationService::class, $authenticationService);
     }
 }

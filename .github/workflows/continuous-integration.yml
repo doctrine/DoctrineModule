@@ -15,27 +15,16 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.3"
           - "7.4"
           - "8.0"
           - "8.1"
         dependencies:
           - "highest"
-        laminas-form-version:
-          - "3.0.0"
-          - "2.17.0"
-        laminas-cache-version:
-          - "3.1.2"
-          - "2.13.0"
         include:
-          - php-version: "7.3"
+          - php-version: "7.4"
             dependencies: "lowest"
-            laminas-form-version: "2.17.0"
-            laminas-cache-version: "2.13.0"
-          - php-version: "7.3"
+          - php-version: "7.4"
             dependencies: "lowest"
-            laminas-form-version: "3.0.0"
-            laminas-cache-version: "3.1.2"
 
     steps:
       - name: "Checkout"
@@ -50,30 +39,11 @@ jobs:
           coverage: "pcov"
           ini-values: "zend.assertions=1"
 
-      - name: "Require specific laminas-form version"
-        if: "! startsWith(matrix.php-version, '8')"
-        run: "composer require laminas/laminas-form ^${{ matrix.laminas-form-version }} --no-update"
-
-      - name: "Require specific laminas-form version (--ignore-platform-req=php)"
-        if: "startsWith(matrix.php-version, '8')"
-        run: "composer require laminas/laminas-form ^${{ matrix.laminas-form-version }} --no-update --ignore-platform-req=php"
-
-      - name: "Require specific laminas-cache version"
-        run: "composer require laminas/laminas-cache ^${{ matrix.laminas-cache-version }} --no-update"
-
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v1"
-        if: "! startsWith(matrix.php-version, '8')"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--prefer-dist"
-
-      - name: "Install dependencies with Composer (--ignore-platform-req=php)"
-        uses: "ramsey/composer-install@v1"
-        if: "startsWith(matrix.php-version, '8')"
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --ignore-platform-req=php"
 
       - name: "Run PHPUnit"
         run: "composer test-coverage"
@@ -81,7 +51,7 @@ jobs:
       - name: "Upload coverage file"
         uses: "actions/upload-artifact@v2"
         with:
-          name: "phpunit-${{ matrix.php-version }}-${{ matrix.dependencies }}-${{ matrix.laminas-form-version }}.coverage"
+          name: "phpunit-${{ matrix.php-version }}-${{ matrix.dependencies }}.coverage"
           path: "coverage.xml"
 
   upload_coverage:

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service\Authentication;
 
+use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -32,7 +33,7 @@ class AdapterFactoryTest extends BaseTestCase
             ]
         );
 
-        $adapter = $factory->createService($serviceManager);
-        $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepository', $adapter);
+        $adapter = $factory->__invoke($serviceManager, ObjectRepository::class);
+        $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 }

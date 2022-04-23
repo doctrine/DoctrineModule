@@ -7,6 +7,7 @@ namespace DoctrineModuleTest\Form\Element;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
+use Laminas\Form\Element;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -22,11 +23,9 @@ class ProxyAwareElementTestCase extends TestCase
     /** @var MockObject&ClassMetadata */
     protected $metadata;
 
-    /** @var object */
-    protected $element;
+    protected Element $element;
 
-    /** @var ArrayCollection */
-    protected $values;
+    protected ArrayCollection $values;
 
     protected function prepareProxy(): void
     {

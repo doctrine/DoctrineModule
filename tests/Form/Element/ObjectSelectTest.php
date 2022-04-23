@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Form\Element;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Form\Element\ObjectSelect;
+use Laminas\Form\Element;
 
 use function get_class;
 
 /**
  * Tests for the ObjectSelect element
  *
- * @link    http://www.doctrine-project.org/
- *
  * @covers  \DoctrineModule\Form\Element\ObjectSelect
  */
 class ObjectSelectTest extends ProxyAwareElementTestCase
 {
-    /** @var ArrayCollection */
-    protected $values;
-
-    /** @var ObjectSelect */
-    protected $element;
+    /** @var ObjectSelect  */
+    protected Element $element;
 
     /**
      * {@inheritDoc}.

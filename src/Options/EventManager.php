@@ -8,10 +8,8 @@ use Laminas\Stdlib\AbstractOptions;
 
 /**
  * EventManager options
- *
- * @link    http://www.doctrine-project.org/
  */
-class EventManager extends AbstractOptions
+final class EventManager extends AbstractOptions
 {
     /**
      * An array of subscribers. The array can contain the FQN of the
@@ -20,7 +18,7 @@ class EventManager extends AbstractOptions
      *
      * @var mixed[]
      */
-    protected $subscribers = [];
+    protected array $subscribers = [];
 
     /**
      * @param mixed[] $subscribers

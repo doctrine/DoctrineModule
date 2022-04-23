@@ -11,16 +11,16 @@ use Traversable;
 use function array_map;
 use function is_array;
 
-class ObjectSelectV2Polyfill extends SelectElement
+class ObjectSelect extends SelectElement
 {
     use GetProxy;
 
     /**
-     * @param array|Traversable $options
+     * @param iterable<mixed> $options
      *
-     * {@inheritDoc}
+     * @return $this
      */
-    public function setOptions($options): self
+    public function setOptions(iterable $options): self
     {
         $this->getProxy()->setOptions($options);
 
@@ -29,8 +29,9 @@ class ObjectSelectV2Polyfill extends SelectElement
 
     /**
      * @param mixed $value
+     * @param mixed $key
      *
-     * {@inheritDoc}
+     * @return $this
      */
     public function setOption($key, $value): self
     {
@@ -63,8 +64,10 @@ class ObjectSelectV2Polyfill extends SelectElement
 
     /**
      * {@inheritDoc}
+     *
+     * @return array<array-key,mixed>
      */
-    public function getValueOptions()
+    public function getValueOptions(): array
     {
         if (! empty($this->valueOptions)) {
             return $this->valueOptions;

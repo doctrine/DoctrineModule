@@ -7,8 +7,10 @@ namespace DoctrineModuleTest\Service;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Service\DriverFactory;
+use DoctrineModuleTest\Service\Mock\MetadataDriverMock;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -27,15 +29,15 @@ class DriverFactoryTest extends BaseTestCase
             [
                 'doctrine' => [
                     'driver' => [
-                        'testDriver' => ['class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock'],
+                        'testDriver' => ['class' => MetadataDriverMock::class],
                     ],
                 ],
             ]
         );
 
         $factory = new DriverFactory('testDriver');
-        $driver  = $factory->createService($serviceManager);
-        $this->assertInstanceOf('DoctrineModuleTest\Service\Mock\MetadataDriverMock', $driver);
+        $driver  = $factory->__invoke($serviceManager, MetadataDriverMock::class);
+        $this->assertInstanceOf(MetadataDriverMock::class, $driver);
     }
 
     public function testCreateDriverChain(): void
@@ -46,9 +48,9 @@ class DriverFactoryTest extends BaseTestCase
             [
                 'doctrine' => [
                     'driver' => [
-                        'testDriver' => ['class' => 'DoctrineModuleTest\Service\Mock\MetadataDriverMock'],
+                        'testDriver' => ['class' => MetadataDriverMock::class],
                         'testChainDriver' => [
-                            'class' => 'Doctrine\Persistence\Mapping\Driver\MappingDriverChain',
+                            'class' => MappingDriverChain::class,
                             'drivers' => [
                                 'Foo\Bar' => 'testDriver',
                                 'Foo\Baz' => null,
@@ -60,13 +62,14 @@ class DriverFactoryTest extends BaseTestCase
         );
 
         $factory = new DriverFactory('testChainDriver');
-        $driver  = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Doctrine\Persistence\Mapping\Driver\MappingDriverChain', $driver);
+        $driver  = $factory->__invoke($serviceManager, MappingDriverChain::class);
+        $this->assertInstanceOf(MappingDriverChain::class, $driver);
         assert($driver instanceof MappingDriverChain);
+
         $drivers = $driver->getDrivers();
         $this->assertCount(1, $drivers);
         $this->assertArrayHasKey('Foo\Bar', $drivers);
-        $this->assertInstanceOf('DoctrineModuleTest\Service\Mock\MetadataDriverMock', $drivers['Foo\Bar']);
+        $this->assertInstanceOf(MetadataDriverMock::class, $drivers['Foo\Bar']);
     }
 
     /**
@@ -80,15 +83,15 @@ class DriverFactoryTest extends BaseTestCase
             [
                 'doctrine' => [
                     'driver' => [
-                        'testDriver' => ['class' => 'Doctrine\ORM\Mapping\Driver\AttributeDriver'],
+                        'testDriver' => ['class' => AttributeDriver::class],
                     ],
                 ],
             ]
         );
 
         $factory = new DriverFactory('testDriver');
-        $driver  = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Doctrine\ORM\Mapping\Driver\AttributeDriver', $driver);
+        $driver  = $factory->__invoke($serviceManager, AttributeDriver::class);
+        $this->assertInstanceOf(AttributeDriver::class, $driver);
     }
 
     public function testCreateAnnotationDriver(): void

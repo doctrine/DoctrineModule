@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\NoObjectExists;
 use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
 use DoctrineModule\Validator\Service\NoObjectExistsFactory;
+use DoctrineModuleTest\Validator\TestAsset\DummyClass;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
@@ -24,8 +25,7 @@ class NoObjectExistsFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var NoObjectExistsFactory */
-    private $object;
+    private NoObjectExistsFactory $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -54,13 +54,13 @@ class NoObjectExistsFactoryTest extends TestCase
     public function testInvoke(): void
     {
         $options = [
-            'target_class' => 'Foo\Bar',
+            'target_class' => DummyClass::class,
             'fields'       => ['test'],
         ];
 
         $repository    = $this->prophesize(ObjectRepository::class);
         $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository('Foo\Bar')
+        $objectManager->getRepository(DummyClass::class)
             ->shouldBeCalled()
             ->willReturn($repository->reveal());
 
@@ -88,12 +88,12 @@ class NoObjectExistsFactoryTest extends TestCase
     {
         $repository    = $this->prophesize(ObjectRepository::class);
         $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository('Foo\Bar')
+        $objectManager->getRepository(DummyClass::class)
             ->shouldBeCalled()
             ->willReturn($repository->reveal());
 
         $options = [
-            'target_class'   => 'Foo\Bar',
+            'target_class'   => DummyClass::class,
             'object_manager' => $objectManager->reveal(),
             'fields'         => ['test'],
         ];
@@ -116,14 +116,14 @@ class NoObjectExistsFactoryTest extends TestCase
     public function testInvokeWithMerge(): void
     {
         $options = [
-            'target_class' => 'Foo\Bar',
+            'target_class' => DummyClass::class,
             'fields'       => ['test'],
             'messages'     => [NoObjectExists::ERROR_OBJECT_FOUND => 'test'],
         ];
 
         $repository    = $this->prophesize(ObjectRepository::class);
         $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository('Foo\Bar')
+        $objectManager->getRepository(DummyClass::class)
             ->shouldBeCalled()
             ->willReturn($repository->reveal());
 
@@ -157,20 +157,16 @@ class NoObjectExistsFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @covers ::createService
-     * @covers ::setCreationOptions
-     */
-    public function testCreateService(): void
+    public function testInvokeWithOptions(): void
     {
         $options = [
-            'target_class' => 'Foo\Bar',
+            'target_class' => DummyClass::class,
             'fields'       => ['test'],
         ];
 
         $repository    = $this->prophesize(ObjectRepository::class);
         $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository('Foo\Bar')
+        $objectManager->getRepository(DummyClass::class)
             ->shouldBeCalled()
             ->willReturn($repository->reveal());
 
@@ -179,8 +175,11 @@ class NoObjectExistsFactoryTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($objectManager->reveal());
 
-        $this->object->setCreationOptions($options);
-        $instance = $this->object->createService($container->reveal());
+        $instance = $this->object->__invoke(
+            $container->reveal(),
+            NoObjectExists::class,
+            $options
+        );
         $this->assertInstanceOf(NoObjectExists::class, $instance);
     }
 }

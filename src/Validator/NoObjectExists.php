@@ -8,8 +8,6 @@ use function is_object;
 
 /**
  * Class that validates if objects does not exist in a given repository with a given list of matched fields
- *
- * @link    http://www.doctrine-project.org/
  */
 class NoObjectExists extends ObjectExists
 {
@@ -19,7 +17,7 @@ class NoObjectExists extends ObjectExists
     public const ERROR_OBJECT_FOUND = 'objectFound';
 
     /** @var mixed[] Message templates */
-    protected $messageTemplates = [self::ERROR_OBJECT_FOUND => "An object matching '%value%' was found"];
+    protected array $messageTemplates = [self::ERROR_OBJECT_FOUND => "An object matching '%value%' was found"];
 
     /**
      * {@inheritDoc}

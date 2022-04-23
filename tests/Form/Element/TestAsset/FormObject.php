@@ -8,31 +8,22 @@ use function assert;
 
 /**
  * Simple mock object for form element adapter test
- *
- * @link    http://www.doctrine-project.org/
  */
 class FormObject
 {
-    /** @var int|null */
-    protected $id;
+    protected ?int $id = null;
 
-    /** @var string|null */
-    public $email;
+    public ?string $email = null;
 
-    /** @var string|null */
-    protected $username;
+    protected ?string $username = null;
 
-    /** @var string|null */
-    protected $firstname;
+    protected ?string $firstname = null;
 
-    /** @var string|null */
-    protected $surname;
+    protected ?string $surname = null;
 
-    /** @var string|null */
-    protected $password;
+    protected ?string $password = null;
 
-    /** @var string|null */
-    protected $optgroup;
+    protected ?string $optgroup = null;
 
     public function __toString(): string
     {

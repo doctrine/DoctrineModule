@@ -47,10 +47,8 @@ use function sprintf;
  * All remains the same using with DoctrineModule\Service\AuthenticationStorageFactory,
  * however, a string may be passed to $objectManager. This string must be a valid key to
  * retrieve an ObjectManager instance from the ServiceManager.
- *
- * @link    http://www.doctrine-project.org/
  */
-class Authentication extends AbstractOptions
+final class Authentication extends AbstractOptions
 {
     /**
      * A valid object implementing ObjectManager interface
@@ -61,31 +59,25 @@ class Authentication extends AbstractOptions
 
     /**
      * A valid object implementing ObjectRepository interface (or ObjectManager/identityClass)
-     *
-     * @var ?ObjectRepository
      */
-    protected $objectRepository;
+    protected ?ObjectRepository $objectRepository = null;
 
     /**
      * Entity's class name
      *
-     * @var string
+     * @psalm-var class-string
      */
-    protected $identityClass;
+    protected string $identityClass;
 
     /**
      * Property to use for the identity
-     *
-     * @var string
      */
-    protected $identityProperty;
+    protected string $identityProperty;
 
     /**
      * Property to use for the credential
-     *
-     * @var string
      */
-    protected $credentialProperty;
+    protected string $credentialProperty;
 
     /**
      * Callable function to check if a credential is valid
@@ -97,10 +89,8 @@ class Authentication extends AbstractOptions
     /**
      * If an objectManager is not supplied, this metadata will be used
      * by DoctrineModule/Authentication/Storage/ObjectRepository
-     *
-     * @var ?ClassMetadata
      */
-    protected $classMetadata;
+    protected ?ClassMetadata $classMetadata = null;
 
     /**
      * When using this options class to create a DoctrineModule/Authentication/Storage/ObjectRepository
@@ -110,7 +100,7 @@ class Authentication extends AbstractOptions
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
      *
-     * @var StorageInterface|string;
+     * @var StorageInterface|string
      */
     protected $storage = 'DoctrineModule\Authentication\Storage\Session';
 
@@ -169,7 +159,7 @@ class Authentication extends AbstractOptions
      */
     public function setIdentityProperty(string $identityProperty): Authentication
     {
-        if (! is_string($identityProperty) || $identityProperty === '') {
+        if ($identityProperty === '') {
             throw new Exception\InvalidArgumentException(
                 sprintf('Provided $identityProperty is invalid, %s given', gettype($identityProperty))
             );
@@ -190,7 +180,7 @@ class Authentication extends AbstractOptions
      */
     public function setCredentialProperty(string $credentialProperty): Authentication
     {
-        if (! is_string($credentialProperty) || $credentialProperty === '') {
+        if ($credentialProperty === '') {
             throw new Exception\InvalidArgumentException(
                 sprintf('Provided $credentialProperty is invalid, %s given', gettype($credentialProperty))
             );

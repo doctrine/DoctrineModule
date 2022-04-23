@@ -7,10 +7,9 @@ namespace DoctrineModule\Validator\Service;
 use DoctrineModule\Validator\UniqueObject;
 use Interop\Container\ContainerInterface;
 
-class UniqueObjectFactory extends AbstractValidatorFactory
+final class UniqueObjectFactory extends AbstractValidatorFactory
 {
-    /** @var string */
-    protected $validatorClass = UniqueObject::class;
+    protected string $validatorClass = UniqueObject::class;
 
     /**
      * {@inheritDoc}

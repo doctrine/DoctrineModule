@@ -8,17 +8,13 @@ use Laminas\Stdlib\AbstractOptions;
 
 /**
  * MappingDriver options
- *
- * @link    http://www.doctrine-project.org/
  */
-class Driver extends AbstractOptions
+final class Driver extends AbstractOptions
 {
     /**
      * The class name of the Driver.
-     *
-     * @var string
      */
-    protected $class;
+    protected string $class;
 
     /**
      * All drivers (except DriverChain) require paths to work on. You
@@ -27,25 +23,21 @@ class Driver extends AbstractOptions
      *
      * @var mixed[]
      */
-    protected $paths = [];
+    protected array $paths = [];
 
     /**
      * Set the cache key for the annotation cache. Cache key
      * is assembled as "doctrine.cache.{key}" and pulled from
      * service locator. This option is only valid for the
      * AnnotationDriver.
-     *
-     * @var string
      */
-    protected $cache = 'array';
+    protected string $cache = 'array';
 
     /**
      * Set the file extension to use. This option is only
      * valid for FileDrivers (XmlDriver, YamlDriver, PHPDriver, etc).
-     *
-     * @var string|null
      */
-    protected $extension = null;
+    protected ?string $extension = null;
 
     /**
      * Set the driver keys to use which are assembled as
@@ -54,7 +46,7 @@ class Driver extends AbstractOptions
      *
      * @var mixed[]
      */
-    protected $drivers = [];
+    protected array $drivers = [];
 
     public function setCache(string $cache): void
     {

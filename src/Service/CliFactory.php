@@ -6,26 +6,21 @@ namespace DoctrineModule\Service;
 
 use Interop\Container\ContainerInterface;
 use Laminas\EventManager\EventManagerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * CLI Application ServiceManager factory responsible for instantiating a Symfony CLI application
- *
- * @link    http://www.doctrine-project.org/
  */
-class CliFactory implements FactoryInterface
+final class CliFactory implements FactoryInterface
 {
-    /** @var EventManagerInterface */
-    protected $events;
+    protected ?EventManagerInterface $events = null;
 
-    /** @var HelperSet */
-    protected $helperSet;
+    protected HelperSet $helperSet;
 
     /** @var mixed[] */
-    protected $commands = [];
+    protected array $commands = [];
 
     public function getEventManager(ContainerInterface $container): EventManagerInterface
     {
@@ -57,17 +52,5 @@ class CliFactory implements FactoryInterface
         $this->getEventManager($container)->trigger('loadCli.post', $cli, ['ServiceManager' => $container]);
 
         return $cli;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated 4.2.0 With laminas-servicemanager v3 this method is obsolete and will be removed in 5.0.0.
-     *
-     * @return Application
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, Application::class);
     }
 }

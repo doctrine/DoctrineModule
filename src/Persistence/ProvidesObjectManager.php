@@ -11,8 +11,7 @@ use Doctrine\Persistence\ObjectManager;
  */
 trait ProvidesObjectManager
 {
-    /** @var ObjectManager */
-    protected $objectManager;
+    protected ObjectManager $objectManager;
 
     /**
      * Set the object manager
