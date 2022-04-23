@@ -24,7 +24,6 @@ use function count;
 use function current;
 use function get_class;
 use function gettype;
-use function interface_exists;
 use function is_callable;
 use function is_object;
 use function is_string;
@@ -594,5 +593,3 @@ class Proxy implements ObjectManagerAwareInterface
         $this->valueOptions = $options;
     }
 }
-
-interface_exists(ObjectManager::class);
