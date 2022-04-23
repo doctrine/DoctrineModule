@@ -6,8 +6,6 @@ namespace DoctrineModule\Persistence;
 
 use Doctrine\Persistence\ObjectManager;
 
-use function interface_exists;
-
 // phpcs:disable SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming
 interface ObjectManagerAwareInterface
 {
@@ -23,5 +21,3 @@ interface ObjectManagerAwareInterface
      */
     public function getObjectManager(): ObjectManager;
 }
-
-interface_exists(ObjectManager::class);
