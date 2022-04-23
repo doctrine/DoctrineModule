@@ -68,7 +68,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0.0",
-        "doctrine/orm": "^2.10.4",
+        "doctrine/orm": "^2.10.5",
         "jangregor/phpstan-prophecy": "^1.0.0",
         "laminas/laminas-cache-storage-adapter-blackhole": "^2.0.0",
         "laminas/laminas-cache-storage-adapter-memory": "^2.0.0",
@@ -82,6 +82,9 @@
         "phpunit/phpunit": "^9.5.11",
         "predis/predis": "^1.1.9",
         "vimeo/psalm": "^4.16.1"
+    },
+    "conflict": {
+        "doctrine/orm": "2.12.0"
     },
     "suggest": {
         "doctrine/data-fixtures":         "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
