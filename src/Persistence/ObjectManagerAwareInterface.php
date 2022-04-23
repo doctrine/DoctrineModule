@@ -6,8 +6,6 @@ namespace DoctrineModule\Persistence;
 
 use Doctrine\Persistence\ObjectManager;
 
-use function interface_exists;
-
 interface ObjectManagerAwareInterface
 {
     /**
@@ -20,5 +18,3 @@ interface ObjectManagerAwareInterface
      */
     public function getObjectManager(): ObjectManager;
 }
-
-interface_exists(ObjectManager::class);

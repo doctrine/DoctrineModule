@@ -12,7 +12,6 @@ use Laminas\Authentication\Storage\StorageInterface;
 use Laminas\Stdlib\AbstractOptions;
 
 use function gettype;
-use function interface_exists;
 use function is_callable;
 use function is_string;
 use function sprintf;
@@ -256,6 +255,3 @@ final class Authentication extends AbstractOptions
         $this->storage = $storage;
     }
 }
-
-interface_exists(ClassMetadata::class);
-interface_exists(ObjectRepository::class);

@@ -13,7 +13,6 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Stdlib\ArrayUtils;
 
 use function class_exists;
-use function interface_exists;
 use function is_string;
 use function sprintf;
 
@@ -98,6 +97,3 @@ abstract class AbstractValidatorFactory implements FactoryInterface
         return ArrayUtils::merge($previousOptions, $newOptions, true);
     }
 }
-
-interface_exists(ObjectManager::class);
-interface_exists(ObjectRepository::class);
