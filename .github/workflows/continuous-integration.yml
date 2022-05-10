@@ -7,6 +7,9 @@ on:
       - '[0-9]+.[0-9]+.x'
       - 'refs/pull/*'
 
+permissions:
+  contents: read
+
 jobs:
   phpunit:
     name: "PHPUnit"
