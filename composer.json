@@ -50,7 +50,7 @@
         "doctrine/doctrine-laminas-hydrator": "^3.0.0",
         "doctrine/event-manager": "^1.1.1",
         "doctrine/inflector": "^2.0.4",
-        "doctrine/persistence": "^2.3.0",
+        "doctrine/persistence": "^2.3.0 || ^3.0.0",
         "laminas/laminas-authentication": "^2.9.0",
         "laminas/laminas-cache": "^3.1.2",
         "laminas/laminas-eventmanager": "^3.4.0",
@@ -103,7 +103,10 @@
         "bin/doctrine-module"
     ],
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "scripts": {
         "check": [

@@ -20,9 +20,7 @@ jobs:
           - "8.1"
         dependencies:
           - "highest"
-        include:
-          - php-version: "7.4"
-            dependencies: "lowest"
+          - "lowest"
 
     steps:
       - name: "Checkout"
