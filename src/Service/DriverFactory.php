@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\Annotations;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver as MongoODMAnnotationDriver;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AttributeDriver as MongoODMAttributeDriver;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver as ORMAttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
@@ -71,8 +73,14 @@ final class DriverFactory extends AbstractFactory
 
         // Special options for AnnotationDrivers.
         if (
-            $class !== AttributeDriver::class &&
-            ($class === AnnotationDriver::class || is_subclass_of($class, AnnotationDriver::class))
+            $class !== ORMAttributeDriver::class &&
+            $class !== MongoODMAttributeDriver::class &&
+            (
+                $class === ORMAnnotationDriver::class ||
+                $class === MongoODMAnnotationDriver::class ||
+                is_subclass_of($class, ORMAnnotationDriver::class) ||
+                is_subclass_of($class, MongoODMAnnotationDriver::class)
+            )
         ) {
             $reader = new Annotations\AnnotationReader();
             $reader = new Annotations\CachedReader(
