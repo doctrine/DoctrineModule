@@ -20,7 +20,7 @@ use RuntimeException;
 
 use function class_exists;
 use function get_class;
-use function is_subclass_of;
+use function is_a;
 use function sprintf;
 
 /**
@@ -76,10 +76,8 @@ final class DriverFactory extends AbstractFactory
             $class !== ORMAttributeDriver::class &&
             $class !== MongoODMAttributeDriver::class &&
             (
-                $class === ORMAnnotationDriver::class ||
-                $class === MongoODMAnnotationDriver::class ||
-                is_subclass_of($class, ORMAnnotationDriver::class) ||
-                is_subclass_of($class, MongoODMAnnotationDriver::class)
+                is_a($class, ORMAnnotationDriver::class, true) ||
+                is_a($class, MongoODMAnnotationDriver::class, true)
             )
         ) {
             $reader = new Annotations\AnnotationReader();
