@@ -1,9 +1,8 @@
 {
     "name": "doctrine/doctrine-module",
     "description": "Laminas Module that provides Doctrine basic functionality required for ORM and ODM modules",
-    "type": "library",
     "license": "MIT",
-    "homepage": "http://www.doctrine-project.org/",
+    "type": "library",
     "keywords": [
         "doctrine",
         "module",
@@ -35,12 +34,7 @@
             "homepage": "https://tomhanderson.com"
         }
     ],
-    "extra": {
-        "laminas": {
-            "config-provider": "DoctrineModule\\ConfigProvider",
-            "module": "DoctrineModule"
-        }
-    },
+    "homepage": "http://www.doctrine-project.org/",
     "require": {
         "php": "^7.4 || ~8.0.0 || ~8.1.0",
         "container-interop/container-interop": "^1.2.0",
@@ -63,9 +57,6 @@
         "laminas/laminas-validator": "^2.16.0",
         "symfony/console": "^5.4.3 || ^6.0.3"
     },
-    "provide": {
-        "laminas/laminas-cache-storage-implementation": "1.0.0"
-    },
     "require-dev": {
         "doctrine/coding-standard": "^9.0.0",
         "doctrine/mongodb-odm": "^2.3.0",
@@ -87,6 +78,9 @@
     "conflict": {
         "doctrine/orm": "2.12.0"
     },
+    "provide": {
+        "laminas/laminas-cache-storage-implementation": "1.0.0"
+    },
     "suggest": {
         "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
     },
@@ -104,12 +98,18 @@
         "bin/doctrine-module"
     ],
     "config": {
-        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
         "platform": {
             "ext-mongodb": "1.8.0"
         },
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+        "sort-packages": true
+    },
+    "extra": {
+        "laminas": {
+            "config-provider": "DoctrineModule\\ConfigProvider",
+            "module": "DoctrineModule"
         }
     },
     "scripts": {
