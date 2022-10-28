@@ -6,8 +6,10 @@ namespace DoctrineModuleTest\Service;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver as MongoDBODMAnnotationDriver;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AttributeDriver as MongoDBODMAttributeDriver;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver as ORMAttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Service\DriverFactory;
 use DoctrineModuleTest\Service\Mock\MetadataDriverMock;
@@ -75,7 +77,7 @@ class DriverFactoryTest extends BaseTestCase
     /**
      * @requires PHP 8.0
      */
-    public function testCreateAttributeDriver(): void
+    public function testCreateORMAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -83,18 +85,21 @@ class DriverFactoryTest extends BaseTestCase
             [
                 'doctrine' => [
                     'driver' => [
-                        'testDriver' => ['class' => AttributeDriver::class],
+                        'testDriver' => ['class' => ORMAttributeDriver::class],
                     ],
                 ],
             ]
         );
 
         $factory = new DriverFactory('testDriver');
-        $driver  = $factory->__invoke($serviceManager, AttributeDriver::class);
-        $this->assertInstanceOf(AttributeDriver::class, $driver);
+        $driver  = $factory->__invoke($serviceManager, ORMAttributeDriver::class);
+        $this->assertInstanceOf(ORMAttributeDriver::class, $driver);
     }
 
-    public function testCreateAnnotationDriver(): void
+    /**
+     * @requires PHP 8.0
+     */
+    public function testCreateMongoDBODMAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -102,7 +107,26 @@ class DriverFactoryTest extends BaseTestCase
             [
                 'doctrine' => [
                     'driver' => [
-                        'testDriver' => ['class' => AnnotationDriver::class],
+                        'testDriver' => ['class' => MongoDBODMAttributeDriver::class],
+                    ],
+                ],
+            ]
+        );
+
+        $factory = new DriverFactory('testDriver');
+        $driver  = $factory->__invoke($serviceManager, MongoDBODMAttributeDriver::class);
+        $this->assertInstanceOf(MongoDBODMAttributeDriver::class, $driver);
+    }
+
+    public function testCreateORMAnnotationDriver(): void
+    {
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'config',
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'testDriver' => ['class' => ORMAnnotationDriver::class],
                     ],
                 ],
             ]
@@ -113,8 +137,32 @@ class DriverFactoryTest extends BaseTestCase
         );
 
         $factory = new DriverFactory('testDriver');
-        $driver  = $factory->__invoke($serviceManager, AnnotationDriver::class);
-        $this->assertInstanceOf(AnnotationDriver::class, $driver);
+        $driver  = $factory->__invoke($serviceManager, ORMAnnotationDriver::class);
+        $this->assertInstanceOf(ORMAnnotationDriver::class, $driver);
+        $this->assertInstanceOf(Reader::class, $driver->getReader());
+    }
+
+    public function testCreateMongoDBODMAnnotationDriver(): void
+    {
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'config',
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'testDriver' => ['class' => MongoDBODMAnnotationDriver::class],
+                    ],
+                ],
+            ]
+        );
+        $serviceManager->setService(
+            'doctrine.cache.array',
+            new ArrayCache()
+        );
+
+        $factory = new DriverFactory('testDriver');
+        $driver  = $factory->__invoke($serviceManager, MongoDBODMAnnotationDriver::class);
+        $this->assertInstanceOf(MongoDBODMAnnotationDriver::class, $driver);
         $this->assertInstanceOf(Reader::class, $driver->getReader());
     }
 }
