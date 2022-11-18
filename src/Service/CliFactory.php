@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Service;
 
-use Interop\Container\ContainerInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 

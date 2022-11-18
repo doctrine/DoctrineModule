@@ -8,7 +8,7 @@ use Doctrine\Common\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModule\Options\Cache as CacheOptions;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 use function get_class;

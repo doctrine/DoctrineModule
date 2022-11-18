@@ -8,9 +8,9 @@ use BadMethodCallException;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Stdlib\ArrayUtils;
+use Psr\Container\ContainerInterface;
 
 use function class_exists;
 use function is_string;

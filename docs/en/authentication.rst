@@ -187,7 +187,7 @@ factories as in the example below:
    <?php
    namespace Application\Factory\Controller;
 
-   use Interop\Container\ContainerInterface;
+   use Psr\Container\ContainerInterface;
    use Laminas\ServiceManager\Factory\FactoryInterface;
 
    class ApplicationControllerFactory implements FactoryInterface

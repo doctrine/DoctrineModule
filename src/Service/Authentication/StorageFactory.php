@@ -7,7 +7,7 @@ namespace DoctrineModule\Service\Authentication;
 use DoctrineModule\Authentication\Storage\ObjectRepository;
 use DoctrineModule\Options\Authentication;
 use DoctrineModule\Service\AbstractFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 use function get_class;
