@@ -4,6 +4,10 @@ parameters:
     paths:
         - src
         - tests
+    ignoreErrors:
+        -
+          message: '#internal(G|S)etItem\(\) has parameter \$(casToken|value) with no type specified#'
+          path: src/Cache/DoctrineCacheStorage.php
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon
