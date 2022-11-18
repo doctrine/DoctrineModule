@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DoctrineModule\Validator\Service;
 
 use DoctrineModule\Validator\UniqueObject;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 final class UniqueObjectFactory extends AbstractValidatorFactory
 {

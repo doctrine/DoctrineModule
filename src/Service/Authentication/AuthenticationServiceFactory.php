@@ -6,8 +6,8 @@ namespace DoctrineModule\Service\Authentication;
 
 use BadMethodCallException;
 use DoctrineModule\Service\AbstractFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\Authentication\AuthenticationService;
+use Psr\Container\ContainerInterface;
 
 /**
  * Factory to create authentication service object.

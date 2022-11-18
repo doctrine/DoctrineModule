@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Service;
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Stdlib\AbstractOptions;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 use function sprintf;

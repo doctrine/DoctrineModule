@@ -14,8 +14,8 @@ use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Options\Driver;
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 use function class_exists;

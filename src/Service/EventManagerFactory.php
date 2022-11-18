@@ -7,8 +7,8 @@ namespace DoctrineModule\Service;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
 use DoctrineModule\Options\EventManager as EventManagerOptions;
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 use function class_exists;
