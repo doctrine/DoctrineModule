@@ -10,7 +10,6 @@ use DoctrineModule\Validator\Service\UniqueObjectFactory;
 use DoctrineModule\Validator\UniqueObject;
 use DoctrineModuleTest\Validator\TestAsset\DummyClass;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -21,8 +20,6 @@ use Psr\Container\ContainerInterface;
  */
 class UniqueObjectFactoryTest extends TestCase
 {
-    use ProphecyTrait;
-
     private UniqueObjectFactory $object;
 
     /**
@@ -44,19 +41,21 @@ class UniqueObjectFactoryTest extends TestCase
             'fields'       => ['test'],
         ];
 
-        $repository    = $this->prophesize(ObjectRepository::class);
-        $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository(DummyClass::class)
-            ->shouldBeCalled()
-            ->willReturn($repository->reveal());
+        $repository    = $this->createMock(ObjectRepository::class);
+        $objectManager = $this->createMock(ObjectManager::class);
+        $objectManager->expects(self::atLeastOnce())
+            ->method('getRepository')
+            ->with(DummyClass::class)
+            ->willReturn($repository);
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get('doctrine.entitymanager.orm_default')
-            ->shouldBeCalled()
-            ->willReturn($objectManager->reveal());
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::atLeastOnce())
+            ->method('get')
+            ->with('doctrine.entitymanager.orm_default')
+            ->willReturn($objectManager);
 
         $instance = $this->object->__invoke(
-            $container->reveal(),
+            $container,
             UniqueObject::class,
             $options
         );

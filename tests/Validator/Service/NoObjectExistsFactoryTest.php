@@ -12,7 +12,6 @@ use DoctrineModule\Validator\Service\NoObjectExistsFactory;
 use DoctrineModuleTest\Validator\TestAsset\DummyClass;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -23,8 +22,6 @@ use Psr\Container\ContainerInterface;
  */
 class NoObjectExistsFactoryTest extends TestCase
 {
-    use ProphecyTrait;
-
     private NoObjectExistsFactory $object;
 
     /**
@@ -58,19 +55,23 @@ class NoObjectExistsFactoryTest extends TestCase
             'fields'       => ['test'],
         ];
 
-        $repository    = $this->prophesize(ObjectRepository::class);
-        $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository(DummyClass::class)
-            ->shouldBeCalled()
-            ->willReturn($repository->reveal());
+        $repository    = $this->createMock(ObjectRepository::class);
+        $objectManager = $this->createMock(ObjectManager::class);
+        $objectManager
+            ->expects(self::atLeastOnce())
+            ->method('getRepository')
+            ->with(DummyClass::class)
+            ->willReturn($repository);
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get('doctrine.entitymanager.orm_default')
-            ->shouldBeCalled()
-            ->willReturn($objectManager->reveal());
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->with('doctrine.entitymanager.orm_default')
+            ->willReturn($objectManager);
 
         $instance = $this->object->__invoke(
-            $container->reveal(),
+            $container,
             NoObjectExists::class,
             $options
         );
@@ -86,24 +87,28 @@ class NoObjectExistsFactoryTest extends TestCase
      */
     public function testInvokeWithObjectManagerGiven(): void
     {
-        $repository    = $this->prophesize(ObjectRepository::class);
-        $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository(DummyClass::class)
-            ->shouldBeCalled()
-            ->willReturn($repository->reveal());
+        $repository    = $this->createMock(ObjectRepository::class);
+        $objectManager = $this->createMock(ObjectManager::class);
+        $objectManager
+            ->expects(self::atLeastOnce())
+            ->method('getRepository')
+            ->with(DummyClass::class)
+            ->willReturn($repository);
 
         $options = [
             'target_class'   => DummyClass::class,
-            'object_manager' => $objectManager->reveal(),
+            'object_manager' => $objectManager,
             'fields'         => ['test'],
         ];
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get('doctrine.entitymanager.orm_default')
-            ->shouldNotBeCalled();
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->expects(self::never())
+            ->method('get')
+            ->with('doctrine.entitymanager.orm_default');
 
         $instance = $this->object->__invoke(
-            $container->reveal(),
+            $container,
             NoObjectExists::class,
             $options
         );
@@ -121,19 +126,23 @@ class NoObjectExistsFactoryTest extends TestCase
             'messages'     => [NoObjectExists::ERROR_OBJECT_FOUND => 'test'],
         ];
 
-        $repository    = $this->prophesize(ObjectRepository::class);
-        $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository(DummyClass::class)
-            ->shouldBeCalled()
-            ->willReturn($repository->reveal());
+        $repository    = $this->createMock(ObjectRepository::class);
+        $objectManager = $this->createMock(ObjectManager::class);
+        $objectManager
+            ->expects(self::atLeastOnce())
+            ->method('getRepository')
+            ->with(DummyClass::class)
+            ->willReturn($repository);
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get('doctrine.entitymanager.orm_default')
-            ->shouldBeCalled()
-            ->willReturn($objectManager->reveal());
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->with('doctrine.entitymanager.orm_default')
+            ->willReturn($objectManager);
 
         $instance  = $this->object->__invoke(
-            $container->reveal(),
+            $container,
             NoObjectExists::class,
             $options
         );
@@ -149,9 +158,9 @@ class NoObjectExistsFactoryTest extends TestCase
     {
         $this->expectException(ServiceCreationException::class);
 
-        $container = $this->prophesize(ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $this->object->__invoke(
-            $container->reveal(),
+            $container,
             NoObjectExists::class,
             []
         );
@@ -164,19 +173,23 @@ class NoObjectExistsFactoryTest extends TestCase
             'fields'       => ['test'],
         ];
 
-        $repository    = $this->prophesize(ObjectRepository::class);
-        $objectManager = $this->prophesize(ObjectManager::class);
-        $objectManager->getRepository(DummyClass::class)
-            ->shouldBeCalled()
-            ->willReturn($repository->reveal());
+        $repository    = $this->createMock(ObjectRepository::class);
+        $objectManager = $this->createMock(ObjectManager::class);
+        $objectManager
+            ->expects(self::atLeastOnce())
+            ->method('getRepository')
+            ->with(DummyClass::class)
+            ->willReturn($repository);
 
-        $container = $this->prophesize(ServiceLocatorInterface::class);
-        $container->get('doctrine.entitymanager.orm_default')
-            ->shouldBeCalled()
-            ->willReturn($objectManager->reveal());
+        $container = $this->createMock(ServiceLocatorInterface::class);
+        $container
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->with('doctrine.entitymanager.orm_default')
+            ->willReturn($objectManager);
 
         $instance = $this->object->__invoke(
-            $container->reveal(),
+            $container,
             NoObjectExists::class,
             $options
         );
