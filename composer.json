@@ -68,7 +68,6 @@
         "laminas/laminas-log": "^2.15.3",
         "laminas/laminas-serializer": "^2.13.0",
         "laminas/laminas-session": "^2.13.0",
-        "phpspec/prophecy-phpunit": "^2.0.1",
         "phpstan/phpstan": "^1.9.2",
         "phpstan/phpstan-phpunit": "^1.2.2",
         "phpunit/phpunit": "^9.5.26",
