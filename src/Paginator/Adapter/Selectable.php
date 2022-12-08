@@ -13,8 +13,8 @@ use function count;
 /**
  * Provides a wrapper around a Selectable object
  *
- * @psalm-template TKey of array-key
- * @psalm-template T
+ * @template TKey of int
+ * @template T
  */
 class Selectable implements AdapterInterface
 {
@@ -38,7 +38,7 @@ class Selectable implements AdapterInterface
     /**
      * {@inheritDoc}
      *
-     * @return array<TKey,T>
+     * @return iterable<TKey,T>
      */
     public function getItems($offset, $itemCountPerPage)
     {
