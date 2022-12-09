@@ -10,6 +10,8 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
 
 /**
  * Bridge class that allows usage of a Doctrine Cache Storage as a Laminas Cache Storage
+ *
+ * @deprecated 5.3.0 Usage of cache adapters from doctrine/cache is deprecated, please switch to laminas-cache.
  */
 class DoctrineCacheStorage extends AbstractAdapter
 {
