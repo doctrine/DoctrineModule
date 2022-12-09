@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Cache;
 
-use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\ArrayCache as DoctrineArrayCache;
 use DoctrineModule\Cache\DoctrineCacheStorage;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\StorageInterface;
@@ -28,7 +28,6 @@ use function ucwords;
 /**
  * Tests for the cache bridge
  *
- * @todo extend \ZendTest\Cache\Storage\CommonAdapterTest instead
  * @covers \DoctrineModule\Cache\DoctrineCacheStorage
  */
 class DoctrineCacheStorageTest extends TestCase
@@ -50,8 +49,7 @@ class DoctrineCacheStorageTest extends TestCase
     protected function setUp(): void
     {
         $this->options = new AdapterOptions();
-        // @todo fix constructor as it is messy
-        $this->storage = new DoctrineCacheStorage($this->options, new ArrayCache());
+        $this->storage = new DoctrineCacheStorage($this->options, new DoctrineArrayCache());
 
         $this->assertInstanceOf(
             'Laminas\Cache\Storage\StorageInterface',
@@ -73,7 +71,7 @@ class DoctrineCacheStorageTest extends TestCase
         }
 
         ErrorHandler::stop();
-        $this->fail('ErrorHandler not stopped');
+        ErrorHandler::clean();
     }
 
     public function testOptionNamesValid(): void
@@ -729,7 +727,7 @@ class DoctrineCacheStorageTest extends TestCase
     {
         $ttl = rand();
 
-        $provider = $this->createMock('Doctrine\Common\Cache\ArrayCache');
+        $provider = $this->createMock(DoctrineArrayCache::class);
         $provider->expects($this->exactly(4))
                  ->method('save')
                  ->with($this->anything(), $this->anything(), $ttl);
