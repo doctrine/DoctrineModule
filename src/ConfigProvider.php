@@ -118,29 +118,29 @@ final class ConfigProvider
     public function getCachesConfig(): array
     {
         return [
-            'doctrine-module-apcu-cache' => [
+            'doctrinemodule.cache.apcu' => [
                 'adapter' => 'apcu',
                 'options' => ['namespace' => 'DoctrineModule'],
             ],
-            'doctrine-module-array-cache' => [
+            'doctrinemodule.cache.array' => [
                 'adapter' => Memory::class,
                 'options' => ['namespace' => 'DoctrineModule'],
             ],
-            'doctrine-module-filesystem-cache' => [
+            'doctrinemodule.cache.filesystem' => [
                 'adapter' => 'filesystem',
                 'options' => [
                     'namespace' => 'DoctrineModule',
                     'cache_dir' => 'data/DoctrineModule/cache',
                 ],
             ],
-            'doctrine-module-memcached-cache' => [
+            'doctrinemodule.cache.memcached' => [
                 'adapter' => 'memcached',
                 'options' => [
                     'namespace' => 'DoctrineModule',
                     'servers' => [],
                 ],
             ],
-            'doctrine-module-redis-cache' => [
+            'doctrinemodule.cache.redis' => [
                 'adapter' => 'redis',
                 'options' => [
                     'namespace' => 'DoctrineModule',
@@ -218,23 +218,23 @@ final class ConfigProvider
         return [
             'apcu' => [
                 'class' => LaminasStorageCache::class,
-                'instance' => 'doctrine-module-apcu-cache',
+                'instance' => 'doctrinemodule.cache.apcu',
             ],
             'array' => [
                 'class' => LaminasStorageCache::class,
-                'instance' => 'doctrine-module-array-cache',
+                'instance' => 'doctrinemodule.cache.array',
             ],
             'filesystem' => [
                 'class' => LaminasStorageCache::class,
-                'instance' => 'doctrine-module-filesystem-cache',
+                'instance' => 'doctrinemodule.cache.filesystem',
             ],
             'memcached' => [
                 'class' => LaminasStorageCache::class,
-                'instance' => 'doctrine-module-memcached-cache',
+                'instance' => 'doctrinemodule.cache.memcached',
             ],
             'redis' => [
                 'class' => LaminasStorageCache::class,
-                'instance' => 'doctrine-module-redis-cache',
+                'instance' => 'doctrinemodule.cache.redis',
             ],
         ];
     }

@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\ServiceFactory;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\FilesystemCache;
 use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModuleTest\ServiceManagerFactory;
+use Laminas\Cache\Storage\Adapter\Filesystem;
+use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -58,16 +64,18 @@ class ModuleDefinedServicesTest extends TestCase
      */
     public function getServicesThatShouldBeDefined(): array
     {
+        $legacyCacheShouldExist = InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0');
+
         return [
             ['doctrine.cache.array', true],
             ['doctrine.cache.apcu', true],
             ['doctrine.cache.filesystem', true],
-            //['doctrine.cache.memcache', true],
             ['doctrine.cache.memcached', true],
             ['doctrine.cache.redis', true],
-            //['doctrine.cache.wincache', true],
-            //['doctrine.cache.xcache', true],
-            //['doctrine.cache.zenddata', true],
+            ['doctrine.cache.memcache', $legacyCacheShouldExist],
+            ['doctrine.cache.wincache', $legacyCacheShouldExist],
+            ['doctrine.cache.xcache', $legacyCacheShouldExist],
+            ['doctrine.cache.zenddata', $legacyCacheShouldExist],
             ['doctrine.authenticationadapter.orm_default', true],
             ['doctrine.authenticationstorage.orm_default', true],
             ['doctrine.authenticationservice.orm_default', true],
@@ -81,7 +89,6 @@ class ModuleDefinedServicesTest extends TestCase
             ['doctrine.foo', false],
             ['doctrine.foo.bar', false],
             ['doctrine.cache.bar', false],
-            //['doctrine.cache.laminascachestorage'],
         ];
     }
 
@@ -90,9 +97,18 @@ class ModuleDefinedServicesTest extends TestCase
      */
     public function getServicesThatCanBeFetched(): array
     {
+        if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0')) {
+            return [
+                ['doctrine.cache.array', ArrayCache::class],
+                ['doctrine.cache.filesystem', FilesystemCache::class],
+            ];
+        }
+
         return [
             ['doctrine.cache.array', LaminasStorageCache::class],
             ['doctrine.cache.filesystem', LaminasStorageCache::class],
+            ['doctrinemodule.cache.array', Memory::class],
+            ['doctrinemodule.cache.filesystem', Filesystem::class],
         ];
     }
 
