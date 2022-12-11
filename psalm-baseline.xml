@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
+  <file src="src/ConfigProvider.php">
+    <UndefinedClass occurrences="11">
+      <code>DoctrineCache\ApcCache</code>
+      <code>DoctrineCache\ApcuCache</code>
+      <code>DoctrineCache\ArrayCache</code>
+      <code>DoctrineCache\FilesystemCache</code>
+      <code>DoctrineCache\MemcacheCache</code>
+      <code>DoctrineCache\MemcachedCache</code>
+      <code>DoctrineCache\PredisCache</code>
+      <code>DoctrineCache\RedisCache</code>
+      <code>DoctrineCache\WinCacheCache</code>
+      <code>DoctrineCache\XcacheCache</code>
+      <code>DoctrineCache\ZendDataCache</code>
+    </UndefinedClass>
+  </file>
+  <file src="src/Service/CacheFactory.php">
+    <UndefinedClass occurrences="3">
+      <code>Cache\FilesystemCache</code>
+      <code>Cache\MemcacheCache</code>
+      <code>Cache\PredisCache</code>
+    </UndefinedClass>
+  </file>
+</files>

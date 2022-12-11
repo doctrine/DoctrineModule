@@ -8,6 +8,15 @@ parameters:
         -
           message: '#internal(G|S)etItem\(\) has parameter \$(casToken|value) with no type specified#'
           path: src/Cache/DoctrineCacheStorage.php
+        - '#(Class|Instantiated class) Doctrine\\Common\\Cache\\(.*) not found#'
+        - '#Call to method (.*) on an unknown class Doctrine\\Common\\Cache\\(.*)#'
+        -
+          message: '#class DoctrineModule\\Cache\\DoctrineCacheStorage constructor expects#'
+          path: tests/Cache/DoctrineCacheStorageTest.php
+        -
+          message: '#mock an undefined method save\(\) on class Doctrine\\Common\\Cache\\ArrayCache#'
+          path: tests/Cache/DoctrineCacheStorageTest.php
+
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon
