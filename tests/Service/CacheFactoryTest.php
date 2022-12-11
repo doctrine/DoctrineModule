@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\PredisCache;
 use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModule\Service\CacheFactory;
 use Laminas\Cache\ConfigProvider;
-use Laminas\Cache\Storage\Adapter\BlackHole;
-use Laminas\Cache\Storage\AdapterPluginManager;
-use Laminas\ServiceManager\Factory\InvokableFactory;
+use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 use function assert;
-use function class_exists;
 
 /**
  * Test for {@see \DoctrineModule\Service\CacheFactory}
@@ -29,6 +28,10 @@ class CacheFactoryTest extends BaseTestCase
      */
     public function testWillSetNamespace(): void
     {
+        if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {
+            $this->markTestSkipped('This test requires doctrine/cache:^1.0, which is not installed.');
+        }
+
         $factory        = new CacheFactory('foo');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -36,7 +39,10 @@ class CacheFactoryTest extends BaseTestCase
             [
                 'doctrine' => [
                     'cache' => [
-                        'foo' => ['namespace' => 'bar'],
+                        'foo' => [
+                            'class' => ArrayCache::class,
+                            'namespace' => 'bar',
+                        ],
                     ],
                 ],
             ]
@@ -68,12 +74,12 @@ class CacheFactoryTest extends BaseTestCase
                 ],
             ],
             'caches' => [
-                'my-laminas-cache' => ['adapter' => 'blackhole'],
+                'my-laminas-cache' => ['adapter' => 'memory'],
             ],
         ];
 
-        // setup for laminas-cache 3 with blackhole adapter 2
-        $serviceManager->configure((new BlackHole\ConfigProvider())->getServiceDependencies());
+        // setup for laminas-cache 3 with memory adapter 2
+        $serviceManager->configure((new Memory\ConfigProvider())->getServiceDependencies());
         $serviceManager->setService('config', $config);
 
         $cache = $factory->__invoke($serviceManager, LaminasStorageCache::class);
@@ -83,6 +89,10 @@ class CacheFactoryTest extends BaseTestCase
 
     public function testCreatePredisCache(): void
     {
+        if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {
+            $this->markTestSkipped('This test requires doctrine/cache:^1.0, which is not installed.');
+        }
+
         $factory        = new CacheFactory('predis');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -91,7 +101,7 @@ class CacheFactoryTest extends BaseTestCase
                 'doctrine' => [
                     'cache' => [
                         'predis' => [
-                            'class' => 'Doctrine\Common\Cache\PredisCache',
+                            'class' => PredisCache::class,
                             'instance' => 'my_predis_alias',
                             'namespace' => 'DoctrineModule',
                         ],
@@ -110,6 +120,10 @@ class CacheFactoryTest extends BaseTestCase
 
     public function testUseServiceFactory(): void
     {
+        if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {
+            $this->markTestSkipped('This test requires doctrine/cache:^1.0, which is not installed.');
+        }
+
         $factory        = new CacheFactory('chain');
         $serviceManager = new ServiceManager();
         $serviceManager->setService(

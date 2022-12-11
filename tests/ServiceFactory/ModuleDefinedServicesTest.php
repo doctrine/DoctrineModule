@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\ServiceFactory;
 
+use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModuleTest\ServiceManagerFactory;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
@@ -59,14 +60,14 @@ class ModuleDefinedServicesTest extends TestCase
     {
         return [
             ['doctrine.cache.array', true],
-            ['doctrine.cache.apc', true],
+            ['doctrine.cache.apcu', true],
             ['doctrine.cache.filesystem', true],
-            ['doctrine.cache.memcache', true],
+            //['doctrine.cache.memcache', true],
             ['doctrine.cache.memcached', true],
             ['doctrine.cache.redis', true],
-            ['doctrine.cache.wincache', true],
-            ['doctrine.cache.xcache', true],
-            ['doctrine.cache.zenddata', true],
+            //['doctrine.cache.wincache', true],
+            //['doctrine.cache.xcache', true],
+            //['doctrine.cache.zenddata', true],
             ['doctrine.authenticationadapter.orm_default', true],
             ['doctrine.authenticationstorage.orm_default', true],
             ['doctrine.authenticationservice.orm_default', true],
@@ -90,7 +91,8 @@ class ModuleDefinedServicesTest extends TestCase
     public function getServicesThatCanBeFetched(): array
     {
         return [
-            ['doctrine.cache.array', 'Doctrine\Common\Cache\ArrayCache'],
+            ['doctrine.cache.array', LaminasStorageCache::class],
+            ['doctrine.cache.filesystem', LaminasStorageCache::class],
         ];
     }
 

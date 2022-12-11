@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace DoctrineModuleTest\Service;
 
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver as MongoDBODMAnnotationDriver;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AttributeDriver as MongoDBODMAttributeDriver;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver as ORMAttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModule\Service\DriverFactory;
 use DoctrineModuleTest\Service\Mock\MetadataDriverMock;
+use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -133,7 +134,7 @@ class DriverFactoryTest extends BaseTestCase
         );
         $serviceManager->setService(
             'doctrine.cache.array',
-            new ArrayCache()
+            new LaminasStorageCache(new Memory())
         );
 
         $factory = new DriverFactory('testDriver');
@@ -157,7 +158,7 @@ class DriverFactoryTest extends BaseTestCase
         );
         $serviceManager->setService(
             'doctrine.cache.array',
-            new ArrayCache()
+            new LaminasStorageCache(new Memory())
         );
 
         $factory = new DriverFactory('testDriver');

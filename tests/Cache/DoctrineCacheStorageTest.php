@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Cache;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use Doctrine\Common\Cache\ArrayCache as DoctrineArrayCache;
 use DoctrineModule\Cache\DoctrineCacheStorage;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
@@ -48,6 +50,10 @@ class DoctrineCacheStorageTest extends TestCase
 
     protected function setUp(): void
     {
+        if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {
+            $this->markTestSkipped('This test requires doctrine/cache:^1.0, which is not installed.');
+        }
+
         $this->options = new AdapterOptions();
         $this->storage = new DoctrineCacheStorage($this->options, new DoctrineArrayCache());
 
