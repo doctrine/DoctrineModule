@@ -15,6 +15,7 @@ use function count;
  *
  * @template TKey of int
  * @template T
+ * @template-implements AdapterInterface<TKey, T>
  */
 class Selectable implements AdapterInterface
 {
