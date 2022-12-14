@@ -17,7 +17,7 @@ use Laminas\Cache\Storage\Adapter\Memory;
 final class ConfigProvider
 {
     /**
-     * @return mixed[]
+     * @return array<non-empty-string, mixed[]>
      */
     public function __invoke(): array
     {
@@ -33,7 +33,7 @@ final class ConfigProvider
     /**
      * Return application-level dependency configuration
      *
-     * @return mixed[]
+     * @return array<non-empty-string, array<non-empty-string, class-string>>
      */
     public function getDependencyConfig(): array
     {
@@ -47,7 +47,7 @@ final class ConfigProvider
     /**
      * Default configuration for Doctrine module
      *
-     * @return mixed[]
+     * @return array<non-empty-string, mixed[]>
      */
     public function getDoctrineConfig(): array
     {
@@ -79,7 +79,7 @@ final class ConfigProvider
     /**
      * Factory mappings - used to define which factory to use to instantiate a particular doctrine service type
      *
-     * @return mixed[]
+     * @return array<non-empty-string, class-string>
      */
     public function getDoctrineFactoryConfig(): array
     {
@@ -94,7 +94,7 @@ final class ConfigProvider
     }
 
     /**
-     * @return mixed[]
+     * @return array<non-empty-string, mixed[]>
      */
     public function getValidatorConfig(): array
     {
@@ -113,7 +113,7 @@ final class ConfigProvider
     }
 
     /**
-     * @return mixed[]
+     * @return array<non-empty-string, array{adapter: string, options?: mixed[]}>
      */
     public function getCachesConfig(): array
     {
@@ -157,7 +157,7 @@ final class ConfigProvider
      * Use doctrine/cache config, when doctrine/cache:^1.0 is installed, and use laminas/laminas-cache,
      * when doctrine/cache:^2.0 is installed, as the latter does not include any cache adapters anymore
      *
-     * @return mixed[]
+     * @return array<non-empty-string,array{class:class-string,instance?:string,namespace?:string,directory?:string}>
      */
     private function getDoctrineCacheConfig(): array
     {
