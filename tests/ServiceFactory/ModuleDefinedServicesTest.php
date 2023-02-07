@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\ServiceFactory;
 
+use Doctrine\Common\Cache\ArrayCache;
 use DoctrineModuleTest\ServiceManagerFactory;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +49,7 @@ class ModuleDefinedServicesTest extends TestCase
      */
     public function testModuleInvalidService(string $serviceName): void
     {
-        $this->expectException('Laminas\ServiceManager\Exception\ServiceNotFoundException');
+        $this->expectException(ServiceNotFoundException::class);
 
         $this->serviceManager->get($serviceName);
     }
@@ -90,7 +92,7 @@ class ModuleDefinedServicesTest extends TestCase
     public function getServicesThatCanBeFetched(): array
     {
         return [
-            ['doctrine.cache.array', 'Doctrine\Common\Cache\ArrayCache'],
+            ['doctrine.cache.array', ArrayCache::class],
         ];
     }
 

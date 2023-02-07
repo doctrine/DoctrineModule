@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace DoctrineModuleTest\Validator\Adapter;
 
 use DateTime;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\UniqueObject;
 use InvalidArgumentException;
 use Laminas\Validator\Exception\RuntimeException;
@@ -22,14 +24,14 @@ class UniqueObjectTest extends BaseTestCase
 {
     public function testCanValidateWithNotAvailableObjectInRepository(): void
     {
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue(null));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -43,7 +45,7 @@ class UniqueObjectTest extends BaseTestCase
     {
         $match = new stdClass();
 
-        $classMetadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
@@ -54,13 +56,13 @@ class UniqueObjectTest extends BaseTestCase
             ->with($match)
             ->will($this->returnValue(['id' => 'identifier']));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
                       ->will($this->returnValue($classMetadata));
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
@@ -83,7 +85,7 @@ class UniqueObjectTest extends BaseTestCase
     {
         $match = new stdClass();
 
-        $classMetadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
@@ -94,13 +96,13 @@ class UniqueObjectTest extends BaseTestCase
             ->with($match)
             ->will($this->returnValue(['id' => 'identifier']));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
                       ->will($this->returnValue($classMetadata));
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
@@ -123,7 +125,7 @@ class UniqueObjectTest extends BaseTestCase
     {
         $match = new stdClass();
 
-        $classMetadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
@@ -134,13 +136,13 @@ class UniqueObjectTest extends BaseTestCase
             ->with($match)
             ->will($this->returnValue(['id' => 'identifier']));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
                       ->will($this->returnValue($classMetadata));
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
@@ -167,14 +169,14 @@ class UniqueObjectTest extends BaseTestCase
 
         $match = new stdClass();
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
             ->will($this->returnValue($match));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -192,19 +194,19 @@ class UniqueObjectTest extends BaseTestCase
 
         $match = new stdClass();
 
-        $classMetadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
             ->will($this->returnValue(['id']));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
                       ->will($this->returnValue($classMetadata));
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
@@ -230,19 +232,19 @@ class UniqueObjectTest extends BaseTestCase
 
         $match = new stdClass();
 
-        $classMetadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
             ->will($this->returnValue(['id']));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
                       ->will($this->returnValue($classMetadata));
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
@@ -270,7 +272,7 @@ class UniqueObjectTest extends BaseTestCase
             ObjectManager::class
         ));
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
 
         new UniqueObject([
             'object_repository' => $repository,
@@ -288,7 +290,7 @@ class UniqueObjectTest extends BaseTestCase
 
         $objectManager = new stdClass();
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
 
         new UniqueObject([
             'object_repository' => $repository,
@@ -300,14 +302,14 @@ class UniqueObjectTest extends BaseTestCase
     public function testCanValidateWithNotAvailableObjectInRepositoryByDateTimeObject(): void
     {
         $date       = new DateTime('17 March 2014');
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['date' => $date])
             ->will($this->returnValue(null));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -325,7 +327,7 @@ class UniqueObjectTest extends BaseTestCase
 
         $match = new stdClass();
 
-        $classMetadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata
             ->expects($this->atLeastOnce())
             ->method('getIdentifierValues')
@@ -334,13 +336,13 @@ class UniqueObjectTest extends BaseTestCase
                 [$match, ['id' => 'identifier']],
             ]);
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with('stdClass')
             ->will($this->returnValue($classMetadata));
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
@@ -365,7 +367,7 @@ class UniqueObjectTest extends BaseTestCase
     {
         $match = new stdClass();
 
-        $classMetadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
@@ -376,13 +378,13 @@ class UniqueObjectTest extends BaseTestCase
             ->with($match)
             ->will($this->returnValue(['id' => 'identifier']));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
                       ->will($this->returnValue($classMetadata));
 
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')

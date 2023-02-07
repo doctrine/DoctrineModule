@@ -28,12 +28,9 @@ class ObjectMultiCheckbox extends MultiCheckbox
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $key
-     *
      * @return $this
      */
-    public function setOption($key, $value): self
+    public function setOption(mixed $key, mixed $value): self
     {
         $this->getProxy()->setOptions([$key => $value]);
 

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service\Authentication;
 
+use Doctrine\Persistence\ObjectManager;
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use DoctrineModule\Service\Authentication\AuthenticationServiceFactory;
 use DoctrineModule\Service\Authentication\StorageFactory;
+use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use Laminas\Authentication\AuthenticationService;
+use Laminas\Authentication\Storage\Session;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -18,7 +21,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         $name    = 'testFactory';
         $factory = new AuthenticationServiceFactory($name);
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -28,7 +31,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
                     'authentication' => [
                         $name => [
                             'objectManager' => $objectManager,
-                            'identityClass' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                            'identityClass' => IdentityObject::class,
                             'identityProperty' => 'username',
                             'credentialProperty' => 'password',
                         ],
@@ -38,7 +41,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         );
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',
-            'Laminas\Authentication\Storage\Session'
+            Session::class
         );
         $serviceManager->setFactory('doctrine.authenticationadapter.' . $name, new AdapterFactory($name));
         $serviceManager->setFactory('doctrine.authenticationstorage.' . $name, new StorageFactory($name));

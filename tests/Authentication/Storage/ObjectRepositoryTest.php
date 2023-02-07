@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Authentication\Storage;
 
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Authentication\Storage\ObjectRepository as ObjectRepositoryStorage;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use Laminas\Authentication\Storage\NonPersistent as NonPersistentStorage;
@@ -21,13 +23,13 @@ class ObjectRepositoryTest extends BaseTestCase
         $entity->setUsername('a username');
         $entity->setPassword('a password');
 
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->exactly(1))
                          ->method('find')
                          ->with($this->equalTo('a username'))
                          ->will($this->returnValue($entity));
 
-        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata->expects($this->exactly(1))
                  ->method('getIdentifierValues')
                  ->with($this->equalTo($entity))

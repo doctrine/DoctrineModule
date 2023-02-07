@@ -13,10 +13,7 @@ class IdentityObject
 
     protected ?string $password = null;
 
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password): void
+    public function setPassword(mixed $password): void
     {
         $this->password = (string) $password;
     }

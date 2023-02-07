@@ -6,6 +6,7 @@ namespace DoctrineModuleTest\Paginator\Adapter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +22,7 @@ class SelectableAdapterTest extends TestCase
      */
     public function testGetItemsAtOffsetZeroWithEmptyCriteria(): void
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        $selectable = $this->createMock(Selectable::class);
         $adapter    = new SelectableAdapter($selectable);
 
         $me = $this;
@@ -52,7 +53,7 @@ class SelectableAdapterTest extends TestCase
      */
     public function testGetItemsAtOffsetZeroWithNonEmptyCriteria(): void
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        $selectable = $this->createMock(Selectable::class);
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
         $adapter    = new SelectableAdapter($selectable, $criteria);
 
@@ -86,7 +87,7 @@ class SelectableAdapterTest extends TestCase
      */
     public function testGetItemsAtOffsetTenWithEmptyCriteria(): void
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        $selectable = $this->createMock(Selectable::class);
         $adapter    = new SelectableAdapter($selectable);
 
         $me = $this;
@@ -116,7 +117,7 @@ class SelectableAdapterTest extends TestCase
      */
     public function testGetItemsAtOffsetTenWithNonEmptyCriteria(): void
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        $selectable = $this->createMock(Selectable::class);
         $criteria   = new Criteria(Criteria::expr()->eq('foo', 'bar'));
         $adapter    = new SelectableAdapter($selectable, $criteria);
 
@@ -150,7 +151,7 @@ class SelectableAdapterTest extends TestCase
      */
     public function testReturnsCorrectCount(): void
     {
-        $selectable = $this->createMock('Doctrine\Common\Collections\Selectable');
+        $selectable = $this->createMock(Selectable::class);
         $expression = Criteria::expr()->eq('foo', 'bar');
         $criteria   = new Criteria($expression, ['baz' => Criteria::DESC], 10, 20);
         $adapter    = new SelectableAdapter($selectable, $criteria);
@@ -159,12 +160,10 @@ class SelectableAdapterTest extends TestCase
             ->method('matching')
             ->with(
                 $this->callback(
-                    static function (Criteria $criteria) use ($expression) {
-                        return $criteria->getWhereExpression() === $expression
-                            && ($criteria->getOrderings() === ['baz' => Criteria::DESC])
-                            && $criteria->getFirstResult() === null
-                            && $criteria->getMaxResults() === null;
-                    }
+                    static fn (Criteria $criteria) => $criteria->getWhereExpression() === $expression
+                        && ($criteria->getOrderings() === ['baz' => Criteria::DESC])
+                        && $criteria->getFirstResult() === null
+                        && $criteria->getMaxResults() === null
                 )
             )
             ->will($this->returnValue(new ArrayCollection(range(1, 101))));

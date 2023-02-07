@@ -12,7 +12,6 @@ use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 use function class_exists;
-use function get_class;
 use function gettype;
 use function is_object;
 use function is_string;
@@ -34,7 +33,7 @@ final class EventManagerFactory extends AbstractFactory
             throw new RuntimeException(sprintf(
                 'Invalid options received, expected %s, got %s.',
                 EventManagerOptions::class,
-                get_class($options)
+                $options::class
             ));
         }
 
@@ -56,7 +55,7 @@ final class EventManagerFactory extends AbstractFactory
                 continue;
             }
 
-            $subscriberType = is_object($subscriberName) ? get_class($subscriberName) : $subscriberName;
+            $subscriberType = is_object($subscriberName) ? $subscriberName::class : $subscriberName;
 
             throw new InvalidArgumentException(
                 sprintf(

@@ -7,6 +7,7 @@ namespace DoctrineModuleTest\Cache;
 use Doctrine\Common\Cache\ArrayCache as DoctrineArrayCache;
 use DoctrineModule\Cache\DoctrineCacheStorage;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
+use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Stdlib\ErrorHandler;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +20,8 @@ use function gettype;
 use function is_string;
 use function ksort;
 use function method_exists;
-use function rand;
+use function mt_getrandmax;
+use function random_int;
 use function sort;
 use function sprintf;
 use function str_replace;
@@ -52,12 +54,12 @@ class DoctrineCacheStorageTest extends TestCase
         $this->storage = new DoctrineCacheStorage($this->options, new DoctrineArrayCache());
 
         $this->assertInstanceOf(
-            'Laminas\Cache\Storage\StorageInterface',
+            StorageInterface::class,
             $this->storage,
             'Storage adapter instance is needed for test'
         );
         $this->assertInstanceOf(
-            'Laminas\Cache\Storage\Adapter\AdapterOptions',
+            AdapterOptions::class,
             $this->options,
             'Options instance is needed for test'
         );
@@ -152,7 +154,7 @@ class DoctrineCacheStorageTest extends TestCase
     public function testGetCapabilities(): void
     {
         $capabilities = $this->storage->getCapabilities();
-        $this->assertInstanceOf('Laminas\Cache\Storage\Capabilities', $capabilities);
+        $this->assertInstanceOf(Capabilities::class, $capabilities);
     }
 
     public function testDatatypesCapability(): void
@@ -725,7 +727,7 @@ class DoctrineCacheStorageTest extends TestCase
 
     public function testSetItemAndSetItemsCallSaveWithTtl(): void
     {
-        $ttl = rand();
+        $ttl = random_int(0, mt_getrandmax());
 
         $provider = $this->createMock(DoctrineArrayCache::class);
         $provider->expects($this->exactly(4))

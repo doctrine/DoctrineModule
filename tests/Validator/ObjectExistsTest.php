@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Validator\Adapter;
 
+use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\ObjectExists;
+use Laminas\Validator\Exception\InvalidArgumentException;
+use Laminas\Validator\Exception\RuntimeException;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
 
@@ -19,7 +22,7 @@ class ObjectExistsTest extends BaseTestCase
 {
     public function testCanValidateWithSingleField(): void
     {
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
 
         $repository
             ->expects($this->exactly(2))
@@ -35,7 +38,7 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testCanValidateWithMultipleFields(): void
     {
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->exactly(2))
             ->method('findOneBy')
@@ -60,7 +63,7 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testCanValidateFalseOnNoResult(): void
     {
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
@@ -75,49 +78,49 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testWillRefuseMissingRepository(): void
     {
-        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         new ObjectExists(['fields' => 'field']);
     }
 
     public function testWillRefuseNonObjectRepository(): void
     {
-        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         new ObjectExists(['object_repository' => 'invalid', 'fields' => 'field']);
     }
 
     public function testWillRefuseInvalidRepository(): void
     {
-        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         new ObjectExists(['object_repository' => new stdClass(), 'fields' => 'field']);
     }
 
     public function testWillRefuseMissingFields(): void
     {
-        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         new ObjectExists([
-            'object_repository' => $this->createMock('Doctrine\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock(ObjectRepository::class),
         ]);
     }
 
     public function testWillRefuseEmptyFields(): void
     {
-        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         new ObjectExists([
-            'object_repository' => $this->createMock('Doctrine\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock(ObjectRepository::class),
             'fields'            => [],
         ]);
     }
 
     public function testWillRefuseNonStringFields(): void
     {
-        $this->expectException('Laminas\Validator\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         new ObjectExists([
-            'object_repository' => $this->createMock('Doctrine\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock(ObjectRepository::class),
             'fields'            => [123],
         ]);
     }
@@ -125,13 +128,13 @@ class ObjectExistsTest extends BaseTestCase
     public function testWillNotValidateOnFieldsCountMismatch(): void
     {
         $this->expectException(
-            'Laminas\Validator\Exception\RuntimeException'
+            RuntimeException::class
         );
         $this->expectExceptionMessage(
             'Provided values count is 1, while expected number of fields to be matched is 2'
         );
         $validator = new ObjectExists([
-            'object_repository' => $this->createMock('Doctrine\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock(ObjectRepository::class),
             'fields'            => ['field1', 'field2'],
         ]);
         $validator->isValid(['field1Value']);
@@ -140,14 +143,14 @@ class ObjectExistsTest extends BaseTestCase
     public function testWillNotValidateOnFieldKeysMismatch(): void
     {
         $this->expectException(
-            'Laminas\Validator\Exception\RuntimeException'
+            RuntimeException::class
         );
         $this->expectExceptionMessage(
             'Field "field2" was not provided, but was expected since the configured field lists needs it for validation'
         );
 
         $validator = new ObjectExists([
-            'object_repository' => $this->createMock('Doctrine\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock(ObjectRepository::class),
             'fields'            => ['field1', 'field2'],
         ]);
 
@@ -156,9 +159,9 @@ class ObjectExistsTest extends BaseTestCase
 
     public function testErrorMessageIsStringInsteadArray(): void
     {
-        $repository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $repository = $this->createMock(ObjectRepository::class);
         $validator  = new ObjectExists([
-            'object_repository' => $this->createMock('Doctrine\Persistence\ObjectRepository'),
+            'object_repository' => $this->createMock(ObjectRepository::class),
             'fields'            => 'field',
         ]);
 
