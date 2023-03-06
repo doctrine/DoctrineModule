@@ -37,7 +37,7 @@
     "homepage": "http://www.doctrine-project.org/",
     "require": {
         "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
-        "doctrine/annotations": "^1.13.3",
+        "doctrine/annotations": "^1.13.3 || ^2",
         "doctrine/cache": "^1.13.0",
         "doctrine/collections": "^1.8.0",
         "doctrine/doctrine-laminas-hydrator": "^3.2.0",
@@ -59,7 +59,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0.2",
-        "doctrine/mongodb-odm": "^2.4.2",
+        "doctrine/mongodb-odm": "^2.5.0",
         "doctrine/orm": "^2.13.4",
         "jangregor/phpstan-prophecy": "^1.0.0",
         "laminas/laminas-cache-storage-adapter-blackhole": "^2.0.0",
@@ -101,7 +101,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         },
         "platform": {
-            "ext-mongodb": "1.8.0"
+            "ext-mongodb": "1.11.0"
         },
         "sort-packages": true
     },
