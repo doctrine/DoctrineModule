@@ -8,8 +8,6 @@ use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
 
-use function class_exists;
-
 /**
  * Base module for integration of Doctrine projects with Laminas applications
  */
