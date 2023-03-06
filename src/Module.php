@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DoctrineModule;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
