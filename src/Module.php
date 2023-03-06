@@ -18,11 +18,6 @@ final class Module implements ConfigProviderInterface, InitProviderInterface
 {
     public function init(ModuleManagerInterface $manager): void
     {
-        AnnotationRegistry::registerLoader(
-            static function ($className) {
-                return class_exists($className);
-            }
-        );
     }
 
     /**
