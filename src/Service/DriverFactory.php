@@ -81,10 +81,13 @@ final class DriverFactory extends AbstractFactory
             )
         ) {
             $reader = new Annotations\AnnotationReader();
-            $reader = new Annotations\CachedReader(
-                new Annotations\IndexedReader($reader),
-                $container->get($options->getCache())
-            );
+            // Decorate reader with cache behavior if available:
+            if (class_exists(Annotations\CachedReader::class)) {
+                $reader = new Annotations\CachedReader(
+                    new Annotations\IndexedReader($reader),
+                    $container->get($options->getCache())
+                );
+            }
             $driver = new $class($reader, $paths);
         } else {
             $driver = new $class($paths);
