@@ -77,19 +77,7 @@ class CacheFactoryTest extends BaseTestCase
             $serviceManager->configure((new BlackHole\ConfigProvider())->getServiceDependencies());
             $serviceManager->setService('config', $config);
         } else {
-            // setup for laminas-cache 2 and 3 with blackhole adapter 1
-            $config['caches']['my-laminas-cache']['name'] = 'blackhole';
-            $pluginManager                                = $serviceManager->get(AdapterPluginManager::class);
-            assert($pluginManager instanceof AdapterPluginManager);
-            $pluginManager->configure([
-                'factories' => [
-                    BlackHole::class => InvokableFactory::class,
-                ],
-                'aliases'   => [
-                    'blackhole'  => BlackHole::class,
-                ],
-            ]);
-            $serviceManager->setService('config', $config);
+            $this->markTestSkipped("Test requires blackhole adapter 2");
         }
 
         $cache = $factory->__invoke($serviceManager, LaminasStorageCache::class);
