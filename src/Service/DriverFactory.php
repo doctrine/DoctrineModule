@@ -80,13 +80,22 @@ final class DriverFactory extends AbstractFactory
                 is_a($class, MongoODMAnnotationDriver::class, true)
             )
         ) {
-            $reader = new Annotations\AnnotationReader();
+            $reader = new Annotations\IndexedReader(new Annotations\AnnotationReader());
             // Decorate reader with cache behavior if available:
             if (class_exists(Annotations\CachedReader::class)) {
+                // For Doctrine Annotations 1.x, use the old CachedReader; this can
+                // be removed when Annotations 1.x support is dropped.
                 $reader = new Annotations\CachedReader(
-                    new Annotations\IndexedReader($reader),
+                    $reader,
                     $container->get($options->getCache())
                 );
+            } else if (class_exists(Annotations\PsrCachedReader::class)) {
+                // For Doctrine Annotations 2.x, we can use the PsrCachedReader if
+                // the cache supports the appropriate interface.
+                $cache = $container->get($options->getCache());
+                if ($cache instanceof \Psr\Cache\CacheItemPoolInterface) {
+                    $reader = new Annotations\PsrCachedReader($reader, $cache);
+                }
             }
             $driver = new $class($reader, $paths);
         } else {
