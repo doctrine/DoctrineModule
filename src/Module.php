@@ -5,18 +5,12 @@ declare(strict_types=1);
 namespace DoctrineModule;
 
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
-use Laminas\ModuleManager\Feature\InitProviderInterface;
-use Laminas\ModuleManager\ModuleManagerInterface;
 
 /**
  * Base module for integration of Doctrine projects with Laminas applications
  */
-final class Module implements ConfigProviderInterface, InitProviderInterface
+final class Module implements ConfigProviderInterface
 {
-    public function init(ModuleManagerInterface $manager): void
-    {
-    }
-
     /**
      * @return array<string, mixed>
      */
