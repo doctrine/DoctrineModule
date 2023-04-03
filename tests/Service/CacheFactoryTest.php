@@ -12,7 +12,6 @@ use Doctrine\Common\Cache\PredisCache;
 use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModule\Service\CacheFactory;
 use Laminas\Cache\ConfigProvider;
-use Laminas\Cache\Storage\Adapter\BlackHole;
 use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -79,13 +78,9 @@ class CacheFactoryTest extends BaseTestCase
             ],
         ];
 
-        if (class_exists(BlackHole\ConfigProvider::class)) {
-            // setup for laminas-cache 3 with blackhole adapter 2
-            $serviceManager->configure((new BlackHole\ConfigProvider())->getServiceDependencies());
-            $serviceManager->setService('config', $config);
-        } else {
-            $this->markTestSkipped('Test requires blackhole adapter 2');
-        }
+        // setup for laminas-cache 3 with memory adapter 2
+        $serviceManager->configure((new Memory\ConfigProvider())->getServiceDependencies());
+        $serviceManager->setService('config', $config);
 
         $cache = $factory->__invoke($serviceManager, LaminasStorageCache::class);
 
