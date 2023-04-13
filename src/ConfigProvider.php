@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace DoctrineModule;
 
-use Doctrine\Common\Cache;
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
+use Doctrine\Common\Cache as DoctrineCache;
+use DoctrineModule\Cache\LaminasStorageCache;
 use Laminas\Authentication\Storage\Session as LaminasSessionStorage;
+use Laminas\Cache\Storage\Adapter\Memory;
 
 /**
  * Config provider for DoctrineORMModule config
@@ -13,11 +17,12 @@ use Laminas\Authentication\Storage\Session as LaminasSessionStorage;
 final class ConfigProvider
 {
     /**
-     * @return mixed[]
+     * @return array<non-empty-string, mixed[]>
      */
     public function __invoke(): array
     {
         return [
+            'caches' => $this->getCachesConfig(),
             'doctrine' => $this->getDoctrineConfig(),
             'doctrine_factories' => $this->getDoctrineFactoryConfig(),
             'dependencies' => $this->getDependencyConfig(),
@@ -28,7 +33,7 @@ final class ConfigProvider
     /**
      * Return application-level dependency configuration
      *
-     * @return mixed[]
+     * @return array<non-empty-string, array<non-empty-string, class-string>>
      */
     public function getDependencyConfig(): array
     {
@@ -42,62 +47,12 @@ final class ConfigProvider
     /**
      * Default configuration for Doctrine module
      *
-     * @return mixed[]
+     * @return array<non-empty-string, mixed[]>
      */
     public function getDoctrineConfig(): array
     {
         return [
-            'cache' => [
-                'apc' => [
-                    'class'     => Cache\ApcCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'apcu' => [
-                    'class'     => Cache\ApcuCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'array' => [
-                    'class' => Cache\ArrayCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'filesystem' => [
-                    'class'     => Cache\FilesystemCache::class,
-                    'directory' => 'data/DoctrineModule/cache',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'memcache' => [
-                    'class'     => Cache\MemcacheCache::class,
-                    'instance'  => 'my_memcache_alias',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'memcached' => [
-                    'class'     => Cache\MemcachedCache::class,
-                    'instance'  => 'my_memcached_alias',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'predis' => [
-                    'class'     => Cache\PredisCache::class,
-                    'instance'  => 'my_predis_alias',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'redis' => [
-                    'class'     => Cache\RedisCache::class,
-                    'instance'  => 'my_redis_alias',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'wincache' => [
-                    'class'     => Cache\WinCacheCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'xcache' => [
-                    'class'     => Cache\XcacheCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'zenddata' => [
-                    'class'     => Cache\ZendDataCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-            ],
+            'cache' => $this->getDoctrineCacheConfig(),
 
             //These authentication settings are a hack to tide things over until version 1.0
             //Normall doctrineModule should have no mention of odm or orm
@@ -124,14 +79,14 @@ final class ConfigProvider
     /**
      * Factory mappings - used to define which factory to use to instantiate a particular doctrine service type
      *
-     * @return mixed[]
+     * @return array<non-empty-string, class-string>
      */
     public function getDoctrineFactoryConfig(): array
     {
         return [
-            'cache'                 => Service\CacheFactory::class,
-            'eventmanager'          => Service\EventManagerFactory::class,
-            'driver'                => Service\DriverFactory::class,
+            'cache' => Service\CacheFactory::class,
+            'eventmanager' => Service\EventManagerFactory::class,
+            'driver' => Service\DriverFactory::class,
             'authenticationadapter' => Service\Authentication\AdapterFactory::class,
             'authenticationstorage' => Service\Authentication\StorageFactory::class,
             'authenticationservice' => Service\Authentication\AuthenticationServiceFactory::class,
@@ -139,20 +94,147 @@ final class ConfigProvider
     }
 
     /**
-     * @return mixed[]
+     * @return array<non-empty-string, mixed[]>
      */
     public function getValidatorConfig(): array
     {
         return [
-            'aliases'   => [
+            'aliases' => [
                 'DoctrineNoObjectExists' => Validator\NoObjectExists::class,
-                'DoctrineObjectExists'   => Validator\ObjectExists::class,
-                'DoctrineUniqueObject'   => Validator\UniqueObject::class,
+                'DoctrineObjectExists' => Validator\ObjectExists::class,
+                'DoctrineUniqueObject' => Validator\UniqueObject::class,
             ],
             'factories' => [
                 Validator\NoObjectExists::class => Validator\Service\NoObjectExistsFactory::class,
-                Validator\ObjectExists::class   => Validator\Service\ObjectExistsFactory::class,
-                Validator\UniqueObject::class   => Validator\Service\UniqueObjectFactory::class,
+                Validator\ObjectExists::class => Validator\Service\ObjectExistsFactory::class,
+                Validator\UniqueObject::class => Validator\Service\UniqueObjectFactory::class,
+            ],
+        ];
+    }
+
+    /**
+     * @return array<non-empty-string, array{adapter: string, options?: mixed[]}>
+     */
+    public function getCachesConfig(): array
+    {
+        return [
+            'doctrinemodule.cache.apcu' => [
+                'adapter' => 'apcu',
+                'options' => ['namespace' => 'DoctrineModule'],
+            ],
+            'doctrinemodule.cache.array' => [
+                'adapter' => Memory::class,
+                'options' => ['namespace' => 'DoctrineModule'],
+            ],
+            'doctrinemodule.cache.filesystem' => [
+                'adapter' => 'filesystem',
+                'options' => [
+                    'namespace' => 'DoctrineModule',
+                    'cache_dir' => 'data/DoctrineModule/cache',
+                ],
+            ],
+            'doctrinemodule.cache.memcached' => [
+                'adapter' => 'memcached',
+                'options' => [
+                    'namespace' => 'DoctrineModule',
+                    'servers' => [],
+                ],
+            ],
+            'doctrinemodule.cache.redis' => [
+                'adapter' => 'redis',
+                'options' => [
+                    'namespace' => 'DoctrineModule',
+                    'server' => [
+                        'host' => 'localhost',
+                        'post' => 6379,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Use doctrine/cache config, when doctrine/cache:^1.0 is installed, and use laminas/laminas-cache,
+     * when doctrine/cache:^2.0 is installed, as the latter does not include any cache adapters anymore
+     *
+     * @return array<non-empty-string,array{class:class-string,instance?:string,namespace?:string,directory?:string}>
+     */
+    private function getDoctrineCacheConfig(): array
+    {
+        if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0')) {
+            return [
+                'apc' => [
+                    'class' => DoctrineCache\ApcCache::class,
+                    'namespace' => 'DoctrineModule',
+                ],
+                'apcu' => [
+                    'class' => DoctrineCache\ApcuCache::class,
+                    'namespace' => 'DoctrineModule',
+                ],
+                'array' => [
+                    'class' => DoctrineCache\ArrayCache::class,
+                    'namespace' => 'DoctrineModule',
+                ],
+                'filesystem' => [
+                    'class' => DoctrineCache\FilesystemCache::class,
+                    'directory' => 'data/DoctrineModule/cache',
+                    'namespace' => 'DoctrineModule',
+                ],
+                'memcache' => [
+                    'class' => DoctrineCache\MemcacheCache::class,
+                    'instance' => 'my_memcache_alias',
+                    'namespace' => 'DoctrineModule',
+                ],
+                'memcached' => [
+                    'class' => DoctrineCache\MemcachedCache::class,
+                    'instance' => 'my_memcached_alias',
+                    'namespace' => 'DoctrineModule',
+                ],
+                'predis' => [
+                    'class' => DoctrineCache\PredisCache::class,
+                    'instance' => 'my_predis_alias',
+                    'namespace' => 'DoctrineModule',
+                ],
+                'redis' => [
+                    'class' => DoctrineCache\RedisCache::class,
+                    'instance' => 'my_redis_alias',
+                    'namespace' => 'DoctrineModule',
+                ],
+                'wincache' => [
+                    'class' => DoctrineCache\WinCacheCache::class,
+                    'namespace' => 'DoctrineModule',
+                ],
+                'xcache' => [
+                    'class' => DoctrineCache\XcacheCache::class,
+                    'namespace' => 'DoctrineModule',
+                ],
+                'zenddata' => [
+                    'class' => DoctrineCache\ZendDataCache::class,
+                    'namespace' => 'DoctrineModule',
+                ],
+            ];
+        }
+
+        return [
+            'apcu' => [
+                'class' => LaminasStorageCache::class,
+                'instance' => 'doctrinemodule.cache.apcu',
+            ],
+            'array' => [
+                'class' => LaminasStorageCache::class,
+                'instance' => 'doctrinemodule.cache.array',
+            ],
+            'filesystem' => [
+                'class' => LaminasStorageCache::class,
+                'instance' => 'doctrinemodule.cache.filesystem',
+            ],
+            'memcached' => [
+                'class' => LaminasStorageCache::class,
+                'instance' => 'doctrinemodule.cache.memcached',
+            ],
+            'redis' => [
+                'class' => LaminasStorageCache::class,
+                'instance' => 'doctrinemodule.cache.redis',
             ],
         ];
     }

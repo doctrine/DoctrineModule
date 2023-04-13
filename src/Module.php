@@ -19,6 +19,7 @@ final class Module implements ConfigProviderInterface
         $provider = new ConfigProvider();
 
         return [
+            'caches' => $provider->getCachesConfig(),
             'doctrine' => $provider->getDoctrineConfig(),
             'doctrine_factories' => $provider->getDoctrineFactoryConfig(),
             'service_manager' => $provider->getDependencyConfig(),
