@@ -52,10 +52,17 @@ class StorageFactoryTest extends BaseTestCase
         $factory        = new StorageFactory('testFactory');
         $serviceManager = $this->createMock(ServiceManager::class);
         $storage        = $this->createMock(StorageInterface::class);
+        $objectManager = $this->createMock(ObjectManager::class);
         $config         = [
             'doctrine' => [
                 'authentication' => [
-                    'testFactory' => ['storage' => 'some_storage'],
+                    'testFactory' => [
+                        'storage'            => 'some_storage',
+                        'objectManager'      => $objectManager,
+                        'identityClass'      => IdentityObject::class,
+                        'identityProperty'   => 'username',
+                        'credentialProperty' => 'password',
+                    ],
                 ],
             ],
         ];
