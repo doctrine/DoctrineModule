@@ -162,11 +162,11 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxy();
 
-        $this->proxy->setOptions(['property' => 'password']);
+        $this->proxy->setOptions(['property' => 'username']);
 
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
-            ->with($this->equalTo('password'))
+            ->with($this->equalTo('username'))
             ->will($this->returnValue(true));
 
         $result = $this->proxy->getValueOptions();
@@ -356,6 +356,7 @@ class ProxyTest extends TestCase
 
         $this->proxy->setOptions([
             'option_attributes' => ['data-id' => $stdClass],
+            'property' => 'username'
         ]);
 
         $this->expectException('RuntimeException');
@@ -415,7 +416,10 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxyWithOptgroupPreset();
 
-        $this->proxy->setOptions(['optgroup_identifier' => 'NonExistantFunctionName']);
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'NonExistantFunctionName',
+            'property' => 'username',
+        ]);
 
         $this->expectException('RuntimeException');
 
@@ -437,12 +441,12 @@ class ProxyTest extends TestCase
 
         $this->proxy->setOptions([
             'optgroup_identifier' => 'optgroup',
-            'property'            => 'password',
+            'property'            => 'username',
         ]);
 
-        $this->metadata->expects($this->exactly(2))
+        $this->metadata->expects($this->exactly(3))
             ->method('hasField')
-            ->with($this->equalTo('password'))
+            ->with($this->equalTo('username'))
             ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
@@ -494,12 +498,12 @@ class ProxyTest extends TestCase
         $this->proxy->setOptions([
             'optgroup_identifier' => 'optgroup',
             'optgroup_default'    => 'Others',
-            'property'            => 'password'
+            'property'            => 'username'
         ]);
 
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
-            ->with($this->equalTo('password'))
+            ->with($this->equalTo('username'))
             ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
@@ -541,12 +545,12 @@ class ProxyTest extends TestCase
 
         $this->proxy->setOptions([
             'optgroup_identifier' => 'optgroup',
-            'property' => 'password',
+            'property' => 'username',
         ]);
 
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
-            ->with($this->equalTo('password'))
+            ->with($this->equalTo('username'))
             ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
