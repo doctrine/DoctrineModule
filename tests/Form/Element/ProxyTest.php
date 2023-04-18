@@ -144,6 +144,7 @@ class ProxyTest extends TestCase
                 'name' => 'findBy',
                 'params' => [],
             ],
+            'property' => 'password',
         ]);
 
         $this->expectException(
@@ -160,6 +161,13 @@ class ProxyTest extends TestCase
     public function testToStringIsUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
+
+        $this->proxy->setOptions(['property' => 'password']);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $result = $this->proxy->getValueOptions();
         $this->assertEquals($result[0]['label'], 'object one username');
@@ -232,7 +240,13 @@ class ProxyTest extends TestCase
         $this->proxy->setOptions([
             'display_empty_item' => true,
             'empty_item_label'   => '---',
+            'property' => 'password',
         ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $result = $this->proxy->getValueOptions();
         $this->assertArrayHasKey('', $result);
@@ -282,7 +296,13 @@ class ProxyTest extends TestCase
                 'class' => 'foo',
                 'lang' => 'en',
             ],
+            'property' => 'password',
         ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $options = $this->proxy->getValueOptions();
 
@@ -308,7 +328,13 @@ class ProxyTest extends TestCase
             'option_attributes' => [
                 'data-id' => static fn ($object) => $object->getId(),
             ],
+            'property' => 'password',
         ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $options = $this->proxy->getValueOptions();
 
@@ -371,6 +397,13 @@ class ProxyTest extends TestCase
     {
         $this->prepareFilteredProxy();
 
+        $this->proxy->setOptions(['property' => 'password']);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
+
         $this->proxy->getValueOptions();
     }
 
@@ -402,7 +435,15 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxyWithOptgroupPreset();
 
-        $this->proxy->setOptions(['optgroup_identifier' => 'optgroup']);
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'optgroup',
+            'property'            => 'password',
+        ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
 
@@ -453,7 +494,13 @@ class ProxyTest extends TestCase
         $this->proxy->setOptions([
             'optgroup_identifier' => 'optgroup',
             'optgroup_default'    => 'Others',
+            'property'            => 'password'
         ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
 
@@ -492,7 +539,15 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxyWithOptgroupPresetThatHasPartiallyEmptyOptgroupValues();
 
-        $this->proxy->setOptions(['optgroup_identifier' => 'optgroup']);
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'optgroup',
+            'property' => 'password',
+        ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
 
