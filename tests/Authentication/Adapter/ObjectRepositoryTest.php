@@ -124,6 +124,7 @@ class ObjectRepositoryTest extends BaseTestCase
             'identity_class'      => IdentityObject::class,
             'credential_property' => 'password',
             'identity_property'   => 'username',
+            'credential_callable' => fn() => null,
         ]);
 
         $adapter->setIdentity('a username');
@@ -162,6 +163,7 @@ class ObjectRepositoryTest extends BaseTestCase
             'object_repository' => $objectRepository,
             'credential_property' => 'password',
             'identity_property' => 'username',
+            'credential_callable' => fn() => null,
         ]);
 
         $adapter->setIdentity('a username');
@@ -273,6 +275,7 @@ class ObjectRepositoryTest extends BaseTestCase
             'object_repository'   => $objectRepository,
             'credential_property' => 'password',
             'identity_property'   => 'username',
+            'credential_callable' => fn() => null,
         ]);
         $adapter->setIdentity('a username');
         $adapter->setCredential('00000');
