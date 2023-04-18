@@ -36,7 +36,7 @@
     ],
     "homepage": "http://www.doctrine-project.org/",
     "require": {
-        "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
         "composer-runtime-api": "^2.0",
         "doctrine/annotations": "^1.13.3 || ^2",
         "doctrine/cache": "^1.13.0 || ^2.1.0",

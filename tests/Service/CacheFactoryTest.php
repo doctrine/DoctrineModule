@@ -15,6 +15,7 @@ use Laminas\Cache\ConfigProvider;
 use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use Predis\ClientInterface;
 
 use function assert;
 
@@ -67,7 +68,7 @@ class CacheFactoryTest extends BaseTestCase
             'doctrine' => [
                 'cache' => [
                     'phpunit' => [
-                        'class' => 'DoctrineModule\Cache\LaminasStorageCache',
+                        'class' => LaminasStorageCache::class,
                         'instance' => 'my-laminas-cache',
                         'namespace' => 'DoctrineModule',
                     ],
@@ -111,7 +112,7 @@ class CacheFactoryTest extends BaseTestCase
         );
         $serviceManager->setService(
             'my_predis_alias',
-            $this->createMock('Predis\ClientInterface')
+            $this->createMock(ClientInterface::class)
         );
         $cache = $factory->__invoke($serviceManager, PredisCache::class);
 
@@ -141,9 +142,7 @@ class CacheFactoryTest extends BaseTestCase
 
         $mock = $this->createMock(ChainCache::class);
 
-        $serviceManager->setFactory(ChainCache::class, static function () use ($mock) {
-            return $mock;
-        });
+        $serviceManager->setFactory(ChainCache::class, static fn () => $mock);
 
         $cache = $factory->__invoke($serviceManager, ChainCache::class);
 

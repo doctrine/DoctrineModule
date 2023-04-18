@@ -60,18 +60,13 @@ class ObjectRepository implements StorageInterface
     /**
      * Will return the key of the identity. If only the key is needed, this avoids an
      * unnecessary db call
-     *
-     * @return mixed
      */
-    public function readKeyOnly()
+    public function readKeyOnly(): mixed
     {
         return $identity = $this->options->getStorage()->read();
     }
 
-    /**
-     * @param mixed $contents
-     */
-    public function write($contents): void
+    public function write(mixed $contents): void
     {
         $metadataInfo     = $this->options->getClassMetadata();
         $identifierValues = $metadataInfo->getIdentifierValues($contents);

@@ -15,19 +15,15 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
  */
 class DoctrineCacheStorage extends AbstractAdapter
 {
-    protected Cache $cache;
-
     /**
      * {@inheritDoc}
      *
      * @param iterable<mixed>|AdapterOptions $options
      * @param Cache                          $cache
      */
-    public function __construct($options, Cache $cache)
+    public function __construct($options, protected Cache $cache)
     {
         parent::__construct($options);
-
-        $this->cache = $cache;
     }
 
     /**

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Service\Authentication;
 
+use Doctrine\Persistence\ObjectManager;
 use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use DoctrineModule\Service\Authentication\AdapterFactory;
+use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -15,7 +17,7 @@ class AdapterFactoryTest extends BaseTestCase
     {
         $name           = 'testFactory';
         $factory        = new AdapterFactory($name);
-        $objectManager  = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager  = $this->createMock(ObjectManager::class);
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'config',
@@ -24,7 +26,7 @@ class AdapterFactoryTest extends BaseTestCase
                     'authentication' => [
                         $name => [
                             'objectManager' => $objectManager,
-                            'identityClass' => 'DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject',
+                            'identityClass' => IdentityObject::class,
                             'identityProperty' => 'username',
                             'credentialProperty' => 'password',
                         ],

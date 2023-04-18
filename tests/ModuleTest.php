@@ -21,25 +21,25 @@ use function unserialize;
 class ModuleTest extends TestCase
 {
     /** @var MockObject&Application */
-    private $application;
+    private MockObject $application;
 
     /** @var MockObject&MvcEvent */
-    private $event;
+    private MockObject $event;
 
     /** @var MockObject&ServiceManager */
-    private $serviceManager;
+    private MockObject $serviceManager;
 
     /** @var MockObject&SymfonyApplication */
-    private $cli;
+    private MockObject $cli;
 
     protected function setUp(): void
     {
-        $this->application    = $this->getMockBuilder('Laminas\Mvc\Application')
+        $this->application    = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->event          = $this->createMock('Laminas\Mvc\MvcEvent');
-        $this->serviceManager = $this->createMock('Laminas\ServiceManager\ServiceManager');
-        $this->cli            = $this->createPartialMock('Symfony\Component\Console\Application', ['run']);
+        $this->event          = $this->createMock(MvcEvent::class);
+        $this->serviceManager = $this->createMock(ServiceManager::class);
+        $this->cli            = $this->createPartialMock(SymfonyApplication::class, ['run']);
 
         $this
             ->serviceManager

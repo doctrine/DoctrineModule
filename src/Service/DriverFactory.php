@@ -20,7 +20,6 @@ use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 use function class_exists;
-use function get_class;
 use function is_a;
 use function sprintf;
 
@@ -42,7 +41,7 @@ final class DriverFactory extends AbstractFactory
             throw new RuntimeException(sprintf(
                 'Invalid options received, expected %s, got %s.',
                 Driver::class,
-                get_class($options)
+                $options::class
             ));
         }
 
@@ -108,13 +107,13 @@ final class DriverFactory extends AbstractFactory
         if ($options->getExtension() && $driver instanceof FileDriver) {
             $locator = $driver->getLocator();
 
-            if (get_class($locator) !== DefaultFileLocator::class) {
+            if ($locator::class !== DefaultFileLocator::class) {
                 throw new InvalidArgumentException(
                     sprintf(
                         'Discovered file locator for driver of type "%s" is an instance of "%s". This factory '
                         . 'supports only the DefaultFileLocator when an extension is set for the file locator',
-                        get_class($driver),
-                        get_class($locator)
+                        $driver::class,
+                        $locator::class
                     )
                 );
             }
@@ -137,7 +136,7 @@ final class DriverFactory extends AbstractFactory
                     throw new RuntimeException(sprintf(
                         'Invalid options received, expected %s, got %s.',
                         Driver::class,
-                        get_class($options)
+                        $options::class
                     ));
                 }
 

@@ -10,7 +10,6 @@ use Laminas\Validator\Exception;
 use function array_diff_assoc;
 use function array_key_exists;
 use function count;
-use function get_class;
 use function gettype;
 use function is_object;
 use function sprintf;
@@ -52,7 +51,7 @@ class UniqueObject extends ObjectExists
                 $provided = 'nothing';
             } else {
                 if (is_object($options['object_manager'])) {
-                    $provided = get_class($options['object_manager']);
+                    $provided = $options['object_manager']::class;
                 } else {
                     $provided = gettype($options['object_manager']);
                 }
@@ -73,11 +72,8 @@ class UniqueObject extends ObjectExists
 
     /**
      * Returns false if there is another object with the same field values but other identifiers.
-     *
-     * @param mixed $value
-     * @param mixed $context
      */
-    public function isValid($value, $context = null): bool
+    public function isValid(mixed $value, mixed $context = null): bool
     {
         if (! $this->useContext) {
             $context = (array) $value;

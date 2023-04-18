@@ -16,7 +16,9 @@ parameters:
         -
           message: '#mock an undefined method save\(\) on class Doctrine\\Common\\Cache\\ArrayCache#'
           path: tests/Cache/DoctrineCacheStorageTest.php
-
+        -
+          message: '=Parameter #1 \$config of method Laminas\\ServiceManager\\AbstractPluginManager='
+          path: tests/Service/CacheFactoryTest.php
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon

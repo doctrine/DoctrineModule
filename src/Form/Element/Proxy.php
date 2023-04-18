@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
 use Doctrine\Persistence\ObjectManager;
+use DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Stdlib\Guard\ArrayOrTraversableGuardTrait;
@@ -22,7 +23,6 @@ use function array_shift;
 use function call_user_func;
 use function count;
 use function current;
-use function get_class;
 use function gettype;
 use function is_callable;
 use function is_object;
@@ -47,8 +47,7 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var mixed[] */
     protected array $findMethod = [];
 
-    /** @var mixed */
-    protected $property;
+    protected mixed $property;
 
     /** @var mixed[] */
     protected array $optionAttributes = [];
@@ -131,10 +130,7 @@ class Proxy implements ObjectManagerAwareInterface
         $this->setOptgroupDefault($options['optgroup_default']);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getValueOptions()
+    public function getValueOptions(): mixed
     {
         if (empty($this->valueOptions)) {
             $this->loadValueOptions();
@@ -143,10 +139,7 @@ class Proxy implements ObjectManagerAwareInterface
         return $this->valueOptions;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getObjects()
+    public function getObjects(): mixed
     {
         $this->loadObjects();
 
@@ -253,10 +246,7 @@ class Proxy implements ObjectManagerAwareInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getProperty()
+    public function getProperty(): mixed
     {
         return $this->property;
     }
@@ -332,10 +322,7 @@ class Proxy implements ObjectManagerAwareInterface
         return $this->findMethod;
     }
 
-    /**
-     * @param mixed $targetEntity
-     */
-    protected function generateLabel($targetEntity): ?string
+    protected function generateLabel(mixed $targetEntity): ?string
     {
         if ($this->getLabelGenerator() === null) {
             return null;
@@ -345,13 +332,9 @@ class Proxy implements ObjectManagerAwareInterface
     }
 
     /**
-     * @param mixed $value
-     *
-     * @return mixed[]|mixed|object
-     *
      * @throws RuntimeException
      */
-    public function getValue($value)
+    public function getValue(mixed $value): mixed
     {
         $metadata = $this->getObjectManager()->getClassMetadata($this->getTargetClass());
 
@@ -366,7 +349,7 @@ class Proxy implements ObjectManagerAwareInterface
 
                 $value = $data;
             } else {
-                $metadata   = $this->getObjectManager()->getClassMetadata(get_class($value));
+                $metadata   = $this->getObjectManager()->getClassMetadata($value::class);
                 $identifier = $metadata->getIdentifierFieldNames();
 
                 if ($identifier !== null && count($identifier) > 1) {
@@ -416,7 +399,7 @@ class Proxy implements ObjectManagerAwareInterface
                     sprintf(
                         'Method "%s" could not be found in repository "%s"',
                         $findMethodName,
-                        get_class($repository)
+                        $repository::class
                     )
                 );
             }
@@ -436,7 +419,7 @@ class Proxy implements ObjectManagerAwareInterface
                             . ' was not provided',
                             $param->getName(),
                             $findMethodName,
-                            get_class($repository)
+                            $repository::class
                         )
                     );
                 }
@@ -447,8 +430,8 @@ class Proxy implements ObjectManagerAwareInterface
 
         $this->guardForArrayOrTraversable(
             $objects,
-            sprintf('%s::%s() return value', get_class($repository), $findMethodName),
-            'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException'
+            sprintf('%s::%s() return value', $repository::class, $findMethodName),
+            InvalidRepositoryResultException::class
         );
 
         $this->objects = $objects;

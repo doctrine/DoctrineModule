@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace DoctrineModuleTest\Form\Element\TestAsset;
 
+use Stringable;
+
 use function assert;
 
 /**
  * Simple mock object for form element adapter test
  */
-class FormObject
+class FormObject implements Stringable
 {
     protected ?int $id = null;
 
