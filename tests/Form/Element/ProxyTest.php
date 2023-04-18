@@ -356,7 +356,7 @@ class ProxyTest extends TestCase
 
         $this->proxy->setOptions([
             'option_attributes' => ['data-id' => $stdClass],
-            'property' => 'username'
+            'property' => 'username',
         ]);
 
         $this->expectException('RuntimeException');
@@ -498,7 +498,7 @@ class ProxyTest extends TestCase
         $this->proxy->setOptions([
             'optgroup_identifier' => 'optgroup',
             'optgroup_default'    => 'Others',
-            'property'            => 'username'
+            'property'            => 'username',
         ]);
 
         $this->metadata->expects($this->exactly(2))

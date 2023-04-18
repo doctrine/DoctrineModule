@@ -17,7 +17,7 @@ class ObjectRepository implements StorageInterface
     /**
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function setOptions($options): ObjectRepository
+    public function setOptions(array|AuthenticationOptions $options): ObjectRepository
     {
         if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
@@ -33,7 +33,7 @@ class ObjectRepository implements StorageInterface
      *
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function __construct($options = [])
+    public function __construct(array|AuthenticationOptions $options = [])
     {
         $this->setOptions($options);
     }

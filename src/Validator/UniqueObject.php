@@ -121,7 +121,7 @@ class UniqueObject extends ObjectExists
      *
      * @throws Exception\RuntimeException
      */
-    protected function getExpectedIdentifiers($context = null): array
+    protected function getExpectedIdentifiers(array|object|null $context = null): array
     {
         if ($context === null) {
             throw new Exception\RuntimeException(

@@ -9,7 +9,6 @@ use Laminas\Paginator\Adapter\AdapterInterface;
 
 use function array_values;
 use function count;
-use function is_countable;
 
 /**
  * @psalm-template TKey of array-key

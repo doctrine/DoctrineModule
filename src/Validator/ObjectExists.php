@@ -127,7 +127,7 @@ class ObjectExists extends AbstractValidator
      *
      * @throws Exception\RuntimeException
      */
-    protected function cleanSearchValue($value): array
+    protected function cleanSearchValue(string|object|array $value): array
     {
         $value = is_object($value) ? [$value] : (array) $value;
 

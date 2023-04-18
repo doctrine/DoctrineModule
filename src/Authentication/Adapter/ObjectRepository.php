@@ -37,7 +37,7 @@ class ObjectRepository extends AbstractAdapter
      *
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function __construct($options = [], ?Inflector $inflector = null)
+    public function __construct(array|AuthenticationOptions $options = [], ?Inflector $inflector = null)
     {
         $this->setOptions($options);
         $this->inflector = $inflector ?? InflectorFactory::create()->build();
@@ -46,7 +46,7 @@ class ObjectRepository extends AbstractAdapter
     /**
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function setOptions($options): self
+    public function setOptions(array|AuthenticationOptions $options): self
     {
         if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
