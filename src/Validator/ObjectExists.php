@@ -40,8 +40,6 @@ class ObjectExists extends AbstractValidator
 
     /**
      * Fields to be checked
-     *
-     * @var mixed[]|string
      */
     protected mixed $fields = null;
 
