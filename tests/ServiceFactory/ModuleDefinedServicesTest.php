@@ -12,6 +12,7 @@ use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModuleTest\ServiceManagerFactory;
 use Laminas\Cache\Storage\Adapter\Filesystem;
 use Laminas\Cache\Storage\Adapter\Memory;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -54,7 +55,7 @@ class ModuleDefinedServicesTest extends TestCase
      */
     public function testModuleInvalidService(string $serviceName): void
     {
-        $this->expectException('Laminas\ServiceManager\Exception\ServiceNotFoundException');
+        $this->expectException(ServiceNotFoundException::class);
 
         $this->serviceManager->get($serviceName);
     }

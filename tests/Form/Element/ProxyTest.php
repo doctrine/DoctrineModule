@@ -6,6 +6,9 @@ namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
+use DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -15,7 +18,6 @@ use stdClass;
 
 use function array_shift;
 use function func_get_args;
-use function get_class;
 
 use const PHP_VERSION_ID;
 
@@ -45,7 +47,7 @@ class ProxyTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No object manager was set');
 
-        $this->proxy->setOptions(['target_class' => 'DoctrineModuleTest\Form\Element\TestAsset\FormObject']);
+        $this->proxy->setOptions(['target_class' => FormObject::class]);
         $this->proxy->getValueOptions();
     }
 
@@ -55,7 +57,7 @@ class ProxyTest extends TestCase
         $this->expectExceptionMessage('No target class was set');
 
         $this->proxy->setOptions([
-            'object_manager' => $this->createMock('Doctrine\Persistence\ObjectManager'),
+            'object_manager' => $this->createMock(ObjectManager::class),
         ]);
         $this->proxy->getValueOptions();
     }
@@ -65,10 +67,10 @@ class ProxyTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No method name was set');
 
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata    = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $objectClass = FormObject::class;
+        $metadata    = $this->createMock(ClassMetadata::class);
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -85,12 +87,12 @@ class ProxyTest extends TestCase
 
     public function testExceptionFindMethodNameNotExistentInRepository(): void
     {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata    = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $objectClass = FormObject::class;
+        $metadata    = $this->createMock(ClassMetadata::class);
 
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -111,7 +113,7 @@ class ProxyTest extends TestCase
             'RuntimeException'
         );
         $this->expectExceptionMessage(
-            'Method "NotExistent" could not be found in repository "' . get_class($objectRepository) . '"'
+            'Method "NotExistent" could not be found in repository "' . $objectRepository::class . '"'
         );
 
         $this->proxy->getValueOptions();
@@ -119,12 +121,12 @@ class ProxyTest extends TestCase
 
     public function testExceptionThrownForMissingRequiredParameter(): void
     {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata    = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $objectClass = FormObject::class;
+        $metadata    = $this->createMock(ClassMetadata::class);
 
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -142,6 +144,7 @@ class ProxyTest extends TestCase
                 'name' => 'findBy',
                 'params' => [],
             ],
+            'property' => 'password',
         ]);
 
         $this->expectException(
@@ -149,7 +152,7 @@ class ProxyTest extends TestCase
         );
         $this->expectExceptionMessage(
             'Required parameter "criteria" with no default value for method "findBy" in repository "'
-            . get_class($objectRepository) . '" was not provided'
+            . $objectRepository::class . '" was not provided'
         );
 
         $this->proxy->getValueOptions();
@@ -158,6 +161,13 @@ class ProxyTest extends TestCase
     public function testToStringIsUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
+
+        $this->proxy->setOptions(['property' => 'username']);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('username'))
+            ->will($this->returnValue(true));
 
         $result = $this->proxy->getValueOptions();
         $this->assertEquals($result[0]['label'], 'object one username');
@@ -230,7 +240,13 @@ class ProxyTest extends TestCase
         $this->proxy->setOptions([
             'display_empty_item' => true,
             'empty_item_label'   => '---',
+            'property' => 'password',
         ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $result = $this->proxy->getValueOptions();
         $this->assertArrayHasKey('', $result);
@@ -242,9 +258,7 @@ class ProxyTest extends TestCase
         $this->prepareProxy();
 
         $this->proxy->setOptions([
-            'label_generator' => static function ($targetEntity) {
-                return $targetEntity->getEmail();
-            },
+            'label_generator' => static fn ($targetEntity) => $targetEntity->getEmail(),
         ]);
 
         $this->metadata->expects($this->never())
@@ -282,7 +296,13 @@ class ProxyTest extends TestCase
                 'class' => 'foo',
                 'lang' => 'en',
             ],
+            'property' => 'password',
         ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $options = $this->proxy->getValueOptions();
 
@@ -306,11 +326,15 @@ class ProxyTest extends TestCase
 
         $this->proxy->setOptions([
             'option_attributes' => [
-                'data-id' => static function ($object) {
-                    return $object->getId();
-                },
+                'data-id' => static fn ($object) => $object->getId(),
             ],
+            'property' => 'password',
         ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
 
         $options = $this->proxy->getValueOptions();
 
@@ -332,6 +356,7 @@ class ProxyTest extends TestCase
 
         $this->proxy->setOptions([
             'option_attributes' => ['data-id' => $stdClass],
+            'property' => 'username',
         ]);
 
         $this->expectException('RuntimeException');
@@ -360,7 +385,7 @@ class ProxyTest extends TestCase
         $this->prepareEmptyProxy(new stdClass());
 
         $this->expectException(
-            'DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException'
+            InvalidRepositoryResultException::class
         );
         $this->expectExceptionMessage(
             'return value must be an array or Traversable'
@@ -373,6 +398,13 @@ class ProxyTest extends TestCase
     {
         $this->prepareFilteredProxy();
 
+        $this->proxy->setOptions(['property' => 'password']);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('password'))
+            ->will($this->returnValue(true));
+
         $this->proxy->getValueOptions();
     }
 
@@ -384,7 +416,10 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxyWithOptgroupPreset();
 
-        $this->proxy->setOptions(['optgroup_identifier' => 'NonExistantFunctionName']);
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'NonExistantFunctionName',
+            'property' => 'username',
+        ]);
 
         $this->expectException('RuntimeException');
 
@@ -404,7 +439,15 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxyWithOptgroupPreset();
 
-        $this->proxy->setOptions(['optgroup_identifier' => 'optgroup']);
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'optgroup',
+            'property'            => 'username',
+        ]);
+
+        $this->metadata->expects($this->exactly(3))
+            ->method('hasField')
+            ->with($this->equalTo('username'))
+            ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
 
@@ -455,7 +498,13 @@ class ProxyTest extends TestCase
         $this->proxy->setOptions([
             'optgroup_identifier' => 'optgroup',
             'optgroup_default'    => 'Others',
+            'property'            => 'username',
         ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('username'))
+            ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
 
@@ -494,7 +543,15 @@ class ProxyTest extends TestCase
     {
         $this->prepareProxyWithOptgroupPresetThatHasPartiallyEmptyOptgroupValues();
 
-        $this->proxy->setOptions(['optgroup_identifier' => 'optgroup']);
+        $this->proxy->setOptions([
+            'optgroup_identifier' => 'optgroup',
+            'property' => 'username',
+        ]);
+
+        $this->metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->equalTo('username'))
+            ->will($this->returnValue(true));
 
         $valueOptions = $this->proxy->getValueOptions();
 
@@ -521,7 +578,7 @@ class ProxyTest extends TestCase
 
     protected function prepareProxy(): void
     {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $objectClass = FormObject::class;
         $objectOne   = new FormObject();
         $objectTwo   = new FormObject();
 
@@ -541,7 +598,7 @@ class ProxyTest extends TestCase
 
         $result = new ArrayCollection([$objectOne, $objectTwo]);
 
-        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -564,12 +621,12 @@ class ProxyTest extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -591,7 +648,7 @@ class ProxyTest extends TestCase
 
     protected function prepareProxyWithOptgroupPreset(): void
     {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $objectClass = FormObject::class;
         $objectOne   = new FormObject();
         $objectTwo   = new FormObject();
         $objectThree = new FormObject();
@@ -622,7 +679,7 @@ class ProxyTest extends TestCase
 
         $result = new ArrayCollection([$objectOne, $objectTwo, $objectThree]);
 
-        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -649,12 +706,12 @@ class ProxyTest extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -676,7 +733,7 @@ class ProxyTest extends TestCase
 
     protected function prepareProxyWithOptgroupPresetThatHasPartiallyEmptyOptgroupValues(): void
     {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $objectClass = FormObject::class;
         $objectOne   = new FormObject();
         $objectTwo   = new FormObject();
 
@@ -697,7 +754,7 @@ class ProxyTest extends TestCase
 
         $result = new ArrayCollection([$objectOne, $objectTwo]);
 
-        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -720,12 +777,12 @@ class ProxyTest extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -747,7 +804,7 @@ class ProxyTest extends TestCase
 
     protected function prepareFilteredProxy(): void
     {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $objectClass = FormObject::class;
         $objectOne   = new FormObject();
         $objectTwo   = new FormObject();
 
@@ -767,7 +824,7 @@ class ProxyTest extends TestCase
 
         $result = new ArrayCollection([$objectOne, $objectTwo]);
 
-        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata
             ->expects($this->exactly(2))
             ->method('getIdentifierValues')
@@ -789,13 +846,13 @@ class ProxyTest extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository
             ->expects($this->once())
             ->method('findBy')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager
             ->expects($this->once())
             ->method('getClassMetadata')
@@ -822,25 +879,22 @@ class ProxyTest extends TestCase
         $this->metadata = $metadata;
     }
 
-    /**
-     * @param mixed $result
-     */
-    public function prepareEmptyProxy($result = null): void
+    public function prepareEmptyProxy(mixed $result = null): void
     {
         if ($result === null) {
             $result = new ArrayCollection();
         }
 
-        $objectClass      = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
-        $metadata         = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectClass      = FormObject::class;
+        $metadata         = $this->createMock(ClassMetadata::class);
+        $objectRepository = $this->createMock(ObjectRepository::class);
 
         $objectRepository
             ->expects($this->once())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager
             ->expects($this->once())
             ->method('getClassMetadata')

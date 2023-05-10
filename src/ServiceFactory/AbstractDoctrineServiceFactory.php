@@ -44,7 +44,7 @@ final class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
     /**
      * @return mixed[]|bool
      */
-    private function getFactoryMapping(ContainerInterface $serviceLocator, string $name)
+    private function getFactoryMapping(ContainerInterface $serviceLocator, string $name): array|bool
     {
         $matches = [];
 

@@ -17,7 +17,7 @@ class ObjectRepository implements StorageInterface
     /**
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function setOptions($options): ObjectRepository
+    public function setOptions(array|AuthenticationOptions $options): ObjectRepository
     {
         if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
@@ -33,7 +33,7 @@ class ObjectRepository implements StorageInterface
      *
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function __construct($options = [])
+    public function __construct(array|AuthenticationOptions $options = [])
     {
         $this->setOptions($options);
     }
@@ -60,18 +60,13 @@ class ObjectRepository implements StorageInterface
     /**
      * Will return the key of the identity. If only the key is needed, this avoids an
      * unnecessary db call
-     *
-     * @return mixed
      */
-    public function readKeyOnly()
+    public function readKeyOnly(): mixed
     {
         return $identity = $this->options->getStorage()->read();
     }
 
-    /**
-     * @param mixed $contents
-     */
-    public function write($contents): void
+    public function write(mixed $contents): void
     {
         $metadataInfo     = $this->options->getClassMetadata();
         $identifierValues = $metadataInfo->getIdentifierValues($contents);

@@ -19,9 +19,6 @@ use function count;
  */
 class Selectable implements AdapterInterface
 {
-    /** @var DoctrineSelectable<TKey,T> $selectable */
-    protected DoctrineSelectable $selectable;
-
     protected Criteria $criteria;
 
     /**
@@ -30,10 +27,9 @@ class Selectable implements AdapterInterface
      *
      * @param DoctrineSelectable<TKey,T> $selectable
      */
-    public function __construct(DoctrineSelectable $selectable, ?Criteria $criteria = null)
+    public function __construct(protected DoctrineSelectable $selectable, ?Criteria $criteria = null)
     {
-        $this->selectable = $selectable;
-        $this->criteria   = $criteria ? clone $criteria : new Criteria();
+        $this->criteria = $criteria ? clone $criteria : new Criteria();
     }
 
     /**

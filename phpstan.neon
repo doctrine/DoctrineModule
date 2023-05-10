@@ -16,7 +16,6 @@ parameters:
         -
           message: '#mock an undefined method save\(\) on class Doctrine\\Common\\Cache\\ArrayCache#'
           path: tests/Cache/DoctrineCacheStorageTest.php
-
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon

@@ -14,8 +14,8 @@ use function array_combine;
 use function array_key_exists;
 use function array_values;
 use function count;
-use function get_class;
 use function gettype;
+use function is_countable;
 use function is_object;
 use function is_string;
 use function sprintf;
@@ -40,10 +40,8 @@ class ObjectExists extends AbstractValidator
 
     /**
      * Fields to be checked
-     *
-     * @var mixed[]|string
      */
-    protected $fields = null;
+    protected mixed $fields = null;
 
     /**
      * Constructor
@@ -61,7 +59,7 @@ class ObjectExists extends AbstractValidator
                 $provided = 'nothing';
             } else {
                 if (is_object($options['object_repository'])) {
-                    $provided = get_class($options['object_repository']);
+                    $provided = $options['object_repository']::class;
                 } else {
                     $provided = gettype($options['object_repository']);
                 }
@@ -127,7 +125,7 @@ class ObjectExists extends AbstractValidator
      *
      * @throws Exception\RuntimeException
      */
-    protected function cleanSearchValue($value): array
+    protected function cleanSearchValue(string|object|array $value): array
     {
         $value = is_object($value) ? [$value] : (array) $value;
 
@@ -150,7 +148,7 @@ class ObjectExists extends AbstractValidator
         } else {
             try {
                 $matchedFieldsValues = @array_combine($this->fields, $value);
-            } catch (ValueError $valueError) {
+            } catch (ValueError) {
                 $matchedFieldsValues = false;
             }
 
@@ -159,7 +157,7 @@ class ObjectExists extends AbstractValidator
                     sprintf(
                         'Provided values count is %s, while expected number of fields to be matched is %s',
                         count($value),
-                        count($this->fields)
+                        is_countable($this->fields) ? count($this->fields) : 0
                     )
                 );
             }

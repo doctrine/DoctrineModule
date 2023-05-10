@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace DoctrineModuleTest\Form\Element;
 
 use DoctrineModule\Form\Element\ObjectSelect;
+use DoctrineModule\Form\Element\Proxy;
 use Laminas\Form\Element;
-
-use function get_class;
 
 /**
  * Tests for the ObjectSelect element
@@ -74,11 +73,11 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
 
     public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized(): void
     {
-        $element = $this->createPartialMock(get_class($this->element), ['setValueOptions']);
+        $element = $this->createPartialMock($this->element::class, ['setValueOptions']);
 
         $options = [];
 
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->exactly(2))
               ->method('getValueOptions')
               ->will($this->returnValue($options));
@@ -95,7 +94,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
     {
         $options = ['foo' => 'bar'];
 
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())
               ->method('getValueOptions')
               ->will($this->returnValue($options));
@@ -108,7 +107,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
 
     public function testOptionsCanBeSetSingle(): void
     {
-        $proxy = $this->createMock('DoctrineModule\Form\Element\Proxy');
+        $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())->method('setOptions')->with(['is_method' => true]);
 
         $this->setProxyViaReflection($proxy);

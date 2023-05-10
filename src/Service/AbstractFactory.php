@@ -23,13 +23,10 @@ abstract class AbstractFactory implements FactoryInterface
      */
     protected ?string $mappingType = null;
 
-    protected string $name;
-
     protected ?AbstractOptions $options = null;
 
-    public function __construct(string $name)
+    public function __construct(protected string $name)
     {
-        $this->name = $name;
     }
 
     public function getName(): string

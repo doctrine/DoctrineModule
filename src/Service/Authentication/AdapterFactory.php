@@ -10,7 +10,6 @@ use DoctrineModule\Service\AbstractFactory;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 
-use function get_class;
 use function is_string;
 use function sprintf;
 
@@ -30,7 +29,7 @@ final class AdapterFactory extends AbstractFactory
             throw new RuntimeException(sprintf(
                 'Invalid options received, expected %s, got %s.',
                 Authentication::class,
-                get_class($options)
+                $options::class
             ));
         }
 

@@ -6,6 +6,8 @@ namespace DoctrineModuleTest\Form\Element;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
 use Laminas\Form\Element;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -15,7 +17,6 @@ use RuntimeException;
 
 use function array_shift;
 use function func_get_args;
-use function get_class;
 use function method_exists;
 
 class ProxyAwareElementTestCase extends TestCase
@@ -29,7 +30,7 @@ class ProxyAwareElementTestCase extends TestCase
 
     protected function prepareProxy(): void
     {
-        $objectClass = 'DoctrineModuleTest\Form\Element\TestAsset\FormObject';
+        $objectClass = FormObject::class;
         $objectOne   = new FormObject();
         $objectTwo   = new FormObject();
 
@@ -50,7 +51,7 @@ class ProxyAwareElementTestCase extends TestCase
         $result       = new ArrayCollection([$objectOne, $objectTwo]);
         $this->values = $result;
 
-        $metadata = $this->createMock('Doctrine\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock(ClassMetadata::class);
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
@@ -73,12 +74,12 @@ class ProxyAwareElementTestCase extends TestCase
                 )
             );
 
-        $objectRepository = $this->createMock('Doctrine\Persistence\ObjectRepository');
+        $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->createMock('Doctrine\Persistence\ObjectManager');
+        $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
@@ -111,7 +112,7 @@ class ProxyAwareElementTestCase extends TestCase
             $element = $this->element;
         }
 
-        $prop = new ReflectionProperty(get_class($this->element), 'proxy');
+        $prop = new ReflectionProperty($this->element::class, 'proxy');
         $prop->setAccessible(true);
         $prop->setValue($element, $proxy);
     }

@@ -12,7 +12,6 @@ use Laminas\Authentication\Adapter\Exception;
 use Laminas\Authentication\Result as AuthenticationResult;
 
 use function call_user_func;
-use function get_class;
 use function method_exists;
 use function property_exists;
 use function sprintf;
@@ -38,7 +37,7 @@ class ObjectRepository extends AbstractAdapter
      *
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function __construct($options = [], ?Inflector $inflector = null)
+    public function __construct(array|AuthenticationOptions $options = [], ?Inflector $inflector = null)
     {
         $this->setOptions($options);
         $this->inflector = $inflector ?? InflectorFactory::create()->build();
@@ -47,7 +46,7 @@ class ObjectRepository extends AbstractAdapter
     /**
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function setOptions($options): self
+    public function setOptions(array|AuthenticationOptions $options): self
     {
         if (! $options instanceof AuthenticationOptions) {
             $options = new AuthenticationOptions($options);
@@ -102,8 +101,8 @@ class ObjectRepository extends AbstractAdapter
                 sprintf(
                     'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
                     $credentialProperty,
-                    get_class($identity),
-                    get_class($identity),
+                    $identity::class,
+                    $identity::class,
                     $getter
                 )
             );

@@ -52,10 +52,8 @@ final class Authentication extends AbstractOptions
 {
     /**
      * A valid object implementing ObjectManager interface
-     *
-     * @var string | ObjectManager
      */
-    protected $objectManager;
+    protected string|ObjectManager $objectManager;
 
     /**
      * A valid object implementing ObjectRepository interface (or ObjectManager/identityClass)
@@ -81,10 +79,8 @@ final class Authentication extends AbstractOptions
 
     /**
      * Callable function to check if a credential is valid
-     *
-     * @var mixed
      */
-    protected $credentialCallable;
+    protected mixed $credentialCallable;
 
     /**
      * If an objectManager is not supplied, this metadata will be used
@@ -99,15 +95,10 @@ final class Authentication extends AbstractOptions
      * When using this options class to create an AuthenticationService with and
      * the option storeOnlyKeys == false, this is the storage instance that the whole
      * object will be stored in.
-     *
-     * @var StorageInterface|string
      */
-    protected $storage = 'DoctrineModule\Authentication\Storage\Session';
+    protected StorageInterface|string $storage = 'DoctrineModule\Authentication\Storage\Session';
 
-    /**
-     * @param  string | ObjectManager $objectManager
-     */
-    public function setObjectManager($objectManager): Authentication
+    public function setObjectManager(string|ObjectManager $objectManager): Authentication
     {
         $this->objectManager = $objectManager;
 
@@ -118,10 +109,8 @@ final class Authentication extends AbstractOptions
      * Causes issue with unit test StorageFactoryTest::testCanInstantiateStorageFromServiceLocator
      * when return type is specified
      * : ObjectManager
-     *
-     * @return mixed
      */
-    public function getObjectManager()
+    public function getObjectManager(): mixed
     {
         return $this->objectManager;
     }
@@ -197,11 +186,9 @@ final class Authentication extends AbstractOptions
     }
 
     /**
-     * @param  mixed $credentialCallable
-     *
      * @throws Exception\InvalidArgumentException
      */
-    public function setCredentialCallable($credentialCallable): Authentication
+    public function setCredentialCallable(mixed $credentialCallable): Authentication
     {
         if (! is_callable($credentialCallable)) {
             throw new Exception\InvalidArgumentException(
@@ -217,10 +204,7 @@ final class Authentication extends AbstractOptions
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCredentialCallable()
+    public function getCredentialCallable(): mixed
     {
         return $this->credentialCallable;
     }
@@ -239,18 +223,12 @@ final class Authentication extends AbstractOptions
         $this->classMetadata = $classMetadata;
     }
 
-    /**
-     * @return StorageInterface|string
-     */
-    public function getStorage()
+    public function getStorage(): StorageInterface|string
     {
         return $this->storage;
     }
 
-    /**
-     * @param StorageInterface|string $storage
-     */
-    public function setStorage($storage): void
+    public function setStorage(StorageInterface|string $storage): void
     {
         $this->storage = $storage;
     }
