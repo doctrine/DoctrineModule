@@ -117,33 +117,34 @@ final class ConfigProvider
      */
     public function getCachesConfig(): array
     {
+        $defaultOptions = [
+            'namespace' => 'DoctrineModule',
+            'key_pattern' => '/^[a-z0-9_\+\-\[\]\\\\$]*$/Di'
+        ];
         return [
             'doctrinemodule.cache.apcu' => [
                 'adapter' => 'apcu',
-                'options' => ['namespace' => 'DoctrineModule'],
+                'options' => $defaultOptions,
             ],
             'doctrinemodule.cache.array' => [
                 'adapter' => Memory::class,
-                'options' => ['namespace' => 'DoctrineModule'],
+                'options' => $defaultOptions,
             ],
             'doctrinemodule.cache.filesystem' => [
                 'adapter' => 'filesystem',
-                'options' => [
-                    'namespace' => 'DoctrineModule',
+                'options' => $defaultOptions + [
                     'cache_dir' => 'data/DoctrineModule/cache',
                 ],
             ],
             'doctrinemodule.cache.memcached' => [
                 'adapter' => 'memcached',
-                'options' => [
-                    'namespace' => 'DoctrineModule',
+                'options' => $defaultOptions + [
                     'servers' => [],
                 ],
             ],
             'doctrinemodule.cache.redis' => [
                 'adapter' => 'redis',
-                'options' => [
-                    'namespace' => 'DoctrineModule',
+                'options' => $defaultOptions + [
                     'server' => [
                         'host' => 'localhost',
                         'post' => 6379,
