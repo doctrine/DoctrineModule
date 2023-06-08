@@ -113,37 +113,36 @@ final class ConfigProvider
     }
 
     /**
-     * @return array<non-empty-string, array{adapter: string, options?: mixed[]}>
+     * @return array<non-empty-string, array{adapter: string, options?: mixed[], plugins?: mixed[]}>
      */
     public function getCachesConfig(): array
     {
+        $defaultOptions = [
+            'namespace' => 'DoctrineModule',
+            'key_pattern' => '/^[a-z0-9_\+\-\[\]\\\\$]*$/Di',
+        ];
+
         return [
             'doctrinemodule.cache.apcu' => [
                 'adapter' => 'apcu',
-                'options' => ['namespace' => 'DoctrineModule'],
+                'options' => $defaultOptions,
             ],
             'doctrinemodule.cache.array' => [
                 'adapter' => Memory::class,
-                'options' => ['namespace' => 'DoctrineModule'],
+                'options' => $defaultOptions,
             ],
             'doctrinemodule.cache.filesystem' => [
                 'adapter' => 'filesystem',
-                'options' => [
-                    'namespace' => 'DoctrineModule',
-                    'cache_dir' => 'data/DoctrineModule/cache',
-                ],
+                'options' => $defaultOptions + ['cache_dir' => 'data/DoctrineModule/cache'],
+                'plugins' => [['name' => 'serializer']],
             ],
             'doctrinemodule.cache.memcached' => [
                 'adapter' => 'memcached',
-                'options' => [
-                    'namespace' => 'DoctrineModule',
-                    'servers' => [],
-                ],
+                'options' => $defaultOptions + ['servers' => []],
             ],
             'doctrinemodule.cache.redis' => [
                 'adapter' => 'redis',
-                'options' => [
-                    'namespace' => 'DoctrineModule',
+                'options' => $defaultOptions + [
                     'server' => [
                         'host' => 'localhost',
                         'post' => 6379,
