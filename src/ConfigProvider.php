@@ -117,10 +117,7 @@ final class ConfigProvider
      */
     public function getCachesConfig(): array
     {
-        $defaultOptions = [
-            'namespace' => 'DoctrineModule',
-            'key_pattern' => '/^[a-z0-9_\+\-\[\]\\\\$]*$/Di',
-        ];
+        $defaultOptions = ['namespace' => 'DoctrineModule'];
 
         return [
             'doctrinemodule.cache.apcu' => [
@@ -133,7 +130,11 @@ final class ConfigProvider
             ],
             'doctrinemodule.cache.filesystem' => [
                 'adapter' => 'filesystem',
-                'options' => $defaultOptions + ['cache_dir' => 'data/DoctrineModule/cache'],
+                'options' => $defaultOptions + [
+                    'cache_dir' => 'data/DoctrineModule/cache',
+                    // We need to be slightly less restrictive than Filesystem defaults:
+                    'key_pattern' => '/^[a-z0-9_\+\-\[\]\\\\$#]*$/Di',
+                ],
                 'plugins' => [['name' => 'serializer']],
             ],
             'doctrinemodule.cache.memcached' => [
