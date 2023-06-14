@@ -47,7 +47,7 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var mixed[] */
     protected array $findMethod = [];
 
-    protected mixed $property;
+    protected mixed $property = null;
 
     /** @var mixed[] */
     protected array $optionAttributes = [];
