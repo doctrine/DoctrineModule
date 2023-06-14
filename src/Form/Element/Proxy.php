@@ -458,7 +458,7 @@ class Proxy implements ObjectManagerAwareInterface
             $generatedLabel = $this->generateLabel($object);
             if ($generatedLabel !== null) {
                 $label = $generatedLabel;
-            } elseif ($this->property) {
+            } elseif ($this->property !== null) {
                 $property = $this->property;
                 if (
                     ($this->getIsMethod() === false || $this->getIsMethod() === null)
