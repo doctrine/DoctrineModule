@@ -269,7 +269,7 @@ class UniqueObjectTest extends BaseTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
             'Option "object_manager" is required and must be an instance of %s, nothing given',
-            ObjectManager::class
+            ObjectManager::class,
         ));
 
         $repository = $this->createMock(ObjectRepository::class);
@@ -285,7 +285,7 @@ class UniqueObjectTest extends BaseTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
             'Option "object_manager" is required and must be an instance of %s, stdClass given',
-            ObjectManager::class
+            ObjectManager::class,
         ));
 
         $objectManager = new stdClass();
@@ -404,15 +404,15 @@ class UniqueObjectTest extends BaseTestCase
         $this->assertFalse(
             $validator->isValid(
                 'matchValue',
-                ['matchKey' => 'matchValue', 'id' => 'another identifier']
-            )
+                ['matchKey' => 'matchValue', 'id' => 'another identifier'],
+            ),
         );
         $messageTemplates = $validator->getMessageTemplates();
 
         $expectedMessage = str_replace(
             '%value%',
             'matchValue',
-            $messageTemplates[UniqueObject::ERROR_OBJECT_NOT_UNIQUE]
+            $messageTemplates[UniqueObject::ERROR_OBJECT_NOT_UNIQUE],
         );
         $messages        = $validator->getMessages();
         $receivedMessage = $messages[UniqueObject::ERROR_OBJECT_NOT_UNIQUE];

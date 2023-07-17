@@ -9,16 +9,16 @@ namespace DoctrineModuleTest\Authentication\Adapter\TestAsset;
  */
 class IdentityObject
 {
-    protected ?string $username = null;
+    protected string|null $username = null;
 
-    protected ?string $password = null;
+    protected string|null $password = null;
 
     public function setPassword(mixed $password): void
     {
         $this->password = (string) $password;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string|null
     {
         return $this->password;
     }
@@ -28,7 +28,7 @@ class IdentityObject
         $this->username = (string) $username;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string|null
     {
         return $this->username;
     }

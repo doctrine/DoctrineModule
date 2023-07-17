@@ -11,9 +11,7 @@ use Laminas\ModuleManager\Feature\ConfigProviderInterface;
  */
 final class Module implements ConfigProviderInterface
 {
-    /**
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     public function getConfig(): array
     {
         $provider = new ConfigProvider();

@@ -33,7 +33,7 @@ final class DriverFactory extends AbstractFactory
      *
      * @return MappingDriver
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
     {
         $options = $this->getOptions($container, 'driver');
 
@@ -41,7 +41,7 @@ final class DriverFactory extends AbstractFactory
             throw new RuntimeException(sprintf(
                 'Invalid options received, expected %s, got %s.',
                 Driver::class,
-                $options::class
+                $options::class,
             ));
         }
 
@@ -53,9 +53,7 @@ final class DriverFactory extends AbstractFactory
         return Driver::class;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     protected function createDriver(ContainerInterface $container, Driver $options): MappingDriver
     {
         $class = $options->getClass();
@@ -88,7 +86,7 @@ final class DriverFactory extends AbstractFactory
                 // be removed when Annotations 1.x support is dropped.
                 $reader = new Annotations\CachedReader(
                     $reader,
-                    $container->get($options->getCache())
+                    $container->get($options->getCache()),
                 );
             } elseif (class_exists(Annotations\PsrCachedReader::class)) {
                 // For Doctrine Annotations 2.x, we can use the PsrCachedReader if
@@ -113,8 +111,8 @@ final class DriverFactory extends AbstractFactory
                         'Discovered file locator for driver of type "%s" is an instance of "%s". This factory '
                         . 'supports only the DefaultFileLocator when an extension is set for the file locator',
                         $driver::class,
-                        $locator::class
-                    )
+                        $locator::class,
+                    ),
                 );
             }
 
@@ -136,7 +134,7 @@ final class DriverFactory extends AbstractFactory
                     throw new RuntimeException(sprintf(
                         'Invalid options received, expected %s, got %s.',
                         Driver::class,
-                        $options::class
+                        $options::class,
                     ));
                 }
 

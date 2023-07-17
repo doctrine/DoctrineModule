@@ -31,9 +31,7 @@ class UniqueObjectFactoryTest extends TestCase
         $this->object = new UniqueObjectFactory();
     }
 
-    /**
-     * @covers ::__invoke
-     */
+    /** @covers ::__invoke */
     public function testInvoke(): void
     {
         $options = [
@@ -57,7 +55,7 @@ class UniqueObjectFactoryTest extends TestCase
         $instance = $this->object->__invoke(
             $container,
             UniqueObject::class,
-            $options
+            $options,
         );
         $this->assertInstanceOf(UniqueObject::class, $instance);
     }

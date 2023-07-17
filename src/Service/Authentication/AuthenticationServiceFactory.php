@@ -17,11 +17,11 @@ final class AuthenticationServiceFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
     {
         return new AuthenticationService(
             $container->get('doctrine.authenticationstorage.' . $this->getName()),
-            $container->get('doctrine.authenticationadapter.' . $this->getName())
+            $container->get('doctrine.authenticationadapter.' . $this->getName()),
         );
     }
 

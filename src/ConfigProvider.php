@@ -16,9 +16,7 @@ use Laminas\Cache\Storage\Adapter\Memory;
  */
 final class ConfigProvider
 {
-    /**
-     * @return array<non-empty-string, mixed[]>
-     */
+    /** @return array<non-empty-string, mixed[]> */
     public function __invoke(): array
     {
         return [
@@ -93,9 +91,7 @@ final class ConfigProvider
         ];
     }
 
-    /**
-     * @return array<non-empty-string, mixed[]>
-     */
+    /** @return array<non-empty-string, mixed[]> */
     public function getValidatorConfig(): array
     {
         return [
@@ -112,9 +108,7 @@ final class ConfigProvider
         ];
     }
 
-    /**
-     * @return array<non-empty-string, array{adapter: string, options?: mixed[], plugins?: mixed[]}>
-     */
+    /** @return array<non-empty-string, array{adapter: string, options?: mixed[], plugins?: mixed[]}> */
     public function getCachesConfig(): array
     {
         $defaultOptions = ['namespace' => 'DoctrineModule'];

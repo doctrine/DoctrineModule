@@ -15,7 +15,7 @@ use Symfony\Component\Console\Helper\HelperSet;
  */
 final class CliFactory implements FactoryInterface
 {
-    protected ?EventManagerInterface $events = null;
+    protected EventManagerInterface|null $events = null;
 
     protected HelperSet $helperSet;
 
@@ -40,7 +40,7 @@ final class CliFactory implements FactoryInterface
      *
      * @return Application
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
     {
         $cli = new Application();
         $cli->setName('DoctrineModule Command Line Interface');

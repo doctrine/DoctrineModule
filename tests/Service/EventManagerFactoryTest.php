@@ -32,7 +32,7 @@ class EventManagerFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         /* $var $eventManager EventManager */
@@ -59,7 +59,7 @@ class EventManagerFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         /* $var $eventManager EventManager */
@@ -89,7 +89,7 @@ class EventManagerFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         /* $var $eventManager EventManager */
@@ -117,7 +117,7 @@ class EventManagerFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $this->expectException('InvalidArgumentException');

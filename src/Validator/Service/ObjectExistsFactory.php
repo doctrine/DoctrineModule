@@ -14,7 +14,7 @@ final class ObjectExistsFactory extends AbstractValidatorFactory
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
     {
         $repository = $this->getRepository($container, $options);
 

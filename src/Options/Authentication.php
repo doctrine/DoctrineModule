@@ -58,7 +58,7 @@ final class Authentication extends AbstractOptions
     /**
      * A valid object implementing ObjectRepository interface (or ObjectManager/identityClass)
      */
-    protected ?ObjectRepository $objectRepository = null;
+    protected ObjectRepository|null $objectRepository = null;
 
     /**
      * Entity's class name
@@ -86,7 +86,7 @@ final class Authentication extends AbstractOptions
      * If an objectManager is not supplied, this metadata will be used
      * by DoctrineModule/Authentication/Storage/ObjectRepository
      */
-    protected ?ClassMetadata $classMetadata = null;
+    protected ClassMetadata|null $classMetadata = null;
 
     /**
      * When using this options class to create a DoctrineModule/Authentication/Storage/ObjectRepository
@@ -143,14 +143,12 @@ final class Authentication extends AbstractOptions
         return $this->identityClass;
     }
 
-    /**
-     * @throws Exception\InvalidArgumentException
-     */
+    /** @throws Exception\InvalidArgumentException */
     public function setIdentityProperty(string $identityProperty): Authentication
     {
         if ($identityProperty === '') {
             throw new Exception\InvalidArgumentException(
-                sprintf('Provided $identityProperty is invalid, %s given', gettype($identityProperty))
+                sprintf('Provided $identityProperty is invalid, %s given', gettype($identityProperty)),
             );
         }
 
@@ -164,14 +162,12 @@ final class Authentication extends AbstractOptions
         return $this->identityProperty;
     }
 
-    /**
-     * @throws Exception\InvalidArgumentException
-     */
+    /** @throws Exception\InvalidArgumentException */
     public function setCredentialProperty(string $credentialProperty): Authentication
     {
         if ($credentialProperty === '') {
             throw new Exception\InvalidArgumentException(
-                sprintf('Provided $credentialProperty is invalid, %s given', gettype($credentialProperty))
+                sprintf('Provided $credentialProperty is invalid, %s given', gettype($credentialProperty)),
             );
         }
 
@@ -185,17 +181,15 @@ final class Authentication extends AbstractOptions
         return $this->credentialProperty;
     }
 
-    /**
-     * @throws Exception\InvalidArgumentException
-     */
+    /** @throws Exception\InvalidArgumentException */
     public function setCredentialCallable(mixed $credentialCallable): Authentication
     {
         if (! is_callable($credentialCallable)) {
             throw new Exception\InvalidArgumentException(
                 sprintf(
                     '"%s" is not a callable',
-                    is_string($credentialCallable) ? $credentialCallable : gettype($credentialCallable)
-                )
+                    is_string($credentialCallable) ? $credentialCallable : gettype($credentialCallable),
+                ),
             );
         }
 

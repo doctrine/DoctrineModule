@@ -21,7 +21,7 @@ final class StorageFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
     {
         $options = $this->getOptions($container, 'authentication');
 
@@ -29,7 +29,7 @@ final class StorageFactory extends AbstractFactory
             throw new RuntimeException(sprintf(
                 'Invalid options received, expected %s, got %s.',
                 Authentication::class,
-                $options::class
+                $options::class,
             ));
         }
 

@@ -33,9 +33,7 @@ class NoObjectExistsFactoryTest extends TestCase
         $this->object = new NoObjectExistsFactory();
     }
 
-    /**
-     * @coversNothing
-     */
+    /** @coversNothing */
     public function testCallable(): void
     {
         $this->assertIsCallable($this->object);
@@ -73,7 +71,7 @@ class NoObjectExistsFactoryTest extends TestCase
         $instance = $this->object->__invoke(
             $container,
             NoObjectExists::class,
-            $options
+            $options,
         );
         $this->assertInstanceOf(NoObjectExists::class, $instance);
     }
@@ -110,14 +108,12 @@ class NoObjectExistsFactoryTest extends TestCase
         $instance = $this->object->__invoke(
             $container,
             NoObjectExists::class,
-            $options
+            $options,
         );
         $this->assertInstanceOf(NoObjectExists::class, $instance);
     }
 
-    /**
-     * @covers ::merge
-     */
+    /** @covers ::merge */
     public function testInvokeWithMerge(): void
     {
         $options = [
@@ -144,16 +140,14 @@ class NoObjectExistsFactoryTest extends TestCase
         $instance  = $this->object->__invoke(
             $container,
             NoObjectExists::class,
-            $options
+            $options,
         );
         $templates = $instance->getMessageTemplates();
         $this->assertArrayHasKey(NoObjectExists::ERROR_OBJECT_FOUND, $templates);
         $this->assertSame('test', $templates[NoObjectExists::ERROR_OBJECT_FOUND]);
     }
 
-    /**
-     * @covers ::getRepository
-     */
+    /** @covers ::getRepository */
     public function testInvokeWithoutTargetClass(): void
     {
         $this->expectException(ServiceCreationException::class);
@@ -162,7 +156,7 @@ class NoObjectExistsFactoryTest extends TestCase
         $this->object->__invoke(
             $container,
             NoObjectExists::class,
-            []
+            [],
         );
     }
 
@@ -191,7 +185,7 @@ class NoObjectExistsFactoryTest extends TestCase
         $instance = $this->object->__invoke(
             $container,
             NoObjectExists::class,
-            $options
+            $options,
         );
         $this->assertInstanceOf(NoObjectExists::class, $instance);
     }

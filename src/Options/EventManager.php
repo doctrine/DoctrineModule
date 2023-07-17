@@ -20,9 +20,7 @@ final class EventManager extends AbstractOptions
      */
     protected array $subscribers = [];
 
-    /**
-     * @param mixed[] $subscribers
-     */
+    /** @param mixed[] $subscribers */
     public function setSubscribers(array $subscribers): self
     {
         $this->subscribers = $subscribers;
@@ -30,9 +28,7 @@ final class EventManager extends AbstractOptions
         return $this;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function getSubscribers(): array
     {
         return $this->subscribers;

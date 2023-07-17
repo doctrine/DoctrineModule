@@ -27,7 +27,7 @@ class ConfigProviderTest extends TestCase
         self::assertArrayHasKey(
             'doctrine_factories',
             $config,
-            'Expected config to have "doctrine_factories" array key'
+            'Expected config to have "doctrine_factories" array key',
         );
         self::assertArrayHasKey('dependencies', $config, 'Expected config to have "dependencies" array key');
 

@@ -24,9 +24,7 @@ use function assert;
  */
 class CacheFactoryTest extends BaseTestCase
 {
-    /**
-     * @covers \DoctrineModule\Service\CacheFactory::createService
-     */
+    /** @covers \DoctrineModule\Service\CacheFactory::createService */
     public function testWillSetNamespace(): void
     {
         if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {
@@ -46,7 +44,7 @@ class CacheFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $service = $factory->__invoke($serviceManager, ArrayCache::class);
@@ -108,11 +106,11 @@ class CacheFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
         $serviceManager->setService(
             'my_predis_alias',
-            $this->createMock(ClientInterface::class)
+            $this->createMock(ClientInterface::class),
         );
         $cache = $factory->__invoke($serviceManager, PredisCache::class);
 
@@ -137,7 +135,7 @@ class CacheFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $mock = $this->createMock(ChainCache::class);

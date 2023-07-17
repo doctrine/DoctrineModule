@@ -14,9 +14,7 @@ class ObjectRepository implements StorageInterface
 {
     protected AuthenticationOptions $options;
 
-    /**
-     * @param mixed[]|AuthenticationOptions $options
-     */
+    /** @param mixed[]|AuthenticationOptions $options */
     public function setOptions(array|AuthenticationOptions $options): ObjectRepository
     {
         if (! $options instanceof AuthenticationOptions) {
@@ -47,7 +45,7 @@ class ObjectRepository implements StorageInterface
      * This function assumes that the storage only contains identifier values (which is the case if
      * the ObjectRepository authentication adapter is used).
      */
-    public function read(): ?object
+    public function read(): object|null
     {
         $identity = $this->options->getStorage()->read();
         if ($identity) {

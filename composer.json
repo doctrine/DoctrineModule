@@ -62,7 +62,7 @@
         "symfony/console": "^5.4.16 || ^6.2.1"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^9.0.2",
+        "doctrine/coding-standard": "^12.0.0",
         "doctrine/mongodb-odm": "^2.5.0",
         "doctrine/orm": "^2.13.4",
         "jangregor/phpstan-prophecy": "^1.0.0",

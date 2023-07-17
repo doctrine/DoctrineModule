@@ -56,7 +56,7 @@ class ObjectExistsTest extends BaseTestCase
             $validator->isValid([
                 'firstMatchKey'  => 'firstMatchValue',
                 'secondMatchKey' => 'secondMatchValue',
-            ])
+            ]),
         );
         $this->assertTrue($validator->isValid(['firstMatchValue', 'secondMatchValue']));
     }
@@ -128,10 +128,10 @@ class ObjectExistsTest extends BaseTestCase
     public function testWillNotValidateOnFieldsCountMismatch(): void
     {
         $this->expectException(
-            RuntimeException::class
+            RuntimeException::class,
         );
         $this->expectExceptionMessage(
-            'Provided values count is 1, while expected number of fields to be matched is 2'
+            'Provided values count is 1, while expected number of fields to be matched is 2',
         );
         $validator = new ObjectExists([
             'object_repository' => $this->createMock(ObjectRepository::class),
@@ -143,10 +143,10 @@ class ObjectExistsTest extends BaseTestCase
     public function testWillNotValidateOnFieldKeysMismatch(): void
     {
         $this->expectException(
-            RuntimeException::class
+            RuntimeException::class,
         );
         $this->expectExceptionMessage(
-            'Field "field2" was not provided, but was expected since the configured field lists needs it for validation'
+            'Field "field2" was not provided, but was expected since the configured field lists needs it for validation',
         );
 
         $validator = new ObjectExists([
@@ -172,7 +172,7 @@ class ObjectExistsTest extends BaseTestCase
         $expectedMessage = str_replace(
             '%value%',
             'value',
-            $messageTemplates[ObjectExists::ERROR_NO_OBJECT_FOUND]
+            $messageTemplates[ObjectExists::ERROR_NO_OBJECT_FOUND],
         );
         $messages        = $validator->getMessages();
         $receivedMessage = $messages[ObjectExists::ERROR_NO_OBJECT_FOUND];

@@ -31,16 +31,10 @@ class UniqueObject extends ObjectExists
 
     protected bool $useContext;
 
-    /***
+    /**
      * Constructor
      *
-     * @param mixed[] $options required keys are `object_repository`, which must be an instance of
-     *                       Doctrine\Persistence\ObjectRepository, `object_manager`, which
-     *                       must be an instance of Doctrine\Persistence\ObjectManager,
-     *                       and `fields`, with either a string or an array of strings representing
-     *                       the fields to be matched by the validator.
-     *
-     * @throws Exception\InvalidArgumentException
+     * @param mixed[] $options required keys are `object_manager`
      */
     public function __construct(array $options)
     {
@@ -61,8 +55,8 @@ class UniqueObject extends ObjectExists
                 sprintf(
                     'Option "object_manager" is required and must be an instance of'
                     . ' Doctrine\Persistence\ObjectManager, %s given',
-                    $provided
-                )
+                    $provided,
+                ),
             );
         }
 
@@ -125,7 +119,7 @@ class UniqueObject extends ObjectExists
     {
         if ($context === null) {
             throw new Exception\RuntimeException(
-                'Expected context to be an array but is null'
+                'Expected context to be an array but is null',
             );
         }
 
@@ -149,9 +143,7 @@ class UniqueObject extends ObjectExists
         return $result;
     }
 
-    /**
-     * @return mixed[] the names of the identifiers
-     */
+    /** @return mixed[] the names of the identifiers */
     protected function getIdentifiers(): array
     {
         return $this->objectManager
@@ -159,9 +151,7 @@ class UniqueObject extends ObjectExists
                     ->getIdentifierFieldNames();
     }
 
-    /**
-     * @return class-string
-     */
+    /** @return class-string */
     protected function getClassName(): string
     {
         return $this->objectRepository->getClassName();

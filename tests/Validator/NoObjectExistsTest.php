@@ -60,7 +60,7 @@ class NoObjectExistsTest extends BaseTestCase
         $expectedMessage = str_replace(
             '%value%',
             'matchValue',
-            $messageTemplates[NoObjectExists::ERROR_OBJECT_FOUND]
+            $messageTemplates[NoObjectExists::ERROR_OBJECT_FOUND],
         );
         $messages        = $validator->getMessages();
         $receivedMessage = $messages[NoObjectExists::ERROR_OBJECT_FOUND];
