@@ -66,8 +66,6 @@ class EventManagerFactoryTest extends BaseTestCase
         $eventManager = $factory->__invoke($serviceManager, EventManager::class);
         $this->assertInstanceOf(EventManager::class, $eventManager);
 
-        $listeners = $eventManager->getListeners();
-        $this->assertArrayHasKey('dummy', $listeners);
         $listeners = $eventManager->getListeners('dummy');
         $this->assertContains($subscriber, $listeners);
     }
@@ -96,8 +94,6 @@ class EventManagerFactoryTest extends BaseTestCase
         $eventManager = $factory->__invoke($serviceManager, EventManager::class);
         $this->assertInstanceOf(EventManager::class, $eventManager);
 
-        $listeners = $eventManager->getListeners();
-        $this->assertArrayHasKey('dummy', $listeners);
         $listeners = $eventManager->getListeners('dummy');
         $this->assertContains($subscriber, $listeners);
     }
