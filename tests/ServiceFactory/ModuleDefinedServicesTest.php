@@ -60,9 +60,7 @@ class ModuleDefinedServicesTest extends TestCase
         $this->serviceManager->get($serviceName);
     }
 
-    /**
-     * @return mixed[][]
-     */
+    /** @return mixed[][] */
     public function getServicesThatShouldBeDefined(): array
     {
         $legacyCacheShouldExist = InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0');
@@ -93,9 +91,7 @@ class ModuleDefinedServicesTest extends TestCase
         ];
     }
 
-    /**
-     * @return string[][]
-     */
+    /** @return string[][] */
     public function getServicesThatCanBeFetched(): array
     {
         if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0')) {
@@ -113,9 +109,7 @@ class ModuleDefinedServicesTest extends TestCase
         ];
     }
 
-    /**
-     * @return string[][]
-     */
+    /** @return string[][] */
     public function getServicesThatCannotBeFetched(): array
     {
         return [

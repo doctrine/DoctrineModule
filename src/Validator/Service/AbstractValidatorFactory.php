@@ -35,12 +35,12 @@ abstract class AbstractValidatorFactory implements FactoryInterface
      *
      * @throws ServiceCreationException
      */
-    protected function getRepository(ContainerInterface $container, ?array $options = null): ObjectRepository
+    protected function getRepository(ContainerInterface $container, array|null $options = null): ObjectRepository
     {
         if (empty($options['target_class'])) {
             throw new ServiceCreationException(sprintf(
                 "Option 'target_class' is missing when creating validator %s",
-                self::class
+                self::class,
             ));
         }
 
@@ -54,10 +54,8 @@ abstract class AbstractValidatorFactory implements FactoryInterface
         return $objectManager->getRepository($targetClassName);
     }
 
-    /**
-     * @param mixed[] $options
-     */
-    protected function getObjectManager(ContainerInterface $container, ?array $options = null): ObjectManager
+    /** @param mixed[] $options */
+    protected function getObjectManager(ContainerInterface $container, array|null $options = null): ObjectManager
     {
         $objectManager = $options['object_manager'] ?? self::DEFAULT_OBJECTMANAGER_KEY;
 

@@ -15,9 +15,7 @@ use Symfony\Component\Console\Application as SymfonyApplication;
 use function serialize;
 use function unserialize;
 
-/**
- * @covers \DoctrineModule\Module
- */
+/** @covers \DoctrineModule\Module */
 class ModuleTest extends TestCase
 {
     /** @var MockObject&Application */
@@ -61,9 +59,7 @@ class ModuleTest extends TestCase
             ->will($this->returnValue($this->application));
     }
 
-    /**
-     * @covers \DoctrineModule\Module::getConfig
-     */
+    /** @covers \DoctrineModule\Module::getConfig */
     public function testGetConfig(): void
     {
         $module = new Module();

@@ -31,9 +31,7 @@ class ObjectExistsFactoryTest extends TestCase
         $this->object = new ObjectExistsFactory();
     }
 
-    /**
-     * @covers ::__invoke
-     */
+    /** @covers ::__invoke */
     public function testInvoke(): void
     {
         $options = [
@@ -59,7 +57,7 @@ class ObjectExistsFactoryTest extends TestCase
         $instance = $this->object->__invoke(
             $container,
             ObjectExists::class,
-            $options
+            $options,
         );
         $this->assertInstanceOf(ObjectExists::class, $instance);
     }

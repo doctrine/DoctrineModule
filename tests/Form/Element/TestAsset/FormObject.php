@@ -13,19 +13,19 @@ use function assert;
  */
 class FormObject implements Stringable
 {
-    protected ?int $id = null;
+    protected int|null $id = null;
 
-    public ?string $email = null;
+    public string|null $email = null;
 
-    protected ?string $username = null;
+    protected string|null $username = null;
 
-    protected ?string $firstname = null;
+    protected string|null $firstname = null;
 
-    protected ?string $surname = null;
+    protected string|null $surname = null;
 
-    protected ?string $password = null;
+    protected string|null $password = null;
 
-    protected ?string $optgroup = null;
+    protected string|null $optgroup = null;
 
     public function __toString(): string
     {
@@ -41,7 +41,7 @@ class FormObject implements Stringable
         return $this;
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
@@ -53,7 +53,7 @@ class FormObject implements Stringable
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string|null
     {
         return $this->email;
     }
@@ -65,7 +65,7 @@ class FormObject implements Stringable
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string|null
     {
         return $this->password;
     }
@@ -77,7 +77,7 @@ class FormObject implements Stringable
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string|null
     {
         return $this->username;
     }
@@ -89,7 +89,7 @@ class FormObject implements Stringable
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getFirstname(): string|null
     {
         return $this->firstname;
     }
@@ -101,22 +101,22 @@ class FormObject implements Stringable
         return $this;
     }
 
-    public function getSurname(): ?string
+    public function getSurname(): string|null
     {
         return $this->surname;
     }
 
-    public function getName(): ?string
+    public function getName(): string|null
     {
         return isset($this->firstname) && isset($this->surname) ? $this->firstname . ' ' . $this->surname : null;
     }
 
-    public function getOptgroup(): ?string
+    public function getOptgroup(): string|null
     {
         return $this->optgroup;
     }
 
-    public function setOptgroup(?string $optgroup): void
+    public function setOptgroup(string|null $optgroup): void
     {
         $this->optgroup = $optgroup;
     }

@@ -37,11 +37,11 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',
-            Session::class
+            Session::class,
         );
         $serviceManager->setFactory('doctrine.authenticationadapter.' . $name, new AdapterFactory($name));
         $serviceManager->setFactory('doctrine.authenticationstorage.' . $name, new StorageFactory($name));

@@ -62,12 +62,12 @@ class DoctrineCacheStorageTest extends TestCase
         $this->assertInstanceOf(
             StorageInterface::class,
             $this->storage,
-            'Storage adapter instance is needed for test'
+            'Storage adapter instance is needed for test',
         );
         $this->assertInstanceOf(
             AdapterOptions::class,
             $this->options,
-            'Options instance is needed for test'
+            'Options instance is needed for test',
         );
     }
 
@@ -91,8 +91,8 @@ class DoctrineCacheStorageTest extends TestCase
                 $name,
                 sprintf(
                     "Invalid option name '%s'",
-                    $name
-                )
+                    $name,
+                ),
             );
         }
     }
@@ -113,16 +113,16 @@ class DoctrineCacheStorageTest extends TestCase
                 method_exists($options, 'set' . $method),
                 sprintf(
                     "Missing method 'set'%s",
-                    $method
-                )
+                    $method,
+                ),
             );
 
             $this->assertTrue(
                 method_exists($options, 'get' . $method),
                 sprintf(
                     "Missing method 'get'%s",
-                    $method
-                )
+                    $method,
+                ),
             );
         }
     }
@@ -145,15 +145,15 @@ class DoctrineCacheStorageTest extends TestCase
                 $options->{$method}($value),
                 sprintf(
                     "Method '%s' doesn't implement the fluent interface",
-                    $method
-                )
+                    $method,
+                ),
             );
         }
 
         $this->assertSame(
             $this->storage,
             $this->storage->setOptions($options),
-            "Method 'setOptions' doesn't implement the fluent interface"
+            "Method 'setOptions' doesn't implement the fluent interface",
         );
     }
 
@@ -525,8 +525,8 @@ class DoctrineCacheStorageTest extends TestCase
                 $this->storage->setItem('key', $value),
                 sprintf(
                     "Failed to set type '%s'",
-                    $sourceType
-                )
+                    $sourceType,
+                ),
             );
 
             if ($targetType === true) {

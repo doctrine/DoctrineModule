@@ -24,6 +24,7 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->element = new ObjectSelect();
 
         $this->prepareProxy();
@@ -34,12 +35,12 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         $this->element->setAttribute('multiple', true);
 
         $this->element->setValue(
-            $this->values
+            $this->values,
         );
 
         $this->assertEquals(
             [1, 2],
-            $this->element->getValue()
+            $this->element->getValue(),
         );
     }
 
@@ -48,12 +49,12 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         $this->element->setAttribute('multiple', true);
 
         $this->element->setValue(
-            $this->values->toArray()
+            $this->values->toArray(),
         );
 
         $this->assertEquals(
             [1, 2],
-            $this->element->getValue()
+            $this->element->getValue(),
         );
     }
 
@@ -62,12 +63,12 @@ class ObjectSelectTest extends ProxyAwareElementTestCase
         $value = $this->values->toArray();
 
         $this->element->setValue(
-            $value[0]
+            $value[0],
         );
 
         $this->assertEquals(
             1,
-            $this->element->getValue()
+            $this->element->getValue(),
         );
     }
 

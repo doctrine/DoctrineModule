@@ -37,9 +37,9 @@ class Proxy implements ObjectManagerAwareInterface
     use ArrayOrTraversableGuardTrait;
 
     /** @var iterable<object>|null */
-    protected ?iterable $objects = null;
+    protected iterable|null $objects = null;
 
-    protected ?string $targetClass = null;
+    protected string|null $targetClass = null;
 
     /** @var mixed[] */
     protected array $valueOptions = [];
@@ -55,28 +55,26 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var callable $labelGenerator A callable used to create a label based on an item in the collection an Entity */
     protected $labelGenerator;
 
-    protected ?bool $isMethod = null;
+    protected bool|null $isMethod = null;
 
-    protected ?ObjectManager $objectManager = null;
+    protected ObjectManager|null $objectManager = null;
 
     protected bool $displayEmptyItem = false;
 
     protected string $emptyItemLabel = '';
 
-    protected ?string $optgroupIdentifier = null;
+    protected string|null $optgroupIdentifier = null;
 
-    protected ?string $optgroupDefault = null;
+    protected string|null $optgroupDefault = null;
 
     protected Inflector $inflector;
 
-    public function __construct(?Inflector $inflector = null)
+    public function __construct(Inflector|null $inflector = null)
     {
         $this->inflector = $inflector ?? InflectorFactory::create()->build();
     }
 
-    /**
-     * @param iterable<mixed> $options
-     */
+    /** @param iterable<mixed> $options */
     public function setOptions(iterable $options): void
     {
         if ($options instanceof Traversable) {
@@ -161,17 +159,13 @@ class Proxy implements ObjectManagerAwareInterface
         return $this->emptyItemLabel;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function getOptionAttributes(): array
     {
         return $this->optionAttributes;
     }
 
-    /**
-     * @param mixed[] $optionAttributes
-     */
+    /** @param mixed[] $optionAttributes */
     public function setOptionAttributes(array $optionAttributes): void
     {
         $this->optionAttributes = $optionAttributes;
@@ -261,12 +255,12 @@ class Proxy implements ObjectManagerAwareInterface
         $this->labelGenerator = $callable;
     }
 
-    public function getLabelGenerator(): ?callable
+    public function getLabelGenerator(): callable|null
     {
         return $this->labelGenerator;
     }
 
-    public function getOptgroupIdentifier(): ?string
+    public function getOptgroupIdentifier(): string|null
     {
         return $this->optgroupIdentifier;
     }
@@ -276,7 +270,7 @@ class Proxy implements ObjectManagerAwareInterface
         $this->optgroupIdentifier = $optgroupIdentifier;
     }
 
-    public function getOptgroupDefault(): ?string
+    public function getOptgroupDefault(): string|null
     {
         return $this->optgroupDefault;
     }
@@ -296,7 +290,7 @@ class Proxy implements ObjectManagerAwareInterface
         return $this;
     }
 
-    public function getIsMethod(): ?bool
+    public function getIsMethod(): bool|null
     {
         return $this->isMethod;
     }
@@ -322,7 +316,7 @@ class Proxy implements ObjectManagerAwareInterface
         return $this->findMethod;
     }
 
-    protected function generateLabel(mixed $targetEntity): ?string
+    protected function generateLabel(mixed $targetEntity): string|null
     {
         if ($this->getLabelGenerator() === null) {
             return null;
@@ -331,9 +325,7 @@ class Proxy implements ObjectManagerAwareInterface
         return call_user_func($this->getLabelGenerator(), $targetEntity);
     }
 
-    /**
-     * @throws RuntimeException
-     */
+    /** @throws RuntimeException */
     public function getValue(mixed $value): mixed
     {
         $metadata = $this->getObjectManager()->getClassMetadata($this->getTargetClass());
@@ -356,7 +348,7 @@ class Proxy implements ObjectManagerAwareInterface
                     // Handling composite (multiple) identifiers is not yet supported
                     throw new BadMethodCallException(sprintf(
                         'Composite identiers are not yet supported in %s.',
-                        self::class
+                        self::class,
                     ));
                 }
 
@@ -399,8 +391,8 @@ class Proxy implements ObjectManagerAwareInterface
                     sprintf(
                         'Method "%s" could not be found in repository "%s"',
                         $findMethodName,
-                        $repository::class
-                    )
+                        $repository::class,
+                    ),
                 );
             }
 
@@ -419,8 +411,8 @@ class Proxy implements ObjectManagerAwareInterface
                             . ' was not provided',
                             $param->getName(),
                             $findMethodName,
-                            $repository::class
-                        )
+                            $repository::class,
+                        ),
                     );
                 }
             }
@@ -431,7 +423,7 @@ class Proxy implements ObjectManagerAwareInterface
         $this->guardForArrayOrTraversable(
             $objects,
             sprintf('%s::%s() return value', $repository::class, $findMethodName),
-            InvalidRepositoryResultException::class
+            InvalidRepositoryResultException::class,
         );
 
         $this->objects = $objects;
@@ -468,8 +460,8 @@ class Proxy implements ObjectManagerAwareInterface
                         sprintf(
                             'Property "%s" could not be found in object "%s"',
                             $property,
-                            $this->getTargetClass()
-                        )
+                            $this->getTargetClass(),
+                        ),
                     );
                 }
 
@@ -477,7 +469,7 @@ class Proxy implements ObjectManagerAwareInterface
 
                 if (! is_callable([$object, $getter])) {
                     throw new RuntimeException(
-                        sprintf('Method "%s::%s" is not callable', $this->targetClass, $getter)
+                        sprintf('Method "%s::%s" is not callable', $this->targetClass, $getter),
                     );
                 }
 
@@ -488,8 +480,8 @@ class Proxy implements ObjectManagerAwareInterface
                         sprintf(
                             '%s must have a "__toString()" method defined if you have not set a property'
                             . ' or method to use.',
-                            $this->getTargetClass()
-                        )
+                            $this->getTargetClass(),
+                        ),
                     );
                 }
 
@@ -520,8 +512,8 @@ class Proxy implements ObjectManagerAwareInterface
                     sprintf(
                         'Parameter "option_attributes" expects an array of key => value where value is of type'
                         . '"string" or "callable". Value of type "%s" found.',
-                        gettype($optionValue)
-                    )
+                        gettype($optionValue),
+                    ),
                 );
             }
 
@@ -537,7 +529,7 @@ class Proxy implements ObjectManagerAwareInterface
 
             if (! is_callable([$object, $optgroupGetter])) {
                 throw new RuntimeException(
-                    sprintf('Method "%s::%s" is not callable', $this->targetClass, $optgroupGetter)
+                    sprintf('Method "%s::%s" is not callable', $this->targetClass, $optgroupGetter),
                 );
             }
 

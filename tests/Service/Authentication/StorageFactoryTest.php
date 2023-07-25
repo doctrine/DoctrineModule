@@ -25,7 +25,7 @@ class StorageFactoryTest extends BaseTestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setInvokableClass(
             'DoctrineModule\Authentication\Storage\Session',
-            Session::class
+            Session::class,
         );
         $serviceManager->setService(
             'config',
@@ -40,7 +40,7 @@ class StorageFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $adapter = $factory->__invoke($serviceManager, ObjectRepository::class);

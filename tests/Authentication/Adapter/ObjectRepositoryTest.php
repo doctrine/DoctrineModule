@@ -25,10 +25,10 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRejectInvalidIdentityProperty(): void
     {
         $this->expectException(
-            InvalidArgumentException::class
+            InvalidArgumentException::class,
         );
         $this->expectExceptionMessage(
-            'Provided $identityProperty is invalid, string given'
+            'Provided $identityProperty is invalid, string given',
         );
 
         new ObjectRepositoryAdapter(['identity_property' => '']);
@@ -37,10 +37,10 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRejectInvalidCredentialProperty(): void
     {
         $this->expectException(
-            InvalidArgumentException::class
+            InvalidArgumentException::class,
         );
         $this->expectExceptionMessage(
-            'Provided $credentialProperty is invalid, string given'
+            'Provided $credentialProperty is invalid, string given',
         );
         new ObjectRepositoryAdapter(['credential_property' => '']);
     }
@@ -48,11 +48,11 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRequireIdentityValue(): void
     {
         $this->expectException(
-            RuntimeException::class
+            RuntimeException::class,
         );
         $this->expectExceptionMessage(
             'A value for the identity was not provided prior to authentication with ObjectRepository authentication '
-            . 'adapter'
+            . 'adapter',
         );
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -66,10 +66,10 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRequireCredentialValue(): void
     {
         $this->expectException(
-            RuntimeException::class
+            RuntimeException::class,
         );
         $this->expectExceptionMessage(
-            'A credential value was not provided prior to authentication with ObjectRepository authentication adapter'
+            'A credential value was not provided prior to authentication with ObjectRepository authentication adapter',
         );
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -84,10 +84,10 @@ class ObjectRepositoryTest extends BaseTestCase
     public function testWillRejectInvalidCredentialCallable(): void
     {
         $this->expectException(
-            InvalidArgumentException::class
+            InvalidArgumentException::class,
         );
         $this->expectExceptionMessage(
-            '"array" is not a callable'
+            '"array" is not a callable',
         );
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -135,7 +135,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertTrue($result->isValid());
         $this->assertInstanceOf(
             IdentityObject::class,
-            $result->getIdentity()
+            $result->getIdentity(),
         );
 
         $method->will($this->returnValue(null));

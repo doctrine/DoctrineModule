@@ -27,7 +27,7 @@ final class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
     {
         $mappings = $this->getFactoryMapping($container, $requestedName);
 
@@ -41,9 +41,7 @@ final class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         return $factory->__invoke($container, $requestedName);
     }
 
-    /**
-     * @return mixed[]|bool
-     */
+    /** @return mixed[]|bool */
     private function getFactoryMapping(ContainerInterface $serviceLocator, string $name): array|bool
     {
         $matches = [];
@@ -52,7 +50,7 @@ final class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
             ! preg_match(
                 '/^doctrine\.((?<mappingType>orm|odm)\.|)(?<serviceType>[a-z0-9_]+)\.(?<serviceName>[a-z0-9_]+)$/',
                 $name,
-                $matches
+                $matches,
             )
         ) {
             return false;
@@ -81,7 +79,7 @@ final class AbstractDoctrineServiceFactory implements AbstractFactoryInterface
         if (
             ! isset(
                 $config['doctrine_factories'][$mappingType][$serviceType],
-                $config['doctrine'][$mappingType][$serviceType][$serviceName]
+                $config['doctrine'][$mappingType][$serviceType][$serviceName],
             )
         ) {
             return false;

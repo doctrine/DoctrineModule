@@ -17,9 +17,7 @@ use function range;
  */
 class SelectableAdapterTest extends TestCase
 {
-    /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
-     */
+    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
     public function testGetItemsAtOffsetZeroWithEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -37,8 +35,8 @@ class SelectableAdapterTest extends TestCase
                         $me->assertEquals(10, $criteria->getMaxResults());
 
                         return true;
-                    }
-                )
+                    },
+                ),
             )
             ->will($this->returnValue(new ArrayCollection(range(1, 10))));
 
@@ -48,9 +46,7 @@ class SelectableAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
-     */
+    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
     public function testGetItemsAtOffsetZeroWithNonEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -71,8 +67,8 @@ class SelectableAdapterTest extends TestCase
                         $me->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
 
                         return true;
-                    }
-                )
+                    },
+                ),
             )
             ->will($this->returnValue(new ArrayCollection(range(1, 10))));
 
@@ -82,9 +78,7 @@ class SelectableAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
-     */
+    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
     public function testGetItemsAtOffsetTenWithEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -101,8 +95,8 @@ class SelectableAdapterTest extends TestCase
                         $me->assertEquals(10, $criteria->getMaxResults());
 
                         return true;
-                    }
-                )
+                    },
+                ),
             )
             ->will($this->returnValue(new ArrayCollection(range(11, 20))));
 
@@ -112,9 +106,7 @@ class SelectableAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems
-     */
+    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
     public function testGetItemsAtOffsetTenWithNonEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -135,8 +127,8 @@ class SelectableAdapterTest extends TestCase
                         $me->assertEquals($innerCriteria->getWhereExpression(), $criteria->getWhereExpression());
 
                         return true;
-                    }
-                )
+                    },
+                ),
             )
             ->will($this->returnValue(new ArrayCollection(range(11, 20))));
 
@@ -146,9 +138,7 @@ class SelectableAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @covers \DoctrineModule\Paginator\Adapter\Selectable::count
-     */
+    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::count */
     public function testReturnsCorrectCount(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -164,7 +154,7 @@ class SelectableAdapterTest extends TestCase
                         && ($criteria->getOrderings() === ['baz' => Criteria::DESC])
                         && $criteria->getFirstResult() === null
                         && $criteria->getMaxResults() === null
-                )
+                ),
             )
             ->will($this->returnValue(new ArrayCollection(range(1, 101))));
 

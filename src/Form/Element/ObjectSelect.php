@@ -27,9 +27,7 @@ class ObjectSelect extends SelectElement
         return parent::setOptions($options);
     }
 
-    /**
-     * @return $this
-     */
+    /** @return $this */
     public function setOption(string $key, mixed $value): self
     {
         $this->getProxy()->setOptions([$key => $value]);

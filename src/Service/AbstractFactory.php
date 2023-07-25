@@ -21,9 +21,9 @@ abstract class AbstractFactory implements FactoryInterface
     /**
      * Would normally be set to orm | odm
      */
-    protected ?string $mappingType = null;
+    protected string|null $mappingType = null;
 
-    protected ?AbstractOptions $options = null;
+    protected AbstractOptions|null $options = null;
 
     public function __construct(protected string $name)
     {
@@ -47,7 +47,7 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @throws RuntimeException
      */
-    public function getOptions(ContainerInterface $container, string $key, ?string $name = null): AbstractOptions
+    public function getOptions(ContainerInterface $container, string $key, string|null $name = null): AbstractOptions
     {
         if ($name === null) {
             $name = $this->getName();
@@ -67,8 +67,8 @@ abstract class AbstractFactory implements FactoryInterface
                 sprintf(
                     'Options with name "%s" could not be found in "doctrine.%s".',
                     $name,
-                    $key
-                )
+                    $key,
+                ),
             );
         }
 

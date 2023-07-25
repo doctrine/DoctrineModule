@@ -28,7 +28,7 @@ class ObjectRepository extends AbstractAdapter
      *
      * @var mixed[]
      */
-    protected ?array $authenticationResultInfo = null;
+    protected array|null $authenticationResultInfo = null;
 
     protected Inflector $inflector;
 
@@ -37,15 +37,13 @@ class ObjectRepository extends AbstractAdapter
      *
      * @param mixed[]|AuthenticationOptions $options
      */
-    public function __construct(array|AuthenticationOptions $options = [], ?Inflector $inflector = null)
+    public function __construct(array|AuthenticationOptions $options = [], Inflector|null $inflector = null)
     {
         $this->setOptions($options);
         $this->inflector = $inflector ?? InflectorFactory::create()->build();
     }
 
-    /**
-     * @param mixed[]|AuthenticationOptions $options
-     */
+    /** @param mixed[]|AuthenticationOptions $options */
     public function setOptions(array|AuthenticationOptions $options): self
     {
         if (! $options instanceof AuthenticationOptions) {
@@ -103,8 +101,8 @@ class ObjectRepository extends AbstractAdapter
                     $credentialProperty,
                     $identity::class,
                     $identity::class,
-                    $getter
-                )
+                    $getter,
+                ),
             );
         }
 
@@ -141,14 +139,14 @@ class ObjectRepository extends AbstractAdapter
         if ($this->identity === null) {
             throw new Exception\RuntimeException(
                 'A value for the identity was not provided prior to authentication with ObjectRepository '
-                . 'authentication adapter'
+                . 'authentication adapter',
             );
         }
 
         if ($this->credential === null) {
             throw new Exception\RuntimeException(
                 'A credential value was not provided prior to authentication with ObjectRepository'
-                . ' authentication adapter'
+                . ' authentication adapter',
             );
         }
 
@@ -168,7 +166,7 @@ class ObjectRepository extends AbstractAdapter
         return new AuthenticationResult(
             $this->authenticationResultInfo['code'],
             $this->authenticationResultInfo['identity'],
-            $this->authenticationResultInfo['messages']
+            $this->authenticationResultInfo['messages'],
         );
     }
 }

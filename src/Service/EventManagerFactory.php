@@ -25,7 +25,7 @@ final class EventManagerFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
     {
         $options = $this->getOptions($container, 'eventmanager');
 
@@ -33,7 +33,7 @@ final class EventManagerFactory extends AbstractFactory
             throw new RuntimeException(sprintf(
                 'Invalid options received, expected %s, got %s.',
                 EventManagerOptions::class,
-                $options::class
+                $options::class,
             ));
         }
 
@@ -61,8 +61,8 @@ final class EventManagerFactory extends AbstractFactory
                 sprintf(
                     'Invalid event subscriber "%s" given, must be a service name, '
                     . 'class name or an instance implementing Doctrine\Common\EventSubscriber',
-                    is_string($subscriberType) ? $subscriberType : gettype($subscriberType)
-                )
+                    is_string($subscriberType) ? $subscriberType : gettype($subscriberType),
+                ),
             );
         }
 

@@ -24,6 +24,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->element = new ObjectRadio();
     }
 

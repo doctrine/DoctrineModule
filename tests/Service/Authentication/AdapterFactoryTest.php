@@ -32,7 +32,7 @@ class AdapterFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $adapter = $factory->__invoke($serviceManager, ObjectRepository::class);

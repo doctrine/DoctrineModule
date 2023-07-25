@@ -39,6 +39,7 @@ class ProxyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->proxy = new Proxy();
     }
 
@@ -110,10 +111,10 @@ class ProxyTest extends TestCase
         ]);
 
         $this->expectException(
-            'RuntimeException'
+            'RuntimeException',
         );
         $this->expectExceptionMessage(
-            'Method "NotExistent" could not be found in repository "' . $objectRepository::class . '"'
+            'Method "NotExistent" could not be found in repository "' . $objectRepository::class . '"',
         );
 
         $this->proxy->getValueOptions();
@@ -148,11 +149,11 @@ class ProxyTest extends TestCase
         ]);
 
         $this->expectException(
-            'RuntimeException'
+            'RuntimeException',
         );
         $this->expectExceptionMessage(
             'Required parameter "criteria" with no default value for method "findBy" in repository "'
-            . $objectRepository::class . '" was not provided'
+            . $objectRepository::class . '" was not provided',
         );
 
         $this->proxy->getValueOptions();
@@ -276,12 +277,12 @@ class ProxyTest extends TestCase
         $this->prepareProxy();
 
         $this->expectException(
-            'TypeError'
+            'TypeError',
         );
         $this->expectExceptionMessage(
             PHP_VERSION_ID >= 80000
             ? 'DoctrineModule\Form\Element\Proxy::setLabelGenerator(): Argument #1 ($callable) must be of type callable'
-            : 'Argument 1 passed to DoctrineModule\Form\Element\Proxy::setLabelGenerator() must be callable'
+            : 'Argument 1 passed to DoctrineModule\Form\Element\Proxy::setLabelGenerator() must be callable',
         );
 
         $this->proxy->setOptions(['label_generator' => 'I throw an invalid type error']);
@@ -385,10 +386,10 @@ class ProxyTest extends TestCase
         $this->prepareEmptyProxy(new stdClass());
 
         $this->expectException(
-            InvalidRepositoryResultException::class
+            InvalidRepositoryResultException::class,
         );
         $this->expectExceptionMessage(
-            'return value must be an array or Traversable'
+            'return value must be an array or Traversable',
         );
 
         $this->proxy->getValueOptions();
@@ -617,8 +618,8 @@ class ProxyTest extends TestCase
                         }
 
                         return [];
-                    }
-                )
+                    },
+                ),
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -702,8 +703,8 @@ class ProxyTest extends TestCase
                         }
 
                         return [];
-                    }
-                )
+                    },
+                ),
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -773,8 +774,8 @@ class ProxyTest extends TestCase
                         }
 
                         return [];
-                    }
-                )
+                    },
+                ),
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -842,8 +843,8 @@ class ProxyTest extends TestCase
                         }
 
                         return [];
-                    }
-                )
+                    },
+                ),
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);

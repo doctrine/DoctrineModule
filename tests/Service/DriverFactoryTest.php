@@ -35,7 +35,7 @@ class DriverFactoryTest extends BaseTestCase
                         'testDriver' => ['class' => MetadataDriverMock::class],
                     ],
                 ],
-            ]
+            ],
         );
 
         $factory = new DriverFactory('testDriver');
@@ -61,7 +61,7 @@ class DriverFactoryTest extends BaseTestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $factory = new DriverFactory('testChainDriver');
@@ -75,9 +75,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(MetadataDriverMock::class, $drivers['Foo\Bar']);
     }
 
-    /**
-     * @requires PHP 8.0
-     */
+    /** @requires PHP 8.0 */
     public function testCreateORMAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();
@@ -89,7 +87,7 @@ class DriverFactoryTest extends BaseTestCase
                         'testDriver' => ['class' => ORMAttributeDriver::class],
                     ],
                 ],
-            ]
+            ],
         );
 
         $factory = new DriverFactory('testDriver');
@@ -97,9 +95,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(ORMAttributeDriver::class, $driver);
     }
 
-    /**
-     * @requires PHP 8.0
-     */
+    /** @requires PHP 8.0 */
     public function testCreateMongoDBODMAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();
@@ -111,7 +107,7 @@ class DriverFactoryTest extends BaseTestCase
                         'testDriver' => ['class' => MongoDBODMAttributeDriver::class],
                     ],
                 ],
-            ]
+            ],
         );
 
         $factory = new DriverFactory('testDriver');
@@ -130,11 +126,11 @@ class DriverFactoryTest extends BaseTestCase
                         'testDriver' => ['class' => ORMAnnotationDriver::class],
                     ],
                 ],
-            ]
+            ],
         );
         $serviceManager->setService(
             'doctrine.cache.array',
-            new LaminasStorageCache(new Memory())
+            new LaminasStorageCache(new Memory()),
         );
 
         $factory = new DriverFactory('testDriver');
@@ -154,11 +150,11 @@ class DriverFactoryTest extends BaseTestCase
                         'testDriver' => ['class' => MongoDBODMAnnotationDriver::class],
                     ],
                 ],
-            ]
+            ],
         );
         $serviceManager->setService(
             'doctrine.cache.array',
-            new LaminasStorageCache(new Memory())
+            new LaminasStorageCache(new Memory()),
         );
 
         $factory = new DriverFactory('testDriver');

@@ -69,8 +69,8 @@ class ObjectExists extends AbstractValidator
                 sprintf(
                     'Option "object_repository" is required and must be an instance of'
                     . ' Doctrine\Persistence\ObjectRepository, %s given',
-                    $provided
-                )
+                    $provided,
+                ),
             );
         }
 
@@ -79,7 +79,7 @@ class ObjectExists extends AbstractValidator
         if (! isset($options['fields'])) {
             throw new Exception\InvalidArgumentException(
                 'Key `fields` must be provided and be a field or a list of fields to be used when searching for'
-                . ' existing instances'
+                . ' existing instances',
             );
         }
 
@@ -107,7 +107,7 @@ class ObjectExists extends AbstractValidator
         foreach ($fields as $key => $field) {
             if (! is_string($field)) {
                 throw new Exception\InvalidArgumentException(
-                    sprintf('Provided fields must be strings, %s provided for key %s', gettype($field), $key)
+                    sprintf('Provided fields must be strings, %s provided for key %s', gettype($field), $key),
                 );
             }
         }
@@ -138,8 +138,8 @@ class ObjectExists extends AbstractValidator
                         sprintf(
                             'Field "%s" was not provided, but was expected since the configured field lists needs'
                             . ' it for validation',
-                            $field
-                        )
+                            $field,
+                        ),
                     );
                 }
 
@@ -157,8 +157,8 @@ class ObjectExists extends AbstractValidator
                     sprintf(
                         'Provided values count is %s, while expected number of fields to be matched is %s',
                         count($value),
-                        is_countable($this->fields) ? count($this->fields) : 0
-                    )
+                        is_countable($this->fields) ? count($this->fields) : 0,
+                    ),
                 );
             }
         }

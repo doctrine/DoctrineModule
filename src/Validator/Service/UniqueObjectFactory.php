@@ -14,7 +14,7 @@ final class UniqueObjectFactory extends AbstractValidatorFactory
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
     {
         $useContext = isset($options['use_context']) ? (bool) $options['use_context'] : false;
 

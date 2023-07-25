@@ -70,8 +70,8 @@ class ProxyAwareElementTestCase extends TestCase
                         }
 
                         return [];
-                    }
-                )
+                    },
+                ),
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -106,7 +106,7 @@ class ProxyAwareElementTestCase extends TestCase
     /**
      * Proxy should stay read only, use with care
      */
-    protected function setProxyViaReflection(MockObject $proxy, ?MockObject $element = null): void
+    protected function setProxyViaReflection(MockObject $proxy, MockObject|null $element = null): void
     {
         if (! $element) {
             $element = $this->element;

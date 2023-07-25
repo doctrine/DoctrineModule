@@ -37,7 +37,7 @@ final class Driver extends AbstractOptions
      * Set the file extension to use. This option is only
      * valid for FileDrivers (XmlDriver, YamlDriver, PHPDriver, etc).
      */
-    protected ?string $extension = null;
+    protected string|null $extension = null;
 
     /**
      * Set the driver keys to use which are assembled as
@@ -68,46 +68,36 @@ final class Driver extends AbstractOptions
         return $this->class;
     }
 
-    /**
-     * @param mixed[] $drivers
-     */
+    /** @param mixed[] $drivers */
     public function setDrivers(array $drivers): void
     {
         $this->drivers = $drivers;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function getDrivers(): array
     {
         return $this->drivers;
     }
 
-    /**
-     * @param null $extension
-     */
+    /** @param null $extension */
     public function setExtension($extension): void
     {
         $this->extension = $extension;
     }
 
-    public function getExtension(): ?string
+    public function getExtension(): string|null
     {
         return $this->extension;
     }
 
-    /**
-     * @param mixed[] $paths
-     */
+    /** @param mixed[] $paths */
     public function setPaths(array $paths): void
     {
         $this->paths = $paths;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function getPaths(): array
     {
         return $this->paths;

@@ -27,7 +27,7 @@ class Selectable implements AdapterInterface
      *
      * @param DoctrineSelectable<TKey,T> $selectable
      */
-    public function __construct(protected DoctrineSelectable $selectable, ?Criteria $criteria = null)
+    public function __construct(protected DoctrineSelectable $selectable, Criteria|null $criteria = null)
     {
         $this->criteria = $criteria ? clone $criteria : new Criteria();
     }

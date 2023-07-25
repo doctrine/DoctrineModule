@@ -24,9 +24,7 @@ class MetadataDriverMock implements MappingDriver
         return false;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getAllClassNames(): array
     {
         return [];

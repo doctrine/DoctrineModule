@@ -24,6 +24,7 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->element = new ObjectMultiCheckbox();
 
         $this->prepareProxy();
@@ -32,24 +33,24 @@ class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
     public function testSetValueWithCollection(): void
     {
         $this->element->setValue(
-            $this->values
+            $this->values,
         );
 
         $this->assertEquals(
             [1, 2],
-            $this->element->getValue()
+            $this->element->getValue(),
         );
     }
 
     public function testSetValueWithArray(): void
     {
         $this->element->setValue(
-            $this->values->toArray()
+            $this->values->toArray(),
         );
 
         $this->assertEquals(
             [1, 2],
-            $this->element->getValue()
+            $this->element->getValue(),
         );
     }
 
