@@ -47,7 +47,7 @@ class Proxy implements ObjectManagerAwareInterface
     /** @var mixed[] */
     protected array $findMethod = [];
 
-    protected mixed $property;
+    protected mixed $property = null;
 
     /** @var mixed[] */
     protected array $optionAttributes = [];
@@ -450,7 +450,7 @@ class Proxy implements ObjectManagerAwareInterface
             $generatedLabel = $this->generateLabel($object);
             if ($generatedLabel !== null) {
                 $label = $generatedLabel;
-            } elseif ($this->property) {
+            } elseif ($this->property !== null) {
                 $property = $this->property;
                 if (
                     ($this->getIsMethod() === false || $this->getIsMethod() === null)
