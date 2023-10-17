@@ -79,9 +79,6 @@
     "conflict": {
         "doctrine/orm": "2.12.0"
     },
-    "provide": {
-        "laminas/laminas-cache-storage-implementation": "1.0.0"
-    },
     "suggest": {
         "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
     },
