@@ -9,6 +9,8 @@ use Laminas\Stdlib\AbstractOptions;
 
 /**
  * Cache options
+ *
+ * @template-extends AbstractOptions<mixed>
  */
 final class Cache extends AbstractOptions
 {

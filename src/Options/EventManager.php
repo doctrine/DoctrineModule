@@ -8,6 +8,8 @@ use Laminas\Stdlib\AbstractOptions;
 
 /**
  * EventManager options
+ *
+ * @template-extends AbstractOptions<mixed>
  */
 final class EventManager extends AbstractOptions
 {
