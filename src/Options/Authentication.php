@@ -47,6 +47,8 @@ use function sprintf;
  * All remains the same using with DoctrineModule\Service\AuthenticationStorageFactory,
  * however, a string may be passed to $objectManager. This string must be a valid key to
  * retrieve an ObjectManager instance from the ServiceManager.
+ *
+ * @template-extends AbstractOptions<mixed>
  */
 final class Authentication extends AbstractOptions
 {

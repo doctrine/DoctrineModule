@@ -8,6 +8,8 @@ use Laminas\Stdlib\AbstractOptions;
 
 /**
  * MappingDriver options
+ *
+ * @template-extends AbstractOptions<mixed>
  */
 final class Driver extends AbstractOptions
 {
