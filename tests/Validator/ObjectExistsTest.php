@@ -36,6 +36,22 @@ class ObjectExistsTest extends BaseTestCase
         $this->assertTrue($validator->isValid(['matchKey' => 'matchValue']));
     }
 
+    public function testCanValidateWithIntegerId(): void
+    {
+        $repository = $this->createMock(ObjectRepository::class);
+
+        $repository
+            ->expects($this->exactly(2))
+            ->method('findOneBy')
+            ->with(['matchKey' => 123])
+            ->will($this->returnValue(new stdClass()));
+
+        $validator = new ObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
+
+        $this->assertTrue($validator->isValid(123));
+        $this->assertTrue($validator->isValid(['matchKey' => 123]));
+    }
+
     public function testCanValidateWithMultipleFields(): void
     {
         $repository = $this->createMock(ObjectRepository::class);
