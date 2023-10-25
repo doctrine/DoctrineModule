@@ -118,14 +118,14 @@ class ObjectExists extends AbstractValidator
     }
 
     /**
-     * @param string|object|mixed[] $value a field value or an array of field values if more fields have been configured to be
+     * @param string|int|object|mixed[] $value a field value or an array of field values if more fields have been configured to be
      *                      matched
      *
      * @return mixed[]
      *
      * @throws Exception\RuntimeException
      */
-    protected function cleanSearchValue(string|object|array $value): array
+    protected function cleanSearchValue(string|int|object|array $value): array
     {
         $value = is_object($value) ? [$value] : (array) $value;
 
