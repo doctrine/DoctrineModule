@@ -82,7 +82,7 @@ final class Authentication extends AbstractOptions
     /**
      * Callable function to check if a credential is valid
      */
-    protected mixed $credentialCallable;
+    protected mixed $credentialCallable = null;
 
     /**
      * If an objectManager is not supplied, this metadata will be used
