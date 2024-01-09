@@ -41,7 +41,7 @@ class ObjectRadio extends RadioElement
     /**
      * {@inheritDoc}
      *
-     * @return array<array-key,mixed>
+     * @return array<int<0, max>|string, array{attributes?: array<string, null|scalar>, disabled?: bool, label: non-empty-string, label_attributes?: array<string, null|scalar>, selected?: bool, value: non-empty-string}|string>
      */
     public function getValueOptions(): array
     {
