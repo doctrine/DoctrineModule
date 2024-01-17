@@ -11,6 +11,7 @@ use Traversable;
 use function array_map;
 use function is_array;
 
+/** @psalm-import-type ValueOptionSpec from MultiCheckbox */
 class ObjectMultiCheckbox extends MultiCheckbox
 {
     use GetProxy;
@@ -54,7 +55,7 @@ class ObjectMultiCheckbox extends MultiCheckbox
     /**
      * {@inheritDoc}
      *
-     * @return array<array-key,mixed>
+     * @return ValueOptionSpec
      */
     public function getValueOptions(): array
     {
