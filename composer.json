@@ -55,7 +55,7 @@
         "laminas/laminas-modulemanager": "^2.12.0",
         "laminas/laminas-mvc": "^3.3.5",
         "laminas/laminas-paginator": "^2.13.0",
-        "laminas/laminas-servicemanager": "^3.17.0",
+        "laminas/laminas-servicemanager": "^3.17.0 || ^4.0",
         "laminas/laminas-stdlib": "^3.13.0",
         "laminas/laminas-validator": "^2.25.0",
         "psr/container": "^1.1.2",
