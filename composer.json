@@ -60,8 +60,7 @@
         "doctrine/coding-standard": "^12.0",
         "php-parallel-lint/php-parallel-lint": "^1.4",
         "phpstan/phpstan": "^1.11",
-        "phpunit/phpunit": "^3.7",
-        "vimeo/psalm": "^5.25"
+        "phpunit/phpunit": "^11.3"
     },
     "suggest": {
         "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
