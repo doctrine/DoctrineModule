@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function range;
@@ -18,6 +19,7 @@ use function range;
 class SelectableAdapterTest extends TestCase
 {
     /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
+    #[Test]
     public function testGetItemsAtOffsetZeroWithEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -47,6 +49,7 @@ class SelectableAdapterTest extends TestCase
     }
 
     /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
+    #[Test]
     public function testGetItemsAtOffsetZeroWithNonEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -79,6 +82,7 @@ class SelectableAdapterTest extends TestCase
     }
 
     /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
+    #[Test]
     public function testGetItemsAtOffsetTenWithEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -107,6 +111,7 @@ class SelectableAdapterTest extends TestCase
     }
 
     /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
+    #[Test]
     public function testGetItemsAtOffsetTenWithNonEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -139,6 +144,7 @@ class SelectableAdapterTest extends TestCase
     }
 
     /** @covers \DoctrineModule\Paginator\Adapter\Selectable::count */
+    #[Test]
     public function testReturnsCorrectCount(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -153,7 +159,7 @@ class SelectableAdapterTest extends TestCase
                     static fn (Criteria $criteria) => $criteria->getWhereExpression() === $expression
                         && ($criteria->getOrderings() === ['baz' => Criteria::DESC])
                         && $criteria->getFirstResult() === null
-                        && $criteria->getMaxResults() === null
+                        && $criteria->getMaxResults() === null,
                 ),
             )
             ->will($this->returnValue(new ArrayCollection(range(1, 101))));

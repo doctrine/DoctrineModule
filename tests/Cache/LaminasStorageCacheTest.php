@@ -8,6 +8,7 @@ use ArrayObject;
 use Doctrine\Common\Cache\Cache;
 use DoctrineModule\Cache\LaminasStorageCache;
 use Laminas\Cache\Storage\Adapter\Memory;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,6 +21,7 @@ class LaminasStorageCacheTest extends TestCase
         return new LaminasStorageCache(new Memory());
     }
 
+    #[Test]
     public function testBasics(): void
     {
         $cache = $this->getCacheDriver();
@@ -43,6 +45,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertInstanceOf('ArrayObject', $cache->fetch('test_object_key'));
     }
 
+    #[Test]
     public function testDeleteAll(): void
     {
         $cache = $this->getCacheDriver();
@@ -54,6 +57,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('test_key2'));
     }
 
+    #[Test]
     public function testFlushAll(): void
     {
         $cache = $this->getCacheDriver();
@@ -65,6 +69,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('test_key2'));
     }
 
+    #[Test]
     public function testNamespace(): void
     {
         $cache = $this->getCacheDriver();
@@ -78,6 +83,7 @@ class LaminasStorageCacheTest extends TestCase
         $this->assertFalse($cache->contains('key1'));
     }
 
+    #[Test]
     public function testGetStats(): void
     {
         $cache = $this->getCacheDriver();

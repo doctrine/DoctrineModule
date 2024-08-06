@@ -12,10 +12,12 @@ use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\Authentication\Storage\Session;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class AuthenticationServiceFactoryTest extends BaseTestCase
 {
+    #[Test]
     public function testWillInstantiateFromFQCN(): void
     {
         $name    = 'testFactory';

@@ -8,6 +8,7 @@ use DoctrineModule\Module;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application as SymfonyApplication;
@@ -60,6 +61,7 @@ class ModuleTest extends TestCase
     }
 
     /** @covers \DoctrineModule\Module::getConfig */
+    #[Test]
     public function testGetConfig(): void
     {
         $module = new Module();

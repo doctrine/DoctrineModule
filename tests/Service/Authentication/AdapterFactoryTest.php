@@ -9,10 +9,12 @@ use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use DoctrineModule\Service\Authentication\AdapterFactory;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class AdapterFactoryTest extends BaseTestCase
 {
+    #[Test]
     public function testWillInstantiateFromFQCN(): void
     {
         $name           = 'testFactory';

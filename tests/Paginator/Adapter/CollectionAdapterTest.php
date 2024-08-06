@@ -6,6 +6,7 @@ namespace DoctrineModuleTest\Paginator\Adapter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Paginator\Adapter\Collection as CollectionAdapter;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function range;
@@ -27,6 +28,7 @@ class CollectionAdapterTest extends TestCase
         $this->adapter = new CollectionAdapter(new ArrayCollection(range(1, 101)));
     }
 
+    #[Test]
     public function testGetsItemsAtOffsetZero(): void
     {
         $expected = range(1, 10);
@@ -34,6 +36,7 @@ class CollectionAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    #[Test]
     public function testGetsItemsAtOffsetTen(): void
     {
         $expected = range(11, 20);
@@ -41,11 +44,13 @@ class CollectionAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    #[Test]
     public function testReturnsCorrectCount(): void
     {
         $this->assertEquals(101, $this->adapter->count());
     }
 
+    #[Test]
     public function testEmptySet(): void
     {
         $adapter = new CollectionAdapter(new ArrayCollection());

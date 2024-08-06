@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\ObjectExists;
 use DoctrineModule\Validator\Service\ObjectExistsFactory;
 use DoctrineModuleTest\Validator\TestAsset\DummyClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -32,6 +33,7 @@ class ObjectExistsFactoryTest extends TestCase
     }
 
     /** @covers ::__invoke */
+    #[Test]
     public function testInvoke(): void
     {
         $options = [

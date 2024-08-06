@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Authentication\Storage\ObjectRepository as ObjectRepositoryStorage;
 use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use Laminas\Authentication\Storage\NonPersistent as NonPersistentStorage;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
  */
 class ObjectRepositoryTest extends BaseTestCase
 {
+    #[Test]
     public function testCanRetrieveEntityFromObjectRepositoryStorage(): void
     {
         // Identifier is considered to be username here

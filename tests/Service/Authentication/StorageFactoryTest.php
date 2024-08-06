@@ -11,10 +11,12 @@ use DoctrineModuleTest\Authentication\Adapter\TestAsset\IdentityObject;
 use Laminas\Authentication\Storage\Session;
 use Laminas\Authentication\Storage\StorageInterface;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class StorageFactoryTest extends BaseTestCase
 {
+    #[Test]
     public function testWillInstantiateFromFQCN(): void
     {
         $name    = 'testFactory';
@@ -47,6 +49,7 @@ class StorageFactoryTest extends BaseTestCase
         $this->assertInstanceOf(ObjectRepository::class, $adapter);
     }
 
+    #[Test]
     public function testCanInstantiateStorageFromServiceLocator(): void
     {
         $factory        = new StorageFactory('testFactory');

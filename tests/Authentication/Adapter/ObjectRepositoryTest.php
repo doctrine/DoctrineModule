@@ -12,6 +12,7 @@ use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentity
 use Laminas\Authentication\Adapter\Exception\InvalidArgumentException;
 use Laminas\Authentication\Adapter\Exception\RuntimeException;
 use Laminas\Authentication\Adapter\Exception\UnexpectedValueException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
 
@@ -22,6 +23,7 @@ use function crypt;
  */
 class ObjectRepositoryTest extends BaseTestCase
 {
+    #[Test]
     public function testWillRejectInvalidIdentityProperty(): void
     {
         $this->expectException(
@@ -34,6 +36,7 @@ class ObjectRepositoryTest extends BaseTestCase
         new ObjectRepositoryAdapter(['identity_property' => '']);
     }
 
+    #[Test]
     public function testWillRejectInvalidCredentialProperty(): void
     {
         $this->expectException(
@@ -45,6 +48,7 @@ class ObjectRepositoryTest extends BaseTestCase
         new ObjectRepositoryAdapter(['credential_property' => '']);
     }
 
+    #[Test]
     public function testWillRequireIdentityValue(): void
     {
         $this->expectException(
@@ -63,6 +67,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testWillRequireCredentialValue(): void
     {
         $this->expectException(
@@ -81,6 +86,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testWillRejectInvalidCredentialCallable(): void
     {
         $this->expectException(
@@ -99,6 +105,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testAuthentication(): void
     {
         $entity = new IdentityObject();
@@ -145,6 +152,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
+    #[Test]
     public function testAuthenticationWithPublicProperties(): void
     {
         $entity           = new PublicPropertiesIdentityObject();
@@ -180,6 +188,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
+    #[Test]
     public function testWillRefuseToAuthenticateWithoutGettersOrPublicMethods(): void
     {
         $this->expectException(UnexpectedValueException::class);
@@ -203,6 +212,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testCanValidateWithSpecialCrypt(): void
     {
         $hash   = '$2y$07$usesomesillystringforsalt$';
@@ -240,6 +250,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
+    #[Test]
     public function testWillRefuseToAuthenticateWhenInvalidInstanceIsFound(): void
     {
         $this->expectException(UnexpectedValueException::class);
@@ -264,6 +275,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testWillNotCastAuthCredentialValue(): void
     {
         $objectRepository = $this->createMock(ObjectRepository::class);
