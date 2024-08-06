@@ -117,13 +117,13 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue($entity));
+            ->willReturn($entity);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->exactly(2))
                       ->method('getRepository')
                       ->with($this->equalTo(IdentityObject::class))
-                      ->will($this->returnValue($objectRepository));
+                      ->willReturn($objectRepository);
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -145,7 +145,7 @@ class ObjectRepositoryTest extends BaseTestCase
             $result->getIdentity(),
         );
 
-        $method->will($this->returnValue(null));
+        $method->willReturn(null);
 
         $result = $adapter->authenticate();
 
@@ -164,7 +164,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue($entity));
+            ->willReturn($entity);
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -181,7 +181,7 @@ class ObjectRepositoryTest extends BaseTestCase
 
         $this->assertTrue($result->isValid());
 
-        $method->will($this->returnValue(null));
+        $method->willReturn(null);
 
         $result = $adapter->authenticate();
 
@@ -198,7 +198,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -226,7 +226,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'username']))
-            ->will($this->returnValue($entity));
+            ->willReturn($entity);
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -260,7 +260,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -295,7 +295,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue($entity));
+            ->willReturn($entity);
 
         $this->assertFalse($adapter->authenticate()->isValid());
     }

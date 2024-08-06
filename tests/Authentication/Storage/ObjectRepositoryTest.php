@@ -29,13 +29,13 @@ class ObjectRepositoryTest extends BaseTestCase
         $objectRepository->expects($this->exactly(1))
                          ->method('find')
                          ->with($this->equalTo('a username'))
-                         ->will($this->returnValue($entity));
+                         ->willReturn($entity);
 
         $metadata = $this->createMock(ClassMetadata::class);
         $metadata->expects($this->exactly(1))
                  ->method('getIdentifierValues')
                  ->with($this->equalTo($entity))
-                 ->will($this->returnValue($entity->getUsername()));
+                 ->willReturn($entity->getUsername());
 
         $storage = new ObjectRepositoryStorage([
             'objectRepository' => $objectRepository,
