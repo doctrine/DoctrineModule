@@ -5,3 +5,6 @@
 /phpcs.xml
 /phpunit.xml
 /vendor/
+/.idea
+/coverage/
+/.phpunit.cache/
