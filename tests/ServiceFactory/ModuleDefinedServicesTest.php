@@ -14,6 +14,8 @@ use Laminas\Cache\Storage\Adapter\Filesystem;
 use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,9 +32,9 @@ class ModuleDefinedServicesTest extends TestCase
 
     /**
      * Verifies that the module defines the correct services
-     *
-     * @dataProvider getServicesThatShouldBeDefined
      */
+    #[Test]
+    #[DataProvider('getServicesThatShouldBeDefined')]
     public function testModuleDefinedServices(string $serviceName, bool $defined): void
     {
         $this->assertSame($defined, $this->serviceManager->has($serviceName));
@@ -40,9 +42,9 @@ class ModuleDefinedServicesTest extends TestCase
 
     /**
      * Verifies that the module defines the correct services
-     *
-     * @dataProvider getServicesThatCanBeFetched
      */
+    #[Test]
+    #[DataProvider('getServicesThatCanBeFetched')]
     public function testModuleFetchedService(string $serviceName, string $expectedClass): void
     {
         $this->assertInstanceOf($expectedClass, $this->serviceManager->get($serviceName));
@@ -50,9 +52,9 @@ class ModuleDefinedServicesTest extends TestCase
 
     /**
      * Verifies that the module defines the correct services
-     *
-     * @dataProvider getServicesThatCannotBeFetched
      */
+    #[Test]
+    #[DataProvider('getServicesThatCannotBeFetched')]
     public function testModuleInvalidService(string $serviceName): void
     {
         $this->expectException(ServiceNotFoundException::class);
@@ -61,7 +63,7 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /** @return mixed[][] */
-    public function getServicesThatShouldBeDefined(): array
+    public static function getServicesThatShouldBeDefined(): array
     {
         $legacyCacheShouldExist = InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0');
 
@@ -92,7 +94,7 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /** @return string[][] */
-    public function getServicesThatCanBeFetched(): array
+    public static function getServicesThatCanBeFetched(): array
     {
         if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0')) {
             return [
@@ -110,7 +112,7 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /** @return string[][] */
-    public function getServicesThatCannotBeFetched(): array
+    public static function getServicesThatCannotBeFetched(): array
     {
         return [
             ['foo'],

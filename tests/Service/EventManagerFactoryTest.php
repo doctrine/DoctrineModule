@@ -8,6 +8,7 @@ use Doctrine\Common\EventManager;
 use DoctrineModule\Service\EventManagerFactory;
 use DoctrineModuleTest\Service\TestAsset\DummyEventSubscriber;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**
@@ -15,6 +16,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
  */
 class EventManagerFactoryTest extends BaseTestCase
 {
+    #[Test]
     public function testWillInstantiateFromFQCN(): void
     {
         $name           = 'eventManagerFactory';
@@ -43,6 +45,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertCount(1, $listeners);
     }
 
+    #[Test]
     public function testWillAttachEventListenersFromConfiguredInstances(): void
     {
         $name           = 'eventManagerFactory';
@@ -70,6 +73,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertContains($subscriber, $listeners);
     }
 
+    #[Test]
     public function testWillAttachEventListenersFromServiceManagerAlias(): void
     {
         $name           = 'eventManagerFactory';
@@ -98,6 +102,7 @@ class EventManagerFactoryTest extends BaseTestCase
         $this->assertContains($subscriber, $listeners);
     }
 
+    #[Test]
     public function testWillRefuseNonExistingSubscriber(): void
     {
         $name           = 'eventManagerFactory';

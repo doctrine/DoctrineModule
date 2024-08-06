@@ -11,6 +11,7 @@ use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -43,6 +44,7 @@ class ProxyTest extends TestCase
         $this->proxy = new Proxy();
     }
 
+    #[Test]
     public function testExceptionThrownForMissingObjectManager(): void
     {
         $this->expectException(RuntimeException::class);
@@ -52,6 +54,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
+    #[Test]
     public function testExceptionThrownForMissingTargetClass(): void
     {
         $this->expectException(RuntimeException::class);
@@ -63,6 +66,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
+    #[Test]
     public function testExceptionThrownForMissingFindMethodName(): void
     {
         $this->expectException(RuntimeException::class);
@@ -86,6 +90,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
+    #[Test]
     public function testExceptionFindMethodNameNotExistentInRepository(): void
     {
         $objectClass = FormObject::class;
@@ -120,6 +125,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
+    #[Test]
     public function testExceptionThrownForMissingRequiredParameter(): void
     {
         $objectClass = FormObject::class;
@@ -159,6 +165,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
+    #[Test]
     public function testToStringIsUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
@@ -177,6 +184,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    #[Test]
     public function testPropertyGetterUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
@@ -195,6 +203,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    #[Test]
     public function testPublicPropertyUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
@@ -215,6 +224,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    #[Test]
     public function testIsMethodOptionUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
@@ -234,6 +244,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    #[Test]
     public function testDisplayEmptyItemAndEmptyItemLabelOptionsUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
@@ -254,6 +265,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[''], '---');
     }
 
+    #[Test]
     public function testLabelGeneratorUsedForGetValueOptions(): void
     {
         $this->prepareProxy();
@@ -272,6 +284,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($result[1]['value'], 2);
     }
 
+    #[Test]
     public function testExceptionThrownForNonCallableLabelGenerator(): void
     {
         $this->prepareProxy();
@@ -288,6 +301,7 @@ class ProxyTest extends TestCase
         $this->proxy->setOptions(['label_generator' => 'I throw an invalid type error']);
     }
 
+    #[Test]
     public function testUsingOptionAttributesOfTypeString(): void
     {
         $this->prepareProxy();
@@ -321,6 +335,7 @@ class ProxyTest extends TestCase
         $this->assertEquals($expectedAttributes, $options[1]['attributes']);
     }
 
+    #[Test]
     public function testUsingOptionAttributesOfTypeCallableReturningString(): void
     {
         $this->prepareProxy();
@@ -348,6 +363,7 @@ class ProxyTest extends TestCase
         $this->assertEquals(['data-id' => 2], $options[1]['attributes']);
     }
 
+    #[Test]
     public function testRuntimeExceptionOnWrongOptionAttributesValue(): void
     {
         $this->prepareProxy();
@@ -365,6 +381,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
+    #[Test]
     public function testCanWorkWithEmptyTables(): void
     {
         $this->prepareEmptyProxy();
@@ -373,6 +390,7 @@ class ProxyTest extends TestCase
         $this->assertEquals([], $result);
     }
 
+    #[Test]
     public function testCanWorkWithEmptyDataReturnedAsArray(): void
     {
         $this->prepareEmptyProxy([]);
@@ -381,6 +399,7 @@ class ProxyTest extends TestCase
         $this->assertEquals([], $result);
     }
 
+    #[Test]
     public function testExceptionThrownForNonTraversableResults(): void
     {
         $this->prepareEmptyProxy(new stdClass());
@@ -395,6 +414,7 @@ class ProxyTest extends TestCase
         $this->proxy->getValueOptions();
     }
 
+    #[Test]
     public function testUsingFindMethod(): void
     {
         $this->prepareFilteredProxy();
@@ -413,6 +433,7 @@ class ProxyTest extends TestCase
      * A \RuntimeException should be thrown when the optgroup_identifier option does not reflect an existing method
      * within the target object
      */
+    #[Test]
     public function testExceptionThrownWhenOptgroupIdentifiesNotCallable(): void
     {
         $this->prepareProxyWithOptgroupPreset();
@@ -436,6 +457,7 @@ class ProxyTest extends TestCase
      *
      * Entries should be grouped accordingly under the respective keys.
      */
+    #[Test]
     public function testValueOptionsGeneratedProperlyWithOptgroups(): void
     {
         $this->prepareProxyWithOptgroupPreset();
@@ -492,6 +514,7 @@ class ProxyTest extends TestCase
      *
      * Both entries should be grouped under the optgroup_default key.
      */
+    #[Test]
     public function testEmptyOptgroupValueBelongsToOptgroupDefaultIfConfigured(): void
     {
         $this->prepareProxy();
@@ -540,6 +563,7 @@ class ProxyTest extends TestCase
      *
      * Entry one should be grouped, entry two shouldn't be.
      */
+    #[Test]
     public function testEmptyOptgroupValueBelongsToNoOptgroupIfNotConfigured(): void
     {
         $this->prepareProxyWithOptgroupPresetThatHasPartiallyEmptyOptgroupValues();

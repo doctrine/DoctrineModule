@@ -15,6 +15,7 @@ use DoctrineModule\Service\DriverFactory;
 use DoctrineModuleTest\Service\Mock\MetadataDriverMock;
 use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 use function assert;
@@ -24,6 +25,7 @@ use function assert;
  */
 class DriverFactoryTest extends BaseTestCase
 {
+    #[Test]
     public function testCreateDriver(): void
     {
         $serviceManager = new ServiceManager();
@@ -43,6 +45,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(MetadataDriverMock::class, $driver);
     }
 
+    #[Test]
     public function testCreateDriverChain(): void
     {
         $serviceManager = new ServiceManager();
@@ -75,7 +78,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(MetadataDriverMock::class, $drivers['Foo\Bar']);
     }
 
-    /** @requires PHP 8.0 */
+    #[Test]
     public function testCreateORMAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();
@@ -95,7 +98,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(ORMAttributeDriver::class, $driver);
     }
 
-    /** @requires PHP 8.0 */
+    #[Test]
     public function testCreateMongoDBODMAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();
@@ -115,6 +118,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(MongoDBODMAttributeDriver::class, $driver);
     }
 
+    #[Test]
     public function testCreateORMAnnotationDriver(): void
     {
         $serviceManager = new ServiceManager();
@@ -139,6 +143,7 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(Reader::class, $driver->getReader());
     }
 
+    #[Test]
     public function testCreateMongoDBODMAnnotationDriver(): void
     {
         $serviceManager = new ServiceManager();

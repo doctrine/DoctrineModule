@@ -7,6 +7,7 @@ namespace DoctrineModuleTest\Form\Element;
 use DoctrineModule\Form\Element\ObjectRadio;
 use DoctrineModule\Form\Element\Proxy;
 use Laminas\Form\Element;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for the ObjectRadio element
@@ -28,6 +29,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
         $this->element = new ObjectRadio();
     }
 
+    #[Test]
     public function testGetValueOptionsDoesntCauseInfiniteLoopIfProxyReturnsEmptyArrayAndValidatorIsInitialized(): void
     {
         $element = $this->createPartialMock($this->element::class, ['setValueOptions']);
@@ -47,6 +49,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $element->getValueOptions());
     }
 
+    #[Test]
     public function testGetValueOptionsDoesntInvokeProxyIfOptionsNotEmpty(): void
     {
         $options = ['foo' => 'bar'];
@@ -62,6 +65,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
         $this->assertEquals($options, $this->element->getValueOptions());
     }
 
+    #[Test]
     public function testOptionsCanBeSetSingle(): void
     {
         $proxy = $this->createMock(Proxy::class);

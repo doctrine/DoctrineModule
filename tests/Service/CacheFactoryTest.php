@@ -14,6 +14,7 @@ use DoctrineModule\Service\CacheFactory;
 use Laminas\Cache\ConfigProvider;
 use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Predis\ClientInterface;
 
@@ -25,6 +26,7 @@ use function assert;
 class CacheFactoryTest extends BaseTestCase
 {
     /** @covers \DoctrineModule\Service\CacheFactory::createService */
+    #[Test]
     public function testWillSetNamespace(): void
     {
         if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {
@@ -58,6 +60,7 @@ class CacheFactoryTest extends BaseTestCase
      * @covers \DoctrineModule\Service\CacheFactory::createService
      * @group 547
      */
+    #[Test]
     public function testCreateLaminasCache(): void
     {
         $factory        = new CacheFactory('phpunit');
@@ -86,6 +89,7 @@ class CacheFactoryTest extends BaseTestCase
         $this->assertInstanceOf(LaminasStorageCache::class, $cache);
     }
 
+    #[Test]
     public function testCreatePredisCache(): void
     {
         if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {
@@ -117,6 +121,7 @@ class CacheFactoryTest extends BaseTestCase
         $this->assertInstanceOf(PredisCache::class, $cache);
     }
 
+    #[Test]
     public function testUseServiceFactory(): void
     {
         if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {

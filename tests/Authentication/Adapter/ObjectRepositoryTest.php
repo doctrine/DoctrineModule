@@ -12,6 +12,7 @@ use DoctrineModuleTest\Authentication\Adapter\TestAsset\PublicPropertiesIdentity
 use Laminas\Authentication\Adapter\Exception\InvalidArgumentException;
 use Laminas\Authentication\Adapter\Exception\RuntimeException;
 use Laminas\Authentication\Adapter\Exception\UnexpectedValueException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
 
@@ -22,6 +23,7 @@ use function crypt;
  */
 class ObjectRepositoryTest extends BaseTestCase
 {
+    #[Test]
     public function testWillRejectInvalidIdentityProperty(): void
     {
         $this->expectException(
@@ -34,6 +36,7 @@ class ObjectRepositoryTest extends BaseTestCase
         new ObjectRepositoryAdapter(['identity_property' => '']);
     }
 
+    #[Test]
     public function testWillRejectInvalidCredentialProperty(): void
     {
         $this->expectException(
@@ -45,6 +48,7 @@ class ObjectRepositoryTest extends BaseTestCase
         new ObjectRepositoryAdapter(['credential_property' => '']);
     }
 
+    #[Test]
     public function testWillRequireIdentityValue(): void
     {
         $this->expectException(
@@ -63,6 +67,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testWillRequireCredentialValue(): void
     {
         $this->expectException(
@@ -81,6 +86,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testWillRejectInvalidCredentialCallable(): void
     {
         $this->expectException(
@@ -99,6 +105,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testAuthentication(): void
     {
         $entity = new IdentityObject();
@@ -110,13 +117,13 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue($entity));
+            ->willReturn($entity);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->exactly(2))
                       ->method('getRepository')
                       ->with($this->equalTo(IdentityObject::class))
-                      ->will($this->returnValue($objectRepository));
+                      ->willReturn($objectRepository);
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -138,13 +145,14 @@ class ObjectRepositoryTest extends BaseTestCase
             $result->getIdentity(),
         );
 
-        $method->will($this->returnValue(null));
+        $method->willReturn(null);
 
         $result = $adapter->authenticate();
 
         $this->assertFalse($result->isValid());
     }
 
+    #[Test]
     public function testAuthenticationWithPublicProperties(): void
     {
         $entity           = new PublicPropertiesIdentityObject();
@@ -156,7 +164,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue($entity));
+            ->willReturn($entity);
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -173,13 +181,14 @@ class ObjectRepositoryTest extends BaseTestCase
 
         $this->assertTrue($result->isValid());
 
-        $method->will($this->returnValue(null));
+        $method->willReturn(null);
 
         $result = $adapter->authenticate();
 
         $this->assertFalse($result->isValid());
     }
 
+    #[Test]
     public function testWillRefuseToAuthenticateWithoutGettersOrPublicMethods(): void
     {
         $this->expectException(UnexpectedValueException::class);
@@ -189,7 +198,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -203,6 +212,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testCanValidateWithSpecialCrypt(): void
     {
         $hash   = '$2y$07$usesomesillystringforsalt$';
@@ -216,7 +226,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'username']))
-            ->will($this->returnValue($entity));
+            ->willReturn($entity);
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -240,6 +250,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $this->assertFalse($result->isValid());
     }
 
+    #[Test]
     public function testWillRefuseToAuthenticateWhenInvalidInstanceIsFound(): void
     {
         $this->expectException(UnexpectedValueException::class);
@@ -249,7 +260,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
 
         $adapter = new ObjectRepositoryAdapter();
         $adapter->setOptions([
@@ -264,6 +275,7 @@ class ObjectRepositoryTest extends BaseTestCase
         $adapter->authenticate();
     }
 
+    #[Test]
     public function testWillNotCastAuthCredentialValue(): void
     {
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -283,7 +295,7 @@ class ObjectRepositoryTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(['username' => 'a username']))
-            ->will($this->returnValue($entity));
+            ->willReturn($entity);
 
         $this->assertFalse($adapter->authenticate()->isValid());
     }

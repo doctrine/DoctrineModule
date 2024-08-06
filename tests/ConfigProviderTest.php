@@ -6,6 +6,7 @@ namespace DoctrineModuleTest;
 
 use DoctrineModule\ConfigProvider;
 use Laminas\Cache\Storage\Adapter\Filesystem;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function serialize;
@@ -16,6 +17,7 @@ use function unserialize;
  */
 class ConfigProviderTest extends TestCase
 {
+    #[Test]
     public function testInvokeHasCorrectKeys(): void
     {
         $config = (new ConfigProvider())->__invoke();
@@ -37,6 +39,7 @@ class ConfigProviderTest extends TestCase
         self::assertSame($config, unserialize(serialize($config)));
     }
 
+    #[Test]
     public function testDoctrineCompatibleCacheKeyConfiguration(): void
     {
         $config  = (new ConfigProvider())->getCachesConfig()['doctrinemodule.cache.filesystem'];

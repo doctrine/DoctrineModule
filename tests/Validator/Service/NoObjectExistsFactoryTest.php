@@ -11,6 +11,7 @@ use DoctrineModule\Validator\Service\Exception\ServiceCreationException;
 use DoctrineModule\Validator\Service\NoObjectExistsFactory;
 use DoctrineModuleTest\Validator\TestAsset\DummyClass;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -34,6 +35,7 @@ class NoObjectExistsFactoryTest extends TestCase
     }
 
     /** @coversNothing */
+    #[Test]
     public function testCallable(): void
     {
         $this->assertIsCallable($this->object);
@@ -46,6 +48,7 @@ class NoObjectExistsFactoryTest extends TestCase
      * @covers ::getObjectManager
      * @covers ::getFields
      */
+    #[Test]
     public function testInvoke(): void
     {
         $options = [
@@ -83,6 +86,7 @@ class NoObjectExistsFactoryTest extends TestCase
      * @covers ::getObjectManager
      * @covers ::getFields
      */
+    #[Test]
     public function testInvokeWithObjectManagerGiven(): void
     {
         $repository    = $this->createMock(ObjectRepository::class);
@@ -114,6 +118,7 @@ class NoObjectExistsFactoryTest extends TestCase
     }
 
     /** @covers ::merge */
+    #[Test]
     public function testInvokeWithMerge(): void
     {
         $options = [
@@ -148,6 +153,7 @@ class NoObjectExistsFactoryTest extends TestCase
     }
 
     /** @covers ::getRepository */
+    #[Test]
     public function testInvokeWithoutTargetClass(): void
     {
         $this->expectException(ServiceCreationException::class);
@@ -160,6 +166,7 @@ class NoObjectExistsFactoryTest extends TestCase
         );
     }
 
+    #[Test]
     public function testInvokeWithOptions(): void
     {
         $options = [
