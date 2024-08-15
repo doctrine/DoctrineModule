@@ -7,13 +7,13 @@ namespace DoctrineModuleTest\Form\Element;
 use DoctrineModule\Form\Element\ObjectSelect;
 use DoctrineModule\Form\Element\Proxy;
 use Laminas\Form\Element;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for the ObjectSelect element
- *
- * @covers  \DoctrineModule\Form\Element\ObjectSelect
  */
+#[CoversClass(ObjectSelect::class)]
 class ObjectSelectTest extends ProxyAwareElementTestCase
 {
     /** @var ObjectSelect  */

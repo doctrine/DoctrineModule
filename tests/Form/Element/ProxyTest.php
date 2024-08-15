@@ -11,6 +11,7 @@ use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,9 +25,8 @@ use const PHP_VERSION_ID;
 
 /**
  * Tests for the Collection pagination adapter
- *
- * @covers  \DoctrineModule\Form\Element\Proxy
  */
+#[CoversClass(Proxy::class)]
 class ProxyTest extends TestCase
 {
     /** @var MockObject&ClassMetadata */

@@ -8,6 +8,7 @@ use DoctrineModule\Module;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +17,7 @@ use Symfony\Component\Console\Application as SymfonyApplication;
 use function serialize;
 use function unserialize;
 
-/** @covers \DoctrineModule\Module */
+#[CoversClass(Module::class)]
 class ModuleTest extends TestCase
 {
     /** @var MockObject&Application */
@@ -60,7 +61,10 @@ class ModuleTest extends TestCase
             ->will($this->returnValue($this->application));
     }
 
-    /** @covers \DoctrineModule\Module::getConfig */
+    /**
+     * FIXME:  attributes for CoversFunction needed
+     * old: covers \DoctrineModule\Module::getConfig
+     */
     #[Test]
     public function testGetConfig(): void
     {

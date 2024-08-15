@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Validator\ObjectExists;
 use Laminas\Validator\Exception\InvalidArgumentException;
 use Laminas\Validator\Exception\RuntimeException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
@@ -16,9 +17,8 @@ use function str_replace;
 
 /**
  * Tests for the ObjectExists validator
- *
- * @covers \DoctrineModule\Validator\ObjectExists
  */
+#[CoversClass(ObjectExists::class)]
 class ObjectExistsTest extends BaseTestCase
 {
     #[Test]

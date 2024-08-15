@@ -7,13 +7,13 @@ namespace DoctrineModuleTest\Form\Element;
 use DoctrineModule\Form\Element\ObjectRadio;
 use DoctrineModule\Form\Element\Proxy;
 use Laminas\Form\Element;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for the ObjectRadio element
- *
- * @covers \DoctrineModule\Form\Element\ObjectRadio
  */
+#[CoversClass(ObjectRadio::class)]
 class ObjectRadioTest extends ProxyAwareElementTestCase
 {
     /** @var ObjectRadio  */
