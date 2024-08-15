@@ -17,7 +17,7 @@ final class AuthenticationServiceFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
+    public function __invoke(ContainerInterface $container, string $requestedName, array|null $options = null): mixed
     {
         return new AuthenticationService(
             $container->get('doctrine.authenticationstorage.' . $this->getName()),

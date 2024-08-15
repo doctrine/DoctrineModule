@@ -26,7 +26,7 @@ final class CacheFactory extends AbstractFactory
      *
      * @throws RuntimeException
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array|null $options = null)
+    public function __invoke(ContainerInterface $container, string $requestedName, array|null $options = null): mixed
     {
         $options = $this->getOptions($container, 'cache');
 
