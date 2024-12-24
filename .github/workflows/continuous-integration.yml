@@ -4,13 +4,27 @@ on:
   pull_request:
     branches:
       - "*.x"
+    paths:
+      - ".github/workflows/continuous-integration.yml"
+      - "composer.*"
+      - "src/**"
+      - "phpunit.xml.dist"
+      - "tests/**"
   push:
     branches:
       - "*.x"
+    paths:
+      - ".github/workflows/continuous-integration.yml"
+      - "composer.*"
+      - "src/**"
+      - "phpunit.xml.dist"
+      - "tests/**"
 
 jobs:
   phpunit:
     name: "PHPUnit"
-    uses: "doctrine/.github/.github/workflows/continuous-integration.yml@2.1.0"
+    uses: "doctrine/.github/.github/workflows/continuous-integration.yml@6.0.0"
     with:
       php-versions: '["8.1", "8.2", "8.3"]'
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
