@@ -11,7 +11,7 @@ use Traversable;
 use function array_map;
 use function is_array;
 
-/** @psalm-import-type ValueOptionSpec from MultiCheckbox */
+/** @phpstan-import-type ValueOptionSpec from MultiCheckbox */
 class ObjectMultiCheckbox extends MultiCheckbox
 {
     use GetProxy;

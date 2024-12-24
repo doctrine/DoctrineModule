@@ -11,8 +11,8 @@ use function array_values;
 use function count;
 
 /**
- * @psalm-template TKey of array-key
- * @psalm-template T
+ * @phpstan-template TKey of array-key
+ * @phpstan-template T
  * @template-implements AdapterInterface<int, T>
  */
 class Collection implements AdapterInterface
