@@ -24,7 +24,7 @@ use function assert;
  */
 class CacheFactoryTest extends BaseTestCase
 {
-    /** @covers \DoctrineModule\Service\CacheFactory::createService */
+    /** @covers \DoctrineModule\Service\CacheFactory::__invoke */
     public function testWillSetNamespace(): void
     {
         if (! InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0.0')) {
@@ -55,7 +55,7 @@ class CacheFactoryTest extends BaseTestCase
     }
 
     /**
-     * @covers \DoctrineModule\Service\CacheFactory::createService
+     * @covers \DoctrineModule\Service\CacheFactory::__invoke
      * @group 547
      */
     public function testCreateLaminasCache(): void
