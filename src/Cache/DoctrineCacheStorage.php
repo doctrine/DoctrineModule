@@ -28,6 +28,8 @@ class DoctrineCacheStorage extends AbstractAdapter
 
     /**
      * {@inheritDoc}
+     *
+     * @param-out bool $success
      */
     protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null)
     {
