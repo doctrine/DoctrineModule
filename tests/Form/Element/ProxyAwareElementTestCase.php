@@ -21,8 +21,7 @@ use function method_exists;
 
 class ProxyAwareElementTestCase extends TestCase
 {
-    /** @var MockObject&ClassMetadata */
-    protected $metadata;
+    protected MockObject&ClassMetadata $metadata;
 
     protected Element $element;
 
