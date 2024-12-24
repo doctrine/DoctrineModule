@@ -61,7 +61,7 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /** @return mixed[][] */
-    public function getServicesThatShouldBeDefined(): array
+    public static function getServicesThatShouldBeDefined(): array
     {
         $legacyCacheShouldExist = InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0');
 
@@ -92,7 +92,7 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /** @return string[][] */
-    public function getServicesThatCanBeFetched(): array
+    public static function getServicesThatCanBeFetched(): array
     {
         if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0')) {
             return [
@@ -110,7 +110,7 @@ class ModuleDefinedServicesTest extends TestCase
     }
 
     /** @return string[][] */
-    public function getServicesThatCannotBeFetched(): array
+    public static function getServicesThatCannotBeFetched(): array
     {
         return [
             ['foo'],
