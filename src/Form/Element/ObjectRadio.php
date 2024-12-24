@@ -7,7 +7,7 @@ namespace DoctrineModule\Form\Element;
 use Laminas\Form\Element\MultiCheckbox;
 use Laminas\Form\Element\Radio as RadioElement;
 
-/** @psalm-import-type ValueOptionSpec from MultiCheckbox */
+/** @phpstan-import-type ValueOptionSpec from MultiCheckbox */
 class ObjectRadio extends RadioElement
 {
     use GetProxy;

@@ -74,8 +74,7 @@
         "phpstan/phpstan": "^1.9.2",
         "phpstan/phpstan-phpunit": "^1.3.0",
         "phpunit/phpunit": "^9.5.27",
-        "predis/predis": "^1.1.10",
-        "vimeo/psalm": "^5.0"
+        "predis/predis": "^1.1.10"
     },
     "conflict": {
         "doctrine/orm": "2.12.0"
@@ -115,13 +114,11 @@
         "check": [
             "@cs-check",
             "@phpstan",
-            "@psalm",
             "@test"
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "phpstan": "phpstan analyse",
-        "psalm": "psalm --stats",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover=coverage.xml"
     }
