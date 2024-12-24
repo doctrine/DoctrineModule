@@ -153,7 +153,7 @@ class SelectableAdapterTest extends TestCase
                     static fn (Criteria $criteria) => $criteria->getWhereExpression() === $expression
                         && ($criteria->getOrderings() === ['baz' => Criteria::DESC])
                         && $criteria->getFirstResult() === null
-                        && $criteria->getMaxResults() === null
+                        && $criteria->getMaxResults() === null,
                 ),
             )
             ->will($this->returnValue(new ArrayCollection(range(1, 101))));

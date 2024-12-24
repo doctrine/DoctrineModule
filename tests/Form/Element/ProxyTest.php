@@ -28,8 +28,7 @@ use const PHP_VERSION_ID;
  */
 class ProxyTest extends TestCase
 {
-    /** @var MockObject&ClassMetadata */
-    protected $metadata;
+    protected MockObject&ClassMetadata $metadata;
 
     protected Proxy $proxy;
 
