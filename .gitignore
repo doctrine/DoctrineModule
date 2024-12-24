@@ -1,8 +1,8 @@
 /.phpcs.cache
-/.phpunit.result.cache
 /coverage.xml
 /composer.lock
 /phpcs.xml
 /phpunit.xml
+/.phpunit.cache/
 /output/
 /vendor/
