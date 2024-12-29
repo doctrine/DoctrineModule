@@ -1,6 +1,6 @@
 # DoctrineModule for Laminas
 
-[![Build Status](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml?query=branch%3A6.3.x)
+[![Build Status](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml)
 [![Code Coverage](https://codecov.io/gh/doctrine/DoctrineModule/graphs/badge.svg)](https://app.codecov.io/gh/doctrine/DoctrineModule)
 [![Latest Stable Version](https://poser.pugx.org/doctrine/doctrine-module/v)](https://packagist.org/packages/doctrine/doctrine-module)
 [![Total Downloads](https://poser.pugx.org/doctrine/doctrine-module/downloads)](https://packagist.org/packages/doctrine/doctrine-module)
