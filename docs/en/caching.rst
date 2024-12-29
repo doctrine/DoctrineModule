@@ -1,27 +1,99 @@
 Caching
 =======
 
-DoctrineModule provides bridging between
-`Laminas\Cache <https://github.com/laminas/laminas-cache>`__ and
-`Doctrine\Common\Cache <https://github.com/doctrine/common/tree/master/lib/Doctrine/Common/Cache>`__.
-This may be useful in case you want to share configured cache instances
-across doctrine, symfony and laminas projects.
+DoctrineModule provides some pre-configured caches using
+`Laminas\Cache <https://github.com/laminas/laminas-cache>`__, which can be utilized
+by either Doctrine ORM or Doctrine ODM.
 
-You may use ``Laminas\Cache`` within your doctrine-related projects as
-following:
+The following caches are available by default:
+
+In-Memory
+~~~~~~~~~
+
+Provided by ``laminas/laminas-cache-storage-adapter-memory``, you can pull this cache from
+the container under the key ``doctrine.cache.array``. It does not really do any caching and
+suits merely as a proof of concept or for cases, where you do not want to have caching.
+
+Filesystem
+~~~~~~~~~~
+
+Provided by ``laminas/laminas-cache-storage-adapter-filesystem``, you can pull this cache from
+the container under the key ``doctrine.cache.filesystem``. To override the location for the
+cache storage folder, use the following configuration:
 
 .. code:: php
+    return [
+        'caches' => [
+            'doctrinemodule.cache.filesystem' => [
+                'options' => [
+                    'cache_dir' => './data/cache/',
+                ],
+            ],
+        ],
+    ];
 
-   $laminasCache = new \Laminas\Cache\Storage\Adapter\Memory(); // any storage adapter is OK here
-   $doctrineCache = new \DoctrineModule\Cache\LaminasStorageCache($laminasCache);
-   // now use $doctrineCache as a normal Doctrine\Common\Cache\Cache instance
+APCu
+~~~~
 
-You may use ``Doctrine\Common\Cache`` within your Laminas projects as
-following:
+This cache requires the additional package ``laminas/laminas-cache-storage-adapter-apcu``, which
+is not installed by default.
+
+You can pull the cache from the container using the key ``doctrine.cache.apcu``. To pass additional
+arguments for configuration, use the following config:
 
 .. code:: php
+    return [
+        'caches' => [
+            'doctrinemodule.cache.apcu' => [
+                'options' => [
 
-   $doctrineCache = new \Doctrine\Common\Cache\ArrayCache(); // any doctrine cache is OK here
-   $adapterOptions = new \Laminas\Cache\Storage\Adapter\AdapterOptions();
-   $laminasCacheStorage = new \DoctrineModule\Cache\DoctrineCacheStorage($adapterOptions, $doctrineCache);
-   // now use $laminasCacheStorage as a normal Laminas\Cache\Storage\StorageInterface instance.
+                ],
+            ],
+        ],
+    ];
+
+Memcached
+~~~~~~~~~
+
+This cache requires the additional package ``laminas/laminas-cache-storage-adapter-memcached``, which
+is not installed by default.
+
+You can pull the cache from the container using the key ``doctrine.cache.memcached``. To pass additional
+arguments for configuration, use the following config:
+
+.. code:: php
+    return [
+        'caches' => [
+            'doctrinemodule.cache.memcached' => [
+                'options' => [
+                    'servers' => [
+
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+Redis
+~~~~~~~~~
+
+This cache requires the additional package ``laminas/laminas-cache-storage-adapter-redis``, which
+is not installed by default.
+
+You can pull the cache from the container using the key ``doctrine.cache.redis``. The default config
+will access a Redis server at localhost, port 6379. To pass additional arguments for configuration,
+or to change the default config, use the following config:
+
+.. code:: php
+    return [
+        'caches' => [
+            'doctrinemodule.cache.redis' => [
+                'options' => [
+                    'server' => [
+                        'host' => 'localhost',
+                        'post' => 6379,
+                    ],
+                ],
+            ],
+        ],
+    ];
