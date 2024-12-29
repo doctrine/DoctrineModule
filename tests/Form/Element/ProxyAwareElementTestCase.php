@@ -76,19 +76,19 @@ class ProxyAwareElementTestCase extends TestCase
         $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $objectManager
             ->expects($this->any())
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
+            ->willReturn($objectRepository);
 
         if (! method_exists($this->element, 'getProxy')) {
             throw new RuntimeException('Element must implement getProxy().');

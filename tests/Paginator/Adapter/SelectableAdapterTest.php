@@ -38,7 +38,7 @@ class SelectableAdapterTest extends TestCase
                     },
                 ),
             )
-            ->will($this->returnValue(new ArrayCollection(range(1, 10))));
+            ->willReturn(new ArrayCollection(range(1, 10)));
 
         $expected = range(1, 10);
         $actual   = $adapter->getItems(0, 10);
@@ -70,7 +70,7 @@ class SelectableAdapterTest extends TestCase
                     },
                 ),
             )
-            ->will($this->returnValue(new ArrayCollection(range(1, 10))));
+            ->willReturn(new ArrayCollection(range(1, 10)));
 
         $expected = range(1, 10);
         $actual   = $adapter->getItems(0, 10);
@@ -98,7 +98,7 @@ class SelectableAdapterTest extends TestCase
                     },
                 ),
             )
-            ->will($this->returnValue(new ArrayCollection(range(11, 20))));
+            ->willReturn(new ArrayCollection(range(11, 20)));
 
         $expected = range(11, 20);
         $actual   = $adapter->getItems(10, 10);
@@ -130,7 +130,7 @@ class SelectableAdapterTest extends TestCase
                     },
                 ),
             )
-            ->will($this->returnValue(new ArrayCollection(range(11, 20))));
+            ->willReturn(new ArrayCollection(range(11, 20)));
 
         $expected = range(11, 20);
         $actual   = $adapter->getItems(10, 10);
@@ -156,7 +156,7 @@ class SelectableAdapterTest extends TestCase
                         && $criteria->getMaxResults() === null,
                 ),
             )
-            ->will($this->returnValue(new ArrayCollection(range(1, 101))));
+            ->willReturn(new ArrayCollection(range(1, 101)));
 
         $this->assertEquals(101, $adapter->count());
 

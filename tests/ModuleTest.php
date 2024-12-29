@@ -44,19 +44,19 @@ class ModuleTest extends TestCase
             ->expects($this->any())
             ->method('get')
             ->with('doctrine.cli')
-            ->will($this->returnValue($this->cli));
+            ->willReturn($this->cli);
 
         $this
             ->application
             ->expects($this->any())
             ->method('getServiceManager')
-            ->will($this->returnValue($this->serviceManager));
+            ->willReturn($this->serviceManager);
 
         $this
             ->event
             ->expects($this->any())
             ->method('getTarget')
-            ->will($this->returnValue($this->application));
+            ->willReturn($this->application);
     }
 
     /** @covers \DoctrineModule\Module::getConfig */

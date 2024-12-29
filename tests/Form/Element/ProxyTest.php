@@ -72,7 +72,7 @@ class ProxyTest extends TestCase
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $this->proxy->setOptions([
             'object_manager' => $objectManager,
@@ -94,12 +94,12 @@ class ProxyTest extends TestCase
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $objectManager->expects($this->once())
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
+            ->willReturn($objectRepository);
 
         $this->proxy->setOptions([
             'object_manager' => $objectManager,
@@ -128,12 +128,12 @@ class ProxyTest extends TestCase
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $objectManager->expects($this->once())
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
+            ->willReturn($objectRepository);
 
         $this->proxy->setOptions([
             'object_manager' => $objectManager,
@@ -165,7 +165,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('username'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $result = $this->proxy->getValueOptions();
         $this->assertEquals($result[0]['label'], 'object one username');
@@ -183,7 +183,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('password'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $result = $this->proxy->getValueOptions();
         $this->assertEquals($result[0]['label'], 'object one password');
@@ -203,7 +203,7 @@ class ProxyTest extends TestCase
             ->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('email'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $result = $this->proxy->getValueOptions();
         $this->assertEquals($result[0]['label'], 'object one email');
@@ -244,7 +244,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('password'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $result = $this->proxy->getValueOptions();
         $this->assertArrayHasKey('', $result);
@@ -298,7 +298,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('password'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $options = $this->proxy->getValueOptions();
 
@@ -330,7 +330,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('password'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $options = $this->proxy->getValueOptions();
 
@@ -399,7 +399,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('password'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->proxy->getValueOptions();
     }
@@ -443,7 +443,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(3))
             ->method('hasField')
             ->with($this->equalTo('username'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $valueOptions = $this->proxy->getValueOptions();
 
@@ -500,7 +500,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('username'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $valueOptions = $this->proxy->getValueOptions();
 
@@ -547,7 +547,7 @@ class ProxyTest extends TestCase
         $this->metadata->expects($this->exactly(2))
             ->method('hasField')
             ->with($this->equalTo('username'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $valueOptions = $this->proxy->getValueOptions();
 
@@ -620,19 +620,19 @@ class ProxyTest extends TestCase
         $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $objectManager
             ->expects($this->any())
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
+            ->willReturn($objectRepository);
 
         $this->proxy->setOptions([
             'object_manager' => $objectManager,
@@ -705,19 +705,19 @@ class ProxyTest extends TestCase
         $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $objectManager
             ->expects($this->any())
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
+            ->willReturn($objectRepository);
 
         $this->proxy->setOptions([
             'object_manager' => $objectManager,
@@ -776,19 +776,19 @@ class ProxyTest extends TestCase
         $objectRepository = $this->createMock(ObjectRepository::class);
         $objectRepository->expects($this->any())
             ->method('findAll')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $objectManager
             ->expects($this->any())
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
+            ->willReturn($objectRepository);
 
         $this->proxy->setOptions([
             'object_manager' => $objectManager,
@@ -846,20 +846,20 @@ class ProxyTest extends TestCase
         $objectRepository
             ->expects($this->once())
             ->method('findBy')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager
             ->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $objectManager
             ->expects($this->once())
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
+            ->willReturn($objectRepository);
 
         $this->proxy->setOptions([
             'object_manager' => $objectManager,
@@ -888,20 +888,20 @@ class ProxyTest extends TestCase
         $objectRepository
             ->expects($this->once())
             ->method('findAll')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager
             ->expects($this->once())
             ->method('getClassMetadata')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $objectManager
             ->expects($this->once())
             ->method('getRepository')
             ->with($this->equalTo($objectClass))
-            ->will($this->returnValue($objectRepository));
+            ->willReturn($objectRepository);
 
         $this->proxy->setOptions([
             'object_manager' => $objectManager,
