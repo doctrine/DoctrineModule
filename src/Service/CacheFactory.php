@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineModule\Service;
 
-use Doctrine\Common\Cache;
-use Doctrine\Common\Cache\CacheProvider;
+use Doctrine\Common\Cache as DoctrineCache;
 use DoctrineModule\Cache\LaminasStorageCache;
 use DoctrineModule\Options\Cache as CacheOptions;
 use Psr\Container\ContainerInterface;
@@ -22,7 +21,7 @@ final class CacheFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      *
-     * @return Cache\Cache
+     * @return DoctrineCache\Cache
      *
      * @throws RuntimeException
      */
@@ -54,12 +53,7 @@ final class CacheFactory extends AbstractFactory
             $cache = $container->get($class);
         } else {
             switch ($class) {
-                case Cache\FilesystemCache::class:
-                    $cache = new $class($options->getDirectory());
-                    break;
-
                 case LaminasStorageCache::class:
-                case Cache\PredisCache::class:
                     $cache = new $class($instance);
                     break;
 
@@ -69,15 +63,7 @@ final class CacheFactory extends AbstractFactory
             }
         }
 
-        if ($cache instanceof Cache\MemcacheCache) {
-            $cache->setMemcache($instance);
-        } elseif ($cache instanceof Cache\MemcachedCache) {
-            $cache->setMemcached($instance);
-        } elseif ($cache instanceof Cache\RedisCache) {
-            $cache->setRedis($instance);
-        }
-
-        if ($cache instanceof CacheProvider) {
+        if ($cache instanceof DoctrineCache\CacheProvider) {
             $namespace = $options->getNamespace();
             if ($namespace) {
                 $cache->setNamespace($namespace);

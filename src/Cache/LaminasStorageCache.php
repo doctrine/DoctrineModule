@@ -13,6 +13,8 @@ use Laminas\Cache\Storage\TotalSpaceCapableInterface;
 
 /**
  * Bridge class that allows usage of a Laminas Cache Storage as a Doctrine Cache
+ *
+ * @deprecated 6.2.0 Usage of doctrine/cache is deprecated, please use PSR-6 natively.
  */
 class LaminasStorageCache extends CacheProvider
 {

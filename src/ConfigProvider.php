@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace DoctrineModule;
 
-use Composer\InstalledVersions;
-use Composer\Semver\VersionParser;
-use Doctrine\Common\Cache as DoctrineCache;
 use DoctrineModule\Cache\LaminasStorageCache;
 use Laminas\Authentication\Storage\Session as LaminasSessionStorage;
 use Laminas\Cache\Storage\Adapter\Memory;
@@ -148,67 +145,12 @@ final class ConfigProvider
     }
 
     /**
-     * Use doctrine/cache config, when doctrine/cache:^1.0 is installed, and use laminas/laminas-cache,
-     * when doctrine/cache:^2.0 is installed, as the latter does not include any cache adapters anymore
+     * Use laminas/laminas-cache, as doctrine/cache ^2.0 does not include any cache adapters anymore
      *
      * @return array<non-empty-string,array{class:class-string,instance?:string,namespace?:string,directory?:string}>
      */
     private function getDoctrineCacheConfig(): array
     {
-        if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/cache', '^1.0')) {
-            return [
-                'apc' => [
-                    'class' => DoctrineCache\ApcCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'apcu' => [
-                    'class' => DoctrineCache\ApcuCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'array' => [
-                    'class' => DoctrineCache\ArrayCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'filesystem' => [
-                    'class' => DoctrineCache\FilesystemCache::class,
-                    'directory' => 'data/DoctrineModule/cache',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'memcache' => [
-                    'class' => DoctrineCache\MemcacheCache::class,
-                    'instance' => 'my_memcache_alias',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'memcached' => [
-                    'class' => DoctrineCache\MemcachedCache::class,
-                    'instance' => 'my_memcached_alias',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'predis' => [
-                    'class' => DoctrineCache\PredisCache::class,
-                    'instance' => 'my_predis_alias',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'redis' => [
-                    'class' => DoctrineCache\RedisCache::class,
-                    'instance' => 'my_redis_alias',
-                    'namespace' => 'DoctrineModule',
-                ],
-                'wincache' => [
-                    'class' => DoctrineCache\WinCacheCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'xcache' => [
-                    'class' => DoctrineCache\XcacheCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-                'zenddata' => [
-                    'class' => DoctrineCache\ZendDataCache::class,
-                    'namespace' => 'DoctrineModule',
-                ],
-            ];
-        }
-
         return [
             'apcu' => [
                 'class' => LaminasStorageCache::class,
