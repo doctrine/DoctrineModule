@@ -8,33 +8,7 @@
         "module",
         "laminas"
     ],
-    "authors": [
-        {
-            "name": "Kyle Spraggs",
-            "email": "theman@spiffyjr.me",
-            "homepage": "http://www.spiffyjr.me/"
-        },
-        {
-            "name": "Marco Pivetta",
-            "email": "ocramius@gmail.com",
-            "homepage": "http://marco-pivetta.com/"
-        },
-        {
-            "name": "Guilherme Blanco",
-            "email": "guilhermeblanco@hotmail.com"
-        },
-        {
-            "name": "Micha\u00ebl Gallego",
-            "email": "mic.gallego@gmail.com",
-            "homepage": "http://www.michaelgallego.fr"
-        },
-        {
-            "name": "Tom H Anderson",
-            "email": "tom.h.anderson@gmail.com",
-            "homepage": "https://tomhanderson.com"
-        }
-    ],
-    "homepage": "http://www.doctrine-project.org/",
+    "homepage": "https://www.doctrine-project.org/",
     "require": {
         "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
         "composer-runtime-api": "^2.0.0",
@@ -73,7 +47,8 @@
         "phpunit/phpunit": "^10.5.40"
     },
     "conflict": {
-        "doctrine/orm": "2.12.0"
+        "doctrine/doctrine-mongo-odm-module": "<5.2.0",
+        "doctrine/doctrine-orm-module": "<6.2.0"
     },
     "suggest": {
         "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments",
