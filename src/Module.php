@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace DoctrineModule;
 
-use Laminas\ModuleManager\Feature\ConfigProviderInterface;
-
 /**
  * Base module for integration of Doctrine projects with Laminas applications
  */
-final class Module implements ConfigProviderInterface
+final class Module
 {
     /** @return array<string, mixed> */
     public function getConfig(): array
