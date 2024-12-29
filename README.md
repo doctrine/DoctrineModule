@@ -1,9 +1,9 @@
 # DoctrineModule for Laminas
 
-[![Build Status](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml?query=branch%3A5.3.x)
-[![Code Coverage](https://codecov.io/gh/doctrine/DoctrineModule/branch/5.3.x/graphs/badge.svg)](https://codecov.io/gh/doctrine/DoctrineModule/branch/5.3.x)
-[![Latest Stable Version](https://poser.pugx.org/doctrine/doctrine-module/v/stable.png)](https://packagist.org/packages/doctrine/doctrine-module)
-[![Total Downloads](https://poser.pugx.org/doctrine/doctrine-module/downloads.png)](https://packagist.org/packages/doctrine/doctrine-module)
+[![Build Status](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/doctrine/DoctrineModule/actions/workflows/continuous-integration.yml?query=branch%3A6.3.x)
+[![Code Coverage](https://codecov.io/gh/doctrine/DoctrineModule/graphs/badge.svg)](https://app.codecov.io/gh/doctrine/DoctrineModule)
+[![Latest Stable Version](https://poser.pugx.org/doctrine/doctrine-module/v)](https://packagist.org/packages/doctrine/doctrine-module)
+[![Total Downloads](https://poser.pugx.org/doctrine/doctrine-module/downloads)](https://packagist.org/packages/doctrine/doctrine-module)
 
 DoctrineModule provides basic functionality consumed by
 [DoctrineORMModule](http://www.github.com/doctrine/DoctrineORMModule)
