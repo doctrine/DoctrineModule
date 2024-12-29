@@ -37,7 +37,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
         $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->exactly(2))
             ->method('getValueOptions')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $element->expects($this->never())
             ->method('setValueOptions');
@@ -54,7 +54,7 @@ class ObjectRadioTest extends ProxyAwareElementTestCase
         $proxy = $this->createMock(Proxy::class);
         $proxy->expects($this->once())
             ->method('getValueOptions')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->setProxyViaReflection($proxy);
 

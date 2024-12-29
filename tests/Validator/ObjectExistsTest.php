@@ -28,7 +28,7 @@ class ObjectExistsTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
 
         $validator = new ObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
 
@@ -44,7 +44,7 @@ class ObjectExistsTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with(['matchKey' => 123])
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
 
         $validator = new ObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
 
@@ -59,7 +59,7 @@ class ObjectExistsTest extends BaseTestCase
             ->expects($this->exactly(2))
             ->method('findOneBy')
             ->with(['firstMatchKey' => 'firstMatchValue', 'secondMatchKey' => 'secondMatchValue'])
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
 
         $validator = new ObjectExists([
             'object_repository' => $repository,
@@ -83,7 +83,7 @@ class ObjectExistsTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $validator = new ObjectExists([
             'object_repository' => $repository,

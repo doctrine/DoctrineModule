@@ -29,7 +29,7 @@ class UniqueObjectTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $objectManager = $this->createMock(ObjectManager::class);
 
@@ -49,29 +49,29 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(['id']));
+            ->willReturn(['id']);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(['id' => 'identifier']));
+            ->willReturn(['id' => 'identifier']);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
-                      ->will($this->returnValue($classMetadata));
+                      ->willReturn($classMetadata);
 
         $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
-            ->will($this->returnValue('stdClass'));
+            ->willReturn('stdClass');
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue($match));
+            ->willReturn($match);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -89,29 +89,29 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(['id']));
+            ->willReturn(['id']);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(['id' => 'identifier']));
+            ->willReturn(['id' => 'identifier']);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
-                      ->will($this->returnValue($classMetadata));
+                      ->willReturn($classMetadata);
 
         $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
-            ->will($this->returnValue('stdClass'));
+            ->willReturn('stdClass');
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue($match));
+            ->willReturn($match);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -129,29 +129,29 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(['id']));
+            ->willReturn(['id']);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(['id' => 'identifier']));
+            ->willReturn(['id' => 'identifier']);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
-                      ->will($this->returnValue($classMetadata));
+                      ->willReturn($classMetadata);
 
         $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
-            ->will($this->returnValue('stdClass'));
+            ->willReturn('stdClass');
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue($match));
+            ->willReturn($match);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -174,7 +174,7 @@ class UniqueObjectTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue($match));
+            ->willReturn($match);
 
         $objectManager = $this->createMock(ObjectManager::class);
 
@@ -198,24 +198,24 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(['id']));
+            ->willReturn(['id']);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
-                      ->will($this->returnValue($classMetadata));
+                      ->willReturn($classMetadata);
 
         $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
-            ->will($this->returnValue('stdClass'));
+            ->willReturn('stdClass');
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue($match));
+            ->willReturn($match);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -236,24 +236,24 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(['id']));
+            ->willReturn(['id']);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
-                      ->will($this->returnValue($classMetadata));
+                      ->willReturn($classMetadata);
 
         $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
-            ->will($this->returnValue('stdClass'));
+            ->willReturn('stdClass');
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue($match));
+            ->willReturn($match);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -307,7 +307,7 @@ class UniqueObjectTest extends BaseTestCase
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['date' => $date])
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $objectManager = $this->createMock(ObjectManager::class);
 
@@ -340,18 +340,18 @@ class UniqueObjectTest extends BaseTestCase
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
             ->with('stdClass')
-            ->will($this->returnValue($classMetadata));
+            ->willReturn($classMetadata);
 
         $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
-            ->will($this->returnValue('stdClass'));
+            ->willReturn('stdClass');
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue($match));
+            ->willReturn($match);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,
@@ -371,29 +371,29 @@ class UniqueObjectTest extends BaseTestCase
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->will($this->returnValue(['id']));
+            ->willReturn(['id']);
         $classMetadata
             ->expects($this->once())
             ->method('getIdentifierValues')
             ->with($match)
-            ->will($this->returnValue(['id' => 'identifier']));
+            ->willReturn(['id' => 'identifier']);
 
         $objectManager = $this->createMock(ObjectManager::class);
         $objectManager->expects($this->any())
                       ->method('getClassMetadata')
                       ->with('stdClass')
-                      ->will($this->returnValue($classMetadata));
+                      ->willReturn($classMetadata);
 
         $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('getClassName')
-            ->will($this->returnValue('stdClass'));
+            ->willReturn('stdClass');
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['matchKey' => 'matchValue'])
-            ->will($this->returnValue($match));
+            ->willReturn($match);
 
         $validator = new UniqueObject([
             'object_repository' => $repository,

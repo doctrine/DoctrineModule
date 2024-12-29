@@ -23,7 +23,7 @@ class NoObjectExistsTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $validator = new NoObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
 
@@ -37,7 +37,7 @@ class NoObjectExistsTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
 
         $validator = new NoObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
 
@@ -50,7 +50,7 @@ class NoObjectExistsTest extends BaseTestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->will($this->returnValue(new stdClass()));
+            ->willReturn(new stdClass());
         $validator = new NoObjectExists(['object_repository' => $repository, 'fields' => 'matchKey']);
 
         $this->assertFalse($validator->isValid('matchValue'));
