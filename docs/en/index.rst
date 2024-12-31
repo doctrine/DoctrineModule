@@ -54,14 +54,3 @@ You can find more details about the features offered by DoctrineModule:
    this chapter explains how to use ObjectExists and NoObjectExists
    validator, that allow you to easily validate if a given entity exists
    or not.
-
-
-.. toctree::
-    :caption: Table of Contents
-
-    authentication
-    caching
-    cli
-    form-element
-    paginator
-    validator
