@@ -1,11 +1,12 @@
 :orphan:
-.. toctree::
-    :depth: 3
 
-    index
-    authentication
-    caching
-    cli
-    form-element
-    paginator
-    validator
+.. toctree::
+   :depth: 3
+
+   index
+   authentication
+   caching
+   cli
+   form-element
+   paginator
+   validator
