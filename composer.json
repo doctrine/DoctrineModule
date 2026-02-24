@@ -19,7 +19,7 @@
         "doctrine/doctrine-laminas-hydrator": "^3.2.0",
         "doctrine/event-manager": "^2.0.0",
         "doctrine/inflector": "^2.0.6",
-        "doctrine/persistence": "^3.0.0",
+        "doctrine/persistence": "^4.0.0",
         "laminas/laminas-authentication": "^2.12.0",
         "laminas/laminas-cache": "^3.6.0",
         "laminas/laminas-cache-storage-adapter-filesystem": "^2.2.0",
