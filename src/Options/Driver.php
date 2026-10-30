@@ -82,8 +82,7 @@ final class Driver extends AbstractOptions
         return $this->drivers;
     }
 
-    /** @param null $extension */
-    public function setExtension($extension): void
+    public function setExtension(string|null $extension): void
     {
         $this->extension = $extension;
     }
