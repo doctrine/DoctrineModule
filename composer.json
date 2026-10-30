@@ -73,7 +73,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         },
         "platform": {
-            "ext-mongodb": "1.11.0"
+            "ext-mongodb": "1.21.0"
         },
         "sort-packages": true
     },
