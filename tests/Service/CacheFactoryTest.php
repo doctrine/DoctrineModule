@@ -9,17 +9,17 @@ use DoctrineModule\Service\CacheFactory;
 use Laminas\Cache\ConfigProvider;
 use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**
  * Test for {@see \DoctrineModule\Service\CacheFactory}
  */
+#[CoversMethod(CacheFactory::class, '__invoke')]
 class CacheFactoryTest extends BaseTestCase
 {
-    /**
-     * @covers \DoctrineModule\Service\CacheFactory::__invoke
-     * @group 547
-     */
+    #[Group('547')]
     public function testCreateLaminasCache(): void
     {
         $factory        = new CacheFactory('phpunit');

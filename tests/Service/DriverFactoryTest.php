@@ -72,7 +72,6 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(MetadataDriverMock::class, $drivers['Foo\Bar']);
     }
 
-    /** @requires PHP 8.0 */
     public function testCreateORMAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();
@@ -92,7 +91,6 @@ class DriverFactoryTest extends BaseTestCase
         $this->assertInstanceOf(ORMAttributeDriver::class, $driver);
     }
 
-    /** @requires PHP 8.0 */
     public function testCreateMongoDBODMAttributeDriver(): void
     {
         $serviceManager = new ServiceManager();

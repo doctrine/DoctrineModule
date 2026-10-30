@@ -7,12 +7,12 @@ namespace DoctrineModuleTest\Form\Element;
 use DoctrineModule\Form\Element\ObjectMultiCheckbox;
 use DoctrineModule\Form\Element\Proxy;
 use Laminas\Form\Element;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests for the ObjectMultiCheckbox element
- *
- * @covers  \DoctrineModule\Form\Element\ObjectMultiCheckbox
  */
+#[CoversClass(ObjectMultiCheckbox::class)]
 class ObjectMultiCheckboxTest extends ProxyAwareElementTestCase
 {
     /** @var ObjectMultiCheckbox  */

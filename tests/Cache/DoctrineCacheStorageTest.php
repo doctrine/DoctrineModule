@@ -12,6 +12,7 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Stdlib\ErrorHandler;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -31,9 +32,8 @@ use function ucwords;
 
 /**
  * Tests for the cache bridge
- *
- * @covers \DoctrineModule\Cache\DoctrineCacheStorage
  */
+#[CoversClass(DoctrineCacheStorage::class)]
 class DoctrineCacheStorageTest extends TestCase
 {
     protected AdapterOptions $options;
