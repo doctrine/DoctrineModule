@@ -28,7 +28,7 @@ class ObjectExists extends AbstractValidator
     /**
      * Error constants
      */
-    public const ERROR_NO_OBJECT_FOUND = 'noObjectFound';
+    public const string ERROR_NO_OBJECT_FOUND = 'noObjectFound';
 
     /** @var mixed[] Message templates */
     protected array $messageTemplates = [self::ERROR_NO_OBJECT_FOUND => "No object matching '%value%' was found"];

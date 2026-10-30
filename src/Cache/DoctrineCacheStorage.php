@@ -19,7 +19,6 @@ class DoctrineCacheStorage extends AbstractAdapter
      * {@inheritDoc}
      *
      * @param iterable<mixed>|AdapterOptions $options
-     * @param Cache                          $cache
      */
     public function __construct($options, protected Cache $cache)
     {

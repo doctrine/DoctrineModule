@@ -22,18 +22,6 @@
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousPrefix"/>
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix"/>
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
-        <!-- Deprecated sniffs, replaced below; their notice breaks the checkstyle output piped to cs2pr -->
-        <exclude name="SlevomatCodingStandard.TypeHints.UnionTypeHintFormat"/>
-        <exclude name="Squiz.WhiteSpace.LanguageConstructSpacing"/>
     </rule>
 
-    <rule ref="SlevomatCodingStandard.TypeHints.DNFTypeHintFormat">
-        <properties>
-            <property name="withSpacesAroundOperators" value="no"/>
-            <property name="withSpacesInsideParentheses" value="no"/>
-            <property name="shortNullable" value="no"/>
-            <property name="nullPosition" value="last"/>
-        </properties>
-    </rule>
-    <rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
 </ruleset>
