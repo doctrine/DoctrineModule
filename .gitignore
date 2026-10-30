@@ -6,3 +6,6 @@
 /.phpunit.cache/
 /output/
 /vendor/
+/docs/composer.lock
+/docs/output/
+/docs/vendor/
