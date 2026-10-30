@@ -11,6 +11,7 @@ use Doctrine\Persistence\ObjectRepository;
 use DoctrineModule\Form\Element\Exception\InvalidRepositoryResultException;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineModuleTest\Form\Element\TestAsset\FormObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -21,9 +22,8 @@ use function func_get_args;
 
 /**
  * Tests for the Collection pagination adapter
- *
- * @covers  \DoctrineModule\Form\Element\Proxy
  */
+#[CoversClass(Proxy::class)]
 class ProxyTest extends TestCase
 {
     protected MockObject&ClassMetadata $metadata;
@@ -598,23 +598,21 @@ class ProxyTest extends TestCase
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
-            ->will(
-                $this->returnCallback(
-                    static function () use ($objectOne, $objectTwo) {
+            ->willReturnCallback(
+                static function () use ($objectOne, $objectTwo) {
                         $input = func_get_args();
                         $input = array_shift($input);
 
-                        if ($input === $objectOne) {
-                            return ['id' => 1];
-                        }
+                    if ($input === $objectOne) {
+                        return ['id' => 1];
+                    }
 
-                        if ($input === $objectTwo) {
-                            return ['id' => 2];
-                        }
+                    if ($input === $objectTwo) {
+                        return ['id' => 2];
+                    }
 
                         return [];
-                    },
-                ),
+                },
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -679,27 +677,25 @@ class ProxyTest extends TestCase
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
-            ->will(
-                $this->returnCallback(
-                    static function () use ($objectOne, $objectTwo, $objectThree) {
+            ->willReturnCallback(
+                static function () use ($objectOne, $objectTwo, $objectThree) {
                         $input = func_get_args();
                         $input = array_shift($input);
 
-                        if ($input === $objectOne) {
-                            return ['id' => 1];
-                        }
+                    if ($input === $objectOne) {
+                        return ['id' => 1];
+                    }
 
-                        if ($input === $objectTwo) {
-                            return ['id' => 2];
-                        }
+                    if ($input === $objectTwo) {
+                        return ['id' => 2];
+                    }
 
-                        if ($input === $objectThree) {
-                            return ['id' => 3];
-                        }
+                    if ($input === $objectThree) {
+                        return ['id' => 3];
+                    }
 
                         return [];
-                    },
-                ),
+                },
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -754,23 +750,21 @@ class ProxyTest extends TestCase
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
-            ->will(
-                $this->returnCallback(
-                    static function () use ($objectOne, $objectTwo) {
+            ->willReturnCallback(
+                static function () use ($objectOne, $objectTwo) {
                         $input = func_get_args();
                         $input = array_shift($input);
 
-                        if ($input === $objectOne) {
-                            return ['id' => 1];
-                        }
+                    if ($input === $objectOne) {
+                        return ['id' => 1];
+                    }
 
-                        if ($input === $objectTwo) {
-                            return ['id' => 2];
-                        }
+                    if ($input === $objectTwo) {
+                        return ['id' => 2];
+                    }
 
                         return [];
-                    },
-                ),
+                },
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);
@@ -824,22 +818,20 @@ class ProxyTest extends TestCase
         $metadata
             ->expects($this->exactly(2))
             ->method('getIdentifierValues')
-            ->will(
-                $this->returnCallback(
-                    static function () use ($objectOne, $objectTwo) {
+            ->willReturnCallback(
+                static function () use ($objectOne, $objectTwo) {
                         $input = func_get_args();
                         $input = array_shift($input);
-                        if ($input === $objectOne) {
-                            return ['id' => 1];
-                        }
+                    if ($input === $objectOne) {
+                        return ['id' => 1];
+                    }
 
-                        if ($input === $objectTwo) {
-                            return ['id' => 2];
-                        }
+                    if ($input === $objectTwo) {
+                        return ['id' => 2];
+                    }
 
                         return [];
-                    },
-                ),
+                },
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);

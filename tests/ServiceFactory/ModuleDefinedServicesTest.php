@@ -14,6 +14,7 @@ use Laminas\Cache\Storage\Adapter\Filesystem;
 use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,9 +31,8 @@ class ModuleDefinedServicesTest extends TestCase
 
     /**
      * Verifies that the module defines the correct services
-     *
-     * @dataProvider getServicesThatShouldBeDefined
      */
+    #[DataProvider('getServicesThatShouldBeDefined')]
     public function testModuleDefinedServices(string $serviceName, bool $defined): void
     {
         $this->assertSame($defined, $this->serviceManager->has($serviceName));
@@ -40,9 +40,8 @@ class ModuleDefinedServicesTest extends TestCase
 
     /**
      * Verifies that the module defines the correct services
-     *
-     * @dataProvider getServicesThatCanBeFetched
      */
+    #[DataProvider('getServicesThatCanBeFetched')]
     public function testModuleFetchedService(string $serviceName, string $expectedClass): void
     {
         $this->assertInstanceOf($expectedClass, $this->serviceManager->get($serviceName));
@@ -50,9 +49,8 @@ class ModuleDefinedServicesTest extends TestCase
 
     /**
      * Verifies that the module defines the correct services
-     *
-     * @dataProvider getServicesThatCannotBeFetched
      */
+    #[DataProvider('getServicesThatCannotBeFetched')]
     public function testModuleInvalidService(string $serviceName): void
     {
         $this->expectException(ServiceNotFoundException::class);

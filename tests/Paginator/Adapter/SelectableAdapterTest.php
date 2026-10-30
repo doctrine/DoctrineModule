@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use DoctrineModule\Paginator\Adapter\Selectable as SelectableAdapter;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
 use function range;
@@ -15,9 +16,10 @@ use function range;
 /**
  * Tests for the Selectable pagination adapter
  */
+#[CoversMethod(SelectableAdapter::class, 'getItems')]
+#[CoversMethod(SelectableAdapter::class, 'count')]
 class SelectableAdapterTest extends TestCase
 {
-    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
     public function testGetItemsAtOffsetZeroWithEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -46,7 +48,6 @@ class SelectableAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
     public function testGetItemsAtOffsetZeroWithNonEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -78,7 +79,6 @@ class SelectableAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
     public function testGetItemsAtOffsetTenWithEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -106,7 +106,6 @@ class SelectableAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::getItems */
     public function testGetItemsAtOffsetTenWithNonEmptyCriteria(): void
     {
         $selectable = $this->createMock(Selectable::class);
@@ -138,7 +137,6 @@ class SelectableAdapterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @covers \DoctrineModule\Paginator\Adapter\Selectable::count */
     public function testReturnsCorrectCount(): void
     {
         $selectable = $this->createMock(Selectable::class);

@@ -54,23 +54,21 @@ class ProxyAwareElementTestCase extends TestCase
         $metadata
             ->expects($this->any())
             ->method('getIdentifierValues')
-            ->will(
-                $this->returnCallback(
-                    static function () use ($objectOne, $objectTwo) {
+            ->willReturnCallback(
+                static function () use ($objectOne, $objectTwo) {
                         $input = func_get_args();
                         $input = array_shift($input);
 
-                        if ($input === $objectOne) {
-                            return ['id' => 1];
-                        }
+                    if ($input === $objectOne) {
+                        return ['id' => 1];
+                    }
 
-                        if ($input === $objectTwo) {
-                            return ['id' => 2];
-                        }
+                    if ($input === $objectTwo) {
+                        return ['id' => 2];
+                    }
 
                         return [];
-                    },
-                ),
+                },
             );
 
         $objectRepository = $this->createMock(ObjectRepository::class);
