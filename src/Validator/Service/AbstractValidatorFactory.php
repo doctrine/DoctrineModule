@@ -23,7 +23,7 @@ use function sprintf;
  */
 abstract class AbstractValidatorFactory implements FactoryInterface
 {
-    public const DEFAULT_OBJECTMANAGER_KEY = 'doctrine.entitymanager.orm_default';
+    public const string DEFAULT_OBJECTMANAGER_KEY = 'doctrine.entitymanager.orm_default';
 
     /** @var mixed[] */
     protected array $creationOptions = [];

@@ -22,7 +22,7 @@ class UniqueObject extends ObjectExists
     /**
      * Error constants
      */
-    public const ERROR_OBJECT_NOT_UNIQUE = 'objectNotUnique';
+    public const string ERROR_OBJECT_NOT_UNIQUE = 'objectNotUnique';
 
     /** @var mixed[] */
     protected array $messageTemplates = [self::ERROR_OBJECT_NOT_UNIQUE => "There is already another object matching '%value%'"];
