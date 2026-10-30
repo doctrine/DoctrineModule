@@ -1,0 +1,31 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method DoctrineModule\\Form\\Element\\ObjectMultiCheckbox\:\:setOptions\(\) should return \$this\(DoctrineModule\\Form\\Element\\ObjectMultiCheckbox\) but returns Laminas\\Form\\Element\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Form/Element/ObjectMultiCheckbox.php
+
+		-
+			message: '#^Class DoctrineModule\\Form\\Element\\ObjectRadio extends @final class Laminas\\Form\\Element\\Radio\.$#'
+			identifier: class.extendsFinalByPhpDoc
+			count: 1
+			path: src/Form/Element/ObjectRadio.php
+
+		-
+			message: '#^Method DoctrineModule\\Form\\Element\\ObjectRadio\:\:setOptions\(\) should return \$this\(DoctrineModule\\Form\\Element\\ObjectRadio\) but returns Laminas\\Form\\Element\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Form/Element/ObjectRadio.php
+
+		-
+			message: '#^Class DoctrineModule\\Form\\Element\\ObjectSelect extends @final class Laminas\\Form\\Element\\Select\.$#'
+			identifier: class.extendsFinalByPhpDoc
+			count: 1
+			path: src/Form/Element/ObjectSelect.php
+
+		-
+			message: '#^Method DoctrineModule\\Form\\Element\\ObjectSelect\:\:setValue\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Form/Element/ObjectSelect.php
